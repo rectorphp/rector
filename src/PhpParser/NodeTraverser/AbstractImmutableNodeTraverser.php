@@ -9,24 +9,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
+use Rector\Exception\ShouldNotHappenException;
 abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
 {
-    /**
-     * @deprecated Use NodeVisitor::DONT_TRAVERSE_CHILDREN instead.
-     */
-    public const DONT_TRAVERSE_CHILDREN = NodeVisitor::DONT_TRAVERSE_CHILDREN;
-    /**
-     * @deprecated Use NodeVisitor::STOP_TRAVERSAL instead.
-     */
-    public const STOP_TRAVERSAL = NodeVisitor::STOP_TRAVERSAL;
-    /**
-     * @deprecated Use NodeVisitor::REMOVE_NODE instead.
-     */
-    public const REMOVE_NODE = NodeVisitor::REMOVE_NODE;
-    /**
-     * @deprecated Use NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN instead.
-     */
-    public const DONT_TRAVERSE_CURRENT_AND_CHILDREN = NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
     /**
      * @var list<NodeVisitor> Visitors
      */
@@ -53,15 +38,9 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
     {
         $this->visitors[] = $visitor;
     }
-    /**
-     * Removes an added visitor.
-     */
     public function removeVisitor(NodeVisitor $visitor): void
     {
-        $index = array_search($visitor, $this->visitors, \true);
-        if ($index !== \false) {
-            array_splice($this->visitors, $index, 1, []);
-        }
+        throw new ShouldNotHappenException('The immutable node traverser does not support removing visitors.');
     }
     /**
      * Traverses an array of nodes using the registered visitors.
@@ -91,11 +70,6 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
      * @return NodeVisitor[]
      */
     abstract public function getVisitorsForNode(Node $node): array;
-    /**
-     * Recursively traverse a node.
-     *
-     * @param Node $node Node to traverse.
-     */
     protected function traverseNode(Node $node): void
     {
         foreach ($node->getSubNodeNames() as $name) {
@@ -166,10 +140,7 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
         }
     }
     /**
-     * Recursively traverse array (usually of nodes).
-     *
-     * @param Node[] $nodes Array to traverse
-     *
+     * @param Node[] $nodes
      * @return array Result of traversal (may be original array or changed one)
      */
     protected function traverseArray(array $nodes): array
@@ -251,10 +222,13 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
     }
     private function ensureReplacementReasonable(Node $old, Node $new): void
     {
-        if ($old instanceof Stmt && $new instanceof Expr) {
-            throw new LogicException(sprintf('Trying to replace statement (%s) ', $old->getType()) . sprintf('with expression (%s). Are you missing a ', $new->getType()) . 'Stmt_Expression wrapper?');
+        if ($old instanceof Stmt) {
+            if ($new instanceof Expr) {
+                throw new LogicException(sprintf('Trying to replace statement (%s) ', $old->getType()) . sprintf('with expression (%s). Are you missing a ', $new->getType()) . 'Stmt_Expression wrapper?');
+            }
+            return;
         }
-        if ($old instanceof Expr && $new instanceof Stmt) {
+        if ($new instanceof Stmt) {
             throw new LogicException(sprintf('Trying to replace expression (%s) ', $old->getType()) . sprintf('with statement (%s)', $new->getType()));
         }
     }
