@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
+class ComposerStaticInit07fdbfa2d6f68e78bb9ae001fb07f3da
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -14,6 +14,8 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
+        '606a39d89246991a373564698c2d8383' => __DIR__ . '/..' . '/symfony/polyfill-php85/bootstrap.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
     );
 
@@ -21,6 +23,8 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'S' =>
         array (
             'Symplify\\RuleDocGenerator\\' => 26,
+            'Symfony\\Polyfill\\Php85\\' => 23,
+            'Symfony\\Polyfill\\Php84\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
@@ -76,6 +80,14 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'Symplify\\RuleDocGenerator\\' =>
         array (
             0 => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src',
+        ),
+        'Symfony\\Polyfill\\Php85\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php85',
+        ),
+        'Symfony\\Polyfill\\Php84\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php84',
         ),
         'Symfony\\Polyfill\\Mbstring\\' =>
         array (
@@ -648,6 +660,7 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\Composer\\XdebugHandler\\Process' => __DIR__ . '/..' . '/composer/xdebug-handler/src/Process.php',
         'RectorPrefix202512\\Composer\\XdebugHandler\\Status' => __DIR__ . '/..' . '/composer/xdebug-handler/src/Status.php',
         'RectorPrefix202512\\Composer\\XdebugHandler\\XdebugHandler' => __DIR__ . '/..' . '/composer/xdebug-handler/src/XdebugHandler.php',
+        'RectorPrefix202512\\Deprecated' => __DIR__ . '/..' . '/symfony/polyfill-php84/Resources/stubs/Deprecated.php',
         'RectorPrefix202512\\Doctrine\\Inflector\\CachedWordInflector' => __DIR__ . '/..' . '/doctrine/inflector/src/CachedWordInflector.php',
         'RectorPrefix202512\\Doctrine\\Inflector\\GenericLanguageInflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/GenericLanguageInflectorFactory.php',
         'RectorPrefix202512\\Doctrine\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/src/Inflector.php',
@@ -730,13 +743,18 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\Fidry\\CpuCoreCounter\\ParallelisationResult' => __DIR__ . '/..' . '/fidry/cpu-core-counter/src/ParallelisationResult.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Auth' => __DIR__ . '/..' . '/illuminate/container/Attributes/Auth.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Authenticated' => __DIR__ . '/..' . '/illuminate/container/Attributes/Authenticated.php',
+        'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Bind' => __DIR__ . '/..' . '/illuminate/container/Attributes/Bind.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Cache' => __DIR__ . '/..' . '/illuminate/container/Attributes/Cache.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Config' => __DIR__ . '/..' . '/illuminate/container/Attributes/Config.php',
+        'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Context' => __DIR__ . '/..' . '/illuminate/container/Attributes/Context.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\CurrentUser' => __DIR__ . '/..' . '/illuminate/container/Attributes/CurrentUser.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\DB' => __DIR__ . '/..' . '/illuminate/container/Attributes/DB.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Database' => __DIR__ . '/..' . '/illuminate/container/Attributes/Database.php',
+        'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Give' => __DIR__ . '/..' . '/illuminate/container/Attributes/Give.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Log' => __DIR__ . '/..' . '/illuminate/container/Attributes/Log.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\RouteParameter' => __DIR__ . '/..' . '/illuminate/container/Attributes/RouteParameter.php',
+        'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Scoped' => __DIR__ . '/..' . '/illuminate/container/Attributes/Scoped.php',
+        'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Singleton' => __DIR__ . '/..' . '/illuminate/container/Attributes/Singleton.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Storage' => __DIR__ . '/..' . '/illuminate/container/Attributes/Storage.php',
         'RectorPrefix202512\\Illuminate\\Container\\Attributes\\Tag' => __DIR__ . '/..' . '/illuminate/container/Attributes/Tag.php',
         'RectorPrefix202512\\Illuminate\\Container\\BoundMethod' => __DIR__ . '/..' . '/illuminate/container/BoundMethod.php',
@@ -764,6 +782,7 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\Illuminate\\Contracts\\Broadcasting\\ShouldBeUnique' => __DIR__ . '/..' . '/illuminate/contracts/Broadcasting/ShouldBeUnique.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Broadcasting\\ShouldBroadcast' => __DIR__ . '/..' . '/illuminate/contracts/Broadcasting/ShouldBroadcast.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Broadcasting\\ShouldBroadcastNow' => __DIR__ . '/..' . '/illuminate/contracts/Broadcasting/ShouldBroadcastNow.php',
+        'RectorPrefix202512\\Illuminate\\Contracts\\Broadcasting\\ShouldRescue' => __DIR__ . '/..' . '/illuminate/contracts/Broadcasting/ShouldRescue.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Bus\\Dispatcher' => __DIR__ . '/..' . '/illuminate/contracts/Bus/Dispatcher.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Bus\\QueueingDispatcher' => __DIR__ . '/..' . '/illuminate/contracts/Bus/QueueingDispatcher.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Cache\\Factory' => __DIR__ . '/..' . '/illuminate/contracts/Cache/Factory.php',
@@ -783,16 +802,20 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\Illuminate\\Contracts\\Container\\Container' => __DIR__ . '/..' . '/illuminate/contracts/Container/Container.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Container\\ContextualAttribute' => __DIR__ . '/..' . '/illuminate/contracts/Container/ContextualAttribute.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Container\\ContextualBindingBuilder' => __DIR__ . '/..' . '/illuminate/contracts/Container/ContextualBindingBuilder.php',
+        'RectorPrefix202512\\Illuminate\\Contracts\\Container\\SelfBuilding' => __DIR__ . '/..' . '/illuminate/contracts/Container/SelfBuilding.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Cookie\\Factory' => __DIR__ . '/..' . '/illuminate/contracts/Cookie/Factory.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Cookie\\QueueingFactory' => __DIR__ . '/..' . '/illuminate/contracts/Cookie/QueueingFactory.php',
+        'RectorPrefix202512\\Illuminate\\Contracts\\Database\\ConcurrencyErrorDetector' => __DIR__ . '/..' . '/illuminate/contracts/Database/ConcurrencyErrorDetector.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Eloquent\\Builder' => __DIR__ . '/..' . '/illuminate/contracts/Database/Eloquent/Builder.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Eloquent\\Castable' => __DIR__ . '/..' . '/illuminate/contracts/Database/Eloquent/Castable.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Eloquent\\CastsAttributes' => __DIR__ . '/..' . '/illuminate/contracts/Database/Eloquent/CastsAttributes.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Eloquent\\CastsInboundAttributes' => __DIR__ . '/..' . '/illuminate/contracts/Database/Eloquent/CastsInboundAttributes.php',
+        'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Eloquent\\ComparesCastableAttributes' => __DIR__ . '/..' . '/illuminate/contracts/Database/Eloquent/ComparesCastableAttributes.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Eloquent\\DeviatesCastableAttributes' => __DIR__ . '/..' . '/illuminate/contracts/Database/Eloquent/DeviatesCastableAttributes.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Eloquent\\SerializesCastableAttributes' => __DIR__ . '/..' . '/illuminate/contracts/Database/Eloquent/SerializesCastableAttributes.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Eloquent\\SupportsPartialRelations' => __DIR__ . '/..' . '/illuminate/contracts/Database/Eloquent/SupportsPartialRelations.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Events\\MigrationEvent' => __DIR__ . '/..' . '/illuminate/contracts/Database/Events/MigrationEvent.php',
+        'RectorPrefix202512\\Illuminate\\Contracts\\Database\\LostConnectionDetector' => __DIR__ . '/..' . '/illuminate/contracts/Database/LostConnectionDetector.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\ModelIdentifier' => __DIR__ . '/..' . '/illuminate/contracts/Database/ModelIdentifier.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Query\\Builder' => __DIR__ . '/..' . '/illuminate/contracts/Database/Query/Builder.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Database\\Query\\ConditionExpression' => __DIR__ . '/..' . '/illuminate/contracts/Database/Query/ConditionExpression.php',
@@ -819,6 +842,7 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\Illuminate\\Contracts\\Hashing\\Hasher' => __DIR__ . '/..' . '/illuminate/contracts/Hashing/Hasher.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Http\\Kernel' => __DIR__ . '/..' . '/illuminate/contracts/Http/Kernel.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\JsonSchema\\JsonSchema' => __DIR__ . '/..' . '/illuminate/contracts/JsonSchema/JsonSchema.php',
+        'RectorPrefix202512\\Illuminate\\Contracts\\Log\\ContextLogProcessor' => __DIR__ . '/..' . '/illuminate/contracts/Log/ContextLogProcessor.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Mail\\Attachable' => __DIR__ . '/..' . '/illuminate/contracts/Mail/Attachable.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Mail\\Factory' => __DIR__ . '/..' . '/illuminate/contracts/Mail/Factory.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Mail\\MailQueue' => __DIR__ . '/..' . '/illuminate/contracts/Mail/MailQueue.php',
@@ -862,6 +886,7 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\Illuminate\\Contracts\\Support\\CanBeEscapedWhenCastToString' => __DIR__ . '/..' . '/illuminate/contracts/Support/CanBeEscapedWhenCastToString.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Support\\DeferrableProvider' => __DIR__ . '/..' . '/illuminate/contracts/Support/DeferrableProvider.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Support\\DeferringDisplayableValue' => __DIR__ . '/..' . '/illuminate/contracts/Support/DeferringDisplayableValue.php',
+        'RectorPrefix202512\\Illuminate\\Contracts\\Support\\HasOnceHash' => __DIR__ . '/..' . '/illuminate/contracts/Support/HasOnceHash.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Support\\Htmlable' => __DIR__ . '/..' . '/illuminate/contracts/Support/Htmlable.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Support\\Jsonable' => __DIR__ . '/..' . '/illuminate/contracts/Support/Jsonable.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Support\\MessageBag' => __DIR__ . '/..' . '/illuminate/contracts/Support/MessageBag.php',
@@ -872,6 +897,7 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\Illuminate\\Contracts\\Translation\\HasLocalePreference' => __DIR__ . '/..' . '/illuminate/contracts/Translation/HasLocalePreference.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Translation\\Loader' => __DIR__ . '/..' . '/illuminate/contracts/Translation/Loader.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Translation\\Translator' => __DIR__ . '/..' . '/illuminate/contracts/Translation/Translator.php',
+        'RectorPrefix202512\\Illuminate\\Contracts\\Validation\\CompilableRules' => __DIR__ . '/..' . '/illuminate/contracts/Validation/CompilableRules.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Validation\\DataAwareRule' => __DIR__ . '/..' . '/illuminate/contracts/Validation/DataAwareRule.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Validation\\Factory' => __DIR__ . '/..' . '/illuminate/contracts/Validation/Factory.php',
         'RectorPrefix202512\\Illuminate\\Contracts\\Validation\\ImplicitRule' => __DIR__ . '/..' . '/illuminate/contracts/Validation/ImplicitRule.php',
@@ -936,6 +962,7 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\Nette\\Utils\\Type' => __DIR__ . '/..' . '/nette/utils/src/Utils/Type.php',
         'RectorPrefix202512\\Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202512\\Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
+        'RectorPrefix202512\\NoDiscard' => __DIR__ . '/..' . '/symfony/polyfill-php85/Resources/stubs/NoDiscard.php',
         'RectorPrefix202512\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'RectorPrefix202512\\OndraM\\CiDetector\\CiDetector' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetector.php',
         'RectorPrefix202512\\OndraM\\CiDetector\\CiDetectorInterface' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetectorInterface.php',
@@ -1054,6 +1081,7 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'RectorPrefix202512\\React\\Stream\\Util' => __DIR__ . '/..' . '/react/stream/src/Util.php',
         'RectorPrefix202512\\React\\Stream\\WritableResourceStream' => __DIR__ . '/..' . '/react/stream/src/WritableResourceStream.php',
         'RectorPrefix202512\\React\\Stream\\WritableStreamInterface' => __DIR__ . '/..' . '/react/stream/src/WritableStreamInterface.php',
+        'RectorPrefix202512\\ReflectionConstant' => __DIR__ . '/..' . '/symfony/polyfill-php84/Resources/stubs/ReflectionConstant.php',
         'RectorPrefix202512\\SebastianBergmann\\Diff\\Chunk' => __DIR__ . '/..' . '/sebastian/diff/src/Chunk.php',
         'RectorPrefix202512\\SebastianBergmann\\Diff\\ConfigurationException' => __DIR__ . '/..' . '/sebastian/diff/src/Exception/ConfigurationException.php',
         'RectorPrefix202512\\SebastianBergmann\\Diff\\Diff' => __DIR__ . '/..' . '/sebastian/diff/src/Diff.php',
@@ -3149,6 +3177,8 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
         'Symfony\\Polyfill\\Intl\\Grapheme\\Grapheme' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/Grapheme.php',
         'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
+        'Symfony\\Polyfill\\Php84\\Php84' => __DIR__ . '/..' . '/symfony/polyfill-php84/Php84.php',
+        'Symfony\\Polyfill\\Php85\\Php85' => __DIR__ . '/..' . '/symfony/polyfill-php85/Php85.php',
         'Symplify\\RuleDocGenerator\\Contract\\Category\\CategoryInfererInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/Category/CategoryInfererInterface.php',
         'Symplify\\RuleDocGenerator\\Contract\\CodeSampleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/CodeSampleInterface.php',
         'Symplify\\RuleDocGenerator\\Contract\\ConfigurableRuleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/ConfigurableRuleInterface.php',
@@ -3167,9 +3197,9 @@ class ComposerStaticInitcc5d2c137d624cde55200b11799ad930
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcc5d2c137d624cde55200b11799ad930::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcc5d2c137d624cde55200b11799ad930::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcc5d2c137d624cde55200b11799ad930::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit07fdbfa2d6f68e78bb9ae001fb07f3da::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit07fdbfa2d6f68e78bb9ae001fb07f3da::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit07fdbfa2d6f68e78bb9ae001fb07f3da::$classMap;
 
         }, null, ClassLoader::class);
     }

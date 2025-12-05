@@ -15,14 +15,14 @@ interface ContextualBindingBuilder
      * Define the implementation for the contextual binding.
      *
      * @param  \Closure|string|array  $implementation
-     * @return void
+     * @return $this
      */
     public function give($implementation);
     /**
      * Define tagged services to be used as the implementation for the contextual binding.
      *
      * @param  string  $tag
-     * @return void
+     * @return $this
      */
     public function giveTagged($tag);
     /**
@@ -30,7 +30,7 @@ interface ContextualBindingBuilder
      *
      * @param  string  $key
      * @param  mixed  $default
-     * @return void
+     * @return $this
      */
     public function giveConfig($key, $default = null);
 }
