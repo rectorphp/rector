@@ -214,6 +214,8 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::PHP_VERSION_FEATURES, $phpVersion);
     }
     /**
+     * @internal
+     *
      * @api only for testing. It is parsed from composer.json "require" packages by default
      * @param array<PolyfillPackage::*> $polyfillPackages
      */
@@ -358,6 +360,7 @@ final class RectorConfig extends Container
         return $this->tags[RectorInterface::class] ?? [];
     }
     /**
+     * @internal used to report level overflows in configuration
      * @param LevelOverflow[] $levelOverflows
      */
     public function setOverflowLevels(array $levelOverflows): void
