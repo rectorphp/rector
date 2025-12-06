@@ -717,17 +717,17 @@
         },
         {
             "name": "nikic\/php-parser",
-            "version": "v5.6.2",
-            "version_normalized": "5.6.2.0",
+            "version": "v5.7.0",
+            "version_normalized": "5.7.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nikic\/PHP-Parser.git",
-                "reference": "3a454ca033b9e06b63282ce19562e892747449bb"
+                "reference": "dca41cd15c2ac9d055ad70dbfd011130757d1f82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/3a454ca033b9e06b63282ce19562e892747449bb",
-                "reference": "3a454ca033b9e06b63282ce19562e892747449bb",
+                "url": "https:\/\/api.github.com\/repos\/nikic\/PHP-Parser\/zipball\/dca41cd15c2ac9d055ad70dbfd011130757d1f82",
+                "reference": "dca41cd15c2ac9d055ad70dbfd011130757d1f82",
                 "shasum": ""
             },
             "require": {
@@ -740,7 +740,7 @@
                 "ircmaxell\/php-yacc": "^0.0.7",
                 "phpunit\/phpunit": "^9.0"
             },
-            "time": "2025-10-21T19:32:17+00:00",
+            "time": "2025-12-06T11:56:16+00:00",
             "bin": [
                 "bin\/php-parse"
             ],
@@ -789,7 +789,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nikic\/PHP-Parser\/issues",
-                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v5.6.2"
+                "source": "https:\/\/github.com\/nikic\/PHP-Parser\/tree\/v5.7.0"
             },
             "install-path": "..\/nikic\/php-parser"
         },
@@ -1756,12 +1756,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "c263ce22aa65e5ea7c10bd593c429b5d336abe83"
+                "reference": "10c7be9b16bccef414be7621ef4dcbf65bfc7e93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/c263ce22aa65e5ea7c10bd593c429b5d336abe83",
-                "reference": "c263ce22aa65e5ea7c10bd593c429b5d336abe83",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/10c7be9b16bccef414be7621ef4dcbf65bfc7e93",
+                "reference": "10c7be9b16bccef414be7621ef4dcbf65bfc7e93",
                 "shasum": ""
             },
             "require": {
@@ -1773,6 +1773,7 @@
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.5",
                 "rector\/rector-src": "dev-main",
+                "rector\/type-perfect": "^2.1",
                 "symplify\/easy-coding-standard": "^12.3",
                 "symplify\/phpstan-extensions": "^12.0",
                 "symplify\/phpstan-rules": "^14.9",
@@ -1781,7 +1782,7 @@
                 "tomasvotruba\/class-leak": "^1.0",
                 "tracy\/tracy": "^2.10"
             },
-            "time": "2025-12-02T23:53:29+00:00",
+            "time": "2025-12-06T14:30:50+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1876,12 +1877,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "315aae4ffdaf038c94fc3e117f39cfc420e8d6b4"
+                "reference": "03f4789a7327a7d1e2f069a025acce119fbde914"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/315aae4ffdaf038c94fc3e117f39cfc420e8d6b4",
-                "reference": "315aae4ffdaf038c94fc3e117f39cfc420e8d6b4",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/03f4789a7327a7d1e2f069a025acce119fbde914",
+                "reference": "03f4789a7327a7d1e2f069a025acce119fbde914",
                 "shasum": ""
             },
             "require": {
@@ -1913,7 +1914,7 @@
                 "tomasvotruba\/unused-public": "^2.1",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2025-12-04T14:41:47+00:00",
+            "time": "2025-12-06T14:55:31+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

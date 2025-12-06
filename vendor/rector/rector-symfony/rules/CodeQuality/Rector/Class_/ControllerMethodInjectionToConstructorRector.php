@@ -150,7 +150,7 @@ CODE_SAMPLE
                     continue;
                 }
                 // skip allowed known objects
-                if ($this->isNames($param->type, array_merge([SymfonyClass::USER_INTERFACE, SymfonyClass::REQUEST, FosClass::PARAM_FETCHER, SymfonyClass::UUID], $entityClasses))) {
+                if ($this->isNames($param->type, array_merge([SymfonyClass::USER_INTERFACE, SymfonyClass::REQUEST, FosClass::PARAM_FETCHER, SymfonyClass::UUID, \Throwable::class, \Exception::class], $entityClasses))) {
                     continue;
                 }
                 foreach (self::COMMON_ENTITY_CONTAINS_SUBNAMESPACES as $commonEntityContainsNamespace) {

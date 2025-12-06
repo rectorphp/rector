@@ -171,8 +171,9 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
      * @var array<string, array{int|string|null, string, string}>
      */
     protected array $emptyListInsertionMap;
-    /** @var array<string, array{string, int}> Map from "{$class}->{$subNode}" to [$printFn, $token]
-     *       where $printFn is the function to print the modifiers and $token is the token before which
+    /** @var array<string, array{string, int, int}>
+     *       Map from "{$class}->{$subNode}" to [$printFn, $skipToken, $findToken] where $printFn is the function to
+     *       print the modifiers, $skipToken is the token to skip at the start and $findToken is the token before which
      *       the modifiers should be reprinted. */
     protected array $modifierChangeMap;
     /**
@@ -628,8 +629,8 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
                 if (!isset($this->modifierChangeMap[$key])) {
                     return $this->pFallback($fallbackNode, $precedence, $lhsPrecedence);
                 }
-                [$printFn, $findToken] = $this->modifierChangeMap[$key];
-                $skipWSPos = $this->origTokens->skipRightWhitespace($pos);
+                [$printFn, $skipToken, $findToken] = $this->modifierChangeMap[$key];
+                $skipWSPos = $this->origTokens->skipRight($pos, $skipToken);
                 $result .= $this->origTokens->getTokenCode($pos, $skipWSPos, $indentAdjustment);
                 $result .= $this->{$printFn}($subNode);
                 $pos = $this->origTokens->findRight($skipWSPos, $findToken);
@@ -1018,6 +1019,9 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
      */
     protected function callLhsRequiresParens(\PhpParser\Node $node): bool
     {
+        if ($node instanceof Expr\New_) {
+            return !$this->phpVersion->supportsNewDereferenceWithoutParentheses();
+        }
         return !($node instanceof \PhpParser\Node\Name || $node instanceof Expr\Variable || $node instanceof Expr\ArrayDimFetch || $node instanceof Expr\FuncCall || $node instanceof Expr\MethodCall || $node instanceof Expr\NullsafeMethodCall || $node instanceof Expr\StaticCall || $node instanceof Expr\Array_);
     }
     /**
@@ -1041,6 +1045,9 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
      */
     protected function staticDereferenceLhsRequiresParens(\PhpParser\Node $node): bool
     {
+        if ($node instanceof Expr\New_) {
+            return !$this->phpVersion->supportsNewDereferenceWithoutParentheses();
+        }
         return !($node instanceof Expr\Variable || $node instanceof \PhpParser\Node\Name || $node instanceof Expr\ArrayDimFetch || $node instanceof Expr\PropertyFetch || $node instanceof Expr\NullsafePropertyFetch || $node instanceof Expr\StaticPropertyFetch || $node instanceof Expr\FuncCall || $node instanceof Expr\MethodCall || $node instanceof Expr\NullsafeMethodCall || $node instanceof Expr\StaticCall || $node instanceof Expr\Array_ || $node instanceof Scalar\String_ || $node instanceof Expr\ClassConstFetch);
     }
     /**
@@ -1337,7 +1344,7 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
         if (isset($this->modifierChangeMap)) {
             return;
         }
-        $this->modifierChangeMap = [Stmt\ClassConst::class . '->flags' => ['pModifiers', \T_CONST], Stmt\ClassMethod::class . '->flags' => ['pModifiers', \T_FUNCTION], Stmt\Class_::class . '->flags' => ['pModifiers', \T_CLASS], Stmt\Property::class . '->flags' => ['pModifiers', \T_VARIABLE], PrintableNewAnonClassNode::class . '->flags' => ['pModifiers', \T_CLASS], Param::class . '->flags' => ['pModifiers', \T_VARIABLE], PropertyHook::class . '->flags' => ['pModifiers', \T_STRING], Expr\Closure::class . '->static' => ['pStatic', \T_FUNCTION], Expr\ArrowFunction::class . '->static' => ['pStatic', \T_FN]];
+        $this->modifierChangeMap = [Stmt\ClassConst::class . '->flags' => ['pModifiers', \T_WHITESPACE, \T_CONST], Stmt\ClassMethod::class . '->flags' => ['pModifiers', \T_WHITESPACE, \T_FUNCTION], Stmt\Class_::class . '->flags' => ['pModifiers', \T_WHITESPACE, \T_CLASS], Stmt\Property::class . '->flags' => ['pModifiers', \T_WHITESPACE, \T_VARIABLE], PrintableNewAnonClassNode::class . '->flags' => ['pModifiers', \T_NEW, \T_CLASS], Param::class . '->flags' => ['pModifiers', \T_WHITESPACE, \T_VARIABLE], PropertyHook::class . '->flags' => ['pModifiers', \T_WHITESPACE, \T_STRING], Expr\Closure::class . '->static' => ['pStatic', \T_WHITESPACE, \T_FUNCTION], Expr\ArrowFunction::class . '->static' => ['pStatic', \T_WHITESPACE, \T_FN]];
         // List of integer subnodes that are not modifiers:
         // Expr_Include->type
         // Stmt_GroupUse->type

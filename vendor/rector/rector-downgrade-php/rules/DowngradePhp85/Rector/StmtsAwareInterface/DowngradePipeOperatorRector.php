@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp85\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Pipe;
@@ -86,13 +87,13 @@ CODE_SAMPLE
         }
         return $hasChanged ? $node : null;
     }
-    private function findPipeNode(Node $node): ?Pipe
+    private function findPipeNode(Expr $expr): ?Pipe
     {
-        if ($node instanceof Pipe) {
-            return $node;
+        if ($expr instanceof Pipe) {
+            return $expr;
         }
-        if ($node instanceof Assign && $node->expr instanceof Pipe) {
-            return $node->expr;
+        if ($expr instanceof Assign && $expr->expr instanceof Pipe) {
+            return $expr->expr;
         }
         return null;
     }

@@ -982,6 +982,9 @@ class Php7 extends \PhpParser\ParserAbstract
             $self->semValue = new Expr\Instanceof_($self->semStack[$stackPos - (3 - 1)], $self->semStack[$stackPos - (3 - 3)], $self->getAttributes($self->tokenStartStack[$stackPos - (3 - 1)], $self->tokenEndStack[$stackPos]));
         }, 476 => static function ($self, $stackPos) {
             $self->semValue = $self->semStack[$stackPos - (3 - 2)];
+            if ($self->semValue instanceof Expr\ArrowFunction) {
+                $self->parenthesizedArrowFunctions->offsetSet($self->semValue);
+            }
         }, 477 => static function ($self, $stackPos) {
             $self->semValue = new Expr\Ternary($self->semStack[$stackPos - (5 - 1)], $self->semStack[$stackPos - (5 - 3)], $self->semStack[$stackPos - (5 - 5)], $self->getAttributes($self->tokenStartStack[$stackPos - (5 - 1)], $self->tokenEndStack[$stackPos]));
         }, 478 => static function ($self, $stackPos) {
