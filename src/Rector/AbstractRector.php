@@ -79,6 +79,10 @@ CODE_SAMPLE;
         $this->commentsMerger = $commentsMerger;
     }
     /**
+     * @final Avoid override to prevent unintended side-effects. Use enterNode() or @see \Rector\Contract\PhpParser\DecoratingNodeVisitorInterface instead.
+     *
+     * @internal
+     *
      * @return Node[]|null
      */
     public function beforeTraverse(array $nodes): ?array
