@@ -1813,12 +1813,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "b84c0de49432ef2b27e97185911f8efec3eca811"
+                "reference": "0d8da7682017df925eccde1cbb59018f81b6a3e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/b84c0de49432ef2b27e97185911f8efec3eca811",
-                "reference": "b84c0de49432ef2b27e97185911f8efec3eca811",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/0d8da7682017df925eccde1cbb59018f81b6a3e2",
+                "reference": "0d8da7682017df925eccde1cbb59018f81b6a3e2",
                 "shasum": ""
             },
             "require": {
@@ -1839,12 +1839,12 @@
                 "rector\/swiss-knife": "^1.0",
                 "rector\/type-perfect": "^2.1",
                 "symplify\/phpstan-extensions": "^12.0",
-                "symplify\/phpstan-rules": "^14.9.3",
+                "symplify\/phpstan-rules": "^14.9",
                 "symplify\/vendor-patches": "^11.5",
                 "tomasvotruba\/class-leak": "^1.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2025-12-02T20:05:05+00:00",
+            "time": "2025-12-06T00:01:26+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
