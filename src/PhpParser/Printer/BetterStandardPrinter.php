@@ -18,7 +18,6 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\InterpolatedStringPart;
@@ -29,7 +28,6 @@ use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\PrettyPrinter\Standard;
 use PhpParser\Token;
-use PHPStan\Node\AnonymousClassNode;
 use PHPStan\Node\Expr\AlwaysRememberedExpr;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -38,7 +36,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Util\NewLineSplitter;
 use Rector\Util\Reflection\PrivatesAccessor;
-use Rector\Util\StringUtils;
 /**
  * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
  *
@@ -60,11 +57,6 @@ final class BetterStandardPrinter extends Standard
      * @var string
      */
     private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \t]+$#m';
-    /**
-     * @see https://regex101.com/r/UluSYL/1
-     * @var string
-     */
-    private const SPACED_NEW_START_REGEX = '#^new\s+#';
     public function __construct(ExprAnalyzer $exprAnalyzer, PrivatesAccessor $privatesAccessor)
     {
         $this->exprAnalyzer = $exprAnalyzer;
@@ -142,10 +134,6 @@ final class BetterStandardPrinter extends Standard
         }
         $this->wrapBinaryOp($node);
         $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
-        /** @todo remove once fix https://github.com/nikic/PHP-Parser/commit/232169fd7972e018e3d7adbcaa235a2eaa2440c4 is released */
-        if ($node instanceof New_ && $node->class instanceof AnonymousClassNode && !StringUtils::isMatch($content, self::SPACED_NEW_START_REGEX)) {
-            $content = 'new ' . $content;
-        }
         if ($node instanceof CallLike) {
             $this->cleanVariadicPlaceHolderTrailingComma($node);
         }
