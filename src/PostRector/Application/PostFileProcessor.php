@@ -109,7 +109,6 @@ final class PostFileProcessor implements ResettableInterface
         }
         $isRenamedClassEnabled = $this->renamedClassesDataCollector->getOldToNewClasses() !== [];
         $isNameImportingEnabled = SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_NAMES);
-        $isDocblockNameImportingEnabled = SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES);
         $isRemovingUnusedImportsEnabled = SimpleParameterProvider::provideBoolParameter(Option::REMOVE_UNUSED_IMPORTS);
         $postRectors = [];
         // sorted by priority, to keep removed imports in order
@@ -119,10 +118,10 @@ final class PostFileProcessor implements ResettableInterface
         // import names
         if ($isNameImportingEnabled) {
             $postRectors[] = $this->nameImportingPostRector;
-        }
-        // import docblocks
-        if ($isNameImportingEnabled && $isDocblockNameImportingEnabled) {
-            $postRectors[] = $this->docblockNameImportingPostRector;
+            // import docblocks
+            if (SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES)) {
+                $postRectors[] = $this->docblockNameImportingPostRector;
+            }
         }
         $postRectors[] = $this->useAddingPostRector;
         if ($isRemovingUnusedImportsEnabled) {

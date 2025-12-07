@@ -40,14 +40,7 @@ final class TestingParser
     }
     public function parseFilePathToFile(string $filePath): File
     {
-        // needed for PHPStan reflection, as it caches the last processed file
-        $this->dynamicSourceLocatorProvider->setFilePath($filePath);
-        $fileContent = FileSystem::read($filePath);
-        $file = new File($filePath, $fileContent);
-        $stmts = $this->rectorParser->parseString($fileContent);
-        $stmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($filePath, $stmts);
-        $file->hydrateStmtsAndTokens($stmts, $stmts, []);
-        $this->currentFileProvider->setFile($file);
+        [$file, $stmts] = $this->parseToFileAndStmts($filePath);
         return $file;
     }
     /**
@@ -55,14 +48,22 @@ final class TestingParser
      */
     public function parseFileToDecoratedNodes(string $filePath): array
     {
+        [$file, $stmts] = $this->parseToFileAndStmts($filePath);
+        return $stmts;
+    }
+    /**
+     * @return array{0: File, 1: Node[]}
+     */
+    private function parseToFileAndStmts(string $filePath): array
+    {
         // needed for PHPStan reflection, as it caches the last processed file
         $this->dynamicSourceLocatorProvider->setFilePath($filePath);
         $fileContent = FileSystem::read($filePath);
-        $stmts = $this->rectorParser->parseString($fileContent);
         $file = new File($filePath, $fileContent);
+        $stmts = $this->rectorParser->parseString($fileContent);
         $stmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($filePath, $stmts);
         $file->hydrateStmtsAndTokens($stmts, $stmts, []);
         $this->currentFileProvider->setFile($file);
-        return $stmts;
+        return [$file, $stmts];
     }
 }

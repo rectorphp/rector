@@ -1957,6 +1957,7 @@ class ComposerStaticInit9382e835eeb0e1e0bafb04fcb204a42a
         'Rector\\Enum\\ClassName' => __DIR__ . '/../..' . '/src/Enum/ClassName.php',
         'Rector\\Enum\\Config\\Defaults' => __DIR__ . '/../..' . '/src/Enum/Config/Defaults.php',
         'Rector\\Enum\\JsonConstant' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Enum/JsonConstant.php',
+        'Rector\\Enum\\LaravelClassName' => __DIR__ . '/../..' . '/src/Enum/LaravelClassName.php',
         'Rector\\Enum\\ObjectReference' => __DIR__ . '/../..' . '/src/Enum/ObjectReference.php',
         'Rector\\Exception\\Cache\\CachingException' => __DIR__ . '/../..' . '/src/Exception/Cache/CachingException.php',
         'Rector\\Exception\\Configuration\\InvalidConfigurationException' => __DIR__ . '/../..' . '/src/Exception/Configuration/InvalidConfigurationException.php',

@@ -1697,6 +1697,7 @@ return array(
     'Rector\\Enum\\ClassName' => $baseDir . '/src/Enum/ClassName.php',
     'Rector\\Enum\\Config\\Defaults' => $baseDir . '/src/Enum/Config/Defaults.php',
     'Rector\\Enum\\JsonConstant' => $vendorDir . '/rector/rector-downgrade-php/src/Enum/JsonConstant.php',
+    'Rector\\Enum\\LaravelClassName' => $baseDir . '/src/Enum/LaravelClassName.php',
     'Rector\\Enum\\ObjectReference' => $baseDir . '/src/Enum/ObjectReference.php',
     'Rector\\Exception\\Cache\\CachingException' => $baseDir . '/src/Exception/Cache/CachingException.php',
     'Rector\\Exception\\Configuration\\InvalidConfigurationException' => $baseDir . '/src/Exception/Configuration/InvalidConfigurationException.php',
