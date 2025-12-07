@@ -143,7 +143,7 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_IN_LOOP = 'is_in_loop';
+    public const IS_IN_LOOP_OR_SWITCH = 'is_in_loop';
     /**
      * @var string
      */

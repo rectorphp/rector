@@ -4,12 +4,8 @@ declare (strict_types=1);
 namespace Rector\Php70\Rector\Break_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
 use PhpParser\NodeVisitor;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -26,10 +22,6 @@ final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector implemen
      * @readonly
      */
     private ContextAnalyzer $contextAnalyzer;
-    /**
-     * @var string
-     */
-    private const IS_BREAK_IN_SWITCH = 'is_break_in_switch';
     public function __construct(ContextAnalyzer $contextAnalyzer)
     {
         $this->contextAnalyzer = $contextAnalyzer;
@@ -73,31 +65,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Switch_::class, Break_::class];
+        return [Break_::class];
     }
     /**
-     * @param Switch_|Break_ $node
+     * @param Break_ $node
      * @return Return_|null|NodeVisitor::REMOVE_NODE
      */
     public function refactor(Node $node)
     {
-        if ($node instanceof Switch_) {
-            $this->traverseNodesWithCallable($node->cases, static function (Node $subNode): ?int {
-                if ($subNode instanceof Class_ || $subNode instanceof FunctionLike && !$subNode instanceof ArrowFunction) {
-                    return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-                }
-                if (!$subNode instanceof Break_) {
-                    return null;
-                }
-                $subNode->setAttribute(self::IS_BREAK_IN_SWITCH, \true);
-                return null;
-            });
-            return null;
-        }
         if ($this->contextAnalyzer->isInLoop($node)) {
-            return null;
-        }
-        if ($node->getAttribute(self::IS_BREAK_IN_SWITCH) === \true) {
             return null;
         }
         if ($this->contextAnalyzer->isInIf($node)) {

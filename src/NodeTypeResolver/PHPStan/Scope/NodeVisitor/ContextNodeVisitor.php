@@ -150,7 +150,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if ($subNode instanceof If_ || $subNode instanceof Break_) {
-                $subNode->setAttribute(AttributeKey::IS_IN_LOOP, \true);
+                $subNode->setAttribute(AttributeKey::IS_IN_LOOP_OR_SWITCH, \true);
             }
             return null;
         });

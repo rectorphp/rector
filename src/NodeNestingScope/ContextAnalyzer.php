@@ -15,7 +15,7 @@ final class ContextAnalyzer
      */
     public function isInLoop(Node $node): bool
     {
-        return $node->getAttribute(AttributeKey::IS_IN_LOOP) === \true;
+        return $node->getAttribute(AttributeKey::IS_IN_LOOP_OR_SWITCH) === \true;
     }
     /**
      * @api
