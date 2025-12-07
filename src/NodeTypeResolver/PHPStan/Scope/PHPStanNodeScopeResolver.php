@@ -171,7 +171,6 @@ final class PHPStanNodeScopeResolver
          * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
          */
         Assert::allIsInstanceOf($stmts, Stmt::class);
-        $this->nodeTraverser->traverse($stmts);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
         $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (&$nodeCallback, $filePath): void {
             // the class reflection is resolved AFTER entering to class node
@@ -355,6 +354,9 @@ final class PHPStanNodeScopeResolver
             // fallback to fill by found scope
             \Rector\NodeTypeResolver\PHPStan\Scope\RectorNodeScopeResolver::processNodes($stmts, $scope);
         }
+        // use after scope filling so DecoratingNodeVisitorInterface instance can fetch the scope of target node
+        // @see https://github.com/rectorphp/rector-src/pull/7721#discussion_r2595932460
+        $this->nodeTraverser->traverse($stmts);
         return $stmts;
     }
     private function processYield(Yield_ $yield, MutatingScope $mutatingScope): void
