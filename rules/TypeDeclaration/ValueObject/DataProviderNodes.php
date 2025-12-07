@@ -44,10 +44,6 @@ final class DataProviderNodes
         Assert::allIsInstanceOf($attributes, Attribute::class);
         Assert::allIsInstanceOf($phpDocTagNodes, PhpDocTagNode::class);
     }
-    public function isEmpty(): bool
-    {
-        return $this->getClassMethods() === [];
-    }
     /**
      * @return ClassMethod[]
      */

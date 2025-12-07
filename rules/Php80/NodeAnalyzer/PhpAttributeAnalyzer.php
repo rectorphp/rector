@@ -9,13 +9,10 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Php81\Enum\AttributeName;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 final class PhpAttributeAnalyzer
 {
@@ -23,14 +20,9 @@ final class PhpAttributeAnalyzer
      * @readonly
      */
     private NodeNameResolver $nodeNameResolver;
-    /**
-     * @readonly
-     */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
@@ -42,25 +34,6 @@ final class PhpAttributeAnalyzer
                 if (!$this->nodeNameResolver->isName($attribute->name, $attributeClass)) {
                     continue;
                 }
-                return \true;
-            }
-        }
-        return \false;
-    }
-    /**
-     * @param AttributeName::* $attributeClass
-     */
-    public function hasInheritedPhpAttribute(Class_ $class, string $attributeClass): bool
-    {
-        $className = (string) $this->nodeNameResolver->getName($class);
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return \false;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $ancestorClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-        foreach ($ancestorClassReflections as $ancestorClassReflection) {
-            $nativeReflection = $ancestorClassReflection->getNativeReflection();
-            if ((method_exists($nativeReflection, 'getAttributes') ? $nativeReflection->getAttributes($attributeClass) : []) !== []) {
                 return \true;
             }
         }

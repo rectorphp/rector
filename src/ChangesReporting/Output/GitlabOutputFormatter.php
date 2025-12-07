@@ -18,10 +18,7 @@ final class GitlabOutputFormatter implements OutputFormatterInterface
      * @readonly
      */
     private Filehasher $filehasher;
-    /**
-     * @var string
-     */
-    public const NAME = 'gitlab';
+    private const NAME = 'gitlab';
     private const ERROR_TYPE_ISSUE = 'issue';
     private const ERROR_CATEGORY_BUG_RISK = 'Bug Risk';
     private const ERROR_CATEGORY_STYLE = 'Style';

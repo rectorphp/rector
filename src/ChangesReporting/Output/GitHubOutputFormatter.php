@@ -20,10 +20,7 @@ use Rector\ValueObject\ProcessResult;
  */
 final class GitHubOutputFormatter implements OutputFormatterInterface
 {
-    /**
-     * @var string
-     */
-    public const NAME = 'github';
+    private const NAME = 'github';
     private const GROUP_NAME = 'Rector report';
     public function getName(): string
     {

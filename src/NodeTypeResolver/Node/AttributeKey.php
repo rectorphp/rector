@@ -214,11 +214,6 @@ final class AttributeKey
      */
     public const IS_USED_AS_ARG_BY_REF_VALUE = 'is_used_as_arg_by_ref_value';
     /**
-     * @deprecated as never used
-     * @var string
-     */
-    public const ATTRIBUTE_COMMENT = 'attribute_comment';
-    /**
      * @var string
      */
     public const IS_FIRST_LEVEL_STATEMENT = 'first_level_stmt';

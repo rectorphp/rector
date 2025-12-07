@@ -19,7 +19,7 @@ final class JUnitOutputFormatter implements OutputFormatterInterface
      * @readonly
      */
     private SymfonyStyle $symfonyStyle;
-    public const NAME = 'junit';
+    private const NAME = 'junit';
     private const XML_ATTRIBUTE_FILE = 'file';
     private const XML_ATTRIBUTE_NAME = 'name';
     private const XML_ATTRIBUTE_TYPE = 'type';
