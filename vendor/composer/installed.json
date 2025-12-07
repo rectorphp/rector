@@ -2011,17 +2011,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.27",
-            "version_normalized": "6.4.27.0",
+            "version": "v6.4.30",
+            "version_normalized": "6.4.30.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "13d3176cf8ad8ced24202844e9f95af11e2959fc"
+                "reference": "1b2813049506b39eb3d7e64aff033fd5ca26c97e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/13d3176cf8ad8ced24202844e9f95af11e2959fc",
-                "reference": "13d3176cf8ad8ced24202844e9f95af11e2959fc",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/1b2813049506b39eb3d7e64aff033fd5ca26c97e",
+                "reference": "1b2813049506b39eb3d7e64aff033fd5ca26c97e",
                 "shasum": ""
             },
             "require": {
@@ -2054,7 +2054,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2025-10-06T10:25:16+00:00",
+            "time": "2025-12-05T13:47:41+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2088,7 +2088,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.27"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.30"
             },
             "funding": [
                 {
@@ -2182,17 +2182,17 @@
         },
         {
             "name": "symfony\/filesystem",
-            "version": "v6.4.24",
-            "version_normalized": "6.4.24.0",
+            "version": "v6.4.30",
+            "version_normalized": "6.4.30.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/filesystem.git",
-                "reference": "75ae2edb7cdcc0c53766c30b0a2512b8df574bd8"
+                "reference": "441c6b69f7222aadae7cbf5df588496d5ee37789"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/75ae2edb7cdcc0c53766c30b0a2512b8df574bd8",
-                "reference": "75ae2edb7cdcc0c53766c30b0a2512b8df574bd8",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/441c6b69f7222aadae7cbf5df588496d5ee37789",
+                "reference": "441c6b69f7222aadae7cbf5df588496d5ee37789",
                 "shasum": ""
             },
             "require": {
@@ -2203,7 +2203,7 @@
             "require-dev": {
                 "symfony\/process": "^5.4|^6.4|^7.0"
             },
-            "time": "2025-07-10T08:14:14+00:00",
+            "time": "2025-11-26T14:43:45+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2231,7 +2231,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.4.24"
+                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.4.30"
             },
             "funding": [
                 {
@@ -3091,17 +3091,17 @@
         },
         {
             "name": "symfony\/yaml",
-            "version": "v7.4.0",
-            "version_normalized": "7.4.0.0",
+            "version": "v7.4.1",
+            "version_normalized": "7.4.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/yaml.git",
-                "reference": "6c84a4b55aee4cd02034d1c528e83f69ddf63810"
+                "reference": "24dd4de28d2e3988b311751ac49e684d783e2345"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/6c84a4b55aee4cd02034d1c528e83f69ddf63810",
-                "reference": "6c84a4b55aee4cd02034d1c528e83f69ddf63810",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/24dd4de28d2e3988b311751ac49e684d783e2345",
+                "reference": "24dd4de28d2e3988b311751ac49e684d783e2345",
                 "shasum": ""
             },
             "require": {
@@ -3115,7 +3115,7 @@
             "require-dev": {
                 "symfony\/console": "^6.4|^7.0|^8.0"
             },
-            "time": "2025-11-16T10:14:42+00:00",
+            "time": "2025-12-04T18:11:45+00:00",
             "bin": [
                 "Resources\/bin\/yaml-lint"
             ],
@@ -3146,7 +3146,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.4.0"
+                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.4.1"
             },
             "funding": [
                 {

@@ -12,6 +12,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\Guard\LaravelModelGuard;
 use Rector\Privatization\Guard\OverrideByParentClassGuard;
+use Rector\Privatization\Guard\ParentClassMagicCallGuard;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Rector\Rector\AbstractRector;
@@ -42,13 +43,18 @@ final class PrivatizeFinalClassMethodRector extends AbstractRector
      * @readonly
      */
     private LaravelModelGuard $laravelModelGuard;
-    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, OverrideByParentClassGuard $overrideByParentClassGuard, BetterNodeFinder $betterNodeFinder, LaravelModelGuard $laravelModelGuard)
+    /**
+     * @readonly
+     */
+    private ParentClassMagicCallGuard $parentClassMagicCallGuard;
+    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, OverrideByParentClassGuard $overrideByParentClassGuard, BetterNodeFinder $betterNodeFinder, LaravelModelGuard $laravelModelGuard, ParentClassMagicCallGuard $parentClassMagicCallGuard)
     {
         $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->overrideByParentClassGuard = $overrideByParentClassGuard;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->laravelModelGuard = $laravelModelGuard;
+        $this->parentClassMagicCallGuard = $parentClassMagicCallGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -105,6 +111,9 @@ CODE_SAMPLE
                 continue;
             }
             if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByTrait($classMethod, $classReflection)) {
+                continue;
+            }
+            if ($this->parentClassMagicCallGuard->containsParentClassMagicCall($node)) {
                 continue;
             }
             $this->visibilityManipulator->makePrivate($classMethod);

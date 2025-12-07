@@ -637,10 +637,6 @@ class Parser
                 default:
                     $lines = [];
                     while ($this->moveToNextLine()) {
-                        if ($this->isCurrentLineBlank()) {
-                            $lines[] = '';
-                            continue;
-                        }
                         // unquoted strings end before the first unindented line
                         if (0 === $this->getCurrentLineIndentation()) {
                             $this->moveToPreviousLine();
@@ -648,6 +644,9 @@ class Parser
                         }
                         if ($this->isCurrentLineComment()) {
                             break;
+                        }
+                        if ('mapping' === $context && strpos($this->currentLine, ': ') !== \false && !$this->isCurrentLineComment()) {
+                            throw new ParseException('A colon cannot be used in an unquoted mapping value.', $this->getRealCurrentLineNb() + 1, $this->currentLine, $this->filename);
                         }
                         $lines[] = trim($this->currentLine);
                     }

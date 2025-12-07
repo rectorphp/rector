@@ -2585,6 +2585,7 @@ class ComposerStaticInit9382e835eeb0e1e0bafb04fcb204a42a
         'Rector\\PostRector\\ValueObject\\PropertyMetadata' => __DIR__ . '/../..' . '/src/PostRector/ValueObject/PropertyMetadata.php',
         'Rector\\Privatization\\Guard\\LaravelModelGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/LaravelModelGuard.php',
         'Rector\\Privatization\\Guard\\OverrideByParentClassGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/OverrideByParentClassGuard.php',
+        'Rector\\Privatization\\Guard\\ParentClassMagicCallGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentClassMagicCallGuard.php',
         'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
