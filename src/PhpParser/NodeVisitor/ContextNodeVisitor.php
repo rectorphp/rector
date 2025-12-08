@@ -30,6 +30,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeVisitor;
@@ -37,6 +38,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
 final class ContextNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**
@@ -61,6 +63,10 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             foreach ($node->vars as $var) {
                 $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
             }
+            return null;
+        }
+        if ($node instanceof TryCatch) {
+            SimpleNodeTraverser::decorateWithAttributeValue($node->stmts, AttributeKey::IS_IN_TRY_BLOCK, \true);
             return null;
         }
         if ($node instanceof Isset_) {

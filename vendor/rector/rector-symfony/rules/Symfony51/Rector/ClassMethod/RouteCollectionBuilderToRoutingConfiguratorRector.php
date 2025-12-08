@@ -5,16 +5,14 @@ namespace Rector\Symfony\Symfony51\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\Exception\NotImplementedYetException;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -70,7 +68,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Symfony\Component\HttpKernel\Kernel'))) {
+        if (!$this->isObjectType($node, new ObjectType(SymfonyClass::KERNEL))) {
             return null;
         }
         $configureRoutesClassMethod = $node->getMethod('configureRoutes');
@@ -81,10 +79,10 @@ CODE_SAMPLE
         if ($firstParam->type === null) {
             return null;
         }
-        if (!$this->isName($firstParam->type, 'Symfony\Component\Routing\RouteCollectionBuilder')) {
+        if (!$this->isName($firstParam->type, SymfonyClass::ROUTE_COLLECTION_BUILDER)) {
             return null;
         }
-        $firstParam->type = new FullyQualified('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator');
+        $firstParam->type = new FullyQualified(SymfonyClass::ROUTING_CONFIGURATOR);
         $configureRoutesClassMethod->name = new Identifier('configureRouting');
         $configureRoutesClassMethod->returnType = new Identifier('void');
         $this->traverseNodesWithCallable((array) $configureRoutesClassMethod->stmts, function (Node $node): ?MethodCall {
@@ -94,18 +92,14 @@ CODE_SAMPLE
             if (!$this->isName($node->name, 'add')) {
                 return null;
             }
-            // avoid nesting chain iteration infinity loop
-            $shouldSkip = (bool) $node->getAttribute(AttributeKey::DO_NOT_CHANGE);
-            if ($shouldSkip) {
+            // already filled
+            $args = $node->getArgs();
+            if (count($args) === 2) {
                 return null;
             }
-            $node->setAttribute(AttributeKey::DO_NOT_CHANGE, \true);
-            $pathValue = $node->getArgs()[0]->value;
-            $controllerValue = $node->getArgs()[1]->value;
-            $nameValue = $node->getArgs()[2]->value ?? null;
-            if (!$nameValue instanceof Expr) {
-                throw new NotImplementedYetException();
-            }
+            $pathValue = $args[0]->value;
+            $controllerValue = $args[1]->value;
+            $nameValue = $args[2]->value;
             $node->args = [new Arg($nameValue), new Arg($pathValue)];
             return new MethodCall($node, 'controller', [new Arg($controllerValue)]);
         });

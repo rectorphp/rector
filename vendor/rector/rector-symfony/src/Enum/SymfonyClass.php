@@ -177,4 +177,7 @@ final class SymfonyClass
      * @var string
      */
     public const UUID = 'Symfony\Component\Uid\Uuid';
+    public const ROUTE_COLLECTION_BUILDER = 'Symfony\Component\Routing\RouteCollectionBuilder';
+    public const ROUTING_CONFIGURATOR = 'Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator';
+    public const KERNEL = 'Symfony\Component\HttpKernel\Kernel';
 }
