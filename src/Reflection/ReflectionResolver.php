@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
@@ -196,6 +197,19 @@ final class ReflectionResolver
         }
         // todo: support NullsafeMethodCall
         return null;
+    }
+    /**
+     * @api used in rector-laravel
+     */
+    public function resolveMethodReflectionFromClassMethod(ClassMethod $classMethod, Scope $scope): ?MethodReflection
+    {
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        $className = $classReflection->getName();
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        return $this->resolveMethodReflection($className, $methodName, $scope);
     }
     public function resolveMethodReflectionFromNew(New_ $new): ?MethodReflection
     {
