@@ -129,7 +129,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var array<StaticCall|MethodCall|FuncCall> $callers */
-        $callers = $this->betterNodeFinder->findInstancesOf($node, [StaticCall::class, MethodCall::class, FuncCall::class]);
+        $callers = $this->betterNodeFinder->findInstancesOfScoped([$node], [StaticCall::class, MethodCall::class, FuncCall::class]);
         $hasChanged = $this->refactorFunctionLike($node, $callers);
         if ($hasChanged) {
             return $node;
