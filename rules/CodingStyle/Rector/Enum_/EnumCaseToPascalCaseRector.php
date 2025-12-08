@@ -162,6 +162,6 @@ CODE_SAMPLE
     private function convertToPascalCase(string $name): string
     {
         $parts = explode('_', $name);
-        return implode('', array_map(fn($part): string => ctype_upper((string) $part) ? ucfirst(strtolower((string) $part)) : ucfirst((string) $part), $parts));
+        return implode('', array_map(fn($part): string => ctype_upper($part) ? ucfirst(strtolower($part)) : ucfirst($part), $parts));
     }
 }
