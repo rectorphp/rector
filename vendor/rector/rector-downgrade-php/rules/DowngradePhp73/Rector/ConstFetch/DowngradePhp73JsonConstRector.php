@@ -9,23 +9,19 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified as NameFullyQualified;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\VariadicPlaceholder;
-use PhpParser\NodeVisitor;
 use Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner;
 use Rector\Enum\JsonConstant;
 use Rector\NodeAnalyzer\DefineFuncCallAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -52,10 +48,6 @@ final class DowngradePhp73JsonConstRector extends AbstractRector
      * @var array<string>
      */
     private const REFACTOR_FUNCS = ['json_decode', 'json_encode'];
-    /**
-     * @var string
-     */
-    private const IS_EXPRESSION_INSIDE_TRY_CATCH = 'is_expression_inside_try_catch';
     public function __construct(JsonConstCleaner $jsonConstCleaner, DefineFuncCallAnalyzer $defineFuncCallAnalyzer)
     {
         $this->jsonConstCleaner = $jsonConstCleaner;
@@ -64,18 +56,16 @@ final class DowngradePhp73JsonConstRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove Json constant that available only in php 7.3', [new CodeSample(<<<'CODE_SAMPLE'
-json_encode($content, JSON_THROW_ON_ERROR);
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-json_encode($content, 0);
-if (json_last_error() !== JSON_ERROR_NONE) {
-    throw new \Exception(json_last_error_msg());
-}
-CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+$json = json_encode($content, JSON_THROW_ON_ERROR);
+
 $content = json_decode($json, null, 512, JSON_THROW_ON_ERROR);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
+$json json_encode($content, 0);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    throw new \Exception(json_last_error_msg());
+}
+
 $content = json_decode($json, null, 512, 0);
 if (json_last_error() !== JSON_ERROR_NONE) {
     throw new \Exception(json_last_error_msg());
@@ -88,10 +78,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ConstFetch::class, BitwiseOr::class, If_::class, TryCatch::class, Expression::class];
+        return [ConstFetch::class, BitwiseOr::class, If_::class, Expression::class];
     }
     /**
-     * @param ConstFetch|BitwiseOr|If_|TryCatch|Expression $node
+     * @param ConstFetch|BitwiseOr|If_|Expression $node
      * @return null|Expr|array<Expression|If_>
      */
     public function refactor(Node $node)
@@ -104,22 +94,10 @@ CODE_SAMPLE
         if ((bool) $node->getAttribute(self::PHP73_JSON_CONSTANT_IS_KNOWN)) {
             return null;
         }
-        if ($node instanceof TryCatch) {
-            $this->traverseNodesWithCallable($node->stmts, function (Node $subNode): ?int {
-                if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
-                    return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-                }
-                if (!$subNode instanceof Expression) {
-                    return null;
-                }
-                $funcCall = $this->resolveFuncCall($subNode);
-                if ($funcCall instanceof FuncCall) {
-                    $subNode->setAttribute(self::IS_EXPRESSION_INSIDE_TRY_CATCH, \true);
-                }
-                return null;
-            });
-            return null;
-        }
+        //        if ($node instanceof TryCatch) {
+        //            SimpleNodeTraverser::decorateWithAttributeValue($node->stmts, self::IS_EXPRESSION_INSIDE_TRY_CATCH, true);
+        //            return null;
+        //        }
         if ($node instanceof Expression) {
             return $this->refactorStmt($node);
         }
@@ -156,11 +134,12 @@ CODE_SAMPLE
      * only when the flags are directly set in the function call.
      * If the flags are set from a variable, that would require a much more
      * complex analysis to be 100% accurate, beyond Rector actual capabilities.
+     *
      * @return null|array<Expression|If_>
      */
     private function refactorStmt(Expression $Expression): ?array
     {
-        if ($Expression->getAttribute(self::IS_EXPRESSION_INSIDE_TRY_CATCH) === \true) {
+        if ($Expression->getAttribute(AttributeKey::IS_IN_TRY_BLOCK) === \true) {
             return null;
         }
         // retrieve a `FuncCall`, if any, from the statement

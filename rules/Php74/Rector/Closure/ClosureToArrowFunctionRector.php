@@ -74,7 +74,7 @@ CODE_SAMPLE
         $comments = $node->stmts[0]->getAttribute(AttributeKey::COMMENTS) ?? [];
         if ($comments !== []) {
             $this->mirrorComments($arrowFunction->expr, $node->stmts[0]);
-            $arrowFunction->setAttribute(AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED, \true);
+            $arrowFunction->setAttribute(AttributeKey::COMMENTS, \true);
         }
         return $arrowFunction;
     }

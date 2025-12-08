@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Expression;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -10,10 +11,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeVisitor;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,16 +34,11 @@ final class RemoveDeadStmtRector extends AbstractRector
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    public function __construct(LivingCodeManipulator $livingCodeManipulator, PropertyFetchAnalyzer $propertyFetchAnalyzer, ReflectionResolver $reflectionResolver, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(LivingCodeManipulator $livingCodeManipulator, PropertyFetchAnalyzer $propertyFetchAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->livingCodeManipulator = $livingCodeManipulator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -108,10 +102,9 @@ CODE_SAMPLE
      */
     private function removeNodeAndKeepComments(Expression $expression)
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
-        if ($expression->getComments() !== []) {
+        if ($expression->getDocComment() instanceof Doc) {
             $nop = new Nop();
-            $nop->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+            $nop->setDocComment($expression->getDocComment());
             return $nop;
         }
         return NodeVisitor::REMOVE_NODE;

@@ -141,7 +141,7 @@ final class BetterStandardPrinter extends Standard
     }
     protected function pExpr_ArrowFunction(ArrowFunction $arrowFunction, int $precedence, int $lhsPrecedence): string
     {
-        if (!$arrowFunction->hasAttribute(AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED)) {
+        if (!$arrowFunction->hasAttribute(AttributeKey::COMMENTS)) {
             return parent::pExpr_ArrowFunction($arrowFunction, $precedence, $lhsPrecedence);
         }
         $expr = $arrowFunction->expr;

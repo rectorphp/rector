@@ -76,6 +76,9 @@ CODE_SAMPLE
     public function beforeTraverse(array $nodes): ?array
     {
         parent::beforeTraverse($nodes);
+        if ($this->file->containsHTML()) {
+            return null;
+        }
         if ($this->shouldSkipNodes($nodes, $this->file)) {
             return null;
         }
