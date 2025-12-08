@@ -7,7 +7,7 @@ use Rector\CodingStyle\Rector\FuncCall\ClosureFromCallableToFirstClassCallableRe
 use Rector\CodingStyle\Rector\FuncCall\FunctionFirstClassCallableRector;
 use Rector\CodingStyle\Rector\FunctionLike\FunctionLikeToFirstClassCallableRector;
 use Rector\Config\RectorConfig;
-use Rector\Php81\Rector\Array_\FirstClassCallableRector;
+use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
 use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;
 use Rector\Php81\Rector\ClassMethod\NewInInitializerRector;
@@ -31,7 +31,7 @@ return static function (RectorConfig $rectorConfig): void {
         NullToStrictStringFuncCallArgRector::class,
         NullToStrictIntPregSlitFuncCallLimitArgRector::class,
         // array of local method call
-        FirstClassCallableRector::class,
+        ArrayToFirstClassCallableRector::class,
         // closure/arrow function
         FunctionLikeToFirstClassCallableRector::class,
         ClosureFromCallableToFirstClassCallableRector::class,
