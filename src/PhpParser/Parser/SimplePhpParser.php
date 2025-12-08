@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\AssignedToNodeVisitor;
+use Rector\PhpParser\NodeVisitor\AssignedToNodeVisitor;
 use Throwable;
 final class SimplePhpParser
 {

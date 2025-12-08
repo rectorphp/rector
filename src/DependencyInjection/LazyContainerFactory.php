@@ -95,18 +95,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver\PropertyTypeResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver\ScalarTypeResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver\StaticCallMethodCallTypeResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver\TraitTypeResolver;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ArgNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\AssignedToNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ByRefReturnNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ByRefVariableNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ClassConstFetchNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ContextNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\GlobalVariableNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\NameNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\PhpVersionConditionNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\PropertyOrClassConstDefaultNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\StaticVariableNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\SymfonyClosureNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Php80\AttributeDecorator\DoctrineConverterAttributeDecorator;
@@ -127,6 +115,19 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\PhpParser\NodeVisitor\ArgNodeVisitor;
+use Rector\PhpParser\NodeVisitor\AssignedToNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ByRefReturnNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ByRefVariableNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ClassConstFetchNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ClosureWithVariadicParametersNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ContextNodeVisitor;
+use Rector\PhpParser\NodeVisitor\GlobalVariableNodeVisitor;
+use Rector\PhpParser\NodeVisitor\NameNodeVisitor;
+use Rector\PhpParser\NodeVisitor\PhpVersionConditionNodeVisitor;
+use Rector\PhpParser\NodeVisitor\PropertyOrClassConstDefaultNodeVisitor;
+use Rector\PhpParser\NodeVisitor\StaticVariableNodeVisitor;
+use Rector\PhpParser\NodeVisitor\SymfonyClosureNodeVisitor;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\AccessoryLiteralStringTypeMapper;
@@ -208,7 +209,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<DecoratingNodeVisitorInterface>>
      */
-    private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, SymfonyClosureNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class];
+    private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, ClosureWithVariadicParametersNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, SymfonyClosureNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class];
     /**
      * @var array<class-string<PhpDocTypeMapperInterface>>
      */
