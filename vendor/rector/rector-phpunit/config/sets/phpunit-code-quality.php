@@ -93,6 +93,8 @@ return static function (RectorConfig $rectorConfig): void {
         AssertEmptyNullableObjectToAssertInstanceofRector::class,
         // avoid call on nullable object
         AddInstanceofAssertForNullableInstanceRector::class,
+        // enable next after testing
+        // \Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableArgumentRector::class,
         AssertArrayCastedObjectToAssertSameRector::class,
         /**
          * Improve direct testing of your code, without mock creep. Make it simple, clear and easy to maintain:
