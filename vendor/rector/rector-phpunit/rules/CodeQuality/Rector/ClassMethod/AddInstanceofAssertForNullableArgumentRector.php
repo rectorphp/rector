@@ -17,6 +17,7 @@ use Rector\PHPUnit\CodeQuality\TypeAnalyzer\MethodCallParameterTypeResolver;
 use Rector\PHPUnit\CodeQuality\TypeAnalyzer\SimpleTypeAnalyzer;
 use Rector\PHPUnit\CodeQuality\ValueObject\VariableNameToType;
 use Rector\PHPUnit\CodeQuality\ValueObject\VariableNameToTypeCollection;
+use Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -42,12 +43,17 @@ final class AddInstanceofAssertForNullableArgumentRector extends AbstractRector
      * @readonly
      */
     private MethodCallParameterTypeResolver $methodCallParameterTypeResolver;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, NullableObjectAssignCollector $nullableObjectAssignCollector, AssertMethodCallFactory $assertMethodCallFactory, MethodCallParameterTypeResolver $methodCallParameterTypeResolver)
+    /**
+     * @readonly
+     */
+    private AssertCallAnalyzer $assertCallAnalyzer;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, NullableObjectAssignCollector $nullableObjectAssignCollector, AssertMethodCallFactory $assertMethodCallFactory, MethodCallParameterTypeResolver $methodCallParameterTypeResolver, AssertCallAnalyzer $assertCallAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->nullableObjectAssignCollector = $nullableObjectAssignCollector;
         $this->assertMethodCallFactory = $assertMethodCallFactory;
         $this->methodCallParameterTypeResolver = $methodCallParameterTypeResolver;
+        $this->assertCallAnalyzer = $assertCallAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -157,6 +163,10 @@ CODE_SAMPLE
                 return null;
             }
             if ($node->isFirstClassCallable()) {
+                return null;
+            }
+            // avoid double null on assert
+            if ($this->assertCallAnalyzer->isAssertMethodCall($node)) {
                 return null;
             }
             $classMethodParameterTypes = $this->methodCallParameterTypeResolver->resolve($node);

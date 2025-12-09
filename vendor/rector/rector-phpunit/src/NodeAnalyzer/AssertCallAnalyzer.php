@@ -87,6 +87,25 @@ final class AssertCallAnalyzer
         $this->containsAssertCallByClassMethod[$cacheHash] = $hasNestedAssertOrMockCall;
         return $hasNestedAssertOrMockCall;
     }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     */
+    public function isAssertMethodCall($call): bool
+    {
+        if (!$call->name instanceof Identifier) {
+            return \false;
+        }
+        $callName = $this->nodeNameResolver->getName($call->name);
+        if (!is_string($callName)) {
+            return \false;
+        }
+        foreach (self::ASSERT_METHOD_NAME_PREFIXES as $assertMethodNamePrefix) {
+            if (strncmp($callName, $assertMethodNamePrefix, strlen($assertMethodNamePrefix)) === 0) {
+                return \true;
+            }
+        }
+        return \false;
+    }
     private function hasDirectAssertOrMockCall(ClassMethod $classMethod): bool
     {
         return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
@@ -99,10 +118,10 @@ final class AssertCallAnalyzer
                 if ($type instanceof FullyQualifiedObjectType && in_array($type->getClassName(), ['PHPUnit\Framework\MockObject\MockBuilder', 'Prophecy\Prophet'], \true)) {
                     return \true;
                 }
-                return $this->isAssertMethodName($node);
+                return $this->isAssertMethodCall($node);
             }
             if ($node instanceof StaticCall) {
-                return $this->isAssertMethodName($node);
+                return $this->isAssertMethodCall($node);
             }
             return \false;
         });
@@ -149,24 +168,5 @@ final class AssertCallAnalyzer
             return null;
         }
         return $this->astResolver->resolveClassMethod($objectType->getClassName(), $methodName);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
-     */
-    private function isAssertMethodName($call): bool
-    {
-        if (!$call->name instanceof Identifier) {
-            return \false;
-        }
-        $callName = $this->nodeNameResolver->getName($call->name);
-        if (!is_string($callName)) {
-            return \false;
-        }
-        foreach (self::ASSERT_METHOD_NAME_PREFIXES as $assertMethodNamePrefix) {
-            if (strncmp($callName, $assertMethodNamePrefix, strlen($assertMethodNamePrefix)) === 0) {
-                return \true;
-            }
-        }
-        return \false;
     }
 }
