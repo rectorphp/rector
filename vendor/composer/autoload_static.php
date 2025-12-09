@@ -2564,6 +2564,7 @@ class ComposerStaticInit74acfc93a8a335df0429191cbf621bda
         'Rector\\PhpParser\\NodeVisitor\\ContextNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/ContextNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\GlobalVariableNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/GlobalVariableNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\NameNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/NameNodeVisitor.php',
+        'Rector\\PhpParser\\NodeVisitor\\ParamDefaultNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/ParamDefaultNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\PhpVersionConditionNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/PhpVersionConditionNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\PropertyOrClassConstDefaultNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/PropertyOrClassConstDefaultNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\StaticVariableNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/StaticVariableNodeVisitor.php',

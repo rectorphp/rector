@@ -181,6 +181,10 @@ final class AttributeKey
     /**
      * @var string
      */
+    public const IS_PARAM_DEFAULT = 'is_param_default';
+    /**
+     * @var string
+     */
     public const IS_INCREMENT_OR_DECREMENT = 'is_increment_or_decrement';
     /**
      * @var string

@@ -124,6 +124,7 @@ use Rector\PhpParser\NodeVisitor\ClosureWithVariadicParametersNodeVisitor;
 use Rector\PhpParser\NodeVisitor\ContextNodeVisitor;
 use Rector\PhpParser\NodeVisitor\GlobalVariableNodeVisitor;
 use Rector\PhpParser\NodeVisitor\NameNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ParamDefaultNodeVisitor;
 use Rector\PhpParser\NodeVisitor\PhpVersionConditionNodeVisitor;
 use Rector\PhpParser\NodeVisitor\PropertyOrClassConstDefaultNodeVisitor;
 use Rector\PhpParser\NodeVisitor\StaticVariableNodeVisitor;
@@ -209,7 +210,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<DecoratingNodeVisitorInterface>>
      */
-    private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, ClosureWithVariadicParametersNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, SymfonyClosureNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class];
+    private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, ClosureWithVariadicParametersNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, SymfonyClosureNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ParamDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class];
     /**
      * @var array<class-string<PhpDocTypeMapperInterface>>
      */
