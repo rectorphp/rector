@@ -3,30 +3,42 @@
 declare (strict_types=1);
 namespace Rector\Skipper\SkipCriteriaResolver;
 
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+/**
+ * @see \Rector\Tests\Skipper\Skipper\SkippedClassResolverTest
+ */
 final class SkippedClassResolver
 {
     /**
-     * @var null|array<string, string[]|null>
+     * @var null|array<class-string, string[]|null>
      */
-    private $skippedClasses = null;
+    private $skippedClassesToFiles = null;
     /**
-     * @return array<string, string[]|null>
+     * @return array<class-string<DeprecatedInterface>>
+     */
+    public function resolveDeprecatedSkippedClasses(): array
+    {
+        $skippedClassNames = array_keys($this->resolve());
+        return array_filter($skippedClassNames, fn(string $class): bool => is_a($class, DeprecatedInterface::class, \true));
+    }
+    /**
+     * @return array<class-string, string[]|null>
      */
     public function resolve(): array
     {
         // disable cache in tests
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            $this->skippedClasses = null;
+            $this->skippedClassesToFiles = null;
         }
         // already cached, even only empty array
-        if ($this->skippedClasses !== null) {
-            return $this->skippedClasses;
+        if ($this->skippedClassesToFiles !== null) {
+            return $this->skippedClassesToFiles;
         }
         $skip = SimpleParameterProvider::provideArrayParameter(Option::SKIP);
-        $this->skippedClasses = [];
+        $this->skippedClassesToFiles = [];
         foreach ($skip as $key => $value) {
             // e.g. [SomeClass::class] → shift values to [SomeClass::class => null]
             if (is_int($key)) {
@@ -40,8 +52,8 @@ final class SkippedClassResolver
             if (!class_exists($key) && !interface_exists($key)) {
                 continue;
             }
-            $this->skippedClasses[$key] = $value;
+            $this->skippedClassesToFiles[$key] = $value;
         }
-        return $this->skippedClasses;
+        return $this->skippedClassesToFiles;
     }
 }

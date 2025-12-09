@@ -2197,6 +2197,7 @@ return array(
     'Rector\\Php81\\NodeFactory\\EnumFactory' => $baseDir . '/rules/Php81/NodeFactory/EnumFactory.php',
     'Rector\\Php81\\NodeManipulator\\NullToStrictStringIntConverter' => $baseDir . '/rules/Php81/NodeManipulator/NullToStrictStringIntConverter.php',
     'Rector\\Php81\\Rector\\Array_\\ArrayToFirstClassCallableRector' => $baseDir . '/rules/Php81/Rector/Array_/ArrayToFirstClassCallableRector.php',
+    'Rector\\Php81\\Rector\\Array_\\FirstClassCallableRector' => $baseDir . '/rules/Php81/Rector/Array_/FirstClassCallableRector.php',
     'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => $baseDir . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
     'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
     'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
