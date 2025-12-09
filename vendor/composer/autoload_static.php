@@ -1567,6 +1567,7 @@ class ComposerStaticInit74acfc93a8a335df0429191cbf621bda
         'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',
         'Rector\\CodingStyle\\Rector\\Stmt\\RemoveUselessAliasInUseStatementRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Stmt/RemoveUselessAliasInUseStatementRector.php',
         'Rector\\CodingStyle\\Rector\\String_\\SimplifyQuoteEscapeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/String_/SimplifyQuoteEscapeRector.php',
+        'Rector\\CodingStyle\\Rector\\String_\\SymplifyQuoteEscapeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/String_/SymplifyQuoteEscapeRector.php',
         'Rector\\CodingStyle\\Rector\\String_\\UseClassKeywordForClassNameResolutionRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/String_/UseClassKeywordForClassNameResolutionRector.php',
         'Rector\\CodingStyle\\Rector\\Ternary\\TernaryConditionVariableAssignmentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Ternary/TernaryConditionVariableAssignmentRector.php',
         'Rector\\CodingStyle\\Rector\\Use_\\SeparateMultiUseImportsRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php',

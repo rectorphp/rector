@@ -1307,6 +1307,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => $baseDir . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',
     'Rector\\CodingStyle\\Rector\\Stmt\\RemoveUselessAliasInUseStatementRector' => $baseDir . '/rules/CodingStyle/Rector/Stmt/RemoveUselessAliasInUseStatementRector.php',
     'Rector\\CodingStyle\\Rector\\String_\\SimplifyQuoteEscapeRector' => $baseDir . '/rules/CodingStyle/Rector/String_/SimplifyQuoteEscapeRector.php',
+    'Rector\\CodingStyle\\Rector\\String_\\SymplifyQuoteEscapeRector' => $baseDir . '/rules/CodingStyle/Rector/String_/SymplifyQuoteEscapeRector.php',
     'Rector\\CodingStyle\\Rector\\String_\\UseClassKeywordForClassNameResolutionRector' => $baseDir . '/rules/CodingStyle/Rector/String_/UseClassKeywordForClassNameResolutionRector.php',
     'Rector\\CodingStyle\\Rector\\Ternary\\TernaryConditionVariableAssignmentRector' => $baseDir . '/rules/CodingStyle/Rector/Ternary/TernaryConditionVariableAssignmentRector.php',
     'Rector\\CodingStyle\\Rector\\Use_\\SeparateMultiUseImportsRector' => $baseDir . '/rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php',
