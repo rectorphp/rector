@@ -1214,6 +1214,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyRegexPatternRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SimplifyRegexPatternRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyStrposLowerRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SimplifyStrposLowerRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\SingleInArrayToCompareRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SingleInArrayToCompareRector.php',
+    'Rector\\CodeQuality\\Rector\\FuncCall\\SortCallLikeNamedArgsRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SortCallLikeNamedArgsRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\SortNamedParamRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SortNamedParamRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\UnwrapSprintfOneArgumentRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/UnwrapSprintfOneArgumentRector.php',
     'Rector\\CodeQuality\\Rector\\FunctionLike\\SimplifyUselessVariableRector' => $baseDir . '/rules/CodeQuality/Rector/FunctionLike/SimplifyUselessVariableRector.php',

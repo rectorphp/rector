@@ -1474,6 +1474,7 @@ class ComposerStaticInit74acfc93a8a335df0429191cbf621bda
         'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyRegexPatternRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SimplifyRegexPatternRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyStrposLowerRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SimplifyStrposLowerRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\SingleInArrayToCompareRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SingleInArrayToCompareRector.php',
+        'Rector\\CodeQuality\\Rector\\FuncCall\\SortCallLikeNamedArgsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SortCallLikeNamedArgsRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\SortNamedParamRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SortNamedParamRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\UnwrapSprintfOneArgumentRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/UnwrapSprintfOneArgumentRector.php',
         'Rector\\CodeQuality\\Rector\\FunctionLike\\SimplifyUselessVariableRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FunctionLike/SimplifyUselessVariableRector.php',
