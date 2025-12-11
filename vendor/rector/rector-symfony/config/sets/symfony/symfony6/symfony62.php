@@ -29,4 +29,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-doctrine-bridge.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-messenger.php');
     $rectorConfig->import(__DIR__ . '/symfony62/symfony62-mail-pace-mailer.php');
+    $rectorConfig->import(__DIR__ . '/symfony62/symfony62-validator.php');
 };
