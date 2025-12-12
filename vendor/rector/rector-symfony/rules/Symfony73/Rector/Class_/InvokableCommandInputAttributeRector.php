@@ -3,16 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Symfony73\Rector\Class_;
 
+use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
-use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\CommandMethodName;
 use Rector\Symfony\Enum\SymfonyAttribute;
@@ -59,24 +60,19 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
     /**
      * @readonly
      */
-    private VisibilityManipulator $visibilityManipulator;
-    /**
-     * @readonly
-     */
     private OutputInputSymfonyStyleReplacer $outputInputSymfonyStyleReplacer;
     /**
      * @readonly
      */
     private CommandUnusedInputOutputRemover $commandUnusedInputOutputRemover;
     private const MIGRATED_CONFIGURE_CALLS = ['addArgument', 'addOption'];
-    public function __construct(AttributeFinder $attributeFinder, CommandArgumentsResolver $commandArgumentsResolver, CommandOptionsResolver $commandOptionsResolver, CommandInvokeParamsFactory $commandInvokeParamsFactory, ConsoleOptionAndArgumentMethodCallVariableReplacer $consoleOptionAndArgumentMethodCallVariableReplacer, VisibilityManipulator $visibilityManipulator, OutputInputSymfonyStyleReplacer $outputInputSymfonyStyleReplacer, CommandUnusedInputOutputRemover $commandUnusedInputOutputRemover)
+    public function __construct(AttributeFinder $attributeFinder, CommandArgumentsResolver $commandArgumentsResolver, CommandOptionsResolver $commandOptionsResolver, CommandInvokeParamsFactory $commandInvokeParamsFactory, ConsoleOptionAndArgumentMethodCallVariableReplacer $consoleOptionAndArgumentMethodCallVariableReplacer, OutputInputSymfonyStyleReplacer $outputInputSymfonyStyleReplacer, CommandUnusedInputOutputRemover $commandUnusedInputOutputRemover)
     {
         $this->attributeFinder = $attributeFinder;
         $this->commandArgumentsResolver = $commandArgumentsResolver;
         $this->commandOptionsResolver = $commandOptionsResolver;
         $this->commandInvokeParamsFactory = $commandInvokeParamsFactory;
         $this->consoleOptionAndArgumentMethodCallVariableReplacer = $consoleOptionAndArgumentMethodCallVariableReplacer;
-        $this->visibilityManipulator = $visibilityManipulator;
         $this->outputInputSymfonyStyleReplacer = $outputInputSymfonyStyleReplacer;
         $this->commandUnusedInputOutputRemover = $commandUnusedInputOutputRemover;
     }
@@ -159,37 +155,31 @@ CODE_SAMPLE
         if (!$this->attributeFinder->hasAttributeByClasses($node, [SymfonyAttribute::AS_COMMAND])) {
             return null;
         }
-        $executeClassMethod = $node->getMethod(CommandMethodName::EXECUTE);
-        if (!$executeClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        // 1. rename execute to __invoke
-        $executeClassMethod->name = new Identifier(MethodName::INVOKE);
-        $this->visibilityManipulator->makePublic($executeClassMethod);
-        // 2. fetch configure method to get arguments and options metadata
-        $configureClassMethod = $node->getMethod(CommandMethodName::CONFIGURE);
-        if ($configureClassMethod instanceof ClassMethod) {
-            // 3. create arguments and options parameters
-            $commandArguments = $this->commandArgumentsResolver->resolve($configureClassMethod);
-            $commandOptions = $this->commandOptionsResolver->resolve($configureClassMethod);
-            // 4. remove configure() method
-            $this->removeConfigureClassMethodIfNotUseful($node);
-            // 5. decorate __invoke method with attributes
-            $invokeParams = $this->commandInvokeParamsFactory->createParams($commandArguments, $commandOptions);
-        } else {
-            $invokeParams = [];
-        }
-        $executeClassMethod->params = array_merge($invokeParams, [$executeClassMethod->params[1]]);
-        // 6. remove parent class
-        $node->extends = null;
-        $this->removeOverrideAttributeAsDifferentMethod($executeClassMethod);
-        if ($configureClassMethod instanceof ClassMethod) {
+        foreach ($node->stmts as $key => $classStmt) {
+            if (!$classStmt instanceof ClassMethod) {
+                continue;
+            }
+            if (!$this->isName($classStmt, CommandMethodName::EXECUTE)) {
+                continue;
+            }
+            $executeClassMethod = $classStmt;
+            // 1. rename execute to __invoke
+            $invokeClassMethod = new ClassMethod(MethodName::INVOKE);
+            $invokeClassMethod->flags |= Modifiers::PUBLIC;
+            $invokeClassMethod->returnType = new Identifier('int');
+            $invokeClassMethod->stmts = $classStmt->stmts;
+            $invokeParams = $this->createInvokeParams($node);
+            $invokeClassMethod->params = array_merge($invokeParams, [$executeClassMethod->params[1]]);
+            // 6. remove parent class
+            $node->extends = null;
             // 7. replace input->getArgument() and input->getOption() calls with direct variable access
-            $this->consoleOptionAndArgumentMethodCallVariableReplacer->replace($executeClassMethod);
+            $this->consoleOptionAndArgumentMethodCallVariableReplacer->replace($invokeClassMethod);
+            $this->outputInputSymfonyStyleReplacer->replace($invokeClassMethod);
+            $this->commandUnusedInputOutputRemover->remove($invokeClassMethod);
+            $node->stmts[$key] = $invokeClassMethod;
+            return $node;
         }
-        $this->outputInputSymfonyStyleReplacer->replace($executeClassMethod);
-        $this->commandUnusedInputOutputRemover->remove($executeClassMethod);
-        return $node;
+        return null;
     }
     /**
      * Skip commands with interact() or initialize() methods as modify the argument/option values
@@ -247,18 +237,22 @@ CODE_SAMPLE
         // the left-most var must be $this
         return $current instanceof Variable && $this->isName($current, 'this');
     }
-    private function removeOverrideAttributeAsDifferentMethod(ClassMethod $executeClassMethod): void
+    /**
+     * @return Param[]
+     */
+    private function createInvokeParams(Class_ $class): array
     {
-        foreach ($executeClassMethod->attrGroups as $attrGroupKey => $attrGroup) {
-            foreach ($attrGroup->attrs as $attributeKey => $attr) {
-                if ($this->isName($attr->name, 'Override')) {
-                    unset($attrGroup->attrs[$attributeKey]);
-                }
-            }
-            // is attribute empty? remove whole group
-            if ($attrGroup->attrs === []) {
-                unset($executeClassMethod->attrGroups[$attrGroupKey]);
-            }
+        // 1. fetch configure method to get arguments and options metadata
+        $configureClassMethod = $class->getMethod(CommandMethodName::CONFIGURE);
+        if ($configureClassMethod instanceof ClassMethod) {
+            // 2. create arguments and options parameters
+            $commandArguments = $this->commandArgumentsResolver->resolve($configureClassMethod);
+            $commandOptions = $this->commandOptionsResolver->resolve($configureClassMethod);
+            // 3. remove configure() method
+            $this->removeConfigureClassMethodIfNotUseful($class);
+            // 4. decorate __invoke method with attributes
+            return $this->commandInvokeParamsFactory->createParams($commandArguments, $commandOptions);
         }
+        return [];
     }
 }

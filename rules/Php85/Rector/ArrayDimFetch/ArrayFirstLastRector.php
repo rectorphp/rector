@@ -6,6 +6,7 @@ namespace Rector\Php85\Rector\ArrayDimFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -67,6 +68,9 @@ CODE_SAMPLE
         }
         $scope = ScopeFetcher::fetch($node->var);
         if ($scope->isInExpressionAssign($node)) {
+            return null;
+        }
+        if ($node->getAttribute(AttributeKey::IS_UNSET_VAR)) {
             return null;
         }
         $functionName = $this->isName($node->dim, self::ARRAY_KEY_FIRST) ? 'array_first' : 'array_last';
