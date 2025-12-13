@@ -2343,6 +2343,7 @@ return array(
     'Rector\\Privatization\\Guard\\ParentClassMagicCallGuard' => $baseDir . '/rules/Privatization/Guard/ParentClassMagicCallGuard.php',
     'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => $baseDir . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
     'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => $baseDir . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
+    'Rector\\Privatization\\Rector\\ClassConst\\PrivatizeFinalClassConstantRector' => $baseDir . '/rules/Privatization/Rector/ClassConst/PrivatizeFinalClassConstantRector.php',
     'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => $baseDir . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
     'Rector\\Privatization\\Rector\\Class_\\FinalizeTestCaseClassRector' => $baseDir . '/rules/Privatization/Rector/Class_/FinalizeTestCaseClassRector.php',
     'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => $baseDir . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',

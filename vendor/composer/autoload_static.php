@@ -2603,6 +2603,7 @@ class ComposerStaticInit74acfc93a8a335df0429191cbf621bda
         'Rector\\Privatization\\Guard\\ParentClassMagicCallGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentClassMagicCallGuard.php',
         'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
+        'Rector\\Privatization\\Rector\\ClassConst\\PrivatizeFinalClassConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassConst/PrivatizeFinalClassConstantRector.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
         'Rector\\Privatization\\Rector\\Class_\\FinalizeTestCaseClassRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeTestCaseClassRector.php',
         'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
