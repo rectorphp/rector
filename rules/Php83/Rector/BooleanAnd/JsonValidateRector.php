@@ -34,7 +34,6 @@ final class JsonValidateRector extends AbstractRector implements MinPhpVersionIn
      * @readonly
      */
     private ValueResolver $valueResolver;
-    protected const ARG_NAMES = ['json', 'associative', 'depth', 'flags'];
     private const JSON_MAX_DEPTH = 0x7fffffff;
     public function __construct(BinaryOpManipulator $binaryOpManipulator, ValueResolver $valueResolver)
     {
