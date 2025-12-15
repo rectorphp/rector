@@ -155,6 +155,9 @@ CODE_SAMPLE
                 if ($this->isNames($param->type, array_merge([SymfonyClass::USER_INTERFACE, SymfonyClass::REQUEST, FosClass::PARAM_FETCHER, SymfonyClass::UUID, Throwable::class, Exception::class], $entityClasses))) {
                     continue;
                 }
+                if ($this->isObjectType($param->type, new ObjectType(SymfonyClass::USER_INTERFACE))) {
+                    continue;
+                }
                 foreach (self::COMMON_ENTITY_CONTAINS_SUBNAMESPACES as $commonEntityContainsNamespace) {
                     if (strpos($this->getName($param->type), $commonEntityContainsNamespace) !== \false) {
                         continue 2;
