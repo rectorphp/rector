@@ -15,6 +15,7 @@ use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\TwigClass;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -88,7 +89,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->nodeTypeResolver->isObjectTypes($node, [new ObjectType('Twig_ExtensionInterface'), new ObjectType('Twig\Extension\ExtensionInterface')])) {
+        if (!$this->nodeTypeResolver->isObjectTypes($node, [new ObjectType('Twig_ExtensionInterface'), new ObjectType(TwigClass::EXTENSION_INTERFACE)])) {
             return null;
         }
         $hasFunctionsChanged = \false;

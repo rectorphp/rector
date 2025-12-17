@@ -17,4 +17,8 @@ final class TwigClass
      * @var string
      */
     public const AS_TWIG_FUNCTION_ATTRIBUTE = 'Twig\Attribute\AsTwigFunction';
+    /**
+     * @var string
+     */
+    public const EXTENSION_INTERFACE = 'Twig\Extension\ExtensionInterface';
 }

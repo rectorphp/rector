@@ -111,6 +111,7 @@ final class GetMethodToAsTwigAttributeTransformer
                     $this->visibilityManipulator->makePublic($localMethod);
                     // remove old new function instance
                     unset($returnArray->items[$key]);
+                    $nameArg->name = new Identifier('name');
                     $hasChanged = \true;
                 }
             }

@@ -12,6 +12,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\ValueObject\ConstantMap\SymfonyCommandConstantMap;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -75,7 +76,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        if (!$classReflection->is('Symfony\Component\Console\Command\Command')) {
+        if (!$classReflection->is(SymfonyClass::COMMAND)) {
             return null;
         }
         if (!$this->isName($node, 'execute')) {
@@ -105,6 +106,6 @@ CODE_SAMPLE
         if (!isset(SymfonyCommandConstantMap::RETURN_TO_CONST[$int->value])) {
             return null;
         }
-        return $this->nodeFactory->createClassConstFetch('Symfony\Component\Console\Command\Command', SymfonyCommandConstantMap::RETURN_TO_CONST[$int->value]);
+        return $this->nodeFactory->createClassConstFetch(SymfonyClass::COMMAND, SymfonyCommandConstantMap::RETURN_TO_CONST[$int->value]);
     }
 }

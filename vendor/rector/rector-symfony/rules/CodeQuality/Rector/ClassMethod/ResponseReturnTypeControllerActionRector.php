@@ -24,6 +24,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\CodeQuality\Enum\ResponseClass;
 use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -131,7 +132,7 @@ CODE_SAMPLE
         if ($this->attrinationFinder->hasByOne($node, SensioAttribute::TEMPLATE) || $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
             $returnType = $this->returnTypeInferer->inferFunctionLike($node);
             $types = $returnType instanceof UnionType ? $returnType->getTypes() : [$returnType];
-            $objectType = new ObjectType('Symfony\Component\HttpFoundation\Response');
+            $objectType = new ObjectType(SymfonyClass::RESPONSE);
             foreach ($types as $type) {
                 if ($type instanceof ObjectType && $objectType->isSuperTypeOf($type)->yes()) {
                     return null;
