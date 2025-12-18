@@ -74,7 +74,7 @@ CODE_SAMPLE
         $comments = $node->stmts[0]->getAttribute(AttributeKey::COMMENTS) ?? [];
         if ($comments !== []) {
             $this->mirrorComments($arrowFunction->expr, $node->stmts[0]);
-            $arrowFunction->setAttribute(AttributeKey::COMMENTS, \true);
+            $arrowFunction->setAttribute(AttributeKey::COMMENTS, $node->stmts[0]->getComments());
         }
         return $arrowFunction;
     }
