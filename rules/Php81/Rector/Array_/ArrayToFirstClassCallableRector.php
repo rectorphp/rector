@@ -123,12 +123,8 @@ CODE_SAMPLE
         }
         $methodName = $arrayCallable->getMethod();
         $methodCall = new MethodCall($callerExpr, $methodName, $args);
-        $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($methodCall);
-        if ($classReflection instanceof ClassReflection && $classReflection->hasNativeMethod($methodName)) {
-            $method = $classReflection->getNativeMethod($methodName);
-            if (!$method->isPublic()) {
-                return null;
-            }
+        if ($this->isReferenceToNonPublicMethodOutsideOwningScope($methodCall, $methodName)) {
+            return null;
         }
         return $methodCall;
     }
@@ -152,5 +148,22 @@ CODE_SAMPLE
             return \true;
         }
         return !$extendedMethodReflection->isPublic();
+    }
+    private function isReferenceToNonPublicMethodOutsideOwningScope(MethodCall $methodCall, string $methodName): bool
+    {
+        if ($methodCall->var instanceof Variable && $methodCall->var->name === 'this') {
+            // If the callable is scoped to `$this` then it can be converted even if it is protected / private
+            return \false;
+        }
+        // If the callable is scoped to another object / variable then it should only be converted if it is public
+        // https://github.com/rectorphp/rector/issues/8659
+        $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($methodCall);
+        if ($classReflection instanceof ClassReflection && $classReflection->hasNativeMethod($methodName)) {
+            $method = $classReflection->getNativeMethod($methodName);
+            if (!$method->isPublic()) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
