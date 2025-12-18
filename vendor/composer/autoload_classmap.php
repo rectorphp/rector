@@ -2474,6 +2474,7 @@ return array(
     'Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\ParamTypeFromRouteRequiredRegexRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/ClassMethod/ParamTypeFromRouteRequiredRegexRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\RemoveUnusedRequestParamRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/ClassMethod/RemoveUnusedRequestParamRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\ResponseReturnTypeControllerActionRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php',
+    'Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\ReturnDirectJsonResponseRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/ClassMethod/ReturnDirectJsonResponseRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\TemplateAnnotationToThisRenderRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\ControllerMethodInjectionToConstructorRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/ControllerMethodInjectionToConstructorRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventListenerToEventSubscriberRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/EventListenerToEventSubscriberRector.php',

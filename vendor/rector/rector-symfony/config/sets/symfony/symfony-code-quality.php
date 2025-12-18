@@ -16,6 +16,7 @@ use Rector\Symfony\CodeQuality\Rector\ClassMethod\ActionSuffixRemoverRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
+use Rector\Symfony\CodeQuality\Rector\ClassMethod\ReturnDirectJsonResponseRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector;
@@ -39,6 +40,8 @@ return static function (RectorConfig $rectorConfig): void {
         // request method
         RequestIsMainRector::class,
         ParameterBagTypedGetMethodCallRector::class,
+        // enable once tested
+        // ReturnDirectJsonResponseRector::class,
         // tests
         AssertSameResponseCodeWithDebugContentsRector::class,
         StringCastDebugResponseRector::class,
