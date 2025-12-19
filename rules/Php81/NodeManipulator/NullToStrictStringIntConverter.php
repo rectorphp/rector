@@ -23,6 +23,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 final class NullToStrictStringIntConverter
@@ -59,6 +60,10 @@ final class NullToStrictStringIntConverter
             $funcCall->args = $args;
             return $funcCall;
         }
+        // skip (string) ternary conditions with both values
+        if ($this->isStringCastedTernaryOfMixedTypes($argValue, $scope)) {
+            return null;
+        }
         if ($this->shouldSkipValue($argValue, $scope, $isTrait, $targetType)) {
             return null;
         }
@@ -76,11 +81,21 @@ final class NullToStrictStringIntConverter
                 $argValue->else = $targetType === 'string' ? new CastString_($argValue->else) : new CastInt_($argValue->else);
             }
             $args[$position]->value = $argValue;
-            $funcCall->args = $args;
             return $funcCall;
         }
-        $args[$position]->value = $targetType === 'string' ? new CastString_($argValue) : new CastInt_($argValue);
-        $funcCall->args = $args;
+        $wrapInParentheses = \false;
+        if ($argValue instanceof Ternary && $argValue->cond instanceof CastString_) {
+            $wrapInParentheses = \true;
+        }
+        if ($targetType === 'string') {
+            $castedType = new CastString_($argValue);
+        } else {
+            $castedType = new CastInt_($argValue);
+        }
+        if ($wrapInParentheses) {
+            $argValue->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+        }
+        $args[$position]->value = $castedType;
         return $funcCall;
     }
     private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait, string $targetType): bool
@@ -181,5 +196,20 @@ final class NullToStrictStringIntConverter
             return strlen($variableName) > 3 && substr_compare($variableName, 's', -strlen('s')) === 0;
         }
         return \false;
+    }
+    private function isStringCastedTernaryOfMixedTypes(Expr $expr, Scope $scope): bool
+    {
+        if (!$expr instanceof Ternary) {
+            return \false;
+        }
+        if (!$expr->cond instanceof CastString_) {
+            return \false;
+        }
+        if (!$expr->if instanceof Expr) {
+            return \false;
+        }
+        $ifType = $scope->getType($expr->if);
+        $elseType = $scope->getType($expr->else);
+        return $ifType instanceof MixedType || $elseType instanceof MixedType;
     }
 }
