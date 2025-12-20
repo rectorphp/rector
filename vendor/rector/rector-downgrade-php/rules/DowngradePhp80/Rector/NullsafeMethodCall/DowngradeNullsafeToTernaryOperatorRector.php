@@ -20,17 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNullsafeToTernaryOperatorRector extends AbstractRector
 {
     private int $counter = 0;
-    /**
-     * Hack-ish way to reset counter for a new file, to avoid rising counter for each file
-     *
-     * @param Node[] $nodes
-     * @return array|Node[]|null
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        $this->counter = 0;
-        return parent::beforeTraverse($nodes);
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change nullsafe operator to ternary operator rector', [new CodeSample(<<<'CODE_SAMPLE'

@@ -17,11 +17,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified as NameFullyQualified;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\VariadicPlaceholder;
 use Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner;
 use Rector\Enum\JsonConstant;
 use Rector\NodeAnalyzer\DefineFuncCallAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -47,7 +47,7 @@ final class DowngradePhp73JsonConstRector extends AbstractRector
     /**
      * @var array<string>
      */
-    private const REFACTOR_FUNCS = ['json_decode', 'json_encode'];
+    private const JSON_FUNCTIONS = ['json_decode', 'json_encode'];
     public function __construct(JsonConstCleaner $jsonConstCleaner, DefineFuncCallAnalyzer $defineFuncCallAnalyzer)
     {
         $this->jsonConstCleaner = $jsonConstCleaner;
@@ -61,12 +61,12 @@ $json = json_encode($content, JSON_THROW_ON_ERROR);
 $content = json_decode($json, null, 512, JSON_THROW_ON_ERROR);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-$json json_encode($content, 0);
+$json = json_encode($content);
 if (json_last_error() !== JSON_ERROR_NONE) {
     throw new \Exception(json_last_error_msg());
 }
 
-$content = json_decode($json, null, 512, 0);
+$content = json_decode($json, null, 512);
 if (json_last_error() !== JSON_ERROR_NONE) {
     throw new \Exception(json_last_error_msg());
 }
@@ -94,12 +94,8 @@ CODE_SAMPLE
         if ((bool) $node->getAttribute(self::PHP73_JSON_CONSTANT_IS_KNOWN)) {
             return null;
         }
-        //        if ($node instanceof TryCatch) {
-        //            SimpleNodeTraverser::decorateWithAttributeValue($node->stmts, self::IS_EXPRESSION_INSIDE_TRY_CATCH, true);
-        //            return null;
-        //        }
         if ($node instanceof Expression) {
-            return $this->refactorStmt($node);
+            return $this->refactorExpression($node);
         }
         return $this->jsonConstCleaner->clean($node, [JsonConstant::THROW_ON_ERROR]);
     }
@@ -108,14 +104,11 @@ CODE_SAMPLE
         if (!$this->defineFuncCallAnalyzer->isDefinedWithConstants($if->cond, [JsonConstant::THROW_ON_ERROR])) {
             return;
         }
-        $this->traverseNodesWithCallable($if, static function (Node $node) {
-            $node->setAttribute(self::PHP73_JSON_CONSTANT_IS_KNOWN, \true);
-            return null;
-        });
+        SimpleNodeTraverser::decorateWithAttributeValue($if, self::PHP73_JSON_CONSTANT_IS_KNOWN, \true);
     }
-    private function resolveFuncCall(Expression $Expression): ?FuncCall
+    private function resolveFuncCall(Expression $expression): ?FuncCall
     {
-        $expr = $Expression->expr;
+        $expr = $expression->expr;
         if ($expr instanceof Assign) {
             if ($expr->expr instanceof FuncCall) {
                 return $expr->expr;
@@ -137,42 +130,40 @@ CODE_SAMPLE
      *
      * @return null|array<Expression|If_>
      */
-    private function refactorStmt(Expression $Expression): ?array
+    private function refactorExpression(Expression $expression): ?array
     {
-        if ($Expression->getAttribute(AttributeKey::IS_IN_TRY_BLOCK) === \true) {
+        if ($expression->getAttribute(AttributeKey::IS_IN_TRY_BLOCK) === \true) {
             return null;
         }
         // retrieve a `FuncCall`, if any, from the statement
-        $funcCall = $this->resolveFuncCall($Expression);
-        // Nothing to do if no `FuncCall` found
+        $funcCall = $this->resolveFuncCall($expression);
         if (!$funcCall instanceof FuncCall) {
             return null;
         }
         // Nothing to do if not a refactored function
-        if (!in_array($this->getName($funcCall), self::REFACTOR_FUNCS, \true)) {
+        if (!$this->isNames($funcCall, self::JSON_FUNCTIONS)) {
+            return null;
+        }
+        if ($funcCall->isFirstClassCallable()) {
             return null;
         }
         // Nothing to do if the flag `JSON_THROW_ON_ERROR` is not set in args
-        if (!$this->hasConstFetchInArgs($funcCall->args, 'JSON_THROW_ON_ERROR')) {
+        if (!$this->hasConstFetchInArgs($funcCall->getArgs(), 'JSON_THROW_ON_ERROR')) {
             return null;
         }
-        $nodes = [$Expression];
+        $nodes = [$expression];
         $nodes[] = new If_(new NotIdentical(new FuncCall(new Name('json_last_error')), new ConstFetch(new Name('JSON_ERROR_NONE'))), ['stmts' => [new Expression(new Throw_(new New_(new NameFullyQualified('Exception'), [new Arg(new FuncCall(new Name('json_last_error_msg')))])))]]);
         return $nodes;
     }
     /**
      * Search if a given constant is set within a list of `Arg`
-     * @param array<Arg|VariadicPlaceholder> $args
+     * @param Arg[] $args
      */
     private function hasConstFetchInArgs(array $args, string $constName): bool
     {
         foreach ($args as $arg) {
-            // Only `Arg` instances are handled.
-            if (!$arg instanceof Arg) {
-                return \false;
-            }
             $value = $arg->value;
-            if ($value instanceof ConstFetch && $this->getName($value) === $constName) {
+            if ($value instanceof ConstFetch && $this->isName($value, $constName)) {
                 return \true;
             }
             if ($value instanceof BitwiseOr) {
@@ -184,25 +175,16 @@ CODE_SAMPLE
     /**
      * Search if a given constant is set within a `BitwiseOr`
      */
-    private function hasConstFetchInBitwiseOr(BitwiseOr $bitwiseOr, string $constName): bool
+    private function hasConstFetchInBitwiseOr(BitwiseOr $bitwiseOr, string $constantName): bool
     {
-        $found = \false;
         foreach ([$bitwiseOr->left, $bitwiseOr->right] as $subNode) {
-            switch (\true) {
-                case $subNode instanceof BitwiseOr:
-                    $found = $this->hasConstFetchInBitwiseOr($subNode, $constName);
-                    break;
-                case $subNode instanceof ConstFetch:
-                    $found = $this->getName($subNode) === $constName;
-                    break;
-                default:
-                    $found = \false;
-                    break;
+            if ($subNode instanceof BitwiseOr && $this->hasConstFetchInBitwiseOr($subNode, $constantName)) {
+                return \true;
             }
-            if ($found) {
-                break;
+            if ($subNode instanceof ConstFetch && $this->isName($subNode, $constantName)) {
+                return \true;
             }
         }
-        return $found;
+        return \false;
     }
 }

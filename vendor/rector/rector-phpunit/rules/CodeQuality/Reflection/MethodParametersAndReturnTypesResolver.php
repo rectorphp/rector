@@ -150,7 +150,7 @@ final class MethodParametersAndReturnTypesResolver
         $parameterTypes = [];
         foreach ($extendedParametersAcceptor->getParameters() as $extendedParameterReflection) {
             $parameterType = $this->resolveObjectType($extendedParameterReflection->getNativeType());
-            if ($parameterType instanceof ObjectType && $currentClassReflection->getName() !== (($nullsafeVariable1 = $parameterType->getClassReflection()) ? $nullsafeVariable1->getName() : null)) {
+            if ($parameterType instanceof ObjectType && $currentClassReflection->getName() !== (($nullsafeVariable3 = $parameterType->getClassReflection()) ? $nullsafeVariable3->getName() : null)) {
                 $parameterTypes[] = new MixedType();
                 continue;
             }
@@ -187,7 +187,7 @@ final class MethodParametersAndReturnTypesResolver
     {
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
         $returnType = $this->resolveObjectType($extendedParametersAcceptor->getNativeReturnType());
-        if ($returnType instanceof ObjectType && $currentClassReflection->getName() !== (($nullsafeVariable2 = $returnType->getClassReflection()) ? $nullsafeVariable2->getName() : null)) {
+        if ($returnType instanceof ObjectType && $currentClassReflection->getName() !== (($nullsafeVariable4 = $returnType->getClassReflection()) ? $nullsafeVariable4->getName() : null)) {
             return new MixedType();
         }
         return $returnType;

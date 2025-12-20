@@ -364,7 +364,7 @@ class QuestionHelper extends Helper
             $errOutput->warning('The value was possibly truncated by your shell or terminal emulator');
         }
         // Restore the terminal so it behaves normally again
-        ($nullsafeVariable1 = $inputHelper) ? $nullsafeVariable1->finish() : null;
+        ($nullsafeVariable3 = $inputHelper) ? $nullsafeVariable3->finish() : null;
         if ($trimmable) {
             $value = trim($value);
         }

@@ -69,7 +69,7 @@ final class CompletionInput extends ArgvInput
                 $this->completionValue = $relevantToken;
                 return;
             }
-            if (($nullsafeVariable1 = $option) ? $nullsafeVariable1->acceptValue() : null) {
+            if (($nullsafeVariable5 = $option) ? $nullsafeVariable5->acceptValue() : null) {
                 $this->completionType = self::TYPE_OPTION_VALUE;
                 $this->completionName = $option->getName();
                 $this->completionValue = $optionValue ?: (strncmp($optionToken, '--', strlen('--')) !== 0 ? (string) substr($optionToken, 2) : '');
@@ -80,7 +80,7 @@ final class CompletionInput extends ArgvInput
         if ('-' === $previousToken[0] && '' !== trim($previousToken, '-')) {
             // check if previous option accepted a value
             $previousOption = $this->getOptionFromToken($previousToken);
-            if (($nullsafeVariable2 = $previousOption) ? $nullsafeVariable2->acceptValue() : null) {
+            if (($nullsafeVariable6 = $previousOption) ? $nullsafeVariable6->acceptValue() : null) {
                 $this->completionType = self::TYPE_OPTION_VALUE;
                 $this->completionName = $previousOption->getName();
                 $this->completionValue = $relevantToken;

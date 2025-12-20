@@ -19,14 +19,10 @@ composer require rector/rector --dev
 To add a set to your config, use `Rector\Set\ValueObject\DowngradeLevelSetList` class and pick target set:
 
 ```php
-use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Config\RectorConfig;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->sets([
-        DowngradeLevelSetList::DOWN_TO_PHP_72
-    ]);
-};
+return RectorConfig::configure()
+    ->withDowngradeSets(php72: true);
 ```
 
 Then run Rector to downgrade your code to PHP 7.2!
