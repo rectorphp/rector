@@ -46,13 +46,13 @@ final class CommandOptionsResolver
             }
             $optionName = $this->valueResolver->getValue($nameArg->value);
             $isImplicitBoolean = $this->isImplicitBoolean($addOptionMethodCall);
-            $commandOptions[] = new CommandOption($optionName, $nameArg->value, ($nullsafeVariable2 = $addOptionMethodCall->getArg('shortcut', 1)) ? $nullsafeVariable2->value : null, ($nullsafeVariable3 = $addOptionMethodCall->getArg('mode', 2)) ? $nullsafeVariable3->value : null, ($nullsafeVariable4 = $addOptionMethodCall->getArg('description', 3)) ? $nullsafeVariable4->value : null, ($nullsafeVariable5 = $addOptionMethodCall->getArg('default', 4)) ? $nullsafeVariable5->value : null, $this->isArrayMode($addOptionMethodCall), $isImplicitBoolean, $this->resolveDefaultType($addOptionMethodCall));
+            $commandOptions[] = new CommandOption($optionName, $nameArg->value, ($nullsafeVariable1 = $addOptionMethodCall->getArg('shortcut', 1)) ? $nullsafeVariable1->value : null, ($nullsafeVariable2 = $addOptionMethodCall->getArg('mode', 2)) ? $nullsafeVariable2->value : null, ($nullsafeVariable3 = $addOptionMethodCall->getArg('description', 3)) ? $nullsafeVariable3->value : null, ($nullsafeVariable4 = $addOptionMethodCall->getArg('default', 4)) ? $nullsafeVariable4->value : null, $this->isArrayMode($addOptionMethodCall), $isImplicitBoolean, $this->resolveDefaultType($addOptionMethodCall));
         }
         return $commandOptions;
     }
     private function resolveDefaultType(MethodCall $methodCall): ?Type
     {
-        $defaultExpr = ($nullsafeVariable6 = $methodCall->getArg('default', 4)) ? $nullsafeVariable6->value : null;
+        $defaultExpr = ($nullsafeVariable5 = $methodCall->getArg('default', 4)) ? $nullsafeVariable5->value : null;
         if (!$defaultExpr instanceof Expr) {
             return null;
         }
@@ -60,7 +60,7 @@ final class CommandOptionsResolver
     }
     private function isArrayMode(MethodCall $methodCall): bool
     {
-        $modeExpr = ($nullsafeVariable7 = $methodCall->getArg('mode', 2)) ? $nullsafeVariable7->value : null;
+        $modeExpr = ($nullsafeVariable6 = $methodCall->getArg('mode', 2)) ? $nullsafeVariable6->value : null;
         if (!$modeExpr instanceof Expr) {
             return \false;
         }
@@ -70,7 +70,7 @@ final class CommandOptionsResolver
     }
     private function isImplicitBoolean(MethodCall $methodCall): bool
     {
-        $modeExpr = ($nullsafeVariable8 = $methodCall->getArg('mode', 2)) ? $nullsafeVariable8->value : null;
+        $modeExpr = ($nullsafeVariable7 = $methodCall->getArg('mode', 2)) ? $nullsafeVariable7->value : null;
         if (!$modeExpr instanceof Expr) {
             return \false;
         }
