@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UseImportsAdder
@@ -37,7 +37,7 @@ final class UseImportsAdder
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $constantUseImportTypes
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $functionUseImportTypes
      */
-    public function addImportsToStmts(FileWithoutNamespace $fileWithoutNamespace, array $stmts, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes): bool
+    public function addImportsToStmts(FileNode $fileNode, array $stmts, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes): bool
     {
         $usedImports = $this->usedImportsResolver->resolveForStmts($stmts);
         $existingUseImportTypes = $usedImports->getUseImports();
@@ -73,14 +73,14 @@ final class UseImportsAdder
                 $stmts[$key + 1]->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             }
             array_splice($stmts, $key + 1, 0, $nodesToAdd);
-            $fileWithoutNamespace->stmts = $stmts;
-            $fileWithoutNamespace->stmts = array_values($fileWithoutNamespace->stmts);
+            $fileNode->stmts = $stmts;
+            $fileNode->stmts = array_values($fileNode->stmts);
             return \true;
         }
         $this->mirrorUseComments($stmts, $newUses);
         // make use stmts first
-        $fileWithoutNamespace->stmts = array_merge($newUses, $this->resolveInsertNop($fileWithoutNamespace), $stmts);
-        $fileWithoutNamespace->stmts = array_values($fileWithoutNamespace->stmts);
+        $fileNode->stmts = array_merge($newUses, $this->resolveInsertNop($fileNode), $stmts);
+        $fileNode->stmts = array_values($fileNode->stmts);
         return \true;
     }
     /**
@@ -110,7 +110,7 @@ final class UseImportsAdder
     }
     /**
      * @return Nop[]
-     * @param \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $namespace
+     * @param \Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_ $namespace
      */
     private function resolveInsertNop($namespace): array
     {

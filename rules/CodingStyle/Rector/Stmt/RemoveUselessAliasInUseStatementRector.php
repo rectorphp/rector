@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,14 +32,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FileWithoutNamespace::class, Namespace_::class];
+        return [FileNode::class, Namespace_::class];
     }
     /**
-     * @param FileWithoutNamespace|Namespace_ $node
-     * @return null|\Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_
+     * @param Namespace_|FileNode $node
+     * @return null|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_
      */
     public function refactor(Node $node)
     {
+        if ($node instanceof FileNode && $node->isNamespaced()) {
+            // handle in Namespace_ node
+            return null;
+        }
         $hasChanged = \false;
         foreach ($node->stmts as $stmt) {
             if (!$stmt instanceof Use_) {

@@ -18,7 +18,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeVisitor;
 use PHPStan\Type\UnionType;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -59,10 +59,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Namespace_::class, FileWithoutNamespace::class, Class_::class, ClassMethod::class, Function_::class, Closure::class];
+        return [Namespace_::class, FileNode::class, Class_::class, ClassMethod::class, Function_::class, Closure::class];
     }
     /**
-     * @param Namespace_|FileWithoutNamespace|Class_|ClassMethod|Function_|Closure $node
+     * @param Namespace_|FileNode|Class_|ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -70,6 +70,10 @@ CODE_SAMPLE
             return $this->refactorClass($node);
         }
         if ($node->stmts === null) {
+            return null;
+        }
+        if ($node instanceof FileNode && $node->isNamespaced()) {
+            // handled in Namespace_
             return null;
         }
         $hasChanged = \false;
@@ -129,7 +133,7 @@ CODE_SAMPLE
     }
     /**
      * @return ArrayDimFetch[]
-     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
     private function findSameNamedVariableAssigns(Variable $variable, $node): array
     {
@@ -174,7 +178,7 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
     private function refactorAssign(Assign $assign, $node): ?Assign
     {

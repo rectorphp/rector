@@ -186,6 +186,7 @@ EOF
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         $outputFormatter->report($processResult, $configuration);
+        // 4. Deprecations reporter
         $this->deprecatedRulesReporter->reportDeprecatedRules();
         $this->deprecatedRulesReporter->reportDeprecatedSkippedRules();
         $this->deprecatedRulesReporter->reportDeprecatedNodeTypes();

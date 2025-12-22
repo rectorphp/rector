@@ -4,14 +4,11 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitor;
 use Rector\CodingStyle\Application\UseImportsRemover;
-use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\RenamedClassesDataCollector;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\PostRector\Guard\AddUseStatementGuard;
 use Rector\Renaming\Collector\RenamedNameCollector;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
@@ -44,36 +41,32 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->addUseStatementGuard = $addUseStatementGuard;
     }
     /**
-     * @param Stmt[] $nodes
-     * @return Stmt[]
+     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|int|null
      */
-    public function beforeTraverse(array $nodes): array
+    public function enterNode(Node $node)
     {
-        if (!SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
-            return $nodes;
-        }
-        foreach ($nodes as $node) {
-            if ($node instanceof FileWithoutNamespace || $node instanceof Namespace_) {
-                $removedUses = $this->renamedClassesDataCollector->getOldClasses();
-                if ($this->useImportsRemover->removeImportsFromStmts($node, $removedUses)) {
-                    $this->addRectorClassWithLine($node);
-                }
-                break;
+        if ($node instanceof FileNode) {
+            // handle in Namespace_ node
+            if ($node->isNamespaced()) {
+                return null;
             }
+            // handle here
+            $removedUses = $this->renamedClassesDataCollector->getOldClasses();
+            if ($this->useImportsRemover->removeImportsFromStmts($node, $removedUses)) {
+                $this->addRectorClassWithLine($node);
+            }
+            $this->renamedNameCollector->reset();
+            return $node;
         }
-        $this->renamedNameCollector->reset();
-        return $nodes;
-    }
-    public function enterNode(Node $node): int
-    {
-        /**
-         * We stop the traversal because all the work has already been done in the beforeTraverse() function
-         *
-         * Using STOP_TRAVERSAL is usually dangerous as it will stop the processing of all your nodes for all visitors
-         * but since the PostFileProcessor is using direct new NodeTraverser() and traverse() for only a single
-         * visitor per execution, using stop traversal here is safe,
-         * ref https://github.com/rectorphp/rector-src/blob/fc1e742fa4d9861ccdc5933f3b53613b8223438d/src/PostRector/Application/PostFileProcessor.php#L59-L61
-         */
+        if ($node instanceof Namespace_) {
+            $removedUses = $this->renamedClassesDataCollector->getOldClasses();
+            if ($this->useImportsRemover->removeImportsFromStmts($node, $removedUses)) {
+                $this->addRectorClassWithLine($node);
+            }
+            $this->renamedNameCollector->reset();
+            return $node;
+        }
+        // nothing else to handle here, as first 2 nodes we'll hit are handled above
         return NodeVisitor::STOP_TRAVERSAL;
     }
     public function shouldTraverse(array $stmts): bool

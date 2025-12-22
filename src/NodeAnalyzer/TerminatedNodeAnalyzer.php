@@ -24,7 +24,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 final class TerminatedNodeAnalyzer
 {
     /**
@@ -47,7 +47,7 @@ final class TerminatedNodeAnalyzer
         if (in_array(get_class($currentStmt), self::ALLOWED_CONTINUE_CURRENT_STMTS, \true)) {
             return \false;
         }
-        if (($stmtsAware instanceof FileWithoutNamespace || $stmtsAware instanceof Namespace_) && ($currentStmt instanceof ClassLike || $currentStmt instanceof Function_)) {
+        if (($stmtsAware instanceof FileNode || $stmtsAware instanceof Namespace_) && ($currentStmt instanceof ClassLike || $currentStmt instanceof Function_)) {
             return \false;
         }
         if (!in_array(get_class($node), self::TERMINABLE_NODES_BY_ITS_STMTS, \true)) {

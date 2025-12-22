@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\Application;
 
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\Renaming\Collector\RenamedNameCollector;
 final class UseImportsRemover
 {
@@ -19,7 +19,7 @@ final class UseImportsRemover
     }
     /**
      * @param string[] $removedUses
-     * @param \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $node
+     * @param \Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_ $node
      */
     public function removeImportsFromStmts($node, array $removedUses): bool
     {

@@ -99,7 +99,7 @@ final class PostFileProcessor implements ResettableInterface
         return !$postRector->shouldTraverse($stmts);
     }
     /**
-     * Load on the fly, to allow test reset with different configuration
+     * Lazy load, to enable test reset with different configuration
      * @return PostRectorInterface[]
      */
     private function getPostRectors(): array

@@ -1,3 +1,110 @@
+# Upgrading from Rector 2.2.14 to 2.3
+
+* `FileWithoutNamespace` is deprecated, and replaced by `FileNode` that represents both namespaced and non-namespaced files and allow changes inside
+* `beforeTraverse()` is now marked as `@final`, use `getNodeTypes()` with `FileNode::class` instead
+
+**Before**
+
+```php
+use Rector\PhpParser\Node\FileWithoutNamespace;
+use Rector\Rector\AbstractRector;
+
+final class SomeRector extends AbstractRector
+{
+    public function getNodeTypes(): array
+    {
+        return [FileWithoutNamespace::class];
+    }
+
+    public function beforeTraverse(array $nodes): array
+    {
+        // some node hacking
+    }
+
+    /**
+     * @param FileWithoutNamespace $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        // ...
+    }
+
+}
+```
+
+**After**
+
+```php
+use Rector\PhpParser\Node\FileNode;
+use Rector\Rector\AbstractRector;
+
+final class SomeRector extends AbstractRector
+{
+    public function getNodeTypes(): array
+    {
+        return [FileNode::class];
+    }
+
+    /**
+     * @param FileNode $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        foreach ($node->stmts as $stmt) {
+            // check if has declare_strict already?
+            // ...
+
+            // create it
+            $declareStrictTypes = $this->createDeclareStrictTypesNode();
+
+            // add it
+            $node->stmts = array_merge([$declareStrictTypes], $node->stmts);
+        }
+
+        return $node;
+    }
+
+}
+```
+
+<br>
+
+The `FileNode` handles both namespaced and non-namespaced files. To handle the first stmts inside the file, you hook into 2 nodes:
+
+```php
+use Rector\PhpParser\Node\FileNode;
+use Rector\Rector\AbstractRector;
+use PhpParser\Node\Stmt\Namespace_;
+
+final class SomeRector extends AbstractRector
+{
+    public function getNodeTypes(): array
+    {
+        return [FileNode::class, Namespace_::class];
+    }
+
+    /**
+     * @param FileNode|Namespace_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node instanceof FileNode && $node->isNamespaced()) {
+            // handled in the Namespace_ node
+            return null;
+        }
+
+        foreach ($node->stmts as $stmt) {
+            // modify stmts in desired way here
+        }
+
+        return $node;
+    }
+
+}
+```
+
+<br>
+
 # Upgrading from Rector 1.x to 2.0
 
 ## PHP version requirements

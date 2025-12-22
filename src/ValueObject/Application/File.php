@@ -6,10 +6,12 @@ namespace Rector\ValueObject\Application;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\InlineHTML;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use PhpParser\Token;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\PhpParser\Node\FileNode;
 use Rector\ValueObject\Reporting\FileDiff;
 final class File
 {
@@ -133,6 +135,34 @@ final class File
         $this->rectorWithLineChanges[] = $rectorWithLineChange;
     }
     /**
+     * This node returns top most node,
+     * that includes use imports
+     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|null
+     */
+    public function getUseImportsRootNode()
+    {
+        if ($this->newStmts === []) {
+            return null;
+        }
+        $firstStmt = $this->newStmts[0];
+        if ($firstStmt instanceof FileNode) {
+            if (!$firstStmt->isNamespaced()) {
+                return $firstStmt;
+            }
+            // return sole Namespace, or none
+            $namespaces = [];
+            foreach ($firstStmt->stmts as $stmt) {
+                if ($stmt instanceof Namespace_) {
+                    $namespaces[] = $stmt;
+                }
+            }
+            if (count($namespaces) === 1) {
+                return $namespaces[0];
+            }
+        }
+        return null;
+    }
+    /**
      * @return RectorWithLineChange[]
      */
     public function getRectorWithLineChanges(): array
@@ -147,5 +177,19 @@ final class File
         $nodeFinder = new NodeFinder();
         $this->containsHtml = (bool) $nodeFinder->findFirstInstanceOf($this->oldStmts, InlineHTML::class);
         return $this->containsHtml;
+    }
+    public function getFileNode(): ?FileNode
+    {
+        if ($this->newStmts === []) {
+            return null;
+        }
+        if ($this->newStmts[0] instanceof FileNode) {
+            return $this->newStmts[0];
+        }
+        return null;
+    }
+    public function hasShebang(): bool
+    {
+        return strncmp($this->fileContent, '#!', strlen('#!')) === 0;
     }
 }

@@ -38,6 +38,7 @@ final class UseNodesToAddCollector
     }
     public function addUseImport(FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
+        // @todo consider using FileNode directly
         /** @var File $file */
         $file = $this->currentFileProvider->getFile();
         $this->useImportTypesInFilePath[$file->getFilePath()][] = $fullyQualifiedObjectType;

@@ -9,7 +9,8 @@ use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PhpParser\Enum\NodeGroup;
-use Rector\PhpParserNode\FileNode;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use ReflectionMethod;
 use RectorPrefix202512\Symfony\Component\Console\Style\SymfonyStyle;
 final class DeprecatedRulesReporter
@@ -74,6 +75,10 @@ final class DeprecatedRulesReporter
         // helper property to avoid reporting multiple times
         static $reportedClasses = [];
         foreach ($this->rectors as $rector) {
+            if (in_array(FileWithoutNamespace::class, $rector->getNodeTypes(), \true)) {
+                $this->reportDeprecatedFileWithoutNamespace($rector);
+                continue;
+            }
             if (!in_array(StmtsAwareInterface::class, $rector->getNodeTypes())) {
                 continue;
             }
@@ -84,5 +89,9 @@ final class DeprecatedRulesReporter
             $reportedClasses[] = get_class($rector);
             $this->symfonyStyle->warning(sprintf('Rector rule "%s" uses StmtsAwareInterface that is now deprecated.%sUse "%s::%s" instead.%sSee %s for more', get_class($rector), \PHP_EOL, NodeGroup::class, 'STMTS_AWARE', \PHP_EOL . \PHP_EOL, 'https://github.com/rectorphp/rector-src/pull/7679'));
         }
+    }
+    private function reportDeprecatedFileWithoutNamespace(RectorInterface $rector): void
+    {
+        $this->symfonyStyle->warning(sprintf('Node type "%s" is deprecated and will be removed. Use "%s" in the "%s" rule instead instead.%sSee %s for upgrade path', FileWithoutNamespace::class, FileNode::class, get_class($rector), \PHP_EOL . \PHP_EOL, 'https://github.com/rectorphp/rector-src/blob/main/UPGRADING.md'));
     }
 }

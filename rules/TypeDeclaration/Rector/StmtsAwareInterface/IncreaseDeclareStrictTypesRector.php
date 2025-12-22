@@ -45,7 +45,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        throw new ShouldNotHappenException(sprintf('"%s" is deprecated as changes strict types randomly on each run.. Use "%s" Rector on specific paths instead.', self::class, \Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector::class));
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated as changes strict types randomly on each run. Use "%s" Rector on specific paths instead.', self::class, \Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector::class));
     }
     /**
      * @param array<string, mixed> $configuration

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
+use Rector\PhpParser\Node\FileNode;
 use Rector\PhpParser\Parser\RectorParser;
 use Rector\ValueObject\Application\File;
 /**
@@ -61,6 +62,8 @@ final class TestingParser
         $fileContent = FileSystem::read($filePath);
         $file = new File($filePath, $fileContent);
         $stmts = $this->rectorParser->parseString($fileContent);
+        // wrap in FileNode to enable file-level rules
+        $stmts = [new FileNode($stmts)];
         $stmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($filePath, $stmts);
         $file->hydrateStmtsAndTokens($stmts, $stmts, []);
         $this->currentFileProvider->setFile($file);

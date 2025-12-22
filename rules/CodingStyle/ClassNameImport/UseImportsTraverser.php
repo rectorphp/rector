@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 final class UseImportsTraverser
 {
     /**
@@ -27,7 +27,7 @@ final class UseImportsTraverser
     public function traverserStmts(array $stmts, callable $callable): void
     {
         foreach ($stmts as $stmt) {
-            if ($stmt instanceof Namespace_ || $stmt instanceof FileWithoutNamespace) {
+            if ($stmt instanceof Namespace_ || $stmt instanceof FileNode) {
                 $this->traverserStmts($stmt->stmts, $callable);
                 continue;
             }

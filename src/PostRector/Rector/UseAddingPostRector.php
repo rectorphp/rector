@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitor;
 use Rector\CodingStyle\Application\UseImportsAdder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
@@ -43,7 +43,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
             return $nodes;
         }
         $rootNode = $this->resolveRootNode($nodes);
-        if (!$rootNode instanceof FileWithoutNamespace && !$rootNode instanceof Namespace_) {
+        if (!$rootNode instanceof FileNode && !$rootNode instanceof Namespace_) {
             return $nodes;
         }
         $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFilePath($this->getFile()->getFilePath());
@@ -54,7 +54,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         }
         /** @var FullyQualifiedObjectType[] $useImportTypes */
         $useImportTypes = $this->typeFactory->uniquateTypes($useImportTypes);
-        $stmts = $rootNode instanceof FileWithoutNamespace ? $rootNode->stmts : $nodes;
+        $stmts = $rootNode instanceof FileNode ? $rootNode->stmts : $nodes;
         if ($this->processStmtsWithImportedUses($stmts, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes, $rootNode)) {
             $this->addRectorClassWithLine($rootNode);
         }
@@ -77,7 +77,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
      * @param FullyQualifiedObjectType[] $useImportTypes
      * @param FullyQualifiedObjectType[] $constantUseImportTypes
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
-     * @param \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $namespace
+     * @param \Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_ $namespace
      */
     private function processStmtsWithImportedUses(array $stmts, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, $namespace): bool
     {
@@ -109,15 +109,22 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
     }
     /**
      * @param Stmt[] $nodes
-     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|null
+     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|null
      */
     private function resolveRootNode(array $nodes)
     {
-        foreach ($nodes as $node) {
-            if ($node instanceof FileWithoutNamespace || $node instanceof Namespace_) {
-                return $node;
+        if ($nodes === []) {
+            return null;
+        }
+        $firstStmt = $nodes[0];
+        if (!$firstStmt instanceof FileNode) {
+            return null;
+        }
+        foreach ($firstStmt->stmts as $stmt) {
+            if ($stmt instanceof Namespace_) {
+                return $stmt;
             }
         }
-        return null;
+        return $firstStmt;
     }
 }

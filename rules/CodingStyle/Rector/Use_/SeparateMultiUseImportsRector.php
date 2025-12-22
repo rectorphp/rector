@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
 use PhpParser\Node\Stmt\Use_;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -46,14 +46,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FileWithoutNamespace::class, Namespace_::class, Class_::class];
+        return [FileNode::class, Namespace_::class, Class_::class];
     }
     /**
-     * @param FileWithoutNamespace|Namespace_|Class_ $node
-     * @return \Rector\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Stmt\Class_|null
+     * @param FileNode|Namespace_|Class_ $node
+     * @return \Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Stmt\Class_|null
      */
     public function refactor(Node $node)
     {
+        if ($node instanceof FileNode && $node->isNamespaced()) {
+            // handled in Namespace_
+            return null;
+        }
         $hasChanged = \false;
         foreach ($node->stmts as $key => $stmt) {
             if ($stmt instanceof Use_) {

@@ -105,7 +105,7 @@ use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202512\Webmozart\Assert\Assert;
 /**
@@ -206,7 +206,8 @@ final class PHPStanNodeScopeResolver
             if (!$node instanceof VirtualNode) {
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
-            if ($node instanceof FileWithoutNamespace) {
+            // handle unwrapped stmts
+            if ($node instanceof FileNode) {
                 $this->nodeScopeResolverProcessNodes($node->stmts, $mutatingScope, $nodeCallback);
                 return;
             }

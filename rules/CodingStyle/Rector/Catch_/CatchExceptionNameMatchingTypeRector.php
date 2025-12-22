@@ -20,7 +20,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -65,14 +65,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, Function_::class, Closure::class, FileWithoutNamespace::class, Namespace_::class];
+        return [ClassMethod::class, Function_::class, Closure::class, FileNode::class, Namespace_::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure|FileWithoutNamespace|Namespace_ $node
+     * @param ClassMethod|Function_|Closure|FileNode|Namespace_ $node
      */
     public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
+            return null;
+        }
+        if ($node instanceof FileNode && $node->isNamespaced()) {
+            // handled in Namespace_ node
             return null;
         }
         $hasChanged = \false;

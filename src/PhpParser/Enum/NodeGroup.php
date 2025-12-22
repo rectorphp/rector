@@ -26,7 +26,7 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 final class NodeGroup
 {
     /**
@@ -36,7 +36,7 @@ final class NodeGroup
      *
      * @var array<class-string<Node>>
      */
-    public const STMTS_AWARE = [Block::class, Closure::class, Case_::class, Catch_::class, ClassMethod::class, Do_::class, Else_::class, ElseIf_::class, Finally_::class, For_::class, Foreach_::class, Function_::class, If_::class, Namespace_::class, TryCatch::class, While_::class, FileWithoutNamespace::class];
+    public const STMTS_AWARE = [Block::class, Closure::class, Case_::class, Catch_::class, ClassMethod::class, Do_::class, Else_::class, ElseIf_::class, Finally_::class, For_::class, Foreach_::class, Function_::class, If_::class, Namespace_::class, TryCatch::class, While_::class, FileNode::class];
     /**
      * @var array<class-string<Node>>
      */
