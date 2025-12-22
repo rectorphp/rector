@@ -97,7 +97,7 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
                         $node->{$name} = $return;
                         if ($originalSubNodeClass !== get_class($subNode)) {
                             // stop traversing as node type changed and visitors won't work
-                            return;
+                            continue 2;
                         }
                     } elseif ($return === NodeVisitor::DONT_TRAVERSE_CHILDREN) {
                         $traverseChildren = \false;
