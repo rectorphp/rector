@@ -7,15 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Nop;
-use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\HTMLAverseRectorInterface;
-use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\DeclareStrictTypeFinder;
-use Rector\ValueObject\Application\File;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -70,80 +67,32 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param Stmt[] $nodes
-     * @return Stmt[]|null
-     */
-    public function beforeTraverse(array $nodes): ?array
-    {
-        parent::beforeTraverse($nodes);
-        if ($this->file->containsHTML()) {
-            return null;
-        }
-        if ($this->shouldSkipNodes($nodes, $this->file)) {
-            return null;
-        }
-        /** @var Node $rootStmt */
-        $rootStmt = current($nodes);
-        // when first stmt is Declare_, verify if there is strict_types definition already,
-        // as multiple declare is allowed, with declare(strict_types=1) only allowed on very first stmt
-        if ($rootStmt instanceof FileWithoutNamespace) {
-            $currentNode = current($rootStmt->stmts);
-            if (!$currentNode instanceof Stmt) {
-                return null;
-            }
-            if ($this->declareStrictTypeFinder->hasDeclareStrictTypes($currentNode)) {
-                return null;
-            }
-        } elseif ($this->declareStrictTypeFinder->hasDeclareStrictTypes($rootStmt)) {
-            return null;
-        }
-        if (!$this->hasPHPUnitTestClass($nodes)) {
-            return null;
-        }
-        $rectorWithLineChange = new RectorWithLineChange(self::class, $rootStmt->getStartLine());
-        $this->file->addRectorClassWithLine($rectorWithLineChange);
-        if ($rootStmt instanceof FileWithoutNamespace) {
-            $stmts = [$this->nodeFactory->createDeclaresStrictType()];
-            $stmts = array_merge($stmts, [new Nop()]);
-            $stmts = array_merge($stmts, $rootStmt->stmts);
-            $rootStmt->stmts = $stmts;
-            return [$rootStmt];
-        }
-        return array_merge([$this->nodeFactory->createDeclaresStrictType(), new Nop()], $nodes);
-    }
-    /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
-        return NodeGroup::STMTS_AWARE;
+        return [FileNode::class];
     }
     /**
-     * @param StmtsAware $node
-     * @return null
+     * @param FileNode $node
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?FileNode
     {
-        // workaround, as Rector now only hooks to specific nodes, not arrays
-        // avoid traversing, as we already handled in beforeTraverse()
-        return null;
+        // when first stmt is Declare_, verify if there is strict_types definition already,
+        // as multiple declare is allowed, with declare(strict_types=1) only allowed on very first stmt
+        if ($this->declareStrictTypeFinder->hasDeclareStrictTypes($node)) {
+            return null;
+        }
+        if (!$this->hasPHPUnitTestClass($node->stmts)) {
+            return null;
+        }
+        $declareStrictTypes = $this->nodeFactory->createDeclaresStrictType();
+        $node->stmts = array_merge([$declareStrictTypes, new Nop()], $node->stmts);
+        return $node;
     }
     public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_70;
-    }
-    /**
-     * @param Stmt[] $nodes
-     */
-    private function shouldSkipNodes(array $nodes, File $file): bool
-    {
-        if ($this->skipper->shouldSkipElementAndFilePath(self::class, $file->getFilePath())) {
-            return \true;
-        }
-        if (strncmp($file->getFileContent(), '#!', strlen('#!')) === 0) {
-            return \true;
-        }
-        return $nodes === [];
     }
     /**
      * @param Stmt[] $nodes

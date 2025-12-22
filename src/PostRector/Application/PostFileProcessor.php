@@ -112,7 +112,7 @@ final class PostFileProcessor implements ResettableInterface
         $isRemovingUnusedImportsEnabled = SimpleParameterProvider::provideBoolParameter(Option::REMOVE_UNUSED_IMPORTS);
         $postRectors = [];
         // sorted by priority, to keep removed imports in order
-        if ($isRenamedClassEnabled) {
+        if ($isRenamedClassEnabled && $isNameImportingEnabled) {
             $postRectors[] = $this->classRenamingPostRector;
         }
         // import names
