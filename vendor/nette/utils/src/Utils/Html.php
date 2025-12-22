@@ -524,7 +524,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     }
     /**
      * Appends plain-text string to element content.
-     * @param \Stringable|string $text
+     * @param \Stringable|string|int|null $text
      * @return static
      */
     public function addText($text)

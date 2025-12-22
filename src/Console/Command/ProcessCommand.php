@@ -189,6 +189,7 @@ EOF
         $this->deprecatedRulesReporter->reportDeprecatedRules();
         $this->deprecatedRulesReporter->reportDeprecatedSkippedRules();
         $this->deprecatedRulesReporter->reportDeprecatedNodeTypes();
+        $this->deprecatedRulesReporter->reportDeprecatedRectorUnsupportedMethods();
         $this->missConfigurationReporter->reportSkippedNeverRegisteredRules();
         return $this->resolveReturnCode($processResult, $configuration);
     }
