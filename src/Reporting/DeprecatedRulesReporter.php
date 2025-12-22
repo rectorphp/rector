@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Reporting;
 
-use Rector\PhpParserNode\FileNode;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PhpParser\Enum\NodeGroup;
+use Rector\PhpParserNode\FileNode;
 use ReflectionMethod;
 use RectorPrefix202512\Symfony\Component\Console\Style\SymfonyStyle;
 final class DeprecatedRulesReporter

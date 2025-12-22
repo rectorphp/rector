@@ -16,6 +16,7 @@ use Rector\DeadCode\Rector\ClassLike\RemoveTypedPropertyNonMockDocblockRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveArgumentFromDefaultParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveNullTagValueNodeRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
@@ -125,6 +126,7 @@ final class DeadCodeLevel
         RemoveDeadStmtRector::class,
         UnwrapFutureCompatibleIfPhpVersionRector::class,
         RemoveParentCallWithoutParentRector::class,
+        RemoveParentDelegatingConstructorRector::class,
         RemoveDeadConditionAboveReturnRector::class,
         RemoveDeadLoopRector::class,
         // removing methods could be risky if there is some magic loading them
