@@ -5,7 +5,9 @@ namespace Rector\TypeDeclaration\NodeFactory;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -34,12 +36,17 @@ final class JMSTypePropertyTypeFactory
      * @readonly
      */
     private VarTagRemover $varTagRemover;
-    public function __construct(ScalarStringToTypeMapper $scalarStringToTypeMapper, StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, VarTagRemover $varTagRemover)
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ScalarStringToTypeMapper $scalarStringToTypeMapper, StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, VarTagRemover $varTagRemover, ReflectionProvider $reflectionProvider)
     {
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->varTagRemover = $varTagRemover;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function createObjectTypeNode(string $typeValue): ?Node
     {
@@ -52,7 +59,11 @@ final class JMSTypePropertyTypeFactory
             // fallback to object type
             $type = new ObjectType($typeValue);
         }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
+        $node = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
+        if ($node instanceof FullyQualified && !$this->reflectionProvider->hasClass($node->toString())) {
+            return null;
+        }
+        return $node;
     }
     public function createScalarTypeNode(string $typeValue, Property $property): ?Node
     {
