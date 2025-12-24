@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.7 (2025-12-23)
+
+Just in time for the holidays, we are happy to announce the release of `v0.6.7`! 🎄🎉
+
+This is a compatibility release that contains backported features from the `0.7.x` branch.
+Once v0.7 is released, it will be the way forward for this project.
+
+*   Feature: Improve PHP 8.5+ support by replacing binary cast with string cast.
+    (#119 by @kubawerlos and @WyriHaximus)
+
 ## 0.6.6 (2025-01-01)
 
 This is a compatibility release that contains backported features from the `0.7.x` branch.

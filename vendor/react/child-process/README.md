@@ -588,7 +588,7 @@ The recommended way to install this library is [through Composer](https://getcom
 This will install the latest supported version:
 
 ```bash
-composer require react/child-process:^0.6.6
+composer require react/child-process:^0.6.7
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
