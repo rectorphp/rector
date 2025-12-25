@@ -44,4 +44,18 @@ final class ArgsAnalyzer
         }
         return $defaultPosition;
     }
+    /**
+     * @param Arg[] $args
+     */
+    public function resolveFirstNamedArgPosition(array $args): ?int
+    {
+        $position = 0;
+        foreach ($args as $arg) {
+            if ($arg->name instanceof Identifier) {
+                return $position;
+            }
+            ++$position;
+        }
+        return null;
+    }
 }

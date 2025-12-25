@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -23,6 +24,7 @@ use Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Enum\ObjectReference;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\PhpParser\AstResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
@@ -52,16 +54,21 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      */
     private StaticTypeMapper $staticTypeMapper;
     /**
+     * @readonly
+     */
+    private ArgsAnalyzer $argsAnalyzer;
+    /**
      * @var ArgumentAdder[]|ArgumentAdderWithoutDefaultValue[]
      */
     private array $addedArguments = [];
     private bool $hasChanged = \false;
-    public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, StaticTypeMapper $staticTypeMapper)
+    public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, StaticTypeMapper $staticTypeMapper, ArgsAnalyzer $argsAnalyzer)
     {
         $this->argumentAddingScope = $argumentAddingScope;
         $this->changedArgumentsDetector = $changedArgumentsDetector;
         $this->astResolver = $astResolver;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -164,11 +171,17 @@ CODE_SAMPLE
         }
         $defaultValue = $argumentAdder->getArgumentDefaultValue();
         $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
-        if (isset($methodCall->args[$position])) {
-            return;
+        // if there are named argyments, we just add it at the end as a new named argument
+        if ($this->argsAnalyzer->hasNamedArg($methodCall->getArgs())) {
+            $argumentName = $argumentAdder->getArgumentName();
+            if ($argumentName === null) {
+                throw new ShouldNotHappenException();
+            }
+            $arg->name = new Identifier($argumentName);
+        } else {
+            $this->fillGapBetweenWithDefaultValue($methodCall, $position);
         }
-        $this->fillGapBetweenWithDefaultValue($methodCall, $position);
-        $methodCall->args[$position] = $arg;
+        $methodCall->args[] = $arg;
         $this->hasChanged = \true;
     }
     /**
@@ -223,7 +236,21 @@ CODE_SAMPLE
             // argument added and type has been changed
             return $this->changedArgumentsDetector->isTypeChanged($param, $argumentAdder->getArgumentType());
         }
-        if (isset($node->args[$position])) {
+        $arguments = $node->getArgs();
+        $firstNamedArgumentPosition = $this->argsAnalyzer->resolveFirstNamedArgPosition($arguments);
+        // If named arguments exist
+        if ($firstNamedArgumentPosition !== null) {
+            // Check if the parameter we're trying to add is before the first named argument
+            if ($position < $firstNamedArgumentPosition) {
+                return \true;
+                //if that is the case, the parameter already exists, skip
+            }
+            // Check if the parameter we're trying to add is already present as a named argument
+            if ($this->argsAnalyzer->resolveArgPosition($arguments, $argumentName, -1) !== -1) {
+                return \true;
+                // if it exists as a named argument, skip
+            }
+        } elseif (isset($node->args[$position])) {
             return \true;
         }
         // Check if default value is the same
@@ -287,8 +314,14 @@ CODE_SAMPLE
         if (!$this->isName($staticCall->class, ObjectReference::PARENT)) {
             return;
         }
-        $this->fillGapBetweenWithDefaultValue($staticCall, $position);
-        $staticCall->args[$position] = new Arg(new Variable($argumentName));
+        // if there are named arguments, we just add it at the end as a new named argument
+        $arg = new Arg(new Variable($argumentName));
+        if ($this->argsAnalyzer->hasNamedArg($staticCall->getArgs())) {
+            $arg->name = new Identifier($argumentName);
+        } else {
+            $this->fillGapBetweenWithDefaultValue($staticCall, $position);
+        }
+        $staticCall->args[] = $arg;
         $this->hasChanged = \true;
     }
     /**
