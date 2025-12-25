@@ -5,15 +5,18 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitor;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionParameter;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ExtendedMethodReflection;
 use Rector\Enum\ObjectReference;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
@@ -30,9 +33,14 @@ final class RemoveParentDelegatingConstructorRector extends AbstractRector
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    public function __construct(StaticTypeMapper $staticTypeMapper, ValueResolver $valueResolver)
     {
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -187,8 +195,31 @@ CODE_SAMPLE
                 if (!$this->nodeComparator->areNodesEqual($parameterType, $parentParameterType)) {
                     return \false;
                 }
+                if (!$param->default instanceof Expr) {
+                    continue;
+                }
+                if ($this->isDifferentDefaultValue($param->default, $extendedMethodReflection, $index)) {
+                    return \false;
+                }
             }
         }
         return \true;
+    }
+    private function isDifferentDefaultValue(Expr $defaultExpr, ExtendedMethodReflection $extendedMethodReflection, int $index): bool
+    {
+        $methodName = $extendedMethodReflection->getName();
+        // native reflection is needed to get exact default value
+        if ($extendedMethodReflection->getDeclaringClass()->getNativeReflection()->hasMethod($methodName)) {
+            $parentMethod = $extendedMethodReflection->getDeclaringClass()->getNativeReflection()->getMethod($methodName);
+            $nativeParentParameterReflection = $parentMethod->getParameters()[$index] ?? null;
+            if (!$nativeParentParameterReflection instanceof ReflectionParameter) {
+                return \false;
+            }
+            $parentDefault = $nativeParentParameterReflection->getDefaultValue();
+            if (!$this->valueResolver->isValue($defaultExpr, $parentDefault)) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
