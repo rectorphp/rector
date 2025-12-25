@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\Closure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use Rector\CodingStyle\Guard\StaticGuard;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -56,6 +57,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->hasAttribute(AttributeKey::IS_CLOSURE_USES_THIS)) {
+            return null;
+        }
         if (!$this->staticGuard->isLegal($node)) {
             return null;
         }
