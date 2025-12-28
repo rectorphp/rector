@@ -67,7 +67,9 @@ CODE_SAMPLE
         if (!$returnExpr instanceof Expr) {
             return null;
         }
-        $arrowFunction = new ArrowFunction(['params' => $node->params, 'returnType' => $node->returnType, 'byRef' => $node->byRef, 'expr' => $returnExpr]);
+        $attributes = $node->getAttributes();
+        unset($attributes[AttributeKey::ORIGINAL_NODE]);
+        $arrowFunction = new ArrowFunction(['params' => $node->params, 'returnType' => $node->returnType, 'byRef' => $node->byRef, 'expr' => $returnExpr], $attributes);
         if ($node->static) {
             $arrowFunction->static = \true;
         }

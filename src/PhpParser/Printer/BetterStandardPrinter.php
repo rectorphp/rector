@@ -153,13 +153,19 @@ final class BetterStandardPrinter extends Standard
         if ($comments === []) {
             return parent::pExpr_ArrowFunction($arrowFunction, $precedence, $lhsPrecedence);
         }
-        $indent = $this->resolveIndentSpaces();
-        $text = "\n" . $indent;
+        $isMaxPrecedence = $precedence === self::MAX_PRECEDENCE;
+        $isNewLineAndIndent = $arrowFunction->getAttribute(AttributeKey::IS_ARG_VALUE) === \true;
+        $indent = $this->resolveIndentSpaces($isMaxPrecedence);
+        $text = $isMaxPrecedence ? '' : "\n" . $indent;
+        if ($isNewLineAndIndent) {
+            $indent = $this->resolveIndentSpaces();
+            $text = "\n" . $indent;
+        }
         foreach ($comments as $key => $comment) {
             $commentText = $key > 0 ? $indent . $comment->getText() : $comment->getText();
             $text .= $commentText . "\n";
         }
-        return $text . "\n" . $indent . parent::pExpr_ArrowFunction($arrowFunction, $precedence, $lhsPrecedence);
+        return $text . $indent . parent::pExpr_ArrowFunction($arrowFunction, $precedence, $lhsPrecedence);
     }
     /**
      * This allows to use both spaces and tabs vs. original space-only
@@ -390,9 +396,12 @@ final class BetterStandardPrinter extends Standard
         $trimmedLines = array_map(\Closure::fromCallable('ltrim'), $lines);
         return implode("\n", $trimmedLines);
     }
-    private function resolveIndentSpaces(): string
+    private function resolveIndentSpaces(bool $onlyLevel = \false): string
     {
         $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
+        if ($onlyLevel) {
+            return str_repeat($this->getIndentCharacter(), $this->indentLevel);
+        }
         return str_repeat($this->getIndentCharacter(), $this->indentLevel) . str_repeat($this->getIndentCharacter(), $indentSize);
     }
     /**
