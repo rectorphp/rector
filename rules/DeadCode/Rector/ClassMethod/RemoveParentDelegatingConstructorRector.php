@@ -215,6 +215,11 @@ CODE_SAMPLE
             if (!$nativeParentParameterReflection instanceof ReflectionParameter) {
                 return \false;
             }
+            // when child has default value, but parent does not have default value,
+            // mark as different
+            if (!$nativeParentParameterReflection->isDefaultValueAvailable()) {
+                return \true;
+            }
             $parentDefault = $nativeParentParameterReflection->getDefaultValue();
             if (!$this->valueResolver->isValue($defaultExpr, $parentDefault)) {
                 return \true;
