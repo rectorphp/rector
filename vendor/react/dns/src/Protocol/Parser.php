@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202512\React\Dns\Protocol;
+namespace RectorPrefix202601\React\Dns\Protocol;
 
-use RectorPrefix202512\React\Dns\Model\Message;
-use RectorPrefix202512\React\Dns\Model\Record;
-use RectorPrefix202512\React\Dns\Query\Query;
+use RectorPrefix202601\React\Dns\Model\Message;
+use RectorPrefix202601\React\Dns\Model\Record;
+use RectorPrefix202601\React\Dns\Query\Query;
 use InvalidArgumentException;
 /**
  * DNS protocol parser

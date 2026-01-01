@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix202512\Illuminate\Container\Attributes;
+namespace RectorPrefix202601\Illuminate\Container\Attributes;
 
 use Attribute;
-use RectorPrefix202512\Illuminate\Contracts\Container\Container;
-use RectorPrefix202512\Illuminate\Contracts\Container\ContextualAttribute;
-use RectorPrefix202512\Illuminate\Log\Context\Repository;
+use RectorPrefix202601\Illuminate\Contracts\Container\Container;
+use RectorPrefix202601\Illuminate\Contracts\Container\ContextualAttribute;
+use RectorPrefix202601\Illuminate\Log\Context\Repository;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Context implements ContextualAttribute
 {

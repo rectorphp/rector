@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202512\Nette\Utils;
+namespace RectorPrefix202601\Nette\Utils;
 
-use RectorPrefix202512\Nette;
+use RectorPrefix202601\Nette;
 use function array_merge, count, func_get_args, func_num_args, glob, implode, is_array, is_dir, iterator_to_array, preg_match, preg_quote, preg_replace, preg_split, rtrim, spl_object_id, sprintf, str_ends_with, str_starts_with, strnatcmp, strpbrk, strrpos, strtolower, strtr, substr, usort;
 use const GLOB_NOESCAPE, GLOB_NOSORT, GLOB_ONLYDIR;
 /**

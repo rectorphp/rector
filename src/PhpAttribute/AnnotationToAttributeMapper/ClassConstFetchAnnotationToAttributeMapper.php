@@ -9,7 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\Validation\RectorAssert;
-use RectorPrefix202512\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202601\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements AnnotationToAttributeMapperInterface<string>
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202512\Illuminate\Contracts\Pagination;
+namespace RectorPrefix202601\Illuminate\Contracts\Pagination;
 
 /**
  * @template TKey of array-key

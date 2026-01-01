@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202512\Symfony\Component\Console\Helper;
+namespace RectorPrefix202601\Symfony\Component\Console\Helper;
 
-use RectorPrefix202512\Symfony\Component\Console\Cursor;
-use RectorPrefix202512\Symfony\Component\Console\Exception\MissingInputException;
-use RectorPrefix202512\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix202512\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202512\Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use RectorPrefix202512\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202512\Symfony\Component\Console\Input\StreamableInputInterface;
-use RectorPrefix202512\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202512\Symfony\Component\Console\Output\ConsoleSectionOutput;
-use RectorPrefix202512\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202512\Symfony\Component\Console\Question\ChoiceQuestion;
-use RectorPrefix202512\Symfony\Component\Console\Question\Question;
-use RectorPrefix202512\Symfony\Component\Console\Terminal;
-use function RectorPrefix202512\Symfony\Component\String\s;
+use RectorPrefix202601\Symfony\Component\Console\Cursor;
+use RectorPrefix202601\Symfony\Component\Console\Exception\MissingInputException;
+use RectorPrefix202601\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202601\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202601\Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use RectorPrefix202601\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202601\Symfony\Component\Console\Input\StreamableInputInterface;
+use RectorPrefix202601\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202601\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use RectorPrefix202601\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202601\Symfony\Component\Console\Question\ChoiceQuestion;
+use RectorPrefix202601\Symfony\Component\Console\Question\Question;
+use RectorPrefix202601\Symfony\Component\Console\Terminal;
+use function RectorPrefix202601\Symfony\Component\String\s;
 /**
  * The QuestionHelper class provides helpers to interact with the user.
  *
@@ -264,7 +264,7 @@ class QuestionHelper extends Helper
                     if ($numMatches > 0 && -1 !== $ofs) {
                         $ret = (string) $matches[$ofs];
                         // Echo out remaining chars for current match
-                        $remainingCharacters = (string) substr($ret, \strlen(trim($this->mostRecentlyEnteredValue($fullChoice))));
+                        $remainingCharacters = (string) substr($ret, \strlen($this->mostRecentlyEnteredValue($fullChoice)));
                         $output->write($remainingCharacters);
                         $fullChoice .= $remainingCharacters;
                         $i = \false === ($encoding = mb_detect_encoding($fullChoice, null, \true)) ? \strlen($fullChoice) : mb_strlen($fullChoice, $encoding);
@@ -304,7 +304,7 @@ class QuestionHelper extends Helper
             if ($numMatches > 0 && -1 !== $ofs) {
                 $cursor->savePosition();
                 // Write highlighted text, complete the partially entered response
-                $charactersEntered = \strlen(trim($this->mostRecentlyEnteredValue($fullChoice)));
+                $charactersEntered = \strlen($this->mostRecentlyEnteredValue($fullChoice));
                 $output->write('<hl>' . OutputFormatter::escapeTrailingBackslash((string) substr($matches[$ofs], $charactersEntered)) . '</hl>');
                 $cursor->restorePosition();
             }

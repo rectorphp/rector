@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202512\Symfony\Component\Console\Helper;
+namespace RectorPrefix202601\Symfony\Component\Console\Helper;
 
 /**
  * TerminalInputHelper stops Ctrl-C and similar signals from leaving the terminal in
@@ -96,7 +96,7 @@ final class TerminalInputHelper
     }
     private function createSignalHandlers(): void
     {
-        if (!\function_exists('pcntl_async_signals') || !\function_exists('pcntl_signal') && !\function_exists('RectorPrefix202512\pcntl_signal')) {
+        if (!\function_exists('pcntl_async_signals') || !\function_exists('pcntl_signal') && !\function_exists('RectorPrefix202601\pcntl_signal')) {
             return;
         }
         pcntl_async_signals(\true);

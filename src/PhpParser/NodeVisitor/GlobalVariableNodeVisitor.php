@@ -15,7 +15,7 @@ use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Enum\NodeGroup;
-use RectorPrefix202512\Webmozart\Assert\Assert;
+use RectorPrefix202601\Webmozart\Assert\Assert;
 final class GlobalVariableNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**

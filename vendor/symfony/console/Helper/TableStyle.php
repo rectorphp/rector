@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202512\Symfony\Component\Console\Helper;
+namespace RectorPrefix202601\Symfony\Component\Console\Helper;
 
-use RectorPrefix202512\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202512\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202601\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202601\Symfony\Component\Console\Exception\LogicException;
 /**
  * Defines the styles for a Table.
  *
@@ -70,10 +70,11 @@ class TableStyle
      *
      * <code>
      * ╔═══════════════╤══════════════════════════╤══════════════════╗
-     * 1 ISBN          2 Title                    │ Author           ║
-     * ╠═══════════════╪══════════════════════════╪══════════════════╣
+     * ║ ISBN          │ Title                    │ Author           ║
+     * ╠═══════1═══════╪══════════════════════════╪══════════════════╣
      * ║ 99921-58-10-7 │ Divine Comedy            │ Dante Alighieri  ║
      * ║ 9971-5-0210-0 │ A Tale of Two Cities     │ Charles Dickens  ║
+     * ╟───────2───────┼──────────────────────────┼──────────────────╢
      * ║ 960-425-059-0 │ The Lord of the Rings    │ J. R. R. Tolkien ║
      * ║ 80-902734-1-6 │ And Then There Were None │ Agatha Christie  ║
      * ╚═══════════════╧══════════════════════════╧══════════════════╝
@@ -92,11 +93,10 @@ class TableStyle
      *
      * <code>
      * ╔═══════════════╤══════════════════════════╤══════════════════╗
-     * ║ ISBN          │ Title                    │ Author           ║
-     * ╠═══════1═══════╪══════════════════════════╪══════════════════╣
+     * 1 ISBN          2 Title                    │ Author           ║
+     * ╠═══════════════╪══════════════════════════╪══════════════════╣
      * ║ 99921-58-10-7 │ Divine Comedy            │ Dante Alighieri  ║
      * ║ 9971-5-0210-0 │ A Tale of Two Cities     │ Charles Dickens  ║
-     * ╟───────2───────┼──────────────────────────┼──────────────────╢
      * ║ 960-425-059-0 │ The Lord of the Rings    │ J. R. R. Tolkien ║
      * ║ 80-902734-1-6 │ And Then There Were None │ Agatha Christie  ║
      * ╚═══════════════╧══════════════════════════╧══════════════════╝

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202512\Doctrine\Inflector;
+namespace RectorPrefix202601\Doctrine\Inflector;
 
 class CachedWordInflector implements WordInflector
 {

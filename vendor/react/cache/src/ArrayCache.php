@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202512\React\Cache;
+namespace RectorPrefix202601\React\Cache;
 
-use RectorPrefix202512\React\Promise;
-use RectorPrefix202512\React\Promise\PromiseInterface;
+use RectorPrefix202601\React\Promise;
+use RectorPrefix202601\React\Promise\PromiseInterface;
 class ArrayCache implements CacheInterface
 {
     private $limit;

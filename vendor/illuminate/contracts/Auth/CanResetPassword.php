@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202512\Illuminate\Contracts\Auth;
+namespace RectorPrefix202601\Illuminate\Contracts\Auth;
 
 interface CanResetPassword
 {

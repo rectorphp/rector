@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202512\Symplify\EasyParallel\Contract;
+namespace RectorPrefix202601\Symplify\EasyParallel\Contract;
 
 use JsonSerializable;
 /**

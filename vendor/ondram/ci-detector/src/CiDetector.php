@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202512\OndraM\CiDetector;
+namespace RectorPrefix202601\OndraM\CiDetector;
 
-use RectorPrefix202512\OndraM\CiDetector\Ci\CiInterface;
-use RectorPrefix202512\OndraM\CiDetector\Exception\CiNotDetectedException;
+use RectorPrefix202601\OndraM\CiDetector\Ci\CiInterface;
+use RectorPrefix202601\OndraM\CiDetector\Exception\CiNotDetectedException;
 /**
  * Unified way to get environment variables from current continuous integration server
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202512\Illuminate\Contracts\Support;
+namespace RectorPrefix202601\Illuminate\Contracts\Support;
 
 interface Renderable
 {

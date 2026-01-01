@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202512\React\Dns\Query;
+namespace RectorPrefix202601\React\Dns\Query;
 
-use RectorPrefix202512\React\Promise\Deferred;
-use RectorPrefix202512\React\Promise\PromiseInterface;
+use RectorPrefix202601\React\Promise\Deferred;
+use RectorPrefix202601\React\Promise\PromiseInterface;
 final class RetryExecutor implements ExecutorInterface
 {
     private $executor;

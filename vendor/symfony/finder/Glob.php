@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202512\Symfony\Component\Finder;
+namespace RectorPrefix202601\Symfony\Component\Finder;
 
 /**
  * Glob matches globbing patterns against text.
@@ -43,6 +43,9 @@ class Glob
         $escaping = \false;
         $inCurlies = 0;
         $regex = '';
+        if ($unanchored = strncmp($glob, '**/', strlen('**/')) === 0) {
+            $glob = '/' . $glob;
+        }
         $sizeGlob = \strlen($glob);
         for ($i = 0; $i < $sizeGlob; ++$i) {
             $car = $glob[$i];
@@ -94,6 +97,9 @@ class Glob
                 $regex .= $car;
             }
             $escaping = \false;
+        }
+        if ($unanchored) {
+            $regex = substr_replace($regex, '?', 1 + ('/' === $delimiter) + ($strictLeadingDot ? \strlen('(?=[^\.])') : 0), 0);
         }
         return $delimiter . '^' . $regex . '$' . $delimiter;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202512\Illuminate\Contracts\Translation;
+namespace RectorPrefix202601\Illuminate\Contracts\Translation;
 
 interface Loader
 {

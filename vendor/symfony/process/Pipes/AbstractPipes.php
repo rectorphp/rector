@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202512\Symfony\Component\Process\Pipes;
+namespace RectorPrefix202601\Symfony\Component\Process\Pipes;
 
-use RectorPrefix202512\Symfony\Component\Process\Exception\InvalidArgumentException;
+use RectorPrefix202601\Symfony\Component\Process\Exception\InvalidArgumentException;
 /**
  * @author Romain Neutron <imprec@gmail.com>
  *
@@ -118,9 +118,11 @@ abstract class AbstractPipes implements PipesInterface
         }
         foreach ($w as $stdin) {
             if (isset($this->inputBuffer[0])) {
-                $written = fwrite($stdin, $this->inputBuffer);
+                if (\false === $written = @fwrite($stdin, $this->inputBuffer)) {
+                    return $this->closeBrokenInputPipe();
+                }
                 $this->inputBuffer = (string) substr($this->inputBuffer, $written);
-                if (isset($this->inputBuffer[0])) {
+                if (isset($this->inputBuffer[0]) && isset($this->pipes[0])) {
                     return [$this->pipes[0]];
                 }
             }
@@ -130,11 +132,13 @@ abstract class AbstractPipes implements PipesInterface
                     if (!isset($data[0])) {
                         break;
                     }
-                    $written = fwrite($stdin, $data);
+                    if (\false === $written = @fwrite($stdin, $data)) {
+                        return $this->closeBrokenInputPipe();
+                    }
                     $data = (string) substr($data, $written);
                     if (isset($data[0])) {
                         $this->inputBuffer = $data;
-                        return [$this->pipes[0]];
+                        return isset($this->pipes[0]) ? [$this->pipes[0]] : null;
                     }
                 }
                 if (feof($input)) {
@@ -155,6 +159,16 @@ abstract class AbstractPipes implements PipesInterface
             return [$this->pipes[0]];
         }
         return null;
+    }
+    private function closeBrokenInputPipe(): void
+    {
+        $this->lastError = error_get_last()['message'] ?? null;
+        if (\is_resource($this->pipes[0] ?? null)) {
+            fclose($this->pipes[0]);
+        }
+        unset($this->pipes[0]);
+        $this->input = null;
+        $this->inputBuffer = '';
     }
     /**
      * @internal

@@ -45,12 +45,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202512\\React\\Stream\\": "src\/"
+            "RectorPrefix202601\\React\\Stream\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202512\\React\\Tests\\Stream\\": "tests\/"
+            "RectorPrefix202601\\React\\Tests\\Stream\\": "tests\/"
         }
     }
 }

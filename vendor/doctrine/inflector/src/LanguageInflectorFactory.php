@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202512\Doctrine\Inflector;
+namespace RectorPrefix202601\Doctrine\Inflector;
 
-use RectorPrefix202512\Doctrine\Inflector\Rules\Ruleset;
+use RectorPrefix202601\Doctrine\Inflector\Rules\Ruleset;
 interface LanguageInflectorFactory
 {
     /**

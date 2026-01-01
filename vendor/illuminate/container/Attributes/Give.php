@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202512\Illuminate\Container\Attributes;
+namespace RectorPrefix202601\Illuminate\Container\Attributes;
 
 use Attribute;
-use RectorPrefix202512\Illuminate\Contracts\Container\Container;
-use RectorPrefix202512\Illuminate\Contracts\Container\ContextualAttribute;
+use RectorPrefix202601\Illuminate\Contracts\Container\Container;
+use RectorPrefix202601\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Give implements ContextualAttribute
 {

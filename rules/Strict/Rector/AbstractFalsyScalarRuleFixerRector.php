@@ -5,7 +5,7 @@ namespace Rector\Strict\Rector;
 
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
-use RectorPrefix202512\Webmozart\Assert\Assert;
+use RectorPrefix202601\Webmozart\Assert\Assert;
 /**
  * @internal
  */

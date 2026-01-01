@@ -7,8 +7,8 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Symfony\Enum\SymfonyClass;
-use RectorPrefix202512\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix202512\Webmozart\Assert\Assert;
+use RectorPrefix202601\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix202601\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
     private ?object $container = null;

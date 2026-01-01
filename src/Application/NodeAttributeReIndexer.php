@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\PhpParser\Enum\NodeGroup;
-use RectorPrefix202512\Webmozart\Assert\Assert;
+use RectorPrefix202601\Webmozart\Assert\Assert;
 final class NodeAttributeReIndexer
 {
     public static function reIndexNodeAttributes(Node $node): ?Node

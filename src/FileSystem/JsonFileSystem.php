@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\FileSystem;
 
-use RectorPrefix202512\Nette\Utils\FileSystem;
-use RectorPrefix202512\Nette\Utils\Json;
+use RectorPrefix202601\Nette\Utils\FileSystem;
+use RectorPrefix202601\Nette\Utils\Json;
 final class JsonFileSystem
 {
     /**

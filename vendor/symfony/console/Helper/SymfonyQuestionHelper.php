@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202512\Symfony\Component\Console\Helper;
+namespace RectorPrefix202601\Symfony\Component\Console\Helper;
 
-use RectorPrefix202512\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202512\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202512\Symfony\Component\Console\Question\ChoiceQuestion;
-use RectorPrefix202512\Symfony\Component\Console\Question\ConfirmationQuestion;
-use RectorPrefix202512\Symfony\Component\Console\Question\Question;
-use RectorPrefix202512\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202601\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202601\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202601\Symfony\Component\Console\Question\ChoiceQuestion;
+use RectorPrefix202601\Symfony\Component\Console\Question\ConfirmationQuestion;
+use RectorPrefix202601\Symfony\Component\Console\Question\Question;
+use RectorPrefix202601\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Symfony Style Guide compliant question helper.
  *
@@ -31,7 +31,7 @@ class SymfonyQuestionHelper extends QuestionHelper
         $text = OutputFormatter::escapeTrailingBackslash($question->getQuestion());
         $default = $question->getDefault();
         if ($question->isMultiline()) {
-            $text .= \sprintf(' (press %s to continue)', $this->getEofShortcut());
+            $text .= \sprintf(' (press %s to continue)', $this->getEofShortcut($output));
         }
         switch (\true) {
             case null === $default:
@@ -75,9 +75,9 @@ class SymfonyQuestionHelper extends QuestionHelper
         }
         parent::writeError($output, $error);
     }
-    private function getEofShortcut(): string
+    private function getEofShortcut(OutputInterface $output): string
     {
-        if ('Windows' === \PHP_OS_FAMILY) {
+        if ('\\' === \DIRECTORY_SEPARATOR && !$output->isDecorated()) {
             return '<comment>Ctrl+Z</comment> then <comment>Enter</comment>';
         }
         return '<comment>Ctrl+D</comment>';
