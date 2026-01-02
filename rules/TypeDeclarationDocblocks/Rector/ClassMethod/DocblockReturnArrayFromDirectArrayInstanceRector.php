@@ -8,7 +8,10 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Rector\AbstractRector;
@@ -102,6 +105,9 @@ CODE_SAMPLE
         if (!$soleReturn->expr instanceof Array_) {
             return null;
         }
+        if ($this->shouldSkipReturnMixedAndEmptyArray($phpDocInfo, $soleReturn->expr)) {
+            return null;
+        }
         // resolve simple type
         $returnedType = $this->getType($soleReturn->expr);
         if (!$returnedType instanceof ConstantArrayType) {
@@ -114,5 +120,17 @@ CODE_SAMPLE
         $genericTypeNode = $this->constantArrayTypeGeneralizer->generalize($returnedType);
         $this->phpDocTypeChanger->changeReturnTypeNode($node, $phpDocInfo, $genericTypeNode);
         return $node;
+    }
+    private function shouldSkipReturnMixedAndEmptyArray(PhpDocInfo $phpDocInfo, Array_ $array): bool
+    {
+        if ($array->items !== []) {
+            return \false;
+        }
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
+            return \false;
+        }
+        // better than array{}
+        return $returnTagValueNode->type instanceof ArrayTypeNode;
     }
 }
