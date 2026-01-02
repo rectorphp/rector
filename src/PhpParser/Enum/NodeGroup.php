@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -36,7 +37,7 @@ final class NodeGroup
      *
      * @var array<class-string<Node>>
      */
-    public const STMTS_AWARE = [Block::class, Closure::class, Case_::class, Catch_::class, ClassMethod::class, Do_::class, Else_::class, ElseIf_::class, Finally_::class, For_::class, Foreach_::class, Function_::class, If_::class, Namespace_::class, TryCatch::class, While_::class, FileNode::class];
+    public const STMTS_AWARE = [Block::class, Closure::class, Case_::class, Catch_::class, ClassMethod::class, Do_::class, Else_::class, ElseIf_::class, Finally_::class, For_::class, Foreach_::class, Function_::class, If_::class, Namespace_::class, TryCatch::class, While_::class, FileNode::class, Declare_::class];
     /**
      * @var array<class-string<Node>>
      */

@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
@@ -55,7 +54,7 @@ final class NodeAttributeReIndexer
     }
     private static function reIndexStmtsKeys(Node $node): ?Node
     {
-        if (!NodeGroup::isStmtAwareNode($node) && !$node instanceof ClassLike && !$node instanceof Declare_) {
+        if (!NodeGroup::isStmtAwareNode($node) && !$node instanceof ClassLike) {
             return null;
         }
         Assert::propertyExists($node, 'stmts');
