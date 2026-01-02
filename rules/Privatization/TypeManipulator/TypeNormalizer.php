@@ -183,7 +183,7 @@ final class TypeNormalizer
     }
     private function resolveNameShortDocTypeNode(UnionType $unionType): TypeNode
     {
-        // we have to converet name to short here, to make sure the not FQN, but short name is counted to the full length
+        // we have to convert name to short here, to make sure the not FQN, but short name is counted to the full length
         $objectShortGeneralizedUnionType = TypeTraverser::map($unionType, function (Type $type, callable $traverseCallback): Type {
             if ($type instanceof ObjectType && strpos($type->getClassName(), '\\') !== \false) {
                 // after last "\\"
