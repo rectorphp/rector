@@ -9,8 +9,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\PhpParser\AstResolver;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
@@ -123,6 +125,11 @@ CODE_SAMPLE
             return null;
         }
         $returnedMethodCall = $onlyReturnWithExpr->expr;
+        // skip doctrine connection calls, as to generic and not helpful
+        $callerType = $this->getType($returnedMethodCall->var);
+        if ($callerType instanceof ObjectType && $callerType->isInstanceOf(DoctrineClass::CONNECTION)->yes()) {
+            return null;
+        }
         $calledClassMethod = $this->astResolver->resolveClassMethodFromCall($returnedMethodCall);
         if (!$calledClassMethod instanceof ClassMethod) {
             return null;
@@ -136,6 +143,9 @@ CODE_SAMPLE
         $calledClassMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($calledClassMethod);
         $calledReturnTagValue = $calledClassMethodPhpDocInfo->getReturnTagValue();
         if (!$calledReturnTagValue instanceof ReturnTagValueNode) {
+            return null;
+        }
+        if (!$this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($calledReturnTagValue)) {
             return null;
         }
         $this->phpDocTypeChanger->changeReturnTypeNode($node, $phpDocInfo, $calledReturnTagValue->type);
