@@ -64,7 +64,15 @@ final class ChangedNodeScopeRefresher
             $errorMessage = sprintf('Node "%s" with is missing scope required for scope refresh', get_class($node));
             throw new ShouldNotHappenException($errorMessage);
         }
-        \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($node);
+        /**
+         * The reindex is needed to:
+         *      - be used by PHPStan processNodes() that relies on indexed arrays start from 0
+         *      - use traverser to avoid issues when multiples rules apply, and higher node remove deep node,
+         *        which the next rule use deep node, for example:
+         *              - first rule: - Class_ → ClassMethod → remove stmt with index 0
+         *              - second rule: - ClassMethod → here fetch the index 0 that no longer exists
+         */
+        SimpleCallableNodeTraverser::traverse($node, fn(Node $subNode): ?Node => \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($subNode));
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
     }
