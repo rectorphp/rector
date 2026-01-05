@@ -92,6 +92,12 @@ CODE_SAMPLE
         if ($node->stmts === null || count($node->stmts) !== 1) {
             return null;
         }
+        if ($node->isFinal()) {
+            return null;
+        }
+        if (!$node->isPublic()) {
+            return null;
+        }
         $parentMethodReflection = $this->matchParentConstructorReflection($node);
         if (!$parentMethodReflection instanceof ExtendedMethodReflection) {
             return null;
