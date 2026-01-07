@@ -3,10 +3,12 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Configuration\Parameter\FeatureFlags;
@@ -147,7 +149,14 @@ CODE_SAMPLE
         if ($this->isName($classMethod, MethodName::CLONE)) {
             return !$classMethod->isPublic();
         }
-        return $this->isName($classMethod, MethodName::INVOKE);
+        if ($this->isName($classMethod, MethodName::INVOKE)) {
+            return \true;
+        }
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        return $this->isAttributeMarkerConstructor($classMethod, $classReflection);
     }
     private function hasDeprecatedAnnotation(ClassMethod $classMethod): bool
     {
@@ -156,5 +165,18 @@ CODE_SAMPLE
             return \false;
         }
         return $phpDocInfo->hasByType(DeprecatedTagValueNode::class);
+    }
+    /**
+     * Skip constructor in attributes as might be a marker parameter
+     */
+    private function isAttributeMarkerConstructor(ClassMethod $classMethod, ClassReflection $classReflection): bool
+    {
+        if (!$this->isName($classMethod, MethodName::CONSTRUCT)) {
+            return \false;
+        }
+        if (!$classReflection->isAttributeClass()) {
+            return \false;
+        }
+        return $classMethod->getDocComment() instanceof Doc;
     }
 }
