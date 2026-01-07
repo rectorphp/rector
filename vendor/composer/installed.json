@@ -574,8 +574,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v12.43.1",
-            "version_normalized": "12.43.1.0",
+            "version": "v12.45.0",
+            "version_normalized": "12.45.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -1877,12 +1877,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "7aeb980491abb8ddc156e20dde808bcc85c0eb35"
+                "reference": "d013008f3727cd2c6fa78e7c2b0cab73aa9a2034"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/7aeb980491abb8ddc156e20dde808bcc85c0eb35",
-                "reference": "7aeb980491abb8ddc156e20dde808bcc85c0eb35",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d013008f3727cd2c6fa78e7c2b0cab73aa9a2034",
+                "reference": "d013008f3727cd2c6fa78e7c2b0cab73aa9a2034",
                 "shasum": ""
             },
             "require": {
@@ -1893,6 +1893,7 @@
                 "phpecs\/phpecs": "^2.2",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^2.1.32",
+                "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.5",
                 "rector\/jack": "^0.4",
@@ -1914,7 +1915,7 @@
                 "tomasvotruba\/unused-public": "^2.1",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2025-12-22T15:59:46+00:00",
+            "time": "2026-01-06T13:29:19+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

@@ -11,6 +11,7 @@
         "phpecs\/phpecs": "^2.2",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan": "^2.1.32",
+        "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.5",
         "rector\/jack": "^0.4",

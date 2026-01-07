@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -85,9 +86,14 @@ CODE_SAMPLE
         }
         $interfaces = $classReflection->getInterfaces();
         foreach ($interfaces as $interface) {
+            // parameters are contract required → skip
             if ($interface->hasNativeMethod(MethodName::CONSTRUCT)) {
                 return null;
             }
+        }
+        // attributes can be used as markers
+        if ($classReflection->isAttributeClass() && $constructorClassMethod->getDocComment() instanceof Doc) {
+            return null;
         }
         $changedConstructorClassMethod = $this->classMethodParamRemover->processRemoveParams($constructorClassMethod);
         if (!$changedConstructorClassMethod instanceof ClassMethod) {
