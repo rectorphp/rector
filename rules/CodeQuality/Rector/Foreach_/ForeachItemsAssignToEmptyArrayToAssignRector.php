@@ -99,6 +99,9 @@ CODE_SAMPLE
                 continue;
             }
             if ($this->shouldSkip($stmt, $emptyArrayVariables)) {
+                if ($this->isAppend($stmt, $emptyArrayVariables)) {
+                    return null;
+                }
                 continue;
             }
             $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($stmt);
