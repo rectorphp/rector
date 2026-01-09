@@ -187,6 +187,9 @@ CODE_SAMPLE
     private function areConstructorAndParentParameterTypesMatching(ClassMethod $classMethod, ExtendedMethodReflection $extendedMethodReflection): bool
     {
         foreach ($classMethod->getParams() as $position => $param) {
+            if ($param->isPromoted() && $param->isPrivate()) {
+                return \false;
+            }
             $parameterType = $param->type;
             // no type override
             if ($parameterType === null) {
