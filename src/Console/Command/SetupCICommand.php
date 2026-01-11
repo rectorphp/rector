@@ -6,11 +6,11 @@ namespace Rector\Console\Command;
 use RectorPrefix202601\Nette\Utils\FileSystem;
 use RectorPrefix202601\OndraM\CiDetector\CiDetector;
 use Rector\Git\RepositoryHelper;
+use function sprintf;
 use RectorPrefix202601\Symfony\Component\Console\Command\Command;
 use RectorPrefix202601\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202601\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202601\Symfony\Component\Console\Style\SymfonyStyle;
-use function sprintf;
 final class SetupCICommand extends Command
 {
     /**
