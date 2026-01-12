@@ -18,7 +18,7 @@ final class SwitchNegatedTernaryRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Switch negated ternary condition rector', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Switch negated ternary condition', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(bool $upper, string $name)
