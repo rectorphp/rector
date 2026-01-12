@@ -845,6 +845,7 @@ final class RectorConfigBuilder
     /**
      * DX helper
      * @see https://getrector.com/documentation/creating-a-node-visitor
+     * @param class-string $decoratingNodeVisitorClass
      */
     public function registerDecoratingNodeVisitor(string $decoratingNodeVisitorClass): self
     {

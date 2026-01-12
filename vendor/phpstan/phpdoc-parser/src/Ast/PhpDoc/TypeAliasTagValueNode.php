@@ -20,4 +20,17 @@ class TypeAliasTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTa
     {
         return trim("{$this->alias} {$this->type}");
     }
+    /**
+     * @param array<string, mixed> $properties
+     */
+    public static function __set_state(array $properties): self
+    {
+        $instance = new self($properties['alias'], $properties['type']);
+        if (isset($properties['attributes'])) {
+            foreach ($properties['attributes'] as $key => $value) {
+                $instance->setAttribute($key, $value);
+            }
+        }
+        return $instance;
+    }
 }

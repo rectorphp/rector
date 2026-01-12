@@ -89,16 +89,19 @@ Method                                                   | Description
 `integer($value, $message = '')`                         | Check that a value is an integer
 `integerish($value, $message = '')`                      | Check that a value casts to an integer
 `positiveInteger($value, $message = '')`                 | Check that a value is a positive (non-zero) integer
+`negativeInteger($value, $message = '')`                 | Check that a value is a negative integer
+`notNegativeInteger($value, $message = '')`              | Check that a value is a non-negative integer
 `float($value, $message = '')`                           | Check that a value is a float
 `numeric($value, $message = '')`                         | Check that a value is numeric
 `natural($value, $message = '')`                         | Check that a value is a non-negative integer
 `boolean($value, $message = '')`                         | Check that a value is a boolean
 `scalar($value, $message = '')`                          | Check that a value is a scalar
 `object($value, $message = '')`                          | Check that a value is an object
+`objectish($value, $message = '')`                       | Check that a value is an object or a string of a class that exists
 `resource($value, $type = null, $message = '')`          | Check that a value is a resource
+`isInitialized($value, $property, $message = '')`        | Check that a value has an initialized property
 `isCallable($value, $message = '')`                      | Check that a value is a callable
 `isArray($value, $message = '')`                         | Check that a value is an array
-`isTraversable($value, $message = '')`  (deprecated)     | Check that a value is an array or a `\Traversable`
 `isIterable($value, $message = '')`                      | Check that a value is an array or a `\Traversable`
 `isCountable($value, $message = '')`                     | Check that a value is an array or a `\Countable`
 `isInstanceOf($value, $class, $message = '')`            | Check that a value is an `instanceof` a class
@@ -112,26 +115,28 @@ Method                                                   | Description
 
 ### Comparison Assertions
 
-Method                                          | Description
------------------------------------------------ | ------------------------------------------------------------------
-`true($value, $message = '')`                   | Check that a value is `true`
-`false($value, $message = '')`                  | Check that a value is `false`
-`notFalse($value, $message = '')`               | Check that a value is not `false`
-`null($value, $message = '')`                   | Check that a value is `null`
-`notNull($value, $message = '')`                | Check that a value is not `null`
-`isEmpty($value, $message = '')`                | Check that a value is `empty()`
-`notEmpty($value, $message = '')`               | Check that a value is not `empty()`
-`eq($value, $value2, $message = '')`            | Check that a value equals another (`==`)
-`notEq($value, $value2, $message = '')`         | Check that a value does not equal another (`!=`)
-`same($value, $value2, $message = '')`          | Check that a value is identical to another (`===`)
-`notSame($value, $value2, $message = '')`       | Check that a value is not identical to another (`!==`)
-`greaterThan($value, $value2, $message = '')`   | Check that a value is greater than another
-`greaterThanEq($value, $value2, $message = '')` | Check that a value is greater than or equal to another
-`lessThan($value, $value2, $message = '')`      | Check that a value is less than another
-`lessThanEq($value, $value2, $message = '')`    | Check that a value is less than or equal to another
-`range($value, $min, $max, $message = '')`      | Check that a value is within a range
-`inArray($value, array $values, $message = '')` | Check that a value is one of a list of values
-`oneOf($value, array $values, $message = '')`   | Check that a value is one of a list of values (alias of `inArray`)
+Method                                                | Description
+----------------------------------------------------- | ------------------------------------------------------------------
+`true($value, $message = '')`                         | Check that a value is `true`
+`false($value, $message = '')`                        | Check that a value is `false`
+`notFalse($value, $message = '')`                     | Check that a value is not `false`
+`null($value, $message = '')`                         | Check that a value is `null`
+`notNull($value, $message = '')`                      | Check that a value is not `null`
+`isEmpty($value, $message = '')`                      | Check that a value is `empty()`
+`notEmpty($value, $message = '')`                     | Check that a value is not `empty()`
+`eq($value, $value2, $message = '')`                  | Check that a value equals another (`==`)
+`notEq($value, $value2, $message = '')`               | Check that a value does not equal another (`!=`)
+`same($value, $value2, $message = '')`                | Check that a value is identical to another (`===`)
+`notSame($value, $value2, $message = '')`             | Check that a value is not identical to another (`!==`)
+`greaterThan($value, $value2, $message = '')`         | Check that a value is greater than another
+`greaterThanEq($value, $value2, $message = '')`       | Check that a value is greater than or equal to another
+`lessThan($value, $value2, $message = '')`            | Check that a value is less than another
+`lessThanEq($value, $value2, $message = '')`          | Check that a value is less than or equal to another
+`range($value, $min, $max, $message = '')`            | Check that a value is within a range
+`inArray($value, array $values, $message = '')`       | Check that a value is one of a list of values
+`notInArray($value, array $values, $message = '')`    | Check that a value is not one of a list of values
+`oneOf($value, array $values, $message = '')`         | Check that a value is one of a list of values (alias of `inArray`)
+`notOneOf($value, array $values, $message = '')`      | Check that a value is not one of a list of values (alias of `notInArray`)
 
 ### String Assertions
 
@@ -207,9 +212,11 @@ Method                                             | Description
 
 ### Function Assertions
 
-Method                                      | Description
-------------------------------------------- | -----------------------------------------------------------------------------------------------------
-`throws($closure, $class, $message = '')`   | Check that a function throws a certain exception. Subclasses of the exception class will be accepted.
+Method                                    | Description
+------------------------------------------| -----------------------------------------------------------------------------------------------------
+`throws($closure, $class, $message = '')` | Check that a function throws a certain exception. Subclasses of the exception class will be accepted.
+`isStatic($closure, $message = '')`       | Check that a function is static.
+`notStatic($closure, $message = '')`    | Check that a function is not static.
 
 ### Collection Assertions
 

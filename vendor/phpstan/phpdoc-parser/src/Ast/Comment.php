@@ -19,4 +19,11 @@ class Comment
     {
         return trim($this->text);
     }
+    /**
+     * @param array<string, mixed> $properties
+     */
+    public static function __set_state(array $properties): self
+    {
+        return new self($properties['text'], $properties['startLine'], $properties['startIndex']);
+    }
 }

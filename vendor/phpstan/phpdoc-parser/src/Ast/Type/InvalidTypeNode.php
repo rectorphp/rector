@@ -22,4 +22,18 @@ class InvalidTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         return '*Invalid type*';
     }
+    /**
+     * @param array<string, mixed> $properties
+     */
+    public static function __set_state(array $properties): self
+    {
+        $exception = new ParserException(...$properties['exceptionArgs']);
+        $instance = new self($exception);
+        if (isset($properties['attributes'])) {
+            foreach ($properties['attributes'] as $key => $value) {
+                $instance->setAttribute($key, $value);
+            }
+        }
+        return $instance;
+    }
 }

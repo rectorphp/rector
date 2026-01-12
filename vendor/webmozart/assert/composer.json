@@ -11,10 +11,14 @@
         {
             "name": "Bernhard Schussek",
             "email": "bschussek@gmail.com"
+        },
+        {
+            "name": "Woody Gilk",
+            "email": "woody.gilk@gmail.com"
         }
     ],
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^8.2",
         "ext-ctype": "*",
         "ext-date": "*",
         "ext-filter": "*"
@@ -37,7 +41,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.10-dev"
+            "dev-feature\/2-0": "2.0-dev"
         }
     },
     "scripts": {
@@ -47,6 +51,13 @@
             "composer --working-dir=tools\/psalm install",
             "composer --working-dir=tools\/roave-bc-check install"
         ],
+        "update-tools": [
+            "composer --working-dir=tools\/php-cs-fixer update",
+            "composer --working-dir=tools\/phpunit update",
+            "composer --working-dir=tools\/psalm update",
+            "composer --working-dir=tools\/roave-bc-check update"
+        ],
+        "generate-mixin": "php bin\/generate.php",
         "bc-check": ".\/tools\/roave-bc-check\/vendor\/bin\/roave-backward-compatibility-check",
         "cs-check": ".\/tools\/php-cs-fixer\/vendor\/bin\/php-cs-fixer check",
         "cs-fix": ".\/tools\/php-cs-fixer\/vendor\/bin\/php-cs-fixer fix",

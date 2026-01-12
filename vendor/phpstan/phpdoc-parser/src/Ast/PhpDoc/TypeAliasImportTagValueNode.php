@@ -22,4 +22,17 @@ class TypeAliasImportTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\Ph
     {
         return trim("{$this->importedAlias} from {$this->importedFrom}" . ($this->importedAs !== null ? " as {$this->importedAs}" : ''));
     }
+    /**
+     * @param array<string, mixed> $properties
+     */
+    public static function __set_state(array $properties): self
+    {
+        $instance = new self($properties['importedAlias'], $properties['importedFrom'], $properties['importedAs']);
+        if (isset($properties['attributes'])) {
+            foreach ($properties['attributes'] as $key => $value) {
+                $instance->setAttribute($key, $value);
+            }
+        }
+        return $instance;
+    }
 }

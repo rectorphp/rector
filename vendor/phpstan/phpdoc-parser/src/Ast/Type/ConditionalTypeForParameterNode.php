@@ -25,4 +25,17 @@ class ConditionalTypeForParameterNode implements \PHPStan\PhpDocParser\Ast\Type\
     {
         return sprintf('(%s %s %s ? %s : %s)', $this->parameterName, $this->negated ? 'is not' : 'is', $this->targetType, $this->if, $this->else);
     }
+    /**
+     * @param array<string, mixed> $properties
+     */
+    public static function __set_state(array $properties): self
+    {
+        $instance = new self($properties['parameterName'], $properties['targetType'], $properties['if'], $properties['else'], $properties['negated']);
+        if (isset($properties['attributes'])) {
+            foreach ($properties['attributes'] as $key => $value) {
+                $instance->setAttribute($key, $value);
+            }
+        }
+        return $instance;
+    }
 }
