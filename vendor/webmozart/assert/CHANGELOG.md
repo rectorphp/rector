@@ -1,9 +1,11 @@
 Changelog
 =========
 
-## [Unreleased]
+## 2.1.2
 
-- ...
+### Fixed
+
+- Changed `all*` assertion values back to `mixed`.
 
 ## 2.1.1
 

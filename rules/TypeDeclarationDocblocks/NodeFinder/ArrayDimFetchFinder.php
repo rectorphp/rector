@@ -7,7 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -42,6 +44,36 @@ final class ArrayDimFetchFinder
                 continue;
             }
             if (!$this->nodeNameResolver->isName($arrayDimFetch->var, $variableName)) {
+                continue;
+            }
+            $exprs[] = $assign->expr;
+        }
+        return $exprs;
+    }
+    /**
+     * Look for bare assigns, $this->someProperty[] = ...
+     * @return Expr[]
+     */
+    public function findDimFetchAssignToPropertyName(Class_ $class, string $variableName): array
+    {
+        $assigns = $this->betterNodeFinder->findInstancesOfScoped($class->getMethods(), Assign::class);
+        $exprs = [];
+        foreach ($assigns as $assign) {
+            if (!$assign->var instanceof ArrayDimFetch) {
+                continue;
+            }
+            $arrayDimFetch = $assign->var;
+            if ($arrayDimFetch->dim instanceof Expr) {
+                continue;
+            }
+            if (!$arrayDimFetch->var instanceof PropertyFetch) {
+                continue;
+            }
+            $propertyFetch = $arrayDimFetch->var;
+            if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+                continue;
+            }
+            if (!$this->nodeNameResolver->isName($propertyFetch->name, $variableName)) {
                 continue;
             }
             $exprs[] = $assign->expr;

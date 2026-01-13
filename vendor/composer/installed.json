@@ -3293,17 +3293,17 @@
         },
         {
             "name": "webmozart\/assert",
-            "version": "2.1.1",
-            "version_normalized": "2.1.1.0",
+            "version": "2.1.2",
+            "version_normalized": "2.1.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/webmozarts\/assert.git",
-                "reference": "bdbabc199a7ba9965484e4725d66170e5711323b"
+                "reference": "ce6a2f100c404b2d32a1dd1270f9b59ad4f57649"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/webmozarts\/assert\/zipball\/bdbabc199a7ba9965484e4725d66170e5711323b",
-                "reference": "bdbabc199a7ba9965484e4725d66170e5711323b",
+                "url": "https:\/\/api.github.com\/repos\/webmozarts\/assert\/zipball\/ce6a2f100c404b2d32a1dd1270f9b59ad4f57649",
+                "reference": "ce6a2f100c404b2d32a1dd1270f9b59ad4f57649",
                 "shasum": ""
             },
             "require": {
@@ -3317,7 +3317,7 @@
                 "ext-simplexml": "",
                 "ext-spl": ""
             },
-            "time": "2026-01-08T11:28:40+00:00",
+            "time": "2026-01-13T14:02:24+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3352,7 +3352,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/webmozarts\/assert\/issues",
-                "source": "https:\/\/github.com\/webmozarts\/assert\/tree\/2.1.1"
+                "source": "https:\/\/github.com\/webmozarts\/assert\/tree\/2.1.2"
             },
             "install-path": "..\/webmozart\/assert"
         }
