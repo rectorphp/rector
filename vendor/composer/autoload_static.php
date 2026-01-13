@@ -1684,6 +1684,7 @@ class ComposerStaticInit7001fb5f7b9b8dbb950c02836c7af51c
         'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDeadReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveDeadReturnRector.php',
         'Rector\\DeadCode\\Rector\\If_\\ReduceAlwaysFalseIfOrRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/ReduceAlwaysFalseIfOrRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveAlwaysTrueIfConditionRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveAlwaysTrueIfConditionRector.php',
+        'Rector\\DeadCode\\Rector\\If_\\RemoveDeadIfBlockRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveDeadIfBlockRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveDeadInstanceOfRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveDeadInstanceOfRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveTypedPropertyDeadInstanceOfRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveTypedPropertyDeadInstanceOfRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveUnusedNonEmptyArrayBeforeForeachRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveUnusedNonEmptyArrayBeforeForeachRector.php',

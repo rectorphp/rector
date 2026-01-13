@@ -1424,6 +1424,7 @@ return array(
     'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDeadReturnRector' => $baseDir . '/rules/DeadCode/Rector/FunctionLike/RemoveDeadReturnRector.php',
     'Rector\\DeadCode\\Rector\\If_\\ReduceAlwaysFalseIfOrRector' => $baseDir . '/rules/DeadCode/Rector/If_/ReduceAlwaysFalseIfOrRector.php',
     'Rector\\DeadCode\\Rector\\If_\\RemoveAlwaysTrueIfConditionRector' => $baseDir . '/rules/DeadCode/Rector/If_/RemoveAlwaysTrueIfConditionRector.php',
+    'Rector\\DeadCode\\Rector\\If_\\RemoveDeadIfBlockRector' => $baseDir . '/rules/DeadCode/Rector/If_/RemoveDeadIfBlockRector.php',
     'Rector\\DeadCode\\Rector\\If_\\RemoveDeadInstanceOfRector' => $baseDir . '/rules/DeadCode/Rector/If_/RemoveDeadInstanceOfRector.php',
     'Rector\\DeadCode\\Rector\\If_\\RemoveTypedPropertyDeadInstanceOfRector' => $baseDir . '/rules/DeadCode/Rector/If_/RemoveTypedPropertyDeadInstanceOfRector.php',
     'Rector\\DeadCode\\Rector\\If_\\RemoveUnusedNonEmptyArrayBeforeForeachRector' => $baseDir . '/rules/DeadCode/Rector/If_/RemoveUnusedNonEmptyArrayBeforeForeachRector.php',
