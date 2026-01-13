@@ -141,6 +141,10 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
         foreach ($functionLikeReflection->getVariants() as $parametersAcceptor) {
             $parameterCounts[] = count($parametersAcceptor->getParameters());
         }
+        // empty variants -> use max value possibly has to prevent removing arguments incorrectly
+        if ($parameterCounts === [0]) {
+            return \PHP_INT_MAX;
+        }
         return max($parameterCounts);
     }
 }
