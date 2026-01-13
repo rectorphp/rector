@@ -85,10 +85,9 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
                 continue;
             }
             $traverseChildren = \true;
-            $visitorIndex = -1;
             $currentNodeVisitors = $this->getVisitorsForNode($subNode);
-            foreach ($currentNodeVisitors as $visitorIndex => $visitor) {
-                $return = $visitor->enterNode($subNode);
+            foreach ($currentNodeVisitors as $currentNodeVisitor) {
+                $return = $currentNodeVisitor->enterNode($subNode);
                 if ($return !== null) {
                     if ($return instanceof Node) {
                         $originalSubNodeClass = get_class($subNode);
@@ -121,27 +120,6 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
                     break;
                 }
             }
-            for (; $visitorIndex >= 0; --$visitorIndex) {
-                $visitor = $currentNodeVisitors[$visitorIndex];
-                $return = $visitor->leaveNode($subNode);
-                if ($return !== null) {
-                    if ($return instanceof Node) {
-                        $this->ensureReplacementReasonable($subNode, $return);
-                        $subNode = $return;
-                        $node->{$name} = $return;
-                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
-                        $this->stopTraversal = \true;
-                        break 2;
-                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
-                        $node->{$name} = null;
-                        break;
-                    } elseif (\is_array($return)) {
-                        throw new LogicException('leaveNode() may only return an array if the parent structure is an array');
-                    } else {
-                        throw new LogicException('leaveNode() returned invalid value of type ' . gettype($return));
-                    }
-                }
-            }
         }
     }
     /**
@@ -159,10 +137,9 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
                 continue;
             }
             $traverseChildren = \true;
-            $visitorIndex = -1;
             $currentNodeVisitors = $this->getVisitorsForNode($node);
-            foreach ($currentNodeVisitors as $visitorIndex => $visitor) {
-                $return = $visitor->enterNode($node);
+            foreach ($currentNodeVisitors as $currentNodeVisitor) {
+                $return = $currentNodeVisitor->enterNode($node);
                 if ($return !== null) {
                     if ($return instanceof Node) {
                         $originalNodeNodeClass = get_class($node);
@@ -197,29 +174,6 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
                 $this->traverseNode($node);
                 if ($this->stopTraversal) {
                     break;
-                }
-            }
-            for (; $visitorIndex >= 0; --$visitorIndex) {
-                $visitor = $currentNodeVisitors[$visitorIndex];
-                $return = $visitor->leaveNode($node);
-                if ($return !== null) {
-                    if ($return instanceof Node) {
-                        $this->ensureReplacementReasonable($node, $return);
-                        $nodes[$i] = $node = $return;
-                    } elseif (\is_array($return)) {
-                        $doNodes[] = [$i, $return];
-                        break;
-                    } elseif ($return === NodeVisitor::REMOVE_NODE) {
-                        $doNodes[] = [$i, []];
-                        break;
-                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
-                        $this->stopTraversal = \true;
-                        break 2;
-                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
-                        throw new LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
-                    } else {
-                        throw new LogicException('leaveNode() returned invalid value of type ' . gettype($return));
-                    }
                 }
             }
         }

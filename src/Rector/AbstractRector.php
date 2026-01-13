@@ -127,6 +127,14 @@ CODE_SAMPLE;
         }
         return $this->postRefactorProcess($originalNode, $node, $refactoredNodeOrState, $filePath);
     }
+    /**
+     * @deprecated no longer used
+     * @return mixed[]|int|\PhpParser\Node|null
+     */
+    final public function leaveNode(Node $node)
+    {
+        return null;
+    }
     protected function isName(Node $node, string $name): bool
     {
         return $this->nodeNameResolver->isName($node, $name);
