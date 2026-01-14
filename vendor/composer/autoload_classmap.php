@@ -2250,7 +2250,7 @@ return array(
     'Rector\\Php85\\Rector\\ClassMethod\\NullDebugInfoReturnRector' => $baseDir . '/rules/Php85/Rector/ClassMethod/NullDebugInfoReturnRector.php',
     'Rector\\Php85\\Rector\\Class_\\SleepToSerializeRector' => $baseDir . '/rules/Php85/Rector/Class_/SleepToSerializeRector.php',
     'Rector\\Php85\\Rector\\Class_\\WakeupToUnserializeRector' => $baseDir . '/rules/Php85/Rector/Class_/WakeupToUnserializeRector.php',
-    'Rector\\Php85\\Rector\\Const_\\DeprecatedAnnotationToDeprecatedAttributeRector' => $baseDir . '/rules/Php85/Rector/Const_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
+    'Rector\\Php85\\Rector\\Const_\\ConstAndTraitDeprecatedAttributeRector' => $baseDir . '/rules/Php85/Rector/Const_/ConstAndTraitDeprecatedAttributeRector.php',
     'Rector\\Php85\\Rector\\Expression\\NestedFuncCallsToPipeOperatorRector' => $baseDir . '/rules/Php85/Rector/Expression/NestedFuncCallsToPipeOperatorRector.php',
     'Rector\\Php85\\Rector\\FuncCall\\ArrayKeyExistsNullToEmptyStringRector' => $baseDir . '/rules/Php85/Rector/FuncCall/ArrayKeyExistsNullToEmptyStringRector.php',
     'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => $baseDir . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',

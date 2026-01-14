@@ -2510,7 +2510,7 @@ class ComposerStaticInit7001fb5f7b9b8dbb950c02836c7af51c
         'Rector\\Php85\\Rector\\ClassMethod\\NullDebugInfoReturnRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ClassMethod/NullDebugInfoReturnRector.php',
         'Rector\\Php85\\Rector\\Class_\\SleepToSerializeRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Class_/SleepToSerializeRector.php',
         'Rector\\Php85\\Rector\\Class_\\WakeupToUnserializeRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Class_/WakeupToUnserializeRector.php',
-        'Rector\\Php85\\Rector\\Const_\\DeprecatedAnnotationToDeprecatedAttributeRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Const_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
+        'Rector\\Php85\\Rector\\Const_\\ConstAndTraitDeprecatedAttributeRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Const_/ConstAndTraitDeprecatedAttributeRector.php',
         'Rector\\Php85\\Rector\\Expression\\NestedFuncCallsToPipeOperatorRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Expression/NestedFuncCallsToPipeOperatorRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\ArrayKeyExistsNullToEmptyStringRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/ArrayKeyExistsNullToEmptyStringRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',

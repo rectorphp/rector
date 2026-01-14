@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Const_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -59,7 +60,7 @@ final class DeprecatedAnnotationToDeprecatedAttributeConverter
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Const_ $node
+     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Stmt\Trait_ $node
      */
     public function convert($node): ?Node
     {

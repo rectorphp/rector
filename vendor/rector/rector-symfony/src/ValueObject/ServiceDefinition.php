@@ -25,6 +25,10 @@ final class ServiceDefinition
     /**
      * @readonly
      */
+    private bool $isShared;
+    /**
+     * @readonly
+     */
     private ?string $alias;
     /**
      * @var TagInterface[]
@@ -34,12 +38,13 @@ final class ServiceDefinition
     /**
      * @param TagInterface[] $tags
      */
-    public function __construct(string $id, ?string $class, bool $isPublic, bool $isSynthetic, ?string $alias, array $tags)
+    public function __construct(string $id, ?string $class, bool $isPublic, bool $isSynthetic, bool $isShared, ?string $alias, array $tags)
     {
         $this->id = $id;
         $this->class = $class;
         $this->isPublic = $isPublic;
         $this->isSynthetic = $isSynthetic;
+        $this->isShared = $isShared;
         $this->alias = $alias;
         $this->tags = $tags;
     }
@@ -58,6 +63,10 @@ final class ServiceDefinition
     public function isSynthetic(): bool
     {
         return $this->isSynthetic;
+    }
+    public function isShared(): bool
+    {
+        return $this->isShared;
     }
     public function getAlias(): ?string
     {
