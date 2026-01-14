@@ -17,10 +17,22 @@ use Rector\PhpParser\Node\FileNode;
 use Rector\VersionBonding\PhpVersionedFilter;
 use RectorPrefix202601\Webmozart\Assert\Assert;
 /**
+ *  Based on native NodeTraverser class, but heavily customized for Rector needs.
+ *
+ *  The main differences are:
+ *  - no leaveNode(), as we do all in enterNode() that calls refactor() method
+ *  - cached visitors per node class for performance, e.g. when we find rules for Class_ node, they're cached for next time
+ *  - immutability features, register Rector rules once, then use; no changes on the fly
+ *
  * @see \Rector\Tests\PhpParser\NodeTraverser\RectorNodeTraverserTest
+ * @internal No BC promise on this class, it might change any time.
  */
 final class RectorNodeTraverser implements NodeTraverserInterface
 {
+    /**
+     * @var RectorInterface[]
+     */
+    private array $rectors;
     /**
      * @readonly
      */
@@ -32,25 +44,21 @@ final class RectorNodeTraverser implements NodeTraverserInterface
     /**
      * @var RectorInterface[]
      */
-    private array $rectors;
-    /**
-     * @var list<NodeVisitor>
-     */
     private array $visitors = [];
     private bool $stopTraversal;
     private bool $areNodeVisitorsPrepared = \false;
     /**
-     * @var array<class-string<Node>, NodeVisitor[]>
+     * @var array<class-string<Node>, RectorInterface[]>
      */
     private array $visitorsPerNodeClass = [];
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(PhpVersionedFilter $phpVersionedFilter, ConfigurationRuleFilter $configurationRuleFilter, array $rectors)
+    public function __construct(array $rectors, PhpVersionedFilter $phpVersionedFilter, ConfigurationRuleFilter $configurationRuleFilter)
     {
+        $this->rectors = $rectors;
         $this->phpVersionedFilter = $phpVersionedFilter;
         $this->configurationRuleFilter = $configurationRuleFilter;
-        $this->rectors = $rectors;
     }
     public function addVisitor(NodeVisitor $visitor): void
     {
@@ -98,7 +106,9 @@ final class RectorNodeTraverser implements NodeTraverserInterface
         $this->prepareNodeVisitors();
     }
     /**
-     * @return NodeVisitor[]
+     * @return RectorInterface[]
+     *
+     * @api used in tests
      */
     public function getVisitorsForNode(Node $node): array
     {
