@@ -9,9 +9,27 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
+use Rector\Configuration\ConfigurationRuleFilter;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
+use Rector\VersionBonding\PhpVersionedFilter;
+use RectorPrefix202601\Webmozart\Assert\Assert;
 abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
 {
+    /**
+     * @readonly
+     */
+    private PhpVersionedFilter $phpVersionedFilter;
+    /**
+     * @readonly
+     */
+    private ConfigurationRuleFilter $configurationRuleFilter;
+    /**
+     * @var RectorInterface[]
+     */
+    private array $rectors;
     /**
      * @var list<NodeVisitor> Visitors
      */
@@ -20,14 +38,19 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
      * @var bool Whether traversal should be stopped
      */
     protected bool $stopTraversal;
+    private bool $areNodeVisitorsPrepared = \false;
     /**
-     * Create a traverser with the given visitors.
-     *
-     * @param NodeVisitor ...$visitors Node visitors
+     * @var array<class-string<Node>, NodeVisitor[]>
      */
-    public function __construct(NodeVisitor ...$visitors)
+    private array $visitorsPerNodeClass = [];
+    /**
+     * @param RectorInterface[] $rectors
+     */
+    public function __construct(PhpVersionedFilter $phpVersionedFilter, ConfigurationRuleFilter $configurationRuleFilter, array $rectors)
     {
-        $this->visitors = $visitors;
+        $this->phpVersionedFilter = $phpVersionedFilter;
+        $this->configurationRuleFilter = $configurationRuleFilter;
+        $this->rectors = $rectors;
     }
     public function addVisitor(NodeVisitor $visitor): void
     {
@@ -38,14 +61,12 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
         throw new ShouldNotHappenException('The immutable node traverser does not support removing visitors.');
     }
     /**
-     * Traverses an array of nodes using the registered visitors.
-     *
-     * @param Node[] $nodes Array of nodes
-     *
-     * @return Node[] Traversed array of nodes
+     * @param Node[] $nodes
+     * @return Node[]
      */
     public function traverse(array $nodes): array
     {
+        $this->prepareNodeVisitors();
         $this->stopTraversal = \false;
         foreach ($this->visitors as $visitor) {
             if (null !== $return = $visitor->beforeTraverse($nodes)) {
@@ -62,9 +83,45 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
         return $nodes;
     }
     /**
+     * @param RectorInterface[] $rectors
+     * @api used in tests to update the active rules
+     *
+     * @internal Used only in Rector core, not supported outside. Might change any time.
+     */
+    public function refreshPhpRectors(array $rectors): void
+    {
+        Assert::allIsInstanceOf($rectors, RectorInterface::class);
+        $this->rectors = $rectors;
+        $this->visitors = [];
+        $this->visitorsPerNodeClass = [];
+        $this->areNodeVisitorsPrepared = \false;
+        $this->prepareNodeVisitors();
+    }
+    /**
      * @return NodeVisitor[]
      */
-    abstract public function getVisitorsForNode(Node $node): array;
+    public function getVisitorsForNode(Node $node): array
+    {
+        $nodeClass = get_class($node);
+        if (!isset($this->visitorsPerNodeClass[$nodeClass])) {
+            $this->visitorsPerNodeClass[$nodeClass] = [];
+            /** @var RectorInterface $visitor */
+            foreach ($this->visitors as $visitor) {
+                foreach ($visitor->getNodeTypes() as $nodeType) {
+                    // BC layer matching
+                    if ($nodeType === FileWithoutNamespace::class && $nodeClass === FileNode::class) {
+                        $this->visitorsPerNodeClass[$nodeClass][] = $visitor;
+                        continue;
+                    }
+                    if (is_a($nodeClass, $nodeType, \true)) {
+                        $this->visitorsPerNodeClass[$nodeClass][] = $visitor;
+                        continue 2;
+                    }
+                }
+            }
+        }
+        return $this->visitorsPerNodeClass[$nodeClass];
+    }
     protected function traverseNode(Node $node): void
     {
         foreach ($node->getSubNodeNames() as $name) {
@@ -119,7 +176,7 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
     }
     /**
      * @param Node[] $nodes
-     * @return array Result of traversal (may be original array or changed one)
+     * @return Node[]
      */
     protected function traverseArray(array $nodes): array
     {
@@ -190,5 +247,21 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
         if ($new instanceof Stmt) {
             throw new LogicException(sprintf('Trying to replace expression (%s) ', $old->getType()) . sprintf('with statement (%s)', $new->getType()));
         }
+    }
+    /**
+     * This must happen after $this->configuration is set after ProcessCommand::execute() is run, otherwise we get default false positives.
+     *
+     * This should be removed after https://github.com/rectorphp/rector/issues/5584 is resolved
+     */
+    private function prepareNodeVisitors(): void
+    {
+        if ($this->areNodeVisitorsPrepared) {
+            return;
+        }
+        // filer out by version
+        $this->visitors = $this->phpVersionedFilter->filter($this->rectors);
+        // filter by configuration
+        $this->visitors = $this->configurationRuleFilter->filter($this->visitors);
+        $this->areNodeVisitorsPrepared = \true;
     }
 }
