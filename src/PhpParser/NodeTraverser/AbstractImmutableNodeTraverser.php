@@ -29,14 +29,9 @@ abstract class AbstractImmutableNodeTraverser implements NodeTraverserInterface
     {
         $this->visitors = $visitors;
     }
-    /**
-     * Adds a visitor.
-     *
-     * @param NodeVisitor $visitor Visitor to add
-     */
     public function addVisitor(NodeVisitor $visitor): void
     {
-        $this->visitors[] = $visitor;
+        throw new ShouldNotHappenException('The immutable node traverser does not support adding visitors.');
     }
     public function removeVisitor(NodeVisitor $visitor): void
     {
