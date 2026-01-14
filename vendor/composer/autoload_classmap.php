@@ -2298,7 +2298,6 @@ return array(
     'Rector\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => $baseDir . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
     'Rector\\PhpParser\\NodeFinder\\PropertyFetchFinder' => $baseDir . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
     'Rector\\PhpParser\\NodeTransformer' => $baseDir . '/src/PhpParser/NodeTransformer.php',
-    'Rector\\PhpParser\\NodeTraverser\\AbstractImmutableNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/AbstractImmutableNodeTraverser.php',
     'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
     'Rector\\PhpParser\\NodeTraverser\\SimpleNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/SimpleNodeTraverser.php',
     'Rector\\PhpParser\\NodeVisitor\\ArgNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/ArgNodeVisitor.php',

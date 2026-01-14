@@ -2558,7 +2558,6 @@ class ComposerStaticInit785541eaf3cb5741f5765d8683ecf302
         'Rector\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
         'Rector\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
         'Rector\\PhpParser\\NodeTransformer' => __DIR__ . '/../..' . '/src/PhpParser/NodeTransformer.php',
-        'Rector\\PhpParser\\NodeTraverser\\AbstractImmutableNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/AbstractImmutableNodeTraverser.php',
         'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
         'Rector\\PhpParser\\NodeTraverser\\SimpleNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/SimpleNodeTraverser.php',
         'Rector\\PhpParser\\NodeVisitor\\ArgNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/ArgNodeVisitor.php',
