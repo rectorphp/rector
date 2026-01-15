@@ -187,9 +187,6 @@ CODE_SAMPLE
     }
     private function hasSomeUntypedProperties(Class_ $class): bool
     {
-        if ($class->getProperties() === []) {
-            return \false;
-        }
         foreach ($class->getProperties() as $property) {
             if ($property->type instanceof Node) {
                 continue;
