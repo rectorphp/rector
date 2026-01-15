@@ -6,8 +6,11 @@ namespace Rector\Arguments\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use Rector\Arguments\ValueObject\RemoveMethodCallParam;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\NodeAnalyzer\ArgsAnalyzer;
+use Rector\PhpParser\AstResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,9 +22,22 @@ use RectorPrefix202601\Webmozart\Assert\Assert;
 final class RemoveMethodCallParamRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
+     */
+    private AstResolver $astResolver;
+    /**
+     * @readonly
+     */
+    private ArgsAnalyzer $argsAnalyzer;
+    /**
      * @var RemoveMethodCallParam[]
      */
     private array $removeMethodCallParams = [];
+    public function __construct(AstResolver $astResolver, ArgsAnalyzer $argsAnalyzer)
+    {
+        $this->astResolver = $astResolver;
+        $this->argsAnalyzer = $argsAnalyzer;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove parameter of method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -68,10 +84,35 @@ CODE_SAMPLE
                 continue;
             }
             $args = $node->getArgs();
-            if (!isset($args[$removeMethodCallParam->getParamPosition()])) {
+            $position = $removeMethodCallParam->getParamPosition();
+            $firstNamedArgPosition = $this->argsAnalyzer->resolveFirstNamedArgPosition($args);
+            // if the call has named arguments and the argument that we want to remove is not
+            // before any named argument, we need to check if it is in the list of named arguments
+            // if it is, we use the position of the named argument as the position to remove
+            // if it is not, we cannot remove it
+            if ($firstNamedArgPosition !== null && $position >= $firstNamedArgPosition) {
+                $call = $this->astResolver->resolveClassMethodOrFunctionFromCall($node);
+                if ($call === null) {
+                    return null;
+                }
+                $paramName = null;
+                $variable = $call->params[$position]->var;
+                if ($variable instanceof Variable) {
+                    $paramName = $variable->name;
+                }
+                $newPosition = -1;
+                if (is_string($paramName)) {
+                    $newPosition = $this->argsAnalyzer->resolveArgPosition($args, $paramName, $newPosition);
+                }
+                if ($newPosition === -1) {
+                    return null;
+                }
+                $position = $newPosition;
+            }
+            if (!isset($args[$position])) {
                 continue;
             }
-            unset($node->args[$removeMethodCallParam->getParamPosition()]);
+            unset($node->args[$position]);
             $hasChanged = \true;
         }
         if (!$hasChanged) {
