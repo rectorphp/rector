@@ -77,6 +77,9 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
+        if ($phpDocInfo->getParamTagValueNodes() === []) {
+            return null;
+        }
         $hasChanged = $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
         if ($hasChanged) {
             return $node;
