@@ -125,6 +125,9 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             if ($subNode instanceof Array_) {
                 $subNode->setAttribute(AttributeKey::IS_ARRAY_IN_ATTRIBUTE, \true);
             }
+            if ($subNode instanceof Closure) {
+                $subNode->setAttribute(AttributeKey::IS_CLOSURE_IN_ATTRIBUTE, \true);
+            }
             return null;
         });
     }

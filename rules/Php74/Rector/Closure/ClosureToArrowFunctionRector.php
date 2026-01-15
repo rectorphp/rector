@@ -67,6 +67,9 @@ CODE_SAMPLE
         if (!$returnExpr instanceof Expr) {
             return null;
         }
+        if ($node->getAttribute(AttributeKey::IS_CLOSURE_IN_ATTRIBUTE) === \true) {
+            return null;
+        }
         $attributes = $node->getAttributes();
         unset($attributes[AttributeKey::ORIGINAL_NODE]);
         $arrowFunction = new ArrowFunction(['params' => $node->params, 'returnType' => $node->returnType, 'byRef' => $node->byRef, 'expr' => $returnExpr], $attributes);
