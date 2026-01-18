@@ -40,8 +40,8 @@ final class PropertyNaming
      */
     private const INTERFACE = 'Interface';
     /**
-     * @var string
      * @see https://regex101.com/r/U78rUF/1
+     * @var string
      */
     private const I_PREFIX_REGEX = '#^I[A-Z]#';
     /**

@@ -25,6 +25,14 @@ final class PHPUnitClassName
     /**
      * @var string
      */
+    public const INVOCATION_MOCKER = 'PHPUnit\Framework\MockObject\Builder\InvocationMocker';
+    /**
+     * @var string
+     */
+    public const INVOCATION_STUBBER = 'PHPUnit\Framework\MockObject\InvocationStubber';
+    /**
+     * @var string
+     */
     public const TEST_LISTENER = 'PHPUnit\Framework\TestListener';
     /**
      * @var string[]

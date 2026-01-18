@@ -12,8 +12,8 @@ use Rector\ValueObject\Configuration;
 final class MemoryLimiter
 {
     /**
-     * @var string
      * @see https://regex101.com/r/pmiGUM/1
+     * @var string
      */
     private const VALID_MEMORY_LIMIT_REGEX = '#^-?\d+[kMG]?$#i';
     public function adjust(Configuration $configuration): void

@@ -25,6 +25,9 @@ final class AddSensitiveParameterAttributeRector extends AbstractRector implemen
      * @readonly
      */
     private PhpAttributeAnalyzer $phpAttributeAnalyzer;
+    /**
+     * @var string
+     */
     public const SENSITIVE_PARAMETERS = 'sensitive_parameters';
     /**
      * @var string[]

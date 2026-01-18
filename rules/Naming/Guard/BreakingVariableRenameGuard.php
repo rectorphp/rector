@@ -53,8 +53,8 @@ final class BreakingVariableRenameGuard
      */
     private NodeNameResolver $nodeNameResolver;
     /**
-     * @var string
      * @see https://regex101.com/r/1pKLgf/1
+     * @var string
      */
     public const AT_NAMING_REGEX = '#[\w+]At$#';
     public function __construct(BetterNodeFinder $betterNodeFinder, ConflictingNameResolver $conflictingNameResolver, NodeTypeResolver $nodeTypeResolver, OverriddenExistingNamesResolver $overriddenExistingNamesResolver, TypeUnwrapper $typeUnwrapper, NodeNameResolver $nodeNameResolver)

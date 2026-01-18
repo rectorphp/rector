@@ -24,8 +24,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      */
     public const NAME = 'console';
     /**
-     * @var string
      * @see https://regex101.com/r/q8I66g/1
+     * @var string
      */
     private const ON_LINE_REGEX = '# on line #';
     public function __construct(SymfonyStyle $symfonyStyle)

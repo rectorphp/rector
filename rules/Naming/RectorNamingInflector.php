@@ -12,8 +12,8 @@ final class RectorNamingInflector
      */
     private Inflector $inflector;
     /**
-     * @var string
      * @see https://regex101.com/r/VqVvke/3
+     * @var string
      */
     private const DATA_INFO_SUFFIX_REGEX = '#^(?<prefix>.+)(?<suffix>Data|Info)$#';
     public function __construct(Inflector $inflector)

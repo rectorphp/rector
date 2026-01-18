@@ -1694,12 +1694,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "211eb09fc3792111acecbb752b6f343f720b0650"
+                "reference": "cdea5364c4429b0cb39a93682027b2a855b93a83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/211eb09fc3792111acecbb752b6f343f720b0650",
-                "reference": "211eb09fc3792111acecbb752b6f343f720b0650",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/cdea5364c4429b0cb39a93682027b2a855b93a83",
+                "reference": "cdea5364c4429b0cb39a93682027b2a855b93a83",
                 "shasum": ""
             },
             "require": {
@@ -1714,8 +1714,8 @@
                 "phpstan\/phpstan": "^2.1.14",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
-                "phpunit\/phpunit": "^11.5|^12.0",
-                "rector\/jack": "^0.5.0",
+                "phpunit\/phpunit": "^12.0",
+                "rector\/jack": "^0.5",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.3",
                 "rector\/type-perfect": "^2.1",
@@ -1725,7 +1725,7 @@
                 "tomasvotruba\/class-leak": "^2.1",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-01-16T13:57:13+00:00",
+            "time": "2026-01-18T16:04:38+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1818,12 +1818,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "d07614095469cb60ec343176fdb1c3454e3ebef4"
+                "reference": "dde04a8a6487f9db6dd89e52ac6383b49ece2798"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/d07614095469cb60ec343176fdb1c3454e3ebef4",
-                "reference": "d07614095469cb60ec343176fdb1c3454e3ebef4",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/dde04a8a6487f9db6dd89e52ac6383b49ece2798",
+                "reference": "dde04a8a6487f9db6dd89e52ac6383b49ece2798",
                 "shasum": ""
             },
             "require": {
@@ -1837,7 +1837,7 @@
                 "phpstan\/phpstan": "^2.1.33",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
-                "phpunit\/phpunit": "^11.5|^12.0",
+                "phpunit\/phpunit": "^12.5",
                 "rector\/jack": "^0.5",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.3",
@@ -1850,7 +1850,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-01-16T14:09:09+00:00",
+            "time": "2026-01-18T16:14:22+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

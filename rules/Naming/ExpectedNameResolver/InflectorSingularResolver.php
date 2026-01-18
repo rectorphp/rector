@@ -20,13 +20,13 @@ final class InflectorSingularResolver
      */
     private const SINGULARIZE_MAP = ['news' => 'new'];
     /**
-     * @var string
      * @see https://regex101.com/r/lbQaGC/3
+     * @var string
      */
     private const CAMELCASE_REGEX = '#(?<camelcase>([a-z\d]+|[A-Z\d]{1,}[a-z\d]+|_))#';
     /**
-     * @var string
      * @see https://regex101.com/r/2aGdkZ/2
+     * @var string
      */
     private const BY_MIDDLE_REGEX = '#(?<by>By[A-Z][a-zA-Z]+)#';
     /**

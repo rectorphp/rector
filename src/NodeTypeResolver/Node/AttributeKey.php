@@ -22,28 +22,24 @@ final class AttributeKey
     /**
      * Internal php-parser name.
      * Do not change this even if you want!
-     *
      * @var string
      */
     public const ORIGINAL_NODE = 'origNode';
     /**
      * Internal php-parser name.
      * Do not change this even if you want!
-     *
      * @var string
      */
     public const COMMENTS = 'comments';
     /**
      * Internal php-parser name.
      * Do not change this even if you want!
-     *
      * @var string
      */
     public const ORIGINAL_NAME = 'originalName';
     /**
      * Internal php-parser name.
      * Do not change this even if you want!
-     *
      * @var string
      */
     public const NAMESPACED_NAME = 'namespacedName';
@@ -52,7 +48,6 @@ final class AttributeKey
      *
      * Internal php-parser name.
      * Do not change this even if you want!
-     *
      * @var string
      */
     public const DOC_INDENTATION = 'docIndentation';
@@ -149,6 +144,9 @@ final class AttributeKey
      * @var string
      */
     public const IS_UNSET_VAR = 'is_unset_var';
+    /**
+     * @var string
+     */
     public const IS_ISSET_VAR = 'is_isset_var';
     /**
      * @var string
@@ -218,13 +216,40 @@ final class AttributeKey
      * @var string
      */
     public const IS_FIRST_LEVEL_STATEMENT = 'first_level_stmt';
+    /**
+     * @var string
+     */
     public const IS_DEFAULT_PROPERTY_VALUE = 'is_default_property_value';
+    /**
+     * @var string
+     */
     public const IS_CLASS_CONST_VALUE = 'is_default_class_const_value';
+    /**
+     * @var string
+     */
     public const IS_INSIDE_SYMFONY_PHP_CLOSURE = 'is_inside_symfony_php_closure';
+    /**
+     * @var string
+     */
     public const IS_INSIDE_BYREF_FUNCTION_LIKE = 'is_inside_byref_function_like';
+    /**
+     * @var string
+     */
     public const CLASS_CONST_FETCH_NAME = 'class_const_fetch_name';
+    /**
+     * @var string
+     */
     public const PHP_VERSION_CONDITIONED = 'php_version_conditioned';
+    /**
+     * @var string
+     */
     public const IS_CLOSURE_USES_THIS = 'has_this_closure';
+    /**
+     * @var string
+     */
     public const HAS_CLOSURE_WITH_VARIADIC_ARGS = 'has_closure_with_variadic_args';
+    /**
+     * @var string
+     */
     public const IS_IN_TRY_BLOCK = 'is_in_try_block';
 }

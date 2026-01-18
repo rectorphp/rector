@@ -26,7 +26,13 @@ final class MyCLabsConstructorCallToEnumFromRector extends AbstractRector implem
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
+    /**
+     * @var string
+     */
     private const MY_C_LABS_CLASS = 'MyCLabs\Enum\Enum';
+    /**
+     * @var string
+     */
     private const DEFAULT_ENUM_CONSTRUCTOR = 'from';
     public function __construct(ReflectionProvider $reflectionProvider)
     {

@@ -15,23 +15,23 @@ use RectorPrefix202601\Symfony\Component\Console\Formatter\OutputFormatter;
 final class ColorConsoleDiffFormatter
 {
     /**
-     * @var string
      * @see https://regex101.com/r/ovLMDF/1
+     * @var string
      */
     private const PLUS_START_REGEX = '#^(\+.*)#';
     /**
-     * @var string
      * @see https://regex101.com/r/xwywpa/1
+     * @var string
      */
     private const MINUS_START_REGEX = '#^(\-.*)#';
     /**
-     * @var string
      * @see https://regex101.com/r/CMlwa8/1
+     * @var string
      */
     private const AT_START_REGEX = '#^(@.*)#';
     /**
-     * @var string
      * @see https://regex101.com/r/8MXnfa/2
+     * @var string
      */
     private const AT_DIFF_LINE_REGEX = '#^\<fg=cyan\>@@ \-\d+,\d+ \+\d+,\d+ @@\<\/fg=cyan\>$#';
     /**

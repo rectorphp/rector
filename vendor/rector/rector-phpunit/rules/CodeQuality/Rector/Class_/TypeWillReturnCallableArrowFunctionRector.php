@@ -18,12 +18,12 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use RectorPrefix202601\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use Rector\Enum\ClassName;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\SetUpAssignedMockTypesResolver;
 use Rector\PHPUnit\CodeQuality\Reflection\MethodParametersAndReturnTypesResolver;
 use Rector\PHPUnit\CodeQuality\ValueObject\ParamTypesAndReturnType;
+use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -161,7 +161,7 @@ CODE_SAMPLE
             }
             $methodName = $methodNameExpr->value;
             $callerType = $this->getType($parentMethodCall->var);
-            if ($callerType instanceof ObjectType && $callerType->getClassName() === InvocationMocker::class) {
+            if ($callerType instanceof ObjectType && in_array($callerType->getClassName(), [PHPUnitClassName::INVOCATION_MOCKER, PHPUnitClassName::INVOCATION_STUBBER], \true)) {
                 $parentMethodCall = $parentMethodCall->var;
                 if ($parentMethodCall instanceof MethodCall) {
                     $callerType = $this->getType($parentMethodCall->var);

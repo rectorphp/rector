@@ -10,13 +10,13 @@ use PhpParser\Node\Scalar\String_;
 final class RegexMatcher
 {
     /**
-     * @var string
      * @see https://regex101.com/r/Ok4wuE/1
+     * @var string
      */
     private const LAST_E_REGEX = '#(\w+)?e(\w+)?$#';
     /**
-     * @var string
      * @see https://regex101.com/r/2NWVwT/1
+     * @var string
      */
     private const LETTER_SUFFIX_REGEX = '#(?<modifiers>\w+)$#';
     /**

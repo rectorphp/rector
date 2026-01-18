@@ -21,9 +21,9 @@ final class JoinStringConcatRector extends AbstractRector
      */
     private const LINE_BREAK_POINT = 100;
     /**
-     * @var string
      * @see https://regex101.com/r/VaXM1t/1
      * @see https://stackoverflow.com/questions/4147646/determine-if-utf-8-text-is-all-ascii
+     * @var string
      */
     private const ASCII_REGEX = '#[^\x00-\x7F]#';
     public function getRuleDefinition(): RuleDefinition

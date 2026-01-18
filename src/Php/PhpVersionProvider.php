@@ -17,8 +17,8 @@ use ReflectionClass;
 final class PhpVersionProvider
 {
     /**
-     * @var string
      * @see https://regex101.com/r/qBMnbl/1
+     * @var string
      */
     private const VALID_PHP_VERSION_REGEX = '#^\d{5,6}$#';
     /**

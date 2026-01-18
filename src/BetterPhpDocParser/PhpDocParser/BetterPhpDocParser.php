@@ -44,13 +44,13 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private PrivatesAccessor $privatesAccessor;
     /**
-     * @var string
      * @see https://regex101.com/r/JDzr0c/1
+     * @var string
      */
     private const NEW_LINE_REGEX = "#(?<new_line>\r\n|\n)#";
     /**
-     * @var string
      * @see https://regex101.com/r/JOKSmr/5
+     * @var string
      */
     private const MULTI_NEW_LINES_REGEX = '#(?<new_line>\r\n|\n){2,}#';
     /**

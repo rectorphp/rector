@@ -61,13 +61,13 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
     /**
-     * @var string
      * @see https://regex101.com/r/JG5w9j/1
+     * @var string
      */
     private const OR_BETWEEN_WORDS_REGEX = '#[a-z]Or[A-Z]#';
     /**
-     * @var string
      * @see https://regex101.com/r/TV8YXZ/1
+     * @var string
      */
     private const VALID_VARIABLE_NAME_REGEX = '#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#';
     public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, NamingConventionAnalyzer $namingConventionAnalyzer, VarTagValueNodeRenamer $varTagValueNodeRenamer, VariableAndCallAssignMatcher $variableAndCallAssignMatcher, VariableRenamer $variableRenamer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)

@@ -30,13 +30,13 @@ final class LaravelModelGuard
      */
     private NodeTypeResolver $nodeTypeResolver;
     /**
-     * @var string
      * @see https://regex101.com/r/Dx0WN5/2
+     * @var string
      */
     private const LARAVEL_MODEL_ATTRIBUTE_REGEX = '#^[gs]et.+Attribute$#';
     /**
-     * @var string
      * @see https://regex101.com/r/hxOGeN/2
+     * @var string
      */
     private const LARAVEL_MODEL_SCOPE_REGEX = '#^scope.+$#';
     public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)

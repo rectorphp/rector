@@ -11,7 +11,7 @@
         "phpstan\/phpstan": "^2.1.33",
         "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
-        "phpunit\/phpunit": "^11.5|^12.0",
+        "phpunit\/phpunit": "^12.5",
         "rector\/jack": "^0.5",
         "rector\/rector-src": "dev-main",
         "rector\/swiss-knife": "^2.3",

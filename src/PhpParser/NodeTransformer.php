@@ -23,8 +23,8 @@ use Rector\ValueObject\SprintfStringAndArgs;
 final class NodeTransformer
 {
     /**
-     * @var string
      * @see https://regex101.com/r/XFc3qA/1
+     * @var string
      */
     private const PERCENT_TEXT_REGEX = '#^%\w$#';
     /**

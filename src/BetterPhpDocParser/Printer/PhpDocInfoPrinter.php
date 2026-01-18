@@ -44,13 +44,13 @@ final class PhpDocInfoPrinter
      */
     private ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor;
     /**
-     * @var string
      * @see https://regex101.com/r/Ab0Vey/1
+     * @var string
      */
     private const CLOSING_DOCBLOCK_REGEX = '#\*\/(\s+)?$#';
     /**
-     * @var string
      * @see https://regex101.com/r/5fJyws/1
+     * @var string
      */
     private const CALLABLE_REGEX = '#callable(\s+)\(#';
     /**
@@ -62,8 +62,8 @@ final class PhpDocInfoPrinter
      */
     private const NEWLINE_WITH_ASTERISK = "\n" . ' *';
     /**
-     * @var string
      * @see https://regex101.com/r/ME5Fcn/1
+     * @var string
      */
     private const NEW_LINE_WITH_SPACE_REGEX = "# (?<new_line>\r\n|\n)#";
     private int $tokenCount = 0;

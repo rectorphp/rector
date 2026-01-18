@@ -34,8 +34,8 @@ final class CatchExceptionNameMatchingTypeRector extends AbstractRector
      */
     private PropertyNaming $propertyNaming;
     /**
-     * @var string
      * @see https://regex101.com/r/xmfMAX/1
+     * @var string
      */
     private const STARTS_WITH_ABBREVIATION_REGEX = '#^([A-Za-z]+?)([A-Z]{1}[a-z]{1})([A-Za-z]*)#';
     public function __construct(PropertyNaming $propertyNaming)

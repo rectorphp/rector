@@ -46,7 +46,6 @@ final class ParallelFileProcessor
     /**
      * The number of chunks a worker can process before getting killed.
      * In contrast the jobSize defines the maximum size of a chunk, a worker process at a time.
-     *
      * @var int
      */
     private const MAX_CHUNKS_PER_WORKER = 8;

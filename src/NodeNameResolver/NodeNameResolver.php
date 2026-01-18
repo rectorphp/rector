@@ -44,6 +44,7 @@ final class NodeNameResolver
     private iterable $nodeNameResolvers = [];
     /**
      * Used to check if a string might contain a regex or fnmatch pattern
+     * @var mixed[]
      */
     private const REGEX_WILDCARD_CHARS = ['*', '#', '~', '/'];
     /**

@@ -136,7 +136,6 @@ final class PhpVersionFeature
     /**
      * @see https://php.watch/versions/8.0/non-static-static-call-fatal-error
      * Deprecated since PHP 7.0
-     *
      * @var int
      */
     public const STATIC_CALL_ON_NON_STATIC = \Rector\ValueObject\PhpVersion::PHP_70;
@@ -241,8 +240,8 @@ final class PhpVersionFeature
      */
     public const ARRAY_KEY_FIRST_LAST = \Rector\ValueObject\PhpVersion::PHP_73;
     /**
-     * @var int
      * @see https://php.watch/versions/8.5/array_first-array_last
+     * @var int
      */
     public const ARRAY_FIRST_LAST = \Rector\ValueObject\PhpVersion::PHP_85;
     /**
@@ -520,8 +519,8 @@ final class PhpVersionFeature
      */
     public const READONLY_ANONYMOUS_CLASS = \Rector\ValueObject\PhpVersion::PHP_83;
     /**
-     * @var int
      * @see https://wiki.php.net/rfc/json_validate
+     * @var int
      */
     public const JSON_VALIDATE = \Rector\ValueObject\PhpVersion::PHP_83;
     /**
@@ -551,7 +550,6 @@ final class PhpVersionFeature
     /**
      * @see https://wiki.php.net/rfc/null-false-standalone-types
      * @see https://wiki.php.net/rfc/true-type
-     *
      * @var int
      */
     public const NULL_FALSE_TRUE_STANDALONE_TYPE = \Rector\ValueObject\PhpVersion::PHP_82;

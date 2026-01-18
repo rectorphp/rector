@@ -22,6 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DateFuncCallToCarbonRector extends AbstractRector
 {
+    /**
+     * @var mixed[]
+     */
     private const TIME_UNITS = [['weeks', 604800], ['days', 86400], ['hours', 3600], ['minutes', 60], ['seconds', 1]];
     public function getRuleDefinition(): RuleDefinition
     {

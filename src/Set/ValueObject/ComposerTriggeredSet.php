@@ -29,8 +29,8 @@ final class ComposerTriggeredSet implements SetInterface
      */
     private string $setFilePath;
     /**
-     * @var string
      * @see https://regex101.com/r/ioYomu/1
+     * @var string
      */
     private const PACKAGE_REGEX = '#^[a-z0-9-]+\/([a-z0-9-_]+|\*)$#';
     public function __construct(string $groupName, string $packageName, string $version, string $setFilePath)

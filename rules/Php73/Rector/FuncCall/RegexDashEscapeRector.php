@@ -19,20 +19,20 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @var string
      * @see https://regex101.com/r/iQbGgZ/1
      *
      * Use {2} as detected only 2 after $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern() call
+     * @var string
      */
     private const THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX = '#(?<=[^\\\\])\\\\{2}(?=[^\\\\])#';
     /**
-     * @var string
      * @see https://regex101.com/r/YgVJFp/1
+     * @var string
      */
     private const LEFT_HAND_UNESCAPED_DASH_REGEX = '#(\[.*?\\\\(w|s|d))-(?!\])#i';
     /**
-     * @var string
      * @see https://regex101.com/r/TBVme9/9
+     * @var string
      */
     private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)(?<!\\\\)-(\\\\(w|s|d)[.*]?)\]#i';
     public function provideMinPhpVersion(): int

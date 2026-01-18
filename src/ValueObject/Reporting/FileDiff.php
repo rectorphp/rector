@@ -33,15 +33,18 @@ final class FileDiff implements SerializableInterface
      */
     private array $rectorsWithLineChanges = [];
     /**
-     * @var string
      * @see https://en.wikipedia.org/wiki/Diff#Unified_format
      * @see https://regex101.com/r/AUPIX4/2
+     * @var string
      */
     private const DIFF_HUNK_HEADER_REGEX = '#@@(.*?)(?<' . self::FIRST_LINE_KEY . '>\d+)(,(?<' . self::LINE_RANGE_KEY . '>\d+))?(.*?)@@#';
     /**
      * @var string
      */
     private const FIRST_LINE_KEY = 'first_line';
+    /**
+     * @var string
+     */
     private const LINE_RANGE_KEY = 'line_range';
     /**
      * @param RectorWithLineChange[] $rectorsWithLineChanges

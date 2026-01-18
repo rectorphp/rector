@@ -8,8 +8,8 @@ use RectorPrefix202601\Symfony\Component\Process\Process;
 final class RepositoryHelper
 {
     /**
-     * @var string
      * @see https://regex101.com/r/etcmog/2
+     * @var string
      */
     private const GITHUB_REPOSITORY_REGEX = '#github\.com[:\/](?<repository_name>.*?)\.git#';
     public static function resolveGithubRepositoryName(string $currentDirectory): ?string

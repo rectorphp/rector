@@ -28,38 +28,38 @@ final class InlineCodeParser
      */
     private ValueResolver $valueResolver;
     /**
-     * @var string
      * @see https://regex101.com/r/dwe4OW/1
+     * @var string
      */
     private const PRESLASHED_DOLLAR_REGEX = '#\\\\\\$#';
     /**
-     * @var string
      * @see https://regex101.com/r/tvwhWq/1
+     * @var string
      */
     private const CURLY_BRACKET_WRAPPER_REGEX = "#'{(\\\$.*?)}'#";
     /**
-     * @var string
      * @see https://regex101.com/r/TBlhoR/1
+     * @var string
      */
     private const OPEN_PHP_TAG_REGEX = '#^\<\?php\s+#';
     /**
-     * @var string
      * @see https://regex101.com/r/TUWwKw/1/
+     * @var string
      */
     private const ENDING_SEMI_COLON_REGEX = '#;(\s+)?$#';
     /**
-     * @var string
      * @see https://regex101.com/r/8fDjnR/1
+     * @var string
      */
     private const VARIABLE_IN_SINGLE_QUOTED_REGEX = '#\'(?<variable>\$.*)\'#U';
     /**
-     * @var string
      * @see https://regex101.com/r/1lzQZv/1
+     * @var string
      */
     private const BACKREFERENCE_NO_QUOTE_REGEX = '#(?<!")(?<backreference>\\\\\\d+)(?!")#';
     /**
-     * @var string
      * @see https://regex101.com/r/nSO3Eq/1
+     * @var string
      */
     private const BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX = '#(?<!")(?<backreference>\$\d+)#';
     public function __construct(BetterStandardPrinter $betterStandardPrinter, \Rector\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver)

@@ -24,8 +24,8 @@ final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
      */
     private ValueResolver $valueResolver;
     /**
-     * @var string
      * @see https://regex101.com/r/N8oLqv/1
+     * @var string
      */
     private const WINDOWS_DRIVE_REGEX = '#^[a-zA-z]\:[\/\\\\]#';
     public function __construct(ValueResolver $valueResolver)

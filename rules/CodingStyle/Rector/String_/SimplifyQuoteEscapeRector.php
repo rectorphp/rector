@@ -16,14 +16,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyQuoteEscapeRector extends AbstractRector
 {
     /**
-     * @var string
      * @see https://regex101.com/r/qEkCe9/2
+     * @var string
      */
     private const ESCAPED_CHAR_REGEX = '#\\\\|\$|\n|\t#sim';
     /**
-     * @var string
      * @see https://alvinalexander.com/php/how-to-remove-non-printable-characters-in-string-regex/
      * @see https://regex101.com/r/lGUhRb/1
+     * @var string
      */
     private const HAS_NON_PRINTABLE_CHARS = '#[\x00-\x1F\x80-\xFF]#';
     private bool $hasChanged = \false;

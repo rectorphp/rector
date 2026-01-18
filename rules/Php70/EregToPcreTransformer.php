@@ -35,8 +35,8 @@ final class EregToPcreTransformer
         ':xdigit:' => '[:xdigit:]',
     ];
     /**
-     * @var string
      * @see https://regex101.com/r/htpXFg/1
+     * @var string
      */
     private const BOUND_REGEX = '/^(?<' . self::MINIMAL_NUMBER_PART . '>\d|[1-9]\d|1\d\d|
                                 2[0-4]\d|25[0-5])

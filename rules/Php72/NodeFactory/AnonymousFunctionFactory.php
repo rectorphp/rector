@@ -55,8 +55,8 @@ final class AnonymousFunctionFactory
      */
     private ReservedKeywordAnalyzer $reservedKeywordAnalyzer;
     /**
-     * @var string
      * @see https://regex101.com/r/jkLLlM/2
+     * @var string
      */
     private const DIM_FETCH_REGEX = '#(\$|\\\\|\x0)(?<number>\d+)#';
     public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, InlineCodeParser $inlineCodeParser, ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
