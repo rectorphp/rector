@@ -43,6 +43,9 @@ final class GetMethodToAsTwigAttributeTransformer
      * @readonly
      */
     private VisibilityManipulator $visibilityManipulator;
+    /**
+     * @var mixed[]
+     */
     private const OPTION_TO_NAMED_ARG = ['is_safe' => 'isSafe', 'needs_environment' => 'needsEnvironment', 'needs_context' => 'needsContext', 'needs_charset' => 'needsCharset', 'is_safe_callback' => 'isSafeCallback', 'deprecation_info' => 'deprecationInfo'];
     public function __construct(LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher, ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover, ReflectionProvider $reflectionProvider, VisibilityManipulator $visibilityManipulator)
     {

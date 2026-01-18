@@ -26,8 +26,17 @@ final class MessengerHelper
      * @readonly
      */
     private ServiceMapProvider $serviceMapProvider;
+    /**
+     * @var string
+     */
     public const MESSAGE_HANDLER_INTERFACE = 'Symfony\Component\Messenger\Handler\MessageHandlerInterface';
+    /**
+     * @var string
+     */
     public const MESSAGE_SUBSCRIBER_INTERFACE = 'Symfony\Component\Messenger\Handler\MessageSubscriberInterface';
+    /**
+     * @var string
+     */
     public const AS_MESSAGE_HANDLER_ATTRIBUTE = 'Symfony\Component\Messenger\Attribute\AsMessageHandler';
     private string $messengerTagName = 'messenger.message_handler';
     /**

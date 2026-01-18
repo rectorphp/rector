@@ -39,13 +39,13 @@ final class SecurityAttributeToIsGrantedAttributeRector extends AbstractRector i
      */
     private AttributePresenceDetector $attributePresenceDetector;
     /**
-     * @var string
      * @see https://regex101.com/r/Si1sDz/1
+     * @var string
      */
     private const SOLE_IS_GRANTED_REGEX = '#^is_granted\((\"|\')(?<role>[\w]+)(\"|\')\)$#';
     /**
-     * @var string
      * @see https://regex101.com/r/NYRPrx/1
+     * @var string
      */
     private const IS_GRANTED_AND_SUBJECT_REGEX = '#^is_granted\((\"|\')(?<role>[\w]+)(\"|\'),\s+(?<subject>\w+)\)$#';
     public function __construct(ReflectionProvider $reflectionProvider, AttributePresenceDetector $attributePresenceDetector)

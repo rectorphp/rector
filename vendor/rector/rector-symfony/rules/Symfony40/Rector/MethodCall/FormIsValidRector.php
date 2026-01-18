@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
+use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,10 +22,12 @@ final class FormIsValidRector extends AbstractRector
     {
         return new RuleDefinition('Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
 if ($form->isValid()) {
+    // ...
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 if ($form->isSubmitted() && $form->isValid()) {
+    // ...
 }
 CODE_SAMPLE
 )]);
@@ -50,10 +53,7 @@ CODE_SAMPLE
         }
         // mark child calls with known is submitted
         if ($this->isName($methodCall->name, 'isSubmitted')) {
-            $this->traverseNodesWithCallable($node->stmts, static function (Node $node) {
-                $node->setAttribute('has_is_submitted', \true);
-                return null;
-            });
+            SimpleNodeTraverser::decorateWithAttributeValue($node->stmts, 'has_is_submitted', \true);
             return null;
         }
         // already checked

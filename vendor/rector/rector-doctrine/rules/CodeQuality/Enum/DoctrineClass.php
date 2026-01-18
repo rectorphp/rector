@@ -11,6 +11,7 @@ final class DoctrineClass
 {
     /**
      * @deprecated BC only
+     * @var string
      */
     public const COLLECTION = \Rector\Doctrine\Enum\DoctrineClass::COLLECTION;
 }

@@ -25,28 +25,28 @@ final class TemplateGuesser
      */
     private NodeNameResolver $nodeNameResolver;
     /**
-     * @var string
      * @see https://regex101.com/r/yZAUAC/1
+     * @var string
      */
     private const BUNDLE_SUFFIX_REGEX = '#Bundle$#';
     /**
-     * @var string
      * @see https://regex101.com/r/T6ItFG/1
+     * @var string
      */
     private const BUNDLE_NAME_MATCHING_REGEX = '#(?<bundle>[\w]*Bundle)#';
     /**
-     * @var string
      * @see https://regex101.com/r/5dNkCC/2
+     * @var string
      */
     private const SMALL_LETTER_BIG_LETTER_REGEX = '#([a-z\d])([A-Z])#';
     /**
-     * @var string
      * @see https://regex101.com/r/YUrmAD/1
+     * @var string
      */
     private const CONTROLLER_NAME_MATCH_REGEX = '#Controller\\\\(?<class_name_without_suffix>.+)Controller$#';
     /**
-     * @var string
      * @see https://regex101.com/r/nj8Ojf/1
+     * @var string
      */
     private const ACTION_MATCH_REGEX = '#Action$#';
     public function __construct(BundleClassResolver $bundleClassResolver, NodeNameResolver $nodeNameResolver)

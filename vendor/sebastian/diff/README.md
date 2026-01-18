@@ -1,4 +1,4 @@
-[![Latest Stable Version](https://poser.pugx.org/sebastian/diff/v/stable.png)](https://packagist.org/packages/sebastian/diff)
+[![Latest Stable Version](https://poser.pugx.org/sebastian/diff/v)](https://packagist.org/packages/sebastian/diff)
 [![CI Status](https://github.com/sebastianbergmann/diff/workflows/CI/badge.svg)](https://github.com/sebastianbergmann/diff/actions)
 [![codecov](https://codecov.io/gh/sebastianbergmann/diff/branch/main/graph/badge.svg)](https://codecov.io/gh/sebastianbergmann/diff)
 
@@ -27,14 +27,17 @@ composer require --dev sebastian/diff
 The `Differ` class can be used to generate a textual representation of the difference between two strings:
 
 ```php
-<?php
+<?php declare(strict_types=1);
 use SebastianBergmann\Diff\Differ;
+use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 
-$differ = new Differ;
+$differ = new Differ(new UnifiedDiffOutputBuilder);
+
 print $differ->diff('foo', 'bar');
 ```
 
 The code above yields the output below:
+
 ```diff
 --- Original
 +++ New
@@ -43,73 +46,16 @@ The code above yields the output below:
 +bar
 ```
 
-There are three output builders available in this package:
+The `UnifiedDiffOutputBuilder` used in the example above generates output in "unified diff"
+format and is used by PHPUnit, for example.
 
-#### UnifiedDiffOutputBuilder
+The `StrictUnifiedDiffOutputBuilder` generates output in "strict unified diff" format with
+hunks,  similar to `diff -u` and compatible with `patch` or `git apply`.
 
-This is default builder, which generates the output close to udiff and is used by PHPUnit.
+The `DiffOnlyOutputBuilder` generates output that only contains the lines that differ.
 
-```php
-<?php
-
-use SebastianBergmann\Diff\Differ;
-use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
-
-$builder = new UnifiedDiffOutputBuilder(
-    "--- Original\n+++ New\n", // custom header
-    false                      // do not add line numbers to the diff 
-);
-
-$differ = new Differ($builder);
-print $differ->diff('foo', 'bar');
-```
-
-#### StrictUnifiedDiffOutputBuilder
-
-Generates (strict) Unified diff's (unidiffs) with hunks,
-similar to `diff -u` and compatible with `patch` and `git apply`.
-
-```php
-<?php
-
-use SebastianBergmann\Diff\Differ;
-use SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
-
-$builder = new StrictUnifiedDiffOutputBuilder([
-    'collapseRanges'      => true, // ranges of length one are rendered with the trailing `,1`
-    'commonLineThreshold' => 6,    // number of same lines before ending a new hunk and creating a new one (if needed)
-    'contextLines'        => 3,    // like `diff:  -u, -U NUM, --unified[=NUM]`, for patch/git apply compatibility best to keep at least @ 3
-    'fromFile'            => '',
-    'fromFileDate'        => null,
-    'toFile'              => '',
-    'toFileDate'          => null,
-]);
-
-$differ = new Differ($builder);
-print $differ->diff('foo', 'bar');
-```
-
-#### DiffOnlyOutputBuilder
-
-Output only the lines that differ.
-
-```php
-<?php
-
-use SebastianBergmann\Diff\Differ;
-use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
-
-$builder = new DiffOnlyOutputBuilder(
-    "--- Original\n+++ New\n"
-);
-
-$differ = new Differ($builder);
-print $differ->diff('foo', 'bar');
-```
-
-#### DiffOutputBuilderInterface
-
-You can pass any output builder to the `Differ` class as longs as it implements the `DiffOutputBuilderInterface`.
+If none of these three output builders match your use case then you can implement
+`DiffOutputBuilderInterface` to generate custom output.
 
 #### Parsing diff
 

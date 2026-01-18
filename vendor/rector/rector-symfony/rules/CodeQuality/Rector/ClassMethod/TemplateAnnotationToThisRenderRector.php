@@ -27,6 +27,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
+use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Annotation\AnnotationAnalyzer;
@@ -198,7 +199,8 @@ CODE_SAMPLE
             if ($node instanceof Closure || $node instanceof Function_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if (!property_exists($node, 'stmts')) {
+            // has stmts
+            if (!NodeGroup::isStmtAwareNode($node)) {
                 return null;
             }
             $hasChangedNode = $this->refactorStmtsAwareNode($node, $templateTagValueNodeOrAttribute, $hasThisRenderOrReturnsResponse, $classMethod);

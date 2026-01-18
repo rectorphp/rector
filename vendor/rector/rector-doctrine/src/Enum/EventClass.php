@@ -5,12 +5,33 @@ namespace Rector\Doctrine\Enum;
 
 final class EventClass
 {
+    /**
+     * @var string
+     */
     public const PRE_PERSIST_EVENT_ARGS = 'Doctrine\ORM\Event\PrePersistEventArgs';
+    /**
+     * @var string
+     */
     public const PRE_UPDATE_EVENT_ARGS = 'Doctrine\ORM\Event\PreUpdateEventArgs';
+    /**
+     * @var string
+     */
     public const PRE_REMOVE_EVENT_ARGS = 'Doctrine\ORM\Event\PreRemoveEventArgs';
+    /**
+     * @var string
+     */
     public const POST_PERSIST_EVENT_ARGS = 'Doctrine\ORM\Event\PostPersistEventArgs';
+    /**
+     * @var string
+     */
     public const POST_UPDATE_EVENT_ARGS = 'Doctrine\ORM\Event\PostUpdateEventArgs';
+    /**
+     * @var string
+     */
     public const POST_REMOVE_EVENT_ARGS = 'Doctrine\ORM\Event\PostRemoveEventArgs';
+    /**
+     * @var string
+     */
     public const POST_LOAD_EVENT_ARGS = 'Doctrine\ORM\Event\PostLoadEventArgs';
     /**
      * @var array<class-string>

@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -102,7 +103,12 @@ CODE_SAMPLE
                 if (!$node->expr instanceof String_) {
                     return null;
                 }
-                $this->replaceStringWIthFormTypeClassConstIfFound($node->expr->value, $node, $hasChanged);
+                $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($node->expr->value);
+                if ($formClass === null) {
+                    return null;
+                }
+                $node->expr = $this->nodeFactory->createClassConstReference($formClass);
+                $hasChanged = \true;
                 return $node;
             });
         }
@@ -114,20 +120,11 @@ CODE_SAMPLE
     private function isClassAndMethodMatch(Class_ $class, ClassMethod $classMethod): bool
     {
         if ($this->isName($classMethod->name, 'getParent')) {
-            return $this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractType'));
+            return $this->isObjectType($class, new ObjectType(SymfonyClass::ABSTRACT_TYPE));
         }
         if ($this->isName($classMethod->name, 'getExtendedType')) {
-            return $this->isObjectType($class, new ObjectType('Symfony\Component\Form\AbstractTypeExtension'));
+            return $this->isObjectType($class, new ObjectType(SymfonyClass::ABSTRACT_TYPE_EXTENSION));
         }
         return \false;
-    }
-    private function replaceStringWIthFormTypeClassConstIfFound(string $stringValue, Return_ $return, bool &$hasChanged): void
-    {
-        $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringValue);
-        if ($formClass === null) {
-            return;
-        }
-        $return->expr = $this->nodeFactory->createClassConstReference($formClass);
-        $hasChanged = \true;
     }
 }

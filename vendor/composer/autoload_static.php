@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit785541eaf3cb5741f5765d8683ecf302
+class ComposerStaticInit95a1adf206b6315b2c18296429c15002
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -2207,7 +2207,6 @@ class ComposerStaticInit785541eaf3cb5741f5765d8683ecf302
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\ReplaceTestFunctionPrefixWithAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/ReplaceTestFunctionPrefixWithAttributeRector.php',
-        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddCoversClassAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddCoversClassAttributeRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddParamTypeFromDependsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddParamTypeFromDependsRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddParentSetupCallOnSetupRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddParentSetupCallOnSetupRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddReturnTypeToDependedRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddReturnTypeToDependedRector.php',
@@ -2318,7 +2317,6 @@ class ComposerStaticInit785541eaf3cb5741f5765d8683ecf302
         'Rector\\PHPUnit\\ValueObject\\BinaryOpWithAssertMethod' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/BinaryOpWithAssertMethod.php',
         'Rector\\PHPUnit\\ValueObject\\ConstantWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ConstantWithAssertMethods.php',
         'Rector\\PHPUnit\\ValueObject\\FunctionNameWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/FunctionNameWithAssertMethods.php',
-        'Rector\\PHPUnit\\ValueObject\\TestClassSuffixesConfig' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/TestClassSuffixesConfig.php',
         'Rector\\Parallel\\Application\\ParallelFileProcessor' => __DIR__ . '/../..' . '/src/Parallel/Application/ParallelFileProcessor.php',
         'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => __DIR__ . '/../..' . '/src/Parallel/Command/WorkerCommandLineFactory.php',
         'Rector\\Parallel\\ValueObject\\Bridge' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/Bridge.php',
@@ -3222,9 +3220,9 @@ class ComposerStaticInit785541eaf3cb5741f5765d8683ecf302
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit785541eaf3cb5741f5765d8683ecf302::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit785541eaf3cb5741f5765d8683ecf302::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit785541eaf3cb5741f5765d8683ecf302::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit95a1adf206b6315b2c18296429c15002::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit95a1adf206b6315b2c18296429c15002::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit95a1adf206b6315b2c18296429c15002::$classMap;
 
         }, null, ClassLoader::class);
     }

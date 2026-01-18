@@ -116,7 +116,10 @@ CODE_SAMPLE
                     return null;
                 }
                 $newObjectType = $this->nodeTypeResolver->getType($node->value);
-                $this->processArrayItem($node, $newObjectType, $hasChanged);
+                $hasArrayItemChanged = $this->processArrayItem($node, $newObjectType);
+                if ($hasArrayItemChanged) {
+                    $hasChanged = \true;
+                }
                 return $node;
             });
             break;
@@ -137,8 +140,9 @@ CODE_SAMPLE
         }
         return !$this->isNames($classMethod, ['getFunctions', 'getFilters']);
     }
-    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType, bool &$hasChanged): void
+    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType): bool
     {
+        $hasChanged = \false;
         foreach (self::OLD_TO_NEW_CLASSES as $oldClass => $newClass) {
             $oldClassObjectType = new ObjectType($oldClass);
             if (!$oldClassObjectType->equals($newNodeType)) {
@@ -159,6 +163,7 @@ CODE_SAMPLE
             $hasChanged = \true;
             break;
         }
+        return $hasChanged;
     }
     /**
      * @param Arg[] $oldArguments

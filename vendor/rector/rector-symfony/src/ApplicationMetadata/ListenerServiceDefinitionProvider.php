@@ -14,8 +14,8 @@ final class ListenerServiceDefinitionProvider
      */
     private ServiceMapProvider $serviceMapProvider;
     /**
-     * @var string
      * @see https://regex101.com/r/j6SAga/1
+     * @var string
      */
     private const SYMFONY_FAMILY_REGEX = '#^(Symfony|Sensio|Doctrine)\b#';
     private bool $areListenerClassesLoaded = \false;

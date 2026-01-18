@@ -65,6 +65,9 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
      * @readonly
      */
     private CommandUnusedInputOutputRemover $commandUnusedInputOutputRemover;
+    /**
+     * @var mixed[]
+     */
     private const MIGRATED_CONFIGURE_CALLS = ['addArgument', 'addOption'];
     public function __construct(AttributeFinder $attributeFinder, CommandArgumentsResolver $commandArgumentsResolver, CommandOptionsResolver $commandOptionsResolver, CommandInvokeParamsFactory $commandInvokeParamsFactory, ConsoleOptionAndArgumentMethodCallVariableReplacer $consoleOptionAndArgumentMethodCallVariableReplacer, OutputInputSymfonyStyleReplacer $outputInputSymfonyStyleReplacer, CommandUnusedInputOutputRemover $commandUnusedInputOutputRemover)
     {

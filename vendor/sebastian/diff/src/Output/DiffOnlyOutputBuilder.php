@@ -11,9 +11,11 @@ declare (strict_types=1);
  */
 namespace RectorPrefix202601\SebastianBergmann\Diff\Output;
 
+use function assert;
 use function fclose;
 use function fopen;
 use function fwrite;
+use function is_resource;
 use function str_ends_with;
 use function stream_get_contents;
 use function substr;
@@ -32,6 +34,7 @@ final class DiffOnlyOutputBuilder implements DiffOutputBuilderInterface
     public function getDiff(array $diff): string
     {
         $buffer = fopen('php://memory', 'r+b');
+        assert(is_resource($buffer));
         if ('' !== $this->header) {
             fwrite($buffer, $this->header);
             if (substr_compare($this->header, "\n", -strlen("\n")) !== 0) {

@@ -22,8 +22,8 @@ final class ShortClassExpander
      */
     private ObjectTypeSpecifier $objectTypeSpecifier;
     /**
-     * @var string
      * @see https://regex101.com/r/548EJJ/1
+     * @var string
      */
     private const CLASS_CONST_REGEX = '#::class#';
     public function __construct(ReflectionProvider $reflectionProvider, ObjectTypeSpecifier $objectTypeSpecifier)

@@ -4,18 +4,19 @@
     "license": "MIT",
     "description": "Rector upgrades rules for Symfony Framework",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-xml": "*"
     },
     "require-dev": {
-        "phpecs\/phpecs": "^2.2",
+        "symplify\/easy-coding-standard": "^13.0.4",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan": "^2.1.32",
         "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.5",
-        "rector\/jack": "^0.4",
+        "rector\/jack": "^0.5",
         "rector\/rector-src": "dev-main",
+        "rector\/swiss-knife": "^2.3",
         "rector\/type-perfect": "^2.1",
         "symfony\/config": "^6.4",
         "symfony\/dependency-injection": "^6.4",
@@ -30,7 +31,7 @@
         "symplify\/vendor-patches": "^11.5",
         "tomasvotruba\/class-leak": "^2.1",
         "tomasvotruba\/type-coverage": "^2.1",
-        "tomasvotruba\/unused-public": "^2.1",
+        "tomasvotruba\/unused-public": "^2.2",
         "tracy\/tracy": "^2.11"
     },
     "autoload": {

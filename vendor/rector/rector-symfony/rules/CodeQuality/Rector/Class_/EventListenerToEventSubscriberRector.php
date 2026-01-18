@@ -46,8 +46,8 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      */
     private ClassNaming $classNaming;
     /**
-     * @var string
      * @changelog https://regex101.com/r/qiHZ4T/1
+     * @var string
      */
     private const LISTENER_MATCH_REGEX = '#^(.*?)(Listener)?$#';
     /**

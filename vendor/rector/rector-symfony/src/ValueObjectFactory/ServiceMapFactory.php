@@ -56,7 +56,7 @@ final class ServiceMapFactory
         return new ServiceMap([]);
     }
     /**
-     * @param mixed[] $def
+     * @param array<string, mixed> $def
      * @return mixed[]
      */
     private function createTagFromXmlElement(array $def): array

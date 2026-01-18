@@ -36,8 +36,4 @@ final class ArgAndFunctionLike
     {
         return $this->functionLike;
     }
-    public function hasParams(): bool
-    {
-        return $this->functionLike->getParams() !== [];
-    }
 }

@@ -23,13 +23,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamAndEnvAttributeRector extends AbstractRector
 {
     /**
-     * @var string
      * @see https://regex101.com/r/7vwGbH/1
+     * @var string
      */
     private const PARAMETER_REGEX = '#%(?<param>[\w\.]+)%$#';
     /**
-     * @var string
      * @see https://regex101.com/r/7xpVRP/1
+     * @var string
      */
     private const ENV_REGEX = '#%env\((?<env>\w+)\)%$#';
     public function getRuleDefinition(): RuleDefinition

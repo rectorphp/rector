@@ -55,6 +55,9 @@ final class TypedPropertyFromToOneRelationTypeRector extends AbstractRector impl
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
+    /**
+     * @var string
+     */
     public const FORCE_NULLABLE = 'force_nullable';
     private bool $forceNullable = \true;
     public function __construct(PropertyTypeDecorator $propertyTypeDecorator, PhpDocTypeChanger $phpDocTypeChanger, ToOneRelationPropertyTypeResolver $toOneRelationPropertyTypeResolver, PhpVersionProvider $phpVersionProvider, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)

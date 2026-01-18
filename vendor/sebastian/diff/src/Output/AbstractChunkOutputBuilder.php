@@ -17,6 +17,8 @@ abstract class AbstractChunkOutputBuilder implements DiffOutputBuilderInterface
     /**
      * Takes input of the diff array and returns the common parts.
      * Iterates through diff line by line.
+     *
+     * @return array<int, positive-int>
      */
     protected function getCommonChunks(array $diff, int $lineThreshold = 5): array
     {

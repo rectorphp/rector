@@ -13,12 +13,14 @@ namespace RectorPrefix202601\SebastianBergmann\Diff\Output;
 
 use function array_merge;
 use function array_splice;
+use function assert;
 use function count;
 use function fclose;
 use function fopen;
 use function fwrite;
 use function is_bool;
 use function is_int;
+use function is_resource;
 use function is_string;
 use function max;
 use function min;
@@ -85,6 +87,7 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
         }
         $this->changed = \false;
         $buffer = fopen('php://memory', 'r+b');
+        assert(is_resource($buffer));
         fwrite($buffer, $this->header);
         $this->writeDiffHunks($buffer, $diff);
         if (!$this->changed) {

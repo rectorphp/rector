@@ -17,6 +17,9 @@ use RectorPrefix202601\Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGrante
 use RectorPrefix202601\Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector\SplitAndSecurityAttributeToIsGrantedRectorTest
+ */
 final class SplitAndSecurityAttributeToIsGrantedRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition

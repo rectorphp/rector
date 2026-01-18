@@ -130,7 +130,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param mixed[] $values
+     * @param ArrayItemNode[] $values
      */
     private function isEmptySensioRoute(array $values): bool
     {

@@ -10,6 +10,7 @@ final class PHPUnitClassName
      */
     public const TEST_CASE = 'PHPUnit\Framework\TestCase';
     /**
+     * @api might be used in public
      * @var string
      */
     public const TEST_CASE_LEGACY = 'PHPUnit_Framework_TestCase';
