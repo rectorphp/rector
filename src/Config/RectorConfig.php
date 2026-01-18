@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Config;
 
 use RectorPrefix202601\Illuminate\Container\Container;
+use Override;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -325,6 +326,7 @@ final class RectorConfig extends Container
      * @param string $abstract
      * @param mixed $concrete
      */
+    #[Override]
     public function singleton($abstract, $concrete = null): void
     {
         parent::singleton($abstract, $concrete);

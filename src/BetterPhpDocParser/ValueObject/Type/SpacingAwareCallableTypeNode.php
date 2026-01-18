@@ -3,10 +3,12 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
+use Override;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use Stringable;
 final class SpacingAwareCallableTypeNode extends CallableTypeNode
 {
+    #[Override]
     public function __toString(): string
     {
         // keep original (Psalm?) format, see https://github.com/rectorphp/rector/issues/2841

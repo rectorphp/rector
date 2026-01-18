@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php81\Rector\Array_;
 
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -16,6 +17,7 @@ final class FirstClassCallableRector extends \Rector\Php81\Rector\Array_\ArrayTo
     /**
      * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
      */
+    #[Override]
     public function refactor(Node $node)
     {
         throw new ShouldNotHappenException(sprintf('%s is deprecated and renamed to "%s". Use it instead.', self::class, \Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector::class));

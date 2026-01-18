@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PhpParser\Printer;
 
 use RectorPrefix202601\Nette\Utils\Strings;
+use Override;
 use PhpParser\Comment;
 use PhpParser\Internal\TokenStream;
 use PhpParser\Node;
@@ -68,6 +69,7 @@ final class BetterStandardPrinter extends Standard
      * @param Node[] $origStmts
      * @param mixed[] $origTokens
      */
+    #[Override]
     public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens): string
     {
         $newStmts = $this->unwrapFileNode($stmts);
@@ -96,6 +98,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * @param Node[] $stmts
      */
+    #[Override]
     public function prettyPrintFile(array $stmts): string
     {
         // to keep indexes from 0
@@ -110,6 +113,7 @@ final class BetterStandardPrinter extends Standard
     {
         return $interpolatedStringPart->value;
     }
+    #[Override]
     protected function p(Node $node, int $precedence = self::MAX_PRECEDENCE, int $lhsPrecedence = self::MAX_PRECEDENCE, bool $parentFormatPreserved = \false): string
     {
         // handle already AlwaysRememberedExpr
@@ -142,6 +146,7 @@ final class BetterStandardPrinter extends Standard
     {
         return $this->pStmts($fileNode->stmts);
     }
+    #[Override]
     protected function pExpr_ArrowFunction(ArrowFunction $arrowFunction, int $precedence, int $lhsPrecedence): string
     {
         if (!$arrowFunction->hasAttribute(AttributeKey::COMMENTS)) {
@@ -170,6 +175,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * This allows to use both spaces and tabs vs. original space-only
      */
+    #[Override]
     protected function setIndentLevel(int $level): void
     {
         $level = max($level, 0);
@@ -179,6 +185,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * This allows to use both spaces and tabs vs. original space-only
      */
+    #[Override]
     protected function indent(): void
     {
         $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
@@ -188,6 +195,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * This allows to use both spaces and tabs vs. original space-only
      */
+    #[Override]
     protected function outdent(): void
     {
         if ($this->getIndentCharacter() === ' ') {
@@ -205,6 +213,7 @@ final class BetterStandardPrinter extends Standard
      * @param mixed[] $nodes
      * @param mixed[] $origNodes
      */
+    #[Override]
     protected function pArray(array $nodes, array $origNodes, int &$pos, int $indentAdjustment, string $parentNodeClass, string $subNodeName, ?int $fixup): ?string
     {
         // reindex positions for printer
@@ -222,6 +231,7 @@ final class BetterStandardPrinter extends Standard
      * Do not add "()" on Expressions
      * @see https://github.com/rectorphp/rector/pull/401#discussion_r181487199
      */
+    #[Override]
     protected function pExpr_Yield(Yield_ $yield, int $precedence, int $lhsPrecedence): string
     {
         if (!$yield->value instanceof Expr) {
@@ -234,6 +244,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * Print new lined array items when newlined_array_print is set to true
      */
+    #[Override]
     protected function pExpr_Array(Array_ $array): string
     {
         if ($array->getAttribute(AttributeKey::NEWLINED_ARRAY_PRINT) === \true) {
@@ -243,6 +254,7 @@ final class BetterStandardPrinter extends Standard
         }
         return parent::pExpr_Array($array);
     }
+    #[Override]
     protected function pExpr_BinaryOp_Pipe(Pipe $node, int $precedence, int $lhsPrecedence): string
     {
         return $this->pInfixOp(Pipe::class, $node->left, "\n" . $this->resolveIndentSpaces() . '|> ', $node->right, $precedence, $lhsPrecedence);
@@ -250,6 +262,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * Fixes escaping of regular patterns
      */
+    #[Override]
     protected function pScalar_String(String_ $string): string
     {
         if ($string->getAttribute(AttributeKey::DOC_INDENTATION) === '__REMOVED__') {
@@ -272,11 +285,13 @@ final class BetterStandardPrinter extends Standard
     /**
      * It remove all spaces extra to parent
      */
+    #[Override]
     protected function pStmt_Declare(Declare_ $declare): string
     {
         $declareString = parent::pStmt_Declare($declare);
         return Strings::replace($declareString, '#\s+#');
     }
+    #[Override]
     protected function pExpr_Ternary(Ternary $ternary, int $precedence, int $lhsPrecedence): string
     {
         $kind = $ternary->getAttribute(AttributeKey::KIND);
@@ -289,6 +304,7 @@ final class BetterStandardPrinter extends Standard
     /**
      * Used in rector-downgrade-php
      */
+    #[Override]
     protected function pScalar_InterpolatedString(InterpolatedString $interpolatedString): string
     {
         $content = parent::pScalar_InterpolatedString($interpolatedString);
@@ -297,6 +313,7 @@ final class BetterStandardPrinter extends Standard
         }
         return $content;
     }
+    #[Override]
     protected function pExpr_MethodCall(MethodCall $methodCall): string
     {
         if (!$methodCall->var instanceof CallLike) {
@@ -313,11 +330,13 @@ final class BetterStandardPrinter extends Standard
         }
         return $this->pDereferenceLhs($methodCall->var) . "\n" . $this->resolveIndentSpaces() . '->' . $this->pObjectProperty($methodCall->name) . '(' . $this->pMaybeMultiline($methodCall->args) . ')';
     }
+    #[Override]
     protected function pInfixOp(string $class, Node $leftNode, string $operatorString, Node $rightNode, int $precedence, int $lhsPrecedence): string
     {
         $this->wrapAssign($leftNode, $rightNode);
         return parent::pInfixOp($class, $leftNode, $operatorString, $rightNode, $precedence, $lhsPrecedence);
     }
+    #[Override]
     protected function pExpr_Instanceof(Instanceof_ $instanceof, int $precedence, int $lhsPrecedence): string
     {
         $this->wrapAssign($instanceof->expr, $instanceof->class);

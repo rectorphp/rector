@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
+use Override;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -12,6 +13,7 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 use Stringable;
 final class SpacingAwareArrayTypeNode extends ArrayTypeNode
 {
+    #[Override]
     public function __toString(): string
     {
         if ($this->type instanceof CallableTypeNode) {

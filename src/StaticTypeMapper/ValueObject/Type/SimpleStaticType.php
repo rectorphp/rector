@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\ValueObject\Type;
 
+use Override;
 use PHPStan\Type\StaticType;
 final class SimpleStaticType extends StaticType
 {
@@ -14,6 +15,7 @@ final class SimpleStaticType extends StaticType
     {
         $this->className = $className;
     }
+    #[Override]
     public function getClassName(): string
     {
         return $this->className;

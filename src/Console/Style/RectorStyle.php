@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Console\Style;
 
 use RectorPrefix202601\OndraM\CiDetector\CiDetector;
+use Override;
 use RectorPrefix202601\Symfony\Component\Console\Exception\RuntimeException;
 use RectorPrefix202601\Symfony\Component\Console\Helper\ProgressBar;
 use RectorPrefix202601\Symfony\Component\Console\Input\InputInterface;
@@ -27,6 +28,7 @@ final class RectorStyle extends SymfonyStyle
     /**
      * @see https://github.com/phpstan/phpstan-src/commit/0993d180e5a15a17631d525909356081be59ffeb
      */
+    #[Override]
     public function createProgressBar(int $max = 0): ProgressBar
     {
         $progressBar = parent::createProgressBar($max);
@@ -48,6 +50,7 @@ final class RectorStyle extends SymfonyStyle
         $this->progressBar = $progressBar;
         return $progressBar;
     }
+    #[Override]
     public function progressAdvance(int $step = 1): void
     {
         // hide progress bar in tests
