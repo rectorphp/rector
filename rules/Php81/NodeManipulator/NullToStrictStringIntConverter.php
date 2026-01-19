@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php81\NodeManipulator;
 
+use PHPStan\Analyser\Fiber\FiberScope;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast\Int_ as CastInt_;
@@ -173,6 +174,9 @@ final class NullToStrictStringIntConverter
             return \true;
         }
         $parentScope = $scope->getParentScope();
+        if ($parentScope instanceof FiberScope) {
+            $parentScope = $parentScope->toMutatingScope();
+        }
         if ($parentScope instanceof Scope) {
             return $parentScope->getType($expr) instanceof ErrorType;
         }

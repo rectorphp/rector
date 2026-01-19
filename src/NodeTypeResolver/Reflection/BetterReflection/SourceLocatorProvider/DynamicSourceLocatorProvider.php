@@ -5,9 +5,8 @@ namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvi
 
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
-use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocatorFactory;
-use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
+use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocatorRepository;
 use Rector\Contract\DependencyInjection\ResettableInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 /**
@@ -18,11 +17,11 @@ final class DynamicSourceLocatorProvider implements ResettableInterface
     /**
      * @readonly
      */
-    private FileNodesFetcher $fileNodesFetcher;
+    private OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory;
     /**
      * @readonly
      */
-    private OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory;
+    private OptimizedSingleFileSourceLocatorRepository $optimizedSingleFileSourceLocatorRepository;
     /**
      * @var string[]
      */
@@ -32,10 +31,10 @@ final class DynamicSourceLocatorProvider implements ResettableInterface
      */
     private array $directories = [];
     private ?AggregateSourceLocator $aggregateSourceLocator = null;
-    public function __construct(FileNodesFetcher $fileNodesFetcher, OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory)
+    public function __construct(OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory, OptimizedSingleFileSourceLocatorRepository $optimizedSingleFileSourceLocatorRepository)
     {
-        $this->fileNodesFetcher = $fileNodesFetcher;
         $this->optimizedDirectorySourceLocatorFactory = $optimizedDirectorySourceLocatorFactory;
+        $this->optimizedSingleFileSourceLocatorRepository = $optimizedSingleFileSourceLocatorRepository;
     }
     public function setFilePath(string $filePath): void
     {
@@ -64,7 +63,7 @@ final class DynamicSourceLocatorProvider implements ResettableInterface
         }
         $sourceLocators = [];
         foreach ($this->filePaths as $file) {
-            $sourceLocators[] = new OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
+            $sourceLocators[] = $this->optimizedSingleFileSourceLocatorRepository->getOrCreate($file);
         }
         foreach ($this->directories as $directory) {
             $sourceLocators[] = $this->optimizedDirectorySourceLocatorFactory->createByDirectory($directory);

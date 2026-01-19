@@ -8,8 +8,6 @@ use PHPStan\DependencyInjection\Nette\NetteContainer;
 use PHPStan\Parser\AnonymousClassVisitor;
 use PHPStan\Parser\ArrayMapArgVisitor;
 use PHPStan\Parser\RichParser;
-use PHPStan\Parser\VariadicFunctionsVisitor;
-use PHPStan\Parser\VariadicMethodsVisitor;
 use Rector\Util\Reflection\PrivatesAccessor;
 /**
  * Helper service to modify PHPStan container
@@ -32,7 +30,7 @@ final class PHPStanContainerMemento
         $tags = $privatesAccessor->getPrivateProperty($deeperContainer, 'tags');
         // keep visitors that are useful
         // remove all the rest, https://github.com/phpstan/phpstan-src/tree/1d86de8bb9371534983a8dbcd879e057d2ff028f/src/Parser
-        $nodeVisitorsToKeep = [$container->findServiceNamesByType(AnonymousClassVisitor::class)[0] => \true, $container->findServiceNamesByType(VariadicFunctionsVisitor::class)[0] => \true, $container->findServiceNamesByType(VariadicMethodsVisitor::class)[0] => \true, $container->findServiceNamesByType(ArrayMapArgVisitor::class)[0] => \true];
+        $nodeVisitorsToKeep = [$container->findServiceNamesByType(AnonymousClassVisitor::class)[0] => \true, $container->findServiceNamesByType(ArrayMapArgVisitor::class)[0] => \true];
         $tags[RichParser::VISITOR_SERVICE_TAG] = $nodeVisitorsToKeep;
         $privatesAccessor->setPrivateProperty($deeperContainer, 'tags', $tags);
     }
