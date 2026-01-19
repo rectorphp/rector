@@ -142,6 +142,12 @@ CODE_SAMPLE
         if ($scope->isInExpressionAssign($arrayDimFetch)) {
             return \true;
         }
+        if ($arrayDimFetch->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
+            return \true;
+        }
+        if ($arrayDimFetch->getAttribute(AttributeKey::IS_ASSIGN_OP_VAR) === \true) {
+            return \true;
+        }
         return (bool) $arrayDimFetch->getAttribute(AttributeKey::IS_UNSET_VAR);
     }
 }
