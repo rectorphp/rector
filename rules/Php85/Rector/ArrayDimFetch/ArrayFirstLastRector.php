@@ -69,82 +69,79 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::ARRAY_FIRST_LAST;
     }
-    private function refactorArrayKeyPattern(ArrayDimFetch $node): ?FuncCall
+    private function refactorArrayKeyPattern(ArrayDimFetch $arrayDimFetch): ?FuncCall
     {
-        if (!$node->dim instanceof FuncCall) {
+        if (!$arrayDimFetch->dim instanceof FuncCall) {
             return null;
         }
-        if (!$this->isNames($node->dim, [self::ARRAY_KEY_FIRST, self::ARRAY_KEY_LAST])) {
+        if (!$this->isNames($arrayDimFetch->dim, [self::ARRAY_KEY_FIRST, self::ARRAY_KEY_LAST])) {
             return null;
         }
-        if ($node->dim->isFirstClassCallable()) {
+        if ($arrayDimFetch->dim->isFirstClassCallable()) {
             return null;
         }
-        if (count($node->dim->getArgs()) !== 1) {
+        if (count($arrayDimFetch->dim->getArgs()) !== 1) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($node->var, $node->dim->getArgs()[0]->value)) {
+        if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $arrayDimFetch->dim->getArgs()[0]->value)) {
             return null;
         }
-        if ($this->shouldSkip($node, $node->var)) {
+        if ($this->shouldSkip($arrayDimFetch, $arrayDimFetch->var)) {
             return null;
         }
-        $functionName = $this->isName($node->dim, self::ARRAY_KEY_FIRST) ? 'array_first' : 'array_last';
-        return $this->nodeFactory->createFuncCall($functionName, [$node->var]);
+        $functionName = $this->isName($arrayDimFetch->dim, self::ARRAY_KEY_FIRST) ? 'array_first' : 'array_last';
+        return $this->nodeFactory->createFuncCall($functionName, [$arrayDimFetch->var]);
     }
-    private function refactorArrayValuesPattern(ArrayDimFetch $node): ?FuncCall
+    private function refactorArrayValuesPattern(ArrayDimFetch $arrayDimFetch): ?FuncCall
     {
-        if (!$node->var instanceof FuncCall) {
+        if (!$arrayDimFetch->var instanceof FuncCall) {
             return null;
         }
-        if (!$this->isName($node->var, 'array_values')) {
+        if (!$this->isName($arrayDimFetch->var, 'array_values')) {
             return null;
         }
-        if ($node->var->isFirstClassCallable()) {
+        if ($arrayDimFetch->var->isFirstClassCallable()) {
             return null;
         }
-        if (count($node->var->getArgs()) !== 1) {
+        if (count($arrayDimFetch->var->getArgs()) !== 1) {
             return null;
         }
-        if ($this->shouldSkip($node, $node)) {
+        if ($this->shouldSkip($arrayDimFetch, $arrayDimFetch)) {
             return null;
         }
-        $arrayArg = $node->var->getArgs()[0]->value;
-        if ($node->dim instanceof Int_ && $node->dim->value === 0) {
+        $arrayArg = $arrayDimFetch->var->getArgs()[0]->value;
+        if ($arrayDimFetch->dim instanceof Int_ && $arrayDimFetch->dim->value === 0) {
             return $this->nodeFactory->createFuncCall('array_first', [$arrayArg]);
         }
-        if ($node->dim instanceof Minus) {
-            if (!$node->dim->left instanceof FuncCall) {
+        if ($arrayDimFetch->dim instanceof Minus) {
+            if (!$arrayDimFetch->dim->left instanceof FuncCall) {
                 return null;
             }
-            if (!$this->isName($node->dim->left, 'count')) {
+            if (!$this->isName($arrayDimFetch->dim->left, 'count')) {
                 return null;
             }
-            if ($node->dim->left->isFirstClassCallable()) {
+            if ($arrayDimFetch->dim->left->isFirstClassCallable()) {
                 return null;
             }
-            if (count($node->dim->left->getArgs()) !== 1) {
+            if (count($arrayDimFetch->dim->left->getArgs()) !== 1) {
                 return null;
             }
-            if (!$node->dim->right instanceof Int_ || $node->dim->right->value !== 1) {
+            if (!$arrayDimFetch->dim->right instanceof Int_ || $arrayDimFetch->dim->right->value !== 1) {
                 return null;
             }
-            if (!$this->nodeComparator->areNodesEqual($arrayArg, $node->dim->left->getArgs()[0]->value)) {
+            if (!$this->nodeComparator->areNodesEqual($arrayArg, $arrayDimFetch->dim->left->getArgs()[0]->value)) {
                 return null;
             }
             return $this->nodeFactory->createFuncCall('array_last', [$arrayArg]);
         }
         return null;
     }
-    private function shouldSkip(ArrayDimFetch $node, Node $scopeNode): bool
+    private function shouldSkip(ArrayDimFetch $arrayDimFetch, Node $scopeNode): bool
     {
         $scope = ScopeFetcher::fetch($scopeNode);
-        if ($scope->isInExpressionAssign($node)) {
+        if ($scope->isInExpressionAssign($arrayDimFetch)) {
             return \true;
         }
-        if ($node->getAttribute(AttributeKey::IS_UNSET_VAR)) {
-            return \true;
-        }
-        return \false;
+        return (bool) $arrayDimFetch->getAttribute(AttributeKey::IS_UNSET_VAR);
     }
 }
