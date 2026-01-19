@@ -17,7 +17,6 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Pipe;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
@@ -29,7 +28,6 @@ use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\PrettyPrinter\Standard;
 use PhpParser\Token;
-use PHPStan\Node\Expr\AlwaysRememberedExpr;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeAnalyzer\ExprAnalyzer;
@@ -116,21 +114,6 @@ final class BetterStandardPrinter extends Standard
     #[Override]
     protected function p(Node $node, int $precedence = self::MAX_PRECEDENCE, int $lhsPrecedence = self::MAX_PRECEDENCE, bool $parentFormatPreserved = \false): string
     {
-        // handle already AlwaysRememberedExpr
-        // @see https://github.com/rectorphp/rector/issues/8815#issuecomment-2503453191
-        if ($node instanceof AlwaysRememberedExpr) {
-            return $this->p($node->getExpr(), $precedence, $lhsPrecedence, $parentFormatPreserved);
-        }
-        // handle overlapped origNode is Match_ and its subnodes still have AlwaysRememberedExpr
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($originalNode instanceof Match_) {
-            $subNodeNames = $node->getSubNodeNames();
-            foreach ($subNodeNames as $subNodeName) {
-                while ($originalNode->{$subNodeName} instanceof AlwaysRememberedExpr) {
-                    $originalNode->{$subNodeName} = $originalNode->{$subNodeName}->getExpr();
-                }
-            }
-        }
         $this->wrapBinaryOpWithBrackets($node);
         $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
         // remove once its fixed in php-parser, https://github.com/nikic/PHP-Parser/pull/1126
