@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php81\NodeManipulator;
 
-use PHPStan\Analyser\Fiber\FiberScope;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast\Int_ as CastInt_;
@@ -15,6 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Analyser\Fiber\FiberScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Native\ExtendedNativeParameterReflection;
 use PHPStan\Reflection\ParametersAcceptor;

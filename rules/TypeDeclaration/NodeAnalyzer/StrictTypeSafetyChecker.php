@@ -14,6 +14,7 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
@@ -163,7 +164,7 @@ final class StrictTypeSafetyChecker
             return \true;
         }
         $propertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($assign->var);
-        if ($propertyReflection === null) {
+        if (!$propertyReflection instanceof PhpPropertyReflection) {
             return \false;
         }
         $propertyType = $propertyReflection->getNativeType();
