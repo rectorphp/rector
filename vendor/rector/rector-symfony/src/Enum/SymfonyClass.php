@@ -176,6 +176,10 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const ACCESS_DECISION_MANAGER_INTERFACE = 'Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface';
+    /**
+     * @var string
+     */
     public const UUID = 'Symfony\Component\Uid\Uuid';
     /**
      * @var string

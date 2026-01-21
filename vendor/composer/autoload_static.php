@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7955fffd214f172412f8f9f29266aeae
+class ComposerStaticInit77bac5663e9656898c39e7aabbe476cf
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -2917,6 +2917,7 @@ class ComposerStaticInit7955fffd214f172412f8f9f29266aeae
         'Rector\\Symfony\\Symfony73\\NodeTransformer\\ConsoleOptionAndArgumentMethodCallVariableReplacer' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/NodeTransformer/ConsoleOptionAndArgumentMethodCallVariableReplacer.php',
         'Rector\\Symfony\\Symfony73\\NodeTransformer\\OutputInputSymfonyStyleReplacer' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/NodeTransformer/OutputInputSymfonyStyleReplacer.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\AddVoteArgumentToVoteOnAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/AddVoteArgumentToVoteOnAttributeRector.php',
+        'Rector\\Symfony\\Symfony73\\Rector\\Class_\\AuthorizationCheckerToAccessDecisionManagerInVoterRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/AuthorizationCheckerToAccessDecisionManagerInVoterRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandDefaultNameAndDescriptionToAsCommandAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/CommandDefaultNameAndDescriptionToAsCommandAttributeRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandHelpToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/CommandHelpToAttributeRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\ConstraintOptionsToNamedArgumentsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/ConstraintOptionsToNamedArgumentsRector.php',
@@ -3221,9 +3222,9 @@ class ComposerStaticInit7955fffd214f172412f8f9f29266aeae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7955fffd214f172412f8f9f29266aeae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7955fffd214f172412f8f9f29266aeae::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7955fffd214f172412f8f9f29266aeae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit77bac5663e9656898c39e7aabbe476cf::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit77bac5663e9656898c39e7aabbe476cf::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit77bac5663e9656898c39e7aabbe476cf::$classMap;
 
         }, null, ClassLoader::class);
     }

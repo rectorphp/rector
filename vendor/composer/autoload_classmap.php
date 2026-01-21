@@ -2657,6 +2657,7 @@ return array(
     'Rector\\Symfony\\Symfony73\\NodeTransformer\\ConsoleOptionAndArgumentMethodCallVariableReplacer' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/NodeTransformer/ConsoleOptionAndArgumentMethodCallVariableReplacer.php',
     'Rector\\Symfony\\Symfony73\\NodeTransformer\\OutputInputSymfonyStyleReplacer' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/NodeTransformer/OutputInputSymfonyStyleReplacer.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\AddVoteArgumentToVoteOnAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/AddVoteArgumentToVoteOnAttributeRector.php',
+    'Rector\\Symfony\\Symfony73\\Rector\\Class_\\AuthorizationCheckerToAccessDecisionManagerInVoterRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/AuthorizationCheckerToAccessDecisionManagerInVoterRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandDefaultNameAndDescriptionToAsCommandAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/CommandDefaultNameAndDescriptionToAsCommandAttributeRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\CommandHelpToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/CommandHelpToAttributeRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\ConstraintOptionsToNamedArgumentsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/ConstraintOptionsToNamedArgumentsRector.php',
