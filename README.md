@@ -103,7 +103,8 @@ Among there projects belong:
 * [contao/contao-rector](https://github.com/contao/contao-rector)
 * [php-static-analysis/rector-rule](https://github.com/php-static-analysis/rector-rule)
 * [ibexa/rector](https://github.com/ibexa/rector)
-  
+* [guanguans/rector-rules](https://github.com/guanguans/rector-rules)
+
 <br>
 
 ## Hire us to get Job Done :muscle:
