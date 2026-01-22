@@ -39,6 +39,7 @@ final class DoctrineSetProvider implements SetProviderInterface
             new Set(SetGroup::ATTRIBUTES, 'Gedmo', __DIR__ . '/../../../config/sets/attributes/gedmo.php'),
             new Set(SetGroup::ATTRIBUTES, 'MongoDB', __DIR__ . '/../../../config/sets/attributes/mongodb.php'),
             new ComposerTriggeredSet(SetGroup::DOCTRINE, 'doctrine/data-fixtures', '1.6', __DIR__ . '/../../../config/sets/data-fixtures-16.php'),
+            new ComposerTriggeredSet(SetGroup::DOCTRINE, 'doctrine/mongodb-odm', '2.16', __DIR__ . '/../../../config/sets/doctrine-mongodb-odm-216.php'),
         ];
     }
 }
