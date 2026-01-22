@@ -17,6 +17,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\StrictMixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
@@ -173,6 +174,10 @@ final class StrictTypeSafetyChecker
     }
     private function isTypeSafeForStrictMode(Type $declaredType, Type $valueType): bool
     {
+        // need to be strict with mixed to avoid false positives
+        if ($valueType instanceof MixedType) {
+            $valueType = new StrictMixedType();
+        }
         return $declaredType->accepts($valueType, \true)->yes();
     }
 }
