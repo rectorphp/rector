@@ -92,6 +92,9 @@ CODE_SAMPLE
         if ($node instanceof ArrayItem) {
             return $this->refactorArrayItem($node);
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         foreach ($node->getArgs() as $arg) {
             $firstArg = $this->matchCreateMockMethodCallArg($arg->value);
             if (!$firstArg instanceof Arg) {
