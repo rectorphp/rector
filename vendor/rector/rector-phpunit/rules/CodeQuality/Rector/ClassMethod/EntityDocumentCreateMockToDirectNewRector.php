@@ -18,8 +18,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PHPUnit\CodeQuality\NodeAnalyser\DoctrineEntityDocumentAnalyser;
+use Rector\PHPUnit\CodeQuality\NodeAnalyser\AssignedMocksCollector;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,20 +30,15 @@ final class EntityDocumentCreateMockToDirectNewRector extends AbstractRector
     /**
      * @readonly
      */
-    private ValueResolver $valueResolver;
-    /**
-     * @readonly
-     */
     private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
      */
-    private DoctrineEntityDocumentAnalyser $doctrineEntityDocumentAnalyser;
-    public function __construct(ValueResolver $valueResolver, ReflectionProvider $reflectionProvider, DoctrineEntityDocumentAnalyser $doctrineEntityDocumentAnalyser)
+    private AssignedMocksCollector $assignedMocksCollector;
+    public function __construct(ReflectionProvider $reflectionProvider, AssignedMocksCollector $assignedMocksCollector)
     {
-        $this->valueResolver = $valueResolver;
         $this->reflectionProvider = $reflectionProvider;
-        $this->doctrineEntityDocumentAnalyser = $doctrineEntityDocumentAnalyser;
+        $this->assignedMocksCollector = $assignedMocksCollector;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -92,11 +86,11 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
-        $mockedVariablesToTypes = $this->collectMockedVariableToTypeAndRefactorAssign($node);
-        if ($mockedVariablesToTypes === []) {
+        $mockedVariablesToEntityClassNames = $this->assignedMocksCollector->collectEntityClasses($node);
+        if ($mockedVariablesToEntityClassNames === []) {
             return null;
         }
-        foreach ($mockedVariablesToTypes as $mockedVariableName => $mockedClass) {
+        foreach ($mockedVariablesToEntityClassNames as $mockedVariableName => $mockedClass) {
             foreach ($node->stmts as $key => $stmt) {
                 if (!$stmt instanceof Expression) {
                     continue;
@@ -125,8 +119,9 @@ CODE_SAMPLE
                 }
             }
         }
+        $this->replaceCreateMockWithDirectNew($node, $mockedVariablesToEntityClassNames);
         // 3. replace value without "mock" in name
-        $mockedVariableNames = array_keys($mockedVariablesToTypes);
+        $mockedVariableNames = array_keys($mockedVariablesToEntityClassNames);
         $this->traverseNodesWithCallable($node, function (Node $node) use ($mockedVariableNames): ?Variable {
             if (!$node instanceof Variable) {
                 return null;
@@ -140,55 +135,6 @@ CODE_SAMPLE
             return new Variable(str_replace('Mock', '', $node->name));
         });
         return $node;
-    }
-    /**
-     * @return array<string, string>
-     */
-    private function collectMockedVariableToTypeAndRefactorAssign(ClassMethod $classMethod): array
-    {
-        if ($classMethod->stmts === null) {
-            return [];
-        }
-        $mockedVariablesToTypes = [];
-        foreach ($classMethod->stmts as $stmt) {
-            // find assign mock
-            if (!$stmt instanceof Expression) {
-                continue;
-            }
-            $stmtExpr = $stmt->expr;
-            if (!$stmtExpr instanceof Assign) {
-                continue;
-            }
-            /** @var Assign $assign */
-            $assign = $stmtExpr;
-            if (!$assign->expr instanceof MethodCall) {
-                continue;
-            }
-            $methodCall = $assign->expr;
-            if (!$this->isName($methodCall->name, 'createMock')) {
-                continue;
-            }
-            $firstArg = $methodCall->getArgs()[0];
-            $mockedClass = $this->valueResolver->getValue($firstArg->value);
-            if (!is_string($mockedClass)) {
-                continue;
-            }
-            if (!$this->reflectionProvider->hasClass($mockedClass)) {
-                continue;
-            }
-            $mockClassReflection = $this->reflectionProvider->getClass($mockedClass);
-            if ($mockClassReflection->isAbstract()) {
-                continue;
-            }
-            if (!$this->doctrineEntityDocumentAnalyser->isEntityClass($mockClassReflection)) {
-                continue;
-            }
-            // ready to replace :)
-            $assign->expr = new New_(new FullyQualified($mockedClass));
-            $mockedVariableName = $this->getName($assign->var);
-            $mockedVariablesToTypes[$mockedVariableName] = $mockedClass;
-        }
-        return $mockedVariablesToTypes;
     }
     /**
      * @return string|\PhpParser\Node\Expr|null
@@ -244,5 +190,37 @@ CODE_SAMPLE
             return null;
         }
         return $foundMethodCall;
+    }
+    /**
+     * @param array<string, string> $mockedVariablesToTypes
+     */
+    private function replaceCreateMockWithDirectNew(ClassMethod $classMethod, array $mockedVariablesToTypes): void
+    {
+        $mockedVariableNames = array_keys($mockedVariablesToTypes);
+        // replace mock assigns with direct new
+        foreach ((array) $classMethod->stmts as $stmt) {
+            if (!$stmt instanceof Expression) {
+                continue;
+            }
+            if (!$stmt->expr instanceof Assign) {
+                continue;
+            }
+            $assign = $stmt->expr;
+            if (!$assign->expr instanceof MethodCall) {
+                continue;
+            }
+            if (!$this->isName($assign->expr->name, 'createMock')) {
+                continue;
+            }
+            if (!$assign->var instanceof Variable) {
+                continue;
+            }
+            if (!$this->isNames($assign->var, $mockedVariableNames)) {
+                continue;
+            }
+            $mockedVariableName = $this->getName($assign->var);
+            $mockedClassName = $mockedVariablesToTypes[$mockedVariableName];
+            $assign->expr = new New_(new FullyQualified($mockedClassName));
+        }
     }
 }
