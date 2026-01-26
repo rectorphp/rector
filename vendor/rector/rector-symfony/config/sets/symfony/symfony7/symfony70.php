@@ -10,4 +10,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony70/symfony70-serializer.php');
     $rectorConfig->import(__DIR__ . '/symfony70/symfony70-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony70/symfony70-contracts.php');
+    $rectorConfig->import(__DIR__ . '/symfony70/symfony70-routing.php');
 };
