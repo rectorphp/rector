@@ -87,6 +87,9 @@ CODE_SAMPLE
             return $node;
         }
         $hasChanges = \false;
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         foreach ($node->getArgs() as $arg) {
             if (!$arg->value instanceof MethodCall) {
                 continue;
