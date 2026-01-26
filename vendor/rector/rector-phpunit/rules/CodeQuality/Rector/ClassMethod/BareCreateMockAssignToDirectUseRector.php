@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPUnit\CodeQuality\NodeAnalyser\AssertMethodAnalyzer;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\AssignedMocksCollector;
 use Rector\PHPUnit\CodeQuality\NodeFinder\VariableFinder;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -44,12 +45,17 @@ final class BareCreateMockAssignToDirectUseRector extends AbstractRector
      * @readonly
      */
     private VariableFinder $variableFinder;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssignedMocksCollector $assignedMocksCollector, BetterNodeFinder $betterNodeFinder, VariableFinder $variableFinder)
+    /**
+     * @readonly
+     */
+    private AssertMethodAnalyzer $assertMethodAnalyzer;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssignedMocksCollector $assignedMocksCollector, BetterNodeFinder $betterNodeFinder, VariableFinder $variableFinder, AssertMethodAnalyzer $assertMethodAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->assignedMocksCollector = $assignedMocksCollector;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->variableFinder = $variableFinder;
+        $this->assertMethodAnalyzer = $assertMethodAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -119,6 +125,9 @@ CODE_SAMPLE
                 continue;
             }
             if ($this->isUsedInClosure($node, $variableName)) {
+                continue;
+            }
+            if ($this->isUsedInAssertCall($node, $variableName)) {
                 continue;
             }
             // 1. remove initial assign
@@ -222,6 +231,32 @@ CODE_SAMPLE
         foreach ($uses as $use) {
             if ($this->isName($use->var, $variableName)) {
                 return \true;
+            }
+        }
+        return \false;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Foreach_ $stmtsAware
+     */
+    private function isUsedInAssertCall($stmtsAware, string $variableName): bool
+    {
+        /** @var StaticCall[]|MethodCall[] $calls */
+        $calls = $this->betterNodeFinder->findInstancesOfScoped([$stmtsAware], [MethodCall::class, StaticCall::class]);
+        $assertCalls = [];
+        foreach ($calls as $call) {
+            if (!$this->assertMethodAnalyzer->detectTestCaseCall($call)) {
+                continue;
+            }
+            $assertCalls[] = $call;
+        }
+        foreach ($assertCalls as $assertCall) {
+            foreach ($assertCall->getArgs() as $assertCallArg) {
+                if (!$assertCallArg->value instanceof Variable) {
+                    continue;
+                }
+                if ($this->isName($assertCallArg->value, $variableName)) {
+                    return \true;
+                }
             }
         }
         return \false;
