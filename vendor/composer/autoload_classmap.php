@@ -1940,6 +1940,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\NodeFactory\\AssertMethodCallFactory' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeFactory/AssertMethodCallFactory.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeFactory\\FromBinaryAndAssertExpressionsFactory' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeFactory/FromBinaryAndAssertExpressionsFactory.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeFactory\\NestedClosureAssertFactory' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeFactory/NestedClosureAssertFactory.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\CallLike\\DirectInstanceOverMockArgRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/CallLike/DirectInstanceOverMockArgRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\AddInstanceofAssertForNullableArgumentRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/AddInstanceofAssertForNullableArgumentRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\AddInstanceofAssertForNullableInstanceRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/AddInstanceofAssertForNullableInstanceRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\CreateMockToAnonymousClassRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/CreateMockToAnonymousClassRector.php',

@@ -2200,6 +2200,7 @@ class ComposerStaticInit26b401162da3a43f2d077daa053b5bf6
         'Rector\\PHPUnit\\CodeQuality\\NodeFactory\\AssertMethodCallFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeFactory/AssertMethodCallFactory.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeFactory\\FromBinaryAndAssertExpressionsFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeFactory/FromBinaryAndAssertExpressionsFactory.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeFactory\\NestedClosureAssertFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeFactory/NestedClosureAssertFactory.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\CallLike\\DirectInstanceOverMockArgRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/CallLike/DirectInstanceOverMockArgRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\AddInstanceofAssertForNullableArgumentRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/AddInstanceofAssertForNullableArgumentRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\AddInstanceofAssertForNullableInstanceRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/AddInstanceofAssertForNullableInstanceRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\CreateMockToAnonymousClassRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/CreateMockToAnonymousClassRector.php',

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix202601;
 
 use Rector\Config\RectorConfig;
+use Rector\PHPUnit\CodeQuality\Rector\CallLike\DirectInstanceOverMockArgRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddParamTypeFromDependsRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddReturnTypeToDependedRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector;
@@ -109,6 +110,7 @@ return static function (RectorConfig $rectorConfig): void {
         RemoveExpectAnyFromMockRector::class,
         SingleMockPropertyTypeRector::class,
         SimplerWithIsInstanceOfRector::class,
+        DirectInstanceOverMockArgRector::class,
         FinalizeTestCaseClassRector::class,
         DeclareStrictTypesTestsRector::class,
         WithCallbackIdenticalToStandaloneAssertsRector::class,
