@@ -123,19 +123,16 @@ CODE_SAMPLE
                 if ($stmt instanceof Expression && $stmt->expr instanceof Assign) {
                     $assign = $stmt->expr;
                     $instanceArg = $this->assignedMocksCollector->matchCreateMockArgAssignedToVariable($assign);
-                    if (!$instanceArg instanceof Arg) {
+                    if ($instanceArg instanceof Arg && $assign->var instanceof Variable && $this->isName($assign->var, $variableName)) {
+                        // 1. remove assign
+                        unset($node->stmts[$key]);
+                        $hasChanged = \true;
+                        $variablesToMethodCalls[$variableName] = $assign->expr;
                         continue;
                     }
-                    if (!$assign->var instanceof Variable) {
-                        continue;
-                    }
-                    if (!$this->isName($assign->var, $variableName)) {
-                        continue;
-                    }
-                    // 1. remove assign
-                    unset($node->stmts[$key]);
-                    $hasChanged = \true;
-                    $variablesToMethodCalls[$variableName] = $assign->expr;
+                }
+                // nothing to processy yet
+                if ($variablesToMethodCalls === []) {
                     continue;
                 }
                 // 2. replace variable with call-like args of new instance
