@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
@@ -90,12 +91,14 @@ final class PropertyFetchFinder
         return $this->findPropertyFetchesInClassLike($class, $nodes, $propertyName, $hasTrait, $scope);
     }
     /**
+     * @api used by other Rector packages
      * @return PropertyFetch[]|StaticPropertyFetch[]|NullsafePropertyFetch[]
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    public function findLocalPropertyFetchesByName(Class_ $class, string $paramName): array
+    public function findLocalPropertyFetchesByName($node, string $paramName): array
     {
         /** @var PropertyFetch[]|StaticPropertyFetch[]|NullsafePropertyFetch[] $foundPropertyFetches */
-        $foundPropertyFetches = $this->betterNodeFinder->find($this->resolveNodesToLocate($class), function (Node $subNode) use ($paramName): bool {
+        $foundPropertyFetches = $this->betterNodeFinder->find($this->resolveNodesToLocate($node), function (Node $subNode) use ($paramName): bool {
             if ($subNode instanceof PropertyFetch) {
                 return $this->propertyFetchAnalyzer->isLocalPropertyFetchName($subNode, $paramName);
             }
@@ -158,11 +161,15 @@ final class PropertyFetchFinder
     }
     /**
      * @return Stmt[]
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    private function resolveNodesToLocate(Class_ $class): array
+    private function resolveNodesToLocate($node): array
     {
-        $propertyWithHooks = array_filter($class->getProperties(), fn(Property $property): bool => $property->hooks !== []);
-        return array_merge($propertyWithHooks, $class->getMethods());
+        if ($node instanceof ClassMethod) {
+            return [$node];
+        }
+        $propertyWithHooks = array_filter($node->getProperties(), fn(Property $property): bool => $property->hooks !== []);
+        return array_merge($propertyWithHooks, $node->getMethods());
     }
     /**
      * @param Stmt[] $stmts

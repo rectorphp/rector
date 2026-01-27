@@ -18,6 +18,7 @@ use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullable
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\BareCreateMockAssignToDirectUseRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\DataProviderArrayItemsNewLinedRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\EntityDocumentCreateMockToDirectNewRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\NoSetupWithParentCallOverrideRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveEmptyTestMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
@@ -121,5 +122,7 @@ return static function (RectorConfig $rectorConfig): void {
         EntityDocumentCreateMockToDirectNewRector::class,
         ReplaceAtMethodWithDesiredMatcherRector::class,
         BareCreateMockAssignToDirectUseRector::class,
+        // readability
+        NoSetupWithParentCallOverrideRector::class,
     ]);
 };

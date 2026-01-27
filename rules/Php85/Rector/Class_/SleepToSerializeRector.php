@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Php85\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
