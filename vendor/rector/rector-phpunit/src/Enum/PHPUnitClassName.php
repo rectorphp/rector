@@ -35,6 +35,10 @@ final class PHPUnitClassName
      */
     public const TEST_LISTENER = 'PHPUnit\Framework\TestListener';
     /**
+     * @var string
+     */
+    public const MOCK_OBJECT = 'PHPUnit\Framework\MockObject\MockObject';
+    /**
      * @var string[]
      */
     public const TEST_CLASSES = [self::TEST_CASE, self::TEST_CASE_LEGACY];
