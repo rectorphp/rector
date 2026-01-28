@@ -15,7 +15,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/6053
  * @see https://github.com/sebastianbergmann/phpunit/blob/12.0.0/ChangeLog-12.0.md
- * @see \Rector\PHPUnit\Tests\PHPUnit120\Rector\MethodCall\AssertIsTypeMethodCallRector\AssertIsTypeMethodCallRectorTest
+ *
+ * @see \Rector\PHPUnit\Tests\PHPUnit120\Rector\Class_\AssertIsTypeMethodCallRector\AssertIsTypeMethodCallRectorTest
  */
 final class AssertIsTypeMethodCallRector extends AbstractRector
 {

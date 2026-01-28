@@ -2045,6 +2045,7 @@ return array(
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AllowMockObjectsWithoutExpectationsAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AllowMockObjectsWithoutExpectationsAttributeRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AssertIsTypeMethodCallRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AssertIsTypeMethodCallRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\RemoveOverrideFinalConstructTestCaseRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/RemoveOverrideFinalConstructTestCaseRector.php',
+    'Rector\\PHPUnit\\PHPUnit120\\Rector\\MethodCall\\ExplicitMockExpectsCallRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/MethodCall/ExplicitMockExpectsCallRector.php',
     'Rector\\PHPUnit\\PHPUnit50\\Rector\\StaticCall\\GetMockRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit50/Rector/StaticCall/GetMockRector.php',
     'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
     'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\ExceptionAnnotationRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/ExceptionAnnotationRector.php',

@@ -296,41 +296,21 @@ final class Path
         $actualExtension = self::getExtension($path);
         $extension = ltrim($extension, '.');
         // No extension for paths
-        if ('/' === substr($path, -1)) {
+        if (substr_compare($path, '/', -strlen('/')) === 0) {
             return $path;
         }
         // No actual extension in path
-        if (empty($actualExtension)) {
-            return $path . ('.' === substr($path, -1) ? '' : '.') . $extension;
+        if (!$actualExtension) {
+            return $path . (substr_compare($path, '.', -strlen('.')) === 0 ? '' : '.') . $extension;
         }
         return substr($path, 0, -\strlen($actualExtension)) . $extension;
     }
+    /**
+     * Returns whether the given path is absolute.
+     */
     public static function isAbsolute(string $path): bool
     {
-        if ('' === $path) {
-            return \false;
-        }
-        // Strip scheme
-        if (\false !== ($schemeSeparatorPosition = strpos($path, '://')) && 1 !== $schemeSeparatorPosition) {
-            $path = (string) substr($path, $schemeSeparatorPosition + 3);
-        }
-        $firstCharacter = $path[0];
-        // UNIX root "/" or "\" (Windows style)
-        if ('/' === $firstCharacter || '\\' === $firstCharacter) {
-            return \true;
-        }
-        // Windows root
-        if (\strlen($path) > 1 && ctype_alpha($firstCharacter) && ':' === $path[1]) {
-            // Special case: "C:"
-            if (2 === \strlen($path)) {
-                return \true;
-            }
-            // Normal case: "C:/ or "C:\"
-            if ('/' === $path[2] || '\\' === $path[2]) {
-                return \true;
-            }
-        }
-        return \false;
+        return '' !== $path && (strspn($path, '/\\', 0, 1) || \strlen($path) > 3 && ctype_alpha($path[0]) && ':' === $path[1] && strspn($path, '/\\', 2, 1) || null !== parse_url($path, \PHP_URL_SCHEME));
     }
     public static function isRelative(string $path): bool
     {
@@ -376,10 +356,10 @@ final class Path
     public static function makeAbsolute(string $path, string $basePath): string
     {
         if ('' === $basePath) {
-            throw new InvalidArgumentException(sprintf('The base path must be a non-empty string. Got: "%s".', $basePath));
+            throw new InvalidArgumentException(\sprintf('The base path must be a non-empty string. Got: "%s".', $basePath));
         }
         if (!self::isAbsolute($basePath)) {
-            throw new InvalidArgumentException(sprintf('The base path "%s" is not an absolute path.', $basePath));
+            throw new InvalidArgumentException(\sprintf('The base path "%s" is not an absolute path.', $basePath));
         }
         if (self::isAbsolute($path)) {
             return self::canonicalize($path);
@@ -461,11 +441,11 @@ final class Path
         // If the passed path is absolute, but the base path is not, we
         // cannot generate a relative path
         if ('' !== $root && '' === $baseRoot) {
-            throw new InvalidArgumentException(sprintf('The absolute path "%s" cannot be made relative to the relative path "%s". You should provide an absolute base path instead.', $path, $basePath));
+            throw new InvalidArgumentException(\sprintf('The absolute path "%s" cannot be made relative to the relative path "%s". You should provide an absolute base path instead.', $path, $basePath));
         }
         // Fail if the roots of the two paths are different
         if ($baseRoot && $root !== $baseRoot) {
-            throw new InvalidArgumentException(sprintf('The path "%s" cannot be made relative to "%s", because they have different roots ("%s" and "%s").', $path, $basePath, $root, $baseRoot));
+            throw new InvalidArgumentException(\sprintf('The path "%s" cannot be made relative to "%s", because they have different roots ("%s" and "%s").', $path, $basePath, $root, $baseRoot));
         }
         if ('' === $relativeBasePath) {
             return $relativePath;
@@ -577,7 +557,7 @@ final class Path
                 continue;
             }
             // Only add slash if previous part didn't end with '/' or '\'
-            if (!\in_array(substr($finalPath, -1), ['/', '\\'])) {
+            if (!\in_array(substr($finalPath, -1), ['/', '\\'], \true)) {
                 $finalPath .= '/';
             }
             // If first part included a scheme like 'phar://' we allow \current part to start with '/', otherwise trim

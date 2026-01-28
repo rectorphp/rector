@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit26b401162da3a43f2d077daa053b5bf6
+class ComposerStaticInit43920ef660f86182970f9c36338f7965
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -2305,6 +2305,7 @@ class ComposerStaticInit26b401162da3a43f2d077daa053b5bf6
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AllowMockObjectsWithoutExpectationsAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AllowMockObjectsWithoutExpectationsAttributeRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AssertIsTypeMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AssertIsTypeMethodCallRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\RemoveOverrideFinalConstructTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/RemoveOverrideFinalConstructTestCaseRector.php',
+        'Rector\\PHPUnit\\PHPUnit120\\Rector\\MethodCall\\ExplicitMockExpectsCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/MethodCall/ExplicitMockExpectsCallRector.php',
         'Rector\\PHPUnit\\PHPUnit50\\Rector\\StaticCall\\GetMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit50/Rector/StaticCall/GetMockRector.php',
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\ExceptionAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/ExceptionAnnotationRector.php',
@@ -3232,9 +3233,9 @@ class ComposerStaticInit26b401162da3a43f2d077daa053b5bf6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit26b401162da3a43f2d077daa053b5bf6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit26b401162da3a43f2d077daa053b5bf6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit26b401162da3a43f2d077daa053b5bf6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit43920ef660f86182970f9c36338f7965::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit43920ef660f86182970f9c36338f7965::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit43920ef660f86182970f9c36338f7965::$classMap;
 
         }, null, ClassLoader::class);
     }
