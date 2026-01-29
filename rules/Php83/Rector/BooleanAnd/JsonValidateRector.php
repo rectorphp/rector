@@ -86,8 +86,14 @@ CODE_SAMPLE
         if (!$this->validateArgs($funcCall)) {
             return null;
         }
+        // Remove associative argument (position 1 or named) - json_validate does not have this param
+        foreach ($args as $index => $arg) {
+            if ($arg instanceof Arg && ($arg->name !== null && $arg->name->toString() === 'associative' || $arg->name === null && $index === 1)) {
+                unset($funcCall->args[$index]);
+                break;
+            }
+        }
         $funcCall->name = new Name('json_validate');
-        $funcCall->args = $args;
         return $funcCall;
     }
     public function providePolyfillPackage(): string
