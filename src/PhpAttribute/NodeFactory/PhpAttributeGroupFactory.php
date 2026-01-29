@@ -138,6 +138,9 @@ final class PhpAttributeGroupFactory
             if (!$arrayItem->value instanceof String_) {
                 continue;
             }
+            if ($arrayItem->value->value === '') {
+                continue;
+            }
             $arrayItem->value = new ClassConstFetch(new FullyQualified($arrayItem->value->value), 'class');
         }
     }
