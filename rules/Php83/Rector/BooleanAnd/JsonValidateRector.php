@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php83\Rector\BooleanAnd;
 
+use PhpParser\Node\Identifier;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
@@ -88,7 +89,7 @@ CODE_SAMPLE
         }
         // Remove associative argument (position 1 or named) - json_validate does not have this param
         foreach ($args as $index => $arg) {
-            if ($arg instanceof Arg && ($arg->name !== null && $arg->name->toString() === 'associative' || $arg->name === null && $index === 1)) {
+            if ($arg instanceof Arg && ($arg->name instanceof Identifier && $arg->name->toString() === 'associative' || !$arg->name instanceof Identifier && $index === 1)) {
                 unset($funcCall->args[$index]);
                 break;
             }

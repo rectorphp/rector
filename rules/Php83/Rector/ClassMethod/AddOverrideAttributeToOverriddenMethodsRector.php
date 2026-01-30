@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
@@ -242,6 +243,9 @@ CODE_SAMPLE
         }
         $parentClassMethod = $parentClass->getMethod($classMethod->name->toString());
         if (!$parentClassMethod instanceof ClassMethod) {
+            $parentClassMethod = $this->resolveClassMethodFromTraitUse($parentClass, $classMethod->name->toString());
+        }
+        if (!$parentClassMethod instanceof ClassMethod) {
             return \true;
         }
         if ($this->allowOverrideEmptyMethod) {
@@ -268,6 +272,22 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function resolveClassMethodFromTraitUse(ClassLike $classLike, string $methodName): ?ClassMethod
+    {
+        foreach ($classLike->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $traitName) {
+                $traitClass = $this->astResolver->resolveClassFromName($traitName->__toString());
+                if (!$traitClass instanceof Trait_) {
+                    continue;
+                }
+                $traitClassMethod = $traitClass->getMethod($methodName);
+                if ($traitClassMethod instanceof ClassMethod) {
+                    return $traitClassMethod;
+                }
+            }
+        }
+        return null;
     }
     private function implementsStringable(Class_ $class): bool
     {
