@@ -2304,6 +2304,7 @@ class ComposerStaticInit43920ef660f86182970f9c36338f7965
         'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\WithConsecutiveRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/WithConsecutiveRector.php',
         'Rector\\PHPUnit\\PHPUnit110\\Rector\\Class_\\NamedArgumentForDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit110/Rector/Class_/NamedArgumentForDataProviderRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\CallLike\\CreateStubOverCreateMockArgRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/CallLike/CreateStubOverCreateMockArgRector.php',
+        'Rector\\PHPUnit\\PHPUnit120\\Rector\\ClassMethod\\ExpressionCreateMockToCreateStubRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/ClassMethod/ExpressionCreateMockToCreateStubRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AllowMockObjectsWithoutExpectationsAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AllowMockObjectsWithoutExpectationsAttributeRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AssertIsTypeMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AssertIsTypeMethodCallRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\RemoveOverrideFinalConstructTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/RemoveOverrideFinalConstructTestCaseRector.php',
