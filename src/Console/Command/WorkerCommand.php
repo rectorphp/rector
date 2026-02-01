@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Console\Command;
 
-use RectorPrefix202601\Clue\React\NDJson\Decoder;
-use RectorPrefix202601\Clue\React\NDJson\Encoder;
-use RectorPrefix202601\React\EventLoop\StreamSelectLoop;
-use RectorPrefix202601\React\Socket\ConnectionInterface;
-use RectorPrefix202601\React\Socket\TcpConnector;
+use RectorPrefix202602\Clue\React\NDJson\Decoder;
+use RectorPrefix202602\Clue\React\NDJson\Encoder;
+use RectorPrefix202602\React\EventLoop\StreamSelectLoop;
+use RectorPrefix202602\React\Socket\ConnectionInterface;
+use RectorPrefix202602\React\Socket\TcpConnector;
 use Rector\Application\ApplicationFileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Configuration\ConfigurationFactory;
@@ -18,14 +18,14 @@ use Rector\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Util\MemoryLimiter;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
-use RectorPrefix202601\Symfony\Component\Console\Command\Command;
-use RectorPrefix202601\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202601\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202601\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202601\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202601\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix202602\Symfony\Component\Console\Command\Command;
+use RectorPrefix202602\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202602\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202602\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix202602\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix202602\Symplify\EasyParallel\Enum\ReactEvent;
 use Throwable;
-use RectorPrefix202601\Webmozart\Assert\Assert;
+use RectorPrefix202602\Webmozart\Assert\Assert;
 /**
  * Inspired at: https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92
  * https://github.com/phpstan/phpstan-src/blob/c471c7b050e0929daf432288770de673b394a983/src/Command/WorkerCommand.php

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202601\Webmozart\Assert;
+namespace RectorPrefix202602\Webmozart\Assert;
 
 use ArrayAccess;
 use Countable;

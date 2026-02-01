@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
-use RectorPrefix202601\Webmozart\Assert\Assert;
+use RectorPrefix202602\Webmozart\Assert\Assert;
 final class EntityMapping
 {
     /**

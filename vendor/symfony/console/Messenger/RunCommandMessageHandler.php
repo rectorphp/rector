@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202601\Symfony\Component\Console\Messenger;
+namespace RectorPrefix202602\Symfony\Component\Console\Messenger;
 
-use RectorPrefix202601\Symfony\Component\Console\Application;
-use RectorPrefix202601\Symfony\Component\Console\Command\Command;
-use RectorPrefix202601\Symfony\Component\Console\Exception\RunCommandFailedException;
-use RectorPrefix202601\Symfony\Component\Console\Input\StringInput;
-use RectorPrefix202601\Symfony\Component\Console\Output\BufferedOutput;
-use RectorPrefix202601\Symfony\Component\Messenger\Exception\RecoverableExceptionInterface;
-use RectorPrefix202601\Symfony\Component\Messenger\Exception\UnrecoverableExceptionInterface;
+use RectorPrefix202602\Symfony\Component\Console\Application;
+use RectorPrefix202602\Symfony\Component\Console\Command\Command;
+use RectorPrefix202602\Symfony\Component\Console\Exception\RunCommandFailedException;
+use RectorPrefix202602\Symfony\Component\Console\Input\StringInput;
+use RectorPrefix202602\Symfony\Component\Console\Output\BufferedOutput;
+use RectorPrefix202602\Symfony\Component\Messenger\Exception\RecoverableExceptionInterface;
+use RectorPrefix202602\Symfony\Component\Messenger\Exception\UnrecoverableExceptionInterface;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */

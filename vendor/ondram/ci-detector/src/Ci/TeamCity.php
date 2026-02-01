@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202601\OndraM\CiDetector\Ci;
+namespace RectorPrefix202602\OndraM\CiDetector\Ci;
 
-use RectorPrefix202601\OndraM\CiDetector\CiDetector;
-use RectorPrefix202601\OndraM\CiDetector\Env;
-use RectorPrefix202601\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202602\OndraM\CiDetector\CiDetector;
+use RectorPrefix202602\OndraM\CiDetector\Env;
+use RectorPrefix202602\OndraM\CiDetector\TrinaryLogic;
 class TeamCity extends AbstractCi
 {
     public static function isDetected(Env $env): bool

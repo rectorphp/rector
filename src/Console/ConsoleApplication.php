@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace Rector\Console;
 
-use RectorPrefix202601\Composer\XdebugHandler\XdebugHandler;
+use RectorPrefix202602\Composer\XdebugHandler\XdebugHandler;
 use Override;
 use Rector\Application\VersionResolver;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
 use Rector\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202601\Symfony\Component\Console\Application;
-use RectorPrefix202601\Symfony\Component\Console\Command\Command;
-use RectorPrefix202601\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202601\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202601\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202601\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202601\Webmozart\Assert\Assert;
+use RectorPrefix202602\Symfony\Component\Console\Application;
+use RectorPrefix202602\Symfony\Component\Console\Command\Command;
+use RectorPrefix202602\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202602\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202602\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202602\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202602\Webmozart\Assert\Assert;
 final class ConsoleApplication extends Application
 {
     /**

@@ -15,7 +15,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PhpParser\Node\FileNode;
 use Rector\VersionBonding\PhpVersionedFilter;
-use RectorPrefix202601\Webmozart\Assert\Assert;
+use RectorPrefix202602\Webmozart\Assert\Assert;
 /**
  *  Based on native NodeTraverser class, but heavily customized for Rector needs.
  *

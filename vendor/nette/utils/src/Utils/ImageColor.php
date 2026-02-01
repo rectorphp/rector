@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202601\Nette\Utils;
+namespace RectorPrefix202602\Nette\Utils;
 
-use RectorPrefix202601\Nette;
+use RectorPrefix202602\Nette;
 use function hexdec, ltrim, max, min, round, strlen;
 /**
  * Represent RGB color (0..255) with opacity (0..1).

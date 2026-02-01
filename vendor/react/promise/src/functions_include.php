@@ -1,7 +1,7 @@
 <?php
 
-namespace RectorPrefix202601;
+namespace RectorPrefix202602;
 
-if (!\function_exists('RectorPrefix202601\React\Promise\resolve')) {
+if (!\function_exists('RectorPrefix202602\React\Promise\resolve')) {
     require __DIR__ . '/functions.php';
 }

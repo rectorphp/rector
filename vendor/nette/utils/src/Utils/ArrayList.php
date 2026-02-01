@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202601\Nette\Utils;
+namespace RectorPrefix202602\Nette\Utils;
 
-use RectorPrefix202601\Nette;
+use RectorPrefix202602\Nette;
 use function array_slice, array_splice, count, is_int;
 /**
  * Provides the base class for a generic list (items can be accessed by index).

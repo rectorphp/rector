@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202601\Illuminate\Contracts\Database;
+namespace RectorPrefix202602\Illuminate\Contracts\Database;
 
 use Throwable;
 interface ConcurrencyErrorDetector

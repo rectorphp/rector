@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202601\OndraM\CiDetector\Exception;
+namespace RectorPrefix202602\OndraM\CiDetector\Exception;
 
 class CiNotDetectedException extends \RuntimeException
 {

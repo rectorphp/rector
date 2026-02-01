@@ -1,19 +1,19 @@
 <?php
 
-namespace RectorPrefix202601\Illuminate\Container;
+namespace RectorPrefix202602\Illuminate\Container;
 
 use ArrayAccess;
 use Closure;
 use Exception;
-use RectorPrefix202601\Illuminate\Container\Attributes\Bind;
-use RectorPrefix202601\Illuminate\Container\Attributes\Scoped;
-use RectorPrefix202601\Illuminate\Container\Attributes\Singleton;
-use RectorPrefix202601\Illuminate\Contracts\Container\BindingResolutionException;
-use RectorPrefix202601\Illuminate\Contracts\Container\CircularDependencyException;
-use RectorPrefix202601\Illuminate\Contracts\Container\Container as ContainerContract;
-use RectorPrefix202601\Illuminate\Contracts\Container\ContextualAttribute;
-use RectorPrefix202601\Illuminate\Contracts\Container\SelfBuilding;
-use RectorPrefix202601\Illuminate\Support\Collection;
+use RectorPrefix202602\Illuminate\Container\Attributes\Bind;
+use RectorPrefix202602\Illuminate\Container\Attributes\Scoped;
+use RectorPrefix202602\Illuminate\Container\Attributes\Singleton;
+use RectorPrefix202602\Illuminate\Contracts\Container\BindingResolutionException;
+use RectorPrefix202602\Illuminate\Contracts\Container\CircularDependencyException;
+use RectorPrefix202602\Illuminate\Contracts\Container\Container as ContainerContract;
+use RectorPrefix202602\Illuminate\Contracts\Container\ContextualAttribute;
+use RectorPrefix202602\Illuminate\Contracts\Container\SelfBuilding;
+use RectorPrefix202602\Illuminate\Support\Collection;
 use LogicException;
 use ReflectionAttribute;
 use ReflectionClass;

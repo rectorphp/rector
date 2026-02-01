@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202601;
+namespace RectorPrefix202602;
 
 /*
  * This file is part of the Symfony package.
@@ -10,7 +10,7 @@ namespace RectorPrefix202601;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-if (!\function_exists('RectorPrefix202601\trigger_deprecation')) {
+if (!\function_exists('RectorPrefix202602\trigger_deprecation')) {
     /**
      * Triggers a silenced deprecation notice.
      *

@@ -9,10 +9,10 @@
  * the LICENSE file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202601\Composer\XdebugHandler;
+namespace RectorPrefix202602\Composer\XdebugHandler;
 
-use RectorPrefix202601\Psr\Log\LoggerInterface;
-use RectorPrefix202601\Psr\Log\LogLevel;
+use RectorPrefix202602\Psr\Log\LoggerInterface;
+use RectorPrefix202602\Psr\Log\LogLevel;
 /**
  * @author John Stevenson <john-stevenson@blueyonder.co.uk>
  * @internal

@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202601\Symfony\Component\Process;
+namespace RectorPrefix202602\Symfony\Component\Process;
 
-use RectorPrefix202601\Symfony\Component\Process\Exception\InvalidArgumentException;
-use RectorPrefix202601\Symfony\Component\Process\Exception\LogicException;
-use RectorPrefix202601\Symfony\Component\Process\Exception\ProcessFailedException;
-use RectorPrefix202601\Symfony\Component\Process\Exception\ProcessSignaledException;
-use RectorPrefix202601\Symfony\Component\Process\Exception\ProcessTimedOutException;
-use RectorPrefix202601\Symfony\Component\Process\Exception\RuntimeException;
-use RectorPrefix202601\Symfony\Component\Process\Pipes\UnixPipes;
-use RectorPrefix202601\Symfony\Component\Process\Pipes\WindowsPipes;
+use RectorPrefix202602\Symfony\Component\Process\Exception\InvalidArgumentException;
+use RectorPrefix202602\Symfony\Component\Process\Exception\LogicException;
+use RectorPrefix202602\Symfony\Component\Process\Exception\ProcessFailedException;
+use RectorPrefix202602\Symfony\Component\Process\Exception\ProcessSignaledException;
+use RectorPrefix202602\Symfony\Component\Process\Exception\ProcessTimedOutException;
+use RectorPrefix202602\Symfony\Component\Process\Exception\RuntimeException;
+use RectorPrefix202602\Symfony\Component\Process\Pipes\UnixPipes;
+use RectorPrefix202602\Symfony\Component\Process\Pipes\WindowsPipes;
 /**
  * Process is a thin wrapper around proc_* functions to easily
  * start independent PHP processes.
@@ -138,7 +138,7 @@ class Process implements \IteratorAggregate
      */
     public function __construct(array $command, ?string $cwd = null, ?array $env = null, $input = null, ?float $timeout = 60)
     {
-        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202601\proc_open')) {
+        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202602\proc_open')) {
             throw new LogicException('The Process class relies on proc_open, which is not available on your PHP installation.');
         }
         $this->commandline = $command;
@@ -1144,7 +1144,7 @@ class Process implements \IteratorAggregate
         if (null !== self::$sigchild) {
             return self::$sigchild;
         }
-        if (!\function_exists('phpinfo') && !\function_exists('RectorPrefix202601\phpinfo')) {
+        if (!\function_exists('phpinfo') && !\function_exists('RectorPrefix202602\phpinfo')) {
             return self::$sigchild = \false;
         }
         ob_start();

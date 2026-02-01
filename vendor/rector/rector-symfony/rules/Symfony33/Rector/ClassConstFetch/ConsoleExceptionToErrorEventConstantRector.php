@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
-use RectorPrefix202601\Symfony\Component\Console\ConsoleEvents;
+use RectorPrefix202602\Symfony\Component\Console\ConsoleEvents;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

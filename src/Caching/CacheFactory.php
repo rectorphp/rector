@@ -7,7 +7,7 @@ use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use RectorPrefix202601\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202602\Symfony\Component\Filesystem\Filesystem;
 final class CacheFactory
 {
     /**

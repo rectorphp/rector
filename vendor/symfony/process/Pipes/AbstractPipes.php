@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202601\Symfony\Component\Process\Pipes;
+namespace RectorPrefix202602\Symfony\Component\Process\Pipes;
 
-use RectorPrefix202601\Symfony\Component\Process\Exception\InvalidArgumentException;
+use RectorPrefix202602\Symfony\Component\Process\Exception\InvalidArgumentException;
 /**
  * @author Romain Neutron <imprec@gmail.com>
  *
