@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -53,10 +54,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Property::class, ClassConst::class];
+        return [Property::class, ClassConst::class, Expression::class];
     }
     /**
-     * @param Property|ClassConst $node
+     * @param Property|ClassConst|Expression $node
      */
     public function refactor(Node $node): ?Node
     {

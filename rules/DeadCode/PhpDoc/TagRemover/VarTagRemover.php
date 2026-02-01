@@ -54,7 +54,7 @@ final class VarTagRemover
         $this->typeComparator = $typeComparator;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $property
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Expression $property
      */
     public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, $property): bool
     {

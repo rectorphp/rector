@@ -49,7 +49,6 @@ final class RegexMatcher
                     $delimiter = $delimiter;
                     break;
             }
-            /** @var string $modifiers */
             $modifiers = $this->resolveModifiers((string) Strings::after($pattern, $delimiter, -1));
             if (strpos($modifiers, 'e') === \false) {
                 return null;
