@@ -1986,6 +1986,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertRegExpRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertRegExpRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertThatToDirectAssertRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertThatToDirectAssertRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertTrueFalseToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\FlipAssertRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/FlipAssertRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\MatchAssertSameExpectedTypeRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/MatchAssertSameExpectedTypeRector.php',
