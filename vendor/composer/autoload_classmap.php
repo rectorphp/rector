@@ -1971,6 +1971,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\TypeWillReturnCallableArrowFunctionRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/TypeWillReturnCallableArrowFunctionRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\YieldDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/YieldDataProviderRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Expression\\AssertArrayCastedObjectToAssertSameRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Expression/AssertArrayCastedObjectToAssertSameRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\Expression\\ConfiguredMockEntityToSetterObjectRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Expression/ConfiguredMockEntityToSetterObjectRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\FuncCall\\AssertFuncCallToPHPUnitAssertRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/FuncCall/AssertFuncCallToPHPUnitAssertRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertCompareOnCountableWithMethodToAssertCountRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertCompareOnCountableWithMethodToAssertCountRector.php',
