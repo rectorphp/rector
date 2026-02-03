@@ -10,11 +10,15 @@ namespace RectorPrefix202602\Nette\Utils;
 use RectorPrefix202602\Nette;
 use function array_unique, ini_get, levenshtein, max, min, ob_end_clean, ob_get_clean, ob_start, preg_replace, strlen;
 use const PHP_OS_FAMILY;
+/**
+ * Miscellaneous utilities.
+ */
 class Helpers
 {
     public const IsWindows = PHP_OS_FAMILY === 'Windows';
     /**
      * Executes a callback and returns the captured output as a string.
+     * @param  callable(): void  $func
      */
     public static function capture(callable $func): string
     {

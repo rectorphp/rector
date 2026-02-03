@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202602\Nette\Localization;
 
 /**
- * Translator adapter.
+ * Translation provider.
  */
 interface Translator
 {

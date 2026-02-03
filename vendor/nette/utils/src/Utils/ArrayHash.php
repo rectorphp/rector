@@ -10,7 +10,7 @@ namespace RectorPrefix202602\Nette\Utils;
 use RectorPrefix202602\Nette;
 use function count, is_array, is_scalar, sprintf;
 /**
- * Provides objects to work as array.
+ * Array-like object with property access.
  * @template T
  * @implements \IteratorAggregate<array-key, T>
  * @implements \ArrayAccess<array-key, T>
@@ -31,7 +31,6 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
         return $obj;
     }
     /**
-     * Returns an iterator over all items.
      * @return \Iterator<array-key, T>
      */
     public function &getIterator(): \Iterator
@@ -40,9 +39,6 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
             yield $key => $this->{$key};
         }
     }
-    /**
-     * Returns items count.
-     */
     public function count(): int
     {
         return count((array) $this);

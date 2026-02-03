@@ -13,17 +13,17 @@ use RectorPrefix202602\Nette;
  *
  * @property   int $page
  * @property-read int $firstPage
- * @property-read int|null $lastPage
+ * @property-read ?int $lastPage
  * @property-read int<0,max> $firstItemOnPage
  * @property-read int<0,max> $lastItemOnPage
  * @property   int $base
  * @property-read bool $first
  * @property-read bool $last
- * @property-read int<0,max>|null $pageCount
+ * @property-read ?int<0,max> $pageCount
  * @property   positive-int $itemsPerPage
- * @property   int<0,max>|null $itemCount
+ * @property   ?int<0,max> $itemCount
  * @property-read int<0,max> $offset
- * @property-read int<0,max>|null $countdownOffset
+ * @property-read ?int<0,max> $countdownOffset
  * @property-read int<0,max> $length
  */
 class Paginator
@@ -33,10 +33,9 @@ class Paginator
     /** @var positive-int */
     private int $itemsPerPage = 1;
     private int $page = 1;
-    /** @var int<0, max>|null */
+    /** @var ?int<0, max> */
     private ?int $itemCount = null;
     /**
-     * Sets current page number.
      * @return static
      */
     public function setPage(int $page)
@@ -44,23 +43,14 @@ class Paginator
         $this->page = $page;
         return $this;
     }
-    /**
-     * Returns current page number.
-     */
     public function getPage(): int
     {
         return $this->base + $this->getPageIndex();
     }
-    /**
-     * Returns first page number.
-     */
     public function getFirstPage(): int
     {
         return $this->base;
     }
-    /**
-     * Returns last page number.
-     */
     public function getLastPage(): ?int
     {
         return $this->itemCount === null ? null : $this->base + max(0, $this->getPageCount() - 1);
@@ -82,7 +72,6 @@ class Paginator
         return $this->offset + $this->length;
     }
     /**
-     * Sets first page (base) number.
      * @return static
      */
     public function setBase(int $base)
@@ -90,9 +79,6 @@ class Paginator
         $this->base = $base;
         return $this;
     }
-    /**
-     * Returns first page (base) number.
-     */
     public function getBase(): int
     {
         return $this->base;
@@ -106,30 +92,22 @@ class Paginator
         $index = max(0, $this->page - $this->base);
         return $this->itemCount === null ? $index : min($index, max(0, $this->getPageCount() - 1));
     }
-    /**
-     * Is the current page the first one?
-     */
     public function isFirst(): bool
     {
         return $this->getPageIndex() === 0;
     }
-    /**
-     * Is the current page the last one?
-     */
     public function isLast(): bool
     {
         return $this->itemCount === null ? \false : $this->getPageIndex() >= $this->getPageCount() - 1;
     }
     /**
-     * Returns the total number of pages.
-     * @return int<0, max>|null
+     * @return ?int<0, max>
      */
     public function getPageCount(): ?int
     {
         return $this->itemCount === null ? null : (int) ceil($this->itemCount / $this->itemsPerPage);
     }
     /**
-     * Sets the number of items to display on a single page.
      * @return static
      */
     public function setItemsPerPage(int $itemsPerPage)
@@ -138,7 +116,6 @@ class Paginator
         return $this;
     }
     /**
-     * Returns the number of items to display on a single page.
      * @return positive-int
      */
     public function getItemsPerPage(): int
@@ -146,7 +123,6 @@ class Paginator
         return $this->itemsPerPage;
     }
     /**
-     * Sets the total number of items.
      * @return static
      */
     public function setItemCount(?int $itemCount = null)
@@ -155,8 +131,7 @@ class Paginator
         return $this;
     }
     /**
-     * Returns the total number of items.
-     * @return int<0, max>|null
+     * @return ?int<0, max>
      */
     public function getItemCount(): ?int
     {
@@ -172,7 +147,7 @@ class Paginator
     }
     /**
      * Returns the absolute index of the first item on current page in countdown paging.
-     * @return int<0, max>|null
+     * @return ?int<0, max>
      */
     public function getCountdownOffset(): ?int
     {

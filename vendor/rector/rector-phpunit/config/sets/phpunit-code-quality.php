@@ -8,6 +8,7 @@ use Rector\PHPUnit\CodeQuality\Rector\CallLike\DirectInstanceOverMockArgRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddParamTypeFromDependsRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddReturnTypeToDependedRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\InlineStubPropertyToCreateStubMethodCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\NarrowUnusedSetUpDefinedPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
@@ -120,6 +121,7 @@ return static function (RectorConfig $rectorConfig): void {
         CreateStubOverCreateMockArgRector::class,
         ExpressionCreateMockToCreateStubRector::class,
         PropertyCreateMockToCreateStubRector::class,
+        InlineStubPropertyToCreateStubMethodCallRector::class,
         // @test first, enable later
         // \Rector\PHPUnit\CodeQuality\Rector\Expression\ConfiguredMockEntityToSetterObjectRector::class,
         FinalizeTestCaseClassRector::class,

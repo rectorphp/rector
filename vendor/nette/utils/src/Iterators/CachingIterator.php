@@ -9,8 +9,11 @@ namespace RectorPrefix202602\Nette\Iterators;
 
 use RectorPrefix202602\Nette;
 /**
- * Smarter caching iterator.
+ * Enhanced caching iterator with first/last/counter tracking.
  *
+ * @template TKey
+ * @template TValue
+ * @extends \CachingIterator<TKey, TValue, \Iterator<TKey, TValue>>
  * @property-read bool $first
  * @property-read bool $last
  * @property-read bool $empty
@@ -25,7 +28,7 @@ class CachingIterator extends \CachingIterator implements \Countable
     use Nette\SmartObject;
     private int $counter = 0;
     /**
-     * @param iterable|\stdClass $iterable
+     * @param  iterable<TKey, TValue>|\stdClass  $iterable
      */
     public function __construct($iterable)
     {
@@ -46,37 +49,22 @@ class CachingIterator extends \CachingIterator implements \Countable
     {
         return !$this->hasNext() || $gridWidth && $this->counter % $gridWidth === 0;
     }
-    /**
-     * Is the iterator empty?
-     */
     public function isEmpty(): bool
     {
         return $this->counter === 0;
     }
-    /**
-     * Is the counter odd?
-     */
     public function isOdd(): bool
     {
         return $this->counter % 2 === 1;
     }
-    /**
-     * Is the counter even?
-     */
     public function isEven(): bool
     {
         return $this->counter % 2 === 0;
     }
-    /**
-     * Returns the counter.
-     */
     public function getCounter(): int
     {
         return $this->counter;
     }
-    /**
-     * Returns the count of elements.
-     */
     public function count(): int
     {
         $inner = $this->getInnerIterator();
@@ -105,7 +93,6 @@ class CachingIterator extends \CachingIterator implements \Countable
         $this->counter = parent::valid() ? 1 : 0;
     }
     /**
-     * Returns the next key.
      * @return mixed
      */
     public function getNextKey()
@@ -113,7 +100,6 @@ class CachingIterator extends \CachingIterator implements \Countable
         return $this->getInnerIterator()->key();
     }
     /**
-     * Returns the next element.
      * @return mixed
      */
     public function getNextValue()

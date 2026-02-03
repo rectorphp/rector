@@ -17,6 +17,7 @@ final class Iterables
     use Nette\StaticClass;
     /**
      * Tests for the presence of value.
+     * @param  iterable<mixed>  $iterable
      * @param mixed $value
      */
     public static function contains(iterable $iterable, $value): bool
@@ -30,6 +31,7 @@ final class Iterables
     }
     /**
      * Tests for the presence of key.
+     * @param  iterable<mixed>  $iterable
      * @param mixed $key
      */
     public static function containsKey(iterable $iterable, $key): bool
@@ -47,6 +49,7 @@ final class Iterables
      * @template V
      * @param  iterable<K, V>  $iterable
      * @param  ?callable(V, K, iterable<K, V>): bool  $predicate
+     * @param  ?callable(): V  $else
      * @return ?V
      */
     public static function first(iterable $iterable, ?callable $predicate = null, ?callable $else = null)
@@ -64,6 +67,7 @@ final class Iterables
      * @template V
      * @param  iterable<K, V>  $iterable
      * @param  ?callable(V, K, iterable<K, V>): bool  $predicate
+     * @param  ?callable(): K  $else
      * @return ?K
      */
     public static function firstKey(iterable $iterable, ?callable $predicate = null, ?callable $else = null)
@@ -167,10 +171,10 @@ final class Iterables
      */
     public static function repeatable(callable $factory): \IteratorAggregate
     {
-        return new class($factory) implements \IteratorAggregate
+        return new class(\Closure::fromCallable($factory)) implements \IteratorAggregate
         {
-            private $factory;
-            public function __construct($factory)
+            private \Closure $factory;
+            public function __construct(\Closure $factory)
             {
                 $this->factory = $factory;
             }
@@ -192,11 +196,15 @@ final class Iterables
     {
         return new class(self::toIterator($iterable)) implements \IteratorAggregate
         {
+            /**
+             * @readonly
+             */
             private \Iterator $iterator;
             private array $cache = [];
             public function __construct(\Iterator $iterator, array $cache = [])
             {
                 $this->iterator = $iterator;
+                /** @var array<array{mixed, mixed}> */
                 $this->cache = $cache;
             }
             public function getIterator(): \Generator

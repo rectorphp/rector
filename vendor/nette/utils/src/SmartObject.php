@@ -18,6 +18,7 @@ use RectorPrefix202602\Nette\Utils\ObjectHelpers;
 trait SmartObject
 {
     /**
+     * @param  list<mixed>  $args
      * @return mixed
      * @throws MemberAccessException
      */
@@ -39,6 +40,8 @@ trait SmartObject
         ObjectHelpers::strictCall($class, $name);
     }
     /**
+     * @param  list<mixed>  $args
+     * @return never
      * @throws MemberAccessException
      */
     public static function __callStatic(string $name, array $args)

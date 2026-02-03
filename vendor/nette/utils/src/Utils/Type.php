@@ -36,9 +36,8 @@ final class Type
         $type = $reflection instanceof \ReflectionFunctionAbstract ? $reflection->getReturnType() ?? ($reflection instanceof \ReflectionMethod ? $reflection->getTentativeReturnType() : null) : $reflection->getType();
         return $type ? self::fromReflectionType($type, $reflection, \true) : null;
     }
-    /**
-     * @return $this|string
-     */
+    /** @param  \ReflectionFunctionAbstract|\ReflectionParameter|\ReflectionProperty  $of
+     * @return $this|string */
     private static function fromReflectionType(\ReflectionType $type, $of, bool $asObject)
     {
         if ($type instanceof \ReflectionNamedType) {
@@ -85,7 +84,7 @@ final class Type
     }
     /**
      * Resolves 'self', 'static' and 'parent' to the actual class name.
-     * @param \ReflectionFunctionAbstract|\ReflectionParameter|\ReflectionProperty $of
+     * @param \ReflectionFunction|\ReflectionMethod|\ReflectionParameter|\ReflectionProperty $of
      */
     public static function resolve(string $type, $of): string
     {
@@ -102,6 +101,7 @@ final class Type
             return $type;
         }
     }
+    /** @param  array<string|self>  $types */
     private function __construct(array $types, string $kind = '|')
     {
         $o = array_search('null', $types, \true);
@@ -144,7 +144,7 @@ final class Type
     }
     /**
      * Returns the array of subtypes that make up the compound type as strings.
-     * @return array<int, string|string[]>
+     * @return list<string|array<string|array<mixed>>>
      */
     public function getNames(): array
     {
@@ -223,10 +223,15 @@ final class Type
         $type = is_string($type) ? self::fromString($type) : $type;
         return $type->isUnion() ? Arrays::every($type->types, fn($t) => $this->allowsAny($t instanceof self ? $t->types : [$t])) : $this->allowsAny($type->types);
     }
+    /** @param  (string|self)[]  $givenTypes */
     private function allowsAny(array $givenTypes): bool
     {
         return $this->isUnion() ? Arrays::some($this->types, fn($t) => $this->allowsAll($t instanceof self ? $t->types : [$t], $givenTypes)) : $this->allowsAll($this->types, $givenTypes);
     }
+    /**
+     * @param  (string|self)[]  $ourTypes
+     * @param  (string|self)[]  $givenTypes
+     */
     private function allowsAll(array $ourTypes, array $givenTypes): bool
     {
         return Arrays::every($ourTypes, fn($ourType) => Arrays::some($givenTypes, fn($givenType) => Validators::isBuiltinType($ourType) ? strcasecmp($ourType, $givenType) === 0 : is_a($givenType, $ourType, \true)));

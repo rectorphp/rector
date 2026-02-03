@@ -48,6 +48,10 @@ class ImageColor
         $this->blue = max(0, min(255, $blue));
         $this->opacity = max(0, min(1, $opacity));
     }
+    /**
+     * Returns GD-compatible color array [R, G, B, alpha].
+     * @return array{int, int, int, int}
+     */
     public function toRGBA(): array
     {
         return [max(0, min(255, $this->red)), max(0, min(255, $this->green)), max(0, min(255, $this->blue)), max(0, min(127, (int) round(127 - $this->opacity * 127)))];

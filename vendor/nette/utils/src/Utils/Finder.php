@@ -26,20 +26,20 @@ class Finder implements \IteratorAggregate
     private array $find = [];
     /** @var string[] */
     private array $in = [];
-    /** @var \Closure[] */
+    /** @var array<\Closure(FileInfo): bool> */
     private array $filters = [];
-    /** @var \Closure[] */
+    /** @var array<\Closure(FileInfo): bool> */
     private array $descentFilters = [];
     /** @var array<string|self> */
     private array $appends = [];
     private bool $childFirst = \false;
-    /** @var ?callable */
-    private $sort;
+    /** @var ?(\Closure(FileInfo, FileInfo): int) */
+    private ?\Closure $sort = null;
     private int $maxDepth = -1;
     private bool $ignoreUnreadableDirs = \true;
     /**
      * Begins search for files and directories matching mask.
-     * @param string|mixed[] $masks
+     * @param  string|list<string>  $masks
      * @return static
      */
     public static function find($masks = ['*'])
@@ -50,7 +50,7 @@ class Finder implements \IteratorAggregate
     }
     /**
      * Begins search for files matching mask.
-     * @param string|mixed[] $masks
+     * @param  string|list<string>  $masks
      * @return static
      */
     public static function findFiles($masks = ['*'])
@@ -61,7 +61,7 @@ class Finder implements \IteratorAggregate
     }
     /**
      * Begins search for directories matching mask.
-     * @param string|mixed[] $masks
+     * @param  string|list<string>  $masks
      * @return static
      */
     public static function findDirectories($masks = ['*'])
@@ -72,7 +72,7 @@ class Finder implements \IteratorAggregate
     }
     /**
      * Finds files matching the specified masks.
-     * @param string|mixed[] $masks
+     * @param  string|list<string>  $masks
      * @return static
      */
     public function files($masks = ['*'])
@@ -81,16 +81,15 @@ class Finder implements \IteratorAggregate
     }
     /**
      * Finds directories matching the specified masks.
-     * @param string|mixed[] $masks
+     * @param  string|list<string>  $masks
      * @return static
      */
     public function directories($masks = ['*'])
     {
         return $this->addMask((array) $masks, 'dir');
     }
-    /**
-     * @return static
-     */
+    /** @param  list<string>  $masks
+     * @return static */
     private function addMask(array $masks, string $mode)
     {
         foreach ($masks as $mask) {
@@ -110,7 +109,7 @@ class Finder implements \IteratorAggregate
     }
     /**
      * Searches in the given directories. Wildcards are allowed.
-     * @param string|mixed[] $paths
+     * @param  string|list<string>  $paths
      * @return static
      */
     public function in($paths)
@@ -122,7 +121,7 @@ class Finder implements \IteratorAggregate
     }
     /**
      * Searches recursively from the given directories. Wildcards are allowed.
-     * @param string|mixed[] $paths
+     * @param  string|list<string>  $paths
      * @return static
      */
     public function from($paths)
@@ -132,6 +131,7 @@ class Finder implements \IteratorAggregate
         $this->addLocation($paths, '/**');
         return $this;
     }
+    /** @param  list<string>  $paths */
     private function addLocation(array $paths, string $ext): void
     {
         foreach ($paths as $path) {
@@ -167,7 +167,7 @@ class Finder implements \IteratorAggregate
      */
     public function sortBy(callable $callback)
     {
-        $this->sort = $callback;
+        $this->sort = \Closure::fromCallable($callback);
         return $this;
     }
     /**
@@ -181,7 +181,7 @@ class Finder implements \IteratorAggregate
     }
     /**
      * Adds the specified paths or appends a new finder that returns.
-     * @param string|mixed[]|null $paths
+     * @param  string|list<string>|null  $paths
      * @return static
      */
     public function append($paths = null)
@@ -195,7 +195,7 @@ class Finder implements \IteratorAggregate
     /********************* filtering ****************d*g**/
     /**
      * Skips entries that matches the given masks relative to the ones defined with the in() or from() methods.
-     * @param string|mixed[] $masks
+     * @param  string|list<string>  $masks
      * @return static
      */
     public function exclude($masks)
@@ -259,7 +259,7 @@ class Finder implements \IteratorAggregate
             }
             [, $operator, $size, $unit] = $matches;
             $units = ['' => 1, 'k' => 1000.0, 'm' => 1000000.0, 'g' => 1000000000.0];
-            $size *= $units[strtolower($unit)];
+            $size = (float) $size * $units[strtolower($unit)];
             $operator = $operator ?: '=';
         }
         return $this->filter(fn(FileInfo $file): bool => !$file->isFile() || Helpers::compare($file->getSize(), $operator, $size));
@@ -358,6 +358,7 @@ class Finder implements \IteratorAggregate
             }
         }
     }
+    /** @param  iterable<string>  $pathNames */
     private function convertToFiles(iterable $pathNames, string $relativePath, bool $absolute): \Generator
     {
         foreach ($pathNames as $pathName) {
@@ -368,6 +369,10 @@ class Finder implements \IteratorAggregate
             yield new FileInfo($pathName, $relativePath);
         }
     }
+    /**
+     * @param  (\Closure(FileInfo): bool)[]  $filters
+     * @param  array<int, bool>  $cache
+     */
     private function proveFilters(array $filters, FileInfo $file, array &$cache): bool
     {
         foreach ($filters as $filter) {
@@ -414,6 +419,7 @@ class Finder implements \IteratorAggregate
     }
     /**
      * Since glob() does not know ** wildcard, we divide the path into a part for glob and a part for manual traversal.
+     * @return array{string, string, bool}
      */
     private static function splitRecursivePart(string $path): array
     {

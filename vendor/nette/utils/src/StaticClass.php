@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202602\Nette;
 
 /**
- * Static class.
+ * Prevents instantiation.
  */
 trait StaticClass
 {

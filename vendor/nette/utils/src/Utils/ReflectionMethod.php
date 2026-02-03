@@ -14,6 +14,8 @@ use function explode, is_string, str_contains;
  */
 final class ReflectionMethod extends \ReflectionMethod
 {
+    /** @var \ReflectionClass<object>
+     * @readonly */
     private \ReflectionClass $originalClass;
     /**
      * @param object|string $objectOrMethod
@@ -26,6 +28,7 @@ final class ReflectionMethod extends \ReflectionMethod
         parent::__construct($objectOrMethod, $method);
         $this->originalClass = new \ReflectionClass($objectOrMethod);
     }
+    /** @return \ReflectionClass<object> */
     public function getOriginalClass(): \ReflectionClass
     {
         return $this->originalClass;

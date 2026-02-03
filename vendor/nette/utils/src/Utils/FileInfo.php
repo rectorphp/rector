@@ -18,12 +18,12 @@ final class FileInfo extends \SplFileInfo
     /**
      * @readonly
      */
-    private string $relativePath;
+    private string $relativePath = '';
     public function __construct(string $file, string $relativePath = '')
     {
-        parent::__construct($file);
-        $this->setInfoClass(static::class);
         $this->relativePath = $relativePath;
+        parent::__construct($file);
+        $this->setInfoClass(self::class);
     }
     /**
      * Returns the relative directory path.

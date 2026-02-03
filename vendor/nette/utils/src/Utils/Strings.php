@@ -407,6 +407,7 @@ class Strings
     }
     /**
      * Divides the string into arrays according to the regular expression. Expressions in parentheses will be captured and returned as well.
+     * @return ($captureOffset is true ? list<array{string, int}> : list<string>)
      * @param bool|int $captureOffset
      */
     public static function split(
@@ -429,6 +430,7 @@ class Strings
     /**
      * Searches the string for the part matching the regular expression and returns
      * an array with the found expression and individual subexpressions, or `null`.
+     * @return ($captureOffset is true ? ?array<?array{string, int}> : ?array<?string>)
      * @param bool|int $captureOffset
      */
     public static function match(
@@ -448,6 +450,7 @@ class Strings
             $offset = strlen(self::substring($subject, 0, $offset));
             $pattern .= 'u';
         }
+        $m = [];
         if ($offset > strlen($subject)) {
             return null;
         } elseif (!self::pcre('preg_match', [$pattern, $subject, &$m, $flags, $offset])) {
@@ -461,7 +464,10 @@ class Strings
     /**
      * Searches the string for all occurrences matching the regular expression and
      * returns an array of arrays containing the found expression and each subexpression.
-     * @return ($lazy is true ? \Generator<int, array> : array[])
+     * @return ($lazy is true
+     *     ? \Generator<int, ($captureOffset is true ? array<?array{string, int}> : array<?string>)>
+     *     : ($captureOffset is true ? list<array<?array{string, int}>> : list<array<?string>>)
+     * )
      * @param bool|int $captureOffset
      */
     public static function matchAll(
@@ -486,6 +492,7 @@ class Strings
             $flags = PREG_OFFSET_CAPTURE | ($unmatchedAsNull ? PREG_UNMATCHED_AS_NULL : 0);
             return (function () use ($utf8, $captureOffset, $flags, $subject, $pattern, $offset) {
                 $counter = 0;
+                $m = null;
                 while ($offset <= strlen($subject) - ($counter ? 1 : 0) && self::pcre('preg_match', [$pattern, $subject, &$m, $flags, $offset])) {
                     $offset = $m[0][1] + max(1, strlen($m[0][0]));
                     if (!$captureOffset) {
@@ -501,13 +508,14 @@ class Strings
             return [];
         }
         $flags = is_int($captureOffset) ? $captureOffset : ($captureOffset ? PREG_OFFSET_CAPTURE : 0) | ($unmatchedAsNull ? PREG_UNMATCHED_AS_NULL : 0) | ($patternOrder ? PREG_PATTERN_ORDER : 0);
+        $m = [];
         self::pcre('preg_match_all', [$pattern, $subject, &$m, $flags & PREG_PATTERN_ORDER ? $flags : $flags | PREG_SET_ORDER, $offset]);
         return $utf8 && $captureOffset ? self::bytesToChars($subject, $m) : $m;
     }
     /**
      * Replaces all occurrences matching regular expression $pattern which can be string or array in the form `pattern => replacement`.
-     * @param string|mixed[] $pattern
-     * @param string|callable $replacement
+     * @param  string|array<string, string>  $pattern
+     * @param  string|(callable(array<?string>): string)  $replacement
      */
     public static function replace(
         string $subject,
@@ -543,6 +551,10 @@ class Strings
         }
         return self::pcre('preg_replace', [$pattern, $replacement, $subject, $limit]);
     }
+    /**
+     * @param  list<array<array{string, int}>>  $groups
+     * @return list<array<array{string, int}>>
+     */
     private static function bytesToChars(string $s, array $groups): array
     {
         $lastBytes = $lastChars = 0;
@@ -559,7 +571,11 @@ class Strings
         }
         return $groups;
     }
-    /** @internal */
+    /**
+     * @param  list<mixed>  $args
+     * @internal
+     * @return mixed
+     */
     public static function pcre(string $func, array $args)
     {
         $res = Callback::invokeSafe($func, $args, function (string $message) use ($args): void {

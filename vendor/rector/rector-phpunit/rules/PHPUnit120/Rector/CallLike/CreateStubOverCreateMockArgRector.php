@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\PHPUnit120\Rector\CallLike;
 
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
