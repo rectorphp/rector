@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\NodeFinder;
 
-use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -26,16 +26,16 @@ final class PropertyFetchUsageFinder
     /**
      * @return PropertyFetch[]
      */
-    public function findInNew(Class_ $class, string $propertyName): array
+    public function findInCallLikes(Class_ $class, string $propertyName): array
     {
-        /** @var New_[] $news */
-        $news = $this->betterNodeFinder->findInstancesOfScoped($class->getMethods(), New_::class);
+        /** @var CallLike[] $callLikes */
+        $callLikes = $this->betterNodeFinder->findInstancesOfScoped($class->getMethods(), CallLike::class);
         $propertyFetchesInNewArgs = [];
-        foreach ($news as $new) {
-            if ($new->isFirstClassCallable()) {
+        foreach ($callLikes as $callLike) {
+            if ($callLike->isFirstClassCallable()) {
                 continue;
             }
-            foreach ($new->getArgs() as $arg) {
+            foreach ($callLike->getArgs() as $arg) {
                 if (!$arg->value instanceof PropertyFetch) {
                     continue;
                 }

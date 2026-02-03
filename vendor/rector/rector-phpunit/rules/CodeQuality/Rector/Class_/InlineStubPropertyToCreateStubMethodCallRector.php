@@ -125,7 +125,7 @@ CODE_SAMPLE
             if (!isset($propertyNamesToStubClasses[$propertyName])) {
                 continue;
             }
-            $currentPropertyFetchesInNewArgs = $this->propertyFetchUsageFinder->findInNew($node, $propertyName);
+            $currentPropertyFetchesInNewArgs = $this->propertyFetchUsageFinder->findInCallLikes($node, $propertyName);
             // are there more uses than simple passing to a new instance?
             $totalPropertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($node, $propertyName);
             if (count($totalPropertyFetches) - 1 !== count($currentPropertyFetchesInNewArgs)) {
