@@ -455,6 +455,9 @@ final class PHPStanNodeScopeResolver
             $arrayItem->key->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         }
         $arrayItem->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        if ($arrayItem->value instanceof List_) {
+            $this->processArray($arrayItem->value, $mutatingScope);
+        }
     }
     /**
      * @param callable(Node $trait, MutatingScope $scope): void $nodeCallback
