@@ -140,6 +140,6 @@ final class InlineCodeParser
             $concat->right->value .= '.';
         }
         $string = $this->stringify($concat->left) . $this->stringify($concat->right);
-        return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, static fn(array $match) => $match['variable']);
+        return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, static fn(array $match): string => (string) $match['variable']);
     }
 }

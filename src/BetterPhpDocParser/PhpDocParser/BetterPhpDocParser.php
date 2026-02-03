@@ -117,7 +117,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
         $phpDocTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
         if ($phpDocTagValueNode instanceof GenericTagValueNode) {
-            $phpDocTagValueNode->value = Strings::replace($phpDocTagValueNode->value, self::MULTI_NEW_LINES_REGEX, static fn(array $match) => $match['new_line']);
+            $phpDocTagValueNode->value = Strings::replace($phpDocTagValueNode->value, self::MULTI_NEW_LINES_REGEX, static fn(array $match): string => (string) $match['new_line']);
         }
         return $phpDocTagValueNode;
     }

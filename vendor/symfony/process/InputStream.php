@@ -25,10 +25,8 @@ class InputStream implements \IteratorAggregate
     private bool $open = \true;
     /**
      * Sets a callback that is called when the write buffer becomes empty.
-     *
-     * @return void
      */
-    public function onEmpty(?callable $onEmpty = null)
+    public function onEmpty(?callable $onEmpty = null): void
     {
         $this->onEmpty = null !== $onEmpty ? \Closure::fromCallable($onEmpty) : null;
     }
@@ -37,10 +35,8 @@ class InputStream implements \IteratorAggregate
      *
      * @param mixed $input The input to append as scalar,
      *                                                                stream resource or \Traversable
-     *
-     * @return void
      */
-    public function write($input)
+    public function write($input): void
     {
         if (null === $input) {
             return;
@@ -52,19 +48,15 @@ class InputStream implements \IteratorAggregate
     }
     /**
      * Closes the write buffer.
-     *
-     * @return void
      */
-    public function close()
+    public function close(): void
     {
         $this->open = \false;
     }
     /**
      * Tells whether the write buffer is closed or not.
-     *
-     * @return bool
      */
-    public function isClosed()
+    public function isClosed(): bool
     {
         return !$this->open;
     }

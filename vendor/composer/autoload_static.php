@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit43920ef660f86182970f9c36338f7965
+class ComposerStaticInit6374fd21a3f525a40760d79e3596b56b
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -1242,6 +1242,7 @@ class ComposerStaticInit43920ef660f86182970f9c36338f7965
         'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\LogicException' => __DIR__ . '/..' . '/symfony/process/Exception/LogicException.php',
         'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\ProcessFailedException' => __DIR__ . '/..' . '/symfony/process/Exception/ProcessFailedException.php',
         'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\ProcessSignaledException' => __DIR__ . '/..' . '/symfony/process/Exception/ProcessSignaledException.php',
+        'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\ProcessStartFailedException' => __DIR__ . '/..' . '/symfony/process/Exception/ProcessStartFailedException.php',
         'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\ProcessTimedOutException' => __DIR__ . '/..' . '/symfony/process/Exception/ProcessTimedOutException.php',
         'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\RunProcessFailedException' => __DIR__ . '/..' . '/symfony/process/Exception/RunProcessFailedException.php',
         'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/process/Exception/RuntimeException.php',
@@ -3243,9 +3244,9 @@ class ComposerStaticInit43920ef660f86182970f9c36338f7965
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit43920ef660f86182970f9c36338f7965::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit43920ef660f86182970f9c36338f7965::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit43920ef660f86182970f9c36338f7965::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6374fd21a3f525a40760d79e3596b56b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6374fd21a3f525a40760d79e3596b56b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6374fd21a3f525a40760d79e3596b56b::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -982,6 +982,7 @@ return array(
     'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\LogicException' => $vendorDir . '/symfony/process/Exception/LogicException.php',
     'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\ProcessFailedException' => $vendorDir . '/symfony/process/Exception/ProcessFailedException.php',
     'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\ProcessSignaledException' => $vendorDir . '/symfony/process/Exception/ProcessSignaledException.php',
+    'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\ProcessStartFailedException' => $vendorDir . '/symfony/process/Exception/ProcessStartFailedException.php',
     'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\ProcessTimedOutException' => $vendorDir . '/symfony/process/Exception/ProcessTimedOutException.php',
     'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\RunProcessFailedException' => $vendorDir . '/symfony/process/Exception/RunProcessFailedException.php',
     'RectorPrefix202602\\Symfony\\Component\\Process\\Exception\\RuntimeException' => $vendorDir . '/symfony/process/Exception/RuntimeException.php',

@@ -1818,12 +1818,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "13caf933b09f2bb5780af6dd570fda6815e46b89"
+                "reference": "d99e5c814b051ec31db9485ac82688ec2c4860e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/13caf933b09f2bb5780af6dd570fda6815e46b89",
-                "reference": "13caf933b09f2bb5780af6dd570fda6815e46b89",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/d99e5c814b051ec31db9485ac82688ec2c4860e3",
+                "reference": "d99e5c814b051ec31db9485ac82688ec2c4860e3",
                 "shasum": ""
             },
             "require": {
@@ -1834,7 +1834,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "^2.1.33",
+                "phpstan\/phpstan": "^2.1.38",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^12.5",
@@ -1850,7 +1850,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-02-03T21:27:37+00:00",
+            "time": "2026-02-03T22:23:10+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2846,23 +2846,23 @@
         },
         {
             "name": "symfony\/process",
-            "version": "v6.4.33",
-            "version_normalized": "6.4.33.0",
+            "version": "v7.4.5",
+            "version_normalized": "7.4.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/process.git",
-                "reference": "c46e854e79b52d07666e43924a20cb6dc546644e"
+                "reference": "608476f4604102976d687c483ac63a79ba18cc97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/c46e854e79b52d07666e43924a20cb6dc546644e",
-                "reference": "c46e854e79b52d07666e43924a20cb6dc546644e",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/608476f4604102976d687c483ac63a79ba18cc97",
+                "reference": "608476f4604102976d687c483ac63a79ba18cc97",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
-            "time": "2026-01-23T16:02:12+00:00",
+            "time": "2026-01-26T15:07:59+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2890,7 +2890,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.4.33"
+                "source": "https:\/\/github.com\/symfony\/process\/tree\/v7.4.5"
             },
             "funding": [
                 {

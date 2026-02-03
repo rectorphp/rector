@@ -92,7 +92,7 @@ final class RegexMatcher
         if (!isset($matches['modifiers'])) {
             return null;
         }
-        if (strpos((string) $matches['modifiers'], 'e') === \false) {
+        if (strpos($matches['modifiers'], 'e') === \false) {
             return null;
         }
         // replace last "e" in the code

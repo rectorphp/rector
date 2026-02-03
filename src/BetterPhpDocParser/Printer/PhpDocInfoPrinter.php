@@ -165,7 +165,7 @@ final class PhpDocInfoPrinter
         if (strncmp($output, '/**', strlen('/**')) === 0 && !StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
             $output .= ' */';
         }
-        return Strings::replace($output, self::NEW_LINE_WITH_SPACE_REGEX, static fn(array $match) => $match['new_line']);
+        return Strings::replace($output, self::NEW_LINE_WITH_SPACE_REGEX, static fn(array $match): string => (string) $match['new_line']);
     }
     private function hasDocblockStart(string $output): bool
     {

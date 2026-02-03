@@ -443,9 +443,10 @@ final class PHPStanNodeScopeResolver
     private function processArray($array, MutatingScope $mutatingScope): void
     {
         foreach ($array->items as $arrayItem) {
-            if ($arrayItem instanceof ArrayItem) {
-                $this->processArrayItem($arrayItem, $mutatingScope);
+            if (!$arrayItem instanceof ArrayItem) {
+                continue;
             }
+            $this->processArrayItem($arrayItem, $mutatingScope);
         }
     }
     private function processArrayItem(ArrayItem $arrayItem, MutatingScope $mutatingScope): void
