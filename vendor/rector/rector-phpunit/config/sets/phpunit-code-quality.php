@@ -51,6 +51,8 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWithMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\WithCallbackIdenticalToStandaloneAssertsRector;
 use Rector\PHPUnit\CodeQuality\Rector\StmtsAwareInterface\DeclareStrictTypesTestsRector;
+use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubOverCreateMockArgRector;
+use Rector\PHPUnit\PHPUnit120\Rector\ClassMethod\ExpressionCreateMockToCreateStubRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\ReplaceAtMethodWithDesiredMatcherRector;
 use Rector\Privatization\Rector\Class_\FinalizeTestCaseClassRector;
@@ -113,6 +115,9 @@ return static function (RectorConfig $rectorConfig): void {
         SingleMockPropertyTypeRector::class,
         SimplerWithIsInstanceOfRector::class,
         DirectInstanceOverMockArgRector::class,
+        // stub over mock
+        CreateStubOverCreateMockArgRector::class,
+        ExpressionCreateMockToCreateStubRector::class,
         // @test first, enable later
         // \Rector\PHPUnit\CodeQuality\Rector\Expression\ConfiguredMockEntityToSetterObjectRector::class,
         FinalizeTestCaseClassRector::class,

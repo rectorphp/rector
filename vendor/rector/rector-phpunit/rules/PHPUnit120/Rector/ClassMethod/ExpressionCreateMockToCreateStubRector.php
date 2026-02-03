@@ -6,17 +6,13 @@ namespace Rector\PHPUnit\PHPUnit120\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\AssignedMocksCollector;
-use Rector\PHPUnit\CodeQuality\NodeFinder\VariableFinder;
+use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockObjectExprDetector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,17 +33,12 @@ final class ExpressionCreateMockToCreateStubRector extends AbstractRector
     /**
      * @readonly
      */
-    private VariableFinder $variableFinder;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    public function __construct(AssignedMocksCollector $assignedMocksCollector, TestsNodeAnalyzer $testsNodeAnalyzer, VariableFinder $variableFinder, BetterNodeFinder $betterNodeFinder)
+    private MockObjectExprDetector $mockObjectExprDetector;
+    public function __construct(AssignedMocksCollector $assignedMocksCollector, TestsNodeAnalyzer $testsNodeAnalyzer, MockObjectExprDetector $mockObjectExprDetector)
     {
         $this->assignedMocksCollector = $assignedMocksCollector;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->variableFinder = $variableFinder;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->mockObjectExprDetector = $mockObjectExprDetector;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -113,24 +104,10 @@ CODE_SAMPLE
             if (!$assign->var instanceof Variable) {
                 continue;
             }
-            $assignedVariable = $assign->var;
-            $variableName = $this->getName($assignedVariable);
-            if ($variableName === null) {
+            if ($this->mockObjectExprDetector->isUsedForMocking($assign->var, $node)) {
                 continue;
             }
-            // find variable usages outside call like and inside it
-            $usedVariables = $this->variableFinder->find($node, $variableName);
-            // used variable in calls
-            /** @var array<StaticCall|MethodCall|New_> $callLikes */
-            $callLikes = $this->betterNodeFinder->findInstancesOfScoped($node->stmts, [CallLike::class]);
-            $callLikeUsedVariables = $this->collectVariableInCallLikeArg($callLikes, $variableName);
-            if (count($usedVariables) - 1 !== count($callLikeUsedVariables)) {
-                continue;
-            }
-            // here we can flip the createMock() to createStub()
-            if (!$assign->expr instanceof MethodCall) {
-                continue;
-            }
+            /** @var MethodCall $methodCall */
             $methodCall = $assign->expr;
             $methodCall->name = new Identifier('createStub');
             $hasChanged = \true;
@@ -139,28 +116,5 @@ CODE_SAMPLE
             return $node;
         }
         return null;
-    }
-    /**
-     * @param CallLike[] $callLikes
-     * @return Variable[]
-     */
-    private function collectVariableInCallLikeArg(array $callLikes, string $variableName): array
-    {
-        $callLikeUsedVariables = [];
-        foreach ($callLikes as $callLike) {
-            if ($callLike->isFirstClassCallable()) {
-                continue;
-            }
-            foreach ($callLike->getArgs() as $arg) {
-                if (!$arg->value instanceof Variable) {
-                    continue;
-                }
-                if (!$this->isName($arg->value, $variableName)) {
-                    continue;
-                }
-                $callLikeUsedVariables[] = $arg->value;
-            }
-        }
-        return $callLikeUsedVariables;
     }
 }

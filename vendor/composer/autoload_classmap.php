@@ -1936,6 +1936,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\AssignedMocksCollector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/AssignedMocksCollector.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\ClosureUsesResolver' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/ClosureUsesResolver.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\DoctrineEntityDocumentAnalyser' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/DoctrineEntityDocumentAnalyser.php',
+    'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\MockObjectExprDetector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/MockObjectExprDetector.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\MockObjectPropertyDetector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/MockObjectPropertyDetector.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\NullableObjectAssignCollector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/NullableObjectAssignCollector.php',
     'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\ParentCallDetector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/ParentCallDetector.php',

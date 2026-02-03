@@ -2196,6 +2196,7 @@ class ComposerStaticInit43920ef660f86182970f9c36338f7965
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\AssignedMocksCollector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/AssignedMocksCollector.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\ClosureUsesResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/ClosureUsesResolver.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\DoctrineEntityDocumentAnalyser' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/DoctrineEntityDocumentAnalyser.php',
+        'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\MockObjectExprDetector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/MockObjectExprDetector.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\MockObjectPropertyDetector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/MockObjectPropertyDetector.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\NullableObjectAssignCollector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/NullableObjectAssignCollector.php',
         'Rector\\PHPUnit\\CodeQuality\\NodeAnalyser\\ParentCallDetector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/NodeAnalyser/ParentCallDetector.php',
