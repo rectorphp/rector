@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -121,6 +122,10 @@ CODE_SAMPLE
         if ($this->shouldSkip($methodName, $className, $node, $scope)) {
             return null;
         }
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection instanceof ClassReflection && $classReflection->getName() === $className) {
+            return new MethodCall(new Variable('this'), $node->name, $node->args);
+        }
         if ($this->isInstantiable($className, $scope)) {
             $new = new New_($node->class);
             return new MethodCall($new, $node->name, $node->args);
@@ -157,8 +162,8 @@ CODE_SAMPLE
         if ($isStaticMethod) {
             return \true;
         }
-        $reflection = $scope->getClassReflection();
-        if ($reflection instanceof ClassReflection && $reflection->is($className)) {
+        $currentClassReflection = $scope->getClassReflection();
+        if ($currentClassReflection instanceof ClassReflection && $this->reflectionProvider->hasClass($className) && $currentClassReflection->isSubclassOfClass($this->reflectionProvider->getClass($className))) {
             return \true;
         }
         $className = $this->getName($staticCall->class);
