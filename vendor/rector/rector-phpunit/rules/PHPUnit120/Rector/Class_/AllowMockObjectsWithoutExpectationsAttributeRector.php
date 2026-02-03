@@ -13,6 +13,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPUnit\Enum\PHPUnitAttribute;
@@ -88,6 +89,12 @@ final class AllowMockObjectsWithoutExpectationsAttributeRector extends AbstractR
                 }
                 $missedTestMethodsByMockPropertyName[$mockObjectPropertyName][] = $this->getName($classMethod);
             }
+        }
+        // or find a ->method() calls on a setUp() mocked property
+        $hasAnyMethodInSetup = $this->isMissingExpectsOnMockObjectMethodCallInSetUp($node);
+        if ($hasAnyMethodInSetup && $testMethodCount > 1) {
+            $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS))]);
+            return $node;
         }
         if (!$this->shouldAddAttribute($missedTestMethodsByMockPropertyName)) {
             return null;
@@ -231,6 +238,25 @@ CODE_SAMPLE
             if (count($usingTestMethods) !== 0) {
                 return \true;
             }
+        }
+        return \false;
+    }
+    private function isMissingExpectsOnMockObjectMethodCallInSetUp(Class_ $class): bool
+    {
+        $setupClassMethod = $class->getMethod(MethodName::SET_UP);
+        if (!$setupClassMethod instanceof ClassMethod) {
+            return \false;
+        }
+        /** @var MethodCall[] $methodCalls */
+        $methodCalls = $this->betterNodeFinder->findInstancesOfScoped((array) $setupClassMethod->stmts, MethodCall::class);
+        foreach ($methodCalls as $methodCall) {
+            if (!$this->isName($methodCall->name, 'method')) {
+                continue;
+            }
+            if (!$this->isObjectType($methodCall->var, new ObjectType(PHPUnitClassName::MOCK_OBJECT))) {
+                continue;
+            }
+            return \true;
         }
         return \false;
     }
