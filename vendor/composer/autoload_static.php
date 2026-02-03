@@ -2310,6 +2310,7 @@ class ComposerStaticInit43920ef660f86182970f9c36338f7965
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\ClassMethod\\ExpressionCreateMockToCreateStubRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/ClassMethod/ExpressionCreateMockToCreateStubRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AllowMockObjectsWithoutExpectationsAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AllowMockObjectsWithoutExpectationsAttributeRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AssertIsTypeMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AssertIsTypeMethodCallRector.php',
+        'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\PropertyCreateMockToCreateStubRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/PropertyCreateMockToCreateStubRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\RemoveOverrideFinalConstructTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/RemoveOverrideFinalConstructTestCaseRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\MethodCall\\ExplicitMockExpectsCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/MethodCall/ExplicitMockExpectsCallRector.php',
         'Rector\\PHPUnit\\PHPUnit50\\Rector\\StaticCall\\GetMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit50/Rector/StaticCall/GetMockRector.php',

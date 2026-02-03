@@ -39,6 +39,10 @@ final class PHPUnitClassName
      */
     public const MOCK_OBJECT = 'PHPUnit\Framework\MockObject\MockObject';
     /**
+     * @var string
+     */
+    public const STUB = 'PHPUnit\Framework\MockObject\Stub';
+    /**
      * @var string[]
      */
     public const TEST_CLASSES = [self::TEST_CASE, self::TEST_CASE_LEGACY];

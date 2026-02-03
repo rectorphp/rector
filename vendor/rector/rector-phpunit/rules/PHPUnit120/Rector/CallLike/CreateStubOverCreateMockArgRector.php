@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\PHPUnit120\Rector\CallLike;
 
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
@@ -13,9 +14,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockObjectExprDetector;
-use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -86,12 +85,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
-        $scope = ScopeFetcher::fetch($node);
-        if (!$scope->isInClass()) {
-            return null;
-        }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection->is(PHPUnitClassName::TEST_CASE)) {
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
         if ($node instanceof ClassMethod) {
@@ -144,6 +138,10 @@ CODE_SAMPLE
                 continue;
             }
             $assign = $stmt->expr;
+            // handled in another rule
+            if ($assign->var instanceof PropertyFetch) {
+                continue;
+            }
             $createMockMethodCall = $this->matchCreateMockMethodCall($assign->expr);
             if (!$createMockMethodCall instanceof MethodCall) {
                 continue;
