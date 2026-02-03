@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use RectorPrefix202602\Nette\Utils\FileSystem;
+use Rector\Bootstrap\RectorConfigsResolver;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\FileSystem\InitFilePathsResolver;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
@@ -34,12 +35,17 @@ final class ConfigInitializer
     }
     public function createConfig(string $projectDirectory): void
     {
-        $commonRectorConfigPath = $projectDirectory . '/rector.php';
+        $commonRectorConfigPath = $projectDirectory . '/' . RectorConfigsResolver::DEFAULT_CONFIG_FILE;
+        $distRectorConfigPath = $projectDirectory . '/' . RectorConfigsResolver::DEFAULT_DIST_CONFIG_FILE;
         if (file_exists($commonRectorConfigPath)) {
-            $this->symfonyStyle->warning('Register rules or sets in your "rector.php" config');
+            $this->symfonyStyle->warning('Register rules or sets in your "' . RectorConfigsResolver::DEFAULT_CONFIG_FILE . '" config');
             return;
         }
-        $response = $this->symfonyStyle->ask('No "rector.php" config found. Should we generate it for you?', 'yes');
+        if (file_exists($distRectorConfigPath)) {
+            $this->symfonyStyle->warning('Register rules or sets in your "' . RectorConfigsResolver::DEFAULT_DIST_CONFIG_FILE . '" config');
+            return;
+        }
+        $response = $this->symfonyStyle->ask('No "' . RectorConfigsResolver::DEFAULT_CONFIG_FILE . '" config found. Should we generate it for you?', 'yes');
         // be tolerant about input
         if (!in_array($response, ['yes', 'YES', 'y', 'Y'], \true)) {
             // okay, nothing we can do

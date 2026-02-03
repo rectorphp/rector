@@ -89,10 +89,10 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         $renamedProperties = [];
-        $authorizationCheckerType = new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER);
+        $objectType = new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER);
         // 1) Regular properties
         foreach ($node->getProperties() as $property) {
-            if (!$this->isObjectType($property, $authorizationCheckerType)) {
+            if (!$this->isObjectType($property, $objectType)) {
                 continue;
             }
             $property->type = new FullyQualified(SymfonyClass::ACCESS_DECISION_MANAGER_INTERFACE);

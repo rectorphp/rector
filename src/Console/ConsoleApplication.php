@@ -90,14 +90,10 @@ final class ConsoleApplication extends Application
     }
     private function addCustomOptions(InputDefinition $inputDefinition): void
     {
-        $inputDefinition->addOption(new InputOption(Option::CONFIG, 'c', InputOption::VALUE_REQUIRED, 'Path to config file', $this->getDefaultConfigPath()));
+        $inputDefinition->addOption(new InputOption(Option::CONFIG, 'c', InputOption::VALUE_REQUIRED, 'Path to config file'));
         $inputDefinition->addOption(new InputOption(Option::DEBUG, null, InputOption::VALUE_NONE, 'Enable debug verbosity'));
         $inputDefinition->addOption(new InputOption(Option::XDEBUG, null, InputOption::VALUE_NONE, 'Allow running xdebug'));
         $inputDefinition->addOption(new InputOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear cache before starting the execution of the command'));
-    }
-    private function getDefaultConfigPath(): string
-    {
-        return getcwd() . '/rector.php';
     }
     private function enableXdebug(InputInterface $input): void
     {

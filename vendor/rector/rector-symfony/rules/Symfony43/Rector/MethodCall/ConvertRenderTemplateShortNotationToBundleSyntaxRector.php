@@ -94,6 +94,9 @@ CODE_SAMPLE
         if ($matches === null) {
             return null;
         }
+        if (!isset($matches[0])) {
+            return null;
+        }
         $newValue = '@' . Strings::replace((string) substr((string) $tplName, 0, $matches[0][1]), '/Bundle/', '') . Strings::replace((string) substr((string) $tplName, $matches[0][1]), '/:/', '/');
         $newValue = str_replace('\\', '/', $newValue);
         $node->args[0] = new Arg(new String_($newValue));

@@ -126,9 +126,10 @@ CODE_SAMPLE
                 continue;
             }
             $currentPropertyFetchesInNewArgs = $this->propertyFetchUsageFinder->findInCallLikes($node, $propertyName);
+            $currentPropertyFetchesInArrays = $this->propertyFetchUsageFinder->findInArrays($node, $propertyName);
             // are there more uses than simple passing to a new instance?
             $totalPropertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($node, $propertyName);
-            if (count($totalPropertyFetches) - 1 !== count($currentPropertyFetchesInNewArgs)) {
+            if (count($totalPropertyFetches) - 1 !== count($currentPropertyFetchesInNewArgs) + count($currentPropertyFetchesInArrays)) {
                 continue;
             }
             $hasChanged = \true;

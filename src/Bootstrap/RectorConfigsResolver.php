@@ -8,10 +8,18 @@ use RectorPrefix202602\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix202602\Webmozart\Assert\Assert;
 final class RectorConfigsResolver
 {
+    /**
+     * @var string
+     */
+    public const DEFAULT_CONFIG_FILE = 'rector.php';
+    /**
+     * @var string
+     */
+    public const DEFAULT_DIST_CONFIG_FILE = 'rector.dist.php';
     public function provide(): BootstrapConfigs
     {
         $argvInput = new ArgvInput();
-        $mainConfigFile = $this->resolveFromInputWithFallback($argvInput, 'rector.php');
+        $mainConfigFile = $this->resolveFromInputWithFallback($argvInput);
         return new BootstrapConfigs($mainConfigFile, []);
     }
     private function resolveFromInput(ArgvInput $argvInput): ?string
@@ -23,13 +31,18 @@ final class RectorConfigsResolver
         Assert::fileExists($configFile);
         return realpath($configFile);
     }
-    private function resolveFromInputWithFallback(ArgvInput $argvInput, string $fallbackFile): ?string
+    private function resolveFromInputWithFallback(ArgvInput $argvInput): ?string
     {
         $configFile = $this->resolveFromInput($argvInput);
         if ($configFile !== null) {
             return $configFile;
         }
-        return $this->createFallbackFileInfoIfFound($fallbackFile);
+        // Try rector.php first, then fall back to rector.dist.php
+        $rectorConfigFile = $this->createFallbackFileInfoIfFound(self::DEFAULT_CONFIG_FILE);
+        if ($rectorConfigFile !== null) {
+            return $rectorConfigFile;
+        }
+        return $this->createFallbackFileInfoIfFound(self::DEFAULT_DIST_CONFIG_FILE);
     }
     private function createFallbackFileInfoIfFound(string $fallbackFile): ?string
     {
