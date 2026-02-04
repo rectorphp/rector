@@ -290,10 +290,6 @@ final class PHPStanNodeScopeResolver
                 $this->processCatch($node, $filePath, $mutatingScope);
                 return;
             }
-            if ($node instanceof ArrayItem) {
-                $this->processArrayItem($node, $mutatingScope);
-                return;
-            }
             if ($node instanceof NullableType) {
                 $node->type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 return;
