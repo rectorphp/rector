@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\NodeAnalyser;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -108,6 +109,19 @@ final class MockObjectExprDetector
                 }
                 $propertyFetch = $arg->value;
                 // its used in arg
+                if ($this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
+                    return \true;
+                }
+            }
+        }
+        /** @var array<Array_> $arrays */
+        $arrays = $this->betterNodeFinder->findInstancesOfScoped($class->getMethods(), [Array_::class]);
+        foreach ($arrays as $array) {
+            foreach ($array->items as $arrayItem) {
+                if (!$arrayItem->value instanceof PropertyFetch) {
+                    continue;
+                }
+                $propertyFetch = $arrayItem->value;
                 if ($this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
                     return \true;
                 }

@@ -53,6 +53,7 @@ final class SomeTest extends TestCase
     protected function setUp(): void
     {
         $this->mockProperty = $this->createMock(SomeClass::class);
+
         $this->mockProperty->expects($this->once())
             ->method('someMethod')
             ->willReturn('someValue');
