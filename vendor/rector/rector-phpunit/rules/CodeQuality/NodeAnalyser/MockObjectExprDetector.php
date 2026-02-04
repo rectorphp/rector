@@ -32,6 +32,21 @@ final class MockObjectExprDetector
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableFinder = $variableFinder;
     }
+    public function hasMethodCallWithoutExpects(ClassMethod $classMethod): bool
+    {
+        /** @var array<Expr\MethodCall> $methodCalls */
+        $methodCalls = $this->betterNodeFinder->findInstancesOfScoped((array) $classMethod->stmts, [MethodCall::class]);
+        foreach ($methodCalls as $methodCall) {
+            if (!$this->nodeNameResolver->isName($methodCall->name, 'method')) {
+                continue;
+            }
+            if ($methodCall->var instanceof MethodCall) {
+                continue;
+            }
+            return \true;
+        }
+        return \false;
+    }
     public function isUsedForMocking(Expr $expr, ClassMethod $classMethod): bool
     {
         if (!$expr instanceof Variable) {

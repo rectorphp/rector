@@ -46,4 +46,8 @@ final class PHPUnitAttribute
      * @var string
      */
     public const ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS = 'PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations';
+    /**
+     * @var string
+     */
+    public const DATA_PROVIDER = 'PHPUnit\Framework\Attributes\DataProvider';
 }

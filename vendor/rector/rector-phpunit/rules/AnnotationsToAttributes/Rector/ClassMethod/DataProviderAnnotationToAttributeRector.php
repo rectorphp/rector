@@ -16,6 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
+use Rector\PHPUnit\Enum\PHPUnitAttribute;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -56,10 +57,6 @@ final class DataProviderAnnotationToAttributeRector extends AbstractRector imple
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
-    /**
-     * @var string
-     */
-    private const DATA_PROVIDER_CLASS = 'PHPUnit\Framework\Attributes\DataProvider';
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpDocTagRemover $phpDocTagRemover, ReflectionResolver $reflectionResolver, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -123,7 +120,7 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if (!$this->reflectionProvider->hasClass(self::DATA_PROVIDER_CLASS)) {
+        if (!$this->reflectionProvider->hasClass(PHPUnitAttribute::DATA_PROVIDER)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
@@ -178,7 +175,7 @@ CODE_SAMPLE
             }
             $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\Framework\Attributes\DataProviderExternal', [$className . '::class', $methodName]);
         } else {
-            $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems(self::DATA_PROVIDER_CLASS, [$methodName]);
+            $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems(PHPUnitAttribute::DATA_PROVIDER, [$methodName]);
         }
         foreach ($classMethod->attrGroups as $existingAttributeGroup) {
             if ($this->nodeComparator->areNodesEqual($existingAttributeGroup, $attributeGroup)) {
