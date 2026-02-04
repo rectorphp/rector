@@ -43,6 +43,10 @@ final class PHPUnitClassName
      */
     public const STUB = 'PHPUnit\Framework\MockObject\Stub';
     /**
+     * @var string
+     */
+    public const SYMFONY_CONSTRAINT_VALIDATOR_TEST_CASE = 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase';
+    /**
      * @var string[]
      */
     public const TEST_CLASSES = [self::TEST_CASE, self::TEST_CASE_LEGACY];

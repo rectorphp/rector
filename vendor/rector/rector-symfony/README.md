@@ -14,23 +14,29 @@ composer require rector/rector --dev
 
 ## Use Sets
 
-To add a set to your config, use `Rector\Symfony\Set\SymfonySetList` class and pick one of constants:
+To add a set to your config, use `->withPreparedSets` method, and pick one :
 
 ```php
+use Rector\Config\RectorConfig;
 
+return RectorConfig::configure()
+    ->withPreparedSets(symfonyCodeQuality: true)
+    ->withComposerBased(symfony: true);
+```
+
+If you're on PHP 7.x, you can use withSets() instead, for `symfonyCodeQuality` set, so you can define:
+
+```php
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Set\SymfonySetList;
 
 return RectorConfig::configure()
-    ->withSymfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml')
     ->withSets([
-        SymfonySetList::SYMFONY_62,
         SymfonySetList::SYMFONY_CODE_QUALITY,
-        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
 ```
 
-<br>
+See [documentation](https://getrector.com/documentation/config-configuration#content-symfony-integration) for more.
 
 ## Configuration
 

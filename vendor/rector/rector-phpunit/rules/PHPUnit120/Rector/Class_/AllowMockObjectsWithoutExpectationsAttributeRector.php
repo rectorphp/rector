@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\PHPUnit120\Rector\Class_;
 
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
