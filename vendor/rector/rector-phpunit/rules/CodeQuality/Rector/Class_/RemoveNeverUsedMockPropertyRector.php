@@ -11,7 +11,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
-use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockObjectExprDetector;
+use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockObjectPropertyDetector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -34,12 +35,17 @@ final class RemoveNeverUsedMockPropertyRector extends AbstractRector
     /**
      * @readonly
      */
-    private MockObjectExprDetector $mockObjectExprDetector;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, MockObjectPropertyDetector $mockObjectPropertyDetector, MockObjectExprDetector $mockObjectExprDetector)
+    private PropertyFetchFinder $propertyFetchFinder;
+    /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, MockObjectPropertyDetector $mockObjectPropertyDetector, PropertyFetchFinder $propertyFetchFinder, BetterNodeFinder $betterNodeFinder)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->mockObjectPropertyDetector = $mockObjectPropertyDetector;
-        $this->mockObjectExprDetector = $mockObjectExprDetector;
+        $this->propertyFetchFinder = $propertyFetchFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -95,13 +101,7 @@ CODE_SAMPLE
         if ($propertyNamesToCreateMockMethodCalls === []) {
             return null;
         }
-        $propertyNamesToRemove = [];
-        foreach (array_keys($propertyNamesToCreateMockMethodCalls) as $propertyName) {
-            if ($this->mockObjectExprDetector->isPropertyMockObjectPassedAsArgument($node, $propertyName)) {
-                continue;
-            }
-            $propertyNamesToRemove[] = $propertyName;
-        }
+        $propertyNamesToRemove = $this->resolvePropertyNamesToRemove($propertyNamesToCreateMockMethodCalls, $node);
         if ($propertyNamesToRemove === []) {
             return null;
         }
@@ -170,5 +170,39 @@ CODE_SAMPLE
             }
             unset($class->stmts[$key]);
         }
+    }
+    /**
+     * @param array<string, MethodCall> $propertyNamesToCreateMockMethodCalls
+     * @return string[]
+     */
+    private function resolvePropertyNamesToRemove(array $propertyNamesToCreateMockMethodCalls, Class_ $class): array
+    {
+        $propertyNamesToRemove = [];
+        foreach (array_keys($propertyNamesToCreateMockMethodCalls) as $propertyName) {
+            $allPropertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($class, $propertyName);
+            /** @var MethodCall[] $methodCalls */
+            $methodCalls = $this->betterNodeFinder->findInstancesOfScoped($class->getMethods(), MethodCall::class);
+            $propertyFetchesMethodCalls = [];
+            foreach ($methodCalls as $methodCall) {
+                if ($methodCall->isFirstClassCallable()) {
+                    continue;
+                }
+                if (!$methodCall->var instanceof PropertyFetch) {
+                    continue;
+                }
+                $propertyFetch = $methodCall->var;
+                if (!$this->isName($propertyFetch->name, $propertyName)) {
+                    continue;
+                }
+                // used in method call, skip removal
+                $propertyFetchesMethodCalls[] = $methodCall;
+            }
+            // -1 for the assign in setUp() method
+            if (count($allPropertyFetches) - 1 !== count($propertyFetchesMethodCalls)) {
+                continue;
+            }
+            $propertyNamesToRemove[] = $propertyName;
+        }
+        return $propertyNamesToRemove;
     }
 }
