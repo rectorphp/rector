@@ -5,7 +5,6 @@ namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
@@ -33,10 +32,6 @@ final class JsonThrowOnErrorRector extends AbstractRector implements MinPhpVersi
      */
     private BetterNodeFinder $betterNodeFinder;
     private bool $hasChanged = \false;
-    /**
-     * @var mixed[]
-     */
-    private const FLAGS = ['JSON_THROW_ON_ERROR'];
     public function __construct(ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->valueResolver = $valueResolver;
@@ -61,6 +56,9 @@ CODE_SAMPLE
     {
         return NodeGroup::STMTS_AWARE;
     }
+    /**
+     * @param StmtsAware $node
+     */
     public function refactor(Node $node): ?Node
     {
         // if found, skip it :)
@@ -111,28 +109,19 @@ CODE_SAMPLE
         }
         return $this->isFirstValueStringOrArray($funcCall);
     }
-    private function processJsonEncode(FuncCall $funcCall): FuncCall
+    private function processJsonEncode(FuncCall $funcCall): ?FuncCall
     {
-        $flags = [];
         if (isset($funcCall->args[1])) {
-            /** @var Arg $arg */
-            $arg = $funcCall->args[1];
-            $flags = $this->getFlags($arg);
+            return null;
         }
-        $newArg = $this->getArgWithFlags($flags);
-        if ($newArg instanceof Arg) {
-            $this->hasChanged = \true;
-            $funcCall->args[1] = $newArg;
-        }
+        $this->hasChanged = \true;
+        $funcCall->args[1] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
         return $funcCall;
     }
-    private function processJsonDecode(FuncCall $funcCall): FuncCall
+    private function processJsonDecode(FuncCall $funcCall): ?FuncCall
     {
-        $flags = [];
         if (isset($funcCall->args[3])) {
-            /** @var Arg $arg */
-            $arg = $funcCall->args[3];
-            $flags = $this->getFlags($arg);
+            return null;
         }
         // set default to inter-args
         if (!isset($funcCall->args[1])) {
@@ -141,11 +130,8 @@ CODE_SAMPLE
         if (!isset($funcCall->args[2])) {
             $funcCall->args[2] = new Arg(new Int_(512));
         }
-        $newArg = $this->getArgWithFlags($flags);
-        if ($newArg instanceof Arg) {
-            $this->hasChanged = \true;
-            $funcCall->args[3] = $newArg;
-        }
+        $this->hasChanged = \true;
+        $funcCall->args[3] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
         return $funcCall;
     }
     private function createConstFetch(string $name): ConstFetch
@@ -163,50 +149,5 @@ CODE_SAMPLE
             return \true;
         }
         return is_array($value);
-    }
-    /**
-     * @param string[] $flags
-     * @return string[]
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\Arg $arg
-     */
-    private function getFlags($arg, array $flags = []): array
-    {
-        // Unwrap Arg
-        if ($arg instanceof Arg) {
-            $arg = $arg->value;
-        }
-        // Single flag: SOME_CONST
-        if ($arg instanceof ConstFetch) {
-            $flags[] = $arg->name->getFirst();
-            return $flags;
-        }
-        // Multiple flags: FLAG_A | FLAG_B | FLAG_C
-        if ($arg instanceof Node\Expr\BinaryOp\BitwiseOr) {
-            $flags = $this->getFlags($arg->left, $flags);
-            $flags = $this->getFlags($arg->right, $flags);
-        }
-        return array_values(array_unique($flags));
-        // array_unique in case the same flag is written multiple times
-    }
-    /**
-     * @param string[] $flags
-     */
-    private function getArgWithFlags(array $flags): ?Arg
-    {
-        $originalCount = count($flags);
-        $flags = array_values(array_unique(array_merge($flags, self::FLAGS)));
-        if ($originalCount === count($flags)) {
-            return null;
-        }
-        // Single flag
-        if (count($flags) === 1) {
-            return new Arg($this->createConstFetch($flags[0]));
-        }
-        // Build FLAG_A | FLAG_B | FLAG_C
-        $expr = $this->createConstFetch(array_shift($flags));
-        foreach ($flags as $flag) {
-            $expr = new Node\Expr\BinaryOp\BitwiseOr($expr, $this->createConstFetch($flag));
-        }
-        return new Arg($expr);
     }
 }
