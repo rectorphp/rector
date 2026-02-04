@@ -3,16 +3,15 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\PHPUnit120\Rector\MethodCall;
 
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -30,7 +29,7 @@ final class ExplicitMockExpectsCallRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add explicit expects() to mocks, to make expectations count explicit', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add explicit expects() to method() mock calls, to make expectations count explicit', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeClass extends TestCase
@@ -61,30 +60,40 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [ClassMethod::class];
     }
     /**
-     * @param MethodCall $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node): ?\PhpParser\Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if ($scope->getFunctionName() === MethodName::SET_UP) {
+        if (!$this->testsNodeAnalyzer->isTestClassMethod($node)) {
             return null;
         }
-        if (!$node->var instanceof Variable) {
-            return null;
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (&$hasChanged): ?MethodCall {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if (!$node->var instanceof Variable) {
+                return null;
+            }
+            if (!$this->isName($node->name, 'method')) {
+                return null;
+            }
+            if (!$this->isObjectType($node->var, new ObjectType(PHPUnitClassName::MOCK_OBJECT))) {
+                return null;
+            }
+            $node->var = new MethodCall($node->var, 'expects', [new Arg(new MethodCall(new Variable('this'), 'atLeastOnce'))]);
+            $hasChanged = \true;
+            return $node;
+        });
+        if ($hasChanged) {
+            return $node;
         }
-        if (!$this->isName($node->name, 'method')) {
-            return null;
-        }
-        if (!$this->isObjectType($node->var, new ObjectType(PHPUnitClassName::MOCK_OBJECT))) {
-            return null;
-        }
-        $node->var = new MethodCall($node->var, 'expects', [new Arg(new MethodCall(new Variable('this'), 'atLeastOnce'))]);
-        return $node;
+        return null;
     }
 }
