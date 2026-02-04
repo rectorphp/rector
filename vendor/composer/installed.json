@@ -574,17 +574,17 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v12.49.0",
-            "version_normalized": "12.49.0.0",
+            "version": "v12.50.0",
+            "version_normalized": "12.50.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
-                "reference": "2c0015e16b40f32c41e49810b6a0acf61204ea3d"
+                "reference": "3d4eeab332c04a9eaea90968c19a66f78745e47a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/2c0015e16b40f32c41e49810b6a0acf61204ea3d",
-                "reference": "2c0015e16b40f32c41e49810b6a0acf61204ea3d",
+                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/3d4eeab332c04a9eaea90968c19a66f78745e47a",
+                "reference": "3d4eeab332c04a9eaea90968c19a66f78745e47a",
                 "shasum": ""
             },
             "require": {
@@ -592,7 +592,7 @@
                 "psr\/container": "^1.1.1|^2.0.1",
                 "psr\/simple-cache": "^1.0|^2.0|^3.0"
             },
-            "time": "2026-01-07T14:57:06+00:00",
+            "time": "2026-01-28T15:26:27+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1818,12 +1818,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "9cae00eeabb9c529b8cfa76a048146b568dae063"
+                "reference": "5617724ec57b4d5d51c5fa412d6b2aa6d06c05e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/9cae00eeabb9c529b8cfa76a048146b568dae063",
-                "reference": "9cae00eeabb9c529b8cfa76a048146b568dae063",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/5617724ec57b4d5d51c5fa412d6b2aa6d06c05e2",
+                "reference": "5617724ec57b4d5d51c5fa412d6b2aa6d06c05e2",
                 "shasum": ""
             },
             "require": {
@@ -1850,7 +1850,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-02-04T17:50:27+00:00",
+            "time": "2026-02-04T21:49:54+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

@@ -1957,6 +1957,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\EntityDocumentCreateMockToDirectNewRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/EntityDocumentCreateMockToDirectNewRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\NoSetupWithParentCallOverrideRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/NoSetupWithParentCallOverrideRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\RemoveStandaloneCreateMockRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/RemoveStandaloneCreateMockRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\ReplaceTestFunctionPrefixWithAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/ReplaceTestFunctionPrefixWithAttributeRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddParamTypeFromDependsRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddParamTypeFromDependsRector.php',

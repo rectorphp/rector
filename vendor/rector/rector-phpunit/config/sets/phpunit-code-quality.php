@@ -16,12 +16,14 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\TestWithToDataProviderRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\TypeWillReturnCallableArrowFunctionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableArgumentRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableInstanceRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\BareCreateMockAssignToDirectUseRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\DataProviderArrayItemsNewLinedRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\EntityDocumentCreateMockToDirectNewRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\NoSetupWithParentCallOverrideRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveEmptyTestMethodRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveStandaloneCreateMockRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector;
 use Rector\PHPUnit\CodeQuality\Rector\Expression\AssertArrayCastedObjectToAssertSameRector;
 use Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector;
@@ -102,7 +104,7 @@ return static function (RectorConfig $rectorConfig): void {
         // avoid call on nullable object
         AddInstanceofAssertForNullableInstanceRector::class,
         // enable next after testing
-        // \Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableArgumentRector::class,
+        AddInstanceofAssertForNullableArgumentRector::class,
         AssertArrayCastedObjectToAssertSameRector::class,
         /**
          * Improve direct testing of your code, without mock creep. Make it simple, clear and easy to maintain:
@@ -134,7 +136,9 @@ return static function (RectorConfig $rectorConfig): void {
         EntityDocumentCreateMockToDirectNewRector::class,
         ReplaceAtMethodWithDesiredMatcherRector::class,
         BareCreateMockAssignToDirectUseRector::class,
+        // dead code
         RemoveNeverUsedMockPropertyRector::class,
+        RemoveStandaloneCreateMockRector::class,
         // readability
         NoSetupWithParentCallOverrideRector::class,
     ]);
