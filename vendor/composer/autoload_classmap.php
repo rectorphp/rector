@@ -1969,6 +1969,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitSelfCallRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitSelfCallRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitThisCallRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitThisCallRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\RemoveDataProviderParamKeysRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/RemoveDataProviderParamKeysRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\RemoveNeverUsedMockPropertyRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/RemoveNeverUsedMockPropertyRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\SetUpBeforeClassToSetUpRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/SetUpBeforeClassToSetUpRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\SingleMockPropertyTypeRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/SingleMockPropertyTypeRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\SuffixMockObjectPropertyRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/SuffixMockObjectPropertyRector.php',

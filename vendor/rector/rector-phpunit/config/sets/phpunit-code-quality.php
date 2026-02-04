@@ -11,6 +11,7 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\ConstructClassMethodToSetUpTestCase
 use Rector\PHPUnit\CodeQuality\Rector\Class_\InlineStubPropertyToCreateStubMethodCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\NarrowUnusedSetUpDefinedPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\RemoveNeverUsedMockPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\SingleMockPropertyTypeRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\TestWithToDataProviderRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\TypeWillReturnCallableArrowFunctionRector;
@@ -133,6 +134,7 @@ return static function (RectorConfig $rectorConfig): void {
         EntityDocumentCreateMockToDirectNewRector::class,
         ReplaceAtMethodWithDesiredMatcherRector::class,
         BareCreateMockAssignToDirectUseRector::class,
+        RemoveNeverUsedMockPropertyRector::class,
         // readability
         NoSetupWithParentCallOverrideRector::class,
     ]);
