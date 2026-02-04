@@ -65,11 +65,8 @@ final class AllowMockObjectsWithoutExpectationsAttributeRector extends AbstractR
         if ($this->shouldSkipClass($node)) {
             return null;
         }
+        // even for 0 mocked properties, the variable in setUp() can be mocked
         $mockObjectPropertyNames = $this->matchMockObjectPropertyNames($node);
-        // there are no mock object properties
-        if ($mockObjectPropertyNames === []) {
-            return null;
-        }
         $missedTestMethodsByMockPropertyName = [];
         $usingTestMethodsByMockPropertyName = [];
         $testMethodCount = 0;
@@ -92,7 +89,7 @@ final class AllowMockObjectsWithoutExpectationsAttributeRector extends AbstractR
         }
         // or find a ->method() calls on a setUp() mocked property
         $hasAnyMethodInSetup = $this->isMissingExpectsOnMockObjectMethodCallInSetUp($node);
-        if ($hasAnyMethodInSetup && $testMethodCount > 1) {
+        if ($hasAnyMethodInSetup) {
             $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS))]);
             return $node;
         }
