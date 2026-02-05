@@ -142,9 +142,28 @@ CODE_SAMPLE
     }
     private function isMulParenthesized(File $file, Mul $mul): bool
     {
+        if (!$mul->right instanceof BinaryOp) {
+            return \false;
+        }
         $oldTokens = $file->getOldTokens();
         $endTokenPost = $mul->getEndTokenPos();
-        return isset($oldTokens[$endTokenPost]) && (string) $oldTokens[$endTokenPost] === ')';
+        if (isset($oldTokens[$endTokenPost]) && (string) $oldTokens[$endTokenPost] === ')') {
+            $startTokenPos = $mul->right->getStartTokenPos();
+            $previousEndTokenPost = $mul->left->getEndTokenPos();
+            while ($startTokenPos > $previousEndTokenPost) {
+                --$startTokenPos;
+                if (!isset($oldTokens[$startTokenPos])) {
+                    return \false;
+                }
+                // handle space before open parentheses
+                if (trim((string) $oldTokens[$startTokenPos]) === '') {
+                    continue;
+                }
+                return (string) $oldTokens[$startTokenPos] === '(';
+            }
+            return \false;
+        }
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
