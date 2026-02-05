@@ -17,8 +17,10 @@ use PhpParser\Node\Expr\BinaryOp\Mul;
 use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\UnaryMinus;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\ValueObject\Application\File;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -138,6 +140,12 @@ CODE_SAMPLE
         }
         return $binaryOp->left;
     }
+    private function isMulParenthesized(File $file, Mul $mul): bool
+    {
+        $oldTokens = $file->getOldTokens();
+        $endTokenPost = $mul->getEndTokenPos();
+        return isset($oldTokens[$endTokenPost]) && (string) $oldTokens[$endTokenPost] === ')';
+    }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
      */
@@ -150,6 +158,9 @@ CODE_SAMPLE
             return null;
         }
         if ($binaryOp instanceof Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
+            if ($this->isMulParenthesized($this->file, $binaryOp)) {
+                $binaryOp->right->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+            }
             return $binaryOp->right;
         }
         if (!$this->valueResolver->isValue($binaryOp->right, 1)) {
