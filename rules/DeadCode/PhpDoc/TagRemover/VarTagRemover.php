@@ -54,23 +54,23 @@ final class VarTagRemover
         $this->typeComparator = $typeComparator;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Expression $property
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Expression $node
      */
-    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, $property): bool
+    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, $node): bool
     {
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
         if (!$varTagValueNode instanceof VarTagValueNode) {
             return \false;
         }
-        $isVarTagValueDead = $this->deadVarTagValueNodeAnalyzer->isDead($varTagValueNode, $property);
+        $isVarTagValueDead = $this->deadVarTagValueNodeAnalyzer->isDead($varTagValueNode, $node);
         if (!$isVarTagValueDead) {
             return \false;
         }
         if ($this->phpDocTypeChanger->isAllowed($varTagValueNode->type)) {
             return \false;
         }
-        $phpDocInfo->removeByType(VarTagValueNode::class);
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
+        $phpDocInfo->removeByType(VarTagValueNode::class, $varTagValueNode->variableName);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return \true;
     }
     /**
