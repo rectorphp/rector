@@ -36,7 +36,7 @@ final class NoSetupWithParentCallOverrideRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove override, if setUp() references parent::setUp() call to improve readability', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove override attribute, if setUp()/tearDown() references parent call to improve readability', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
@@ -80,7 +80,7 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if (!$this->isName($node, 'setUp')) {
+        if (!$this->isNames($node, ['setUp', 'tearDown'])) {
             return null;
         }
         if (!$this->parentCallDetector->hasParentCall($node)) {

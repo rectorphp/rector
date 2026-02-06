@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt\Expression;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -79,6 +81,11 @@ CODE_SAMPLE
         }
         $methodCall = $node->expr;
         if (!$this->isName($methodCall->name, 'willReturnMap')) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        // allowed as can be flexible
+        if ($scope->getFunctionName() === MethodName::SET_UP) {
             return null;
         }
         $topmostCall = $this->resolveTopmostCall($methodCall);
