@@ -93,8 +93,14 @@ CODE_SAMPLE
         if ($this->isName($topmostCall->name, 'expects')) {
             return null;
         }
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
         // count values in will map arg
-        $willReturnMapArg = $methodCall->getArgs()[0];
+        $willReturnMapArg = $methodCall->getArgs()[0] ?? null;
+        if (!$willReturnMapArg instanceof Arg) {
+            return null;
+        }
         if (!$willReturnMapArg->value instanceof Array_) {
             return null;
         }
