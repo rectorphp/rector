@@ -11,11 +11,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeAnalyzer\CompactFuncCallAnalyzer;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Util\ArrayChecker;
@@ -40,18 +38,13 @@ final class ClosureArrowFunctionAnalyzer
     /**
      * @readonly
      */
-    private NodeTypeResolver $nodeTypeResolver;
-    /**
-     * @readonly
-     */
     private CompactFuncCallAnalyzer $compactFuncCallAnalyzer;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, ArrayChecker $arrayChecker, PhpDocInfoFactory $phpDocInfoFactory, NodeTypeResolver $nodeTypeResolver, CompactFuncCallAnalyzer $compactFuncCallAnalyzer)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, ArrayChecker $arrayChecker, PhpDocInfoFactory $phpDocInfoFactory, CompactFuncCallAnalyzer $compactFuncCallAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->arrayChecker = $arrayChecker;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->compactFuncCallAnalyzer = $compactFuncCallAnalyzer;
     }
     public function matchArrowFunctionExpr(Closure $closure): ?Expr
@@ -98,7 +91,8 @@ final class ClosureArrowFunctionAnalyzer
         });
     }
     /**
-     * Ensure @var doc usage with more specific type on purpose to be skipped
+     * Ensure @var doc usage to be skipped, as arrow functions do not support
+     * inline @var annotations for type narrowing (e.g. generic types like Builder<Team>)
      */
     private function shouldSkipMoreSpecificTypeWithVarDoc(Return_ $return, Expr $expr): bool
     {
@@ -107,21 +101,7 @@ final class ClosureArrowFunctionAnalyzer
             return \false;
         }
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof VarTagValueNode) {
-            return \false;
-        }
-        $varType = $phpDocInfo->getVarType();
-        if ($varType instanceof MixedType) {
-            return \false;
-        }
-        $variableName = ltrim($varTagValueNode->variableName, '$');
-        $variable = $this->betterNodeFinder->findFirst($expr, static fn(Node $node): bool => $node instanceof Variable && $node->name === $variableName);
-        if (!$variable instanceof Variable) {
-            return \false;
-        }
-        $nativeVariableType = $this->nodeTypeResolver->getNativeType($variable);
-        // not equal with native type means more specific type
-        return !$nativeVariableType->equals($varType);
+        return $varTagValueNode instanceof VarTagValueNode;
     }
     private function shouldSkipForUsedReferencedValue(Closure $closure): bool
     {
