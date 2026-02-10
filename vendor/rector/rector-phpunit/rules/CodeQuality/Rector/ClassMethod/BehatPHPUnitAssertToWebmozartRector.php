@@ -83,7 +83,7 @@ final class BehatPHPUnitAssertToWebmozartRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const FLIPPED_ARGS = ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals', 'assertGreaterThan', 'assertGreaterThanOrEqual', 'assertLessThan', 'assertLessThanOrEqual', 'assertCount', 'assertInstanceOf', 'assertNotInstanceOf', 'assertArrayHasKey', 'assertArrayNotHasKey'];
+    private const FLIPPED_ARGS = ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals', 'assertGreaterThan', 'assertGreaterThanOrEqual', 'assertLessThan', 'assertLessThanOrEqual', 'assertCount', 'assertInstanceOf', 'assertNotInstanceOf', 'assertArrayHasKey', 'assertArrayNotHasKey', 'assertStringContainsString'];
     public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
