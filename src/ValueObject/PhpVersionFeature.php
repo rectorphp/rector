@@ -689,4 +689,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const PIPE_OPERATOER = \Rector\ValueObject\PhpVersion::PHP_85;
+    /**
+     * @see https://wiki.php.net/rfc/override_properties
+     * @var int
+     */
+    public const OVERRIDE_ATTRIBUTE_ON_PROPERTIES = \Rector\ValueObject\PhpVersion::PHP_85;
 }

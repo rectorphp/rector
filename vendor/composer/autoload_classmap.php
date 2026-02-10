@@ -2287,6 +2287,7 @@ return array(
     'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => $baseDir . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',
     'Rector\\Php85\\Rector\\FuncCall\\OrdSingleByteRector' => $baseDir . '/rules/Php85/Rector/FuncCall/OrdSingleByteRector.php',
     'Rector\\Php85\\Rector\\FuncCall\\RemoveFinfoBufferContextArgRector' => $baseDir . '/rules/Php85/Rector/FuncCall/RemoveFinfoBufferContextArgRector.php',
+    'Rector\\Php85\\Rector\\Property\\AddOverrideAttributeToOverriddenPropertiesRector' => $baseDir . '/rules/Php85/Rector/Property/AddOverrideAttributeToOverriddenPropertiesRector.php',
     'Rector\\Php85\\Rector\\ShellExec\\ShellExecFunctionCallOverBackticksRector' => $baseDir . '/rules/Php85/Rector/ShellExec/ShellExecFunctionCallOverBackticksRector.php',
     'Rector\\Php85\\Rector\\StmtsAwareInterface\\SequentialAssignmentsToPipeOperatorRector' => $baseDir . '/rules/Php85/Rector/StmtsAwareInterface/SequentialAssignmentsToPipeOperatorRector.php',
     'Rector\\Php85\\Rector\\Switch_\\ColonAfterSwitchCaseRector' => $baseDir . '/rules/Php85/Rector/Switch_/ColonAfterSwitchCaseRector.php',

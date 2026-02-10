@@ -2547,6 +2547,7 @@ class ComposerStaticInit6374fd21a3f525a40760d79e3596b56b
         'Rector\\Php85\\Rector\\FuncCall\\ChrArgModuloRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/ChrArgModuloRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\OrdSingleByteRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/OrdSingleByteRector.php',
         'Rector\\Php85\\Rector\\FuncCall\\RemoveFinfoBufferContextArgRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/FuncCall/RemoveFinfoBufferContextArgRector.php',
+        'Rector\\Php85\\Rector\\Property\\AddOverrideAttributeToOverriddenPropertiesRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Property/AddOverrideAttributeToOverriddenPropertiesRector.php',
         'Rector\\Php85\\Rector\\ShellExec\\ShellExecFunctionCallOverBackticksRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ShellExec/ShellExecFunctionCallOverBackticksRector.php',
         'Rector\\Php85\\Rector\\StmtsAwareInterface\\SequentialAssignmentsToPipeOperatorRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/StmtsAwareInterface/SequentialAssignmentsToPipeOperatorRector.php',
         'Rector\\Php85\\Rector\\Switch_\\ColonAfterSwitchCaseRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Switch_/ColonAfterSwitchCaseRector.php',
