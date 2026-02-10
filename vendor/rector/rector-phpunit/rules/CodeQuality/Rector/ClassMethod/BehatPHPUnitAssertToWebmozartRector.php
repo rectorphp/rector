@@ -68,6 +68,9 @@ final class BehatPHPUnitAssertToWebmozartRector extends AbstractRector
         'assertStringEndsWith' => 'endsWith',
         'assertStringEndsNotWith' => 'notEndsWith',
         'assertMatchesRegularExpression' => 'regex',
+        // Bool
+        'assertNotTrue' => 'false',
+        'assertNotFalse' => 'true',
         // Arrays / count
         'assertCount' => 'count',
         'assertArrayHasKey' => 'keyExists',
@@ -80,7 +83,7 @@ final class BehatPHPUnitAssertToWebmozartRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const FLIPPED_ARGS = ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals', 'assertGreaterThan', 'assertGreaterThanOrEqual', 'assertLessThan', 'assertLessThanOrEqual', 'assertCount', 'assertContains', 'assertNotContains', 'assertInstanceOf', 'assertNotInstanceOf', 'assertArrayHasKey', 'assertArrayNotHasKey'];
+    private const FLIPPED_ARGS = ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals', 'assertGreaterThan', 'assertGreaterThanOrEqual', 'assertLessThan', 'assertLessThanOrEqual', 'assertCount', 'assertInstanceOf', 'assertNotInstanceOf', 'assertArrayHasKey', 'assertArrayNotHasKey'];
     public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
