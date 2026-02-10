@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\Enum\BehatClassName;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
@@ -20,6 +21,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class BehatPHPUnitAssertToWebmozartRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
     /**
      * @var array<string, string>
      */
@@ -73,6 +78,10 @@ final class BehatPHPUnitAssertToWebmozartRector extends AbstractRector
      * @var string[]
      */
     private const FLIPPED_ARGS = ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals', 'assertGreaterThan', 'assertGreaterThanOrEqual', 'assertLessThan', 'assertLessThanOrEqual', 'assertCount', 'assertContains', 'assertNotContains', 'assertInstanceOf', 'assertNotInstanceOf'];
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change PHPUnit assert in Behat context files to Webmozart Assert, as first require a TestCase instance', [new CodeSample(<<<'CODE_SAMPLE'
@@ -119,6 +128,9 @@ CODE_SAMPLE
         }
         $classReflection = $scope->getClassReflection();
         if (!$classReflection->is(BehatClassName::CONTEXT)) {
+            return null;
+        }
+        if (!$this->reflectionProvider->hasClass(WebmozartClassName::ASSERT)) {
             return null;
         }
         $hasChanged = \false;
