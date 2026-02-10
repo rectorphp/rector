@@ -49,8 +49,8 @@ final class BehatPHPUnitAssertToWebmozartRector extends AbstractRector
         'assertIsIterable' => 'isIterable',
         'assertInstanceOf' => 'isInstanceOf',
         // array
-        'assertContains' => 'inArray',
-        'assertNotContains' => 'notInArray',
+        'assertContains' => 'oneOf',
+        'assertNotContains' => 'notOneOf',
         // Comparison / equality
         'assertSame' => 'same',
         'assertNotSame' => 'notSame',
@@ -79,6 +79,8 @@ final class BehatPHPUnitAssertToWebmozartRector extends AbstractRector
         'assertFileExists' => 'fileExists',
         'assertFileIsReadable' => 'readable',
         'assertDirectoryExists' => 'directory',
+        // Instance of
+        'assertNotInstanceOf' => 'notInstanceOf',
     ];
     /**
      * @var string[]
