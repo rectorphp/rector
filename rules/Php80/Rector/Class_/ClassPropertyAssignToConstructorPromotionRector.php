@@ -308,6 +308,14 @@ CODE_SAMPLE
     }
     private function shouldSkipPropertyOrParam(Property $property, Param $param): bool
     {
+        foreach ($property->hooks as $hook) {
+            if (!is_array($hook->body)) {
+                continue;
+            }
+            if (count($hook->body) > 1) {
+                return \true;
+            }
+        }
         return $property->type instanceof Node && $param->type instanceof Node && $property->hooks !== [] && !$this->nodeComparator->areNodesEqual($property->type, $param->type);
     }
 }
