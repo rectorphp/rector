@@ -14,6 +14,7 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PhpParser\Node\FileNode;
+use Rector\VersionBonding\ComposerPackageConstraintFilter;
 use Rector\VersionBonding\PhpVersionedFilter;
 use RectorPrefix202602\Webmozart\Assert\Assert;
 /**
@@ -40,6 +41,10 @@ final class RectorNodeTraverser implements NodeTraverserInterface
     /**
      * @readonly
      */
+    private ComposerPackageConstraintFilter $composerPackageConstraintFilter;
+    /**
+     * @readonly
+     */
     private ConfigurationRuleFilter $configurationRuleFilter;
     /**
      * @var RectorInterface[]
@@ -54,10 +59,11 @@ final class RectorNodeTraverser implements NodeTraverserInterface
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, PhpVersionedFilter $phpVersionedFilter, ConfigurationRuleFilter $configurationRuleFilter)
+    public function __construct(array $rectors, PhpVersionedFilter $phpVersionedFilter, ComposerPackageConstraintFilter $composerPackageConstraintFilter, ConfigurationRuleFilter $configurationRuleFilter)
     {
         $this->rectors = $rectors;
         $this->phpVersionedFilter = $phpVersionedFilter;
+        $this->composerPackageConstraintFilter = $composerPackageConstraintFilter;
         $this->configurationRuleFilter = $configurationRuleFilter;
     }
     public function addVisitor(NodeVisitor $visitor): void
@@ -268,8 +274,10 @@ final class RectorNodeTraverser implements NodeTraverserInterface
         if ($this->areNodeVisitorsPrepared) {
             return;
         }
-        // filer out by version
+        // filter out by PHP version
         $this->visitors = $this->phpVersionedFilter->filter($this->rectors);
+        // filter out by composer package constraint
+        $this->visitors = $this->composerPackageConstraintFilter->filter($this->visitors);
         // filter by configuration
         $this->visitors = $this->configurationRuleFilter->filter($this->visitors);
         $this->areNodeVisitorsPrepared = \true;
