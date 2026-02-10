@@ -80,7 +80,7 @@ final class TestsNodeAnalyzer
         } else {
             return \false;
         }
-        $assertObjectType = new ObjectType('PHPUnit\Framework\Assert');
+        $assertObjectType = new ObjectType(PHPUnitClassName::ASSERT);
         if (!$assertObjectType->isSuperTypeOf($callerType)->yes()) {
             return \false;
         }
