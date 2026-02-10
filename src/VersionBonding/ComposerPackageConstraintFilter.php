@@ -7,6 +7,9 @@ use RectorPrefix202602\Composer\Semver\Semver;
 use Rector\Composer\InstalledPackageResolver;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+/**
+ * @see \Rector\Tests\VersionBonding\ComposerPackageConstraintFilterTest
+ */
 final class ComposerPackageConstraintFilter
 {
     /**

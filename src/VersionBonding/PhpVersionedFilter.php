@@ -8,6 +8,9 @@ use Rector\Php\PhpVersionProvider;
 use Rector\Php\PolyfillPackagesProvider;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
+/**
+ * @see \Rector\Tests\VersionBonding\PhpVersionedFilterTest
+ */
 final class PhpVersionedFilter
 {
     /**
