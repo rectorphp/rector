@@ -16,14 +16,14 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\ClassMethod\BehatPHPUnitAssertToWebmozzartRector\BehatPHPUnitAssertToWebmozzartRectorTest
+ * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\ClassMethod\BehatPHPUnitAssertToWebmozartRector\BehatPHPUnitAssertToWebmozartRectorTest
  */
-final class BehatPHPUnitAssertToWebmozzartRector extends AbstractRector
+final class BehatPHPUnitAssertToWebmozartRector extends AbstractRector
 {
     /**
      * @var array<string, string>
      */
-    private const PHPUNIT_TO_WEBMOZZART_METHODS = [
+    private const PHPUNIT_TO_WEBMOZART_METHODS = [
         // Boolean
         'assertTrue' => 'true',
         'assertFalse' => 'false',
@@ -72,7 +72,7 @@ final class BehatPHPUnitAssertToWebmozzartRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const FLIPPED_ARGS = ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals', 'assertGreaterThan', 'assertGreaterThanOrEqual', 'assertLessThan', 'assertLessThanOrEqual', 'assertCount', 'assertContains', 'assertNotContains'];
+    private const FLIPPED_ARGS = ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals', 'assertGreaterThan', 'assertGreaterThanOrEqual', 'assertLessThan', 'assertLessThanOrEqual', 'assertCount', 'assertContains', 'assertNotContains', 'assertInstanceOf', 'assertNotInstanceOf'];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change PHPUnit assert in Behat context files to Webmozart Assert, as first require a TestCase instance', [new CodeSample(<<<'CODE_SAMPLE'
@@ -134,7 +134,7 @@ CODE_SAMPLE
                 return null;
             }
             // changed method name
-            $webmozartMethodName = self::PHPUNIT_TO_WEBMOZZART_METHODS[$phpunitMethodName] ?? null;
+            $webmozartMethodName = self::PHPUNIT_TO_WEBMOZART_METHODS[$phpunitMethodName] ?? null;
             if ($webmozartMethodName === null) {
                 return null;
             }

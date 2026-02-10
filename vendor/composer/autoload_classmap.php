@@ -1955,7 +1955,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\AddInstanceofAssertForNullableInstanceRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/AddInstanceofAssertForNullableInstanceRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\AddKeysExistsAssertForKeyUseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/AddKeysExistsAssertForKeyUseRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\BareCreateMockAssignToDirectUseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/BareCreateMockAssignToDirectUseRector.php',
-    'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\BehatPHPUnitAssertToWebmozzartRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/BehatPHPUnitAssertToWebmozzartRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\BehatPHPUnitAssertToWebmozartRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/BehatPHPUnitAssertToWebmozartRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\CreateMockToAnonymousClassRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/CreateMockToAnonymousClassRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\DataProviderArrayItemsNewLinedRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/DataProviderArrayItemsNewLinedRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\EntityDocumentCreateMockToDirectNewRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/EntityDocumentCreateMockToDirectNewRector.php',
