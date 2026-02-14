@@ -625,17 +625,17 @@
         },
         {
             "name": "nette\/utils",
-            "version": "v4.1.2",
-            "version_normalized": "4.1.2.0",
+            "version": "v4.1.3",
+            "version_normalized": "4.1.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/utils.git",
-                "reference": "f76b5dc3d6c6d3043c8d937df2698515b99cbaf5"
+                "reference": "bb3ea637e3d131d72acc033cfc2746ee893349fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/f76b5dc3d6c6d3043c8d937df2698515b99cbaf5",
-                "reference": "f76b5dc3d6c6d3043c8d937df2698515b99cbaf5",
+                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/bb3ea637e3d131d72acc033cfc2746ee893349fe",
+                "reference": "bb3ea637e3d131d72acc033cfc2746ee893349fe",
                 "shasum": ""
             },
             "require": {
@@ -647,8 +647,10 @@
             },
             "require-dev": {
                 "jetbrains\/phpstorm-attributes": "^1.2",
+                "nette\/phpstan-rules": "^1.0",
                 "nette\/tester": "^2.5",
-                "phpstan\/phpstan": "^2.0@stable",
+                "phpstan\/extension-installer": "^1.4@stable",
+                "phpstan\/phpstan": "^2.1@stable",
                 "tracy\/tracy": "^2.9"
             },
             "suggest": {
@@ -659,7 +661,7 @@
                 "ext-mbstring": "to use Strings::lower() etc...",
                 "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
             },
-            "time": "2026-02-03T17:21:09+00:00",
+            "time": "2026-02-13T03:05:33+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -711,7 +713,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/utils\/issues",
-                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.1.2"
+                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.1.3"
             },
             "install-path": "..\/nette\/utils"
         },
@@ -1757,12 +1759,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "db13b8fe0b57a5c292f8fe9696d2dcad0609dc65"
+                "reference": "b0da459893a4b68697879b6888d5ce858f0a5850"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/db13b8fe0b57a5c292f8fe9696d2dcad0609dc65",
-                "reference": "db13b8fe0b57a5c292f8fe9696d2dcad0609dc65",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b0da459893a4b68697879b6888d5ce858f0a5850",
+                "reference": "b0da459893a4b68697879b6888d5ce858f0a5850",
                 "shasum": ""
             },
             "require": {
@@ -1786,7 +1788,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-02-14T05:36:31+00:00",
+            "time": "2026-02-14T06:40:16+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

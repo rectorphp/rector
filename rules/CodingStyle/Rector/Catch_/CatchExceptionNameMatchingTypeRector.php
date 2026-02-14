@@ -129,7 +129,7 @@ CODE_SAMPLE
     private function resolveNewVariableName(string $typeShortName): string
     {
         return Strings::replace(lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, static function (array $matches): string {
-            $output = isset($matches[1]) ? strtolower($matches[1]) : '';
+            $output = isset($matches[1]) ? strtolower((string) $matches[1]) : '';
             $output .= $matches[2] ?? '';
             return $output . ($matches[3] ?? '');
         });

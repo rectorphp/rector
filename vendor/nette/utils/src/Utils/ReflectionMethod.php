@@ -17,9 +17,7 @@ final class ReflectionMethod extends \ReflectionMethod
     /** @var \ReflectionClass<object>
      * @readonly */
     private \ReflectionClass $originalClass;
-    /**
-     * @param object|string $objectOrMethod
-     */
+    /** @param  class-string|object  $objectOrMethod */
     public function __construct($objectOrMethod, ?string $method = null)
     {
         if (is_string($objectOrMethod) && strpos($objectOrMethod, '::') !== \false) {

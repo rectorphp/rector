@@ -20,16 +20,14 @@ use RectorPrefix202602\Nette;
  * @property-read bool $odd
  * @property-read bool $even
  * @property-read int $counter
- * @property-read mixed $nextKey
- * @property-read mixed $nextValue
+ * @property-read TKey $nextKey
+ * @property-read TValue $nextValue
  */
 class CachingIterator extends \CachingIterator implements \Countable
 {
     use Nette\SmartObject;
     private int $counter = 0;
-    /**
-     * @param  iterable<TKey, TValue>|\stdClass  $iterable
-     */
+    /** @param  iterable<TKey, TValue>|\stdClass  $iterable */
     public function __construct($iterable)
     {
         $iterable = $iterable instanceof \stdClass ? new \ArrayIterator((array) $iterable) : Nette\Utils\Iterables::toIterator($iterable);
@@ -92,16 +90,12 @@ class CachingIterator extends \CachingIterator implements \Countable
         parent::rewind();
         $this->counter = parent::valid() ? 1 : 0;
     }
-    /**
-     * @return mixed
-     */
+    /** @return TKey */
     public function getNextKey()
     {
         return $this->getInnerIterator()->key();
     }
-    /**
-     * @return mixed
-     */
+    /** @return TValue */
     public function getNextValue()
     {
         return $this->getInnerIterator()->current();

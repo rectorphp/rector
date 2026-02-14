@@ -107,10 +107,7 @@ class DateTime extends \DateTime implements \JsonSerializable
     {
         return (new self('@0 ' . $relativeTime))->getTimestamp();
     }
-    /**
-     * @param \DateTimeZone|string|null $timezone
-     */
-    private function apply(string $datetime, $timezone = null, bool $ctr = \false): void
+    private function apply(string $datetime, ?\DateTimeZone $timezone = null, bool $ctr = \false): void
     {
         $relPart = '';
         $absPart = preg_replace_callback('/[+-]?\s*\d+\s+((microsecond|millisecond|[mµu]sec)s?|[mµ]s|sec(ond)?s?|min(ute)?s?|hours?)(\s+ago)?\b/iu', function ($m) use (&$relPart) {

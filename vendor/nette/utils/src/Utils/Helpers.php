@@ -33,7 +33,7 @@ class Helpers
     }
     /**
      * Returns the last occurred PHP error or an empty string if no error occurred. Unlike error_get_last(),
-     * it is nit affected by the PHP directive html_errors and always returns text, not HTML.
+     * it is not affected by the PHP directive html_errors and always returns text, not HTML.
      */
     public static function getLastError(): string
     {
@@ -53,10 +53,10 @@ class Helpers
     }
     /**
      * Returns value clamped to the inclusive range of min and max.
+     * @return ($value is float ? float : ($min is float ? float : ($max is float ? float : int)))
      * @param int|float $value
      * @param int|float $min
      * @param int|float $max
-     * @return float|int
      */
     public static function clamp($value, $min, $max)
     {
@@ -83,6 +83,7 @@ class Helpers
     }
     /**
      * Compares two values in the same way that PHP does. Recognizes operators: >, >=, <, <=, =, ==, ===, !=, !==, <>
+     * @param  '>'|'>='|'<'|'<='|'='|'=='|'==='|'!='|'!=='|'<>'  $operator
      * @param mixed $left
      * @param mixed $right
      */

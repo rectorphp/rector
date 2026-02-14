@@ -105,7 +105,7 @@ class Paginator
      */
     public function getPageCount(): ?int
     {
-        return $this->itemCount === null ? null : (int) ceil($this->itemCount / $this->itemsPerPage);
+        return $this->itemCount === null ? null : max(0, (int) ceil($this->itemCount / $this->itemsPerPage));
     }
     /**
      * @return static
@@ -159,6 +159,6 @@ class Paginator
      */
     public function getLength(): int
     {
-        return $this->itemCount === null ? $this->itemsPerPage : min($this->itemsPerPage, $this->itemCount - $this->getPageIndex() * $this->itemsPerPage);
+        return $this->itemCount === null ? $this->itemsPerPage : max(0, min($this->itemsPerPage, $this->itemCount - $this->getPageIndex() * $this->itemsPerPage));
     }
 }
