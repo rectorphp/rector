@@ -1818,12 +1818,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "0b6744bba763adaa0fb4adfcf3425461799380d4"
+                "reference": "adce7d9660b4eb540e0bcbe4e196408983f0f352"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/0b6744bba763adaa0fb4adfcf3425461799380d4",
-                "reference": "0b6744bba763adaa0fb4adfcf3425461799380d4",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/adce7d9660b4eb540e0bcbe4e196408983f0f352",
+                "reference": "adce7d9660b4eb540e0bcbe4e196408983f0f352",
                 "shasum": ""
             },
             "require": {
@@ -1850,7 +1850,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-02-11T12:14:38+00:00",
+            "time": "2026-02-11T12:24:12+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -3299,17 +3299,17 @@
         },
         {
             "name": "webmozart\/assert",
-            "version": "2.1.2",
-            "version_normalized": "2.1.2.0",
+            "version": "2.1.3",
+            "version_normalized": "2.1.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/webmozarts\/assert.git",
-                "reference": "ce6a2f100c404b2d32a1dd1270f9b59ad4f57649"
+                "reference": "6976757ba8dd70bf8cbaea0914ad84d8b51a9f46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/webmozarts\/assert\/zipball\/ce6a2f100c404b2d32a1dd1270f9b59ad4f57649",
-                "reference": "ce6a2f100c404b2d32a1dd1270f9b59ad4f57649",
+                "url": "https:\/\/api.github.com\/repos\/webmozarts\/assert\/zipball\/6976757ba8dd70bf8cbaea0914ad84d8b51a9f46",
+                "reference": "6976757ba8dd70bf8cbaea0914ad84d8b51a9f46",
                 "shasum": ""
             },
             "require": {
@@ -3323,7 +3323,7 @@
                 "ext-simplexml": "",
                 "ext-spl": ""
             },
-            "time": "2026-01-13T14:02:24+00:00",
+            "time": "2026-02-13T21:01:40+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3358,7 +3358,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/webmozarts\/assert\/issues",
-                "source": "https:\/\/github.com\/webmozarts\/assert\/tree\/2.1.2"
+                "source": "https:\/\/github.com\/webmozarts\/assert\/tree\/2.1.3"
             },
             "install-path": "..\/webmozart\/assert"
         }

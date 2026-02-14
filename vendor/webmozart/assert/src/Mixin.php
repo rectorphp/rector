@@ -5,6 +5,7 @@ namespace RectorPrefix202602\Webmozart\Assert;
 
 use ArrayAccess;
 use Countable;
+use Throwable;
 /**
  * This trait provides nullOr*, all* and allNullOr* variants of assertion base methods.
  * Do not use this trait directly: it will change, and is not designed for reuse.
@@ -1040,15 +1041,15 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
-     * @psalm-assert ExpectedType|null $value
+     * @template T of object
+     * @psalm-assert T|null $value
      *
-     * @param mixed $class
-     *
-     * @return ExpectedType|null
+     * @psalm-param class-string<T> $class
+     * @return T|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
+     * @param mixed $class
      */
     public static function nullOrIsInstanceOf($value, $class, string $message = '')
     {
@@ -1058,15 +1059,15 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
-     * @psalm-assert iterable<ExpectedType> $value
+     * @template T of object
+     * @psalm-assert iterable<T> $value
      *
-     * @param mixed $class
-     *
-     * @return iterable<ExpectedType>
+     * @psalm-param class-string<T> $class
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
+     * @param mixed $class
      */
     public static function allIsInstanceOf($value, $class, string $message = ''): iterable
     {
@@ -1079,15 +1080,15 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
-     * @psalm-assert iterable<ExpectedType|null> $value
+     * @template T of object
+     * @psalm-assert iterable<T|null> $value
      *
-     * @param mixed $class
-     *
-     * @return iterable<ExpectedType|null>
+     * @psalm-param class-string<T> $class
+     * @return iterable<T|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
+     * @param mixed $class
      */
     public static function allNullOrIsInstanceOf($value, $class, string $message = ''): iterable
     {
@@ -1098,16 +1099,13 @@ trait Mixin
         return $value;
     }
     /**
-     * @psalm-pure
-     *
-     * @template ExpectedType of object
-     *
-     * @param mixed $class
-     *
+     * @template T of object
+     * @psalm-param class-string<T> $class
      * @return mixed
      *
      * @throws InvalidArgumentException
      * @param mixed $value
+     * @param mixed $class
      */
     public static function nullOrNotInstanceOf($value, $class, string $message = '')
     {
@@ -1115,16 +1113,13 @@ trait Mixin
         return $value;
     }
     /**
-     * @psalm-pure
-     *
-     * @template ExpectedType of object
-     *
-     * @param mixed $class
-     *
+     * @template T of object
+     * @psalm-param class-string<T> $class
      * @return mixed
      *
      * @throws InvalidArgumentException
      * @param mixed $value
+     * @param mixed $class
      */
     public static function allNotInstanceOf($value, $class, string $message = ''): iterable
     {
@@ -1135,17 +1130,15 @@ trait Mixin
         return $value;
     }
     /**
-     * @psalm-pure
+     * @template T of object
+     * @psalm-assert iterable<object|null> $value
      *
-     * @template ExpectedType of object
-     * @psalm-assert iterable<!ExpectedType|null> $value
-     *
-     * @param mixed $class
-     *
-     * @return iterable<!ExpectedType|null>
+     * @psalm-param class-string<T> $class
+     * @return iterable<object|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
+     * @param mixed $class
      */
     public static function allNullOrNotInstanceOf($value, $class, string $message = ''): iterable
     {
@@ -1156,16 +1149,15 @@ trait Mixin
         return $value;
     }
     /**
-     * @psalm-pure
+     * @template T of object
+     * @psalm-assert T|null $value
      *
-     * @param mixed $classes
+     * @param mixed $value
      *
-     * @psalm-param array<class-string> $classes
-     *
-     * @return mixed
+     * @return T|null
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
+     * @param mixed $classes
      */
     public static function nullOrIsInstanceOfAny($value, $classes, string $message = '')
     {
@@ -1173,16 +1165,15 @@ trait Mixin
         return $value;
     }
     /**
-     * @psalm-pure
+     * @template T of object
+     * @psalm-assert iterable<T> $value
      *
-     * @param mixed $classes
+     * @param mixed $value
      *
-     * @psalm-param array<class-string> $classes
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
+     * @param mixed $classes
      */
     public static function allIsInstanceOfAny($value, $classes, string $message = ''): iterable
     {
@@ -1193,16 +1184,15 @@ trait Mixin
         return $value;
     }
     /**
-     * @psalm-pure
+     * @template T of object
+     * @psalm-assert iterable<T|null> $value
      *
-     * @param mixed $classes
+     * @param mixed $value
      *
-     * @psalm-param array<class-string> $classes
-     *
-     * @return mixed
+     * @return iterable<T|null>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
+     * @param mixed $classes
      */
     public static function allNullOrIsInstanceOfAny($value, $classes, string $message = ''): iterable
     {
@@ -1215,15 +1205,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
-     * @psalm-assert ExpectedType|class-string<ExpectedType>|null $value
+     * @template T of object
+     * @psalm-assert T|class-string<T>|null $value
      *
-     * @param mixed $value
-     * @param mixed $class
-     *
-     * @return ExpectedType|class-string<ExpectedType>|null
+     * @return T|class-string<T>|null
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
+     * @param mixed $class
      */
     public static function nullOrIsAOf($value, $class, string $message = '')
     {
@@ -1233,15 +1222,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
-     * @psalm-assert iterable<ExpectedType|class-string<ExpectedType>> $value
+     * @template T of object
+     * @psalm-assert iterable<T|class-string<T>> $value
      *
-     * @param mixed $value
-     * @param mixed $class
-     *
-     * @return iterable<ExpectedType|class-string<ExpectedType>>
+     * @return iterable<T|class-string<T>>
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
+     * @param mixed $class
      */
     public static function allIsAOf($value, $class, string $message = ''): iterable
     {
@@ -1254,15 +1242,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
-     * @psalm-assert iterable<ExpectedType|class-string<ExpectedType>|null> $value
+     * @template T of object
+     * @psalm-assert iterable<T|class-string<T>|null> $value
      *
-     * @param mixed $value
-     * @param mixed $class
-     *
-     * @return iterable<ExpectedType|class-string<ExpectedType>|null>
+     * @return iterable<T|class-string<T>|null>
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
+     * @param mixed $class
      */
     public static function allNullOrIsAOf($value, $class, string $message = ''): iterable
     {
@@ -1275,14 +1262,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template UnexpectedType of object
+     * @template T
      *
      * @param mixed $value
-     * @param mixed $class
      *
      * @return mixed
      *
      * @throws InvalidArgumentException
+     * @param mixed $class
      */
     public static function nullOrIsNotA($value, $class, string $message = '')
     {
@@ -1292,14 +1279,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template UnexpectedType of object
+     * @template T
      *
      * @param mixed $value
-     * @param mixed $class
      *
      * @return mixed
      *
      * @throws InvalidArgumentException
+     * @param mixed $class
      */
     public static function allIsNotA($value, $class, string $message = ''): iterable
     {
@@ -1312,14 +1299,15 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template UnexpectedType of object
+     * @template T
+     * @psalm-assert iterable<object|class-string|null> $value
      *
      * @param mixed $value
-     * @param mixed $class
      *
-     * @return mixed
+     * @return iterable<object|class-string|null>
      *
      * @throws InvalidArgumentException
+     * @param mixed $class
      */
     public static function allNullOrIsNotA($value, $class, string $message = ''): iterable
     {
@@ -4414,9 +4402,10 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert list|null $array
+     * @psalm-assert list<T>|null $array
      *
-     * @return list|null
+     * @template T
+     * @return list<T>|null
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4429,9 +4418,10 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert iterable<list> $array
+     * @psalm-assert iterable<list<T>> $array
      *
-     * @return iterable<list>
+     * @template T
+     * @return iterable<list<T>>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4447,9 +4437,10 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert iterable<list|null> $array
+     * @psalm-assert iterable<list<T>|null> $array
      *
-     * @return iterable<list|null>
+     * @template T
+     * @return iterable<list<T>|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4465,9 +4456,10 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert non-empty-list|null $array
+     * @psalm-assert non-empty-list<T>|null $array
      *
-     * @return non-empty-list|null
+     * @template T
+     * @return non-empty-list<T>|null
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4480,9 +4472,10 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert iterable<non-empty-list> $array
+     * @psalm-assert iterable<non-empty-list<T>> $array
      *
-     * @return iterable<non-empty-list>
+     * @template T
+     * @return iterable<non-empty-list<T>>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4498,9 +4491,10 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert iterable<non-empty-list|null> $array
+     * @psalm-assert iterable<non-empty-list<T>|null> $array
      *
-     * @return iterable<non-empty-list|null>
+     * @template T
+     * @return iterable<non-empty-list<T>|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
