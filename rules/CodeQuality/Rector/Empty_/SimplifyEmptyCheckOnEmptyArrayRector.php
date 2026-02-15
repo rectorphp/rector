@@ -64,13 +64,13 @@ final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify empty() functions calls on empty arrays', [new CodeSample(<<<'CODE_SAMPLE'
-$array = [];
+$values = [];
 
 if (empty($values)) {
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-$array = [];
+$values = [];
 
 if ([] === $values) {
 }
