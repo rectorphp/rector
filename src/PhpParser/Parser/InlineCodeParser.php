@@ -62,6 +62,11 @@ final class InlineCodeParser
      * @var string
      */
     private const BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX = '#(?<!")(?<backreference>\$\d+)#';
+    /**
+     * @see https://regex101.com/r/13mVVg/1
+     * @var string
+     */
+    private const HEX_BACKREFERENCE_REGEX = '#0x(?<backreference>\$\d+)#';
     public function __construct(BetterStandardPrinter $betterStandardPrinter, \Rector\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -88,6 +93,12 @@ final class InlineCodeParser
     public function stringify(Expr $expr): string
     {
         if ($expr instanceof String_) {
+            if (strpos($expr->value, "'") === \false && strpos($expr->value, '"') === \false && StringUtils::isMatch($expr->value, self::HEX_BACKREFERENCE_REGEX)) {
+                return Strings::replace($expr->value, self::HEX_BACKREFERENCE_REGEX, static function (array $match): string {
+                    $number = ltrim((string) $match['backreference'], '\$');
+                    return 'hexdec($matches[' . $number . '])';
+                });
+            }
             if (!StringUtils::isMatch($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX)) {
                 return Strings::replace($expr->value, self::BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX, static fn(array $match): string => '"' . $match['backreference'] . '"');
             }
