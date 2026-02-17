@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -147,11 +146,7 @@ CODE_SAMPLE
     private function shouldSkipOverriddenMethod(ClassMethod $classMethod): bool
     {
         // Check if this method overrides a parent method
-        $parentMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($classMethod);
-        if (!$parentMethodReflection instanceof MethodReflection) {
-            return \false;
-        }
         // If parent method exists, skip adding docblock as it should inherit documentation from parent
-        return \true;
+        return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
     }
 }
