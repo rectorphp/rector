@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -18,6 +19,7 @@ use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Rector\TypeDeclarationDocblocks\TypeResolver\ConstantArrayTypeGeneralizer;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -45,13 +47,18 @@ final class DocblockReturnArrayFromDirectArrayInstanceRector extends AbstractRec
      * @readonly
      */
     private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer, ReturnNodeFinder $returnNodeFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer)
+    /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer, ReturnNodeFinder $returnNodeFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->constantArrayTypeGeneralizer = $constantArrayTypeGeneralizer;
         $this->returnNodeFinder = $returnNodeFinder;
         $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getNodeTypes(): array
     {
@@ -98,6 +105,10 @@ CODE_SAMPLE
         if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($phpDocInfo->getReturnTagValue())) {
             return null;
         }
+        // skip if method overrides parent method with return docblock
+        if ($node instanceof ClassMethod && $this->shouldSkipOverriddenMethod($node)) {
+            return null;
+        }
         $soleReturn = $this->returnNodeFinder->findOnlyReturnWithExpr($node);
         if (!$soleReturn instanceof Return_) {
             return null;
@@ -132,5 +143,15 @@ CODE_SAMPLE
         }
         // better than array{}
         return $returnTagValueNode->type instanceof ArrayTypeNode;
+    }
+    private function shouldSkipOverriddenMethod(ClassMethod $classMethod): bool
+    {
+        // Check if this method overrides a parent method
+        $parentMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($classMethod);
+        if (!$parentMethodReflection instanceof MethodReflection) {
+            return \false;
+        }
+        // If parent method exists, skip adding docblock as it should inherit documentation from parent
+        return \true;
     }
 }
