@@ -82,8 +82,9 @@ final class JUnitOutputFormatter implements OutputFormatterInterface
         }
         foreach ($processResult->getSystemErrors() as $systemError) {
             $filePath = $configuration->isReportingWithRealPath() ? $systemError->getAbsoluteFilePath() ?? '' : $systemError->getRelativeFilePath() ?? '';
-            $xmlError = $domDocument->createElement(self::XML_ELEMENT_ERROR, $systemError->getMessage());
+            $xmlError = $domDocument->createElement(self::XML_ELEMENT_ERROR);
             $xmlError->setAttribute(self::XML_ATTRIBUTE_TYPE, 'Error');
+            $xmlError->appendChild($domDocument->createTextNode($systemError->getMessage()));
             $xmlTestCase = $domDocument->createElement(self::XML_ELEMENT_TESTCASE);
             $xmlTestCase->setAttribute(self::XML_ATTRIBUTE_FILE, $filePath);
             $xmlTestCase->setAttribute(self::XML_ATTRIBUTE_NAME, $filePath . ':' . $systemError->getLine());
@@ -101,8 +102,9 @@ final class JUnitOutputFormatter implements OutputFormatterInterface
         foreach ($fileDiffs as $fileDiff) {
             $filePath = $configuration->isReportingWithRealPath() ? $fileDiff->getAbsoluteFilePath() ?? '' : $fileDiff->getRelativeFilePath() ?? '';
             $rectorClasses = implode(' / ', $fileDiff->getRectorShortClasses());
-            $xmlError = $domDocument->createElement(self::XML_ELEMENT_ERROR, $fileDiff->getDiff());
+            $xmlError = $domDocument->createElement(self::XML_ELEMENT_ERROR);
             $xmlError->setAttribute(self::XML_ATTRIBUTE_TYPE, $rectorClasses);
+            $xmlError->appendChild($domDocument->createTextNode($fileDiff->getDiff()));
             $xmlTestCase = $domDocument->createElement(self::XML_ELEMENT_TESTCASE);
             $xmlTestCase->setAttribute(self::XML_ATTRIBUTE_FILE, $filePath);
             $xmlTestCase->setAttribute(self::XML_ATTRIBUTE_NAME, $filePath . ':' . $fileDiff->getFirstLineNumber());
