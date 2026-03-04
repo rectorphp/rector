@@ -141,11 +141,11 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\IntersectionType|\PhpParser\Node\Name\FullyQualified
      */
-    private function updatePropertyType(?Node $type)
+    private function updatePropertyType(?Node $node)
     {
-        if ($type instanceof IntersectionType) {
+        if ($node instanceof IntersectionType) {
             $newTypes = [];
-            foreach ($type->types as $innerType) {
+            foreach ($node->types as $innerType) {
                 if ($innerType instanceof FullyQualified && $innerType->toString() === PHPUnitClassName::MOCK_OBJECT) {
                     $newTypes[] = new FullyQualified(PHPUnitClassName::STUB);
                 } else {

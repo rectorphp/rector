@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\PHPUnit120\Rector\CallLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -14,9 +15,19 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptor;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockObjectExprDetector;
+use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -34,10 +45,15 @@ final class CreateStubOverCreateMockArgRector extends AbstractRector
      * @readonly
      */
     private MockObjectExprDetector $mockObjectExprDetector;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, MockObjectExprDetector $mockObjectExprDetector)
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, MockObjectExprDetector $mockObjectExprDetector, ReflectionResolver $reflectionResolver)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->mockObjectExprDetector = $mockObjectExprDetector;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -98,8 +114,19 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        foreach ($node->getArgs() as $arg) {
+        $scope = ScopeFetcher::fetch($node);
+        $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
+        if (!$reflection instanceof FunctionReflection && !$reflection instanceof MethodReflection) {
+            return null;
+        }
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($reflection, $node, $scope);
+        foreach ($node->getArgs() as $key => $arg) {
             if (!$arg->value instanceof MethodCall) {
+                continue;
+            }
+            $type = $this->resolveTypeFromArgumentAndKey($parametersAcceptor, $arg, $key);
+            $superType = new ObjectType(PHPUnitClassName::MOCK_OBJECT);
+            if ($superType->isSuperTypeOf($type)->yes()) {
                 continue;
             }
             $methodCall = $arg->value;
@@ -113,6 +140,23 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    private function resolveTypeFromArgumentAndKey(ParametersAcceptor $parametersAcceptor, Arg $arg, int $key): Type
+    {
+        $parameters = $parametersAcceptor->getParameters();
+        if (!$arg->name instanceof Identifier) {
+            if (!isset($parameters[$key])) {
+                return new MixedType();
+            }
+            return $parameters[$key]->getType();
+        }
+        foreach ($parameters as $parameter) {
+            if ($parameter->getName() !== $arg->name->toString()) {
+                continue;
+            }
+            return $parameter->getType();
+        }
+        return new MixedType();
     }
     private function matchCreateMockMethodCall(Expr $expr): ?\PhpParser\Node\Expr\MethodCall
     {
