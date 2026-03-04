@@ -14,6 +14,8 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,9 +29,19 @@ final class InlineConstructorDefaultToPropertyRector extends AbstractRector
      * @readonly
      */
     private ExprAnalyzer $exprAnalyzer;
-    public function __construct(ExprAnalyzer $exprAnalyzer)
+    /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    /**
+     * @readonly
+     */
+    private PropertyFetchFinder $propertyFetchFinder;
+    public function __construct(ExprAnalyzer $exprAnalyzer, BetterNodeFinder $betterNodeFinder, PropertyFetchFinder $propertyFetchFinder)
     {
         $this->exprAnalyzer = $exprAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->propertyFetchFinder = $propertyFetchFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -121,9 +133,22 @@ CODE_SAMPLE
         }
         return $propertyName;
     }
+    private function isFoundInAnyPropertyHooks(Class_ $class, string $propertyName): bool
+    {
+        $propertyHooks = array_reduce($class->getProperties(), static fn(array $hooks, Property $property): array => array_merge($hooks, $property->hooks), []);
+        return (bool) $this->betterNodeFinder->findFirst($propertyHooks, function (Node $subNode) use ($class, $propertyName): bool {
+            if (!$subNode instanceof PropertyFetch) {
+                return \false;
+            }
+            return $this->propertyFetchFinder->isLocalPropertyFetchByName($subNode, $class, $propertyName);
+        });
+    }
     private function refactorProperty(Class_ $class, string $propertyName, Expr $defaultExpr, ClassMethod $constructClassMethod, int $key): bool
     {
         if ($class->isReadonly()) {
+            return \false;
+        }
+        if ($this->isFoundInAnyPropertyHooks($class, $propertyName)) {
             return \false;
         }
         foreach ($class->stmts as $classStmt) {
