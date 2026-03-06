@@ -25,6 +25,35 @@ final class SymfonyAttribute
      * @var string
      */
     public const AS_EVENT_LISTENER = 'Symfony\Component\EventDispatcher\Attribute\AsEventListener';
+    // Workflow listener attributes (Symfony 7.1+)
+    /**
+     * @var string
+     */
+    public const AS_ANNOUNCE_LISTENER = 'Symfony\Component\Workflow\Attribute\AsAnnounceListener';
+    /**
+     * @var string
+     */
+    public const AS_COMPLETED_LISTENER = 'Symfony\Component\Workflow\Attribute\AsCompletedListener';
+    /**
+     * @var string
+     */
+    public const AS_ENTER_LISTENER = 'Symfony\Component\Workflow\Attribute\AsEnterListener';
+    /**
+     * @var string
+     */
+    public const AS_ENTERED_LISTENER = 'Symfony\Component\Workflow\Attribute\AsEnteredListener';
+    /**
+     * @var string
+     */
+    public const AS_GUARD_LISTENER = 'Symfony\Component\Workflow\Attribute\AsGuardListener';
+    /**
+     * @var string
+     */
+    public const AS_LEAVE_LISTENER = 'Symfony\Component\Workflow\Attribute\AsLeaveListener';
+    /**
+     * @var string
+     */
+    public const AS_TRANSITION_LISTENER = 'Symfony\Component\Workflow\Attribute\AsTransitionListener';
     /**
      * @var string
      */
