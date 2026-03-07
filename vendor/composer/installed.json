@@ -1884,12 +1884,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "6f8031094466a0fb748524a8ba12a944d16579f7"
+                "reference": "aa281cb4f5c3b19bc87e50b52583d1e8bc534ad5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/6f8031094466a0fb748524a8ba12a944d16579f7",
-                "reference": "6f8031094466a0fb748524a8ba12a944d16579f7",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/aa281cb4f5c3b19bc87e50b52583d1e8bc534ad5",
+                "reference": "aa281cb4f5c3b19bc87e50b52583d1e8bc534ad5",
                 "shasum": ""
             },
             "require": {
@@ -1923,7 +1923,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-03-06T15:13:30+00:00",
+            "time": "2026-03-07T18:05:35+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2020,17 +2020,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.34",
-            "version_normalized": "6.4.34.0",
+            "version": "v6.4.35",
+            "version_normalized": "6.4.35.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "7b1f1c37eff5910ddda2831345467e593a5120ad"
+                "reference": "49257c96304c508223815ee965c251e7c79e614e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/7b1f1c37eff5910ddda2831345467e593a5120ad",
-                "reference": "7b1f1c37eff5910ddda2831345467e593a5120ad",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/49257c96304c508223815ee965c251e7c79e614e",
+                "reference": "49257c96304c508223815ee965c251e7c79e614e",
                 "shasum": ""
             },
             "require": {
@@ -2063,7 +2063,7 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2026-02-23T15:42:15+00:00",
+            "time": "2026-03-06T13:31:08+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2097,7 +2097,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.34"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.35"
             },
             "funding": [
                 {

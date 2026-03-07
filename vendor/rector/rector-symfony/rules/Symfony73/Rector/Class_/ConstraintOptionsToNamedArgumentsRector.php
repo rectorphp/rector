@@ -75,11 +75,24 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if ($className === SymfonyClass::SYMFONY_VALIDATOR_CONSTRAINTS_COLLECTION && count($args) === 1 && $args[0]->value instanceof Array_) {
+        if ($className === SymfonyClass::SYMFONY_VALIDATOR_CONSTRAINTS_COLLECTION && $args[0]->value instanceof Array_) {
             if ($args[0]->name instanceof Identifier) {
                 return null;
             }
             $args[0]->name = new Identifier('fields');
+            foreach ($args as $key => $arg) {
+                if (!$arg->name instanceof Identifier) {
+                    continue;
+                }
+                if ($arg->name->toString() !== 'allowExtraFields') {
+                    continue;
+                }
+                if (!$this->valueResolver->isFalse($arg->value)) {
+                    continue;
+                }
+                unset($args[$key]);
+            }
+            $node->args = array_values($args);
             return $node;
         }
         $array = $node->args[0]->value;
