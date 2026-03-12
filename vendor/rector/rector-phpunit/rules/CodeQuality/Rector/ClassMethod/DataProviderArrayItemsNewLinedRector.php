@@ -8,7 +8,9 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPUnit\Enum\PHPUnitAttribute;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,10 +28,15 @@ final class DataProviderArrayItemsNewLinedRector extends AbstractRector
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     */
+    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, BetterNodeFinder $betterNodeFinder, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -95,7 +102,7 @@ CODE_SAMPLE
             return null;
         }
         // skip test methods
-        if (strncmp($node->name->toString(), 'test', strlen('test')) === 0) {
+        if (strncmp($node->name->toString(), 'test', strlen('test')) === 0 || $this->phpAttributeAnalyzer->hasPhpAttribute($node, PHPUnitAttribute::TEST)) {
             return null;
         }
         // find array in data provider - must contain a return node
