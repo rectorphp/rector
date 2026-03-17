@@ -25,7 +25,6 @@ use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
 /**
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\Expression\ConfiguredMockEntityToSetterObjectRector\ConfiguredMockEntityToSetterObjectRectorTest
  */
@@ -138,7 +137,6 @@ CODE_SAMPLE
             return null;
         }
         if ($node instanceof Expression) {
-            Assert::isInstanceOf($assign, Assign::class);
             return $this->createForAssign($doctrineClass, $assign, $definedGettersArg->value, $node);
         }
         return $this->createForReturn($doctrineClass, $definedGettersArg->value, $node);
