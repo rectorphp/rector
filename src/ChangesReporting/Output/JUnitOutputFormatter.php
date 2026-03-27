@@ -66,13 +66,13 @@ final class JUnitOutputFormatter implements OutputFormatterInterface
             return;
         }
         $domDocument = new DOMDocument('1.0', 'UTF-8');
-        $xmlTestSuite = $domDocument->createElement(self::XML_ELEMENT_TESTSUITE);
-        $xmlTestSuite->setAttribute(self::XML_ATTRIBUTE_NAME, 'rector');
+        $domElement = $domDocument->createElement(self::XML_ELEMENT_TESTSUITE);
+        $domElement->setAttribute(self::XML_ATTRIBUTE_NAME, 'rector');
         $xmlTestSuites = $domDocument->createElement(self::XML_ELEMENT_TESTSUITES);
-        $xmlTestSuites->appendChild($xmlTestSuite);
+        $xmlTestSuites->appendChild($domElement);
         $domDocument->appendChild($xmlTestSuites);
-        $this->appendSystemErrors($processResult, $configuration, $domDocument, $xmlTestSuite);
-        $this->appendFileDiffs($processResult, $configuration, $domDocument, $xmlTestSuite);
+        $this->appendSystemErrors($processResult, $configuration, $domDocument, $domElement);
+        $this->appendFileDiffs($processResult, $configuration, $domDocument, $domElement);
         echo $domDocument->saveXML() . \PHP_EOL;
     }
     private function appendSystemErrors(ProcessResult $processResult, Configuration $configuration, DOMDocument $domDocument, DOMElement $domElement): void

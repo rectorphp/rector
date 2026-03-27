@@ -118,6 +118,10 @@ CODE_SAMPLE
             }
             // If we're deep in recursion and hit a non-FuncCall, this is the base
             if ($deep) {
+                // Spread argument can't be converted to pipe — keep the call as-is
+                if ($arg->unpack) {
+                    return null;
+                }
                 // Return a pipe with the base expression on the left
                 return new Pipe($arg->value, $this->createPlaceholderCall($expr));
             }
