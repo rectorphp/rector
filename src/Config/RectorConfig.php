@@ -5,6 +5,7 @@ namespace Rector\Config;
 
 use RectorPrefix202603\Illuminate\Container\Container;
 use Override;
+use Rector\Caching\Contract\CacheMetaExtensionInterface;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -283,6 +284,15 @@ final class RectorConfig extends Container
     {
         Assert::isAOf($cacheClass, CacheStorageInterface::class);
         SimpleParameterProvider::setParameter(Option::CACHE_CLASS, $cacheClass);
+    }
+    /**
+     * @param class-string<CacheMetaExtensionInterface> $cacheMetaExtensionClass
+     */
+    public function cacheMetaExtension(string $cacheMetaExtensionClass): void
+    {
+        Assert::isAOf($cacheMetaExtensionClass, CacheMetaExtensionInterface::class);
+        $this->singleton($cacheMetaExtensionClass);
+        $this->tag($cacheMetaExtensionClass, CacheMetaExtensionInterface::class);
     }
     /**
      * @see https://github.com/nikic/PHP-Parser/issues/723#issuecomment-712401963

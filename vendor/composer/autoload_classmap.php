@@ -1137,6 +1137,7 @@ return array(
     'Rector\\Caching\\Cache' => $baseDir . '/src/Caching/Cache.php',
     'Rector\\Caching\\CacheFactory' => $baseDir . '/src/Caching/CacheFactory.php',
     'Rector\\Caching\\Config\\FileHashComputer' => $baseDir . '/src/Caching/Config/FileHashComputer.php',
+    'Rector\\Caching\\Contract\\CacheMetaExtensionInterface' => $baseDir . '/src/Caching/Contract/CacheMetaExtensionInterface.php',
     'Rector\\Caching\\Contract\\ValueObject\\Storage\\CacheStorageInterface' => $baseDir . '/src/Caching/Contract/ValueObject/Storage/CacheStorageInterface.php',
     'Rector\\Caching\\Detector\\ChangedFilesDetector' => $baseDir . '/src/Caching/Detector/ChangedFilesDetector.php',
     'Rector\\Caching\\Enum\\CacheKey' => $baseDir . '/src/Caching/Enum/CacheKey.php',

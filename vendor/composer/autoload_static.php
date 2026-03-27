@@ -1397,6 +1397,7 @@ class ComposerStaticInitc9819cb6f85619d8e1cbb4426044dd33
         'Rector\\Caching\\Cache' => __DIR__ . '/../..' . '/src/Caching/Cache.php',
         'Rector\\Caching\\CacheFactory' => __DIR__ . '/../..' . '/src/Caching/CacheFactory.php',
         'Rector\\Caching\\Config\\FileHashComputer' => __DIR__ . '/../..' . '/src/Caching/Config/FileHashComputer.php',
+        'Rector\\Caching\\Contract\\CacheMetaExtensionInterface' => __DIR__ . '/../..' . '/src/Caching/Contract/CacheMetaExtensionInterface.php',
         'Rector\\Caching\\Contract\\ValueObject\\Storage\\CacheStorageInterface' => __DIR__ . '/../..' . '/src/Caching/Contract/ValueObject/Storage/CacheStorageInterface.php',
         'Rector\\Caching\\Detector\\ChangedFilesDetector' => __DIR__ . '/../..' . '/src/Caching/Detector/ChangedFilesDetector.php',
         'Rector\\Caching\\Enum\\CacheKey' => __DIR__ . '/../..' . '/src/Caching/Enum/CacheKey.php',
