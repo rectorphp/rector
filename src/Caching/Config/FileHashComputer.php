@@ -34,8 +34,8 @@ final class FileHashComputer
     private function computeExtensionHash(): string
     {
         $extensionHash = '';
-        foreach ($this->cacheMetaExtensions as $cacheMetaExtension) {
-            $extensionHash .= $cacheMetaExtension->getKey() . ':' . $cacheMetaExtension->getHash();
+        foreach ($this->cacheMetaExtensions as $cacheMetumExtension) {
+            $extensionHash .= $cacheMetumExtension->getKey() . ':' . $cacheMetumExtension->getHash();
         }
         return $extensionHash;
     }

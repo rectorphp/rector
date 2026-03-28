@@ -12,13 +12,17 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ArgumentDefaultValueReplacer
 {
     /**
@@ -37,12 +41,17 @@ final class ArgumentDefaultValueReplacer
      * @readonly
      */
     private AstResolver $astResolver;
-    public function __construct(NodeFactory $nodeFactory, ValueResolver $valueResolver, ArgsAnalyzer $argsAnalyzer, AstResolver $astResolver)
+    /**
+     * @readonly
+     */
+    private NodeTypeResolver $nodeTypeResolver;
+    public function __construct(NodeFactory $nodeFactory, ValueResolver $valueResolver, ArgsAnalyzer $argsAnalyzer, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->valueResolver = $valueResolver;
         $this->argsAnalyzer = $argsAnalyzer;
         $this->astResolver = $astResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
      * @template TCall as (MethodCall|StaticCall|ClassMethod|FuncCall|New_)
@@ -139,7 +148,15 @@ final class ArgumentDefaultValueReplacer
         }
         $argValue = $this->valueResolver->getValue($particularArg->value);
         if (is_scalar($replaceArgumentDefaultValue->getValueBefore()) && $argValue === $replaceArgumentDefaultValue->getValueBefore()) {
-            $particularArg->value = $this->normalizeValue($replaceArgumentDefaultValue->getValueAfter());
+            $normalizedValueAfter = $this->normalizeValue($replaceArgumentDefaultValue->getValueAfter());
+            if ($particularArg->value instanceof ClassConstFetch && $particularArg->value->class instanceof Name && $particularArg->value->class->isSpecialClassName() && $normalizedValueAfter instanceof ClassConstFetch && is_string($replaceArgumentDefaultValue->getValueAfter()) && strpos($replaceArgumentDefaultValue->getValueAfter(), '::') !== \false) {
+                [$targetClass, $targetConstant] = explode('::', $replaceArgumentDefaultValue->getValueAfter());
+                $type = $this->nodeTypeResolver->getType($particularArg->value->class);
+                if ($type instanceof FullyQualifiedObjectType && $type->getClassName() === $targetClass && $particularArg->value->name instanceof Identifier && $particularArg->value->name->toString() === $targetConstant) {
+                    return null;
+                }
+            }
+            $particularArg->value = $normalizedValueAfter;
             return $expr;
         }
         if (is_array($replaceArgumentDefaultValue->getValueBefore())) {
