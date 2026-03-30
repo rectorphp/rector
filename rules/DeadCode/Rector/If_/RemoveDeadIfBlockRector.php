@@ -97,7 +97,7 @@ CODE_SAMPLE
             return $this->refactor($node) ?? $node;
         }
         foreach ($node->elseifs as $elseif) {
-            $keep_elseifs = array_filter($node->elseifs, fn(ElseIf_ $elseif): bool => $elseif->stmts !== [] || $this->sideEffectNodeDetector->detect($elseif->cond));
+            $keep_elseifs = array_values(array_filter($node->elseifs, fn(ElseIf_ $elseif): bool => $elseif->stmts !== [] || $this->sideEffectNodeDetector->detect($elseif->cond)));
             if (count($node->elseifs) !== count($keep_elseifs)) {
                 $node->elseifs = $keep_elseifs;
                 return $this->refactor($node) ?? $node;
