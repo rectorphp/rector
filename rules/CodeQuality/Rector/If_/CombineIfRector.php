@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -92,6 +93,9 @@ CODE_SAMPLE
         }
         if ($subIf->cond instanceof BinaryOp && !$subIf->cond->left instanceof BinaryOp) {
             $subIf->cond->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
+        if ($node->cond instanceof BooleanNot && $node->cond->expr instanceof BinaryOp) {
+            $node->cond->expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
