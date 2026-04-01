@@ -20,6 +20,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Comparing\NodeComparator;
@@ -96,6 +97,13 @@ final class ArrowFunctionAndClosureFirstClassCallableGuard
         // phpstan reports first class callables that are not native methods
         if ($reflection instanceof MethodReflection && !$reflection->getDeclaringClass()->hasNativeMethod($reflection->getName())) {
             return \true;
+        }
+        // check if args require by reference
+        $parameters = ParametersAcceptorSelectorVariantsWrapper::select($reflection, $callLike, $scope)->getParameters();
+        foreach ($parameters as $parameter) {
+            if ($parameter->passedByReference()->yes()) {
+                return \true;
+            }
         }
         $functionLike = $this->astResolver->resolveClassMethodOrFunctionFromCall($callLike);
         if (!$functionLike instanceof FunctionLike) {
