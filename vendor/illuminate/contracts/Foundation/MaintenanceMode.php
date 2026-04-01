@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202603\Illuminate\Contracts\Foundation;
+namespace RectorPrefix202604\Illuminate\Contracts\Foundation;
 
 interface MaintenanceMode
 {

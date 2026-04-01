@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Console\Style;
 
-use RectorPrefix202603\OndraM\CiDetector\CiDetector;
+use RectorPrefix202604\OndraM\CiDetector\CiDetector;
 use Override;
-use RectorPrefix202603\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix202603\Symfony\Component\Console\Helper\ProgressBar;
-use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202603\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202604\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202604\Symfony\Component\Console\Helper\ProgressBar;
+use RectorPrefix202604\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202604\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202604\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorStyle extends SymfonyStyle
 {
     private ?ProgressBar $progressBar = null;

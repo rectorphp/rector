@@ -12,7 +12,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PhpParser\Node\FileNode;
 use ReflectionMethod;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202604\Symfony\Component\Console\Style\SymfonyStyle;
 final class DeprecatedRulesReporter
 {
     /**

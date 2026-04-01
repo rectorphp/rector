@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202603\Illuminate\Contracts\Support;
+namespace RectorPrefix202604\Illuminate\Contracts\Support;
 
 interface CanBeEscapedWhenCastToString
 {

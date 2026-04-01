@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202603\Illuminate\Contracts\Container;
+namespace RectorPrefix202604\Illuminate\Contracts\Container;
 
 use Closure;
-use RectorPrefix202603\Psr\Container\ContainerInterface;
+use RectorPrefix202604\Psr\Container\ContainerInterface;
 interface Container extends ContainerInterface
 {
     /**

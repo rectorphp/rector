@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202603;
+namespace RectorPrefix202604;
 
 /*
  * This file is part of the Symfony package.
@@ -28,5 +28,5 @@ if (\PHP_VERSION_ID < 80400) {
             $this->since = $since;
         }
     }
-    \class_alias('RectorPrefix202603\Deprecated', 'Deprecated', \false);
+    \class_alias('RectorPrefix202604\Deprecated', 'Deprecated', \false);
 }

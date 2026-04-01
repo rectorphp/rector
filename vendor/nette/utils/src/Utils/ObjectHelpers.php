@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202603\Nette\Utils;
+namespace RectorPrefix202604\Nette\Utils;
 
-use RectorPrefix202603\Nette;
-use RectorPrefix202603\Nette\MemberAccessException;
+use RectorPrefix202604\Nette;
+use RectorPrefix202604\Nette\MemberAccessException;
 use function array_filter, array_merge, array_pop, array_unique, get_class_methods, get_parent_class, implode, is_a, levenshtein, method_exists, preg_match_all, preg_replace, strlen, ucfirst;
 use const PREG_SET_ORDER, SORT_REGULAR;
 /**

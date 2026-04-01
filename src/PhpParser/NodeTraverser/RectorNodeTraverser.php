@@ -16,7 +16,7 @@ use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PhpParser\Node\FileNode;
 use Rector\VersionBonding\ComposerPackageConstraintFilter;
 use Rector\VersionBonding\PhpVersionedFilter;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+use RectorPrefix202604\Webmozart\Assert\Assert;
 /**
  *  Based on native NodeTraverser class, but heavily customized for Rector needs.
  *

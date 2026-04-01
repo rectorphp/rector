@@ -39,11 +39,11 @@ use Rector\Symfony\Set\SymfonyInternalSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
-use RectorPrefix202603\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202603\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202603\Symfony\Component\Finder\Finder;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+use RectorPrefix202604\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202604\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202604\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202604\Symfony\Component\Finder\Finder;
+use RectorPrefix202604\Webmozart\Assert\Assert;
 /**
  * @api
  */

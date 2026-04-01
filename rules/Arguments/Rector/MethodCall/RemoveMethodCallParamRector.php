@@ -14,7 +14,7 @@ use Rector\PhpParser\AstResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+use RectorPrefix202604\Webmozart\Assert\Assert;
 /**
  * @note used extensively https://github.com/search?q=RemoveMethodCallParamRector%3A%3Aclass+language%3APHP&type=code&l=PHP
  * @see \Rector\Tests\Arguments\Rector\MethodCall\RemoveMethodCallParamRector\RemoveMethodCallParamRectorTest

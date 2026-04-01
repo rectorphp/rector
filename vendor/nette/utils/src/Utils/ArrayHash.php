@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202603\Nette\Utils;
+namespace RectorPrefix202604\Nette\Utils;
 
-use RectorPrefix202603\Nette;
+use RectorPrefix202604\Nette;
 use function count, is_array, is_scalar, sprintf;
 /**
  * Array-like object with property access.

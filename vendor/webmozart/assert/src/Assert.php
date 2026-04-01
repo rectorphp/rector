@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202603\Webmozart\Assert;
+namespace RectorPrefix202604\Webmozart\Assert;
 
 use ArrayAccess;
 use Closure;
@@ -1823,7 +1823,7 @@ class Assert
     }
     protected static function strlen(string $value): int
     {
-        if (!\function_exists('mb_detect_encoding') && !\function_exists('RectorPrefix202603\mb_detect_encoding')) {
+        if (!\function_exists('mb_detect_encoding') && !\function_exists('RectorPrefix202604\mb_detect_encoding')) {
             return \strlen($value);
         }
         if (\false === $encoding = \mb_detect_encoding($value)) {

@@ -3,18 +3,18 @@
 declare (strict_types=1);
 namespace Rector\Console\Command;
 
-use RectorPrefix202603\Nette\Utils\FileSystem;
-use RectorPrefix202603\Nette\Utils\Strings;
+use RectorPrefix202604\Nette\Utils\FileSystem;
+use RectorPrefix202604\Nette\Utils\Strings;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Enum\ClassName;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\JsonFileSystem;
-use RectorPrefix202603\Symfony\Component\Console\Command\Command;
-use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202603\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202603\Symfony\Component\Finder\Finder;
-use RectorPrefix202603\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202604\Symfony\Component\Console\Command\Command;
+use RectorPrefix202604\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202604\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202604\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202604\Symfony\Component\Finder\Finder;
+use RectorPrefix202604\Symfony\Component\Finder\SplFileInfo;
 final class CustomRuleCommand extends Command
 {
     /**

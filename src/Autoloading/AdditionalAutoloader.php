@@ -6,8 +6,8 @@ namespace Rector\Autoloading;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\StaticReflection\DynamicSourceLocatorDecorator;
-use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+use RectorPrefix202604\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202604\Webmozart\Assert\Assert;
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
  */

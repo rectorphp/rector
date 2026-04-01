@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202603\React\Socket;
+namespace RectorPrefix202604\React\Socket;
 
-use RectorPrefix202603\Evenement\EventEmitter;
-use RectorPrefix202603\React\EventLoop\Loop;
-use RectorPrefix202603\React\EventLoop\LoopInterface;
+use RectorPrefix202604\Evenement\EventEmitter;
+use RectorPrefix202604\React\EventLoop\Loop;
+use RectorPrefix202604\React\EventLoop\LoopInterface;
 use BadMethodCallException;
 use UnexpectedValueException;
 /**
@@ -126,7 +126,7 @@ final class SecureServer extends EventEmitter implements ServerInterface
             // manual type check to support legacy PHP < 7.1
             throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
         }
-        if (!\function_exists('stream_socket_enable_crypto') && !\function_exists('RectorPrefix202603\stream_socket_enable_crypto')) {
+        if (!\function_exists('stream_socket_enable_crypto') && !\function_exists('RectorPrefix202604\stream_socket_enable_crypto')) {
             throw new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)');
             // @codeCoverageIgnore
         }

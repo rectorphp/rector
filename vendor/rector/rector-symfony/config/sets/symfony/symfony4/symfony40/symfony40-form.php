@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202603;
+namespace RectorPrefix202604;
 
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Symfony40\Rector\MethodCall\FormIsValidRector;

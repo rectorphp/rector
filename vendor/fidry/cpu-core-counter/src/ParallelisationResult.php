@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202603\Fidry\CpuCoreCounter;
+namespace RectorPrefix202604\Fidry\CpuCoreCounter;
 
 /**
  * @readonly

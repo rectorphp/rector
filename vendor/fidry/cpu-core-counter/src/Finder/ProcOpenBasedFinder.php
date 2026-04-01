@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202603\Fidry\CpuCoreCounter\Finder;
+namespace RectorPrefix202604\Fidry\CpuCoreCounter\Finder;
 
-use RectorPrefix202603\Fidry\CpuCoreCounter\Executor\ProcessExecutor;
-use RectorPrefix202603\Fidry\CpuCoreCounter\Executor\ProcOpenExecutor;
+use RectorPrefix202604\Fidry\CpuCoreCounter\Executor\ProcessExecutor;
+use RectorPrefix202604\Fidry\CpuCoreCounter\Executor\ProcOpenExecutor;
 use function filter_var;
 use function function_exists;
 use function is_int;

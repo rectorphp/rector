@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202603\Symfony\Component\Process;
+namespace RectorPrefix202604\Symfony\Component\Process;
 
-use RectorPrefix202603\Symfony\Component\Process\Exception\InvalidArgumentException;
-use RectorPrefix202603\Symfony\Component\Process\Exception\LogicException;
-use RectorPrefix202603\Symfony\Component\Process\Exception\ProcessFailedException;
-use RectorPrefix202603\Symfony\Component\Process\Exception\ProcessSignaledException;
-use RectorPrefix202603\Symfony\Component\Process\Exception\ProcessStartFailedException;
-use RectorPrefix202603\Symfony\Component\Process\Exception\ProcessTimedOutException;
-use RectorPrefix202603\Symfony\Component\Process\Exception\RuntimeException;
-use RectorPrefix202603\Symfony\Component\Process\Pipes\UnixPipes;
-use RectorPrefix202603\Symfony\Component\Process\Pipes\WindowsPipes;
+use RectorPrefix202604\Symfony\Component\Process\Exception\InvalidArgumentException;
+use RectorPrefix202604\Symfony\Component\Process\Exception\LogicException;
+use RectorPrefix202604\Symfony\Component\Process\Exception\ProcessFailedException;
+use RectorPrefix202604\Symfony\Component\Process\Exception\ProcessSignaledException;
+use RectorPrefix202604\Symfony\Component\Process\Exception\ProcessStartFailedException;
+use RectorPrefix202604\Symfony\Component\Process\Exception\ProcessTimedOutException;
+use RectorPrefix202604\Symfony\Component\Process\Exception\RuntimeException;
+use RectorPrefix202604\Symfony\Component\Process\Pipes\UnixPipes;
+use RectorPrefix202604\Symfony\Component\Process\Pipes\WindowsPipes;
 /**
  * Process is a thin wrapper around proc_* functions to easily
  * start independent PHP processes.
@@ -48,6 +48,16 @@ class Process implements \IteratorAggregate
     // Use this flag to skip STDOUT while iterating
     public const ITER_SKIP_ERR = 8;
     // Use this flag to skip STDERR while iterating
+    /**
+     * Maximum number of UTF-16 code units allowed in the Windows environment block.
+     *
+     * The Win32 CreateProcess API encodes env vars as KEY=VALUE\0 in UTF-16LE,
+     * terminated by an extra \0. Exceeding this limit causes proc_open() to hang
+     * silently rather than returning false.
+     *
+     * @see https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
+     */
+    private const WINDOWS_ENV_BLOCK_MAX_LENGTH = 32767;
     /**
      * @var \Closure('out'|'err', string):bool|null
      */
@@ -144,7 +154,7 @@ class Process implements \IteratorAggregate
      */
     public function __construct(array $command, ?string $cwd = null, ?array $env = null, $input = null, ?float $timeout = 60)
     {
-        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202603\proc_open')) {
+        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202604\proc_open')) {
             throw new LogicException('The Process class relies on proc_open, which is not available on your PHP installation.');
         }
         $this->commandline = $command;
@@ -322,11 +332,14 @@ class Process implements \IteratorAggregate
                 $envPairs[] = $k . '=' . $v;
             }
         }
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            $this->validateWindowsEnvBlockSize($envPairs);
+        }
         if (!is_dir($this->cwd)) {
             throw new RuntimeException(\sprintf('The provided cwd "%s" does not exist.', $this->cwd));
         }
         $lastError = null;
-        set_error_handler(function ($type, $msg) use (&$lastError) {
+        set_error_handler(static function ($type, $msg) use (&$lastError) {
             $lastError = $msg;
             return \true;
         });
@@ -1144,7 +1157,7 @@ class Process implements \IteratorAggregate
     protected function buildCallback(?callable $callback = null): \Closure
     {
         if ($this->outputDisabled) {
-            return fn($type, $data): bool => null !== $callback && $callback($type, $data);
+            return static fn($type, $data): bool => null !== $callback && $callback($type, $data);
         }
         return function ($type, $data) use ($callback): bool {
             switch ($type) {
@@ -1188,7 +1201,7 @@ class Process implements \IteratorAggregate
         if (null !== self::$sigchild) {
             return self::$sigchild;
         }
-        if (!\function_exists('phpinfo') && !\function_exists('RectorPrefix202603\phpinfo')) {
+        if (!\function_exists('phpinfo') && !\function_exists('RectorPrefix202604\phpinfo')) {
             return self::$sigchild = \false;
         }
         ob_start();
@@ -1370,7 +1383,7 @@ class Process implements \IteratorAggregate
                     (?: !LF! | "(?:\^[%!^])?+" )
                     [^"%!^]*+
                 )++
-            ) | [^"]*+ )"/x', function ($m) use (&$env, $uid) {
+            ) | [^"]*+ )"/x', static function ($m) use (&$env, $uid) {
             static $varCount = 0;
             static $varCache = [];
             if (!isset($m[1])) {
@@ -1458,5 +1471,14 @@ class Process implements \IteratorAggregate
         $env = getenv();
         $env = ('\\' === \DIRECTORY_SEPARATOR ? array_intersect_ukey($env, $_SERVER, 'strcasecmp') : array_intersect_key($env, $_SERVER)) ?: $env;
         return $_ENV + ('\\' === \DIRECTORY_SEPARATOR ? array_diff_ukey($env, $_ENV, 'strcasecmp') : $env);
+    }
+    private function validateWindowsEnvBlockSize(array $envPairs): void
+    {
+        $block = implode("\x00", $envPairs) . "\x00";
+        @preg_replace('/./u', '', $block, -1, $blockLength) ?? preg_replace('/./', '', $block, -1, $blockLength);
+        $blockLength += 1 + preg_match_all('/[\xF0-\xF4][\x80-\xBF]{3}/', $block);
+        if ($blockLength > self::WINDOWS_ENV_BLOCK_MAX_LENGTH) {
+            throw new InvalidArgumentException(\sprintf('The environment block size (%d) exceeds the Windows limit of %d UTF-16 code units.', $blockLength, self::WINDOWS_ENV_BLOCK_MAX_LENGTH));
+        }
     }
 }

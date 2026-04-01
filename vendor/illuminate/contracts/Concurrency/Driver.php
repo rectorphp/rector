@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202603\Illuminate\Contracts\Concurrency;
+namespace RectorPrefix202604\Illuminate\Contracts\Concurrency;
 
 use Closure;
-use RectorPrefix202603\Illuminate\Support\Defer\DeferredCallback;
+use RectorPrefix202604\Illuminate\Support\Defer\DeferredCallback;
 interface Driver
 {
     /**

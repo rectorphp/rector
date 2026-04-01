@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202603\Illuminate\Contracts\Queue;
+namespace RectorPrefix202604\Illuminate\Contracts\Queue;
 
 interface Monitor
 {

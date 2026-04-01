@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
-use RectorPrefix202603\Nette\Utils\Json;
-use RectorPrefix202603\Nette\Utils\Strings;
+use RectorPrefix202604\Nette\Utils\Json;
+use RectorPrefix202604\Nette\Utils\Strings;
 use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\ArrayItem;

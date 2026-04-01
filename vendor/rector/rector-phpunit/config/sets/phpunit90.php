@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202603;
+namespace RectorPrefix202604;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\WithConsecutiveRector;
@@ -15,5 +15,9 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // see https://github.com/sebastianbergmann/phpunit/issues/3957
         new MethodCallRename('PHPUnit\Framework\TestCase', 'expectExceptionMessageRegExp', 'expectExceptionMessageMatches'),
+        // @see https://github.com/sebastianbergmann/phpunit/issues/4086
+        new MethodCallRename('PHPUnit\Framework\TestCase', 'assertRegExp', 'assertMatchesRegularExpression'),
+        // @see https://github.com/sebastianbergmann/phpunit/issues/4089
+        new MethodCallRename('PHPUnit\Framework\TestCase', 'assertNotRegExp', 'assertDoesNotMatchRegularExpression'),
     ]);
 };
