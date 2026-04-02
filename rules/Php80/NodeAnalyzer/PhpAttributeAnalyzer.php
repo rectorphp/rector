@@ -11,6 +11,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
@@ -25,7 +26,7 @@ final class PhpAttributeAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Param $node
      */
     public function hasPhpAttribute($node, string $attributeClass): bool
     {
@@ -41,7 +42,7 @@ final class PhpAttributeAnalyzer
     }
     /**
      * @param string[] $attributeClasses
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Param $node
      */
     public function hasPhpAttributes($node, array $attributeClasses): bool
     {
