@@ -402,7 +402,8 @@ final class RectorConfigBuilder
         bool $php53 = \false,
         // place on later as BC break when used in php 7.x without named arg
         bool $php84 = \false,
-        bool $php85 = \false
+        bool $php85 = \false,
+        bool $php86 = \false
     ): self
     {
         if ($this->isWithPhpSetsUsed === \true) {
@@ -470,6 +471,8 @@ final class RectorConfigBuilder
             $targetPhpVersion = PhpVersion::PHP_84;
         } elseif ($php85) {
             $targetPhpVersion = PhpVersion::PHP_85;
+        } elseif ($php86) {
+            $targetPhpVersion = PhpVersion::PHP_86;
         } else {
             throw new InvalidConfigurationException('Invalid PHP version set');
         }

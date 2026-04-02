@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\PropertyItem;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -175,6 +176,13 @@ CODE_SAMPLE;
     protected function getType(Node $node): Type
     {
         return $this->nodeTypeResolver->getType($node);
+    }
+    /**
+     * Use this method for getting native expr type
+     */
+    protected function getNativeType(Expr $node): Type
+    {
+        return $this->nodeTypeResolver->getNativeType($node);
     }
     /**
      * @param Node|Node[] $nodes

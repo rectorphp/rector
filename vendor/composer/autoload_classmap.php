@@ -2294,6 +2294,7 @@ return array(
     'Rector\\Php85\\Rector\\ShellExec\\ShellExecFunctionCallOverBackticksRector' => $baseDir . '/rules/Php85/Rector/ShellExec/ShellExecFunctionCallOverBackticksRector.php',
     'Rector\\Php85\\Rector\\StmtsAwareInterface\\SequentialAssignmentsToPipeOperatorRector' => $baseDir . '/rules/Php85/Rector/StmtsAwareInterface/SequentialAssignmentsToPipeOperatorRector.php',
     'Rector\\Php85\\Rector\\Switch_\\ColonAfterSwitchCaseRector' => $baseDir . '/rules/Php85/Rector/Switch_/ColonAfterSwitchCaseRector.php',
+    'Rector\\Php86\\Rector\\FuncCall\\MinMaxToClampRector' => $baseDir . '/rules/Php86/Rector/FuncCall/MinMaxToClampRector.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',

@@ -2554,6 +2554,7 @@ class ComposerStaticInitc9819cb6f85619d8e1cbb4426044dd33
         'Rector\\Php85\\Rector\\ShellExec\\ShellExecFunctionCallOverBackticksRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/ShellExec/ShellExecFunctionCallOverBackticksRector.php',
         'Rector\\Php85\\Rector\\StmtsAwareInterface\\SequentialAssignmentsToPipeOperatorRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/StmtsAwareInterface/SequentialAssignmentsToPipeOperatorRector.php',
         'Rector\\Php85\\Rector\\Switch_\\ColonAfterSwitchCaseRector' => __DIR__ . '/../..' . '/rules/Php85/Rector/Switch_/ColonAfterSwitchCaseRector.php',
+        'Rector\\Php86\\Rector\\FuncCall\\MinMaxToClampRector' => __DIR__ . '/../..' . '/rules/Php86/Rector/FuncCall/MinMaxToClampRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',

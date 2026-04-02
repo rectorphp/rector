@@ -110,6 +110,10 @@ final class SetList
     /**
      * @var string
      */
+    public const PHP_86 = __DIR__ . '/../../../config/set/php86.php';
+    /**
+     * @var string
+     */
     public const PRIVATIZATION = __DIR__ . '/../../../config/set/privatization.php';
     /**
      * @var string
