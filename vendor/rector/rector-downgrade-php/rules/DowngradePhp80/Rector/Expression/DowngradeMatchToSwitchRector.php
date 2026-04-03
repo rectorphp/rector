@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
@@ -18,6 +19,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
@@ -28,6 +30,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
+use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Rector\PHPStan\ScopeFetcher;
@@ -45,9 +48,14 @@ final class DowngradeMatchToSwitchRector extends AbstractRector
      * @readonly
      */
     private AnonymousFunctionFactory $anonymousFunctionFactory;
-    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory)
+    /**
+     * @readonly
+     */
+    private VariableNaming $variableNaming;
+    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory, VariableNaming $variableNaming)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
+        $this->variableNaming = $variableNaming;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -95,13 +103,26 @@ CODE_SAMPLE
     }
     /**
      * @param Echo_|Expression|Return_ $node
+     * @return null|\PhpParser\Node|mixed[]
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node)
     {
         /** @var Match_|null $match */
         $match = null;
         $hasChanged = \false;
         $scope = ScopeFetcher::fetch($node);
+        if ($node instanceof Expression && $node->expr instanceof Assign && $node->expr->var instanceof ArrayDimFetch && $node->expr->var->var instanceof ArrayDimFetch && $node->expr->var->var->dim instanceof Match_) {
+            $matchVariable = new Variable($this->variableNaming->createCountedValueName('match', $scope));
+            $expression = new Expression(new Assign($matchVariable, $node->expr->var->var->dim));
+            $expression->setAttribute(AttributeKey::SCOPE, $scope);
+            $refactored = $this->refactor($expression);
+            if ($refactored === null) {
+                return null;
+            }
+            $node->expr->var->var->dim = $matchVariable;
+            $stmts = is_array($refactored) ? $refactored : [$refactored];
+            return array_merge($stmts, [$node]);
+        }
         $this->traverseNodesWithCallable($node, function (Node $subNode) use ($node, &$match, &$hasChanged, $scope) {
             if (($subNode instanceof ArrayItem || $subNode instanceof Arg) && $subNode->value instanceof Match_ && $this->isEqualScope($subNode->value, $scope)) {
                 $switchCases = $this->createSwitchCasesFromMatchArms($node, $subNode->value, \true);
