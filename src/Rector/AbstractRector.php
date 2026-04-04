@@ -180,9 +180,9 @@ CODE_SAMPLE;
     /**
      * Use this method for getting native expr type
      */
-    protected function getNativeType(Expr $node): Type
+    protected function getNativeType(Expr $expr): Type
     {
-        return $this->nodeTypeResolver->getNativeType($node);
+        return $this->nodeTypeResolver->getNativeType($expr);
     }
     /**
      * @param Node|Node[] $nodes
