@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php86\Rector\FuncCall;
 
+use PhpParser\Node\Identifier;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -97,7 +98,7 @@ CODE_SAMPLE
     }
     private function isSupportedArg(Arg $arg): bool
     {
-        return !$arg->unpack && $arg->name === null;
+        return !$arg->unpack && !$arg->name instanceof Identifier;
     }
     /**
      * @return array{Expr, Expr}|null

@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Token;
+use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -16,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector\CompleteMissingIfElseBracketRectorTest
  */
-final class CompleteMissingIfElseBracketRector extends AbstractRector
+final class CompleteMissingIfElseBracketRector extends AbstractRector implements HTMLAverseRectorInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
