@@ -113,7 +113,7 @@ CODE_SAMPLE
         if ($this->isNodeTooLong($assign)) {
             return null;
         }
-        if ($ternary->cond instanceof BinaryOp || $ternary->cond instanceof Assign) {
+        if ($ternary->cond instanceof BinaryOp) {
             $ternary->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         $expression = new Expression($assign);
