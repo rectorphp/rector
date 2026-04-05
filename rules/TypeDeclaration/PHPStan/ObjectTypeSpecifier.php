@@ -57,13 +57,15 @@ final class ObjectTypeSpecifier
             return new FullyQualifiedObjectType($className);
         }
         $uses = $this->useImportsResolver->resolve();
-        $aliasedObjectType = $this->matchAliasedObjectType($objectType, $uses);
-        if ($aliasedObjectType instanceof AliasedObjectType) {
-            return $aliasedObjectType;
-        }
-        $shortenedObjectType = $this->matchShortenedObjectType($objectType, $uses);
-        if ($shortenedObjectType !== null) {
-            return $shortenedObjectType;
+        if (!$withPreslash) {
+            $aliasedObjectType = $this->matchAliasedObjectType($objectType, $uses);
+            if ($aliasedObjectType instanceof AliasedObjectType) {
+                return $aliasedObjectType;
+            }
+            $shortenedObjectType = $this->matchShortenedObjectType($objectType, $uses);
+            if ($shortenedObjectType !== null) {
+                return $shortenedObjectType;
+            }
         }
         if ($this->reflectionProvider->hasClass($className)) {
             return new FullyQualifiedObjectType($className);

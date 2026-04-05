@@ -1759,12 +1759,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "77ccf646e697589619b4dda07865b1d638b64b83"
+                "reference": "549a1e316e5e123c13edf4d6e825c6fcb9224f57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/77ccf646e697589619b4dda07865b1d638b64b83",
-                "reference": "77ccf646e697589619b4dda07865b1d638b64b83",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/549a1e316e5e123c13edf4d6e825c6fcb9224f57",
+                "reference": "549a1e316e5e123c13edf4d6e825c6fcb9224f57",
                 "shasum": ""
             },
             "require": {
@@ -1772,11 +1772,11 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "2.1.x-dev",
+                "phpstan\/phpstan": "^2.1.33",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.5",
                 "rector\/jack": "^0.5.1",
-                "rector\/rector-src": "dev-test-21xdev",
+                "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.3",
                 "rector\/type-perfect": "^2.1",
                 "symplify\/easy-coding-standard": "^13.0",
@@ -1788,7 +1788,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-04-05T10:35:15+00:00",
+            "time": "2026-04-05T10:59:16+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
