@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Php86\Rector\FuncCall;
 
-use PhpParser\Node\Identifier;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
