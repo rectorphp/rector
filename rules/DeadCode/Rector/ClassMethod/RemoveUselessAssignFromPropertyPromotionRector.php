@@ -78,7 +78,6 @@ CODE_SAMPLE
             if (!$stmt instanceof Expression || !$stmt->expr instanceof Assign) {
                 return null;
             }
-            /** @var Assign $assign */
             $assign = $stmt->expr;
             // has non property fetches assignments, skip
             if (!$assign->var instanceof PropertyFetch) {

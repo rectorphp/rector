@@ -49,13 +49,11 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     {
         $isPositive = $binaryOp instanceof Identical || $binaryOp instanceof Equal;
         if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'substr')) {
-            /** @var FuncCall $funcCall */
             $funcCall = $binaryOp->left;
             $haystack = $funcCall->getArgs()[0]->value;
             return new StrStartsWith($funcCall, $haystack, $binaryOp->right, $isPositive);
         }
         if ($binaryOp->right instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->right, 'substr')) {
-            /** @var FuncCall $funcCall */
             $funcCall = $binaryOp->right;
             $haystack = $funcCall->getArgs()[0]->value;
             return new StrStartsWith($funcCall, $haystack, $binaryOp->left, $isPositive);

@@ -31,7 +31,6 @@ final class ClassMethodAndPropertyAnalyzer
         if (!$onlyClassMethodStmt instanceof Return_) {
             return \false;
         }
-        /** @var Return_ $return */
         $return = $onlyClassMethodStmt;
         if (!$return->expr instanceof PropertyFetch) {
             return \false;

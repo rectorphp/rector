@@ -96,7 +96,6 @@ CODE_SAMPLE
         if ($this->shouldSkipAssign($assign, $arrayOrList)) {
             return null;
         }
-        /** @var Variable $exprVariable */
         $exprVariable = $assign->expr;
         // Count number of params by ref on the right side, to remove them later on
         $rightSideRemovableParamsCount = $this->countRightSideMostParamsByRefOrEmpty($arrayOrList->items);
@@ -184,7 +183,6 @@ CODE_SAMPLE
             $key = $this->getArrayItemKey($listItem, $position);
             // Either the item is a variable, or a nested list
             if ($listItem->value instanceof Variable) {
-                /** @var Variable $itemVariable */
                 $itemVariable = $listItem->value;
                 // Remove the reference in the present arrayOrList
                 $listItem->byRef = \false;

@@ -4,10 +4,12 @@ declare (strict_types=1);
 namespace Rector\StaticTypeMapper\ValueObject\Type;
 
 use RectorPrefix202604\Nette\Utils\Strings;
+use Override;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @api
@@ -54,5 +56,17 @@ final class FullyQualifiedObjectType extends ObjectType
     public function getShortNameLowered(): string
     {
         return strtolower($this->getShortName());
+    }
+    #[Override]
+    public function equals(Type $type): bool
+    {
+        $isEqual = parent::equals($type);
+        if ($isEqual) {
+            return \true;
+        }
+        if ($type instanceof self || get_class($type) === ObjectType::class) {
+            return $type->getClassName() === $this->getClassName();
+        }
+        return \false;
     }
 }

@@ -99,7 +99,6 @@ CODE_SAMPLE
         if (!$node->stmts[0] instanceof Return_ || !$node->stmts[0]->expr instanceof MethodCall) {
             return null;
         }
-        /** @var MethodCall $returnExpr */
         $returnExpr = $node->stmts[0]->expr;
         if (!$this->isName($returnExpr->name, 'deserialize')) {
             return null;

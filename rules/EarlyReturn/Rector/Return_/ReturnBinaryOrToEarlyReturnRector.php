@@ -81,7 +81,6 @@ CODE_SAMPLE
             if (!$stmt->expr instanceof BooleanOr) {
                 continue;
             }
-            /** @var BooleanOr $booleanOr */
             $booleanOr = $stmt->expr;
             $left = $booleanOr->left;
             $ifs = $this->createMultipleIfs($left, $stmt, []);

@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -80,7 +79,6 @@ final class TypeProvidingExprFromClassResolver
     {
         $nativeReflectionClass = $classReflection->getNativeReflection();
         foreach ($nativeReflectionClass->getProperties() as $reflectionProperty) {
-            /** @var PhpPropertyReflection $phpPropertyReflection */
             $phpPropertyReflection = $classReflection->getNativeProperty($reflectionProperty->getName());
             $readableType = $phpPropertyReflection->getReadableType();
             if (!$this->isMatchingType($readableType, $objectType)) {

@@ -45,7 +45,6 @@ final class SimplifyInArrayValuesRector extends AbstractRector
         if (!$node->args[1]->value instanceof FuncCall) {
             return null;
         }
-        /** @var FuncCall $innerFunCall */
         $innerFunCall = $node->args[1]->value;
         if (!$this->isName($innerFunCall, 'array_values')) {
             return null;

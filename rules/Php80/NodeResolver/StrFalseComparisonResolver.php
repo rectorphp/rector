@@ -38,9 +38,7 @@ final class StrFalseComparisonResolver
             if (!$this->nodeNameResolver->isNames($expr->right, $oldStrFuncNames)) {
                 return null;
             }
-            /** @var FuncCall $funcCall */
-            $funcCall = $expr->right;
-            return $funcCall;
+            return $expr->right;
         }
         if ($this->valueResolver->isFalse($expr->right)) {
             if (!$expr->left instanceof FuncCall) {
@@ -49,9 +47,7 @@ final class StrFalseComparisonResolver
             if (!$this->nodeNameResolver->isNames($expr->left, $oldStrFuncNames)) {
                 return null;
             }
-            /** @var FuncCall $funcCall */
-            $funcCall = $expr->left;
-            return $funcCall;
+            return $expr->left;
         }
         return null;
     }

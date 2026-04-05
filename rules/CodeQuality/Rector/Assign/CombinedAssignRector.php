@@ -44,7 +44,6 @@ final class CombinedAssignRector extends AbstractRector
         if (!$node->expr instanceof BinaryOp) {
             return null;
         }
-        /** @var BinaryOp $binaryNode */
         $binaryNode = $node->expr;
         if (!$this->nodeComparator->areNodesEqual($node->var, $binaryNode->left)) {
             return null;

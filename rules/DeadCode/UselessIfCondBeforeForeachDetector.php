@@ -32,7 +32,6 @@ final class UselessIfCondBeforeForeachDetector
         if (!$if->cond instanceof Empty_) {
             return \false;
         }
-        /** @var Empty_ $empty */
         $empty = $if->cond;
         if (!$this->nodeComparator->areNodesEqual($empty->expr, $foreachExpr)) {
             return \false;
@@ -59,7 +58,6 @@ final class UselessIfCondBeforeForeachDetector
         if (!$cond->expr instanceof Empty_) {
             return \false;
         }
-        /** @var Empty_ $empty */
         $empty = $cond->expr;
         return $this->areCondExprAndForeachExprSame($empty, $foreachExpr, $scope);
     }
@@ -75,7 +73,6 @@ final class UselessIfCondBeforeForeachDetector
         if (!$if->cond instanceof NotIdentical && !$if->cond instanceof NotEqual) {
             return \false;
         }
-        /** @var NotIdentical|NotEqual $notIdentical */
         $notIdentical = $if->cond;
         return $this->isMatchingNotBinaryOp($notIdentical, $foreachExpr);
     }

@@ -56,7 +56,6 @@ final class ClosureArrowFunctionAnalyzer
         if (!$onlyStmt instanceof Return_) {
             return null;
         }
-        /** @var Return_ $return */
         $return = $onlyStmt;
         if (!$return->expr instanceof Expr) {
             return null;

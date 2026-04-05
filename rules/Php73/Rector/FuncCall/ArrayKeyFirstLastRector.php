@@ -110,7 +110,6 @@ CODE_SAMPLE
             if (!$stmtsAware->stmts[$key] instanceof Expression) {
                 continue;
             }
-            /** @var Expression $stmt */
             $stmt = $stmtsAware->stmts[$key];
             if ($this->shouldSkip($stmt)) {
                 continue;

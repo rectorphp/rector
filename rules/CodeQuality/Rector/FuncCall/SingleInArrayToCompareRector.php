@@ -92,7 +92,6 @@ CODE_SAMPLE
         if (!$funcCall->args[1]->value instanceof Array_) {
             return null;
         }
-        /** @var Array_ $arrayNode */
         $arrayNode = $funcCall->args[1]->value;
         if (count($arrayNode->items) !== 1) {
             return null;

@@ -22,7 +22,6 @@ final class BitwiseFlagCleaner
     public function cleanFuncCall(FuncCall $funcCall, BitwiseOr $bitwiseOr, string $flag, ?Expr $expr = null): void
     {
         if ($bitwiseOr->left instanceof BitwiseOr) {
-            /** @var BitwiseOr $leftLeft */
             $leftLeft = $bitwiseOr->left;
             if ($leftLeft->left instanceof ConstFetch && $this->nodeNameResolver->isName($leftLeft->left, $flag)) {
                 $bitwiseOr = new BitwiseOr($leftLeft->right, $bitwiseOr->right);

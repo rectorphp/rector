@@ -116,7 +116,6 @@ final class ClassDependencyManipulator
      */
     public function addConstructorDependencyWithCustomAssign(Class_ $class, string $name, ?Type $type, Assign $assign): void
     {
-        /** @var ClassMethod|null $constructClassMethod */
         $constructClassMethod = $this->resolveConstruct($class);
         if ($constructClassMethod instanceof ClassMethod) {
             if (!$class->getMethod(MethodName::CONSTRUCT) instanceof ClassMethod) {
@@ -162,7 +161,6 @@ final class ClassDependencyManipulator
     }
     private function resolveConstruct(Class_ $class): ?ClassMethod
     {
-        /** @var ClassMethod|null $constructorMethod */
         $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);
         // exists in current class
         if ($constructorMethod instanceof ClassMethod) {

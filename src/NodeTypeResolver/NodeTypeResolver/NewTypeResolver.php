@@ -72,7 +72,6 @@ final class NewTypeResolver implements NodeTypeResolverInterface
             return new ObjectWithoutClassType();
         }
         $directParentTypes = [];
-        /** @var Class_ $class */
         $class = $new->class;
         if ($class->extends instanceof Name) {
             $parentClass = (string) $class->extends;

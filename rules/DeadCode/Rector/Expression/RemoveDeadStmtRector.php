@@ -5,8 +5,6 @@ namespace Rector\DeadCode\Rector\Expression;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeVisitor;
@@ -88,7 +86,6 @@ CODE_SAMPLE
         if (!$this->propertyFetchAnalyzer->isPropertyFetch($expression->expr)) {
             return \false;
         }
-        /** @var PropertyFetch|StaticPropertyFetch $propertyFetch */
         $propertyFetch = $expression->expr;
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
         /**

@@ -42,4 +42,16 @@ final class ShortenedObjectType extends ObjectType
     {
         return $this->fullyQualifiedName;
     }
+    #[Override]
+    public function equals(Type $type): bool
+    {
+        $isEqual = parent::equals($type);
+        if ($isEqual) {
+            return \true;
+        }
+        if ($type instanceof self || get_class($type) === ObjectType::class) {
+            return $type->getClassName() === $this->fullyQualifiedName;
+        }
+        return \false;
+    }
 }
