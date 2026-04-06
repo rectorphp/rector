@@ -1192,6 +1192,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\RemoveReadonlyPropertyVisibilityOnReadonlyClassRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/RemoveReadonlyPropertyVisibilityOnReadonlyClassRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\ReturnIteratorInDataProviderRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/ReturnIteratorInDataProviderRector.php',
+    'Rector\\CodeQuality\\Rector\\Coalesce\\CoalesceToTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/Coalesce/CoalesceToTernaryRector.php',
     'Rector\\CodeQuality\\Rector\\Concat\\DirnameDirConcatStringToDirectStringPathRector' => $baseDir . '/rules/CodeQuality/Rector/Concat/DirnameDirConcatStringToDirectStringPathRector.php',
     'Rector\\CodeQuality\\Rector\\Concat\\JoinStringConcatRector' => $baseDir . '/rules/CodeQuality/Rector/Concat/JoinStringConcatRector.php',
     'Rector\\CodeQuality\\Rector\\Empty_\\SimplifyEmptyCheckOnEmptyArrayRector' => $baseDir . '/rules/CodeQuality/Rector/Empty_/SimplifyEmptyCheckOnEmptyArrayRector.php',
