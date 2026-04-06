@@ -60,6 +60,7 @@ use Rector\DeadCode\Rector\Stmt\RemoveConditionExactReturnRector;
 use Rector\DeadCode\Rector\Stmt\RemoveNextSameValueConditionRector;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
+use Rector\DeadCode\Rector\Ternary\RemoveUselessTernaryRector;
 use Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
 use Rector\DeadCode\Rector\TryCatch\RemoveDeadCatchRector;
 use Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;
@@ -97,6 +98,7 @@ final class DeadCodeLevel
         RemoveFilterVarOnExactTypeRector::class,
         RemoveTypedPropertyDeadInstanceOfRector::class,
         TernaryToBooleanOrFalseToBooleanAndRector::class,
+        RemoveUselessTernaryRector::class,
         RemoveDoubleAssignRector::class,
         RemoveUselessAssignFromPropertyPromotionRector::class,
         RemoveConcatAutocastRector::class,
