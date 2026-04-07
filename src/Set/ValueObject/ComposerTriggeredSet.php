@@ -51,17 +51,15 @@ final class ComposerTriggeredSet implements SetInterface
         return $this->setFilePath;
     }
     /**
-     * @param InstalledPackage[] $installedPackages
+     * @param array<string, InstalledPackage> $installedPackages
      */
     public function matchInstalledPackages(array $installedPackages): bool
     {
-        foreach ($installedPackages as $installedPackage) {
-            if ($installedPackage->getName() !== $this->packageName) {
-                continue;
-            }
-            return Semver::satisfies($installedPackage->getVersion(), '^' . $this->version);
+        $package = $installedPackages[$this->packageName] ?? null;
+        if (!$package instanceof InstalledPackage) {
+            return \false;
         }
-        return \false;
+        return Semver::satisfies($package->getVersion(), '^' . $this->version);
     }
     public function getName(): string
     {
