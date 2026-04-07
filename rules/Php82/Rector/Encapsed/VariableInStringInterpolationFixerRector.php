@@ -42,7 +42,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $oldTokens = $this->file->getOldTokens();
+        $oldTokens = $this->getFile()->getOldTokens();
         $hasChanged = \false;
         foreach ($node->parts as $part) {
             if (!$part instanceof Variable && !($part instanceof ArrayDimFetch && $part->var instanceof Variable)) {

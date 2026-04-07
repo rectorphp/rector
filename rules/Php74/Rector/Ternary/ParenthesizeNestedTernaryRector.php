@@ -58,7 +58,7 @@ CODE_SAMPLE
             if ($isElvis) {
                 return null;
             }
-            if ($this->parenthesizedNestedTernaryAnalyzer->isParenthesized($this->file, $node)) {
+            if ($this->parenthesizedNestedTernaryAnalyzer->isParenthesized($this->getFile(), $node)) {
                 return null;
             }
             // re-print with brackets

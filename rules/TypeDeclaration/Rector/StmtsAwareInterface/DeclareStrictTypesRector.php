@@ -58,7 +58,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?FileNode
     {
         // shebang files cannot have declare strict types
-        if ($this->file->hasShebang()) {
+        if ($this->getFile()->hasShebang()) {
             return null;
         }
         // only add to namespaced files, as global namespace files are often included in other files

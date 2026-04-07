@@ -59,7 +59,7 @@ CODE_SAMPLE
         if ($this->isBareNewNode($node)) {
             return null;
         }
-        $oldTokens = $this->file->getOldTokens();
+        $oldTokens = $this->getFile()->getOldTokens();
         if ($this->isIfConditionFollowedByOpeningCurlyBracket($node, $oldTokens)) {
             return null;
         }

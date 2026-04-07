@@ -63,7 +63,7 @@ CODE_SAMPLE
     }
     private function isParenthesized(Expr $ifExpr, Expr $elseExpr): bool
     {
-        $tokens = $this->file->getOldTokens();
+        $tokens = $this->getFile()->getOldTokens();
         $ifExprTokenEnd = $ifExpr->getEndTokenPos();
         $elseExprTokenStart = $elseExpr->getStartTokenPos();
         if ($ifExprTokenEnd < 0 || $elseExprTokenStart < 0 || $elseExprTokenStart <= $ifExprTokenEnd) {

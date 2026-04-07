@@ -44,7 +44,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $hasVariableBeenWrapped = \false;
-        $oldTokens = $this->file->getOldTokens();
+        $oldTokens = $this->getFile()->getOldTokens();
         foreach ($node->parts as $index => $nodePart) {
             if ($nodePart instanceof Variable && $nodePart->getStartTokenPos() >= 0) {
                 $start = $oldTokens[$nodePart->getStartTokenPos() - 1] ?? null;

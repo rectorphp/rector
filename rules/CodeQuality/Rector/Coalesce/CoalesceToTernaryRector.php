@@ -3,18 +3,18 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Coalesce;
 
-use PHPStan\Type\UnionType;
-use PHPStan\Type\NullType;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Ternary;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\UnionType;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Rector\PHPStan\ScopeFetcher;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Coalesce\CoalesceToTernaryRector\CoalesceToTernaryRectorTest
  */

@@ -142,12 +142,10 @@ CODE_SAMPLE
     }
     private function isIntegerTernaryIfElse(Ternary $ternary): bool
     {
-        /** @var Expr|null $if */
         $if = $ternary->if;
         if (!$if instanceof Expr) {
             $if = $ternary->cond;
         }
-        /** @var Expr $else */
         $else = $ternary->else;
         $ifType = $this->getType($if);
         $elseType = $this->getType($else);

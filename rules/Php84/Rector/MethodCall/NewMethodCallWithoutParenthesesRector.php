@@ -41,7 +41,7 @@ CODE_SAMPLE
         if (!$node->var instanceof New_) {
             return null;
         }
-        $oldTokens = $this->file->getOldTokens();
+        $oldTokens = $this->getFile()->getOldTokens();
         $loop = 1;
         while (isset($oldTokens[$node->var->getStartTokenPos() + $loop])) {
             if (trim((string) $oldTokens[$node->var->getStartTokenPos() + $loop]) === '') {

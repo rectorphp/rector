@@ -71,7 +71,6 @@ CODE_SAMPLE
         if (!$firstArg->value instanceof String_) {
             return null;
         }
-        /** @var String_ $stringNode */
         $stringNode = $firstArg->value;
         // not a form type string
         $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringNode->value);

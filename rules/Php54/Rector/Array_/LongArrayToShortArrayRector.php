@@ -63,7 +63,7 @@ CODE_SAMPLE
             return null;
         }
         $node->setAttribute(AttributeKey::KIND, Array_::KIND_SHORT);
-        $tokens = $this->file->getOldTokens();
+        $tokens = $this->getFile()->getOldTokens();
         $startTokenPos = $node->getStartTokenPos();
         $endTokenPos = $node->getEndTokenPos();
         if (!isset($tokens[$startTokenPos], $tokens[$endTokenPos])) {
