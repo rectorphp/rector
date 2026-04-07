@@ -8,10 +8,15 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+/**
+ * @api
+ */
 final class ClassChildAnalyzer
 {
     /**
      * Look both parent class and interface, yes, all PHP interface methods are abstract
+     *
+     * @api rector-symfony
      */
     public function hasAbstractParentClassMethod(ClassReflection $classReflection, string $methodName): bool
     {

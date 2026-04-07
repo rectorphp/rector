@@ -2502,8 +2502,6 @@ class ComposerStaticInitc9819cb6f85619d8e1cbb4426044dd33
         'Rector\\Php80\\ValueObject\\StrStartsWith' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/StrStartsWith.php',
         'Rector\\Php81\\Enum\\AttributeName' => __DIR__ . '/../..' . '/rules/Php81/Enum/AttributeName.php',
         'Rector\\Php81\\Enum\\NameNullToStrictNullFunctionMap' => __DIR__ . '/../..' . '/rules/Php81/Enum/NameNullToStrictNullFunctionMap.php',
-        'Rector\\Php81\\NodeAnalyzer\\CoalescePropertyAssignMatcher' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/CoalescePropertyAssignMatcher.php',
-        'Rector\\Php81\\NodeAnalyzer\\ComplexNewAnalyzer' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/ComplexNewAnalyzer.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
         'Rector\\Php81\\NodeManipulator\\NullToStrictStringIntConverter' => __DIR__ . '/../..' . '/rules/Php81/NodeManipulator/NullToStrictStringIntConverter.php',
         'Rector\\Php81\\Rector\\Array_\\ArrayToFirstClassCallableRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Array_/ArrayToFirstClassCallableRector.php',
