@@ -12,26 +12,27 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitor;
+use PHPStan\Reflection\AttributeReflection;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeManipulator\StmtsManipulator;
 use Rector\Php\ReservedKeywordAnalyzer;
-use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -64,20 +65,15 @@ final class RemoveUnusedVariableAssignRector extends AbstractRector
     /**
      * @readonly
      */
-    private AstResolver $astResolver;
-    /**
-     * @readonly
-     */
-    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector, VariableAnalyzer $variableAnalyzer, BetterNodeFinder $betterNodeFinder, StmtsManipulator $stmtsManipulator, AstResolver $astResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector, VariableAnalyzer $variableAnalyzer, BetterNodeFinder $betterNodeFinder, StmtsManipulator $stmtsManipulator, ReflectionProvider $reflectionProvider)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
         $this->variableAnalyzer = $variableAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->stmtsManipulator = $stmtsManipulator;
-        $this->astResolver = $astResolver;
-        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -253,11 +249,8 @@ CODE_SAMPLE
             if ($this->shouldSkipVariable($assign->var, $variableName, $refVariableNames)) {
                 continue;
             }
-            if ($assign->expr instanceof FuncCall || $assign->expr instanceof StaticCall || $assign->expr instanceof MethodCall || $assign->expr instanceof New_ || $assign->expr instanceof NullsafeMethodCall) {
-                $targetCall = $this->astResolver->resolveClassMethodOrFunctionFromCall($assign->expr);
-                if (($targetCall instanceof ClassMethod || $targetCall instanceof Function_) && $this->phpAttributeAnalyzer->hasPhpAttribute($targetCall, 'NoDiscard')) {
-                    continue;
-                }
+            if ($this->isNoDiscardCall($assign->expr)) {
+                continue;
             }
             $assignedVariableNamesByStmtPosition[$key] = $variableName;
         }
@@ -275,5 +268,56 @@ CODE_SAMPLE
             return \true;
         }
         return in_array($variableName, $refVariableNames, \true);
+    }
+    private function isNoDiscardCall(Expr $expr): bool
+    {
+        if ($expr instanceof FuncCall) {
+            $name = $this->getName($expr);
+            if ($name === null) {
+                return \false;
+            }
+            $scope = ScopeFetcher::fetch($expr);
+            if (!$this->reflectionProvider->hasFunction(new Name($name), $scope)) {
+                return \false;
+            }
+            return $this->hasNoDiscardAttribute($this->reflectionProvider->getFunction(new Name($name), $scope)->getAttributes());
+        }
+        if ($expr instanceof StaticCall) {
+            $classNames = $this->getType($expr->class)->getObjectClassNames();
+            $methodName = $this->getName($expr->name);
+        } elseif ($expr instanceof MethodCall || $expr instanceof NullsafeMethodCall) {
+            $classNames = $this->getType($expr->var)->getObjectClassNames();
+            $methodName = $this->getName($expr->name);
+        } else {
+            return \false;
+        }
+        if ($classNames === [] || $methodName === null) {
+            return \false;
+        }
+        foreach ($classNames as $className) {
+            if (!$this->reflectionProvider->hasClass($className)) {
+                continue;
+            }
+            $classReflection = $this->reflectionProvider->getClass($className);
+            if (!$classReflection->hasNativeMethod($methodName)) {
+                continue;
+            }
+            if ($this->hasNoDiscardAttribute($classReflection->getNativeMethod($methodName)->getAttributes())) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    /**
+     * @param AttributeReflection[] $attributes
+     */
+    private function hasNoDiscardAttribute(array $attributes): bool
+    {
+        foreach ($attributes as $attribute) {
+            if ($attribute->getName() === 'NoDiscard') {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
