@@ -12,6 +12,7 @@ use Rector\Application\ApplicationFileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Configuration\ConfigurationFactory;
 use Rector\Configuration\ConfigurationRuleFilter;
+use Rector\Configuration\Option;
 use Rector\Console\ProcessConfigureDecorator;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\StaticReflection\DynamicSourceLocatorDecorator;
@@ -89,16 +90,16 @@ final class WorkerCommand extends Command
         $parallelIdentifier = $configuration->getParallelIdentifier();
         $tcpConnector = new TcpConnector($streamSelectLoop);
         $promise = $tcpConnector->connect('127.0.0.1:' . $configuration->getParallelPort());
-        $promise->then(function (ConnectionInterface $connection) use ($parallelIdentifier, $configuration, $output): void {
+        $promise->then(function (ConnectionInterface $connection) use ($parallelIdentifier, $configuration, $input, $output): void {
             $inDecoder = new Decoder($connection, \true, 512, \JSON_INVALID_UTF8_IGNORE);
             $outEncoder = new Encoder($connection, \JSON_INVALID_UTF8_IGNORE);
             $outEncoder->write([ReactCommand::ACTION => Action::HELLO, ReactCommand::IDENTIFIER => $parallelIdentifier]);
-            $this->runWorker($outEncoder, $inDecoder, $configuration, $output);
+            $this->runWorker($outEncoder, $inDecoder, $configuration, $input, $output);
         });
         $streamSelectLoop->run();
         return self::SUCCESS;
     }
-    private function runWorker(Encoder $encoder, Decoder $decoder, Configuration $configuration, OutputInterface $output): void
+    private function runWorker(Encoder $encoder, Decoder $decoder, Configuration $configuration, InputInterface $input, OutputInterface $output): void
     {
         $this->additionalAutoloader->autoloadPaths();
         $this->dynamicSourceLocatorDecorator->addPaths($configuration->getPaths());
@@ -117,7 +118,7 @@ final class WorkerCommand extends Command
         };
         $encoder->on(ReactEvent::ERROR, $handleErrorCallback);
         // 2. collect diffs + errors from file processor
-        $decoder->on(ReactEvent::DATA, function (array $json) use ($preFileCallback, $encoder, $configuration): void {
+        $decoder->on(ReactEvent::DATA, function (array $json) use ($preFileCallback, $encoder, $configuration, $input): void {
             $action = $json[ReactCommand::ACTION];
             if ($action !== Action::MAIN) {
                 return;
@@ -129,7 +130,7 @@ final class WorkerCommand extends Command
             /**
              * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA
              */
-            $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::FILE_DIFFS => $processResult->getFileDiffs(), Bridge::FILES_COUNT => count($filePaths), Bridge::SYSTEM_ERRORS => $processResult->getSystemErrors(), Bridge::SYSTEM_ERRORS_COUNT => count($processResult->getSystemErrors()), Bridge::TOTAL_CHANGED => $processResult->getTotalChanged()]]);
+            $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::FILE_DIFFS => $processResult->getFileDiffs($input->getOption(Option::OUTPUT_FORMAT) !== 'json'), Bridge::FILES_COUNT => count($filePaths), Bridge::SYSTEM_ERRORS => $processResult->getSystemErrors(), Bridge::SYSTEM_ERRORS_COUNT => count($processResult->getSystemErrors()), Bridge::TOTAL_CHANGED => $processResult->getTotalChanged()]]);
         });
         $decoder->on(ReactEvent::ERROR, $handleErrorCallback);
     }

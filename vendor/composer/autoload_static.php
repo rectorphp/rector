@@ -1413,6 +1413,7 @@ class ComposerStaticInitc9819cb6f85619d8e1cbb4426044dd33
         'Rector\\Carbon\\Rector\\New_\\DateTimeInstanceToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/New_/DateTimeInstanceToCarbonRector.php',
         'Rector\\ChangesReporting\\Contract\\Output\\OutputFormatterInterface' => __DIR__ . '/../..' . '/src/ChangesReporting/Contract/Output/OutputFormatterInterface.php',
         'Rector\\ChangesReporting\\Output\\ConsoleOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/ConsoleOutputFormatter.php',
+        'Rector\\ChangesReporting\\Output\\Factory\\JsonOutputFactory' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/Factory/JsonOutputFactory.php',
         'Rector\\ChangesReporting\\Output\\GitHubOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/GitHubOutputFormatter.php',
         'Rector\\ChangesReporting\\Output\\GitlabOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/GitlabOutputFormatter.php',
         'Rector\\ChangesReporting\\Output\\JUnitOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/JUnitOutputFormatter.php',
