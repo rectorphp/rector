@@ -252,4 +252,8 @@ final class AttributeKey
      * @var string
      */
     public const IS_IN_TRY_BLOCK = 'is_in_try_block';
+    /**
+     * @var string
+     */
+    public const NEWLINE_ON_FLUENT_CALL = 'newline_on_fluent_call';
 }
