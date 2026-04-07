@@ -45,6 +45,9 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         if ($configuration->shouldShowProgressBar() && $processResult->getFileDiffs() === []) {
             $this->symfonyStyle->newLine();
         }
+        if ($configuration->shouldShowRulesSummary()) {
+            $this->reportRulesSummary($processResult, $configuration);
+        }
         $message = $this->createSuccessMessage($processResult, $configuration);
         $this->symfonyStyle->success($message);
     }
@@ -100,6 +103,20 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             }
             $this->symfonyStyle->error($message);
         }
+    }
+    private function reportRulesSummary(ProcessResult $processResult, Configuration $configuration): void
+    {
+        $ruleApplicationCounts = $processResult->getRuleApplicationCounts();
+        if ($ruleApplicationCounts === []) {
+            return;
+        }
+        $verb = $configuration->isDryRun() ? 'would have been applied' : 'was applied';
+        $this->symfonyStyle->section('Rules Summary');
+        foreach ($ruleApplicationCounts as $ruleClass => $count) {
+            $ruleShortClass = (string) Strings::after($ruleClass, '\\', -1);
+            $this->symfonyStyle->writeln(sprintf(' * <info>%s</info> %s <comment>%d</comment> time%s', $ruleShortClass, $verb, $count, $count > 1 ? 's' : ''));
+        }
+        $this->symfonyStyle->newLine();
     }
     private function normalizePathsToRelativeWithLine(string $errorMessage): string
     {

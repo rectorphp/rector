@@ -146,6 +146,10 @@ final class Option
     /**
      * @var string
      */
+    public const RULES_SUMMARY = 'rules-summary';
+    /**
+     * @var string
+     */
     public const CONFIG = 'config';
     /**
      * @internal Use

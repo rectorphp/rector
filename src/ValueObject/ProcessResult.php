@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\ValueObject;
 
+use Rector\Contract\Rector\RectorInterface;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202604\Webmozart\Assert\Assert;
@@ -61,5 +62,22 @@ final class ProcessResult
     public function getTotalChanged(): int
     {
         return $this->totalChanged;
+    }
+    /**
+     * @return array<class-string<RectorInterface>, int>
+     */
+    public function getRuleApplicationCounts(): array
+    {
+        $ruleCounts = [];
+        foreach ($this->fileDiffs as $fileDiff) {
+            foreach ($fileDiff->getRectorClasses() as $rectorClass) {
+                if (!isset($ruleCounts[$rectorClass])) {
+                    $ruleCounts[$rectorClass] = 0;
+                }
+                ++$ruleCounts[$rectorClass];
+            }
+        }
+        arsort($ruleCounts);
+        return $ruleCounts;
     }
 }
