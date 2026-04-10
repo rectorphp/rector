@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 2.2.0
+
+### Added
+
+- Added `isNotInstanceOfAny` assertion.
+
 ## 2.1.6
 
 ### Fixed

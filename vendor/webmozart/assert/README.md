@@ -82,36 +82,37 @@ The [`Assert`] class provides the following assertions:
 
 ### Type Assertions
 
-Method                                                   | Description
--------------------------------------------------------- | --------------------------------------------------
-`string($value, $message = '')`                          | Check that a value is a string
-`stringNotEmpty($value, $message = '')`                  | Check that a value is a non-empty string
-`integer($value, $message = '')`                         | Check that a value is an integer
-`integerish($value, $message = '')`                      | Check that a value casts to an integer
-`positiveInteger($value, $message = '')`                 | Check that a value is a positive (non-zero) integer
-`negativeInteger($value, $message = '')`                 | Check that a value is a negative integer
-`notNegativeInteger($value, $message = '')`              | Check that a value is a non-negative integer
-`float($value, $message = '')`                           | Check that a value is a float
-`numeric($value, $message = '')`                         | Check that a value is numeric
-`natural($value, $message = '')`                         | Check that a value is a non-negative integer
-`boolean($value, $message = '')`                         | Check that a value is a boolean
-`scalar($value, $message = '')`                          | Check that a value is a scalar
-`object($value, $message = '')`                          | Check that a value is an object
-`objectish($value, $message = '')`                       | Check that a value is an object or a string of a class that exists
-`resource($value, $type = null, $message = '')`          | Check that a value is a resource
-`isInitialized($value, $property, $message = '')`        | Check that a value has an initialized property
-`isCallable($value, $message = '')`                      | Check that a value is a callable
-`isArray($value, $message = '')`                         | Check that a value is an array
-`isIterable($value, $message = '')`                      | Check that a value is an array or a `\Traversable`
-`isCountable($value, $message = '')`                     | Check that a value is an array or a `\Countable`
-`isInstanceOf($value, $class, $message = '')`            | Check that a value is an `instanceof` a class
-`isInstanceOfAny($value, array $classes, $message = '')` | Check that a value is an `instanceof` at least one class on the array of classes
-`notInstanceOf($value, $class, $message = '')`           | Check that a value is not an `instanceof` a class
-`isAOf($value, $class, $message = '')`                   | Check that a value is of the class or has one of its parents
-`isAnyOf($value, array $classes, $message = '')`         | Check that a value is of at least one of the classes or has one of its parents
-`isNotA($value, $class, $message = '')`                  | Check that a value is not of the class or has not one of its parents
-`isArrayAccessible($value, $message = '')`               | Check that a value can be accessed as an array
-`uniqueValues($values, $message = '')`                   | Check that the given array contains unique values
+Method                                                      | Description
+----------------------------------------------------------- | --------------------------------------------------
+`string($value, $message = '')`                             | Check that a value is a string
+`stringNotEmpty($value, $message = '')`                     | Check that a value is a non-empty string
+`integer($value, $message = '')`                            | Check that a value is an integer
+`integerish($value, $message = '')`                         | Check that a value casts to an integer
+`positiveInteger($value, $message = '')`                    | Check that a value is a positive (non-zero) integer
+`negativeInteger($value, $message = '')`                    | Check that a value is a negative integer
+`notNegativeInteger($value, $message = '')`                 | Check that a value is a non-negative integer
+`float($value, $message = '')`                              | Check that a value is a float
+`numeric($value, $message = '')`                            | Check that a value is numeric
+`natural($value, $message = '')`                            | Check that a value is a non-negative integer
+`boolean($value, $message = '')`                            | Check that a value is a boolean
+`scalar($value, $message = '')`                             | Check that a value is a scalar
+`object($value, $message = '')`                             | Check that a value is an object
+`objectish($value, $message = '')`                          | Check that a value is an object or a string of a class that exists
+`resource($value, $type = null, $message = '')`             | Check that a value is a resource
+`isInitialized($value, $property, $message = '')`           | Check that a value has an initialized property
+`isCallable($value, $message = '')`                         | Check that a value is a callable
+`isArray($value, $message = '')`                            | Check that a value is an array
+`isIterable($value, $message = '')`                         | Check that a value is an array or a `\Traversable`
+`isCountable($value, $message = '')`                        | Check that a value is an array or a `\Countable`
+`isInstanceOf($value, $class, $message = '')`               | Check that a value is an `instanceof` a class
+`isInstanceOfAny($value, array $classes, $message = '')`    | Check that a value is an `instanceof` at least one class on the array of classes
+`notInstanceOf($value, $class, $message = '')`              | Check that a value is not an `instanceof` a class
+`isNotInstanceOfAny($value, array $classes, $message = '')` | Check that a value is not an `instanceof` at least one class on the array of classes
+`isAOf($value, $class, $message = '')`                      | Check that a value is of the class or has one of its parents
+`isAnyOf($value, array $classes, $message = '')`            | Check that a value is of at least one of the classes or has one of its parents
+`isNotA($value, $class, $message = '')`                     | Check that a value is not of the class or has not one of its parents
+`isArrayAccessible($value, $message = '')`                  | Check that a value can be accessed as an array
+`uniqueValues($values, $message = '')`                      | Check that the given array contains unique values
 
 ### Comparison Assertions
 

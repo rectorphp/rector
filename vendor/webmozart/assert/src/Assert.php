@@ -446,6 +446,29 @@ class Assert
         static::reportInvalidArgument(\sprintf($message ?: 'Expected an instance of any of %2$s. Got: %s', static::typeToString($value), \implode(', ', \array_map(\Closure::fromCallable([static::class, 'valueToString']), \iterator_to_array(is_array($classes) ? new \ArrayIterator($classes) : $classes)))));
     }
     /**
+     * @template T
+     *
+     * @psalm-assert T $value
+     *
+     * @param mixed $value
+     *
+     * @return T
+     *
+     * @throws InvalidArgumentException
+     * @param mixed $classes
+     */
+    public static function isNotInstanceOfAny($value, $classes, string $message = '')
+    {
+        static::isIterable($classes);
+        foreach ($classes as $class) {
+            static::string($class, 'Expected class as a string. Got: %s');
+            if ($value instanceof $class) {
+                static::reportInvalidArgument(\sprintf($message ?: 'Expected not an instance of %2$s. Got: %s', static::typeToString($value), \implode(', ', \array_map(\Closure::fromCallable([static::class, 'valueToString']), \iterator_to_array(is_array($classes) ? new \ArrayIterator($classes) : $classes)))));
+            }
+        }
+        return $value;
+    }
+    /**
      * @psalm-pure
      *
      * @template T of object
