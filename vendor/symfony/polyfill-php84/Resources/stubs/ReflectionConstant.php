@@ -11,9 +11,7 @@ namespace RectorPrefix202604;
  * file that was distributed with this source code.
  */
 if (\PHP_VERSION_ID < 80400) {
-    /**
-     * @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
-     */
+    // @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
     final class ReflectionConstant
     {
         /**
@@ -138,8 +136,6 @@ if (\PHP_VERSION_ID < 80400) {
             throw new \Exception("Unserialization of 'ReflectionConstant' is not allowed");
         }
     }
-    /**
-     * @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
-     */
+    // @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
     \class_alias('RectorPrefix202604\ReflectionConstant', 'ReflectionConstant', \false);
 }

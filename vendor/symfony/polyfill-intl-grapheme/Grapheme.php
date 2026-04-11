@@ -25,6 +25,7 @@ namespace Symfony\Polyfill\Intl\Grapheme;
  * - grapheme_strstr   - Returns part of haystack string from the first occurrence of needle to the end of haystack
  * - grapheme_substr   - Return part of a string
  * - grapheme_str_split - Splits a string into an array of individual or chunks of graphemes
+ * - grapheme_levenshtein - Calculate the grapheme-unit Levenshtein distance between two strings
  *
  * @author Nicolas Grekas <p@tchwork.com>
  *
@@ -43,7 +44,7 @@ final class Grapheme
         }
         if (!\is_scalar($s)) {
             $hasError = \false;
-            set_error_handler(function () use (&$hasError) {
+            set_error_handler(static function () use (&$hasError) {
                 $hasError = \true;
             });
             $next = (string) substr($s, $start);
@@ -180,6 +181,44 @@ final class Grapheme
             $chunk = implode('', $chunk);
         }
         return $chunks;
+    }
+    public static function grapheme_levenshtein($s1, $s2, $insertion_cost = 1, $replacement_cost = 1, $deletion_cost = 1)
+    {
+        if (!preg_match('//u', $s1) || !preg_match('//u', $s2)) {
+            return \false;
+        }
+        if (0 > $insertion_cost || 0 > $replacement_cost || 0 > $deletion_cost) {
+            if (80000 > \PHP_VERSION_ID) {
+                return \false;
+            }
+            throw new \ValueError('grapheme_levenshtein(): Argument #3 ($insertion_cost), #4 ($replacement_cost), and #5 ($deletion_cost) must be greater than or equal to 0');
+        }
+        preg_match_all('/' . SYMFONY_GRAPHEME_CLUSTER_RX . '/u', $s1, $s1);
+        preg_match_all('/' . SYMFONY_GRAPHEME_CLUSTER_RX . '/u', $s2, $s2);
+        $s1 = $s1[0];
+        $s2 = $s2[0];
+        $l1 = \count($s1);
+        $l2 = \count($s2);
+        if (0 === $l1) {
+            return $l2 * $insertion_cost;
+        }
+        if (0 === $l2) {
+            return $l1 * $deletion_cost;
+        }
+        $dp = array_fill(0, $l1 + 1, array_fill(0, $l2 + 1, 0));
+        for ($i = 1; $i <= $l1; ++$i) {
+            $dp[$i][0] = $dp[$i - 1][0] + $deletion_cost;
+        }
+        for ($j = 1; $j <= $l2; ++$j) {
+            $dp[0][$j] = $dp[0][$j - 1] + $insertion_cost;
+        }
+        for ($i = 1; $i <= $l1; ++$i) {
+            for ($j = 1; $j <= $l2; ++$j) {
+                $cost = $s1[$i - 1] === $s2[$j - 1] ? 0 : $replacement_cost;
+                $dp[$i][$j] = min($dp[$i - 1][$j] + $deletion_cost, $dp[$i][$j - 1] + $insertion_cost, $dp[$i - 1][$j - 1] + $cost);
+            }
+        }
+        return $dp[$l1][$l2];
     }
     private static function grapheme_position($s, $needle, $offset, $mode)
     {

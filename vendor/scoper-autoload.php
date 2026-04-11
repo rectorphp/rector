@@ -14,7 +14,7 @@ $loader = (static function () {
     // Restore the backup and ensure the excluded files are properly marked as loaded
     $GLOBALS['__composer_autoload_files'] = \array_merge(
         $existingComposerAutoloadFiles,
-        \array_fill_keys(['9eaa6b0f3f04e58e17ae5ecb754ea313', '320cde22f66dd4f5d3fd621d3e88b98f', 'acbe0d033c55cd0a032b415e08d14f4c', '8825ede83f2f289127722d4e842cf7e8', '36dfd6ed9dd74e8062aa61f09caf8554', 'e69f7f6ee287b969198c3c9d6777bd38', '5928a00fa978807cf85d90ec3f4b0147', '0e6d7bf4a5811bfa5cf40c5ccd6fae6a', '7bfbed8d216c917b4d3e46b319a08b5c', '9d2b9fc6db0f153a0a149fefb182415e', '606a39d89246991a373564698c2d8383'], true)
+        \array_fill_keys(['9eaa6b0f3f04e58e17ae5ecb754ea313', '320cde22f66dd4f5d3fd621d3e88b98f', 'acbe0d033c55cd0a032b415e08d14f4c', '8825ede83f2f289127722d4e842cf7e8', '36dfd6ed9dd74e8062aa61f09caf8554', 'e69f7f6ee287b969198c3c9d6777bd38', '5928a00fa978807cf85d90ec3f4b0147', '0e6d7bf4a5811bfa5cf40c5ccd6fae6a', '1c231eb0a2980bfb45d2eedd095b0490', '7bfbed8d216c917b4d3e46b319a08b5c', '9d2b9fc6db0f153a0a149fefb182415e', 'c4dd194f5b50c0821acf143dcfed86ea', '606a39d89246991a373564698c2d8383'], true)
     );
 
     return $loader;
@@ -36,7 +36,9 @@ humbug_phpscoper_expose_class('Product', 'RectorPrefix202604\Product');
 humbug_phpscoper_expose_class('SomeTest', 'RectorPrefix202604\SomeTest');
 humbug_phpscoper_expose_class('Normalizer', 'RectorPrefix202604\Normalizer');
 humbug_phpscoper_expose_class('Deprecated', 'RectorPrefix202604\Deprecated');
+humbug_phpscoper_expose_class('RoundingMode', 'RectorPrefix202604\RoundingMode');
 humbug_phpscoper_expose_class('ReflectionConstant', 'RectorPrefix202604\ReflectionConstant');
+humbug_phpscoper_expose_class('DelayedTargetValidation', 'RectorPrefix202604\DelayedTargetValidation');
 humbug_phpscoper_expose_class('NoDiscard', 'RectorPrefix202604\NoDiscard');
 
 // Function aliases. For more information see:
@@ -47,7 +49,10 @@ if (!function_exists('array_find')) { function array_find() { return \RectorPref
 if (!function_exists('array_find_key')) { function array_find_key() { return \RectorPrefix202604\array_find_key(...func_get_args()); } }
 if (!function_exists('array_first')) { function array_first() { return \RectorPrefix202604\array_first(...func_get_args()); } }
 if (!function_exists('array_last')) { function array_last() { return \RectorPrefix202604\array_last(...func_get_args()); } }
+if (!function_exists('bcceil')) { function bcceil() { return \RectorPrefix202604\bcceil(...func_get_args()); } }
 if (!function_exists('bcdivmod')) { function bcdivmod() { return \RectorPrefix202604\bcdivmod(...func_get_args()); } }
+if (!function_exists('bcfloor')) { function bcfloor() { return \RectorPrefix202604\bcfloor(...func_get_args()); } }
+if (!function_exists('bcround')) { function bcround() { return \RectorPrefix202604\bcround(...func_get_args()); } }
 if (!function_exists('ctype_alnum')) { function ctype_alnum() { return \RectorPrefix202604\ctype_alnum(...func_get_args()); } }
 if (!function_exists('ctype_alpha')) { function ctype_alpha() { return \RectorPrefix202604\ctype_alpha(...func_get_args()); } }
 if (!function_exists('ctype_cntrl')) { function ctype_cntrl() { return \RectorPrefix202604\ctype_cntrl(...func_get_args()); } }
@@ -65,6 +70,7 @@ if (!function_exists('fpow')) { function fpow() { return \RectorPrefix202604\fpo
 if (!function_exists('get_error_handler')) { function get_error_handler() { return \RectorPrefix202604\get_error_handler(...func_get_args()); } }
 if (!function_exists('get_exception_handler')) { function get_exception_handler() { return \RectorPrefix202604\get_exception_handler(...func_get_args()); } }
 if (!function_exists('grapheme_extract')) { function grapheme_extract() { return \RectorPrefix202604\grapheme_extract(...func_get_args()); } }
+if (!function_exists('grapheme_levenshtein')) { function grapheme_levenshtein() { return \RectorPrefix202604\grapheme_levenshtein(...func_get_args()); } }
 if (!function_exists('grapheme_str_split')) { function grapheme_str_split() { return \RectorPrefix202604\grapheme_str_split(...func_get_args()); } }
 if (!function_exists('grapheme_stripos')) { function grapheme_stripos() { return \RectorPrefix202604\grapheme_stripos(...func_get_args()); } }
 if (!function_exists('grapheme_stristr')) { function grapheme_stristr() { return \RectorPrefix202604\grapheme_stristr(...func_get_args()); } }
@@ -75,6 +81,7 @@ if (!function_exists('grapheme_strrpos')) { function grapheme_strrpos() { return
 if (!function_exists('grapheme_strstr')) { function grapheme_strstr() { return \RectorPrefix202604\grapheme_strstr(...func_get_args()); } }
 if (!function_exists('grapheme_substr')) { function grapheme_substr() { return \RectorPrefix202604\grapheme_substr(...func_get_args()); } }
 if (!function_exists('includeIfExists')) { function includeIfExists() { return \RectorPrefix202604\includeIfExists(...func_get_args()); } }
+if (!function_exists('locale_is_right_to_left')) { function locale_is_right_to_left() { return \RectorPrefix202604\locale_is_right_to_left(...func_get_args()); } }
 if (!function_exists('mb_check_encoding')) { function mb_check_encoding() { return \RectorPrefix202604\mb_check_encoding(...func_get_args()); } }
 if (!function_exists('mb_chr')) { function mb_chr() { return \RectorPrefix202604\mb_chr(...func_get_args()); } }
 if (!function_exists('mb_convert_case')) { function mb_convert_case() { return \RectorPrefix202604\mb_convert_case(...func_get_args()); } }

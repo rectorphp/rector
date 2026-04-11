@@ -84,6 +84,9 @@ final class DeadVarTagValueNodeAnalyzer
             return !$docType instanceof IntersectionType;
         }
         if ($propertyType instanceof ObjectType && $docType instanceof ObjectType) {
+            if ($docType->equals($propertyType)) {
+                return \true;
+            }
             // more specific type is already in the property
             return $docType->isSuperTypeOf($propertyType)->yes();
         }
