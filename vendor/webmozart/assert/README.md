@@ -242,6 +242,16 @@ Assert::nullOrString($middleName, 'The middle name must be a string or null. Got
 The `Assert` class comes with a few methods, which can be overridden to change the class behaviour. You can also extend it to
 add your own assertions.
 
+### Lazy assertion messages
+
+Assertion messages can be provided as callables to avoid unnecessary computation when the assertion passes:
+
+```php
+Assert::string($value, fn() => expensiveMessage());
+```
+
+The callable will only be executed if the assertion fails.
+
 #### Overriding methods
 
 Overriding the following methods in your assertion class allows you to change the behaviour of the assertions:

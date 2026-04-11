@@ -1,6 +1,16 @@
 Changelog
 =========
 
+## 2.3.0
+
+### Changed
+
+- Clarified documentation and testing of `uniqueValues`.
+
+### Added
+
+- All assertions now support `string|callable` for the message.
+
 ## 2.2.0
 
 ### Added
