@@ -191,7 +191,7 @@ CODE_SAMPLE
     }
     private function createAbsolutePathConcat(string $classFilePath): Concat
     {
-        $relativeDirectoryPath = $this->filesystem->makePathRelative(dirname($classFilePath), dirname((string) $this->getFile()->getFilePath()));
+        $relativeDirectoryPath = $this->filesystem->makePathRelative(dirname($classFilePath), dirname($this->getFile()->getFilePath()));
         $distConstFetch = new ConstFetch(new Name('__DIR__'));
         return new Concat($distConstFetch, new String_('/' . $relativeDirectoryPath));
     }

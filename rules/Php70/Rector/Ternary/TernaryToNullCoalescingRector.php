@@ -4,11 +4,14 @@ declare (strict_types=1);
 namespace Rector\Php70\Rector\Ternary;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -34,7 +37,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes unneeded null check to ?? operator', [new CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'), new CodeSample('isset($value) ? $value : 10;', '$value ?? 10;')]);
+        return new RuleDefinition('Changes unneeded null check to ?? operator', [new CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'), new CodeSample('isset($value) ? $value : 10;', '$value ?? 10;'), new CodeSample('is_null($value) ? 10 : $value;', '$value ?? 10;')]);
     }
     /**
      * @return array<class-string<Node>>
@@ -50,6 +53,12 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
     {
         if ($node->cond instanceof Isset_) {
             return $this->processTernaryWithIsset($node, $node->cond);
+        }
+        if ($node->cond instanceof FuncCall && $this->isName($node->cond, 'is_null')) {
+            return $this->processTernaryWithIsNull($node, $node->cond, \false);
+        }
+        if ($node->cond instanceof BooleanNot && $node->cond->expr instanceof FuncCall && $this->isName($node->cond->expr, 'is_null')) {
+            return $this->processTernaryWithIsNull($node, $node->cond->expr, \true);
         }
         if ($node->cond instanceof Identical) {
             $checkedNode = $node->else;
@@ -69,16 +78,45 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         }
         $ternaryCompareNode = $node->cond;
         if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode)) {
-            return new Coalesce($checkedNode, $fallbackNode);
+            return $this->createCoalesce($checkedNode, $fallbackNode);
         }
         if ($this->isNullMatch($ternaryCompareNode->right, $ternaryCompareNode->left, $checkedNode)) {
-            return new Coalesce($checkedNode, $fallbackNode);
+            return $this->createCoalesce($checkedNode, $fallbackNode);
         }
         return null;
     }
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULL_COALESCE;
+    }
+    private function processTernaryWithIsNull(Ternary $ternary, FuncCall $isNullFuncCall, bool $isNegated): ?Coalesce
+    {
+        if (count($isNullFuncCall->args) !== 1) {
+            return null;
+        }
+        $firstArg = $isNullFuncCall->args[0];
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
+        $checkedExpr = $firstArg->value;
+        if ($isNegated) {
+            if (!$ternary->if instanceof Expr) {
+                return null;
+            }
+            if (!$this->nodeComparator->areNodesEqual($ternary->if, $checkedExpr)) {
+                return null;
+            }
+            $this->preserveWrappedFallback($ternary->else);
+            return $this->createCoalesce($ternary->if, $ternary->else);
+        }
+        if (!$this->nodeComparator->areNodesEqual($ternary->else, $checkedExpr)) {
+            return null;
+        }
+        if (!$ternary->if instanceof Expr) {
+            return null;
+        }
+        $this->preserveWrappedFallback($ternary->if);
+        return $this->createCoalesce($ternary->else, $ternary->if);
     }
     private function processTernaryWithIsset(Ternary $ternary, Isset_ $isset): ?Coalesce
     {
@@ -98,7 +136,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         if (($ternary->else instanceof Ternary || $ternary->else instanceof BinaryOp) && $this->isTernaryParenthesized($this->getFile(), $ternary->cond, $ternary)) {
             $ternary->else->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         }
-        return new Coalesce($ternary->if, $ternary->else);
+        return $this->createCoalesce($ternary->if, $ternary->else);
     }
     private function isTernaryParenthesized(File $file, Expr $expr, Ternary $ternary): bool
     {
@@ -128,5 +166,35 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
             return \false;
         }
         return $this->nodeComparator->areNodesEqual($firstNode, $secondNode);
+    }
+    private function createCoalesce(Expr $checkedExpr, Expr $fallbackExpr): Coalesce
+    {
+        if ($this->isExprParenthesized($this->getFile(), $checkedExpr)) {
+            $checkedExpr->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+        }
+        return new Coalesce($checkedExpr, $fallbackExpr);
+    }
+    private function preserveWrappedFallback(Expr $expr): void
+    {
+        if (!$expr instanceof BinaryOp && !$expr instanceof Ternary) {
+            return;
+        }
+        if (!$this->isExprParenthesized($this->getFile(), $expr)) {
+            return;
+        }
+        $expr->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+    }
+    private function isExprParenthesized(File $file, Expr $expr): bool
+    {
+        $oldTokens = $file->getOldTokens();
+        $startTokenPos = $expr->getStartTokenPos();
+        $endTokenPos = $expr->getEndTokenPos();
+        while (isset($oldTokens[$startTokenPos - 1]) && trim((string) $oldTokens[$startTokenPos - 1]) === '') {
+            --$startTokenPos;
+        }
+        while (isset($oldTokens[$endTokenPos + 1]) && trim((string) $oldTokens[$endTokenPos + 1]) === '') {
+            ++$endTokenPos;
+        }
+        return isset($oldTokens[$startTokenPos - 1], $oldTokens[$endTokenPos + 1]) && (string) $oldTokens[$startTokenPos - 1] === '(' && (string) $oldTokens[$endTokenPos + 1] === ')';
     }
 }
