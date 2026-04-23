@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -19,6 +20,7 @@ use PhpParser\NodeVisitor;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
@@ -29,6 +31,7 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\DocBlock\PropertyPromotionDocBlockMerger;
 use Rector\Php80\Guard\MakePropertyPromotionGuard;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -84,6 +87,10 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     private StaticTypeMapper $staticTypeMapper;
     /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    /**
      * @api
      * @var string
      */
@@ -115,7 +122,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      * Set to false will skip property promotion on model based classes
      */
     private bool $allowModelBasedClasses = \true;
-    public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, ParamAnalyzer $paramAnalyzer, PropertyPromotionDocBlockMerger $propertyPromotionDocBlockMerger, MakePropertyPromotionGuard $makePropertyPromotionGuard, TypeComparator $typeComparator, ReflectionResolver $reflectionResolver, PropertyPromotionRenamer $propertyPromotionRenamer, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
+    public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, ParamAnalyzer $paramAnalyzer, PropertyPromotionDocBlockMerger $propertyPromotionDocBlockMerger, MakePropertyPromotionGuard $makePropertyPromotionGuard, TypeComparator $typeComparator, ReflectionResolver $reflectionResolver, PropertyPromotionRenamer $propertyPromotionRenamer, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, ValueResolver $valueResolver)
     {
         $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;
         $this->variableRenamer = $variableRenamer;
@@ -127,6 +134,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
         $this->propertyPromotionRenamer = $propertyPromotionRenamer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -253,18 +261,22 @@ CODE_SAMPLE
     }
     private function processUnionType(Property $property, Param $param): void
     {
-        if ($property->type instanceof Node) {
+        if ($this->shouldUsePropertyTypeForPromotedParam($property, $param)) {
             $param->type = $property->type;
-            return;
-        }
-        if (!$param->default instanceof Expr) {
             return;
         }
         if (!$param->type instanceof Node) {
             return;
         }
-        $defaultType = $this->getType($param->default);
         $paramType = $this->getType($param->type);
+        if ($this->shouldRemoveNullFromForPromotedParamType($property, $param)) {
+            $paramType = TypeCombinator::removeNull($paramType);
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
+        }
+        if (!$param->default instanceof Expr) {
+            return;
+        }
+        $defaultType = $this->getType($param->default);
         if ($this->typeComparator->isSubtype($defaultType, $paramType)) {
             return;
         }
@@ -317,5 +329,36 @@ CODE_SAMPLE
             }
         }
         return $property->type instanceof Node && $param->type instanceof Node && $property->hooks !== [] && !$this->nodeComparator->areNodesEqual($property->type, $param->type);
+    }
+    private function shouldRemoveNullFromForPromotedParamType(Property $property, Param $param): bool
+    {
+        if ($property->type === null || $param->type === null) {
+            return \false;
+        }
+        if ($param->default !== null && $this->valueResolver->isNull($param->default)) {
+            return \false;
+        }
+        $propertyType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($property->type);
+        $propertyTypeWithoutNull = TypeCombinator::removeNull($propertyType);
+        if (!$this->typeComparator->areTypesEqual($propertyTypeWithoutNull, $propertyType)) {
+            return \false;
+        }
+        $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $paramTypeWithoutNull = TypeCombinator::removeNull($paramType);
+        return !$this->typeComparator->areTypesEqual($paramTypeWithoutNull, $paramType);
+    }
+    private function shouldUsePropertyTypeForPromotedParam(Property $property, Param $param): bool
+    {
+        if ($property->type === null) {
+            return \false;
+        }
+        if ($param->type === null) {
+            return \true;
+        }
+        $propertyType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($property->type);
+        $propertyTypeWithoutNull = TypeCombinator::removeNull($propertyType);
+        $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        $paramTypeWithoutNull = TypeCombinator::removeNull($paramType);
+        return $this->typeComparator->areTypesEqual($propertyTypeWithoutNull, $paramTypeWithoutNull);
     }
 }
