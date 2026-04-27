@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -20,7 +19,6 @@ use PhpParser\NodeVisitor;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
@@ -332,15 +330,15 @@ CODE_SAMPLE
     }
     private function shouldRemoveNullFromForPromotedParamType(Property $property, Param $param): bool
     {
-        if ($property->type === null || $param->type === null) {
+        if (!$property->type instanceof Node || !$param->type instanceof Node) {
             return \false;
         }
-        if ($param->default !== null && $this->valueResolver->isNull($param->default)) {
+        if ($param->default instanceof Expr && $this->valueResolver->isNull($param->default)) {
             return \false;
         }
         $propertyType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($property->type);
-        $propertyTypeWithoutNull = TypeCombinator::removeNull($propertyType);
-        if (!$this->typeComparator->areTypesEqual($propertyTypeWithoutNull, $propertyType)) {
+        $type = TypeCombinator::removeNull($propertyType);
+        if (!$this->typeComparator->areTypesEqual($type, $propertyType)) {
             return \false;
         }
         $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
@@ -349,16 +347,16 @@ CODE_SAMPLE
     }
     private function shouldUsePropertyTypeForPromotedParam(Property $property, Param $param): bool
     {
-        if ($property->type === null) {
+        if (!$property->type instanceof Node) {
             return \false;
         }
-        if ($param->type === null) {
+        if (!$param->type instanceof Node) {
             return \true;
         }
         $propertyType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($property->type);
-        $propertyTypeWithoutNull = TypeCombinator::removeNull($propertyType);
+        $type = TypeCombinator::removeNull($propertyType);
         $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $paramTypeWithoutNull = TypeCombinator::removeNull($paramType);
-        return $this->typeComparator->areTypesEqual($propertyTypeWithoutNull, $paramTypeWithoutNull);
+        return $this->typeComparator->areTypesEqual($type, $paramTypeWithoutNull);
     }
 }

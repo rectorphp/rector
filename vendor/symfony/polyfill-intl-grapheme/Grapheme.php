@@ -26,6 +26,7 @@ namespace Symfony\Polyfill\Intl\Grapheme;
  * - grapheme_substr   - Return part of a string
  * - grapheme_str_split - Splits a string into an array of individual or chunks of graphemes
  * - grapheme_levenshtein - Calculate the grapheme-unit Levenshtein distance between two strings
+ * - grapheme_strrev - Reverse a string by grapheme clusters
  *
  * @author Nicolas Grekas <p@tchwork.com>
  *
@@ -269,5 +270,13 @@ final class Grapheme
             $needlePos = strpos($s, $needle);
         }
         return \false !== $needlePos ? self::grapheme_strlen(substr($s, 0, $needlePos)) + $offset : \false;
+    }
+    public static function grapheme_strrev(string $string)
+    {
+        $units = grapheme_str_split($string);
+        if (\false === $units) {
+            return \false;
+        }
+        return implode('', array_reverse($units));
     }
 }
