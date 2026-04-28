@@ -104,6 +104,7 @@ Among there projects belong:
 * [php-static-analysis/rector-rule](https://github.com/php-static-analysis/rector-rule)
 * [ibexa/rector](https://github.com/ibexa/rector)
 * [guanguans/rector-rules](https://github.com/guanguans/rector-rules)
+* [wernerkrauss/silverstripe-rector](https://github.com/wernerkrauss/silverstripe-rector/)
 
 <br>
 
