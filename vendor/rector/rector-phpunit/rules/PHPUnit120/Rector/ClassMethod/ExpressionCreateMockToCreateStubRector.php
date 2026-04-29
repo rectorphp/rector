@@ -99,7 +99,6 @@ CODE_SAMPLE
             if (!$typeArg instanceof Arg) {
                 continue;
             }
-            /** @var Assign $assign */
             $assign = $stmt->expr;
             if (!$assign->var instanceof Variable) {
                 continue;

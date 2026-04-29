@@ -209,8 +209,7 @@ CODE_SAMPLE
                 ++$callLikeVariableUseCount;
             }
         }
-        // not suitable for direct replacing
-        return count($foundVariables) - 1 > $callLikeVariableUseCount;
+        return $callLikeVariableUseCount > 1 || count($foundVariables) - 1 > $callLikeVariableUseCount;
     }
     /**
      * @return CallLike[]

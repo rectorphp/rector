@@ -127,7 +127,6 @@ CODE_SAMPLE
             if (!$seePhpDocTagNode->value instanceof GenericTagValueNode) {
                 continue;
             }
-            /** @var GenericTagValueNode $genericTagValueNode */
             $genericTagValueNode = $seePhpDocTagNode->value;
             $seeTagClass = ltrim($genericTagValueNode->value, '\\');
             if ($this->reflectionProvider->hasClass($seeTagClass)) {
