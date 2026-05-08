@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2692dc3e95802212d68a3d3c48ff7f9c
+class ComposerStaticInitb67b80604df8d83b849ed16e17c8f717
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -1300,6 +1300,7 @@ class ComposerStaticInit2692dc3e95802212d68a3d3c48ff7f9c
         'RectorPrefix202605\\Symfony\\Component\\Yaml\\Yaml' => __DIR__ . '/..' . '/symfony/yaml/Yaml.php',
         'RectorPrefix202605\\Symfony\\Contracts\\Service\\Attribute\\Required' => __DIR__ . '/..' . '/symfony/service-contracts/Attribute/Required.php',
         'RectorPrefix202605\\Symfony\\Contracts\\Service\\Attribute\\SubscribedService' => __DIR__ . '/..' . '/symfony/service-contracts/Attribute/SubscribedService.php',
+        'RectorPrefix202605\\Symfony\\Contracts\\Service\\ContainerAwareInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ContainerAwareInterface.php',
         'RectorPrefix202605\\Symfony\\Contracts\\Service\\ResetInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ResetInterface.php',
         'RectorPrefix202605\\Symfony\\Contracts\\Service\\ServiceCollectionInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceCollectionInterface.php',
         'RectorPrefix202605\\Symfony\\Contracts\\Service\\ServiceLocatorTrait' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceLocatorTrait.php',
@@ -2831,6 +2832,7 @@ class ComposerStaticInit2692dc3e95802212d68a3d3c48ff7f9c
         'Rector\\Symfony\\Enum\\FosAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/FosAnnotation.php',
         'Rector\\Symfony\\Enum\\FosClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/FosClass.php',
         'Rector\\Symfony\\Enum\\JMSAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/JMSAnnotation.php',
+        'Rector\\Symfony\\Enum\\SensioAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAnnotation.php',
         'Rector\\Symfony\\Enum\\SensioAttribute' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAttribute.php',
         'Rector\\Symfony\\Enum\\SymfonyAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
         'Rector\\Symfony\\Enum\\SymfonyAttribute' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAttribute.php',
@@ -3274,9 +3276,9 @@ class ComposerStaticInit2692dc3e95802212d68a3d3c48ff7f9c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2692dc3e95802212d68a3d3c48ff7f9c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2692dc3e95802212d68a3d3c48ff7f9c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2692dc3e95802212d68a3d3c48ff7f9c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb67b80604df8d83b849ed16e17c8f717::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb67b80604df8d83b849ed16e17c8f717::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb67b80604df8d83b849ed16e17c8f717::$classMap;
 
         }, null, ClassLoader::class);
     }

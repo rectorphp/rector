@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SensioAnnotation;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -46,10 +47,6 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
      * @readonly
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
-     * @var string
-     */
-    private const SENSIO_ROUTE_NAME = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Route';
     public function __construct(SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, PhpDocTagRemover $phpDocTagRemover, RenamedClassesDataCollector $renamedClassesDataCollector, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
@@ -108,7 +105,7 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
-        $sensioDoctrineAnnotationTagValueNodes = $phpDocInfo->findByAnnotationClass(self::SENSIO_ROUTE_NAME);
+        $sensioDoctrineAnnotationTagValueNodes = $phpDocInfo->findByAnnotationClass(SensioAnnotation::ROUTE);
         // nothing to find
         if ($sensioDoctrineAnnotationTagValueNodes === []) {
             return null;
@@ -125,7 +122,7 @@ CODE_SAMPLE
             }
             $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
         }
-        $this->renamedClassesDataCollector->addOldToNewClasses([self::SENSIO_ROUTE_NAME => SymfonyAnnotation::ROUTE]);
+        $this->renamedClassesDataCollector->addOldToNewClasses([SensioAnnotation::ROUTE => SymfonyAnnotation::ROUTE]);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
