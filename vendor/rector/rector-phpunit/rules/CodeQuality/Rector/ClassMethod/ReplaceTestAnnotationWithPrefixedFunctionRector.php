@@ -92,7 +92,7 @@ CODE_SAMPLE
         }
         $hasAnnotation = \false;
         foreach (NewLineSplitter::split($docComment->getText()) as $row) {
-            if (in_array(trim($row), ['*@test', '* @test'])) {
+            if (in_array(trim($row), ['*@test', '* @test'], \true)) {
                 $hasAnnotation = \true;
                 break;
             }

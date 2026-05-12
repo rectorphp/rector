@@ -25,13 +25,18 @@ final class ConfigInitializer
      */
     private SymfonyStyle $symfonyStyle;
     /**
+     * @readonly
+     */
+    private RectorConfigsResolver $rectorConfigsResolver;
+    /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, InitFilePathsResolver $initFilePathsResolver, SymfonyStyle $symfonyStyle)
+    public function __construct(array $rectors, InitFilePathsResolver $initFilePathsResolver, SymfonyStyle $symfonyStyle, RectorConfigsResolver $rectorConfigsResolver)
     {
         $this->rectors = $rectors;
         $this->initFilePathsResolver = $initFilePathsResolver;
         $this->symfonyStyle = $symfonyStyle;
+        $this->rectorConfigsResolver = $rectorConfigsResolver;
     }
     public function createConfig(string $projectDirectory): void
     {
@@ -43,6 +48,11 @@ final class ConfigInitializer
         }
         if (file_exists($distRectorConfigPath)) {
             $this->symfonyStyle->warning('Register rules or sets in your "' . RectorConfigsResolver::DEFAULT_DIST_CONFIG_FILE . '" config');
+            return;
+        }
+        $mainConfigFile = $this->rectorConfigsResolver->provide()->getMainConfigFile();
+        if ($mainConfigFile !== null && file_exists($mainConfigFile)) {
+            $this->symfonyStyle->warning('Register rules or sets in your "' . basename($mainConfigFile) . '" config');
             return;
         }
         $response = $this->symfonyStyle->ask('No "' . RectorConfigsResolver::DEFAULT_CONFIG_FILE . '" config found. Should we generate it for you?', 'yes');
