@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace RectorPrefix202605\Nette\Utils;
 
 use RectorPrefix202605\Nette;
@@ -131,7 +131,7 @@ final class Type
         return implode($this->kind, $res);
     }
     /**
-     * Returns a type that accepts both the current type and the given type.
+     * Returns a union type that accepts both the current type and the given type.
      * @param string|$this $type
      */
     public function with($type): self
@@ -184,7 +184,7 @@ final class Type
         return $this->kind === '&';
     }
     /**
-     * Returns true whether it is a simple type. Single nullable types are also considered to be simple types.
+     * Checks whether it is a simple (non-compound) type. Single nullable types such as ?int are also considered simple.
      */
     public function isSimple(): bool
     {
@@ -195,14 +195,14 @@ final class Type
         return $this->singleName !== null;
     }
     /**
-     * Returns true whether the type is both a simple and a PHP built-in type.
+     * Checks whether it is a simple PHP built-in type (int, string, bool, etc.).
      */
     public function isBuiltin(): bool
     {
         return $this->singleName !== null && Validators::isBuiltinType($this->singleName);
     }
     /**
-     * Returns true whether the type is both a simple and a class name.
+     * Checks whether it is a simple class or interface name (not a built-in type).
      */
     public function isClass(): bool
     {
@@ -216,7 +216,7 @@ final class Type
         return $this->singleName !== null && Validators::isClassKeyword($this->singleName);
     }
     /**
-     * Verifies type compatibility. For example, it checks if a value of a certain type could be passed as a parameter.
+     * Checks whether a value of the given type could be assigned to this type.
      * @param string|$this $type
      */
     public function allows($type): bool

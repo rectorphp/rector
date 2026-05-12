@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace RectorPrefix202605\Nette\Utils;
 
 use RectorPrefix202605\Nette;
@@ -156,7 +156,7 @@ final class FileSystem
         })(static::open($file, 'r'));
     }
     /**
-     * Writes the string to a file.
+     * Writes the string to a file. Creates the parent directory if it does not exist. Pass null as $mode to skip chmod.
      * @throws Nette\IOException  on error occurred
      */
     public static function write(string $file, string $content, ?int $mode = 0666): void
@@ -202,6 +202,15 @@ final class FileSystem
     public static function isAbsolute(string $path): bool
     {
         return (bool) preg_match('#([a-z]:)?[/\\\\]|[a-z][a-z0-9+.-]*://#Ai', $path);
+    }
+    /**
+     * Determines whether the string is a valid cross-platform filename without any path information.
+     */
+    public static function isValidFilename(string $name): bool
+    {
+        [$stem] = explode('.', $name, 2);
+        return $name !== '' && $name !== '.' && $name !== '..' && !preg_match('#[\x00-\x1F<>:"|?*\\\\/]#', $name) && substr_compare($name, '.', -strlen('.')) !== 0 && substr_compare($name, ' ', -strlen(' ')) !== 0 && !preg_match('#^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$#i', $stem);
+        // Windows reserved device names
     }
     /**
      * Normalizes `..` and `.` and directory separators in path.

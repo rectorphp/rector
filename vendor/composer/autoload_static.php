@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit37e0e4a0ea64aedb6719b2276faba560
+class ComposerStaticInitbc08dee7b32aa57b9a805823d073849f
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -957,6 +957,9 @@ class ComposerStaticInit37e0e4a0ea64aedb6719b2276faba560
         'RectorPrefix202605\\Nette\\Utils\\JsonException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202605\\Nette\\Utils\\ObjectHelpers' => __DIR__ . '/..' . '/nette/utils/src/Utils/ObjectHelpers.php',
         'RectorPrefix202605\\Nette\\Utils\\Paginator' => __DIR__ . '/..' . '/nette/utils/src/Utils/Paginator.php',
+        'RectorPrefix202605\\Nette\\Utils\\Process' => __DIR__ . '/..' . '/nette/utils/src/Utils/Process.php',
+        'RectorPrefix202605\\Nette\\Utils\\ProcessFailedException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
+        'RectorPrefix202605\\Nette\\Utils\\ProcessTimeoutException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202605\\Nette\\Utils\\Random' => __DIR__ . '/..' . '/nette/utils/src/Utils/Random.php',
         'RectorPrefix202605\\Nette\\Utils\\Reflection' => __DIR__ . '/..' . '/nette/utils/src/Utils/Reflection.php',
         'RectorPrefix202605\\Nette\\Utils\\ReflectionMethod' => __DIR__ . '/..' . '/nette/utils/src/Utils/ReflectionMethod.php',
@@ -3276,9 +3279,9 @@ class ComposerStaticInit37e0e4a0ea64aedb6719b2276faba560
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit37e0e4a0ea64aedb6719b2276faba560::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit37e0e4a0ea64aedb6719b2276faba560::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit37e0e4a0ea64aedb6719b2276faba560::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbc08dee7b32aa57b9a805823d073849f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbc08dee7b32aa57b9a805823d073849f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbc08dee7b32aa57b9a805823d073849f::$classMap;
 
         }, null, ClassLoader::class);
     }

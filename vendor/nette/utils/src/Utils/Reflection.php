@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace RectorPrefix202605\Nette\Utils;
 
 use RectorPrefix202605\Nette;
@@ -26,6 +26,8 @@ final class Reflection
         return Validators::isClassKeyword($name);
     }
     /**
+     * Returns the default value of a parameter. Resolves constants and class constants used as default values.
+     * @throws \ReflectionException if the constant cannot be resolved
      * @return mixed
      */
     public static function getParameterDefaultValue(\ReflectionParameter $param)
@@ -99,6 +101,9 @@ final class Reflection
         static $res;
         return $res ?? $res = (bool) (new \ReflectionMethod(self::class, __FUNCTION__))->getDocComment();
     }
+    /**
+     * Returns a human-readable string representation of a reflection object.
+     */
     public static function toString(\Reflector $ref): string
     {
         if ($ref instanceof \ReflectionClass) {
@@ -148,8 +153,9 @@ final class Reflection
         }
     }
     /**
+     * Returns the use statements from the file where the class is defined.
      * @param  \ReflectionClass<object>  $class
-     * @return array<string, class-string> of [alias => class]
+     * @return array<string, class-string>  Map of alias to fully qualified class name
      */
     public static function getUseStatements(\ReflectionClass $class): array
     {

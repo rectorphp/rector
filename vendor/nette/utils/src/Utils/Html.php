@@ -1,17 +1,17 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace RectorPrefix202605\Nette\Utils;
 
 use RectorPrefix202605\Nette\HtmlStringable;
 use function array_merge, array_splice, count, explode, func_num_args, html_entity_decode, htmlspecialchars, http_build_query, implode, is_array, is_bool, is_float, is_object, is_string, json_encode, max, number_format, rtrim, str_contains, str_repeat, str_replace, strip_tags, strncmp, strpbrk, substr;
 use const ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES;
 /**
- * HTML helper.
+ * Generates HTML elements with automatic attribute escaping.
  *
  * @property ?string $accept
  * @property ?string $accesskey
@@ -318,7 +318,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
         return $this->name;
     }
     /**
-     * Is element empty?
+     * Checks whether the element is a void (self-closing) element.
      */
     final public function isEmpty(): bool
     {
@@ -396,7 +396,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
         return $this;
     }
     /**
-     * Overloaded setter for element's attribute.
+     * Sets element's attribute via property assignment.
      * @param mixed $value
      */
     final public function __set(string $name, $value): void
@@ -404,7 +404,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
         $this->attrs[$name] = $value;
     }
     /**
-     * Overloaded getter for element's attribute.
+     * Returns element's attribute via property access.
      * @return mixed
      */
     final public function &__get(string $name)
@@ -412,21 +412,21 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
         return $this->attrs[$name];
     }
     /**
-     * Overloaded tester for element's attribute.
+     * Checks if element's attribute is set.
      */
     final public function __isset(string $name): bool
     {
         return isset($this->attrs[$name]);
     }
     /**
-     * Overloaded unsetter for element's attribute.
+     * Unsets element's attribute via property unset.
      */
     final public function __unset(string $name): void
     {
         unset($this->attrs[$name]);
     }
     /**
-     * Overloaded setter for element's attribute.
+     * Sets or returns element's attribute via method call.
      * @param  mixed[]  $args
      * @return mixed
      */
@@ -636,7 +636,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
         return $this->children;
     }
     /**
-     * Renders element's start tag, content and end tag.
+     * Renders element's start tag, content and end tag. Pass indent level to enable pretty-printing.
      */
     final public function render(?int $indent = null): string
     {

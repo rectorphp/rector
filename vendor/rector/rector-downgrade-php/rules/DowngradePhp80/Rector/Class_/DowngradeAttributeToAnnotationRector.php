@@ -108,9 +108,11 @@ CODE_SAMPLE
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $key => $attribute) {
                 if ($this->shouldSkipAttribute($attribute)) {
-                    if (isset($oldTokens[$attrGroup->getEndTokenPos() + 1]) && strpos((string) $oldTokens[$attrGroup->getEndTokenPos() + 1], "\n") === \false) {
+                    $endTokenPos = $attrGroup->getEndTokenPos();
+                    $nextTokenPos = $endTokenPos + 1;
+                    if ($endTokenPos >= 0 && isset($oldTokens[$nextTokenPos]) && strpos((string) $oldTokens[$nextTokenPos], "\n") === \false) {
                         // add new line
-                        $oldTokens[$attrGroup->getEndTokenPos() + 1]->text = "\n" . $this->resolveIndentation($node, $attrGroup, $attribute) . $oldTokens[$attrGroup->getEndTokenPos() + 1]->text;
+                        $oldTokens[$nextTokenPos]->text = "\n" . $this->resolveIndentation($node, $attrGroup, $attribute) . $oldTokens[$nextTokenPos]->text;
                         $this->isDowngraded = \true;
                     }
                     continue;

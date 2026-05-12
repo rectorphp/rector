@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace RectorPrefix202605\Nette\Utils;
 
 use RectorPrefix202605\JetBrains\PhpStorm\Language;
@@ -433,7 +433,7 @@ class Strings
         return Helpers::falseToNull($pos);
     }
     /**
-     * Divides the string into arrays according to the regular expression. Expressions in parentheses will be captured and returned as well.
+     * Splits the string by a regular expression. Expressions in parentheses will be captured and returned as well.
      * @return list<string>
      * @param bool|int $captureOffset
      */
@@ -455,8 +455,8 @@ class Strings
         return $utf8 && $captureOffset ? self::bytesToChars($subject, [$m])[0] : $m;
     }
     /**
-     * Searches the string for the part matching the regular expression and returns
-     * an array with the found expression and individual subexpressions, or `null`.
+     * Searches the string for the first match of the regular expression and returns
+     * an array with the found expression and individual subexpressions, or null.
      * @return ?array<string>
      * @param bool|int $captureOffset
      */
@@ -489,8 +489,8 @@ class Strings
         }
     }
     /**
-     * Searches the string for all occurrences matching the regular expression and
-     * returns an array of arrays containing the found expression and each subexpression.
+     * Searches the string for all occurrences matching the regular expression and returns
+     * an array of arrays containing the found expression and each subexpression.
      * @return ($lazy is true ? \Generator<int, array<string>> : list<array<string>>)
      * @param bool|int $captureOffset
      */
@@ -538,7 +538,7 @@ class Strings
         return $utf8 && $captureOffset ? self::bytesToChars($subject, $m) : $m;
     }
     /**
-     * Replaces all occurrences matching regular expression $pattern which can be string or array in the form `pattern => replacement`.
+     * Replaces all occurrences matching the regular expression $pattern, which can be a string or array in the form `pattern => replacement`.
      * @param  string|array<string, string>  $pattern
      * @param string|callable $replacement
      */

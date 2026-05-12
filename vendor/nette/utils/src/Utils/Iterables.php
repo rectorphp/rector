@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace RectorPrefix202605\Nette\Utils;
 
 use RectorPrefix202605\Nette;
@@ -82,7 +82,7 @@ final class Iterables
         return $else ? $else() : null;
     }
     /**
-     * Tests whether at least one element in the iterator passes the test implemented by the provided function.
+     * Tests whether at least one element in the iterable passes the test implemented by the provided function.
      * @template K
      * @template V
      * @param  iterable<K, V>  $iterable
@@ -98,7 +98,7 @@ final class Iterables
         return \false;
     }
     /**
-     * Tests whether all elements in the iterator pass the test implemented by the provided function.
+     * Tests whether all elements in the iterable pass the test implemented by the provided function.
      * @template K
      * @template V
      * @param  iterable<K, V>  $iterable
@@ -114,7 +114,7 @@ final class Iterables
         return \true;
     }
     /**
-     * Iterator that filters elements according to a given $predicate. Maintains original keys.
+     * Returns a generator that yields only elements matching the given $predicate. Maintains original keys.
      * @template K
      * @template V
      * @param  iterable<K, V>  $iterable
@@ -130,7 +130,7 @@ final class Iterables
         }
     }
     /**
-     * Iterator that transforms values by calling $transformer. Maintains original keys.
+     * Returns a generator that transforms values by calling $transformer. Maintains original keys.
      * @template K
      * @template V
      * @template R
@@ -145,7 +145,7 @@ final class Iterables
         }
     }
     /**
-     * Iterator that transforms keys and values by calling $transformer. If it returns null, the element is skipped.
+     * Returns a generator that transforms keys and values by calling $transformer. If it returns null, the element is skipped.
      * @template K
      * @template V
      * @template ResK

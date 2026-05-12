@@ -1,10 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /**
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-declare (strict_types=1);
 namespace RectorPrefix202605\Nette\Utils;
 
 use RectorPrefix202605\Nette;
@@ -115,6 +115,7 @@ class Image
     public const JPEG = ImageType::JPEG, PNG = ImageType::PNG, GIF = ImageType::GIF, WEBP = ImageType::WEBP, AVIF = ImageType::AVIF, BMP = ImageType::BMP;
     public const EmptyGIF = "GIF89a\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00!\xf9\x04\x01\x00\x00\x00\x00,\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;";
     private const Formats = [ImageType::JPEG => 'jpeg', ImageType::PNG => 'png', ImageType::GIF => 'gif', ImageType::WEBP => 'webp', ImageType::AVIF => 'avif', ImageType::BMP => 'bmp'];
+    private const Sentinel = "\x00";
     private \GdImage $image;
     /**
      * Returns RGB color (0..255) and transparency (0..127).
@@ -126,47 +127,53 @@ class Image
         return ['red' => max(0, min(255, $red)), 'green' => max(0, min(255, $green)), 'blue' => max(0, min(255, $blue)), 'alpha' => max(0, min(127, $transparency))];
     }
     /**
-     * Reads an image from a file and returns its type in $type.
+     * Reads an image from a file and returns its type in $type. If $warnings is passed, recoverable decoder
+     * warnings are returned in it instead of being raised as a PHP warning.
+     * @param-out ?string  $warnings
      * @throws Nette\NotSupportedException if gd extension is not loaded
      * @throws UnknownImageFileException if file not found or file type is not known
      * @return static
      */
-    public static function fromFile(string $file, ?int &$type = null)
+    public static function fromFile(string $file, ?int &$type = null, ?string &$warnings = self::Sentinel)
     {
         self::ensureExtension();
         $type = self::detectTypeFromFile($file);
         if (!$type) {
             throw new UnknownImageFileException(is_file($file) ? "Unknown type of file '{$file}'." : "File '{$file}' not found.");
         }
-        return self::invokeSafe('imagecreatefrom' . self::Formats[$type], $file, "Unable to open file '{$file}'.", __METHOD__);
+        return self::invokeSafe('imagecreatefrom' . self::Formats[$type], $file, "Unable to open file '{$file}'.", __METHOD__, $warnings);
     }
     /**
-     * Reads an image from a string and returns its type in $type.
+     * Reads an image from a string and returns its type in $type. If $warnings is passed, recoverable decoder
+     * warnings are returned in it instead of being raised as a PHP warning.
+     * @param-out ?string  $warnings
      * @throws Nette\NotSupportedException if gd extension is not loaded
      * @throws ImageException
      * @return static
      */
-    public static function fromString(string $s, ?int &$type = null)
+    public static function fromString(string $s, ?int &$type = null, ?string &$warnings = self::Sentinel)
     {
         self::ensureExtension();
         $type = self::detectTypeFromString($s);
         if (!$type) {
             throw new UnknownImageFileException('Unknown type of image.');
         }
-        return self::invokeSafe('imagecreatefromstring', $s, 'Unable to open image from string.', __METHOD__);
+        return self::invokeSafe('imagecreatefromstring', $s, 'Unable to open image from string.', __METHOD__, $warnings);
     }
     /** @param  callable-string  $func
      * @return static */
-    private static function invokeSafe(string $func, string $arg, string $message, string $callee)
+    private static function invokeSafe(string $func, string $arg, string $message, string $callee, ?string &$warnings = self::Sentinel)
     {
         $errors = [];
         $res = Callback::invokeSafe($func, [$arg], function (string $message) use (&$errors): void {
             $errors[] = $message;
         });
+        $raiseWarning = $warnings === self::Sentinel;
+        $warnings = $errors ? implode(', ', $errors) : null;
         if (!$res) {
-            throw new ImageException($message . ' Errors: ' . implode(', ', $errors));
-        } elseif ($errors) {
-            trigger_error($callee . '(): ' . implode(', ', $errors), \E_USER_WARNING);
+            throw new ImageException($message . ' Errors: ' . $warnings);
+        } elseif ($errors && $raiseWarning) {
+            trigger_error($callee . '(): ' . $warnings, \E_USER_WARNING);
         }
         return new static($res);
     }
@@ -254,6 +261,7 @@ class Image
         return 'image/' . self::typeToExtension($type);
     }
     /**
+     * Checks whether the given image type is supported by the GD extension.
      * @param  ImageType::*  $type
      */
     public static function isTypeSupported(int $type): bool
@@ -276,7 +284,10 @@ class Image
                 return 0;
         }
     }
-    /** @return  ImageType::*[] */
+    /**
+     * Returns list of image types supported by the GD extension.
+     * @return  ImageType::*[]
+     */
     public static function getSupportedTypes(): array
     {
         self::ensureExtension();
@@ -531,7 +542,7 @@ class Image
         return ['left' => $minX = min([$box[0], $box[2], $box[4], $box[6]]), 'top' => $minY = min([$box[1], $box[3], $box[5], $box[7]]), 'width' => max([$box[0], $box[2], $box[4], $box[6]]) - $minX + 1, 'height' => max([$box[1], $box[3], $box[5], $box[7]]) - $minY + 1];
     }
     /**
-     * Draw a rectangle.
+     * Draws a rectangle using top-left coordinates and dimensions instead of two corner coordinates.
      */
     public function rectangleWH(int $x, int $y, int $width, int $height, ImageColor $color): void
     {
@@ -540,7 +551,7 @@ class Image
         }
     }
     /**
-     * Draw a filled rectangle.
+     * Draws a filled rectangle using top-left coordinates and dimensions instead of two corner coordinates.
      */
     public function filledRectangleWH(int $x, int $y, int $width, int $height, ImageColor $color): void
     {
@@ -679,6 +690,7 @@ class Image
         throw new Nette\NotSupportedException('You cannot serialize or unserialize ' . self::class . ' instances.');
     }
     /**
+     * Resolves a color to a GD color index for the current image.
      * @param  ImageColor|array{red: int, green: int, blue: int, alpha?: int}  $color
      */
     public function resolveColor($color): int
