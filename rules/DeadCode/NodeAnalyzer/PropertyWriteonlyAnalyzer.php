@@ -12,10 +12,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 final class PropertyWriteonlyAnalyzer
 {
@@ -26,22 +24,16 @@ final class PropertyWriteonlyAnalyzer
     /**
      * @readonly
      */
-    private NodeTypeResolver $nodeTypeResolver;
-    /**
-     * @readonly
-     */
     private NodeNameResolver $nodeNameResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
     public function hasClassDynamicPropertyNames(Class_ $class): bool
     {
-        $isImplementsJsonSerializable = $this->nodeTypeResolver->isObjectType($class, new ObjectType('JsonSerializable'));
-        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node) use ($isImplementsJsonSerializable): bool {
-            if ($isImplementsJsonSerializable && $node instanceof FuncCall && $this->nodeNameResolver->isName($node, 'get_object_vars') && !$node->isFirstClassCallable()) {
+        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node): bool {
+            if ($node instanceof FuncCall && $this->nodeNameResolver->isName($node, 'get_object_vars') && !$node->isFirstClassCallable()) {
                 $firstArg = $node->getArgs()[0] ?? null;
                 if ($firstArg instanceof Arg && $firstArg->value instanceof Variable && $firstArg->value->name === 'this') {
                     return \true;
