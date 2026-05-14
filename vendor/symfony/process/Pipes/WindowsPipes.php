@@ -43,7 +43,7 @@ class WindowsPipes extends AbstractPipes
             $pipes = [Process::STDOUT => Process::OUT, Process::STDERR => Process::ERR];
             $tmpDir = sys_get_temp_dir();
             $lastError = 'unknown reason';
-            set_error_handler(function ($type, $msg) use (&$lastError) {
+            set_error_handler(static function ($type, $msg) use (&$lastError) {
                 $lastError = $msg;
             });
             for ($i = 0;; ++$i) {

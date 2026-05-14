@@ -59,8 +59,8 @@ class Filesystem
                 throw new IOException(\sprintf('Failed to copy "%s" to "%s".', $originFile, $targetFile), 0, null, $originFile);
             }
             if ($originIsLocal) {
-                // Like `cp`, preserve executable permission bits
-                self::box('chmod', $targetFile, fileperms($targetFile) | fileperms($originFile) & 0111);
+                // Like `cp`, preserve the source mode masked by the umask
+                self::box('chmod', $targetFile, fileperms($originFile) & 0777 & ~umask());
                 // Like `cp`, preserve the file modification time
                 self::box('touch', $targetFile, filemtime($originFile));
                 if ($bytesCopied !== $bytesOrigin = filesize($originFile)) {

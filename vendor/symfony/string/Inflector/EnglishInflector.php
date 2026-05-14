@@ -129,6 +129,8 @@ final class EnglishInflector implements InflectorInterface
         ['segd', 4, \true, \true, 'dge'],
         // outages (outage) - specific fix to avoid 'outag'
         ['segatuo', 7, \true, \true, 'outage'],
+        // traces (trace), faces (face), places (place), pieces (piece)
+        ['sec', 3, \true, \true, 'ce'],
         // roses (rose), garages (garage), cassettes (cassette),
         // waltzes (waltz), heroes (hero), bushes (bush), arches (arch),
         // shoes (shoe)

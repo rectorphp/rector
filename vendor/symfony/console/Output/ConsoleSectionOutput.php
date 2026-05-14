@@ -79,8 +79,25 @@ class ConsoleSectionOutput extends StreamOutput
      */
     public function overwrite($message)
     {
-        $this->clear();
-        $this->writeln($message);
+        if (!$this->content || !$this->isDecorated()) {
+            $this->writeln($message);
+            return;
+        }
+        // Replace own content and write everything in a single cursor-up + erase
+        // pass, to avoid the flicker (and the line-eating artifacts on some
+        // terminals) caused by calling clear() then writeln() back-to-back.
+        $linesCleared = $this->lines;
+        $this->content = [];
+        $this->lines = 0;
+        if (!is_iterable($message)) {
+            $message = [$message];
+        }
+        foreach ($message as $line) {
+            $this->addContent($line, \true);
+        }
+        $erasedContent = $this->popStreamContentUntilCurrentSection($this->maxHeight ? min($this->maxHeight, $linesCleared) : $linesCleared);
+        parent::doWrite($this->getVisibleContent(), \false);
+        parent::doWrite($erasedContent, \false);
     }
     public function getContent(): string
     {

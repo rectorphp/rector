@@ -328,6 +328,9 @@ class Process implements \IteratorAggregate
         }
         $envPairs = [];
         foreach ($env as $k => $v) {
+            if (!\is_scalar($v ?? '') && !(is_object($v) && method_exists($v, '__toString'))) {
+                continue;
+            }
             if (\false !== $v && !\in_array($k = (string) $k, ['', 'argc', 'argv', 'ARGC', 'ARGV'], \true) && strpos($k, '=') === \false && strpos($k, "\x00") === \false) {
                 $envPairs[] = $k . '=' . $v;
             }
