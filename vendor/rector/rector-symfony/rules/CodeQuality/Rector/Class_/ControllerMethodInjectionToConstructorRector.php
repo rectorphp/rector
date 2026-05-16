@@ -6,6 +6,7 @@ namespace Rector\Symfony\CodeQuality\Rector\Class_;
 use Exception;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
@@ -142,6 +143,8 @@ CODE_SAMPLE
         $paramsToRemove = [];
         /** @var array<string, string[]> $methodParamNamesToReplace */
         $methodParamNamesToReplace = [];
+        /** @var array<string, int[]> $removedMethodArgPositions */
+        $removedMethodArgPositions = [];
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
@@ -188,6 +191,7 @@ CODE_SAMPLE
                 $paramsToRemove[] = [$classMethod, $key];
                 $propertyMetadatas[$paramName] = new PropertyMetadata($paramName, $paramType);
                 $methodParamNamesToReplace[$classMethod->name->toString()][] = $paramName;
+                $removedMethodArgPositions[$classMethod->name->toString()][] = $key;
             }
         }
         // nothing to move
@@ -212,7 +216,44 @@ CODE_SAMPLE
             }
             $this->replaceParamUseWithPropertyFetch($classMethod, $methodParamNamesToReplace[$methodName]);
         }
+        $this->updateCallSitesForRemovedParams($node, $removedMethodArgPositions);
         return $node;
+    }
+    /**
+     * @param array<string, int[]> $removedArgPositionsByMethod
+     */
+    private function updateCallSitesForRemovedParams(Class_ $class, array $removedArgPositionsByMethod): void
+    {
+        if ($removedArgPositionsByMethod === []) {
+            return;
+        }
+        foreach ($class->getMethods() as $classMethod) {
+            if ($classMethod->stmts === null) {
+                continue;
+            }
+            $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use ($removedArgPositionsByMethod): ?MethodCall {
+                if (!$node instanceof MethodCall) {
+                    return null;
+                }
+                if (!$node->var instanceof Variable) {
+                    return null;
+                }
+                if (!$this->isName($node->var, 'this')) {
+                    return null;
+                }
+                $methodName = $this->getName($node->name);
+                if ($methodName === null || !isset($removedArgPositionsByMethod[$methodName])) {
+                    return null;
+                }
+                $removedPositions = $removedArgPositionsByMethod[$methodName];
+                rsort($removedPositions);
+                foreach ($removedPositions as $removedPosition) {
+                    unset($node->args[$removedPosition]);
+                }
+                $node->args = array_values($node->args);
+                return $node;
+            });
+        }
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
