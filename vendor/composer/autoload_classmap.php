@@ -1195,6 +1195,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\BooleanNot\\ReplaceMultipleBooleanNotRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/ReplaceMultipleBooleanNotRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanNot\\SimplifyDeMorganBinaryRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/SimplifyDeMorganBinaryRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanOr\\RepeatedOrEqualToInArrayRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanOr/RepeatedOrEqualToInArrayRector.php',
+    'Rector\\CodeQuality\\Rector\\CallLike\\AddNameToBooleanArgumentRector' => $baseDir . '/rules/CodeQuality/Rector/CallLike/AddNameToBooleanArgumentRector.php',
     'Rector\\CodeQuality\\Rector\\Catch_\\ThrowWithPreviousExceptionRector' => $baseDir . '/rules/CodeQuality/Rector/Catch_/ThrowWithPreviousExceptionRector.php',
     'Rector\\CodeQuality\\Rector\\ClassConstFetch\\VariableConstFetchToClassConstFetchRector' => $baseDir . '/rules/CodeQuality/Rector/ClassConstFetch/VariableConstFetchToClassConstFetchRector.php',
     'Rector\\CodeQuality\\Rector\\ClassMethod\\ExplicitReturnNullRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/ExplicitReturnNullRector.php',

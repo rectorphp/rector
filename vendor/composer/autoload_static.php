@@ -1455,6 +1455,7 @@ class ComposerStaticInit90b424c5d36460aa2389d3a48305deb7
         'Rector\\CodeQuality\\Rector\\BooleanNot\\ReplaceMultipleBooleanNotRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanNot/ReplaceMultipleBooleanNotRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanNot\\SimplifyDeMorganBinaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanNot/SimplifyDeMorganBinaryRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanOr\\RepeatedOrEqualToInArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanOr/RepeatedOrEqualToInArrayRector.php',
+        'Rector\\CodeQuality\\Rector\\CallLike\\AddNameToBooleanArgumentRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/CallLike/AddNameToBooleanArgumentRector.php',
         'Rector\\CodeQuality\\Rector\\Catch_\\ThrowWithPreviousExceptionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Catch_/ThrowWithPreviousExceptionRector.php',
         'Rector\\CodeQuality\\Rector\\ClassConstFetch\\VariableConstFetchToClassConstFetchRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassConstFetch/VariableConstFetchToClassConstFetchRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\ExplicitReturnNullRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/ExplicitReturnNullRector.php',
