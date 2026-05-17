@@ -699,4 +699,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const CLAMP = \Rector\ValueObject\PhpVersion::PHP_86;
+    /**
+     * @see https://php.watch/versions/8.0/named-parameters
+     * @var int
+     */
+    public const NAMED_ARGUMENTS = \Rector\ValueObject\PhpVersion::PHP_80;
 }

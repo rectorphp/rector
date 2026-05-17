@@ -15,12 +15,14 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector\AddNameToBooleanArgumentRectorTest
  */
-final class AddNameToBooleanArgumentRector extends AbstractRector
+final class AddNameToBooleanArgumentRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -72,7 +74,8 @@ CODE_SAMPLE
             return null;
         }
         $wasChanged = \false;
-        for ($i = $position; $i < count($args); ++$i) {
+        $counter = count($args);
+        for ($i = $position; $i < $counter; ++$i) {
             $arg = $args[$i];
             if ($arg->name instanceof Identifier) {
                 continue;
@@ -88,6 +91,10 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NAMED_ARGUMENTS;
     }
     private function shouldSkip(CallLike $callLike): bool
     {
