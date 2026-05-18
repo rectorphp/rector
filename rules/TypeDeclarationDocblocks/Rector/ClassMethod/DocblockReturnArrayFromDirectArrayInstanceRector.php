@@ -18,6 +18,7 @@ use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Rector\TypeDeclarationDocblocks\TypeResolver\ConstantArrayTypeGeneralizer;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -45,13 +46,18 @@ final class DocblockReturnArrayFromDirectArrayInstanceRector extends AbstractRec
      * @readonly
      */
     private UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer, ReturnNodeFinder $returnNodeFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer)
+    /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, ConstantArrayTypeGeneralizer $constantArrayTypeGeneralizer, ReturnNodeFinder $returnNodeFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->constantArrayTypeGeneralizer = $constantArrayTypeGeneralizer;
         $this->returnNodeFinder = $returnNodeFinder;
         $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getNodeTypes(): array
     {
@@ -92,6 +98,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node->stmts === null) {
+            return null;
+        }
+        // skip overridden methods to not conflict with parent/interface @return docblock
+        if ($node instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
