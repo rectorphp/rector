@@ -13,9 +13,9 @@ use Symfony\Polyfill\Mbstring as p;
 
 if (!function_exists('mb_convert_encoding')) {
     /**
+     * @return mixed[]|string|false
      * @param mixed[]|string|null $string
      * @param mixed[]|string|null $from_encoding
-     * @return mixed[]|string|false
      */
     function mb_convert_encoding($string, ?string $to_encoding, $from_encoding = null) { return p\Mbstring::mb_convert_encoding($string ?? '', (string) $to_encoding, $from_encoding); }
 }
@@ -60,8 +60,8 @@ if (!function_exists('mb_check_encoding')) {
 }
 if (!function_exists('mb_detect_encoding')) {
     /**
-     * @param mixed[]|string|null $encodings
      * @return string|false
+     * @param mixed[]|string|null $encodings
      */
     function mb_detect_encoding(?string $string, $encodings = null, ?bool $strict = false) { return p\Mbstring::mb_detect_encoding((string) $string, $encodings, (bool) $strict); }
 }
@@ -172,8 +172,8 @@ if (!function_exists('mb_http_input')) {
 
 if (!function_exists('mb_convert_variables')) {
     /**
-     * @param mixed[]|string|null $from_encoding
      * @return string|false
+     * @param mixed[]|string|null $from_encoding
      * @param mixed $var
      * @param mixed ...$vars
      */

@@ -444,8 +444,8 @@ class QuestionHelper extends Helper
     }
     /**
      * Sets console I/O to the specified code page and converts the user input.
-     * @param string|false $input
      * @return string|false
+     * @param string|false $input
      */
     private function resetIOCodepage(int $cp, $input)
     {

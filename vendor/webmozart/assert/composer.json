@@ -40,8 +40,12 @@
         }
     },
     "extra": {
+        "psalm": {
+            "pluginClass": "Webmozart\\Assert\\PsalmPlugin"
+        },
         "branch-alias": {
-            "dev-feature\/2-0": "2.0-dev"
+            "dev-feature\/2-0": "2.0-dev",
+            "dev-master": "2.0-dev"
         }
     },
     "scripts": {

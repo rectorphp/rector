@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix202605\Webmozart\Assert;
 
 use ArrayAccess;
+use Closure;
 use Countable;
 use Throwable;
 /**
@@ -24,7 +25,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrString($value, $message = '')
+    public static function nullOrString($value, $message = ''): ?string
     {
         null === $value || static::string($value, $message);
         return $value;
@@ -81,7 +82,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrStringNotEmpty($value, $message = '')
+    public static function nullOrStringNotEmpty($value, $message = ''): ?string
     {
         null === $value || static::stringNotEmpty($value, $message);
         return $value;
@@ -138,7 +139,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrInteger($value, $message = '')
+    public static function nullOrInteger($value, $message = ''): ?int
     {
         null === $value || static::integer($value, $message);
         return $value;
@@ -252,7 +253,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrPositiveInteger($value, $message = '')
+    public static function nullOrPositiveInteger($value, $message = ''): ?int
     {
         null === $value || static::positiveInteger($value, $message);
         return $value;
@@ -309,7 +310,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrNotNegativeInteger($value, $message = '')
+    public static function nullOrNotNegativeInteger($value, $message = ''): ?int
     {
         null === $value || static::notNegativeInteger($value, $message);
         return $value;
@@ -366,7 +367,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrNegativeInteger($value, $message = '')
+    public static function nullOrNegativeInteger($value, $message = ''): ?int
     {
         null === $value || static::negativeInteger($value, $message);
         return $value;
@@ -423,7 +424,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrFloat($value, $message = '')
+    public static function nullOrFloat($value, $message = ''): ?float
     {
         null === $value || static::float($value, $message);
         return $value;
@@ -537,7 +538,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrNatural($value, $message = '')
+    public static function nullOrNatural($value, $message = ''): ?int
     {
         null === $value || static::natural($value, $message);
         return $value;
@@ -594,7 +595,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrBoolean($value, $message = '')
+    public static function nullOrBoolean($value, $message = ''): ?bool
     {
         null === $value || static::boolean($value, $message);
         return $value;
@@ -708,7 +709,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrObject($value, $message = '')
+    public static function nullOrObject($value, $message = ''): ?object
     {
         null === $value || static::object($value, $message);
         return $value;
@@ -756,11 +757,11 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert object|string|null $value
+     * @psalm-assert object|class-string|null $value
      *
      * @param string|callable():string $message
      *
-     * @return object|string|null
+     * @return object|class-string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -773,11 +774,11 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert iterable<object|string> $value
+     * @psalm-assert iterable<object|class-string> $value
      *
      * @param string|callable():string $message
      *
-     * @return iterable<object|string>
+     * @return iterable<object|class-string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -793,11 +794,11 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert iterable<object|string|null> $value
+     * @psalm-assert iterable<object|class-string|null> $value
      *
      * @param string|callable():string $message
      *
-     * @return iterable<object|string|null>
+     * @return iterable<object|class-string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -885,7 +886,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrIsCallable($value, $message = '')
+    public static function nullOrIsCallable($value, $message = ''): ?callable
     {
         null === $value || static::isCallable($value, $message);
         return $value;
@@ -942,7 +943,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrIsArray($value, $message = '')
+    public static function nullOrIsArray($value, $message = ''): ?array
     {
         null === $value || static::isArray($value, $message);
         return $value;
@@ -1113,7 +1114,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrIsIterable($value, $message = '')
+    public static function nullOrIsIterable($value, $message = ''): ?iterable
     {
         null === $value || static::isIterable($value, $message);
         return $value;
@@ -1164,17 +1165,15 @@ trait Mixin
      * @template T of object
      * @psalm-assert T|null $value
      *
+     * @param mixed $class
      * @param string|callable():string $message
-     *
-     * @psalm-param class-string<T> $class
      *
      * @return T|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
-    public static function nullOrIsInstanceOf($value, $class, $message = '')
+    public static function nullOrIsInstanceOf($value, $class, $message = ''): ?object
     {
         null === $value || static::isInstanceOf($value, $class, $message);
         return $value;
@@ -1185,15 +1184,13 @@ trait Mixin
      * @template T of object
      * @psalm-assert iterable<T> $value
      *
+     * @param mixed $class
      * @param string|callable():string $message
-     *
-     * @psalm-param class-string<T> $class
      *
      * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
     public static function allIsInstanceOf($value, $class, $message = ''): iterable
     {
@@ -1206,18 +1203,16 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template T of object
-     * @psalm-assert iterable<T|null> $value
+     * @template T of object|null
+     * @psalm-assert iterable<T> $value
      *
+     * @param mixed $class
      * @param string|callable():string $message
      *
-     * @psalm-param class-string<T> $class
-     *
-     * @return iterable<T|null>
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
     public static function allNullOrIsInstanceOf($value, $class, $message = ''): iterable
     {
@@ -1230,17 +1225,15 @@ trait Mixin
     /**
      * @template T of object
      *
+     * @param mixed $class
      * @param string|callable():string $message
      *
-     * @psalm-param class-string<T> $class
-     *
-     * @return mixed
+     * @return object|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
-    public static function nullOrNotInstanceOf($value, $class, $message = '')
+    public static function nullOrNotInstanceOf($value, $class, $message = ''): ?object
     {
         null === $value || static::notInstanceOf($value, $class, $message);
         return $value;
@@ -1248,15 +1241,13 @@ trait Mixin
     /**
      * @template T of object
      *
+     * @param mixed $class
      * @param string|callable():string $message
      *
-     * @psalm-param class-string<T> $class
-     *
-     * @return mixed
+     * @return iterable<object>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
     public static function allNotInstanceOf($value, $class, $message = ''): iterable
     {
@@ -1267,18 +1258,16 @@ trait Mixin
         return $value;
     }
     /**
-     * @template T of object
+     * @template T of object|null
      * @psalm-assert iterable<object|null> $value
      *
+     * @param mixed $class
      * @param string|callable():string $message
-     *
-     * @psalm-param class-string<T> $class
      *
      * @return iterable<object|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
     public static function allNullOrNotInstanceOf($value, $class, $message = ''): iterable
     {
@@ -1292,15 +1281,15 @@ trait Mixin
      * @template T of object
      * @psalm-assert T|null $value
      *
-     * @param mixed $value
-     * @param string|callable():string $message
+     * @param mixed $classes
+     * @param string|callable():string  $message
      *
      * @return T|null
      *
      * @throws InvalidArgumentException
-     * @param mixed $classes
+     * @param mixed $value
      */
-    public static function nullOrIsInstanceOfAny($value, $classes, $message = '')
+    public static function nullOrIsInstanceOfAny($value, $classes, $message = ''): ?object
     {
         null === $value || static::isInstanceOfAny($value, $classes, $message);
         return $value;
@@ -1309,13 +1298,13 @@ trait Mixin
      * @template T of object
      * @psalm-assert iterable<T> $value
      *
-     * @param mixed $value
-     * @param string|callable():string $message
+     * @param mixed $classes
+     * @param string|callable():string  $message
      *
      * @return iterable<T>
      *
      * @throws InvalidArgumentException
-     * @param mixed $classes
+     * @param mixed $value
      */
     public static function allIsInstanceOfAny($value, $classes, $message = ''): iterable
     {
@@ -1326,16 +1315,16 @@ trait Mixin
         return $value;
     }
     /**
-     * @template T of object
-     * @psalm-assert iterable<T|null> $value
+     * @template T of object|null
+     * @psalm-assert iterable<T> $value
      *
-     * @param mixed $value
-     * @param string|callable():string $message
+     * @param mixed $classes
+     * @param string|callable():string  $message
      *
-     * @return iterable<T|null>
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
-     * @param mixed $classes
+     * @param mixed $value
      */
     public static function allNullOrIsInstanceOfAny($value, $classes, $message = ''): iterable
     {
@@ -1347,7 +1336,7 @@ trait Mixin
     }
     /**
      * @template T
-     * @psalm-assert T|null $value
+     * @psalm-assert object|class-string|null $value
      *
      * @param mixed $value
      * @param string|callable():string $message
@@ -1364,7 +1353,7 @@ trait Mixin
     }
     /**
      * @template T
-     * @psalm-assert iterable<T> $value
+     * @psalm-assert iterable<object|class-string> $value
      *
      * @param mixed $value
      * @param string|callable():string $message
@@ -1384,12 +1373,12 @@ trait Mixin
     }
     /**
      * @template T
-     * @psalm-assert iterable<T|null> $value
+     * @psalm-assert iterable<object|class-string|null> $value
      *
      * @param mixed $value
      * @param string|callable():string $message
      *
-     * @return iterable<T|null>
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $classes
@@ -1408,13 +1397,13 @@ trait Mixin
      * @template T of object
      * @psalm-assert T|class-string<T>|null $value
      *
+     * @param mixed $class
      * @param string|callable():string $message
      *
      * @return T|class-string<T>|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
     public static function nullOrIsAOf($value, $class, $message = '')
     {
@@ -1427,13 +1416,13 @@ trait Mixin
      * @template T of object
      * @psalm-assert iterable<T|class-string<T>> $value
      *
+     * @param mixed $class
      * @param string|callable():string $message
      *
      * @return iterable<T|class-string<T>>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
     public static function allIsAOf($value, $class, $message = ''): iterable
     {
@@ -1446,16 +1435,16 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template T of object
+     * @template T of object|null
      * @psalm-assert iterable<T|class-string<T>|null> $value
      *
+     * @param mixed $class
      * @param string|callable():string $message
      *
      * @return iterable<T|class-string<T>|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
-     * @param mixed $class
      */
     public static function allNullOrIsAOf($value, $class, $message = ''): iterable
     {
@@ -1473,7 +1462,7 @@ trait Mixin
      * @param mixed $value
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return object|class-string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $class
@@ -1491,7 +1480,7 @@ trait Mixin
      * @param mixed $value
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<object|class-string>
      *
      * @throws InvalidArgumentException
      * @param mixed $class
@@ -1529,15 +1518,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @param mixed $value
+     * @psalm-assert T|null $value
+     *
+     * @template T as object
+     *
      * @param mixed $classes
      * @param string|callable():string $message
      *
-     * @psalm-param array<class-string> $classes
-     *
-     * @return mixed
+     * @return T|null
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
      */
     public static function nullOrIsAnyOf($value, $classes, $message = '')
     {
@@ -1547,15 +1538,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @param mixed $value
+     * @psalm-assert iterable<T> $value
+     *
+     * @template T as object
+     *
      * @param mixed $classes
      * @param string|callable():string $message
      *
-     * @psalm-param array<class-string> $classes
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
      */
     public static function allIsAnyOf($value, $classes, $message = ''): iterable
     {
@@ -1568,15 +1561,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @param mixed $value
+     * @psalm-assert iterable<T> $value
+     *
+     * @template T as object|null
+     *
      * @param mixed $classes
-     * @param string|callable():string     $message
+     * @param string|callable():string $message
      *
-     * @psalm-param array<class-string> $classes
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
      */
     public static function allNullOrIsAnyOf($value, $classes, $message = ''): iterable
     {
@@ -1663,7 +1658,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -1719,12 +1714,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T
+     *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allNotNull($value, $message = ''): iterable
     {
@@ -1746,7 +1743,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrTrue($value, $message = '')
+    public static function nullOrTrue($value, $message = ''): ?bool
     {
         null === $value || static::true($value, $message);
         return $value;
@@ -1803,7 +1800,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrFalse($value, $message = '')
+    public static function nullOrFalse($value, $message = ''): ?bool
     {
         null === $value || static::false($value, $message);
         return $value;
@@ -1851,12 +1848,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T
+     *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return T|null
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function nullOrNotFalse($value, $message = '')
     {
@@ -1866,12 +1865,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T
+     *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allNotFalse($value, $message = ''): iterable
     {
@@ -1886,12 +1887,14 @@ trait Mixin
      *
      * @psalm-assert iterable<!false|null> $value
      *
+     * @template T
+     *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @return iterable<!false|null>
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allNullOrNotFalse($value, $message = ''): iterable
     {
@@ -1904,16 +1907,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param string|null $value
-     *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
-    public static function nullOrIp($value, $message = '')
+    public static function nullOrIp($value, $message = ''): ?string
     {
         null === $value || static::ip($value, $message);
         return $value;
@@ -1921,14 +1922,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<string> $value
-     *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allIp($value, $message = ''): iterable
     {
@@ -1941,14 +1940,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<string|null> $value
-     *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allNullOrIp($value, $message = ''): iterable
     {
@@ -1961,16 +1958,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param string|null $value
-     *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
-    public static function nullOrIpv4($value, $message = '')
+    public static function nullOrIpv4($value, $message = ''): ?string
     {
         null === $value || static::ipv4($value, $message);
         return $value;
@@ -1978,14 +1973,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<string> $value
-     *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allIpv4($value, $message = ''): iterable
     {
@@ -1998,14 +1991,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<string|null> $value
-     *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allNullOrIpv4($value, $message = ''): iterable
     {
@@ -2018,16 +2009,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param string|null $value
-     *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
-    public static function nullOrIpv6($value, $message = '')
+    public static function nullOrIpv6($value, $message = ''): ?string
     {
         null === $value || static::ipv6($value, $message);
         return $value;
@@ -2035,14 +2024,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<string> $value
-     *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allIpv6($value, $message = ''): iterable
     {
@@ -2055,14 +2042,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<string|null> $value
-     *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allNullOrIpv6($value, $message = ''): iterable
     {
@@ -2075,16 +2060,14 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param string|null $value
-     *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
-    public static function nullOrEmail($value, $message = '')
+    public static function nullOrEmail($value, $message = ''): ?string
     {
         null === $value || static::email($value, $message);
         return $value;
@@ -2092,14 +2075,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<string> $value
-     *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allEmail($value, $message = ''): iterable
     {
@@ -2112,14 +2093,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @param mixed $value
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<string|null> $value
-     *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
-     * @param mixed $value
      */
     public static function allNullOrEmail($value, $message = ''): iterable
     {
@@ -2130,27 +2109,31 @@ trait Mixin
         return $value;
     }
     /**
+     * @psalm-assert array|null $values
+     *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return array|null
      *
      * @throws InvalidArgumentException
      * @param mixed $values
      */
-    public static function nullOrUniqueValues($values, $message = '')
+    public static function nullOrUniqueValues($values, $message = ''): ?array
     {
         null === $values || static::uniqueValues($values, $message);
         return $values;
     }
     /**
+     * @psalm-assert iterable<array> $values
+     *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<array>
      *
      * @throws InvalidArgumentException
      * @param mixed $values
      */
-    public static function allUniqueValues($values, $message = '')
+    public static function allUniqueValues($values, $message = ''): iterable
     {
         static::isIterable($values);
         foreach ($values as $entry) {
@@ -2159,14 +2142,16 @@ trait Mixin
         return $values;
     }
     /**
+     * @psalm-assert iterable<array|null> $values
+     *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<array|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $values
      */
-    public static function allNullOrUniqueValues($values, $message = '')
+    public static function allNullOrUniqueValues($values, $message = ''): iterable
     {
         static::isIterable($values);
         foreach ($values as $entry) {
@@ -2191,7 +2176,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2208,7 +2193,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2239,7 +2224,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2256,7 +2241,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2291,7 +2276,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2310,7 +2295,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2345,7 +2330,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2364,7 +2349,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2399,7 +2384,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2418,7 +2403,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2453,7 +2438,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2472,7 +2457,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2507,7 +2492,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2526,7 +2511,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2561,7 +2546,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2580,7 +2565,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2616,7 +2601,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2636,7 +2621,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2672,7 +2657,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2691,7 +2676,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2726,7 +2711,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2745,7 +2730,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2780,7 +2765,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2799,7 +2784,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2834,7 +2819,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2853,7 +2838,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2872,13 +2857,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $subString
      */
-    public static function nullOrContains($value, $subString, $message = '')
+    public static function nullOrContains($value, $subString, $message = ''): ?string
     {
         null === $value || static::contains($value, $subString, $message);
         return $value;
@@ -2888,7 +2873,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2907,7 +2892,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2926,13 +2911,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $subString
      */
-    public static function nullOrNotContains($value, $subString, $message = '')
+    public static function nullOrNotContains($value, $subString, $message = ''): ?string
     {
         null === $value || static::notContains($value, $subString, $message);
         return $value;
@@ -2942,7 +2927,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2961,7 +2946,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -2980,12 +2965,12 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrNotWhitespaceOnly($value, $message = '')
+    public static function nullOrNotWhitespaceOnly($value, $message = ''): ?string
     {
         null === $value || static::notWhitespaceOnly($value, $message);
         return $value;
@@ -2995,7 +2980,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3013,7 +2998,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3031,13 +3016,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $prefix
      */
-    public static function nullOrStartsWith($value, $prefix, $message = '')
+    public static function nullOrStartsWith($value, $prefix, $message = ''): ?string
     {
         null === $value || static::startsWith($value, $prefix, $message);
         return $value;
@@ -3047,7 +3032,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3066,7 +3051,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3085,13 +3070,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $prefix
      */
-    public static function nullOrNotStartsWith($value, $prefix, $message = '')
+    public static function nullOrNotStartsWith($value, $prefix, $message = ''): ?string
     {
         null === $value || static::notStartsWith($value, $prefix, $message);
         return $value;
@@ -3101,7 +3086,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3120,7 +3105,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3139,12 +3124,12 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrStartsWithLetter($value, $message = '')
+    public static function nullOrStartsWithLetter($value, $message = ''): ?string
     {
         null === $value || static::startsWithLetter($value, $message);
         return $value;
@@ -3154,7 +3139,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3172,7 +3157,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3190,13 +3175,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $suffix
      */
-    public static function nullOrEndsWith($value, $suffix, $message = '')
+    public static function nullOrEndsWith($value, $suffix, $message = ''): ?string
     {
         null === $value || static::endsWith($value, $suffix, $message);
         return $value;
@@ -3206,7 +3191,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3225,7 +3210,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3244,13 +3229,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $suffix
      */
-    public static function nullOrNotEndsWith($value, $suffix, $message = '')
+    public static function nullOrNotEndsWith($value, $suffix, $message = ''): ?string
     {
         null === $value || static::notEndsWith($value, $suffix, $message);
         return $value;
@@ -3260,7 +3245,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3279,7 +3264,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3298,13 +3283,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $pattern
      */
-    public static function nullOrRegex($value, $pattern, $message = '')
+    public static function nullOrRegex($value, $pattern, $message = ''): ?string
     {
         null === $value || static::regex($value, $pattern, $message);
         return $value;
@@ -3314,7 +3299,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3333,7 +3318,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3352,13 +3337,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $pattern
      */
-    public static function nullOrNotRegex($value, $pattern, $message = '')
+    public static function nullOrNotRegex($value, $pattern, $message = ''): ?string
     {
         null === $value || static::notRegex($value, $pattern, $message);
         return $value;
@@ -3368,7 +3353,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3387,7 +3372,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3406,12 +3391,12 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrUnicodeLetters($value, $message = '')
+    public static function nullOrUnicodeLetters($value, $message = ''): ?string
     {
         null === $value || static::unicodeLetters($value, $message);
         return $value;
@@ -3421,7 +3406,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3439,7 +3424,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3457,12 +3442,12 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrAlpha($value, $message = '')
+    public static function nullOrAlpha($value, $message = ''): ?string
     {
         null === $value || static::alpha($value, $message);
         return $value;
@@ -3472,7 +3457,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3490,7 +3475,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3508,12 +3493,12 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrDigits($value, $message = '')
+    public static function nullOrDigits($value, $message = ''): ?string
     {
         null === $value || static::digits($value, $message);
         return $value;
@@ -3523,7 +3508,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3541,7 +3526,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3559,12 +3544,12 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrAlnum($value, $message = '')
+    public static function nullOrAlnum($value, $message = ''): ?string
     {
         null === $value || static::alnum($value, $message);
         return $value;
@@ -3574,7 +3559,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3592,7 +3577,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3617,7 +3602,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrLower($value, $message = '')
+    public static function nullOrLower($value, $message = ''): ?string
     {
         null === $value || static::lower($value, $message);
         return $value;
@@ -3667,12 +3652,12 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrUpper($value, $message = '')
+    public static function nullOrUpper($value, $message = ''): ?string
     {
         null === $value || static::upper($value, $message);
         return $value;
@@ -3682,7 +3667,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3698,11 +3683,11 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @psalm-assert iterable<!lowercase-string|null> $value
+     * @psalm-assert iterable<string|null> $value
      *
      * @param string|callable():string $message
      *
-     * @return iterable<!lowercase-string|null>
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3720,13 +3705,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $length
      */
-    public static function nullOrLength($value, $length, $message = '')
+    public static function nullOrLength($value, $length, $message = ''): ?string
     {
         null === $value || static::length($value, $length, $message);
         return $value;
@@ -3736,7 +3721,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3755,7 +3740,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3774,13 +3759,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $min
      */
-    public static function nullOrMinLength($value, $min, $message = '')
+    public static function nullOrMinLength($value, $min, $message = ''): ?string
     {
         null === $value || static::minLength($value, $min, $message);
         return $value;
@@ -3790,7 +3775,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3809,7 +3794,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3828,13 +3813,13 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $max
      */
-    public static function nullOrMaxLength($value, $max, $message = '')
+    public static function nullOrMaxLength($value, $max, $message = ''): ?string
     {
         null === $value || static::maxLength($value, $max, $message);
         return $value;
@@ -3844,7 +3829,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3863,7 +3848,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3882,14 +3867,14 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      * @param mixed $min
      * @param mixed $max
      */
-    public static function nullOrLengthBetween($value, $min, $max, $message = '')
+    public static function nullOrLengthBetween($value, $min, $max, $message = ''): ?string
     {
         null === $value || static::lengthBetween($value, $min, $max, $message);
         return $value;
@@ -3899,7 +3884,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3919,7 +3904,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3937,12 +3922,12 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrFileExists($value, $message = '')
+    public static function nullOrFileExists($value, $message = ''): ?string
     {
         null === $value || static::fileExists($value, $message);
         return $value;
@@ -3950,7 +3935,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3966,7 +3951,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -3982,12 +3967,12 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrFile($value, $message = '')
+    public static function nullOrFile($value, $message = ''): ?string
     {
         null === $value || static::file($value, $message);
         return $value;
@@ -3995,7 +3980,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -4011,7 +3996,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -4027,12 +4012,12 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrDirectory($value, $message = '')
+    public static function nullOrDirectory($value, $message = ''): ?string
     {
         null === $value || static::directory($value, $message);
         return $value;
@@ -4040,7 +4025,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -4056,7 +4041,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -4072,12 +4057,12 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrReadable($value, $message = '')
+    public static function nullOrReadable($value, $message = ''): ?string
     {
         null === $value || static::readable($value, $message);
         return $value;
@@ -4085,7 +4070,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -4101,7 +4086,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -4117,12 +4102,12 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrWritable($value, $message = '')
+    public static function nullOrWritable($value, $message = ''): ?string
     {
         null === $value || static::writable($value, $message);
         return $value;
@@ -4130,7 +4115,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -4146,7 +4131,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -4169,7 +4154,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrClassExists($value, $message = '')
+    public static function nullOrClassExists($value, $message = ''): ?string
     {
         null === $value || static::classExists($value, $message);
         return $value;
@@ -4224,7 +4209,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrSubclassOf($value, $class, $message = '')
+    public static function nullOrSubclassOf($value, $class, $message = ''): ?string
     {
         null === $value || static::subclassOf($value, $class, $message);
         return $value;
@@ -4254,7 +4239,7 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
+     * @template ExpectedType of object|null
      * @psalm-assert iterable<class-string<ExpectedType>|null> $value
      *
      * @param mixed $class
@@ -4283,7 +4268,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrInterfaceExists($value, $message = '')
+    public static function nullOrInterfaceExists($value, $message = ''): ?string
     {
         null === $value || static::interfaceExists($value, $message);
         return $value;
@@ -4330,13 +4315,13 @@ trait Mixin
      * @template ExpectedType of object
      * @psalm-assert class-string<ExpectedType>|ExpectedType|null $value
      *
-     * @param mixed $value
      * @param mixed $interface
-     * @param string|callable():string                     $message
+     * @param string|callable():string   $message
      *
      * @return class-string<ExpectedType>|ExpectedType|null
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
      */
     public static function nullOrImplementsInterface($value, $interface, $message = '')
     {
@@ -4349,13 +4334,13 @@ trait Mixin
      * @template ExpectedType of object
      * @psalm-assert iterable<class-string<ExpectedType>|ExpectedType> $value
      *
-     * @param mixed $value
      * @param mixed $interface
-     * @param string|callable():string                          $message
+     * @param string|callable():string   $message
      *
      * @return iterable<class-string<ExpectedType>|ExpectedType>
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
      */
     public static function allImplementsInterface($value, $interface, $message = ''): iterable
     {
@@ -4368,16 +4353,16 @@ trait Mixin
     /**
      * @psalm-pure
      *
-     * @template ExpectedType of object
+     * @template ExpectedType of object|null
      * @psalm-assert iterable<class-string<ExpectedType>|ExpectedType|null> $value
      *
-     * @param mixed $value
      * @param mixed $interface
-     * @param string|callable():string                               $message
+     * @param string|callable():string   $message
      *
      * @return iterable<class-string<ExpectedType>|ExpectedType|null>
      *
      * @throws InvalidArgumentException
+     * @param mixed $value
      */
     public static function allNullOrImplementsInterface($value, $interface, $message = ''): iterable
     {
@@ -4393,7 +4378,7 @@ trait Mixin
      * @param mixed $classOrObject
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|object|null
      *
      * @throws InvalidArgumentException
      * @param mixed $property
@@ -4409,12 +4394,12 @@ trait Mixin
      * @param mixed $classOrObject
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|object>
      *
      * @throws InvalidArgumentException
      * @param mixed $property
      */
-    public static function allPropertyExists($classOrObject, $property, $message = '')
+    public static function allPropertyExists($classOrObject, $property, $message = ''): iterable
     {
         static::isIterable($classOrObject);
         foreach ($classOrObject as $entry) {
@@ -4428,12 +4413,12 @@ trait Mixin
      * @param mixed $classOrObject
      * @param string|callable():string     $message
      *
-     * @return mixed
+     * @return iterable<string|object|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $property
      */
-    public static function allNullOrPropertyExists($classOrObject, $property, $message = '')
+    public static function allNullOrPropertyExists($classOrObject, $property, $message = ''): iterable
     {
         static::isIterable($classOrObject);
         foreach ($classOrObject as $entry) {
@@ -4444,12 +4429,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object
+     *
      * @param mixed $classOrObject
      * @param string|callable():string $message
      *
-     * @psalm-param class-string|object|null $classOrObject
-     *
-     * @return mixed
+     * @return T|null
      *
      * @throws InvalidArgumentException
      * @param mixed $property
@@ -4462,17 +4447,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object
+     *
      * @param mixed $classOrObject
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<class-string|object> $classOrObject
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $property
      */
-    public static function allPropertyNotExists($classOrObject, $property, $message = '')
+    public static function allPropertyNotExists($classOrObject, $property, $message = ''): iterable
     {
         static::isIterable($classOrObject);
         foreach ($classOrObject as $entry) {
@@ -4483,17 +4468,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object|null
+     *
      * @param mixed $classOrObject
-     * @param string|callable():string     $message
+     * @param string|callable():string $message
      *
-     * @psalm-param iterable<class-string|object|null> $classOrObject
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $property
      */
-    public static function allNullOrPropertyNotExists($classOrObject, $property, $message = '')
+    public static function allNullOrPropertyNotExists($classOrObject, $property, $message = ''): iterable
     {
         static::isIterable($classOrObject);
         foreach ($classOrObject as $entry) {
@@ -4504,12 +4489,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object
+     *
      * @param mixed $classOrObject
      * @param string|callable():string $message
      *
-     * @psalm-param class-string|object|null $classOrObject
-     *
-     * @return mixed
+     * @return T|null
      *
      * @throws InvalidArgumentException
      * @param mixed $method
@@ -4522,17 +4507,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object
+     *
      * @param mixed $classOrObject
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<class-string|object> $classOrObject
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $method
      */
-    public static function allMethodExists($classOrObject, $method, $message = '')
+    public static function allMethodExists($classOrObject, $method, $message = ''): iterable
     {
         static::isIterable($classOrObject);
         foreach ($classOrObject as $entry) {
@@ -4543,17 +4528,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object|null
+     *
      * @param mixed $classOrObject
-     * @param string|callable():string     $message
+     * @param string|callable():string $message
      *
-     * @psalm-param iterable<class-string|object|null> $classOrObject
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $method
      */
-    public static function allNullOrMethodExists($classOrObject, $method, $message = '')
+    public static function allNullOrMethodExists($classOrObject, $method, $message = ''): iterable
     {
         static::isIterable($classOrObject);
         foreach ($classOrObject as $entry) {
@@ -4564,12 +4549,12 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object
+     *
      * @param mixed $classOrObject
      * @param string|callable():string $message
      *
-     * @psalm-param class-string|object|null $classOrObject
-     *
-     * @return mixed
+     * @return T|null
      *
      * @throws InvalidArgumentException
      * @param mixed $method
@@ -4582,17 +4567,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object
+     *
      * @param mixed $classOrObject
      * @param string|callable():string $message
      *
-     * @psalm-param iterable<class-string|object> $classOrObject
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $method
      */
-    public static function allMethodNotExists($classOrObject, $method, $message = '')
+    public static function allMethodNotExists($classOrObject, $method, $message = ''): iterable
     {
         static::isIterable($classOrObject);
         foreach ($classOrObject as $entry) {
@@ -4603,17 +4588,17 @@ trait Mixin
     /**
      * @psalm-pure
      *
+     * @template T as class-string|object|null
+     *
      * @param mixed $classOrObject
-     * @param string|callable():string     $message
+     * @param string|callable():string $message
      *
-     * @psalm-param iterable<class-string|object|null> $classOrObject
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
      * @param mixed $method
      */
-    public static function allNullOrMethodNotExists($classOrObject, $method, $message = '')
+    public static function allNullOrMethodNotExists($classOrObject, $method, $message = ''): iterable
     {
         static::isIterable($classOrObject);
         foreach ($classOrObject as $entry) {
@@ -4627,12 +4612,12 @@ trait Mixin
      * @param string|int               $key
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return array|null
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function nullOrKeyExists($array, $key, $message = '')
+    public static function nullOrKeyExists($array, $key, $message = ''): ?array
     {
         null === $array || static::keyExists($array, $key, $message);
         return $array;
@@ -4643,12 +4628,12 @@ trait Mixin
      * @param string|int               $key
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<array>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function allKeyExists($array, $key, $message = '')
+    public static function allKeyExists($array, $key, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4662,12 +4647,12 @@ trait Mixin
      * @param string|int               $key
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<array|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function allNullOrKeyExists($array, $key, $message = '')
+    public static function allNullOrKeyExists($array, $key, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4681,12 +4666,12 @@ trait Mixin
      * @param string|int               $key
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return array|null
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function nullOrKeyNotExists($array, $key, $message = '')
+    public static function nullOrKeyNotExists($array, $key, $message = ''): ?array
     {
         null === $array || static::keyNotExists($array, $key, $message);
         return $array;
@@ -4697,12 +4682,12 @@ trait Mixin
      * @param string|int               $key
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<array>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function allKeyNotExists($array, $key, $message = '')
+    public static function allKeyNotExists($array, $key, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4716,12 +4701,12 @@ trait Mixin
      * @param string|int               $key
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<array|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function allNullOrKeyNotExists($array, $key, $message = '')
+    public static function allNullOrKeyNotExists($array, $key, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4789,7 +4774,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return Countable|array|null
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4803,13 +4788,13 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<Countable|array>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      * @param mixed $number
      */
-    public static function allCount($array, $number, $message = '')
+    public static function allCount($array, $number, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4820,13 +4805,13 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<Countable|array|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      * @param mixed $number
      */
-    public static function allNullOrCount($array, $number, $message = '')
+    public static function allNullOrCount($array, $number, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4837,7 +4822,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return Countable|array|null
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4851,13 +4836,13 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<Countable|array>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      * @param mixed $min
      */
-    public static function allMinCount($array, $min, $message = '')
+    public static function allMinCount($array, $min, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4868,13 +4853,13 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<Countable|array|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      * @param mixed $min
      */
-    public static function allNullOrMinCount($array, $min, $message = '')
+    public static function allNullOrMinCount($array, $min, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4885,7 +4870,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return Countable|array|null
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4899,13 +4884,13 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<Countable|array>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      * @param mixed $max
      */
-    public static function allMaxCount($array, $max, $message = '')
+    public static function allMaxCount($array, $max, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4916,13 +4901,13 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<Countable|array|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      * @param mixed $max
      */
-    public static function allNullOrMaxCount($array, $max, $message = '')
+    public static function allNullOrMaxCount($array, $max, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4933,7 +4918,7 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return Countable|array|null
      *
      * @throws InvalidArgumentException
      * @param mixed $array
@@ -4948,14 +4933,14 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<Countable|array>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      * @param mixed $min
      * @param mixed $max
      */
-    public static function allCountBetween($array, $min, $max, $message = '')
+    public static function allCountBetween($array, $min, $max, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4966,14 +4951,14 @@ trait Mixin
     /**
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<Countable|array|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $array
      * @param mixed $min
      * @param mixed $max
      */
-    public static function allNullOrCountBetween($array, $min, $max, $message = '')
+    public static function allNullOrCountBetween($array, $min, $max, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -4993,7 +4978,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function nullOrIsList($array, $message = '')
+    public static function nullOrIsList($array, $message = ''): ?array
     {
         null === $array || static::isList($array, $message);
         return $array;
@@ -5010,7 +4995,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function allIsList($array, $message = '')
+    public static function allIsList($array, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -5030,7 +5015,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function allNullOrIsList($array, $message = '')
+    public static function allNullOrIsList($array, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -5050,7 +5035,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function nullOrIsNonEmptyList($array, $message = '')
+    public static function nullOrIsNonEmptyList($array, $message = ''): ?array
     {
         null === $array || static::isNonEmptyList($array, $message);
         return $array;
@@ -5067,7 +5052,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function allIsNonEmptyList($array, $message = '')
+    public static function allIsNonEmptyList($array, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -5087,7 +5072,7 @@ trait Mixin
      * @throws InvalidArgumentException
      * @param mixed $array
      */
-    public static function allNullOrIsNonEmptyList($array, $message = '')
+    public static function allNullOrIsNonEmptyList($array, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -5108,7 +5093,7 @@ trait Mixin
      *
      * @throws InvalidArgumentException
      */
-    public static function nullOrIsMap($array, $message = '')
+    public static function nullOrIsMap($array, $message = ''): ?array
     {
         null === $array || static::isMap($array, $message);
         return $array;
@@ -5126,7 +5111,7 @@ trait Mixin
      *
      * @throws InvalidArgumentException
      */
-    public static function allIsMap($array, $message = '')
+    public static function allIsMap($array, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -5147,7 +5132,7 @@ trait Mixin
      *
      * @throws InvalidArgumentException
      */
-    public static function allNullOrIsMap($array, $message = '')
+    public static function allNullOrIsMap($array, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -5156,12 +5141,10 @@ trait Mixin
         return $array;
     }
     /**
-     * @psalm-assert callable|null $callable
-     *
      * @param mixed $callable
      * @param string|callable():string $message
      *
-     * @return callable|null
+     * @return Closure|callable-string|null
      *
      * @throws InvalidArgumentException
      */
@@ -5171,16 +5154,14 @@ trait Mixin
         return $callable;
     }
     /**
-     * @psalm-assert iterable<callable> $callable
-     *
      * @param mixed $callable
-     * @param string|callable():string   $message
+     * @param string|callable():string $message
      *
-     * @return iterable<callable>
+     * @return iterable<Closure|callable-string>
      *
      * @throws InvalidArgumentException
      */
-    public static function allIsStatic($callable, $message = '')
+    public static function allIsStatic($callable, $message = ''): iterable
     {
         static::isIterable($callable);
         foreach ($callable as $entry) {
@@ -5189,16 +5170,14 @@ trait Mixin
         return $callable;
     }
     /**
-     * @psalm-assert iterable<callable|null> $callable
-     *
      * @param mixed $callable
-     * @param string|callable():string        $message
+     * @param string|callable():string $message
      *
-     * @return iterable<callable|null>
+     * @return iterable<Closure|callable-string|null>
      *
      * @throws InvalidArgumentException
      */
-    public static function allNullOrIsStatic($callable, $message = '')
+    public static function allNullOrIsStatic($callable, $message = ''): iterable
     {
         static::isIterable($callable);
         foreach ($callable as $entry) {
@@ -5207,12 +5186,10 @@ trait Mixin
         return $callable;
     }
     /**
-     * @psalm-assert callable|null $callable
-     *
      * @param mixed $callable
      * @param string|callable():string $message
      *
-     * @return callable|null
+     * @return Closure|callable-string|null
      *
      * @throws InvalidArgumentException
      */
@@ -5222,16 +5199,14 @@ trait Mixin
         return $callable;
     }
     /**
-     * @psalm-assert iterable<callable> $callable
-     *
      * @param mixed $callable
-     * @param string|callable():string   $message
+     * @param string|callable():string $message
      *
-     * @return iterable<callable>
+     * @return iterable<Closure|callable-string>
      *
      * @throws InvalidArgumentException
      */
-    public static function allNotStatic($callable, $message = '')
+    public static function allNotStatic($callable, $message = ''): iterable
     {
         static::isIterable($callable);
         foreach ($callable as $entry) {
@@ -5240,16 +5215,14 @@ trait Mixin
         return $callable;
     }
     /**
-     * @psalm-assert iterable<callable|null> $callable
-     *
      * @param mixed $callable
-     * @param string|callable():string        $message
+     * @param string|callable():string $message
      *
-     * @return iterable<callable|null>
+     * @return iterable<Closure|callable-string|null>
      *
      * @throws InvalidArgumentException
      */
-    public static function allNullOrNotStatic($callable, $message = '')
+    public static function allNullOrNotStatic($callable, $message = ''): iterable
     {
         static::isIterable($callable);
         foreach ($callable as $entry) {
@@ -5265,11 +5238,11 @@ trait Mixin
      * @param mixed $array
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return non-empty-array<string, T>|null
      *
      * @throws InvalidArgumentException
      */
-    public static function nullOrIsNonEmptyMap($array, $message = '')
+    public static function nullOrIsNonEmptyMap($array, $message = ''): ?array
     {
         null === $array || static::isNonEmptyMap($array, $message);
         return $array;
@@ -5282,11 +5255,11 @@ trait Mixin
      * @param mixed $array
      * @param string|callable():string   $message
      *
-     * @return mixed
+     * @return iterable<non-empty-array<string, T>>
      *
      * @throws InvalidArgumentException
      */
-    public static function allIsNonEmptyMap($array, $message = '')
+    public static function allIsNonEmptyMap($array, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -5304,12 +5277,11 @@ trait Mixin
      * @param mixed $array
      * @param string|callable():string        $message
      *
-     * @return iterable<!empty|null>
+     * @return iterable<non-empty-array<string, T>|null>
      *
      * @throws InvalidArgumentException
-     * @return mixed
      */
-    public static function allNullOrIsNonEmptyMap($array, $message = '')
+    public static function allNullOrIsNonEmptyMap($array, $message = ''): iterable
     {
         static::isIterable($array);
         foreach ($array as $entry) {
@@ -5322,12 +5294,12 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws InvalidArgumentException
      * @param mixed $value
      */
-    public static function nullOrUuid($value, $message = '')
+    public static function nullOrUuid($value, $message = ''): ?string
     {
         null === $value || static::uuid($value, $message);
         return $value;
@@ -5337,7 +5309,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -5355,7 +5327,7 @@ trait Mixin
      *
      * @param string|callable():string $message
      *
-     * @return mixed
+     * @return iterable<string|null>
      *
      * @throws InvalidArgumentException
      * @param mixed $value
@@ -5369,31 +5341,33 @@ trait Mixin
         return $value;
     }
     /**
+     * @template T as callable
+     *
+     * @param mixed $expression
+     * @param class-string<Throwable>  $class
      * @param string|callable():string $message
      *
-     * @psalm-param class-string<Throwable> $class
-     *
-     * @return mixed
+     * @return T|null
      *
      * @throws InvalidArgumentException
-     * @param mixed $expression
      */
-    public static function nullOrThrows($expression, string $class = 'Throwable', $message = '')
+    public static function nullOrThrows($expression, string $class = 'Throwable', $message = ''): ?callable
     {
         null === $expression || static::throws($expression, $class, $message);
         return $expression;
     }
     /**
+     * @template T as callable
+     *
+     * @param mixed $expression
+     * @param class-string<Throwable>  $class
      * @param string|callable():string $message
      *
-     * @psalm-param class-string<Throwable> $class
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
-     * @param mixed $expression
      */
-    public static function allThrows($expression, string $class = 'Throwable', $message = '')
+    public static function allThrows($expression, string $class = 'Throwable', $message = ''): iterable
     {
         static::isIterable($expression);
         foreach ($expression as $entry) {
@@ -5402,16 +5376,17 @@ trait Mixin
         return $expression;
     }
     /**
+     * @template T as callable|null
+     *
+     * @param mixed $expression
+     * @param class-string<Throwable>  $class
      * @param string|callable():string $message
      *
-     * @psalm-param class-string<Throwable> $class
-     *
-     * @return mixed
+     * @return iterable<T>
      *
      * @throws InvalidArgumentException
-     * @param mixed $expression
      */
-    public static function allNullOrThrows($expression, string $class = 'Throwable', $message = '')
+    public static function allNullOrThrows($expression, string $class = 'Throwable', $message = ''): iterable
     {
         static::isIterable($expression);
         foreach ($expression as $entry) {

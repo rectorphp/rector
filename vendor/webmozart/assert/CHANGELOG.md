@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 2.4.0
+
+### Changed
+
+- Updated docblocks for many methods, improving psalm support and type hints.
+
 ## 2.3.0
 
 ### Changed

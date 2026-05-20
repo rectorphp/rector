@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739
+class ComposerStaticInita1f7d80ce98bceff62e283e14af86139
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -1327,8 +1327,10 @@ class ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739
         'RectorPrefix202605\\Symplify\\EasyParallel\\ValueObject\\ProcessPool' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ProcessPool.php',
         'RectorPrefix202605\\Symplify\\EasyParallel\\ValueObject\\Schedule' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/Schedule.php',
         'RectorPrefix202605\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
+        'RectorPrefix202605\\Webmozart\\Assert\\HasAssert' => __DIR__ . '/..' . '/webmozart/assert/src/HasAssert.php',
         'RectorPrefix202605\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix202605\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
+        'RectorPrefix202605\\Webmozart\\Assert\\PsalmPlugin' => __DIR__ . '/..' . '/webmozart/assert/src/PsalmPlugin.php',
         'Rector\\Application\\ApplicationFileProcessor' => __DIR__ . '/../..' . '/src/Application/ApplicationFileProcessor.php',
         'Rector\\Application\\ChangedNodeScopeRefresher' => __DIR__ . '/../..' . '/src/Application/ChangedNodeScopeRefresher.php',
         'Rector\\Application\\FileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor.php',
@@ -3281,9 +3283,9 @@ class ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita1f7d80ce98bceff62e283e14af86139::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita1f7d80ce98bceff62e283e14af86139::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita1f7d80ce98bceff62e283e14af86139::$classMap;
 
         }, null, ClassLoader::class);
     }
