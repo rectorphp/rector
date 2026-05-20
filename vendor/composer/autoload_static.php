@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit90b424c5d36460aa2389d3a48305deb7
+class ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -1298,6 +1298,7 @@ class ComposerStaticInit90b424c5d36460aa2389d3a48305deb7
         'RectorPrefix202605\\Symfony\\Component\\Yaml\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/yaml/Exception/RuntimeException.php',
         'RectorPrefix202605\\Symfony\\Component\\Yaml\\Inline' => __DIR__ . '/..' . '/symfony/yaml/Inline.php',
         'RectorPrefix202605\\Symfony\\Component\\Yaml\\Parser' => __DIR__ . '/..' . '/symfony/yaml/Parser.php',
+        'RectorPrefix202605\\Symfony\\Component\\Yaml\\ParserState' => __DIR__ . '/..' . '/symfony/yaml/ParserState.php',
         'RectorPrefix202605\\Symfony\\Component\\Yaml\\Tag\\TaggedValue' => __DIR__ . '/..' . '/symfony/yaml/Tag/TaggedValue.php',
         'RectorPrefix202605\\Symfony\\Component\\Yaml\\Unescaper' => __DIR__ . '/..' . '/symfony/yaml/Unescaper.php',
         'RectorPrefix202605\\Symfony\\Component\\Yaml\\Yaml' => __DIR__ . '/..' . '/symfony/yaml/Yaml.php',
@@ -3280,9 +3281,9 @@ class ComposerStaticInit90b424c5d36460aa2389d3a48305deb7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit90b424c5d36460aa2389d3a48305deb7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit90b424c5d36460aa2389d3a48305deb7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit90b424c5d36460aa2389d3a48305deb7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit584dccbcd7f4bd54be6d5670864cf739::$classMap;
 
         }, null, ClassLoader::class);
     }

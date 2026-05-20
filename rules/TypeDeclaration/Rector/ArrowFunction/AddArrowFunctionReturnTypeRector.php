@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ArrowFunction;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -52,7 +53,8 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        $type = $this->nodeTypeResolver->getNativeType($node->expr);
+        // to allow array shape
+        $type = $node->expr instanceof ArrayDimFetch ? $this->getType($node->expr) : $this->nodeTypeResolver->getNativeType($node->expr);
         // not valid to add explicit type in PHP
         if ($type->isVoid()->yes()) {
             return null;

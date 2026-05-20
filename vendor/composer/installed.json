@@ -574,8 +574,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v12.59.0",
-            "version_normalized": "12.59.0.0",
+            "version": "v12.60.2",
+            "version_normalized": "12.60.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -1867,12 +1867,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "55ece61bcc1e1bb830da9c21c724652392e63f49"
+                "reference": "d9b1d43583c7b0699108153347d35aff14827021"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/55ece61bcc1e1bb830da9c21c724652392e63f49",
-                "reference": "55ece61bcc1e1bb830da9c21c724652392e63f49",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d9b1d43583c7b0699108153347d35aff14827021",
+                "reference": "d9b1d43583c7b0699108153347d35aff14827021",
                 "shasum": ""
             },
             "require": {
@@ -1906,7 +1906,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-05-16T20:52:49+00:00",
+            "time": "2026-05-18T10:21:09+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -3087,17 +3087,17 @@
         },
         {
             "name": "symfony\/yaml",
-            "version": "v7.4.11",
-            "version_normalized": "7.4.11.0",
+            "version": "v7.4.12",
+            "version_normalized": "7.4.12.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/yaml.git",
-                "reference": "e2eb64a57763815ccae07ac1c7653d6cc1c326fd"
+                "reference": "8b6952b56ca6417f25f7a65758cadd0ce02edc51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/e2eb64a57763815ccae07ac1c7653d6cc1c326fd",
-                "reference": "e2eb64a57763815ccae07ac1c7653d6cc1c326fd",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/yaml\/zipball\/8b6952b56ca6417f25f7a65758cadd0ce02edc51",
+                "reference": "8b6952b56ca6417f25f7a65758cadd0ce02edc51",
                 "shasum": ""
             },
             "require": {
@@ -3111,7 +3111,7 @@
             "require-dev": {
                 "symfony\/console": "^6.4|^7.0|^8.0"
             },
-            "time": "2026-05-13T12:04:42+00:00",
+            "time": "2026-05-20T07:20:23+00:00",
             "bin": [
                 "Resources\/bin\/yaml-lint"
             ],
@@ -3142,7 +3142,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.4.11"
+                "source": "https:\/\/github.com\/symfony\/yaml\/tree\/v7.4.12"
             },
             "funding": [
                 {

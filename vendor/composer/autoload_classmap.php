@@ -1038,6 +1038,7 @@ return array(
     'RectorPrefix202605\\Symfony\\Component\\Yaml\\Exception\\RuntimeException' => $vendorDir . '/symfony/yaml/Exception/RuntimeException.php',
     'RectorPrefix202605\\Symfony\\Component\\Yaml\\Inline' => $vendorDir . '/symfony/yaml/Inline.php',
     'RectorPrefix202605\\Symfony\\Component\\Yaml\\Parser' => $vendorDir . '/symfony/yaml/Parser.php',
+    'RectorPrefix202605\\Symfony\\Component\\Yaml\\ParserState' => $vendorDir . '/symfony/yaml/ParserState.php',
     'RectorPrefix202605\\Symfony\\Component\\Yaml\\Tag\\TaggedValue' => $vendorDir . '/symfony/yaml/Tag/TaggedValue.php',
     'RectorPrefix202605\\Symfony\\Component\\Yaml\\Unescaper' => $vendorDir . '/symfony/yaml/Unescaper.php',
     'RectorPrefix202605\\Symfony\\Component\\Yaml\\Yaml' => $vendorDir . '/symfony/yaml/Yaml.php',
