@@ -13,9 +13,9 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector\AddNameToBooleanArgumentRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\CallLike\AddNameToNullArgumentRector\AddNameToNullArgumentRectorTest
  */
-final class AddNameToBooleanArgumentRector extends AbstractRector implements MinPhpVersionInterface
+final class AddNameToNullArgumentRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -32,11 +32,11 @@ final class AddNameToBooleanArgumentRector extends AbstractRector implements Min
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add parameter names to boolean arguments.', [new CodeSample(<<<'CODE_SAMPLE'
-in_array($value, $array, true);
+        return new RuleDefinition('Add parameter names to null arguments.', [new CodeSample(<<<'CODE_SAMPLE'
+some_function($value, null);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-in_array($value, $array, strict: true);
+some_function($value, default: null);
 CODE_SAMPLE
 )]);
     }
@@ -52,7 +52,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->callLikeArgumentNameAdder->addNamesToArgs($node, fn($expr): bool => $this->valueResolver->isTrueOrFalse($expr));
+        return $this->callLikeArgumentNameAdder->addNamesToArgs($node, fn($expr): bool => $this->valueResolver->isNull($expr));
     }
     public function provideMinPhpVersion(): int
     {
