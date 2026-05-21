@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StaticType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -101,7 +102,19 @@ final class TestsNodeAnalyzer
     public function isPHPUnitTestCaseCall(Node $node): bool
     {
         if ($node instanceof MethodCall) {
-            return $this->isInTestClass($node);
+            $callerType = $this->nodeTypeResolver->getType($node->var);
+            if ($callerType instanceof StaticType) {
+                $callerType = $callerType->getStaticObjectType();
+            }
+            if ($callerType instanceof ObjectType) {
+                if ($callerType->isInstanceOf(PHPUnitClassName::TEST_CASE)->yes()) {
+                    return \true;
+                }
+                if ($callerType->isInstanceOf(PHPUnitClassName::ASSERT)->yes()) {
+                    return \true;
+                }
+            }
+            return \false;
         }
         if ($node instanceof StaticCall) {
             $classType = $this->nodeTypeResolver->getType($node->class);

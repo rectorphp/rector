@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace RectorPrefix202605;
 
 use Rector\Config\RectorConfig;
-use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\AssertRegExpRector;
 use Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\WithConsecutiveRector;
 use Rector\PHPUnit\PHPUnit90\Rector\Class_\TestListenerToHooksRector;
+use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\AssertRegExpRector;
 use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\ExplicitPhpErrorApiRector;
 use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
