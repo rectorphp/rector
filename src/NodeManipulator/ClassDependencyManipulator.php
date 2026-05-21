@@ -161,6 +161,32 @@ final class ClassDependencyManipulator
         }
         $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
     }
+    public function hasFinalParentConstructor(Class_ $class): bool
+    {
+        if ($class->getMethod(MethodName::CONSTRUCT) instanceof ClassMethod) {
+            return \false;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        $ancestors = array_filter($classReflection->getAncestors(), static fn(ClassReflection $ancestor): bool => $ancestor->getName() !== $classReflection->getName());
+        foreach ($ancestors as $ancestor) {
+            if (!$ancestor->hasNativeMethod(MethodName::CONSTRUCT)) {
+                continue;
+            }
+            $parentClass = $this->astResolver->resolveClassFromClassReflection($ancestor);
+            if (!$parentClass instanceof ClassLike) {
+                continue;
+            }
+            $parentConstructorMethod = $parentClass->getMethod(MethodName::CONSTRUCT);
+            if (!$parentConstructorMethod instanceof ClassMethod) {
+                continue;
+            }
+            return $parentConstructorMethod->isFinal();
+        }
+        return \false;
+    }
     private function resolveConstruct(Class_ $class): ?ClassMethod
     {
         $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);

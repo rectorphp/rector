@@ -99,6 +99,9 @@ CODE_SAMPLE
                         return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
                     }
                     $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($class, $classMethod, $staticCallToMethodCall->getClassObjectType());
+                    if ($expr === null) {
+                        return null;
+                    }
                     $methodName = $this->getMethodName($node, $staticCallToMethodCall);
                     $hasChanged = \true;
                     return new MethodCall($expr, $methodName, $node->args);

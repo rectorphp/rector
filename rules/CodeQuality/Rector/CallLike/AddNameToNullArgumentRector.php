@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\CallLike;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Expr\CallLike;
 use Rector\NodeAnalyzer\CallLikeArgumentNameAdder;
@@ -52,7 +53,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->callLikeArgumentNameAdder->addNamesToArgs($node, fn($expr): bool => $this->valueResolver->isNull($expr));
+        return $this->callLikeArgumentNameAdder->addNamesToArgs($node, fn(Expr $expr): bool => $this->valueResolver->isNull($expr));
     }
     public function provideMinPhpVersion(): int
     {

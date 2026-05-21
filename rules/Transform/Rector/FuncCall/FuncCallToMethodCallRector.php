@@ -92,6 +92,9 @@ CODE_SAMPLE
                         continue;
                     }
                     $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($class, $classMethod, $funcNameToMethodCallName->getNewObjectType());
+                    if ($expr === null) {
+                        return null;
+                    }
                     $hasChanged = \true;
                     return $this->nodeFactory->createMethodCall($expr, $funcNameToMethodCallName->getNewMethodName(), $node->args);
                 }

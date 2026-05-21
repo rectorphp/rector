@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeAnalyzer;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Identifier;
@@ -27,20 +28,20 @@ final class CallLikeArgumentNameAdder
      * argument whose value satisfies $shouldNameArgValue. All subsequent positional
      * arguments receive names too (required by PHP named-arg semantics).
      *
-     * @param callable(\PhpParser\Node\Expr): bool $shouldNameArgValue
+     * @param callable(Expr):bool $shouldNameArgValue
      */
-    public function addNamesToArgs(CallLike $node, callable $shouldNameArgValue): ?CallLike
+    public function addNamesToArgs(CallLike $callLike, callable $shouldNameArgValue): ?CallLike
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkip($callLike)) {
             return null;
         }
-        $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
+        $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($callLike);
         if (!$reflection instanceof FunctionReflection && !$reflection instanceof MethodReflection) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        $args = $node->getArgs();
-        $parameters = ParametersAcceptorSelectorVariantsWrapper::select($reflection, $node, $scope)->getParameters();
+        $scope = ScopeFetcher::fetch($callLike);
+        $args = $callLike->getArgs();
+        $parameters = ParametersAcceptorSelectorVariantsWrapper::select($reflection, $callLike, $scope)->getParameters();
         $position = $this->resolveFirstPositionToName($args, $parameters, $shouldNameArgValue);
         if ($position === null) {
             return null;
@@ -62,7 +63,7 @@ final class CallLikeArgumentNameAdder
         if (!$wasChanged) {
             return null;
         }
-        return $node;
+        return $callLike;
     }
     private function shouldSkip(CallLike $callLike): bool
     {
@@ -83,7 +84,7 @@ final class CallLikeArgumentNameAdder
     /**
      * @param Arg[] $args
      * @param ParameterReflection[] $parameters
-     * @param callable(\PhpParser\Node\Expr): bool $shouldNameArgValue
+     * @param callable(Expr):bool $shouldNameArgValue
      */
     private function resolveFirstPositionToName(array $args, array $parameters, callable $shouldNameArgValue): ?int
     {
