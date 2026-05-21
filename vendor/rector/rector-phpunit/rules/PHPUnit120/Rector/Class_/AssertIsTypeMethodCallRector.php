@@ -89,6 +89,9 @@ CODE_SAMPLE
             return null;
         }
         $argValue = $this->valueResolver->getValue($arg);
+        if (!is_string($argValue)) {
+            return null;
+        }
         if (isset(self::IS_TYPE_VALUE_TO_METHOD[$argValue])) {
             if ($node instanceof MethodCall) {
                 return new MethodCall($node->var, self::IS_TYPE_VALUE_TO_METHOD[$argValue]);
