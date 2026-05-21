@@ -175,15 +175,7 @@ final class ClassDependencyManipulator
             if (!$ancestor->hasNativeMethod(MethodName::CONSTRUCT)) {
                 continue;
             }
-            $parentClass = $this->astResolver->resolveClassFromClassReflection($ancestor);
-            if (!$parentClass instanceof ClassLike) {
-                continue;
-            }
-            $parentConstructorMethod = $parentClass->getMethod(MethodName::CONSTRUCT);
-            if (!$parentConstructorMethod instanceof ClassMethod) {
-                continue;
-            }
-            return $parentConstructorMethod->isFinal();
+            return $ancestor->getNativeMethod(MethodName::CONSTRUCT)->isFinalByKeyword()->yes();
         }
         return \false;
     }
