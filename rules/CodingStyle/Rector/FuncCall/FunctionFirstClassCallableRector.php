@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\VariadicPlaceholder;
 use Rector\Rector\AbstractRector;
@@ -83,7 +84,7 @@ CODE_SAMPLE
             if (!$arg->value instanceof String_) {
                 continue;
             }
-            $node->args[$key] = new Arg(new FuncCall(new Name($arg->value->value), [new VariadicPlaceholder()]), \false, \false, [], $arg->name);
+            $node->args[$key] = new Arg(new FuncCall(strpos($arg->value->value, '\\') !== \false ? new FullyQualified($arg->value->value) : new Name($arg->value->value), [new VariadicPlaceholder()]), \false, \false, [], $arg->name);
             $hasChanged = \true;
         }
         return $hasChanged ? $node : null;
