@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\CallLike;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\CallLike;
 use Rector\NodeAnalyzer\CallLikeArgumentNameAdder;
 use Rector\PhpParser\Node\Value\ValueResolver;

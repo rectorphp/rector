@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Identifier;
 use PHPStan\Reflection\FunctionReflection;
