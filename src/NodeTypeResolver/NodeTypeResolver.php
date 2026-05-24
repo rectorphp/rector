@@ -364,7 +364,7 @@ final class NodeTypeResolver
             if (!in_array($key, $optionalKeys, \true)) {
                 continue;
             }
-            return $originalNativeType;
+            return new MixedType();
         }
         return $type;
     }
