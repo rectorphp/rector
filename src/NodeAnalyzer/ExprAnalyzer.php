@@ -53,9 +53,18 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
 use Rector\Enum\ObjectReference;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ExprAnalyzer
 {
+    /**
+     * @readonly
+     */
+    private NodeNameResolver $nodeNameResolver;
+    public function __construct(NodeNameResolver $nodeNameResolver)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
     public function isBoolExpr(Expr $expr): bool
     {
         return $expr instanceof BooleanNot || $expr instanceof Empty_ || $expr instanceof Isset_ || $expr instanceof Instanceof_ || $expr instanceof Bool_ || $expr instanceof Equal || $expr instanceof NotEqual || $expr instanceof Identical || $expr instanceof NotIdentical || $expr instanceof Greater || $expr instanceof GreaterOrEqual || $expr instanceof Smaller || $expr instanceof SmallerOrEqual || $expr instanceof BooleanAnd || $expr instanceof BooleanOr || $expr instanceof LogicalAnd || $expr instanceof LogicalOr || $expr instanceof LogicalXor;
@@ -105,6 +114,9 @@ final class ExprAnalyzer
             return \true;
         }
         if ($nativeType instanceof ObjectWithoutClassType && !$type instanceof ObjectWithoutClassType) {
+            return \true;
+        }
+        if (!$scope->hasVariableType((string) $this->nodeNameResolver->getName($expr))->yes()) {
             return \true;
         }
         if ($nativeType instanceof UnionType) {
