@@ -34,6 +34,8 @@ class Normalizer
     private static $D;
     private static $KD;
     private static $cC;
+    private static $rawD;
+    private static $rawKD;
     private static $ulenMask = ["\xc0" => 2, "\xd0" => 2, "\xe0" => 3, "\xf0" => 4];
     private static $ASCII = " eiasntrolud][cmp'\ng|hv.fb,:=-q10C2*yx)(L9AS/P\"EjMIk3>5T<D4}B{8FwR67UGN;JzV#HOW_&!K?XQ%Y\\\tZ+~^\$@`\x00\x01\x02\x03\x04\x05\x06\x07\x08\v\f\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f";
     public static function isNormalized(string $s, int $form = self::FORM_C)
@@ -48,6 +50,44 @@ class Normalizer
             return \true;
         }
         return self::normalize($s, $form) === $s;
+    }
+    public static function getRawDecomposition(string $s, int $form = self::FORM_C)
+    {
+        if ('' === $s || !preg_match('//u', $s)) {
+            return null;
+        }
+        $ulen = $s[0] < "\x80" ? 1 : self::$ulenMask[$s[0] & "\xf0"] ?? 0;
+        if (!$ulen || \strlen($s) !== $ulen) {
+            return null;
+        }
+        if (self::NFC !== $form && self::NFD !== $form && self::NFKC !== $form && self::NFKD !== $form) {
+            return '';
+        }
+        if ($s >= "가" && $s <= "힣") {
+            $u = unpack('C*', $s);
+            $j = ($u[1] - 224 << 12) + ($u[2] - 128 << 6) + $u[3] - 0xac80;
+            if ($t = $j % 28) {
+                $j -= $t;
+                $lv = 0xac00 + $j;
+                $r = \chr(0xe0 | $lv >> 12) . \chr(0x80 | $lv >> 6 & 0x3f) . \chr(0x80 | $lv & 0x3f);
+                $r .= $t < 25 ? "\xe1\x86" . \chr(0xa7 + $t) : "\xe1\x87" . \chr(0x67 + $t);
+                return $r;
+            }
+            return "\xe1\x84" . \chr(0x80 + (int) ($j / 588)) . "\xe1\x85" . \chr(0xa1 + (int) ($j % 588 / 28));
+        }
+        if (null === self::$rawD) {
+            self::$rawD = self::getData('rawCanonicalDecomposition');
+        }
+        if (isset(self::$rawD[$s])) {
+            return self::$rawD[$s];
+        }
+        if (self::NFKC === $form || self::NFKD === $form) {
+            if (null === self::$rawKD) {
+                self::$rawKD = self::getData('rawCompatibilityDecomposition');
+            }
+            return self::$rawKD[$s] ?? null;
+        }
+        return null;
     }
     public static function normalize(string $s, int $form = self::FORM_C)
     {

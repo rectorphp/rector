@@ -105,5 +105,5 @@ final class DoctrineSetList
     /**
      * @var string
      */
-    public const MONGODB__ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/attributes/mongodb.php';
+    public const MONGODB_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/attributes/mongodb.php';
 }

@@ -14,7 +14,7 @@ $loader = (static function () {
     // Restore the backup and ensure the excluded files are properly marked as loaded
     $GLOBALS['__composer_autoload_files'] = \array_merge(
         $existingComposerAutoloadFiles,
-        \array_fill_keys(['320cde22f66dd4f5d3fd621d3e88b98f', '9eaa6b0f3f04e58e17ae5ecb754ea313', '8825ede83f2f289127722d4e842cf7e8', 'acbe0d033c55cd0a032b415e08d14f4c', 'e69f7f6ee287b969198c3c9d6777bd38', '36dfd6ed9dd74e8062aa61f09caf8554', '0e6d7bf4a5811bfa5cf40c5ccd6fae6a', '5928a00fa978807cf85d90ec3f4b0147', '7bfbed8d216c917b4d3e46b319a08b5c', '9d2b9fc6db0f153a0a149fefb182415e', '1c231eb0a2980bfb45d2eedd095b0490', '606a39d89246991a373564698c2d8383', 'c4dd194f5b50c0821acf143dcfed86ea'], true)
+        \array_fill_keys(['320cde22f66dd4f5d3fd621d3e88b98f', '9eaa6b0f3f04e58e17ae5ecb754ea313', '80dfc307f8b4b13bcd033cef5c977d19', '8825ede83f2f289127722d4e842cf7e8', 'acbe0d033c55cd0a032b415e08d14f4c', 'e69f7f6ee287b969198c3c9d6777bd38', '36dfd6ed9dd74e8062aa61f09caf8554', 'e4e9c4430b5a6c815e77a26074c8155a', '0e6d7bf4a5811bfa5cf40c5ccd6fae6a', '5928a00fa978807cf85d90ec3f4b0147', '7bfbed8d216c917b4d3e46b319a08b5c', 'c18d2008c6f2fa913c7bba17deb24ff5', '9d2b9fc6db0f153a0a149fefb182415e', '606a39d89246991a373564698c2d8383', 'c4dd194f5b50c0821acf143dcfed86ea'], true)
     );
 
     return $loader;
@@ -31,7 +31,7 @@ if (!function_exists('humbug_phpscoper_expose_class')) {
 }
 humbug_phpscoper_expose_class('AutoloadIncluder', 'RectorPrefix202605\AutoloadIncluder');
 humbug_phpscoper_expose_class('SomeClass', 'RectorPrefix202605\SomeClass');
-humbug_phpscoper_expose_class('ComposerAutoloaderInita1f7d80ce98bceff62e283e14af86139', 'RectorPrefix202605\ComposerAutoloaderInita1f7d80ce98bceff62e283e14af86139');
+humbug_phpscoper_expose_class('ComposerAutoloaderInit5387c686f5f9f5959e7afbd7310de6e1', 'RectorPrefix202605\ComposerAutoloaderInit5387c686f5f9f5959e7afbd7310de6e1');
 humbug_phpscoper_expose_class('Product', 'RectorPrefix202605\Product');
 humbug_phpscoper_expose_class('SomeTest', 'RectorPrefix202605\SomeTest');
 humbug_phpscoper_expose_class('Normalizer', 'RectorPrefix202605\Normalizer');
@@ -127,6 +127,7 @@ if (!function_exists('mb_substr')) { function mb_substr() { return \RectorPrefix
 if (!function_exists('mb_substr_count')) { function mb_substr_count() { return \RectorPrefix202605\mb_substr_count(...func_get_args()); } }
 if (!function_exists('mb_trim')) { function mb_trim() { return \RectorPrefix202605\mb_trim(...func_get_args()); } }
 if (!function_exists('mb_ucfirst')) { function mb_ucfirst() { return \RectorPrefix202605\mb_ucfirst(...func_get_args()); } }
+if (!function_exists('normalizer_get_raw_decomposition')) { function normalizer_get_raw_decomposition() { return \RectorPrefix202605\normalizer_get_raw_decomposition(...func_get_args()); } }
 if (!function_exists('normalizer_is_normalized')) { function normalizer_is_normalized() { return \RectorPrefix202605\normalizer_is_normalized(...func_get_args()); } }
 if (!function_exists('normalizer_normalize')) { function normalizer_normalize() { return \RectorPrefix202605\normalizer_normalize(...func_get_args()); } }
 if (!function_exists('parseArgs')) { function parseArgs() { return \RectorPrefix202605\parseArgs(...func_get_args()); } }

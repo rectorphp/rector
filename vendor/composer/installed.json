@@ -1679,12 +1679,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "fb7154285c96f04ce2944755ce4d6da48ee5ba64"
+                "reference": "18872bfc002447774fb6a418ab2de8d52096f886"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/fb7154285c96f04ce2944755ce4d6da48ee5ba64",
-                "reference": "fb7154285c96f04ce2944755ce4d6da48ee5ba64",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/18872bfc002447774fb6a418ab2de8d52096f886",
+                "reference": "18872bfc002447774fb6a418ab2de8d52096f886",
                 "shasum": ""
             },
             "require": {
@@ -1692,6 +1692,7 @@
                 "symfony\/yaml": "^7.4|8.0.*"
             },
             "require-dev": {
+                "boundwize\/structarmed": "^0.7.12",
                 "doctrine\/doctrine-bundle": "^2.18|^3.0",
                 "doctrine\/orm": "^2.20|^3.0",
                 "phpecs\/phpecs": "^2.2",
@@ -1710,7 +1711,7 @@
                 "tomasvotruba\/class-leak": "^2.1",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-03-31T05:24:41+00:00",
+            "time": "2026-05-26T20:33:28+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1869,12 +1870,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "b03c205c01daf9f57298fcbcdf6870e5de576b77"
+                "reference": "82254cca8eb24a87b84511c5e5b7134b2b0ca434"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b03c205c01daf9f57298fcbcdf6870e5de576b77",
-                "reference": "b03c205c01daf9f57298fcbcdf6870e5de576b77",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/82254cca8eb24a87b84511c5e5b7134b2b0ca434",
+                "reference": "82254cca8eb24a87b84511c5e5b7134b2b0ca434",
                 "shasum": ""
             },
             "require": {
@@ -1909,7 +1910,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-05-24T19:08:36+00:00",
+            "time": "2026-05-25T19:47:18+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2411,17 +2412,17 @@
         },
         {
             "name": "symfony\/polyfill-intl-grapheme",
-            "version": "v1.37.0",
-            "version_normalized": "1.37.0.0",
+            "version": "v1.38.1",
+            "version_normalized": "1.38.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-intl-grapheme.git",
-                "reference": "4864388bfbd3001ce88e234fab652acd91fdc57e"
+                "reference": "e9247d281d694a5120554d9afaf54e070e88a603"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-intl-grapheme\/zipball\/4864388bfbd3001ce88e234fab652acd91fdc57e",
-                "reference": "4864388bfbd3001ce88e234fab652acd91fdc57e",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-intl-grapheme\/zipball\/e9247d281d694a5120554d9afaf54e070e88a603",
+                "reference": "e9247d281d694a5120554d9afaf54e070e88a603",
                 "shasum": ""
             },
             "require": {
@@ -2430,7 +2431,7 @@
             "suggest": {
                 "ext-intl": "For best performance"
             },
-            "time": "2026-04-26T13:13:48+00:00",
+            "time": "2026-05-26T05:58:03+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2472,7 +2473,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-intl-grapheme\/tree\/v1.37.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-intl-grapheme\/tree\/v1.38.1"
             },
             "funding": [
                 {
@@ -2496,17 +2497,17 @@
         },
         {
             "name": "symfony\/polyfill-intl-normalizer",
-            "version": "v1.37.0",
-            "version_normalized": "1.37.0.0",
+            "version": "v1.38.0",
+            "version_normalized": "1.38.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer.git",
-                "reference": "3833d7255cc303546435cb650316bff708a1c75c"
+                "reference": "2d446c214bdbe5b71bde5011b060a05fece3ae6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-intl-normalizer\/zipball\/3833d7255cc303546435cb650316bff708a1c75c",
-                "reference": "3833d7255cc303546435cb650316bff708a1c75c",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-intl-normalizer\/zipball\/2d446c214bdbe5b71bde5011b060a05fece3ae6b",
+                "reference": "2d446c214bdbe5b71bde5011b060a05fece3ae6b",
                 "shasum": ""
             },
             "require": {
@@ -2515,7 +2516,7 @@
             "suggest": {
                 "ext-intl": "For best performance"
             },
-            "time": "2024-09-09T11:45:10+00:00",
+            "time": "2026-05-25T13:48:31+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2560,7 +2561,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer\/tree\/v1.37.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer\/tree\/v1.38.0"
             },
             "funding": [
                 {
@@ -2584,17 +2585,17 @@
         },
         {
             "name": "symfony\/polyfill-mbstring",
-            "version": "v1.37.0",
-            "version_normalized": "1.37.0.0",
+            "version": "v1.38.1",
+            "version_normalized": "1.38.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-mbstring.git",
-                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315"
+                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-mbstring\/zipball\/6a21eb99c6973357967f6ce3708cd55a6bec6315",
-                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-mbstring\/zipball\/14c5439eec4ccff081ac14eca2dc57feb2a66d92",
+                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92",
                 "shasum": ""
             },
             "require": {
@@ -2607,7 +2608,7 @@
             "suggest": {
                 "ext-mbstring": "For best performance"
             },
-            "time": "2026-04-10T17:25:58+00:00",
+            "time": "2026-05-26T12:51:13+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2648,7 +2649,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-mbstring\/tree\/v1.37.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-mbstring\/tree\/v1.38.1"
             },
             "funding": [
                 {
@@ -2672,23 +2673,23 @@
         },
         {
             "name": "symfony\/polyfill-php84",
-            "version": "v1.37.0",
-            "version_normalized": "1.37.0.0",
+            "version": "v1.38.1",
+            "version_normalized": "1.38.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-php84.git",
-                "reference": "88486db2c389b290bf87ff1de7ebc1e13e42bb06"
+                "reference": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php84\/zipball\/88486db2c389b290bf87ff1de7ebc1e13e42bb06",
-                "reference": "88486db2c389b290bf87ff1de7ebc1e13e42bb06",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php84\/zipball\/f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
+                "reference": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2"
             },
-            "time": "2026-04-10T18:47:49+00:00",
+            "time": "2026-05-26T12:51:13+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2731,7 +2732,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-php84\/tree\/v1.37.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-php84\/tree\/v1.38.1"
             },
             "funding": [
                 {
@@ -2755,23 +2756,23 @@
         },
         {
             "name": "symfony\/polyfill-php85",
-            "version": "v1.37.0",
-            "version_normalized": "1.37.0.0",
+            "version": "v1.38.1",
+            "version_normalized": "1.38.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/polyfill-php85.git",
-                "reference": "fcfa4973a9917cef23f2e38774da74a2b7d115ee"
+                "reference": "ba2ba04f3352cfa2dcbbcb90aee13ed967f505b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php85\/zipball\/fcfa4973a9917cef23f2e38774da74a2b7d115ee",
-                "reference": "fcfa4973a9917cef23f2e38774da74a2b7d115ee",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php85\/zipball\/ba2ba04f3352cfa2dcbbcb90aee13ed967f505b1",
+                "reference": "ba2ba04f3352cfa2dcbbcb90aee13ed967f505b1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2"
             },
-            "time": "2026-04-26T13:10:57+00:00",
+            "time": "2026-05-26T02:25:22+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2814,7 +2815,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-php85\/tree\/v1.37.0"
+                "source": "https:\/\/github.com\/symfony\/polyfill-php85\/tree\/v1.38.1"
             },
             "funding": [
                 {

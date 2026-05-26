@@ -22,6 +22,7 @@ if (\PHP_VERSION_ID < 80400) {
         public $name;
         private $value;
         private $deprecated;
+        private $persistent;
         private static $persistentConstants = [];
         public function __construct(string $name)
         {

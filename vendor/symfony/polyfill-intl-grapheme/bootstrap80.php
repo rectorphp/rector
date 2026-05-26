@@ -50,6 +50,10 @@ if (!function_exists('grapheme_extract')) {
      */
     function grapheme_extract(?string $haystack, ?int $size, ?int $type = GRAPHEME_EXTR_COUNT, ?int $offset = 0, &$next = null) { return p\Grapheme::grapheme_extract((string) $haystack, (int) $size, (int) $type, (int) $offset, $next); }
 }
+if (\PHP_VERSION_ID >= 80500) {
+    return require __DIR__.'/bootstrap85.php';
+}
+
 if (!function_exists('grapheme_stripos')) {
     /**
      * @return int|false

@@ -90,7 +90,6 @@ CODE_SAMPLE
             if (!$stmt->expr instanceof Assign) {
                 continue;
             }
-            /** @var Assign $assign */
             $assign = $stmt->expr;
             // we only care about initialization
             if (!$assign->var instanceof PropertyFetch) {

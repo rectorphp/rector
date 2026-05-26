@@ -2725,6 +2725,7 @@ return array(
     'Rector\\Symfony\\Symfony73\\ValueObject\\CommandArgument' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandArgument.php',
     'Rector\\Symfony\\Symfony73\\ValueObject\\CommandOption' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandOption.php',
     'Rector\\Symfony\\Symfony80\\Rector\\Class_\\RemoveEraseCredentialsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony80/Rector/Class_/RemoveEraseCredentialsRector.php',
+    'Rector\\Symfony\\Symfony81\\Rector\\StaticCall\\AddFormatArgumentToIsValidRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony81/Rector/StaticCall/AddFormatArgumentToIsValidRector.php',
     'Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector' => $vendorDir . '/rector/rector-symfony/rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php',
     'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
     'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',

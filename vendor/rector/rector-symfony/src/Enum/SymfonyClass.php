@@ -205,4 +205,8 @@ final class SymfonyClass
      * @var string
      */
     public const ABSTRACT_TYPE = 'Symfony\Component\Form\AbstractType';
+    /**
+     * @var string
+     */
+    public const ULID_CLASS = 'Symfony\Component\Uid\Ulid';
 }
