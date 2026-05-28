@@ -1716,6 +1716,7 @@ class ComposerStaticInit212655bc4bab4fd389ef43de213724c8
         'Rector\\DeadCode\\Rector\\If_\\SimplifyIfElseWithSameContentRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/SimplifyIfElseWithSameContentRector.php',
         'Rector\\DeadCode\\Rector\\If_\\UnwrapFutureCompatibleIfPhpVersionRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/UnwrapFutureCompatibleIfPhpVersionRector.php',
         'Rector\\DeadCode\\Rector\\MethodCall\\RemoveNullArgOnNullDefaultParamRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/MethodCall/RemoveNullArgOnNullDefaultParamRector.php',
+        'Rector\\DeadCode\\Rector\\MethodCall\\RemoveNullNamedArgOnNullDefaultParamRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/MethodCall/RemoveNullNamedArgOnNullDefaultParamRector.php',
         'Rector\\DeadCode\\Rector\\Node\\RemoveNonExistingVarAnnotationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Node/RemoveNonExistingVarAnnotationRector.php',
         'Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php',
         'Rector\\DeadCode\\Rector\\PropertyProperty\\RemoveNullPropertyInitializationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/PropertyProperty/RemoveNullPropertyInitializationRector.php',

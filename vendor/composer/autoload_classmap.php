@@ -1456,6 +1456,7 @@ return array(
     'Rector\\DeadCode\\Rector\\If_\\SimplifyIfElseWithSameContentRector' => $baseDir . '/rules/DeadCode/Rector/If_/SimplifyIfElseWithSameContentRector.php',
     'Rector\\DeadCode\\Rector\\If_\\UnwrapFutureCompatibleIfPhpVersionRector' => $baseDir . '/rules/DeadCode/Rector/If_/UnwrapFutureCompatibleIfPhpVersionRector.php',
     'Rector\\DeadCode\\Rector\\MethodCall\\RemoveNullArgOnNullDefaultParamRector' => $baseDir . '/rules/DeadCode/Rector/MethodCall/RemoveNullArgOnNullDefaultParamRector.php',
+    'Rector\\DeadCode\\Rector\\MethodCall\\RemoveNullNamedArgOnNullDefaultParamRector' => $baseDir . '/rules/DeadCode/Rector/MethodCall/RemoveNullNamedArgOnNullDefaultParamRector.php',
     'Rector\\DeadCode\\Rector\\Node\\RemoveNonExistingVarAnnotationRector' => $baseDir . '/rules/DeadCode/Rector/Node/RemoveNonExistingVarAnnotationRector.php',
     'Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector' => $baseDir . '/rules/DeadCode/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php',
     'Rector\\DeadCode\\Rector\\PropertyProperty\\RemoveNullPropertyInitializationRector' => $baseDir . '/rules/DeadCode/Rector/PropertyProperty/RemoveNullPropertyInitializationRector.php',

@@ -15,9 +15,9 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\DeadCode\Rector\MethodCall\RemoveNullArgOnNullDefaultParamRector\RemoveNullArgOnNullDefaultParamRectorTest
+ * @see \Rector\Tests\DeadCode\Rector\MethodCall\RemoveNullNamedArgOnNullDefaultParamRector\RemoveNullNamedArgOnNullDefaultParamRectorTest
  */
-final class RemoveNullArgOnNullDefaultParamRector extends AbstractRector
+final class RemoveNullNamedArgOnNullDefaultParamRector extends AbstractRector
 {
     /**
      * @readonly
@@ -34,35 +34,34 @@ final class RemoveNullArgOnNullDefaultParamRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove default null argument, where null is already a default param value', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove named null argument, where null is already a default param value', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function call(ExternalClass $externalClass)
     {
-        $externalClass->execute(null);
+        $externalClass->execute(value: 1, someClass: null);
     }
 }
 
 class ExternalClass
 {
-    public function execute(?SomeClass $someClass = null)
+    public function execute(int $value, ?SomeClass $someClass = null)
     {
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-
 class SomeClass
 {
     public function call(ExternalClass $externalClass)
     {
-        $externalClass->execute();
+        $externalClass->execute(value: 1);
     }
 }
 
 class ExternalClass
 {
-    public function execute(?SomeClass $someClass = null)
+    public function execute(int $value, ?SomeClass $someClass = null)
     {
     }
 }
@@ -86,29 +85,40 @@ CODE_SAMPLE
         if ($args === []) {
             return null;
         }
-        // named args are handled by RemoveNullNamedArgOnNullDefaultParamRector
+        $hasNamedArg = \false;
         foreach ($args as $arg) {
-            if ($arg->name instanceof Identifier) {
-                return null;
-            }
+            // unpack hides which parameters are bound, so removal is not safe
             if ($arg->unpack) {
                 return null;
             }
+            if ($arg->name instanceof Identifier) {
+                $hasNamedArg = \true;
+            }
+        }
+        if (!$hasNamedArg) {
+            return null;
         }
         $nullPositions = $this->callLikeParamDefaultResolver->resolveNullPositions($node);
         if ($nullPositions === []) {
             return null;
         }
         $hasChanged = \false;
-        for ($position = count($args) - 1; $position >= 0; --$position) {
-            $arg = $args[$position];
+        foreach ($args as $argPosition => $arg) {
+            // only named args are removed here; in any order, remaining args still bind by name
+            if (!$arg->name instanceof Identifier) {
+                continue;
+            }
             if (!$this->valueResolver->isNull($arg->value)) {
-                break;
+                continue;
             }
-            if (!in_array($position, $nullPositions, \true)) {
-                break;
+            $parameterPosition = $this->callLikeParamDefaultResolver->resolvePositionParameterByName($node, $arg->name->toString());
+            if ($parameterPosition === null) {
+                continue;
             }
-            unset($node->args[$position]);
+            if (!in_array($parameterPosition, $nullPositions, \true)) {
+                continue;
+            }
+            unset($node->args[$argPosition]);
             $hasChanged = \true;
         }
         if ($hasChanged) {
