@@ -368,6 +368,9 @@ class UnicodeString extends AbstractUnicodeString
         if ($wakeup = self::class !== (new \ReflectionMethod($this, '__wakeup'))->class && self::class === (new \ReflectionMethod($this, '__unserialize'))->class) {
             trigger_deprecation('symfony/string', '7.4', 'Implementing "%s::__wakeup()" is deprecated, use "__unserialize()" instead.', get_debug_type($this));
         }
+        if (is_object($data['string'] ?? null) && method_exists($data['string'] ?? null, '__toString') || is_object($data["\x00*\x00string"] ?? null) && method_exists($data["\x00*\x00string"] ?? null, '__toString')) {
+            throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
+        }
         try {
             if (\in_array(array_keys($data), [['string'], ["\x00*\x00string"]], \true)) {
                 $this->string = $data['string'] ?? $data["\x00*\x00string"];
@@ -387,9 +390,6 @@ class UnicodeString extends AbstractUnicodeString
             }, $this, static::class)($data);
         } finally {
             if (!$wakeup) {
-                if (!\is_string($this->string)) {
-                    throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
-                }
                 normalizer_is_normalized($this->string) ?: $this->string = normalizer_normalize($this->string);
             }
         }

@@ -109,7 +109,7 @@ class Parser
     }
     private function getState(): ParserState
     {
-        return $this->state ?? $this->state = new ParserState();
+        return $this->state ??= new ParserState();
     }
     /**
      * @return mixed
@@ -862,7 +862,7 @@ class Parser
             $this->offset += substr_count($value, "\n") - substr_count($trimmedValue, "\n");
             $value = $trimmedValue;
             // remove end of the document marker (...)
-            $value = preg_replace('#\.\.\.[ \t]*+$#', '', $value);
+            $value = preg_replace('#\.\.\.\s*+$#', '', $value);
         }
         return $value;
     }

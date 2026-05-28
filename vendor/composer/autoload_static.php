@@ -2985,6 +2985,7 @@ class ComposerStaticInit212655bc4bab4fd389ef43de213724c8
         'Rector\\Symfony\\Symfony73\\ValueObject\\CommandArgument' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandArgument.php',
         'Rector\\Symfony\\Symfony73\\ValueObject\\CommandOption' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandOption.php',
         'Rector\\Symfony\\Symfony80\\Rector\\Class_\\RemoveEraseCredentialsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony80/Rector/Class_/RemoveEraseCredentialsRector.php',
+        'Rector\\Symfony\\Symfony81\\Rector\\MethodCall\\RenameCopyOnWindowsOptionToFollowSymlinksRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/MethodCall/RenameCopyOnWindowsOptionToFollowSymlinksRector.php',
         'Rector\\Symfony\\Symfony81\\Rector\\StaticCall\\AddFormatArgumentToIsValidRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/StaticCall/AddFormatArgumentToIsValidRector.php',
         'Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php',
         'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',

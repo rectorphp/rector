@@ -39,6 +39,10 @@ final class SetList
      */
     public const NAMING = __DIR__ . '/../../../config/set/naming.php';
     /**
+     * @var string
+     */
+    public const NAMED_ARGS = __DIR__ . '/../../../config/set/named-args.php';
+    /**
      * Opinionated rules that match rector coding standard
      * @var string
      */
