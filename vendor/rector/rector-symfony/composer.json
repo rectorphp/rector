@@ -10,13 +10,13 @@
     "require-dev": {
         "boundwize\/structarmed": "^0.7.7",
         "phpstan\/extension-installer": "^1.4",
-        "phpstan\/phpstan": "^2.1.32",
+        "phpstan\/phpstan": "^2.2",
         "phpstan\/phpstan-deprecation-rules": "^2.0",
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^11.5",
         "rector\/jack": "^0.5",
         "rector\/rector-src": "dev-main",
-        "rector\/swiss-knife": "^2.3",
+        "rector\/swiss-knife": "^2.4",
         "rector\/type-perfect": "^2.1",
         "symfony\/config": "^6.4",
         "symfony\/dependency-injection": "^6.4",
@@ -26,14 +26,14 @@
         "symfony\/security-http": "^6.4",
         "symfony\/validator": "^6.4",
         "symfony\/web-link": "^6.4",
-        "symplify\/easy-coding-standard": "^13.0.4",
+        "symplify\/easy-coding-standard": "^13.1",
         "symplify\/phpstan-extensions": "^12.0",
-        "symplify\/phpstan-rules": "^14.9",
+        "symplify\/phpstan-rules": "^14.10",
         "symplify\/vendor-patches": "^11.5",
         "tomasvotruba\/class-leak": "^2.1",
-        "tomasvotruba\/type-coverage": "^2.1",
+        "tomasvotruba\/type-coverage": "^2.2",
         "tomasvotruba\/unused-public": "^2.2",
-        "tracy\/tracy": "^2.11"
+        "tracy\/tracy": "^2.12"
     },
     "autoload": {
         "psr-4": {
@@ -48,7 +48,9 @@
             "Rector\\Symfony\\Tests\\": [
                 "tests",
                 "rules-tests"
-            ]
+            ],
+            "Rector\\Symfony\\Utils\\PHPStan\\": "utils\/phpstan\/src",
+            "Rector\\Symfony\\Utils\\PHPStan\\Tests\\": "utils\/phpstan\/tests"
         },
         "classmap": [
             "stubs"

@@ -193,6 +193,7 @@ final class CompletionInput extends ArgvInput
         }
         return $this->currentIndex >= $nrOfTokens;
     }
+    #[\ReturnTypeWillChange]
     public function __toString(): string
     {
         $str = '';

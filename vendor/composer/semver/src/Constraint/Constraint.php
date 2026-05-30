@@ -287,6 +287,7 @@ class Constraint implements ConstraintInterface
     /**
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function __toString()
     {
         return self::$transOpInt[$this->operator] . ' ' . $this->version;

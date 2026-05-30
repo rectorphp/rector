@@ -15,5 +15,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-inflector.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-notifier.php');
+    $rectorConfig->import(__DIR__ . '/symfony51/symfony51-security-core.php');
     $rectorConfig->import(__DIR__ . '/symfony51/symfony51-security-http.php');
 };

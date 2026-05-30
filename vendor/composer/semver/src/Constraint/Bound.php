@@ -82,6 +82,7 @@ class Bound
         // Question we're answering here is "am I higher than $other?"
         return '>' === $operator ? $other->isInclusive() : !$other->isInclusive();
     }
+    #[\ReturnTypeWillChange]
     public function __toString()
     {
         return sprintf('%s [%s]', $this->getVersion(), $this->isInclusive() ? 'inclusive' : 'exclusive');

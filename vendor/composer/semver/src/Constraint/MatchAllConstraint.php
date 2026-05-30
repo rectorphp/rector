@@ -55,6 +55,7 @@ class MatchAllConstraint implements ConstraintInterface
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function __toString()
     {
         return '*';

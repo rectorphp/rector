@@ -138,6 +138,7 @@ class MultiConstraint implements ConstraintInterface
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function __toString()
     {
         if ($this->string !== null) {
