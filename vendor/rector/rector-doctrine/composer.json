@@ -8,7 +8,7 @@
         "symfony\/yaml": "^7.4|8.0.*"
     },
     "require-dev": {
-        "boundwize\/structarmed": "^0.7.12",
+        "boundwize\/structarmed": "^0.9",
         "doctrine\/doctrine-bundle": "^2.18|^3.0",
         "doctrine\/orm": "^2.20|^3.0",
         "phpecs\/phpecs": "^2.2",

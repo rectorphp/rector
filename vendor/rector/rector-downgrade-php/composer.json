@@ -7,7 +7,7 @@
         "php": ">=8.3"
     },
     "require-dev": {
-        "boundwize\/structarmed": "^0.7.7",
+        "boundwize\/structarmed": "^0.9",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan": "^2.1.33",
         "phpstan\/phpstan-webmozart-assert": "^2.0",

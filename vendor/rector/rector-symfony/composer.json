@@ -8,7 +8,7 @@
         "ext-xml": "*"
     },
     "require-dev": {
-        "boundwize\/structarmed": "^0.7.7",
+        "boundwize\/structarmed": "^0.9",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan": "^2.2",
         "phpstan\/phpstan-deprecation-rules": "^2.0",
