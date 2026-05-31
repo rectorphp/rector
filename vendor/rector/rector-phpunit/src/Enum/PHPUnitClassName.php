@@ -45,10 +45,6 @@ final class PHPUnitClassName
     /**
      * @var string
      */
-    public const SYMFONY_CONSTRAINT_VALIDATOR_TEST_CASE = 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase';
-    /**
-     * @var string
-     */
     public const SYMFONY_TYPE_TEST_CASE = 'Symfony\Component\Form\Test\TypeTestCase';
     /**
      * @var string[]

@@ -40,7 +40,7 @@ final class AllowMockObjectsWhereParentClassRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const PARENT_CLASSES = [PHPUnitClassName::SYMFONY_CONSTRAINT_VALIDATOR_TEST_CASE, PHPUnitClassName::SYMFONY_TYPE_TEST_CASE];
+    private const PARENT_CLASSES = [PHPUnitClassName::SYMFONY_TYPE_TEST_CASE];
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AttributeFinder $attributeFinder, ReflectionProvider $reflectionProvider)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -69,17 +69,17 @@ final class AllowMockObjectsWhereParentClassRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add #[AllowMockObjectsWithoutExpectations] attribute to PHPUnit test classes with a 3rd party test case, that provides any mocks', [new CodeSample(<<<'CODE_SAMPLE'
-use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use Symfony\Component\Form\Test\TypeTestCase;
 
-final class SomeTest extends ConstraintValidatorTestCase
+final class SomeTest extends TypeTestCase
 {
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use Symfony\Component\Form\Test\TypeTestCase;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-final class SomeTest extends ConstraintValidatorTestCase
+final class SomeTest extends TypeTestCase
 {
 }
 CODE_SAMPLE
