@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202605;
+namespace RectorPrefix202606;
 
 /*
  * This file is part of the Symfony package.
@@ -20,5 +20,5 @@ if (\PHP_VERSION_ID < 80500) {
             $this->message = $message;
         }
     }
-    \class_alias('RectorPrefix202605\NoDiscard', 'NoDiscard', \false);
+    \class_alias('RectorPrefix202606\NoDiscard', 'NoDiscard', \false);
 }

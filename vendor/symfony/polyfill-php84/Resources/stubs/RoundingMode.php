@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202605;
+namespace RectorPrefix202606;
 
 /*
  * This file is part of the Symfony package.
@@ -29,7 +29,7 @@ if (\PHP_VERSION_ID < 80100) {
             return [self::HalfAwayFromZero, self::HalfTowardsZero, self::HalfEven, self::HalfOdd, self::TowardsZero, self::AwayFromZero, self::NegativeInfinity, self::PositiveInfinity];
         }
     }
-    \class_alias('RectorPrefix202605\RoundingMode', 'RoundingMode', \false);
+    \class_alias('RectorPrefix202606\RoundingMode', 'RoundingMode', \false);
 } elseif (\PHP_VERSION_ID < 80400) {
     require \dirname(__DIR__) . '/RoundingMode.php';
 }

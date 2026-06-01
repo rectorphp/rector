@@ -5,9 +5,9 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202605\Nette\Utils;
+namespace RectorPrefix202606\Nette\Utils;
 
-use RectorPrefix202605\Nette;
+use RectorPrefix202606\Nette;
 use function array_unique, ini_get, levenshtein, max, min, ob_end_clean, ob_get_clean, ob_start, preg_replace, strlen;
 use const PHP_OS_FAMILY;
 /**

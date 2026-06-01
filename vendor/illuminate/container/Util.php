@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202605\Illuminate\Container;
+namespace RectorPrefix202606\Illuminate\Container;
 
 use Closure;
-use RectorPrefix202605\Illuminate\Contracts\Container\ContextualAttribute;
+use RectorPrefix202606\Illuminate\Contracts\Container\ContextualAttribute;
 use ReflectionAttribute;
 use ReflectionNamedType;
 /**

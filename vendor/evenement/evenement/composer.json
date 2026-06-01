@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202605\\Evenement\\": "src\/"
+            "RectorPrefix202606\\Evenement\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202605\\Evenement\\Tests\\": "tests\/"
+            "RectorPrefix202606\\Evenement\\Tests\\": "tests\/"
         },
         "files": [
             "tests\/functions.php"

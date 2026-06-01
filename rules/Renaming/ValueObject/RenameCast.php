@@ -5,7 +5,7 @@ namespace Rector\Renaming\ValueObject;
 
 use PhpParser\Node\Expr\Cast;
 use Rector\Validation\RectorAssert;
-use RectorPrefix202605\Webmozart\Assert\Assert;
+use RectorPrefix202606\Webmozart\Assert\Assert;
 final class RenameCast
 {
     /**

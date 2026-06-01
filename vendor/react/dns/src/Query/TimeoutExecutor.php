@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202605\React\Dns\Query;
+namespace RectorPrefix202606\React\Dns\Query;
 
-use RectorPrefix202605\React\EventLoop\Loop;
-use RectorPrefix202605\React\EventLoop\LoopInterface;
-use RectorPrefix202605\React\Promise\Promise;
+use RectorPrefix202606\React\EventLoop\Loop;
+use RectorPrefix202606\React\EventLoop\LoopInterface;
+use RectorPrefix202606\React\Promise\Promise;
 final class TimeoutExecutor implements ExecutorInterface
 {
     private $executor;

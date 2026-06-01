@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202605;
+namespace RectorPrefix202606;
 
-use RectorPrefix202605\OndraM\CiDetector\CiDetector;
+use RectorPrefix202606\OndraM\CiDetector\CiDetector;
 use Rector\Bootstrap\ExtensionConfigResolver;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Config\RectorConfig;

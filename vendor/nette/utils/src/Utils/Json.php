@@ -5,9 +5,9 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202605\Nette\Utils;
+namespace RectorPrefix202606\Nette\Utils;
 
-use RectorPrefix202605\Nette;
+use RectorPrefix202606\Nette;
 use function defined, is_int, json_decode, json_encode, json_last_error, json_last_error_msg;
 use const JSON_BIGINT_AS_STRING, JSON_FORCE_OBJECT, JSON_HEX_AMP, JSON_HEX_APOS, JSON_HEX_QUOT, JSON_HEX_TAG, JSON_OBJECT_AS_ARRAY, JSON_PRESERVE_ZERO_FRACTION, JSON_PRETTY_PRINT, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 /**

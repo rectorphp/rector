@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202605\React\Socket;
+namespace RectorPrefix202606\React\Socket;
 
-use RectorPrefix202605\React\EventLoop\Loop;
-use RectorPrefix202605\React\EventLoop\LoopInterface;
-use RectorPrefix202605\React\Promise;
+use RectorPrefix202606\React\EventLoop\Loop;
+use RectorPrefix202606\React\EventLoop\LoopInterface;
+use RectorPrefix202606\React\Promise;
 use InvalidArgumentException;
 use RuntimeException;
 final class TcpConnector implements ConnectorInterface

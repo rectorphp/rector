@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\VersionBonding;
 
-use RectorPrefix202605\Composer\Semver\Semver;
+use RectorPrefix202606\Composer\Semver\Semver;
 use Rector\Composer\InstalledPackageResolver;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202605\Illuminate\Contracts\Redis;
+namespace RectorPrefix202606\Illuminate\Contracts\Redis;
 
 use Exception;
 class LimiterTimeoutException extends Exception

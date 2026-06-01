@@ -5,9 +5,9 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202605\Nette\Utils;
+namespace RectorPrefix202606\Nette\Utils;
 
-use RectorPrefix202605\Nette;
+use RectorPrefix202606\Nette;
 use function explode, func_get_args, ini_get, is_array, is_callable, is_object, is_string, preg_replace, restore_error_handler, set_error_handler, sprintf, str_contains, str_ends_with;
 /**
  * PHP callable tools.

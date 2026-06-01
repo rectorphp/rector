@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202605\Illuminate\Contracts\Database;
+namespace RectorPrefix202606\Illuminate\Contracts\Database;
 
-use RectorPrefix202605\Illuminate\Database\Eloquent\Relations\Relation;
+use RectorPrefix202606\Illuminate\Database\Eloquent\Relations\Relation;
 class ModelIdentifier
 {
     /**

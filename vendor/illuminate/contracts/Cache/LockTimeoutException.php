@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202605\Illuminate\Contracts\Cache;
+namespace RectorPrefix202606\Illuminate\Contracts\Cache;
 
 use Exception;
 class LockTimeoutException extends Exception

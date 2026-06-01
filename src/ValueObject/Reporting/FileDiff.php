@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\ValueObject\Reporting;
 
-use RectorPrefix202605\Nette\Utils\Strings;
+use RectorPrefix202606\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
 use Rector\Util\RectorClassesSorter;
-use RectorPrefix202605\Symplify\EasyParallel\Contract\SerializableInterface;
-use RectorPrefix202605\Webmozart\Assert\Assert;
+use RectorPrefix202606\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202606\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\ValueObject\Reporting\FileDiffTest
  */

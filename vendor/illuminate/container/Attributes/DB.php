@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202605\Illuminate\Container\Attributes;
+namespace RectorPrefix202606\Illuminate\Container\Attributes;
 
 use Attribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]

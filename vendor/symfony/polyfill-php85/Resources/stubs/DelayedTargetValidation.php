@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202605;
+namespace RectorPrefix202606;
 
 /*
  * This file is part of the Symfony package.
@@ -17,5 +17,5 @@ if (\PHP_VERSION_ID < 80500) {
     {
     }
     // @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
-    \class_alias('RectorPrefix202605\DelayedTargetValidation', 'DelayedTargetValidation', \false);
+    \class_alias('RectorPrefix202606\DelayedTargetValidation', 'DelayedTargetValidation', \false);
 }

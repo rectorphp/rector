@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202605\Illuminate\Contracts\Queue;
+namespace RectorPrefix202606\Illuminate\Contracts\Queue;
 
 interface Job
 {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202605;
+namespace RectorPrefix202606;
 
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;

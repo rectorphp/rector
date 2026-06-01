@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\ValueObject\Type;
 
-use RectorPrefix202605\Nette\Utils\Strings;
+use RectorPrefix202606\Nette\Utils\Strings;
 use Override;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
