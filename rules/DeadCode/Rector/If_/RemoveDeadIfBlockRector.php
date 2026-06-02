@@ -123,6 +123,7 @@ CODE_SAMPLE
             if (count($node->elseifs) > 1) {
                 $if->elseifs = \array_slice($node->elseifs, 1);
             }
+            $if->else = $node->else;
             return $this->refactor($if) ?? $if;
         }
         if ($node->else instanceof Else_) {
