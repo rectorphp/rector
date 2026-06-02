@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -121,6 +122,12 @@ final class MockObjectExprDetector
     }
     public function isPropertyUsedForMocking(Class_ $class, string $propertyName): bool
     {
+        $property = $class->getProperty($propertyName);
+        // possibly dynamic property on purpose
+        // mark as used
+        if (!$property instanceof Property) {
+            return \true;
+        }
         // find out, how many are used in call likes as args
         /** @var array<Expr\MethodCall> $methodCalls */
         $methodCalls = $this->betterNodeFinder->findInstancesOfScoped($class->getMethods(), [MethodCall::class]);
