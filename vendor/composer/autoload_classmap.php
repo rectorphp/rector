@@ -2724,6 +2724,7 @@ return array(
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFiltersToAsTwigFilterAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/GetFiltersToAsTwigFilterAttributeRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFunctionsToAsTwigFunctionAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/GetFunctionsToAsTwigFunctionAttributeRector.php',
     'Rector\\Symfony\\Symfony73\\Rector\\Class_\\InvokableCommandInputAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/InvokableCommandInputAttributeRector.php',
+    'Rector\\Symfony\\Symfony73\\ValueObject\\AsTwigAttributeConversion' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/AsTwigAttributeConversion.php',
     'Rector\\Symfony\\Symfony73\\ValueObject\\CommandArgument' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandArgument.php',
     'Rector\\Symfony\\Symfony73\\ValueObject\\CommandOption' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandOption.php',
     'Rector\\Symfony\\Symfony80\\Rector\\Class_\\RemoveEraseCredentialsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony80/Rector/Class_/RemoveEraseCredentialsRector.php',

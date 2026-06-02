@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
@@ -22,6 +23,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ArgumentDefaultValueReplacer
 {
@@ -45,13 +47,18 @@ final class ArgumentDefaultValueReplacer
      * @readonly
      */
     private NodeTypeResolver $nodeTypeResolver;
-    public function __construct(NodeFactory $nodeFactory, ValueResolver $valueResolver, ArgsAnalyzer $argsAnalyzer, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    public function __construct(NodeFactory $nodeFactory, ValueResolver $valueResolver, ArgsAnalyzer $argsAnalyzer, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->valueResolver = $valueResolver;
         $this->argsAnalyzer = $argsAnalyzer;
         $this->astResolver = $astResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     /**
      * @template TCall as (MethodCall|StaticCall|ClassMethod|FuncCall|New_)
@@ -153,6 +160,18 @@ final class ArgumentDefaultValueReplacer
                 [$targetClass, $targetConstant] = explode('::', $replaceArgumentDefaultValue->getValueAfter());
                 $type = $this->nodeTypeResolver->getType($particularArg->value->class);
                 if ($type instanceof FullyQualifiedObjectType && $type->getClassName() === $targetClass && $particularArg->value->name instanceof Identifier && $particularArg->value->name->toString() === $targetConstant) {
+                    return null;
+                }
+            }
+            // when the replacement value is a self::/static::/parent:: constant, it only
+            // resolves correctly if the class around the call actually has that constant;
+            // otherwise the produced code would reference a non-existing constant
+            if ($normalizedValueAfter instanceof ClassConstFetch && $normalizedValueAfter->class instanceof Name && $normalizedValueAfter->class->isSpecialClassName() && $normalizedValueAfter->name instanceof Identifier) {
+                $classReflection = $this->reflectionResolver->resolveClassReflection($expr);
+                if (!$classReflection instanceof ClassReflection) {
+                    return null;
+                }
+                if (!$classReflection->hasConstant($normalizedValueAfter->name->toString())) {
                     return null;
                 }
             }

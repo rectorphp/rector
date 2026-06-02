@@ -2984,6 +2984,7 @@ class ComposerStaticInit01276972c65a3d03f761e9dab07137cb
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFiltersToAsTwigFilterAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/GetFiltersToAsTwigFilterAttributeRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\GetFunctionsToAsTwigFunctionAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/GetFunctionsToAsTwigFunctionAttributeRector.php',
         'Rector\\Symfony\\Symfony73\\Rector\\Class_\\InvokableCommandInputAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/Rector/Class_/InvokableCommandInputAttributeRector.php',
+        'Rector\\Symfony\\Symfony73\\ValueObject\\AsTwigAttributeConversion' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/AsTwigAttributeConversion.php',
         'Rector\\Symfony\\Symfony73\\ValueObject\\CommandArgument' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandArgument.php',
         'Rector\\Symfony\\Symfony73\\ValueObject\\CommandOption' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandOption.php',
         'Rector\\Symfony\\Symfony80\\Rector\\Class_\\RemoveEraseCredentialsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony80/Rector/Class_/RemoveEraseCredentialsRector.php',

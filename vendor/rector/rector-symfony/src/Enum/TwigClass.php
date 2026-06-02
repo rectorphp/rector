@@ -21,4 +21,8 @@ final class TwigClass
      * @var string
      */
     public const EXTENSION_INTERFACE = 'Twig\Extension\ExtensionInterface';
+    /**
+     * @var string
+     */
+    public const GLOBALS_INTERFACE = 'Twig\Extension\GlobalsInterface';
 }

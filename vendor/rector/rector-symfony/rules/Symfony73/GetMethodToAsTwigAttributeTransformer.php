@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Symfony73;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
@@ -18,10 +19,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Symfony\Enum\TwigClass;
 use Rector\Symfony\Symfony73\NodeAnalyzer\LocalArrayMethodCallableMatcher;
 use Rector\Symfony\Symfony73\NodeRemover\ReturnEmptyArrayMethodRemover;
+use Rector\Symfony\Symfony73\ValueObject\AsTwigAttributeConversion;
 /**
  * @see https://symfony.com/blog/new-in-symfony-7-3-twig-extension-attributes
  */
@@ -44,15 +47,27 @@ final class GetMethodToAsTwigAttributeTransformer
      */
     private VisibilityManipulator $visibilityManipulator;
     /**
+     * @readonly
+     */
+    private NodeNameResolver $nodeNameResolver;
+    /**
      * @var mixed[]
      */
     private const OPTION_TO_NAMED_ARG = ['is_safe' => 'isSafe', 'needs_environment' => 'needsEnvironment', 'needs_context' => 'needsContext', 'needs_charset' => 'needsCharset', 'is_safe_callback' => 'isSafeCallback', 'deprecation_info' => 'deprecationInfo'];
-    public function __construct(LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher, ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover, ReflectionProvider $reflectionProvider, VisibilityManipulator $visibilityManipulator)
+    /**
+     * Methods that keep a class registered as a classic Twig extension; while any of them is present,
+     * "extends AbstractExtension" must stay and the class cannot be turned into an attribute-based one.
+     *
+     * @var string[]
+     */
+    private const TWIG_EXTENSION_METHODS = ['getTokenParsers', 'getNodeVisitors', 'getFilters', 'getTests', 'getFunctions', 'getOperators', 'getGlobals'];
+    public function __construct(LocalArrayMethodCallableMatcher $localArrayMethodCallableMatcher, ReturnEmptyArrayMethodRemover $returnEmptyArrayMethodRemover, ReflectionProvider $reflectionProvider, VisibilityManipulator $visibilityManipulator, NodeNameResolver $nodeNameResolver)
     {
         $this->localArrayMethodCallableMatcher = $localArrayMethodCallableMatcher;
         $this->returnEmptyArrayMethodRemover = $returnEmptyArrayMethodRemover;
         $this->reflectionProvider = $reflectionProvider;
         $this->visibilityManipulator = $visibilityManipulator;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @param array<string, string> $additionalOptionMapping
@@ -67,63 +82,125 @@ final class GetMethodToAsTwigAttributeTransformer
         if (!$getMethod instanceof ClassMethod) {
             return \false;
         }
-        $originalMethod = clone $getMethod;
-        $hasChanged = \false;
-        foreach ((array) $getMethod->stmts as $stmt) {
-            // handle return array simple case
+        $returnArray = $this->matchReturnArray($getMethod);
+        if (!$returnArray instanceof Array_) {
+            return \false;
+        }
+        // nothing to convert
+        if ($returnArray->items === []) {
+            return \false;
+        }
+        // validate every registration before changing anything: a partial conversion would
+        // leave some filters/functions unregistered once "extends AbstractExtension" is removed
+        $conversions = [];
+        foreach ($returnArray->items as $key => $arrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
+                return \false;
+            }
+            $conversion = $this->matchArrayItemConversion($key, $arrayItem, $class, $objectType, $additionalOptionMapping);
+            if (!$conversion instanceof AsTwigAttributeConversion) {
+                return \false;
+            }
+            $conversions[] = $conversion;
+        }
+        // attribute-based extensions and "extends AbstractExtension" are incompatible, so the class
+        // must not keep relying on the parent class for other registrations (e.g. getTests(), globals)
+        if ($this->stillRequiresAbstractExtension($class, $methodName)) {
+            return \false;
+        }
+        foreach ($conversions as $conversion) {
+            $nameArg = $conversion->getNameArg();
+            $nameArg->name = new Identifier('name');
+            $this->decorateMethodWithAttribute($conversion->getClassMethod(), $attributeClass, array_merge([$nameArg], $conversion->getOptionArgs()));
+            $this->visibilityManipulator->makePublic($conversion->getClassMethod());
+            // remove old new function/filter instance
+            unset($returnArray->items[$conversion->getItemKey()]);
+        }
+        $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty($class, $returnArray, $methodName);
+        if ($class->extends instanceof FullyQualified && $class->extends->toString() === TwigClass::TWIG_EXTENSION) {
+            $class->extends = null;
+        }
+        return \true;
+    }
+    private function matchReturnArray(ClassMethod $classMethod): ?Array_
+    {
+        $returnArray = null;
+        foreach ((array) $classMethod->stmts as $stmt) {
             if (!$stmt instanceof Return_) {
                 continue;
             }
+            // multiple/conditional returns cannot be converted safely
+            if ($returnArray instanceof Array_) {
+                return null;
+            }
             if (!$stmt->expr instanceof Array_) {
-                continue;
+                return null;
             }
             $returnArray = $stmt->expr;
-            foreach ($returnArray->items as $key => $arrayItem) {
-                if (!$arrayItem->value instanceof New_) {
-                    continue;
-                }
-                if ($arrayItem->value->isFirstClassCallable()) {
-                    continue;
-                }
-                $new = $arrayItem->value;
-                $argCount = count($new->getArgs());
-                if ($argCount > 3 || $argCount < 2) {
-                    continue;
-                }
-                $nameArg = $new->getArgs()[0];
-                if (!$nameArg->value instanceof String_) {
-                    continue;
-                }
-                $secondArg = $new->getArgs()[1];
-                $thirdArg = $new->getArgs()[2] ?? null;
-                if ($this->isLocalCallable($secondArg->value)) {
-                    $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value, $objectType);
-                    if (!is_string($localMethodName)) {
-                        $getMethod = $originalMethod;
-                        return \false;
-                    }
-                    $localMethod = $class->getMethod($localMethodName);
-                    if (!$localMethod instanceof ClassMethod) {
-                        continue;
-                    }
-                    $optionArguments = $this->getArgumentsFromOptionArray($thirdArg, $additionalOptionMapping);
-                    if ($optionArguments === null) {
-                        continue;
-                    }
-                    $this->decorateMethodWithAttribute($localMethod, $attributeClass, array_merge([$nameArg], $optionArguments));
-                    $this->visibilityManipulator->makePublic($localMethod);
-                    // remove old new function instance
-                    unset($returnArray->items[$key]);
-                    $nameArg->name = new Identifier('name');
-                    $hasChanged = \true;
-                }
+        }
+        return $returnArray;
+    }
+    /**
+     * @param array<string, string> $additionalOptionMapping
+     */
+    private function matchArrayItemConversion(int $key, ArrayItem $arrayItem, Class_ $class, ObjectType $objectType, array $additionalOptionMapping): ?AsTwigAttributeConversion
+    {
+        if (!$arrayItem->value instanceof New_) {
+            return null;
+        }
+        $new = $arrayItem->value;
+        if ($new->isFirstClassCallable()) {
+            return null;
+        }
+        $argCount = count($new->getArgs());
+        if ($argCount > 3 || $argCount < 2) {
+            return null;
+        }
+        $nameArg = $new->getArgs()[0];
+        if (!$nameArg->value instanceof String_) {
+            return null;
+        }
+        $secondArg = $new->getArgs()[1];
+        $thirdArg = $new->getArgs()[2] ?? null;
+        // the callable must be a local method; external services, other classes or null callables
+        // cannot be expressed as an attribute on a method of this class
+        if (!$this->isLocalCallable($secondArg->value)) {
+            return null;
+        }
+        $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value, $objectType);
+        if (!is_string($localMethodName)) {
+            return null;
+        }
+        $localMethod = $class->getMethod($localMethodName);
+        if (!$localMethod instanceof ClassMethod) {
+            return null;
+        }
+        $optionArguments = $this->getArgumentsFromOptionArray($thirdArg, $additionalOptionMapping);
+        if ($optionArguments === null) {
+            return null;
+        }
+        return new AsTwigAttributeConversion($key, $localMethod, $nameArg, $optionArguments);
+    }
+    private function stillRequiresAbstractExtension(Class_ $class, string $convertedMethodName): bool
+    {
+        foreach ($class->getMethods() as $classMethod) {
+            $currentMethodName = $classMethod->name->toString();
+            if ($currentMethodName === $convertedMethodName) {
+                continue;
             }
-            $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty($class, $returnArray, $methodName);
+            if (in_array($currentMethodName, self::TWIG_EXTENSION_METHODS, \true)) {
+                return \true;
+            }
         }
-        if ($hasChanged && $class->extends instanceof FullyQualified && $class->extends->toString() === TwigClass::TWIG_EXTENSION) {
-            $class->extends = null;
+        foreach ($class->implements as $implement) {
+            if ($this->nodeNameResolver->isName($implement, TwigClass::GLOBALS_INTERFACE)) {
+                return \true;
+            }
+            if ($this->nodeNameResolver->isName($implement, TwigClass::EXTENSION_INTERFACE)) {
+                return \true;
+            }
         }
-        return $hasChanged;
+        return \false;
     }
     /**
      * @param Arg[] $args
