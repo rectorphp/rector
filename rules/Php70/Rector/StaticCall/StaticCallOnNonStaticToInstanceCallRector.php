@@ -124,6 +124,10 @@ CODE_SAMPLE
         }
         $classReflection = $scope->getClassReflection();
         if ($classReflection instanceof ClassReflection && $classReflection->getName() === $className) {
+            // detect any scope where $this is unavailable or possibly unavailable
+            if (!$scope->hasVariableType('this')->yes()) {
+                return null;
+            }
             return new MethodCall(new Variable('this'), $node->name, $node->args);
         }
         if ($this->isInstantiable($className, $scope)) {
