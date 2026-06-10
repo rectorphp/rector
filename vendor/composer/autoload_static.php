@@ -2988,6 +2988,7 @@ class ComposerStaticInit01276972c65a3d03f761e9dab07137cb
         'Rector\\Symfony\\Symfony73\\ValueObject\\CommandArgument' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandArgument.php',
         'Rector\\Symfony\\Symfony73\\ValueObject\\CommandOption' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandOption.php',
         'Rector\\Symfony\\Symfony80\\Rector\\Class_\\RemoveEraseCredentialsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony80/Rector/Class_/RemoveEraseCredentialsRector.php',
+        'Rector\\Symfony\\Symfony81\\Rector\\MethodCall\\ConstraintValidatorValidateToValidateInContextRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/MethodCall/ConstraintValidatorValidateToValidateInContextRector.php',
         'Rector\\Symfony\\Symfony81\\Rector\\MethodCall\\RenameCopyOnWindowsOptionToFollowSymlinksRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/MethodCall/RenameCopyOnWindowsOptionToFollowSymlinksRector.php',
         'Rector\\Symfony\\Symfony81\\Rector\\New_\\RemoveEraseCredentialsFromAuthenticatorManagerRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/New_/RemoveEraseCredentialsFromAuthenticatorManagerRector.php',
         'Rector\\Symfony\\Symfony81\\Rector\\StaticCall\\AddFormatArgumentToIsValidRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/StaticCall/AddFormatArgumentToIsValidRector.php',

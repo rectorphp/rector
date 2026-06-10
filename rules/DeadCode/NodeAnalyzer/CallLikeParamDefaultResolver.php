@@ -11,6 +11,7 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\NullType;
+use Rector\NodeAnalyzer\VariadicAnalyzer;
 use Rector\Reflection\ReflectionResolver;
 final class CallLikeParamDefaultResolver
 {
@@ -18,9 +19,14 @@ final class CallLikeParamDefaultResolver
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    public function __construct(ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     */
+    private VariadicAnalyzer $variadicAnalyzer;
+    public function __construct(ReflectionResolver $reflectionResolver, VariadicAnalyzer $variadicAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
+        $this->variadicAnalyzer = $variadicAnalyzer;
     }
     /**
      * @return int[]
@@ -37,6 +43,9 @@ final class CallLikeParamDefaultResolver
             if ($classReflection->getName() === 'Ds\Map') {
                 return [];
             }
+        }
+        if ($this->variadicAnalyzer->hasVariadicParameters($callLike)) {
+            return [];
         }
         $nullPositions = [];
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($reflection->getVariants());

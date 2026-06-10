@@ -2728,6 +2728,7 @@ return array(
     'Rector\\Symfony\\Symfony73\\ValueObject\\CommandArgument' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandArgument.php',
     'Rector\\Symfony\\Symfony73\\ValueObject\\CommandOption' => $vendorDir . '/rector/rector-symfony/rules/Symfony73/ValueObject/CommandOption.php',
     'Rector\\Symfony\\Symfony80\\Rector\\Class_\\RemoveEraseCredentialsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony80/Rector/Class_/RemoveEraseCredentialsRector.php',
+    'Rector\\Symfony\\Symfony81\\Rector\\MethodCall\\ConstraintValidatorValidateToValidateInContextRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony81/Rector/MethodCall/ConstraintValidatorValidateToValidateInContextRector.php',
     'Rector\\Symfony\\Symfony81\\Rector\\MethodCall\\RenameCopyOnWindowsOptionToFollowSymlinksRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony81/Rector/MethodCall/RenameCopyOnWindowsOptionToFollowSymlinksRector.php',
     'Rector\\Symfony\\Symfony81\\Rector\\New_\\RemoveEraseCredentialsFromAuthenticatorManagerRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony81/Rector/New_/RemoveEraseCredentialsFromAuthenticatorManagerRector.php',
     'Rector\\Symfony\\Symfony81\\Rector\\StaticCall\\AddFormatArgumentToIsValidRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony81/Rector/StaticCall/AddFormatArgumentToIsValidRector.php',

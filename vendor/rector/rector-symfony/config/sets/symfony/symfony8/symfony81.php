@@ -11,4 +11,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony81/symfony81-serializer.php');
     $rectorConfig->import(__DIR__ . '/symfony81/symfony81-filesystem.php');
     $rectorConfig->import(__DIR__ . '/symfony81/symfony81-security.php');
+    $rectorConfig->import(__DIR__ . '/symfony81/symfony81-validator.php');
 };
