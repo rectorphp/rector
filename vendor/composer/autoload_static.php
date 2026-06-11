@@ -1407,6 +1407,7 @@ class ComposerStaticInit01276972c65a3d03f761e9dab07137cb
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\ShortenedIdentifierTypeNode' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/ValueObject/Type/ShortenedIdentifierTypeNode.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareArrayTypeNode' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/ValueObject/Type/SpacingAwareArrayTypeNode.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareCallableTypeNode' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/ValueObject/Type/SpacingAwareCallableTypeNode.php',
+        'Rector\\Bootstrap\\AutoloadFileParameterResolver' => __DIR__ . '/../..' . '/src/Bootstrap/AutoloadFileParameterResolver.php',
         'Rector\\Bootstrap\\ExtensionConfigResolver' => __DIR__ . '/../..' . '/src/Bootstrap/ExtensionConfigResolver.php',
         'Rector\\Bootstrap\\RectorConfigsResolver' => __DIR__ . '/../..' . '/src/Bootstrap/RectorConfigsResolver.php',
         'Rector\\Bridge\\SetProviderCollector' => __DIR__ . '/../..' . '/src/Bridge/SetProviderCollector.php',

@@ -1147,6 +1147,7 @@ return array(
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\ShortenedIdentifierTypeNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/Type/ShortenedIdentifierTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareArrayTypeNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/Type/SpacingAwareArrayTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareCallableTypeNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/Type/SpacingAwareCallableTypeNode.php',
+    'Rector\\Bootstrap\\AutoloadFileParameterResolver' => $baseDir . '/src/Bootstrap/AutoloadFileParameterResolver.php',
     'Rector\\Bootstrap\\ExtensionConfigResolver' => $baseDir . '/src/Bootstrap/ExtensionConfigResolver.php',
     'Rector\\Bootstrap\\RectorConfigsResolver' => $baseDir . '/src/Bootstrap/RectorConfigsResolver.php',
     'Rector\\Bridge\\SetProviderCollector' => $baseDir . '/src/Bridge/SetProviderCollector.php',
