@@ -7,6 +7,7 @@ use RectorPrefix202606\Nette\Utils\Json;
 use Rector\Bootstrap\RectorConfigsResolver;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Configuration\Option;
+use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Style\SymfonyStyleFactory;
 use Rector\DependencyInjection\LazyContainerFactory;
 use Rector\DependencyInjection\RectorContainerFactory;
@@ -105,6 +106,13 @@ $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-auto
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadRectorInstalledAsGlobalDependency();
 $autoloadIncluder->autoloadFromCommandLine();
+// a different extra autoload changes what PHPStan can resolve, so cached results
+// must not survive it: register it before the configuration hash is computed.
+// ArgvInput handles both "--autoload-file path" and "--autoload-file=path"
+$autoloadFileOption = (new ArgvInput())->getParameterOption(['--autoload-file', '-a'], null);
+if (\is_string($autoloadFileOption) && $autoloadFileOption !== '') {
+    SimpleParameterProvider::setParameter(Option::AUTOLOAD_FILE, \realpath($autoloadFileOption) ?: $autoloadFileOption);
+}
 $rectorConfigsResolver = new RectorConfigsResolver();
 try {
     $bootstrapConfigs = $rectorConfigsResolver->provide();
