@@ -91,10 +91,14 @@ CODE_SAMPLE
             if (!$node instanceof Throw_) {
                 return null;
             }
-            $isChanged = $this->refactorThrow($node, $caughtThrowableVariable);
-            return $isChanged;
+            $result = $this->refactorThrow($node, $caughtThrowableVariable);
+            if ($result === null) {
+                return null;
+            }
+            $isChanged = \true;
+            return $result;
         });
-        if (!(bool) $isChanged) {
+        if (!$isChanged) {
             return null;
         }
         return $node;
@@ -122,6 +126,11 @@ CODE_SAMPLE
         /** @var Arg|null $messageArgument */
         $messageArgument = $new->args[0] ?? null;
         $shouldUseNamedArguments = $messageArgument instanceof Arg && $messageArgument->name instanceof Identifier;
+        $hasCodeParameter = $this->hasParameter($new, 'code');
+        $hasCodeArgument = $this->hasArgument($new, 'code');
+        if (!isset($new->getArgs()[1]) && (!$hasCodeParameter || $hasCodeArgument)) {
+            return null;
+        }
         $hasChanged = \false;
         if (!isset($new->args[0])) {
             // get previous message
@@ -134,7 +143,7 @@ CODE_SAMPLE
             $hasChanged = \true;
         }
         if (!isset($new->getArgs()[1])) {
-            if ($this->hasParameter($new, 'code') && !$this->hasArgument($new, 'code')) {
+            if ($hasCodeParameter && !$hasCodeArgument) {
                 // get previous code
                 $new->args[1] = new Arg(new MethodCall($caughtThrowableVariable, 'getCode'), \false, \false, [], $shouldUseNamedArguments ? new Identifier('code') : null);
                 $hasChanged = \true;
@@ -145,7 +154,7 @@ CODE_SAMPLE
         /** @var Arg $arg1 */
         $arg1 = $new->args[1];
         if ($arg1->name instanceof Identifier && $arg1->name->toString() === 'previous') {
-            if ($this->hasParameter($new, 'code') && !$this->hasArgument($new, 'code')) {
+            if ($hasCodeParameter && !$hasCodeArgument) {
                 $new->args[1] = new Arg(new MethodCall($caughtThrowableVariable, 'getCode'), \false, \false, [], $shouldUseNamedArguments ? new Identifier('code') : null);
                 $new->args[$exceptionArgumentPosition] = $arg1;
                 $hasChanged = \true;

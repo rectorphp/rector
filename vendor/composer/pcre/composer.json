@@ -20,12 +20,13 @@
         "php": "^7.4 || ^8.0"
     },
     "require-dev": {
-        "phpunit\/phpunit": "^8 || ^9",
-        "phpstan\/phpstan": "^1.12 || ^2",
-        "phpstan\/phpstan-strict-rules": "^1 || ^2"
+        "phpunit\/phpunit": "^9",
+        "phpstan\/phpstan": "^2",
+        "phpstan\/phpstan-strict-rules": "^2",
+        "phpstan\/phpstan-deprecation-rules": "^2"
     },
     "conflict": {
-        "phpstan\/phpstan": "<1.11.10"
+        "phpstan\/phpstan": "<2.2.2"
     },
     "autoload": {
         "psr-4": {
@@ -48,7 +49,10 @@
         }
     },
     "scripts": {
-        "test": "@php vendor\/bin\/phpunit",
+        "test": [
+            "@php vendor\/bin\/phpunit",
+            "@php vendor\/bin\/phpunit --testsuite phpstan"
+        ],
         "phpstan": "@php phpstan analyse"
     }
 }
