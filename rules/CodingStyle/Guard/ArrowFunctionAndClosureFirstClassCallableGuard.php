@@ -12,17 +12,16 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\Reflection\ReflectionResolver;
 final class ArrowFunctionAndClosureFirstClassCallableGuard
@@ -34,19 +33,14 @@ final class ArrowFunctionAndClosureFirstClassCallableGuard
     /**
      * @readonly
      */
-    private AstResolver $astResolver;
-    /**
-     * @readonly
-     */
     private NodeComparator $nodeComparator;
     /**
      * @readonly
      */
     private NodeNameResolver $nodeNameResolver;
-    public function __construct(ReflectionResolver $reflectionResolver, AstResolver $astResolver, NodeComparator $nodeComparator, NodeNameResolver $nodeNameResolver)
+    public function __construct(ReflectionResolver $reflectionResolver, NodeComparator $nodeComparator, NodeNameResolver $nodeNameResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
-        $this->astResolver = $astResolver;
         $this->nodeComparator = $nodeComparator;
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -105,11 +99,20 @@ final class ArrowFunctionAndClosureFirstClassCallableGuard
                 return \true;
             }
         }
-        $functionLike = $this->astResolver->resolveClassMethodOrFunctionFromCall($callLike);
-        if (!$functionLike instanceof FunctionLike) {
+        if ($this->isBuiltinReflection($reflection)) {
             return \false;
         }
-        return count($functionLike->getParams()) > 1;
+        return count($parameters) > 1;
+    }
+    /**
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $reflection
+     */
+    private function isBuiltinReflection($reflection): bool
+    {
+        if ($reflection instanceof FunctionReflection) {
+            return $reflection->isBuiltin();
+        }
+        return $reflection->getDeclaringClass()->isBuiltin();
     }
     /**
      * @param Param[] $params
