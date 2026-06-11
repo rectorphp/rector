@@ -11,12 +11,13 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Enum\ObjectReference;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeManipulator\ClassMethodManipulator;
-use Rector\PhpParser\AstResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ClassReflectionAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -39,13 +40,13 @@ final class RemoveParentCallWithoutParentRector extends AbstractRector
     /**
      * @readonly
      */
-    private AstResolver $astResolver;
-    public function __construct(ClassMethodManipulator $classMethodManipulator, ClassAnalyzer $classAnalyzer, ReflectionProvider $reflectionProvider, AstResolver $astResolver)
+    private ClassReflectionAnalyzer $classReflectionAnalyzer;
+    public function __construct(ClassMethodManipulator $classMethodManipulator, ClassAnalyzer $classAnalyzer, ReflectionProvider $reflectionProvider, ClassReflectionAnalyzer $classReflectionAnalyzer)
     {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->classAnalyzer = $classAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
-        $this->astResolver = $astResolver;
+        $this->classReflectionAnalyzer = $classReflectionAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -163,13 +164,19 @@ CODE_SAMPLE
         if (!$this->reflectionProvider->hasClass($parentClassName)) {
             return \true;
         }
-        $parentClass = $this->astResolver->resolveClassFromName($parentClassName);
-        if (!$parentClass instanceof Class_) {
+        $parentClassReflection = $this->reflectionProvider->getClass($parentClassName);
+        return $this->hasUnresolvableParentClass($parentClassReflection);
+    }
+    private function hasUnresolvableParentClass(ClassReflection $classReflection): bool
+    {
+        $parentClassName = $this->classReflectionAnalyzer->resolveParentClassName($classReflection);
+        if ($parentClassName === null) {
             return \false;
         }
-        if (!$parentClass->extends instanceof Name) {
-            return \false;
+        $parentClassReflection = $classReflection->getParentClass();
+        if (!$parentClassReflection instanceof ClassReflection) {
+            return \true;
         }
-        return $this->hasUnresolvableAncestor($parentClass->extends);
+        return $this->hasUnresolvableParentClass($parentClassReflection);
     }
 }
