@@ -1656,6 +1656,7 @@ class ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9
         'Rector\\DeadCode\\NodeAnalyzer\\CallLikeParamDefaultResolver' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/CallLikeParamDefaultResolver.php',
         'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNodeAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\IsClassMethodUsedAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/IsClassMethodUsedAnalyzer.php',
+        'Rector\\DeadCode\\NodeAnalyzer\\NoDiscardCallAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/NoDiscardCallAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\ParentClassAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ParentClassAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\PropertyWriteonlyAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/PropertyWriteonlyAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\SafeLeftTypeBooleanAndOrAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/SafeLeftTypeBooleanAndOrAnalyzer.php',
