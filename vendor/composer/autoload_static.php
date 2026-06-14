@@ -1928,6 +1928,7 @@ class ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9
         'Rector\\DowngradePhp80\\Rector\\Enum_\\DowngradeEnumToConstantListClassRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Enum_/DowngradeEnumToConstantListClassRector.php',
         'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeMatchToSwitchRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Expression/DowngradeMatchToSwitchRector.php',
         'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeThrowExprRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php',
+        'Rector\\DowngradePhp80\\Rector\\Foreach_\\DowngradeDomNodeChildNodesForeachRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Foreach_/DowngradeDomNodeChildNodesForeachRector.php',
         'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeArrayFilterNullableCallbackRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeArrayFilterNullableCallbackRector.php',
         'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeNumberFormatNoFourthArgRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeNumberFormatNoFourthArgRector.php',
         'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrContainsRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php',

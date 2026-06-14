@@ -1668,6 +1668,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\Enum_\\DowngradeEnumToConstantListClassRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Enum_/DowngradeEnumToConstantListClassRector.php',
     'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeMatchToSwitchRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Expression/DowngradeMatchToSwitchRector.php',
     'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeThrowExprRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php',
+    'Rector\\DowngradePhp80\\Rector\\Foreach_\\DowngradeDomNodeChildNodesForeachRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Foreach_/DowngradeDomNodeChildNodesForeachRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeArrayFilterNullableCallbackRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeArrayFilterNullableCallbackRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeNumberFormatNoFourthArgRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeNumberFormatNoFourthArgRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrContainsRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php',

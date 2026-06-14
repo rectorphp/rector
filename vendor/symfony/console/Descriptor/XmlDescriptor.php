@@ -120,7 +120,7 @@ class XmlDescriptor extends Descriptor
      */
     private function appendDocument(\DOMNode $parentNode, \DOMNode $importedParent): void
     {
-        foreach ($importedParent->childNodes as $childNode) {
+        foreach ($importedParent->childNodes ?? [] as $childNode) {
             $parentNode->appendChild($parentNode->ownerDocument->importNode($childNode, \true));
         }
     }
