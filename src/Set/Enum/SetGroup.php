@@ -47,6 +47,11 @@ final class SetGroup
      */
     public const LARAVEL = 'laravel';
     /**
+     * Version-based set provider
+     * @var string
+     */
+    public const DRUPAL = 'drupal';
+    /**
      * @var string
      */
     public const ATTRIBUTES = 'attributes';

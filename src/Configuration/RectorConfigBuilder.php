@@ -574,9 +574,9 @@ final class RectorConfigBuilder
         }
         return $this;
     }
-    public function withComposerBased(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false, bool $symfony = \false, bool $netteUtils = \false, bool $laravel = \false): self
+    public function withComposerBased(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false, bool $symfony = \false, bool $netteUtils = \false, bool $laravel = \false, bool $drupal = \false): self
     {
-        $setMap = [SetGroup::TWIG => $twig, SetGroup::DOCTRINE => $doctrine, SetGroup::PHPUNIT => $phpunit, SetGroup::SYMFONY => $symfony, SetGroup::NETTE_UTILS => $netteUtils, SetGroup::LARAVEL => $laravel];
+        $setMap = [SetGroup::TWIG => $twig, SetGroup::DOCTRINE => $doctrine, SetGroup::PHPUNIT => $phpunit, SetGroup::SYMFONY => $symfony, SetGroup::NETTE_UTILS => $netteUtils, SetGroup::LARAVEL => $laravel, SetGroup::DRUPAL => $drupal];
         foreach ($setMap as $setPath => $isEnabled) {
             if ($isEnabled) {
                 $this->setGroups[] = $setPath;
