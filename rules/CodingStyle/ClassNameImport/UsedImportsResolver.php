@@ -38,24 +38,24 @@ final class UsedImportsResolver
      */
     public function resolveForStmts(array $stmts): UsedImports
     {
-        $usedImports = [];
+        $useImports = [];
         /** @var Class_|null $class */
         $class = $this->betterNodeFinder->findFirstInstanceOf($stmts, Class_::class);
         // add class itself
         // is not anonymous class
         if ($class instanceof Class_) {
             $className = (string) $this->nodeNameResolver->getName($class);
-            $usedImports[] = new FullyQualifiedObjectType($className);
+            $useImports[] = new FullyQualifiedObjectType($className);
         }
         $usedConstImports = [];
         $usedFunctionImports = [];
         /** @param Use_::TYPE_* $useType */
-        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseItem $useItem, string $name) use (&$usedImports, &$usedFunctionImports, &$usedConstImports): void {
+        $this->useImportsTraverser->traverserStmts($stmts, static function (int $useType, UseItem $useItem, string $name) use (&$useImports, &$usedFunctionImports, &$usedConstImports): void {
             if ($useType === Use_::TYPE_NORMAL) {
                 if ($useItem->alias instanceof Identifier) {
-                    $usedImports[] = new AliasedObjectType($useItem->alias->toString(), $name);
+                    $useImports[] = new AliasedObjectType($useItem->alias->toString(), $name);
                 } else {
-                    $usedImports[] = new FullyQualifiedObjectType($name);
+                    $useImports[] = new FullyQualifiedObjectType($name);
                 }
             }
             if ($useType === Use_::TYPE_FUNCTION) {
@@ -65,6 +65,6 @@ final class UsedImportsResolver
                 $usedConstImports[] = new FullyQualifiedObjectType($name);
             }
         });
-        return new UsedImports($usedImports, $usedFunctionImports, $usedConstImports);
+        return new UsedImports($useImports, $usedFunctionImports, $usedConstImports);
     }
 }

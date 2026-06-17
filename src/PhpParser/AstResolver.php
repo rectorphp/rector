@@ -276,7 +276,7 @@ final class AstResolver
     /**
      * @return Stmt[]
      */
-    public function parseFileNameToDecoratedNodes(?string $fileName): array
+    private function parseFileNameToDecoratedNodes(?string $fileName): array
     {
         // probably native PHP → un-parseable
         if ($fileName === null) {

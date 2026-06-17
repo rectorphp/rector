@@ -4,11 +4,14 @@ declare (strict_types=1);
 namespace Rector\Application;
 
 use RectorPrefix202606\Nette\Utils\FileSystem;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Parser\ParserErrorsException;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilePathHelper;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -67,7 +70,11 @@ final class FileProcessor
      * @readonly
      */
     private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator;
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
+    /**
+     * @readonly
+     */
+    private UsedImportsResolver $usedImportsResolver;
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, UsedImportsResolver $usedImportsResolver)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
@@ -79,6 +86,7 @@ final class FileProcessor
         $this->postFileProcessor = $postFileProcessor;
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+        $this->usedImportsResolver = $usedImportsResolver;
     }
     public function processFile(File $file, Configuration $configuration): FileProcessResult
     {
@@ -169,8 +177,13 @@ final class FileProcessor
         // store tokens by original file content, so we don't have to print them right now
         $stmtsAndTokens = $this->rectorParser->parseFileContentToStmtsAndTokens($file->getOriginalFileContent(), $forNewestSupportedVersion);
         $oldStmts = $stmtsAndTokens->getStmts();
-        // wrap in FileNode to allow file-level rules
-        $oldStmts = [new FileNode($oldStmts)];
+        // resolve names up front, so used imports (incl. the class FQN) are resolvable at construction,
+        // before scope decoration runs; only annotates namespacedName, does not replace name nodes
+        $nameResolvingNodeTraverser = new NodeTraverser(new NameResolver(null, ['preserveOriginalNames' => \true, 'replaceNodes' => \false]));
+        $nameResolvingNodeTraverser->traverse($oldStmts);
+        // wrap in FileNode to allow file-level rules; seed used imports once, kept in sync incrementally
+        $usedImports = $this->usedImportsResolver->resolveForStmts($oldStmts);
+        $oldStmts = [new FileNode($oldStmts, $usedImports)];
         $oldTokens = $stmtsAndTokens->getTokens();
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file->getFilePath(), $oldStmts);
         $file->hydrateStmtsAndTokens($newStmts, $oldStmts, $oldTokens);

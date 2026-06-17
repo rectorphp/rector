@@ -103,6 +103,11 @@ CODE_SAMPLE
         for ($position = count($args) - 1; $position >= 0; --$position) {
             $arg = $args[$position];
             if (!$this->valueResolver->isNull($arg->value)) {
+                // a named non-null argument can be skipped over: removing an earlier
+                // named null argument still leaves the remaining named arguments validly bound
+                if ($arg->name instanceof Identifier) {
+                    continue;
+                }
                 break;
             }
             if (!in_array($position, $nullPositions, \true)) {

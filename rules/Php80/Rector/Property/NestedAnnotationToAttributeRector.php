@@ -23,7 +23,7 @@ use Rector\Php80\NodeFactory\NestedAttrGroupsFactory;
 use Rector\Php80\ValueObject\AnnotationPropertyToAttributeClass;
 use Rector\Php80\ValueObject\NestedAnnotationToAttribute;
 use Rector\Php80\ValueObject\NestedDoctrineTagAndAnnotationToAttribute;
-use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\PhpParser\Node\FileNode;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\PhpVersion;
@@ -51,10 +51,6 @@ final class NestedAnnotationToAttributeRector extends AbstractRector implements 
     /**
      * @readonly
      */
-    private UseNodesToAddCollector $useNodesToAddCollector;
-    /**
-     * @readonly
-     */
     private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
@@ -64,12 +60,11 @@ final class NestedAnnotationToAttributeRector extends AbstractRector implements 
      * @var NestedAnnotationToAttribute[]
      */
     private array $nestedAnnotationsToAttributes = [];
-    public function __construct(UseImportsResolver $useImportsResolver, PhpDocTagRemover $phpDocTagRemover, NestedAttrGroupsFactory $nestedAttrGroupsFactory, UseNodesToAddCollector $useNodesToAddCollector, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(UseImportsResolver $useImportsResolver, PhpDocTagRemover $phpDocTagRemover, NestedAttrGroupsFactory $nestedAttrGroupsFactory, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->useImportsResolver = $useImportsResolver;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->nestedAttrGroupsFactory = $nestedAttrGroupsFactory;
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
@@ -189,13 +184,18 @@ CODE_SAMPLE
      */
     private function completeExtraUseImports(array $attributeGroups): void
     {
+        $fileNode = $this->file->getFileNode();
+        if (!$fileNode instanceof FileNode) {
+            return;
+        }
+        $pendingImports = $fileNode->getPendingImports();
         foreach ($attributeGroups as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attr) {
                 $namespacedAttrName = $attr->name->getAttribute(AttributeKey::EXTRA_USE_IMPORT);
                 if (!is_string($namespacedAttrName)) {
                     continue;
                 }
-                $this->useNodesToAddCollector->addUseImport(new FullyQualifiedObjectType($namespacedAttrName));
+                $pendingImports->addUseImport(new FullyQualifiedObjectType($namespacedAttrName));
             }
         }
     }

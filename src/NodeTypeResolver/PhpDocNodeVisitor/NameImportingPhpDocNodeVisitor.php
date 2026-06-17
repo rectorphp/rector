@@ -17,7 +17,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\PhpParser\Node\FileNode;
 use Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -32,10 +32,6 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     /**
      * @readonly
      */
-    private UseNodesToAddCollector $useNodesToAddCollector;
-    /**
-     * @readonly
-     */
     private CurrentFileProvider $currentFileProvider;
     /**
      * @readonly
@@ -47,10 +43,9 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper;
     private ?PhpParserNode $currentPhpParserNode = null;
     private bool $hasChanged = \false;
-    public function __construct(ClassNameImportSkipper $classNameImportSkipper, UseNodesToAddCollector $useNodesToAddCollector, CurrentFileProvider $currentFileProvider, ReflectionProvider $reflectionProvider, IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper)
+    public function __construct(ClassNameImportSkipper $classNameImportSkipper, CurrentFileProvider $currentFileProvider, ReflectionProvider $reflectionProvider, IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper)
     {
         $this->classNameImportSkipper = $classNameImportSkipper;
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->currentFileProvider = $currentFileProvider;
         $this->reflectionProvider = $reflectionProvider;
         $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
@@ -125,18 +120,23 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return null;
         }
         $newNode = new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
-        // should skip because its already used
-        if ($this->useNodesToAddCollector->isShortImported($file, $fullyQualifiedObjectType) && !$this->useNodesToAddCollector->isImportShortable($file, $fullyQualifiedObjectType)) {
+        $fileNode = $file->getFileNode();
+        if (!$fileNode instanceof FileNode) {
             return null;
         }
-        if ($this->shouldImport($file, $newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
-            $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
+        $pendingImports = $fileNode->getPendingImports();
+        // should skip because its already used
+        if ($pendingImports->isShortImported($fullyQualifiedObjectType) && !$pendingImports->isImportShortable($fullyQualifiedObjectType)) {
+            return null;
+        }
+        if ($this->shouldImport($fileNode, $newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
+            $pendingImports->addUseImport($fullyQualifiedObjectType);
             $this->hasChanged = \true;
             return $newNode;
         }
         return null;
     }
-    private function shouldImport(File $file, IdentifierTypeNode $newNode, IdentifierTypeNode $identifierTypeNode, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
+    private function shouldImport(FileNode $fileNode, IdentifierTypeNode $newNode, IdentifierTypeNode $identifierTypeNode, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
         if ($newNode->name === $identifierTypeNode->name) {
             return \false;
@@ -153,7 +153,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
         $firstPath = Strings::before($identifierTypeNode->name, '\\' . $newNode->name);
         if ($firstPath === null) {
-            return !$this->useNodesToAddCollector->hasImport($file, $fullyQualifiedObjectType);
+            return !$fileNode->hasImport($fullyQualifiedObjectType);
         }
         if ($firstPath === '') {
             return \true;

@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
 use PhpParser\Node;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\PhpParser\Node\FileNode;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\Application\File;
 /**
@@ -17,17 +17,13 @@ use Rector\ValueObject\Application\File;
  */
 final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
-    /**
-     * @readonly
-     */
-    private UseNodesToAddCollector $useNodesToAddCollector;
-    public function __construct(UseNodesToAddCollector $useNodesToAddCollector)
-    {
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
-    }
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
-        $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($file);
+        $fileNode = $file->getFileNode();
+        if (!$fileNode instanceof FileNode) {
+            return \false;
+        }
+        $useImportTypes = $fileNode->resolveUsedImportTypes();
         foreach ($useImportTypes as $useImportType) {
             if (!$useImportType->equals($fullyQualifiedObjectType) && $useImportType->areShortNamesEqual($fullyQualifiedObjectType)) {
                 return \true;

@@ -5,9 +5,7 @@ namespace Rector\PostRector\Rector;
 
 use Override;
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitor;
-use Rector\CodingStyle\Application\UseImportsRemover;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\PhpParser\Node\FileNode;
 use Rector\PostRector\Guard\AddUseStatementGuard;
@@ -21,10 +19,6 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
     /**
      * @readonly
      */
-    private UseImportsRemover $useImportsRemover;
-    /**
-     * @readonly
-     */
     private RenamedNameCollector $renamedNameCollector;
     /**
      * @readonly
@@ -34,40 +28,28 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var array<string, string>
      */
     private array $oldToNewClasses = [];
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsRemover $useImportsRemover, RenamedNameCollector $renamedNameCollector, AddUseStatementGuard $addUseStatementGuard)
+    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, RenamedNameCollector $renamedNameCollector, AddUseStatementGuard $addUseStatementGuard)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->useImportsRemover = $useImportsRemover;
         $this->renamedNameCollector = $renamedNameCollector;
         $this->addUseStatementGuard = $addUseStatementGuard;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|int|null
+     * @return \Rector\PhpParser\Node\FileNode|int
      */
     public function enterNode(Node $node)
     {
+        // the FileNode resolves the namespace-or-file placement internally
         if ($node instanceof FileNode) {
-            // handle in Namespace_ node
-            if ($node->isNamespaced()) {
-                return null;
-            }
-            // handle here
-            $removedUses = $this->renamedClassesDataCollector->getOldClasses();
-            if ($this->useImportsRemover->removeImportsFromStmts($node, $removedUses)) {
+            // keep only the uses that were actually renamed
+            $removedUses = array_values(array_filter($this->renamedClassesDataCollector->getOldClasses(), \Closure::fromCallable([$this->renamedNameCollector, 'has'])));
+            if ($node->removeImports($removedUses)) {
                 $this->addRectorClassWithLine($node);
             }
             $this->renamedNameCollector->reset();
             return $node;
         }
-        if ($node instanceof Namespace_) {
-            $removedUses = $this->renamedClassesDataCollector->getOldClasses();
-            if ($this->useImportsRemover->removeImportsFromStmts($node, $removedUses)) {
-                $this->addRectorClassWithLine($node);
-            }
-            $this->renamedNameCollector->reset();
-            return $node;
-        }
-        // nothing else to handle here, as first 2 nodes we'll hit are handled above
+        // nothing else to handle here, as the first node we'll hit is handled above
         return NodeVisitor::STOP_TRAVERSAL;
     }
     #[Override]
