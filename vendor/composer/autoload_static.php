@@ -1450,6 +1450,7 @@ class ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9
         'Rector\\CodeQuality\\NodeFactory\\TypedPropertyFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/TypedPropertyFactory.php',
         'Rector\\CodeQuality\\NodeManipulator\\ExprBoolCaster' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/ExprBoolCaster.php',
         'Rector\\CodeQuality\\NodeManipulator\\NamedArgsSorter' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/NamedArgsSorter.php',
+        'Rector\\CodeQuality\\Rector\\AssignOp\\NewArrayItemConcatAssignToAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/AssignOp/NewArrayItemConcatAssignToAssignRector.php',
         'Rector\\CodeQuality\\Rector\\Assign\\CombinedAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Assign/CombinedAssignRector.php',
         'Rector\\CodeQuality\\Rector\\Attribute\\SortAttributeNamedArgsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Attribute/SortAttributeNamedArgsRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanAnd\\RemoveUselessIsObjectCheckRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanAnd/RemoveUselessIsObjectCheckRector.php',
