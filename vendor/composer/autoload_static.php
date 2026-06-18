@@ -1526,6 +1526,7 @@ class ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9
         'Rector\\CodeQuality\\Rector\\New_\\NewStaticToNewSelfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/New_/NewStaticToNewSelfRector.php',
         'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
         'Rector\\CodeQuality\\Rector\\NullsafeMethodCall\\CleanupUnneededNullsafeOperatorRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/NullsafeMethodCall/CleanupUnneededNullsafeOperatorRector.php',
+        'Rector\\CodeQuality\\Rector\\Property\\FixClassCaseSensitivityVarDocblockRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Property/FixClassCaseSensitivityVarDocblockRector.php',
         'Rector\\CodeQuality\\Rector\\StmtsAwareInterface\\MoveInnerFunctionToTopLevelRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/StmtsAwareInterface/MoveInnerFunctionToTopLevelRector.php',
         'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
         'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToIfRector.php',
