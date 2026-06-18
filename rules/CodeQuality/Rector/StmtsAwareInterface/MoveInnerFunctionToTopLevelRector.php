@@ -4,7 +4,10 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Reflection\Native\NativeFunctionReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -14,6 +17,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MoveInnerFunctionToTopLevelRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Move an inner named function to the top level, as inner named functions are not supported by PHPStan', [new CodeSample(<<<'CODE_SAMPLE'
@@ -101,12 +112,19 @@ CODE_SAMPLE
      */
     private function hasSiblingFunctionOfSameName(Function_ $innerFunction, array $siblingStmts): bool
     {
+        $innerFunctionName = new Name($innerFunction->name->toString());
         foreach ($siblingStmts as $siblingStmt) {
             if (!$siblingStmt instanceof Function_) {
                 continue;
             }
             if ($this->nodeNameResolver->areNamesEqual($siblingStmt, $innerFunction)) {
                 return \true;
+            }
+            if ($this->reflectionProvider->hasFunction($innerFunctionName, null)) {
+                $functionReflection = $this->reflectionProvider->getFunction($innerFunctionName, null);
+                if ($functionReflection instanceof NativeFunctionReflection) {
+                    return \true;
+                }
             }
         }
         return \false;
