@@ -179,7 +179,11 @@ final class ApplicationFileProcessor
         if ($fileProcessResult->getSystemErrors() !== []) {
             $this->changedFilesDetector->invalidateFile($file->getFilePath());
         } elseif (!$configuration->isDryRun() || !$fileProcessResult->getFileDiff() instanceof FileDiff) {
-            $this->changedFilesDetector->cacheFile($file->getFilePath());
+            // a file clean under a subset of rules is not necessarily clean under all rules,
+            // caching it would hide its pending changes from the next full run
+            if ($configuration->getOnlyRule() === null && $configuration->getOnlySuffix() === null) {
+                $this->changedFilesDetector->cacheFile($file->getFilePath());
+            }
         }
         return $fileProcessResult;
     }
