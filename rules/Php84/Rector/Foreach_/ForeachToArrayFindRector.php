@@ -18,13 +18,15 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php84\Rector\Foreach_\ForeachToArrayFindRector\ForeachToArrayFindRectorTest
  */
-final class ForeachToArrayFindRector extends AbstractRector implements MinPhpVersionInterface
+final class ForeachToArrayFindRector extends AbstractRector implements MinPhpVersionInterface, RelatedPolyfillInterface
 {
     /**
      * @readonly
@@ -126,6 +128,10 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ARRAY_FIND;
+    }
+    public function providePolyfillPackage(): string
+    {
+        return PolyfillPackage::PHP_84;
     }
     private function isValidForeachStructure(Foreach_ $foreach, Variable $assignedVariable): bool
     {

@@ -66,12 +66,14 @@ final class SimpleNodeDumper
      */
     private static function isStringList(array $items): bool
     {
+        $found = \true;
         foreach ($items as $item) {
             if (!is_string($item)) {
-                return \false;
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
     /**
      * @param mixed $flags

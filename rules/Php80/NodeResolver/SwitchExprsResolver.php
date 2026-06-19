@@ -128,11 +128,13 @@ final class SwitchExprsResolver
     }
     private function areCasesValid(Switch_ $newSwitch): bool
     {
+        $found = \true;
         foreach ($newSwitch->cases as $case) {
             if (!$this->isValidCase($case)) {
-                return \false;
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
 }

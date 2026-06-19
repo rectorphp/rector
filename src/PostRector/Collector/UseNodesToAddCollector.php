@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Collector;
 
+use Deprecated;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\PhpParser\Node\FileNode;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -73,8 +74,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->getPendingImports()->addUseImport($type) instead.
      */
     public function addUseImport(FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
@@ -87,8 +86,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->getPendingImports()->addConstantUseImport($type) instead.
      */
     public function addConstantUseImport(FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
@@ -101,8 +98,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->getPendingImports()->addFunctionUseImport($type) instead.
      */
     public function addFunctionUseImport(FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
@@ -115,8 +110,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->resolveUsedImportTypes() instead.
      *
      * @return array<AliasedObjectType|FullyQualifiedObjectType>
      */
@@ -131,8 +124,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->hasImport($type) instead.
      */
     public function hasImport(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
@@ -145,8 +136,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->getPendingImports()->isShortImported($type) instead.
      */
     public function isShortImported(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
@@ -159,8 +148,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->getPendingImports()->isImportShortable($type) instead.
      */
     public function isImportShortable(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
@@ -173,8 +160,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->getPendingImports()->getUseImports() instead.
      *
      * @return FullyQualifiedObjectType[]
      */
@@ -190,8 +175,6 @@ final class UseNodesToAddCollector
     /**
      * @api
      *
-     * @deprecated Use $file->getFileNode()->getPendingImports()->getConstantImports() instead.
-     *
      * @return FullyQualifiedObjectType[]
      */
     public function getConstantImportsByFilePath(string $filePath): array
@@ -205,8 +188,6 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
-     *
-     * @deprecated Use $file->getFileNode()->getPendingImports()->getFunctionImports() instead.
      *
      * @return FullyQualifiedObjectType[]
      */

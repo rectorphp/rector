@@ -60,12 +60,14 @@ final class NodeComparator
      */
     public function isNodeEqual(Node $singleNode, array $availableNodes): bool
     {
+        $found = \false;
         foreach ($availableNodes as $availableNode) {
             if ($this->areNodesEqual($singleNode, $availableNode)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * Checks even clone nodes

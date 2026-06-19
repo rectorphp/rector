@@ -19,13 +19,16 @@ final class VendorMissAnalyseGuard
     }
     private function hasDowngradeSets(): bool
     {
+        /** @var string[] $registeredRectorSets */
         $registeredRectorSets = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::REGISTERED_RECTOR_SETS);
+        $found = \false;
         foreach ($registeredRectorSets as $registeredRectorSet) {
-            if (strpos((string) $registeredRectorSet, 'downgrade-') !== \false) {
-                return \true;
+            if (strpos($registeredRectorSet, 'downgrade-') !== \false) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param string[] $filePaths

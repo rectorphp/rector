@@ -170,12 +170,14 @@ final class IsClassMethodUsedAnalyzer
         }
         $traits = $this->astResolver->parseClassReflectionTraits($classReflection);
         $className = $classReflection->getName();
+        $found = \false;
         foreach ($traits as $trait) {
             if ($this->isUsedByTrait($trait, $classMethodName, $className)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function isUsedByTrait(Trait_ $trait, string $classMethodName, string $className): bool
     {

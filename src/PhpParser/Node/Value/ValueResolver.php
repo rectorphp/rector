@@ -135,12 +135,14 @@ final class ValueResolver
      */
     public function isValues(Expr $expr, array $expectedValues): bool
     {
+        $found = \false;
         foreach ($expectedValues as $expectedValue) {
             if ($this->isValue($expr, $expectedValue)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function isFalse(Expr $expr): bool
     {

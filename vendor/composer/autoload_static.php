@@ -32,6 +32,7 @@ class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
         ),
         'R' =>
         array (
+            'Rector\\Utils\\PHPStan\\' => 21,
             'Rector\\Utils\\' => 13,
             'Rector\\Symfony\\' => 15,
             'Rector\\RectorInstaller\\' => 23,
@@ -104,6 +105,10 @@ class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
         'Symfony\\Polyfill\\Ctype\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Rector\\Utils\\PHPStan\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/utils/phpstan/src',
         ),
         'Rector\\Utils\\' =>
         array (

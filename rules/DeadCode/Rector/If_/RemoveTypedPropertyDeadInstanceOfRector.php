@@ -188,11 +188,13 @@ CODE_SAMPLE
         /** @var string $propertyName */
         $propertyName = $this->getName($propertyFetch);
         $params = $this->promotedPropertyResolver->resolveFromClass($class);
+        $found = \false;
         foreach ($params as $param) {
             if ($this->isName($param, $propertyName)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

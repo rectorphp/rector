@@ -46,12 +46,14 @@ final class PhpAttributeAnalyzer
      */
     public function hasPhpAttributes($node, array $attributeClasses): bool
     {
+        $found = \false;
         foreach ($attributeClasses as $attributeClass) {
             if ($this->hasPhpAttribute($node, $attributeClass)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param AttributeGroup[] $attributeGroups

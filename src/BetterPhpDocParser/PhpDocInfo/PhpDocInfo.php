@@ -165,24 +165,28 @@ final class PhpDocInfo
      */
     public function hasByTypes(array $types): bool
     {
+        $found = \false;
         foreach ($types as $type) {
             if ($this->hasByType($type)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param string[] $names
      */
     public function hasByNames(array $names): bool
     {
+        $found = \false;
         foreach ($names as $name) {
             if ($this->hasByName($name)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function hasByName(string $name): bool
     {

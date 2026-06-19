@@ -122,12 +122,14 @@ final class NodeTypeResolver
      */
     public function isObjectTypes(Node $node, array $requiredTypes): bool
     {
-        foreach ($requiredTypes as $requiredType) {
-            if ($this->isObjectType($node, $requiredType)) {
-                return \true;
+        $found = \false;
+        foreach ($requiredTypes as $objectType) {
+            if ($this->isObjectType($node, $objectType)) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function isObjectType(Node $node, ObjectType $requiredObjectType): bool
     {

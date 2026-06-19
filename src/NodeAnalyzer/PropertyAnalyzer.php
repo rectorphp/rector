@@ -32,12 +32,14 @@ final class PropertyAnalyzer
             return \false;
         }
         $types = $propertyType->getTypes();
+        $found = \false;
         foreach ($types as $type) {
             if ($this->isForbiddenType($type)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function isForbiddenType(Type $type): bool
     {

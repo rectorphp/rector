@@ -25,12 +25,14 @@ final class NeverFuncCallAnalyzer
      */
     public function hasNeverFuncCall($functionLike): bool
     {
+        $found = \false;
         foreach ((array) $functionLike->stmts as $stmt) {
             if ($this->isWithNeverTypeExpr($stmt)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function isWithNeverTypeExpr(Stmt $stmt, bool $withNativeNeverType = \true): bool
     {

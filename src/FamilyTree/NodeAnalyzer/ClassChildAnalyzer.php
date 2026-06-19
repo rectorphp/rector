@@ -25,8 +25,8 @@ final class ClassChildAnalyzer
             return \false;
         }
         $found = \false;
-        foreach ($parentClassMethods as $parentClassMethod) {
-            if ($parentClassMethod->isAbstract()) {
+        foreach ($parentClassMethods as $phpMethodReflection) {
+            if ($phpMethodReflection->isAbstract()) {
                 $found = \true;
                 break;
             }
