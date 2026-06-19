@@ -130,7 +130,7 @@ CODE_SAMPLE
             if ($this->isObjectWithDestructMethod($assign->expr)) {
                 continue;
             }
-            if ($this->isNullResetOfObject($assign)) {
+            if ($this->isNullResetOfInternalObject($assign)) {
                 continue;
             }
             if ($this->hasCallLikeInAssignExpr($assign)) {
@@ -149,14 +149,22 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isNullResetOfObject(Assign $assign): bool
+    private function isNullResetOfInternalObject(Assign $assign): bool
     {
-        // resetting a native filesystem object to null releases the held file handle,
-        // e.g. $file = null on a SplFileObject/SplFileInfo/RecursiveDirectoryIterator
+        // resetting an internal PHP object to null releases the held resource/file handle,
+        // e.g. $file = null on a SplFileObject/RecursiveDirectoryIterator/finfo
         if (!$this->valueResolver->isNull($assign->expr)) {
             return \false;
         }
-        return (new ObjectType('SplFileInfo'))->isSuperTypeOf($this->getType($assign->var))->yes();
+        $varType = $this->getType($assign->var);
+        if (!$varType instanceof ObjectType) {
+            return \false;
+        }
+        $classReflection = $varType->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        return $classReflection->isBuiltin();
     }
     private function isObjectWithDestructMethod(Expr $expr): bool
     {
