@@ -103,12 +103,14 @@ final class VariableRenamer
         if ($scope instanceof MutatingScope && $functionLikeScope instanceof MutatingScope && $scope->equals($functionLikeScope)) {
             return \false;
         }
+        $found = \false;
         foreach ($functionLike->getParams() as $param) {
             if ($this->nodeNameResolver->isName($param, $variableName)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function renameVariableIfMatchesName(Variable $variable, string $oldName, string $expectedName, ?Stmt $currentStmt): ?Variable
     {

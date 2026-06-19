@@ -44,11 +44,13 @@ final class NodeGroup
     public const STMTS_TO_HAVE_NEXT_NEWLINE = [ClassMethod::class, Function_::class, Property::class, If_::class, Foreach_::class, Do_::class, While_::class, For_::class, ClassConst::class, TryCatch::class, Class_::class, Trait_::class, Interface_::class, Switch_::class];
     public static function isStmtAwareNode(Node $node): bool
     {
+        $found = \false;
         foreach (self::STMTS_AWARE as $stmtAwareClass) {
             if ($node instanceof $stmtAwareClass) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

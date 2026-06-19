@@ -225,11 +225,13 @@ CODE_SAMPLE
      */
     private function hasAtLeastOneParamWithoutType($functionLike): bool
     {
+        $found = \false;
         foreach ($functionLike->params as $param) {
             if (!$param->type instanceof Node) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

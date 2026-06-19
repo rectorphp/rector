@@ -39,24 +39,28 @@ final class CallAnalyzer
             $isObjectCallRight = $this->isObjectCall($expr->right);
             return $isObjectCallLeft || $isObjectCallRight;
         }
+        $found = \false;
         foreach (self::OBJECT_CALL_TYPES as $objectCallType) {
             if ($expr instanceof $objectCallType) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param If_[] $ifs
      */
     public function doesIfHasObjectCall(array $ifs): bool
     {
+        $found = \false;
         foreach ($ifs as $if) {
             if ($this->isObjectCall($if->cond)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function isNewInstance(Variable $variable): bool
     {

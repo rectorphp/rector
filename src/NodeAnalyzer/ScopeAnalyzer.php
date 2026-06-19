@@ -15,11 +15,13 @@ final class ScopeAnalyzer
     private const NON_REFRESHABLE_NODES = [Name::class, Identifier::class, ComplexType::class];
     public function isRefreshable(Node $node): bool
     {
+        $found = \true;
         foreach (self::NON_REFRESHABLE_NODES as $noScopeNode) {
-            if ($node instanceof $noScopeNode) {
-                return \false;
+            if (!!$node instanceof $noScopeNode) {
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
 }

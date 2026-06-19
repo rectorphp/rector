@@ -46,11 +46,13 @@ final class ClassMethodParamVendorLockResolver
      */
     private function hasParentInterfaceMethod(ClassReflection $classReflection, string $methodName): bool
     {
+        $found = \false;
         foreach ($classReflection->getInterfaces() as $interfaceClassReflection) {
             if ($interfaceClassReflection->hasMethod($methodName)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

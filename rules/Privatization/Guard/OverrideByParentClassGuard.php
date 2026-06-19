@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Privatization\Guard;
 
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
@@ -24,11 +25,13 @@ final class OverrideByParentClassGuard
         if ($class->extends instanceof FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString())) {
             return \false;
         }
-        foreach ($class->implements as $implement) {
-            if (!$this->reflectionProvider->hasClass($implement->toString())) {
-                return \false;
+        $found = \true;
+        foreach ($class->implements as $name) {
+            if (!$this->reflectionProvider->hasClass($name->toString())) {
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
 }

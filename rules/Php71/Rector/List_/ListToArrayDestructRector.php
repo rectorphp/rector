@@ -95,11 +95,13 @@ CODE_SAMPLE
     }
     private function hasPartialDestruct(List_ $list): bool
     {
-        foreach ($list->items as $listItem) {
-            if (!$listItem instanceof ArrayItem) {
-                return \true;
+        $found = \false;
+        foreach ($list->items as $arrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

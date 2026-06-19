@@ -69,12 +69,14 @@ final class NodeNameResolver
         if ($nodeName === null) {
             return \false;
         }
+        $found = \false;
         foreach ($names as $name) {
             if ($this->isStringName($nodeName, $name)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param Node|Node[] $node
@@ -83,12 +85,14 @@ final class NodeNameResolver
     public function isName($node, string $name): bool
     {
         $nodes = is_array($node) ? $node : [$node];
+        $found = \false;
         foreach ($nodes as $node) {
             if ($this->isSingleName($node, $name)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * Some nodes have always-known string name. This makes PHPStan smarter.

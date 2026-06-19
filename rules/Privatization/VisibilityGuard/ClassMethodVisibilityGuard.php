@@ -32,12 +32,14 @@ final class ClassMethodVisibilityGuard
     {
         $parentTraitReflections = $this->getLocalAndParentTraitReflections($classReflection);
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        foreach ($parentTraitReflections as $parentTraitReflection) {
-            if ($parentTraitReflection->hasMethod($methodName)) {
-                return \true;
+        $found = \false;
+        foreach ($parentTraitReflections as $classReflection) {
+            if ($classReflection->hasMethod($methodName)) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @return ClassReflection[]

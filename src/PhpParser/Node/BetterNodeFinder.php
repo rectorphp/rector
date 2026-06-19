@@ -116,14 +116,7 @@ final class BetterNodeFinder
     public function hasInstancesOf($nodes, array $types): bool
     {
         Assert::allIsAOf($types, Node::class);
-        return (bool) $this->nodeFinder->findFirst($nodes, static function (Node $node) use ($types): bool {
-            foreach ($types as $type) {
-                if ($node instanceof $type) {
-                    return \true;
-                }
-            }
-            return \false;
-        });
+        return (bool) $this->nodeFinder->findFirst($nodes, static fn(Node $node): bool => array_any($types, fn(string $type): bool => $node instanceof $type));
     }
     /**
      * @param Node|Node[] $nodes

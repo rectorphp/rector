@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -78,11 +79,13 @@ CODE_SAMPLE
     }
     private function hasArraySpread(FuncCall $funcCall): bool
     {
+        $found = \false;
         foreach ($funcCall->getArgs() as $arg) {
             if ($arg->unpack) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

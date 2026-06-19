@@ -79,11 +79,13 @@ final class NoDiscardCallAnalyzer
      */
     private function hasNoDiscardAttribute(array $attributes): bool
     {
-        foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'NoDiscard') {
-                return \true;
+        $found = \false;
+        foreach ($attributes as $attributeReflection) {
+            if ($attributeReflection->getName() === 'NoDiscard') {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

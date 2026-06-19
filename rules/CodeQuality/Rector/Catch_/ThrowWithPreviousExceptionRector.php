@@ -13,6 +13,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\NodeVisitor;
+use PHPStan\Reflection\ExtendedParameterReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
@@ -188,21 +189,25 @@ CODE_SAMPLE
         }
         $extendedMethodReflection = $classReflection->getConstructor();
         $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
+        $found = \false;
         foreach ($extendedParametersAcceptor->getParameters() as $extendedParameterReflection) {
             if ($extendedParameterReflection->getName() === $parameterName) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function hasArgument(New_ $new, string $argumentName): bool
     {
+        $found = \false;
         foreach ($new->getArgs() as $arg) {
             if ($arg->name instanceof Identifier && $arg->name->toString() === $argumentName) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function resolveExceptionArgumentPosition(Name $exceptionName): ?int
     {

@@ -5,6 +5,7 @@ namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Return_;
@@ -108,11 +109,13 @@ final class SwitchAnalyzer
     }
     private function containsCaseReturn(Case_ $case): bool
     {
+        $found = \false;
         foreach ($case->stmts as $stmt) {
             if ($stmt instanceof Return_) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

@@ -165,24 +165,28 @@ final class ArrowFunctionAndClosureFirstClassCallableGuard
      */
     private function isUsingByRef(array $params): bool
     {
+        $found = \false;
         foreach ($params as $param) {
             if ($param->byRef) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param Arg[] $args
      */
     private function isUsingNamedArgs(array $args): bool
     {
+        $found = \false;
         foreach ($args as $arg) {
             if ($arg->name instanceof Identifier) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $callLike

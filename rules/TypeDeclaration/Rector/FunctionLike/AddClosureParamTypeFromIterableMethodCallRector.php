@@ -207,11 +207,13 @@ CODE_SAMPLE
      */
     private function callUsesClosures(array $args): bool
     {
+        $found = \false;
         foreach ($args as $arg) {
             if ($arg instanceof Arg && $arg->value instanceof Closure) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

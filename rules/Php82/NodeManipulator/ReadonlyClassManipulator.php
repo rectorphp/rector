@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php82\NodeManipulator;
 
+use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -72,13 +73,14 @@ final class ReadonlyClassManipulator
      */
     private function hasNonTypedProperty(array $properties): bool
     {
+        $found = \false;
         foreach ($properties as $property) {
-            // properties of readonly class must always have type
-            if ($property->type === null) {
-                return \true;
+            if (!$property->type instanceof Node) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function shouldSkip(Class_ $class, Scope $scope): bool
     {
@@ -144,36 +146,42 @@ final class ReadonlyClassManipulator
      */
     private function hasReadonlyProperty(array $properties): bool
     {
-        foreach ($properties as $property) {
-            if (!$property->isReadOnly()) {
-                return \true;
+        $found = \false;
+        foreach ($properties as $reflectionProperty) {
+            if (!$reflectionProperty->isReadOnly()) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param ClassReflection[] $parents
      */
     private function isExtendsReadonlyClass(array $parents): bool
     {
-        foreach ($parents as $parent) {
-            if ($parent->isReadOnly()) {
-                return \true;
+        $found = \false;
+        foreach ($parents as $classReflection) {
+            if ($classReflection->isReadOnly()) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param Property[] $properties
      */
     private function hasWritableProperty(array $properties): bool
     {
+        $found = \false;
         foreach ($properties as $property) {
             if (!$property->isReadonly()) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function shouldSkipClass(Class_ $class): bool
     {

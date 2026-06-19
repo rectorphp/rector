@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\ClosureUse;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
@@ -99,12 +100,14 @@ final class ParamAnalyzer
      */
     public function hasPropertyPromotion(array $params): bool
     {
+        $found = \false;
         foreach ($params as $param) {
             if ($param->isPromoted()) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function isNullable(Param $param): bool
     {
@@ -131,12 +134,14 @@ final class ParamAnalyzer
     }
     private function isVariableInClosureUses(Closure $closure, Variable $variable): bool
     {
+        $found = \false;
         foreach ($closure->uses as $use) {
             if ($this->nodeComparator->areNodesEqual($use->var, $variable)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function isUsedAsArg(Node $node, Param $param): bool
     {

@@ -144,12 +144,14 @@ CODE_SAMPLE
             if ($this->doesNotLastStatementBreakFlow($lastStmt) || $this->doesNotLastStatementBreakFlow($lastStmt->else)) {
                 return \true;
             }
+            $found = \false;
             foreach ($lastStmt->elseifs as $elseIf) {
                 if ($this->doesNotLastStatementBreakFlow($elseIf)) {
-                    return \true;
+                    $found = \true;
+                    break;
                 }
             }
-            return \false;
+            return $found;
         }
         return !($lastStmt instanceof Return_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Throw_ || $lastStmt instanceof Continue_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_);
     }

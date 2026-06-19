@@ -41,12 +41,13 @@ final class DoctrineEntityAnalyzer
         if ((method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes() : []) === []) {
             return \false;
         }
+        $found = \false;
         foreach (self::DOCTRINE_MAPPING_CLASSES as $doctrineMappingClass) {
-            // skip entities
             if ((method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes($doctrineMappingClass) : []) !== []) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

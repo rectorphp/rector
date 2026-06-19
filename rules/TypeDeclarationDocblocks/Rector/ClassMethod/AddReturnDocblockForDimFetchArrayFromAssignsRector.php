@@ -190,12 +190,14 @@ CODE_SAMPLE
     private function isConstantArrayType(Type $returnedExprType): bool
     {
         if ($returnedExprType instanceof UnionType) {
+            $found = \true;
             foreach ($returnedExprType->getTypes() as $unionedType) {
                 if (!$unionedType instanceof ConstantArrayType) {
-                    return \false;
+                    $found = \false;
+                    break;
                 }
             }
-            return \true;
+            return $found;
         }
         return $returnedExprType instanceof ConstantArrayType;
     }

@@ -22,12 +22,14 @@ final class BetterTokenIterator extends TokenIterator
      */
     public function isNextTokenTypes(array $types): bool
     {
+        $found = \false;
         foreach ($types as $type) {
             if ($this->isNextTokenType($type)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function isTokenTypeOnPosition(int $tokenType, int $position): bool
     {
@@ -80,12 +82,14 @@ final class BetterTokenIterator extends TokenIterator
     }
     public function containsTokenType(int $type): bool
     {
+        $found = \false;
         foreach ($this->getTokens() as $token) {
             if ($token[1] === $type) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function nextTokenType(): ?int
     {

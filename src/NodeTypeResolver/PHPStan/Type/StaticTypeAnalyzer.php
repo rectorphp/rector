@@ -44,12 +44,14 @@ final class StaticTypeAnalyzer
         if (!$type instanceof UnionType) {
             return \false;
         }
+        $found = \true;
         foreach ($type->getTypes() as $unionedType) {
             if (!$this->isAlwaysTruableType($unionedType)) {
-                return \false;
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
     private function isAlwaysTruableArrayType(ArrayType $arrayType): bool
     {

@@ -17,11 +17,13 @@ final class NewPhpDocFromPHPStanTypeGuard
     }
     private function isLegalUnionType(UnionType $type): bool
     {
+        $found = \true;
         foreach ($type->getTypes() as $unionType) {
-            if ($unionType instanceof MixedType) {
-                return \false;
+            if (!!$unionType instanceof MixedType) {
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
 }

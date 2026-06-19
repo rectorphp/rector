@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9
+class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -3194,8 +3194,10 @@ class ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
+        'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrayAnyAllClosureParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FuncCall/AddArrayAnyAllClosureParamTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrayFunctionClosureParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FuncCall/AddArrayFunctionClosureParamTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrowFunctionParamArrayWhereDimFetchRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FuncCall/AddArrowFunctionParamArrayWhereDimFetchRector.php',
+        'Rector\\TypeDeclaration\\Rector\\FuncCall\\NarrowArrayAnyAllNullableParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FuncCall/NarrowArrayAnyAllNullableParamTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeForArrayMapRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeForArrayMapRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeForArrayReduceRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeForArrayReduceRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddClosureParamTypeFromIterableMethodCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddClosureParamTypeFromIterableMethodCallRector.php',
@@ -3300,9 +3302,9 @@ class ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit66a3c22cfbd40cb049dcb2d9e47672e9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d::$classMap;
 
         }, null, ClassLoader::class);
     }

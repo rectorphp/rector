@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -178,12 +179,14 @@ CODE_SAMPLE
         if (!$node instanceof Echo_) {
             return \false;
         }
+        $found = \false;
         foreach ($node->exprs as $expr) {
             if ($expr instanceof Variable && $this->isName($expr, $paramName)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function shouldStop(Node $node, string $paramName): bool
     {
@@ -229,12 +232,14 @@ CODE_SAMPLE
         if ($node->expr->isFirstClassCallable()) {
             return \false;
         }
+        $found = \false;
         foreach ($node->expr->getArgs() as $arg) {
             if ($arg->value instanceof Variable && $this->isName($arg->value, $paramName)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function isEmptyOrEchoedOrCasted(Node $node, string $paramName): bool
     {

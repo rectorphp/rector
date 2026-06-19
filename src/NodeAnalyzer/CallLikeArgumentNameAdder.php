@@ -74,12 +74,14 @@ final class CallLikeArgumentNameAdder
         if ($args === []) {
             return \true;
         }
+        $found = \false;
         foreach ($args as $arg) {
             if ($arg->unpack) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param Arg[] $args

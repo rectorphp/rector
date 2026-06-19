@@ -55,11 +55,13 @@ final class ClassMethodManipulator
                 return \true;
             }
         }
-        foreach ($classReflection->getInterfaces() as $interfaceReflection) {
-            if ($interfaceReflection->hasMethod($methodName)) {
-                return \true;
+        $found = \false;
+        foreach ($classReflection->getInterfaces() as $classReflection) {
+            if ($classReflection->hasMethod($methodName)) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

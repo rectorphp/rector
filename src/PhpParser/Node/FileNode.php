@@ -113,12 +113,14 @@ class FileNode extends Stmt
     }
     public function hasImport(FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
+        $found = \false;
         foreach ($this->resolveUsedImportTypes() as $useImport) {
             if ($useImport->equals($fullyQualifiedObjectType)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * The queued use imports merged with the use imports already present in the file
@@ -183,12 +185,14 @@ class FileNode extends Stmt
     }
     public function isNamespaced(): bool
     {
+        $found = \false;
         foreach ($this->stmts as $stmt) {
             if ($stmt instanceof Namespace_) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function getNamespace(): ?Namespace_
     {

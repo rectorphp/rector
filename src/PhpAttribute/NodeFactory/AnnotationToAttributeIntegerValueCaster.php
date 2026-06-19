@@ -79,12 +79,14 @@ final class AnnotationToAttributeIntegerValueCaster
         if (!$type instanceof UnionType) {
             return \false;
         }
+        $found = \false;
         foreach ($type->getTypes() as $unionedType) {
             if ($unionedType->isInteger()->yes()) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @return ParameterReflection[]

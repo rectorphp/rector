@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Switch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Return_;
@@ -148,12 +149,14 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($currentCase->stmts, $nextCase->stmts)) {
             return \false;
         }
+        $found = \false;
         foreach ($currentCase->stmts as $stmt) {
             if ($stmt instanceof Break_ || $stmt instanceof Return_) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function areSwitchStmtsEqualsConsideringComments(Case_ $currentCase, Case_ $nextCase): bool
     {

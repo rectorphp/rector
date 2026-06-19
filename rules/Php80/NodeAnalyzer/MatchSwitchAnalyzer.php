@@ -48,12 +48,14 @@ final class MatchSwitchAnalyzer
      */
     public function isReturnCondsAndExprs(array $condAndExprs): bool
     {
+        $found = \false;
         foreach ($condAndExprs as $condAndExpr) {
             if ($condAndExpr->equalsMatchKind(MatchKind::RETURN)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param CondAndExpr[] $condAndExprs
@@ -110,12 +112,14 @@ final class MatchSwitchAnalyzer
      */
     public function hasCondsAndExprDefaultValue(array $condAndExprs): bool
     {
+        $found = \false;
         foreach ($condAndExprs as $condAndExpr) {
             if ($condAndExpr->getCondExprs() === null) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function hasDefaultValue(Match_ $match): bool
     {

@@ -128,13 +128,14 @@ CODE_SAMPLE
      */
     private function hasAlwaysStringScalarReturn(array $returns): bool
     {
+        $found = \true;
         foreach ($returns as $return) {
-            // we need exact string "value" return
-            if (!$return->expr instanceof String_ && !$return->expr instanceof InterpolatedString) {
-                return \false;
+            if (!!(!$return->expr instanceof String_ && !$return->expr instanceof InterpolatedString)) {
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
     /**
      * @param Return_[] $returns

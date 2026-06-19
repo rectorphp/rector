@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ExtendedParametersAcceptor;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -165,12 +166,14 @@ CODE_SAMPLE
         if (!$functionReflection->isBuiltin()) {
             return \false;
         }
+        $found = \true;
         foreach ($functionReflection->getVariants() as $extendedParametersAcceptor) {
             if (!$extendedParametersAcceptor->getNativeReturnType()->isBoolean()->yes()) {
-                return \false;
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
     /**
      * @param Return_[] $returns

@@ -16,11 +16,13 @@ final class TemplateTypeRemovalGuard
         }
         // cover mixed template with mix from @template and non @template
         $types = $docType instanceof UnionType ? $docType->getTypes() : [$docType];
+        $found = \true;
         foreach ($types as $type) {
-            if ($type instanceof TemplateType) {
-                return \false;
+            if (!!$type instanceof TemplateType) {
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
 }

@@ -94,11 +94,13 @@ CODE_SAMPLE
     }
     private function hasParentClassOfEnumSuffix(ClassReflection $classReflection): bool
     {
+        $found = \false;
         foreach ($classReflection->getParentClassesNames() as $parentClassesName) {
             if (substr_compare($parentClassesName, 'Enum', -strlen('Enum')) === 0) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

@@ -24,12 +24,14 @@ final class ClassChildAnalyzer
         if ($parentClassMethods === []) {
             return \false;
         }
+        $found = \false;
         foreach ($parentClassMethods as $parentClassMethod) {
             if ($parentClassMethod->isAbstract()) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @api downgrade

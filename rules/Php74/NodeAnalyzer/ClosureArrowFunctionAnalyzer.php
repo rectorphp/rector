@@ -81,12 +81,14 @@ final class ClosureArrowFunctionAnalyzer
             if (!$node instanceof FuncCall) {
                 return \false;
             }
+            $found = \false;
             foreach ($variables as $variable) {
                 if ($this->compactFuncCallAnalyzer->isInCompact($node, $variable)) {
-                    return \true;
+                    $found = \true;
+                    break;
                 }
             }
-            return \false;
+            return $found;
         });
     }
     /**
@@ -108,14 +110,7 @@ final class ClosureArrowFunctionAnalyzer
         if ($referencedValues === []) {
             return \false;
         }
-        $isFoundInStmt = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, function (Node $node) use ($referencedValues): bool {
-            foreach ($referencedValues as $referencedValue) {
-                if ($this->nodeComparator->areNodesEqual($node, $referencedValue)) {
-                    return \true;
-                }
-            }
-            return \false;
-        });
+        $isFoundInStmt = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, fn(Node $node): bool => array_any($referencedValues, fn($referencedValue): bool => $this->nodeComparator->areNodesEqual($node, $referencedValue)));
         if ($isFoundInStmt) {
             return \true;
         }

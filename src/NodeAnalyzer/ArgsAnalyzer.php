@@ -21,12 +21,14 @@ final class ArgsAnalyzer
      */
     public function hasNamedArg(array $args): bool
     {
+        $found = \false;
         foreach ($args as $arg) {
             if ($arg->name instanceof Identifier) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param Arg[] $args
