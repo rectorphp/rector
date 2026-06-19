@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -39,6 +40,11 @@ final class CallCollectionAnalyzer
             $callerType = $this->nodeTypeResolver->getType($callerRoot);
             $callerTypeClassName = ClassNameFromObjectTypeResolver::resolve($callerType);
             if ($callerTypeClassName === null) {
+                // the caller scope is unreachable, e.g. behind mutual recursion, so the type
+                // resolves to never; the call still exists in code, keep the method to be safe
+                if ($callerType instanceof NeverType && $this->shouldSkip($call, $classMethodName)) {
+                    return \true;
+                }
                 // handle fluent by $this->bar()->baz()->qux()
                 // that methods don't have return type
                 if ($callerType instanceof MixedType && !$callerType->isExplicitMixed()) {
