@@ -652,7 +652,7 @@ final class RectorConfigBuilder
         $this->parallel = \false;
         return $this;
     }
-    public function withImportNames(bool $importNames = \true, bool $importDocBlockNames = \true, bool $importShortClasses = \true, bool $removeUnusedImports = \false): self
+    public function withImportNames(bool $importNames = \true, bool $importDocBlockNames = \true, bool $importShortClasses = \true, bool $removeUnusedImports = \true): self
     {
         $this->importNames = $importNames;
         $this->importDocBlockNames = $importDocBlockNames;
