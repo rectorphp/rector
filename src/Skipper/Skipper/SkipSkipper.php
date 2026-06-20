@@ -34,8 +34,10 @@ final class SkipSkipper
                 $this->usedSkipCollector->markUsed($skippedClass);
                 return \true;
             }
-            if ($this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, $skippedFiles)) {
-                $this->usedSkipCollector->markUsed($skippedClass);
+            // mark the specific matched path used, so unused paths under the same rule are reported
+            $matchedPath = $this->fileInfoMatcher->matchPattern($filePath, $skippedFiles);
+            if ($matchedPath !== null) {
+                $this->usedSkipCollector->markUsed($matchedPath);
                 return \true;
             }
         }

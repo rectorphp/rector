@@ -48,10 +48,18 @@ final class MissConfigurationReporter
         if (!SimpleParameterProvider::provideBoolParameter(Option::REPORT_UNUSED_SKIPS, \false)) {
             return;
         }
-        // only path-scoped class skips are trackable at runtime; skip-everywhere rule skips
+        // only concrete path-scoped skips are trackable at runtime; skip-everywhere rule skips
         // (null path) are forgotten from the container at boot, so they never reach the skipper
-        $pathScopedClassSkips = array_keys(array_filter($this->skippedClassResolver->resolve(), static fn(?array $paths): bool => $paths !== null));
-        $configuredSkips = array_merge($pathScopedClassSkips, $this->skippedPathsResolver->resolve());
+        $skippedClassPaths = [];
+        foreach ($this->skippedClassResolver->resolve() as $paths) {
+            if ($paths === null) {
+                continue;
+            }
+            $skippedClassPaths = array_merge($skippedClassPaths, $paths);
+        }
+        $configuredSkips = array_merge($skippedClassPaths, $this->skippedPathsResolver->resolve());
+        // skip mask paths like "*/some/*"; they are hard to spot and report false positives
+        $configuredSkips = array_filter($configuredSkips, static fn(string $skip): bool => strpos($skip, '*') === \false);
         $unusedSkips = array_values(array_diff($configuredSkips, $processResult->getUsedSkips()));
         if ($unusedSkips === []) {
             return;

@@ -32,14 +32,24 @@ final class FileInfoMatcher
      */
     public function doesFileInfoMatchPatterns(string $filePath, array $filePatterns): bool
     {
-        $filePath = PathNormalizer::normalize($filePath);
+        return $this->matchPattern($filePath, $filePatterns) !== null;
+    }
+    /**
+     * Returns the original (un-normalized) pattern that matched, so callers can report the exact
+     * configured path. Returns null when no pattern matches.
+     *
+     * @param string[] $filePatterns
+     */
+    public function matchPattern(string $filePath, array $filePatterns): ?string
+    {
+        $normalizedFilePath = PathNormalizer::normalize($filePath);
         foreach ($filePatterns as $filePattern) {
-            $filePattern = PathNormalizer::normalize($filePattern);
-            if ($this->doesFileMatchPattern($filePath, $filePattern)) {
-                return \true;
+            $normalizedFilePattern = PathNormalizer::normalize($filePattern);
+            if ($this->doesFileMatchPattern($normalizedFilePath, $normalizedFilePattern)) {
+                return $filePattern;
             }
         }
-        return \false;
+        return null;
     }
     /**
      * Supports both relative and absolute $file path. They differ for PHP-CS-Fixer and PHP_CodeSniffer.
