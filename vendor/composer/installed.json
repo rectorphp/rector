@@ -3223,6 +3223,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": "local parallel configuration",
             "install-path": "..\/symplify\/easy-parallel"
         },
         {

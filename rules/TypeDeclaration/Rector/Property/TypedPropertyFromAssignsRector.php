@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType as NodeUnionType;
 use PHPStan\Reflection\ClassReflection;
@@ -148,6 +149,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // skip Doctrine static function mapping, properties are mapped in loadMetadata() method
+        // @see https://www.doctrine-project.org/projects/doctrine-orm/en/3.6/reference/php-mapping.html#static-function
+        if ($node->getMethod('loadMetadata') instanceof ClassMethod) {
+            return null;
+        }
         $hasChanged = \false;
         $classReflection = null;
         foreach ($node->getProperties() as $property) {

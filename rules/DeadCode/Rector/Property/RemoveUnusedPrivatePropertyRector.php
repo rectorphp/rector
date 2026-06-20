@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
@@ -129,6 +130,11 @@ CODE_SAMPLE
     }
     private function shouldSkipClass(Class_ $class): bool
     {
+        // skip Doctrine static function mapping, properties are mapped in loadMetadata() method
+        // @see https://www.doctrine-project.org/projects/doctrine-orm/en/3.6/reference/php-mapping.html#static-function
+        if ($class->getMethod('loadMetadata') instanceof ClassMethod) {
+            return \true;
+        }
         foreach ($class->stmts as $stmt) {
             // unclear what property can be used there
             if ($stmt instanceof TraitUse) {
