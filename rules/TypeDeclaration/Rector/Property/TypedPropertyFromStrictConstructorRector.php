@@ -122,6 +122,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // skip Doctrine static function mapping, properties are mapped in loadMetadata() method
+        // @see https://www.doctrine-project.org/projects/doctrine-orm/en/3.6/reference/php-mapping.html#static-function
+        if ($node->getMethod('loadMetadata') instanceof ClassMethod) {
+            return null;
+        }
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
             return null;
