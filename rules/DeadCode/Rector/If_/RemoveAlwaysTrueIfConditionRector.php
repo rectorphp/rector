@@ -137,13 +137,9 @@ CODE_SAMPLE
     {
         /** @var Variable[] $variables */
         $variables = $this->betterNodeFinder->findInstancesOf($expr, [Variable::class]);
-        $hasPlainVariable = \false;
         foreach ($variables as $variable) {
             if ($this->exprAnalyzer->isNonTypedFromParam($variable)) {
                 return \true;
-            }
-            if (!$variable->name instanceof Expr) {
-                $hasPlainVariable = \true;
             }
             $type = $this->nodeTypeResolver->getNativeType($variable);
             if ($type instanceof IntersectionType) {
@@ -154,13 +150,7 @@ CODE_SAMPLE
                 }
             }
         }
-        // a dynamic variable assignment, e.g. ${$name} = ..., is invisible to native type inference, so the
-        // condition variable may be overwritten at runtime and is not safe to evaluate as always true
-        return $hasPlainVariable && $this->hasDynamicVariable();
-    }
-    private function hasDynamicVariable(): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($this->getFile()->getNewStmts(), static fn(Node $node): bool => $node instanceof Variable && $node->name instanceof Expr);
+        return \false;
     }
     private function shouldSkipExpr(Expr $expr): bool
     {

@@ -49,6 +49,7 @@ use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
@@ -119,10 +120,20 @@ final class ExprAnalyzer
         if (!$scope->hasVariableType((string) $this->nodeNameResolver->getName($expr))->yes()) {
             return \true;
         }
-        if ($nativeType instanceof UnionType) {
-            return !$nativeType->equals($type);
+        if ($nativeType instanceof UnionType && !$nativeType->equals($type)) {
+            return \true;
         }
-        return !$nativeType->isSuperTypeOf($type)->yes();
+        if (!$nativeType->isSuperTypeOf($type)->yes()) {
+            return \true;
+        }
+        $definedVariables = $scope->getDefinedVariables();
+        foreach ($definedVariables as $definedVariable) {
+            $variableType = $scope->getVariableType($definedVariable);
+            if ($variableType instanceof ConstantStringType && in_array($variableType->getValue(), $definedVariables, \true)) {
+                return \true;
+            }
+        }
+        return \false;
     }
     public function isDynamicExpr(Expr $expr): bool
     {
