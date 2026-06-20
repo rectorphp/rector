@@ -29,6 +29,9 @@ final class ConstFetchToClassConstFetchRector extends AbstractRector implements 
     {
         return [ConstFetch::class];
     }
+    /**
+     * @param ConstFetch $node
+     */
     public function refactor(Node $node): ?ClassConstFetch
     {
         foreach ($this->constFetchToClassConsts as $constFetchToClassConst) {
