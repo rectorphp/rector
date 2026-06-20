@@ -18,6 +18,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202606\Webmozart\Assert\Assert;
 /**
@@ -40,7 +41,42 @@ final class RemoveRefactorDuplicatedNodeInstanceCheckRector extends AbstractRect
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove refactor() method of Rector rule double check of $classMethod instance, if already defined in @param type', []);
+        return new RuleDefinition('Remove refactor() method of Rector rule double check of $classMethod instance, if already defined in @param type', [new CodeSample(<<<'CODE_SAMPLE'
+final class SomeRector extends AbstractRector
+{
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class];
+    }
+
+    /**
+     * @param ClassMethod $node
+     */
+    public function refactor(Node $node)
+    {
+        if (! $node instanceof ClassMethod) {
+            return null;
+        }
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+final class SomeRector extends AbstractRector
+{
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class];
+    }
+
+    /**
+     * @param ClassMethod $node
+     */
+    public function refactor(Node $node)
+    {
+    }
+}
+CODE_SAMPLE
+)]);
     }
     public function getNodeTypes(): array
     {
