@@ -34,9 +34,9 @@ final class UnusedSkipResolver
     }
     /**
      * Resolves skips configured via "->withSkip()" that never matched any element during the run.
-     * Rule-scoped skips are grouped under their rule ("rule => path", or "rule => [ path\n path ]"
-     * for multiple paths) so the user knows exactly what to remove; global skips are returned as a
-     * plain path. Returns an empty array unless "->reportUnusedSkips()" is enabled.
+     * Rule-scoped skips are grouped under their rule ("rule:" on its own line, each path nested
+     * below it) so the user knows exactly what to remove; global skips are returned as a plain
+     * path. Returns an empty array unless "->reportUnusedSkips()" is enabled.
      *
      * @return string[]
      */
@@ -85,11 +85,8 @@ final class UnusedSkipResolver
             if ($unusedRelativePaths === []) {
                 continue;
             }
-            if (count($unusedRelativePaths) === 1) {
-                $unusedSkips[] = $rectorClass . ' => ' . $unusedRelativePaths[0];
-                continue;
-            }
-            $unusedSkips[] = $rectorClass . ' => [ ' . implode("\n    ", $unusedRelativePaths) . ' ]';
+            // rule on its own line, with each unused path nested below it as a "->listing()" sub-item
+            $unusedSkips[] = $rectorClass . ':' . "\n     * " . implode("\n     * ", $unusedRelativePaths);
         }
         foreach ($globalRelativePaths as $path => $relativePath) {
             if (!in_array($path, $usedSkips, \true)) {
