@@ -5,6 +5,7 @@ namespace Rector\Reporting;
 
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\FileSystem\FilePathHelper;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Rector\ValueObject\ProcessResult;
@@ -21,10 +22,15 @@ final class UnusedSkipResolver
      * @readonly
      */
     private SkippedPathsResolver $skippedPathsResolver;
-    public function __construct(SkippedClassResolver $skippedClassResolver, SkippedPathsResolver $skippedPathsResolver)
+    /**
+     * @readonly
+     */
+    private FilePathHelper $filePathHelper;
+    public function __construct(SkippedClassResolver $skippedClassResolver, SkippedPathsResolver $skippedPathsResolver, FilePathHelper $filePathHelper)
     {
         $this->skippedClassResolver = $skippedClassResolver;
         $this->skippedPathsResolver = $skippedPathsResolver;
+        $this->filePathHelper = $filePathHelper;
     }
     /**
      * Resolves skips configured via "->withSkip()" that never matched any element during the run.
@@ -50,7 +56,7 @@ final class UnusedSkipResolver
             }
             // rule-scoped paths are intentional, so they are reported even as mask paths
             foreach ($paths as $path) {
-                $skipDisplaysByPath[$path] = $rectorClass . ' => ' . $path;
+                $skipDisplaysByPath[$path] = $rectorClass . ' => ' . $this->filePathHelper->relativePath($path);
             }
         }
         // global mask paths like "*/some/*" are hard to spot and report false positives, skip them
@@ -58,7 +64,7 @@ final class UnusedSkipResolver
             if (strpos($globalPath, '*') !== \false) {
                 continue;
             }
-            $skipDisplaysByPath[$globalPath] = $globalPath;
+            $skipDisplaysByPath[$globalPath] = $this->filePathHelper->relativePath($globalPath);
         }
         $usedSkips = $processResult->getUsedSkips();
         $unusedSkips = [];

@@ -24,7 +24,6 @@ final class ProcessResult
     private int $totalChanged;
     /**
      * @var string[]
-     * @readonly
      */
     private array $usedSkips = [];
     /**
@@ -66,6 +65,18 @@ final class ProcessResult
     {
         Assert::allIsInstanceOf($systemErrors, SystemError::class);
         $this->systemErrors = array_merge($this->systemErrors, $systemErrors);
+    }
+    /**
+     * Path-only skips are matched while finding files in the main process, but parallel runs build
+     * their result from worker processes only. Merge those main-process marks back in, or they would
+     * be wrongly reported as unused.
+     *
+     * @param string[] $usedSkips
+     */
+    public function addUsedSkips(array $usedSkips): void
+    {
+        Assert::allString($usedSkips);
+        $this->usedSkips = array_values(array_unique(array_merge($this->usedSkips, $usedSkips)));
     }
     public function getTotalChanged(): int
     {
