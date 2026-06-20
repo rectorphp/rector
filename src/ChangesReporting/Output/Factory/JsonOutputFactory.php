@@ -13,7 +13,10 @@ use Rector\ValueObject\ProcessResult;
  */
 final class JsonOutputFactory
 {
-    public static function create(ProcessResult $processResult, Configuration $configuration): string
+    /**
+     * @param string[] $unusedSkips
+     */
+    public static function create(ProcessResult $processResult, Configuration $configuration, array $unusedSkips = []): string
     {
         $errorsJson = ['totals' => ['changed_files' => $processResult->getTotalChanged()]];
         // We need onlyWithChanges: false to include all file diffs
@@ -32,6 +35,9 @@ final class JsonOutputFactory
         $errorsData = self::createErrorsData($systemErrors, $configuration->isReportingWithRealPath());
         if ($errorsData !== []) {
             $errorsJson['errors'] = $errorsData;
+        }
+        if ($unusedSkips !== []) {
+            $errorsJson['unused_skips'] = $unusedSkips;
         }
         return Json::encode($errorsJson, \true);
     }

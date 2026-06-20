@@ -2734,6 +2734,7 @@ class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
         'Rector\\Renaming\\ValueObject\\RenameStaticMethod' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameStaticMethod.php',
         'Rector\\Reporting\\DeprecatedRulesReporter' => __DIR__ . '/../..' . '/src/Reporting/DeprecatedRulesReporter.php',
         'Rector\\Reporting\\MissConfigurationReporter' => __DIR__ . '/../..' . '/src/Reporting/MissConfigurationReporter.php',
+        'Rector\\Reporting\\UnusedSkipResolver' => __DIR__ . '/../..' . '/src/Reporting/UnusedSkipResolver.php',
         'Rector\\Set\\Contract\\SetInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetInterface.php',
         'Rector\\Set\\Contract\\SetProviderInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetProviderInterface.php',
         'Rector\\Set\\Enum\\SetGroup' => __DIR__ . '/../..' . '/src/Set/Enum/SetGroup.php',

@@ -2469,6 +2469,7 @@ return array(
     'Rector\\Renaming\\ValueObject\\RenameStaticMethod' => $baseDir . '/rules/Renaming/ValueObject/RenameStaticMethod.php',
     'Rector\\Reporting\\DeprecatedRulesReporter' => $baseDir . '/src/Reporting/DeprecatedRulesReporter.php',
     'Rector\\Reporting\\MissConfigurationReporter' => $baseDir . '/src/Reporting/MissConfigurationReporter.php',
+    'Rector\\Reporting\\UnusedSkipResolver' => $baseDir . '/src/Reporting/UnusedSkipResolver.php',
     'Rector\\Set\\Contract\\SetInterface' => $baseDir . '/src/Set/Contract/SetInterface.php',
     'Rector\\Set\\Contract\\SetProviderInterface' => $baseDir . '/src/Set/Contract/SetProviderInterface.php',
     'Rector\\Set\\Enum\\SetGroup' => $baseDir . '/src/Set/Enum/SetGroup.php',
