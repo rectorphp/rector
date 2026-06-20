@@ -2757,6 +2757,7 @@ class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
         'Rector\\Skipper\\Skipper\\PathSkipper' => __DIR__ . '/../..' . '/src/Skipper/Skipper/PathSkipper.php',
         'Rector\\Skipper\\Skipper\\SkipSkipper' => __DIR__ . '/../..' . '/src/Skipper/Skipper/SkipSkipper.php',
         'Rector\\Skipper\\Skipper\\Skipper' => __DIR__ . '/../..' . '/src/Skipper/Skipper/Skipper.php',
+        'Rector\\Skipper\\Skipper\\UsedSkipCollector' => __DIR__ . '/../..' . '/src/Skipper/Skipper/UsedSkipCollector.php',
         'Rector\\StaticReflection\\DynamicSourceLocatorDecorator' => __DIR__ . '/../..' . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
         'Rector\\StaticTypeMapper\\Contract\\PhpDocParser\\PhpDocTypeMapperInterface' => __DIR__ . '/../..' . '/src/StaticTypeMapper/Contract/PhpDocParser/PhpDocTypeMapperInterface.php',
         'Rector\\StaticTypeMapper\\Contract\\PhpParser\\PhpParserNodeMapperInterface' => __DIR__ . '/../..' . '/src/StaticTypeMapper/Contract/PhpParser/PhpParserNodeMapperInterface.php',

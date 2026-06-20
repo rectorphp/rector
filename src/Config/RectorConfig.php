@@ -351,6 +351,10 @@ final class RectorConfig extends Container
     {
         SimpleParameterProvider::setParameter(Option::ABSOLUTE_FILE_PATH, $absolute);
     }
+    public function reportUnusedSkips(bool $report = \true): void
+    {
+        SimpleParameterProvider::setParameter(Option::REPORT_UNUSED_SKIPS, $report);
+    }
     public function editorUrl(string $editorUrl): void
     {
         SimpleParameterProvider::setParameter(Option::EDITOR_URL, $editorUrl);

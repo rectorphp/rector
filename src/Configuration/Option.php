@@ -118,6 +118,12 @@ final class Option
      */
     public const SKIP = 'skip';
     /**
+     * @internal Use
+     * @var string @see \Rector\Config\RectorConfig::reportUnusedSkips() instead
+     * @var string
+     */
+    public const REPORT_UNUSED_SKIPS = 'report_unused_skips';
+    /**
      * @internal Use RectorConfig::fileExtensions() instead
      * @var string
      */

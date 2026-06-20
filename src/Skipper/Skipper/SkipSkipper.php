@@ -10,9 +10,14 @@ final class SkipSkipper
      * @readonly
      */
     private FileInfoMatcher $fileInfoMatcher;
-    public function __construct(FileInfoMatcher $fileInfoMatcher)
+    /**
+     * @readonly
+     */
+    private \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector;
+    public function __construct(FileInfoMatcher $fileInfoMatcher, \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector)
     {
         $this->fileInfoMatcher = $fileInfoMatcher;
+        $this->usedSkipCollector = $usedSkipCollector;
     }
     /**
      * @param array<string, string[]|null> $skippedClasses
@@ -26,9 +31,11 @@ final class SkipSkipper
             }
             // skip everywhere
             if (!is_array($skippedFiles)) {
+                $this->usedSkipCollector->markUsed($skippedClass);
                 return \true;
             }
             if ($this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, $skippedFiles)) {
+                $this->usedSkipCollector->markUsed($skippedClass);
                 return \true;
             }
         }

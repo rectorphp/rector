@@ -192,6 +192,7 @@ EOF
         $this->deprecatedRulesReporter->reportDeprecatedSkippedRules();
         $this->deprecatedRulesReporter->reportDeprecatedRectorUnsupportedMethods();
         $this->missConfigurationReporter->reportSkippedNeverRegisteredRules();
+        $this->missConfigurationReporter->reportUnusedSkips($processResult);
         return $this->resolveReturnCode($processResult, $configuration);
     }
     protected function initialize(InputInterface $input, OutputInterface $output): void

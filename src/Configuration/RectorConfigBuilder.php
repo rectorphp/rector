@@ -136,6 +136,7 @@ final class RectorConfigBuilder
      */
     private array $setGroups = [];
     private ?bool $reportingRealPath = null;
+    private ?bool $reportUnusedSkips = null;
     /**
      * @var string[]
      */
@@ -278,6 +279,9 @@ final class RectorConfigBuilder
         }
         if ($this->reportingRealPath !== null) {
             $rectorConfig->reportingRealPath($this->reportingRealPath);
+        }
+        if ($this->reportUnusedSkips !== null) {
+            $rectorConfig->reportUnusedSkips($this->reportUnusedSkips);
         }
         if ($this->editorUrl !== null) {
             $rectorConfig->editorUrl($this->editorUrl);
@@ -898,6 +902,15 @@ final class RectorConfigBuilder
     public function withRealPathReporting(bool $absolutePath = \true): self
     {
         $this->reportingRealPath = $absolutePath;
+        return $this;
+    }
+    /**
+     * Report skips configured via withSkip() that never matched anything during the run,
+     * so they can be safely removed.
+     */
+    public function reportUnusedSkips(bool $report = \true): self
+    {
+        $this->reportUnusedSkips = $report;
         return $this;
     }
     public function withEditorUrl(string $editorUrl): self

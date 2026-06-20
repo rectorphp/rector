@@ -13,6 +13,7 @@ use Rector\FileSystem\FilesFinder;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\PhpParser\Parser\ParserErrors;
 use Rector\Reporting\MissConfigurationReporter;
+use Rector\Skipper\Skipper\UsedSkipCollector;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\ArrayParametersMerger;
 use Rector\ValueObject\Application\File;
@@ -70,6 +71,10 @@ final class ApplicationFileProcessor
      */
     private MissConfigurationReporter $missConfigurationReporter;
     /**
+     * @readonly
+     */
+    private UsedSkipCollector $usedSkipCollector;
+    /**
      * @var string
      */
     private const ARGV = 'argv';
@@ -77,7 +82,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private array $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FilesFinder $filesFinder, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter)
+    public function __construct(SymfonyStyle $symfonyStyle, FilesFinder $filesFinder, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter, UsedSkipCollector $usedSkipCollector)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->filesFinder = $filesFinder;
@@ -89,6 +94,7 @@ final class ApplicationFileProcessor
         $this->fileProcessor = $fileProcessor;
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->missConfigurationReporter = $missConfigurationReporter;
+        $this->usedSkipCollector = $usedSkipCollector;
     }
     public function run(Configuration $configuration, InputInterface $input): ProcessResult
     {
@@ -170,7 +176,7 @@ final class ApplicationFileProcessor
                 $systemErrors[] = $this->resolveSystemError($throwable, $filePath);
             }
         }
-        return new ProcessResult($systemErrors, $fileDiffs, $totalChanged);
+        return new ProcessResult($systemErrors, $fileDiffs, $totalChanged, $this->usedSkipCollector->provide());
     }
     private function processFile(File $file, Configuration $configuration): FileProcessResult
     {

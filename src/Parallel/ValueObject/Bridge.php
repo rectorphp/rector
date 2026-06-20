@@ -32,4 +32,8 @@ final class Bridge
      * @var string
      */
     public const TOTAL_CHANGED = 'total_changed';
+    /**
+     * @var string
+     */
+    public const USED_SKIPS = 'used_skips';
 }

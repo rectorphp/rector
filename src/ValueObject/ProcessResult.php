@@ -23,16 +23,24 @@ final class ProcessResult
      */
     private int $totalChanged;
     /**
+     * @var string[]
+     * @readonly
+     */
+    private array $usedSkips = [];
+    /**
      * @param SystemError[] $systemErrors
      * @param FileDiff[] $fileDiffs
+     * @param string[] $usedSkips
      */
-    public function __construct(array $systemErrors, array $fileDiffs, int $totalChanged)
+    public function __construct(array $systemErrors, array $fileDiffs, int $totalChanged, array $usedSkips = [])
     {
         $this->systemErrors = $systemErrors;
         $this->fileDiffs = $fileDiffs;
         $this->totalChanged = $totalChanged;
+        $this->usedSkips = $usedSkips;
         Assert::allIsInstanceOf($systemErrors, SystemError::class);
         Assert::allIsInstanceOf($fileDiffs, FileDiff::class);
+        Assert::allString($usedSkips);
     }
     /**
      * @return SystemError[]
@@ -62,6 +70,13 @@ final class ProcessResult
     public function getTotalChanged(): int
     {
         return $this->totalChanged;
+    }
+    /**
+     * @return string[]
+     */
+    public function getUsedSkips(): array
+    {
+        return $this->usedSkips;
     }
     /**
      * @return array<class-string<RectorInterface>, int>
