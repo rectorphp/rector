@@ -1440,6 +1440,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnExprInConstructRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveVoidDocblockFromMagicMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveVoidDocblockFromMagicMethodRector.php',
+    'Rector\\DeadCode\\Rector\\Class_\\RemoveRefactorDuplicatedNodeInstanceCheckRector' => $baseDir . '/rules/DeadCode/Rector/Class_/RemoveRefactorDuplicatedNodeInstanceCheckRector.php',
     'Rector\\DeadCode\\Rector\\Closure\\RemoveUnusedClosureVariableUseRector' => $baseDir . '/rules/DeadCode/Rector/Closure/RemoveUnusedClosureVariableUseRector.php',
     'Rector\\DeadCode\\Rector\\Concat\\RemoveConcatAutocastRector' => $baseDir . '/rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php',
     'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => $baseDir . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',

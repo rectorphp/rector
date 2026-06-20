@@ -1705,6 +1705,7 @@ class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnExprInConstructRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveVoidDocblockFromMagicMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveVoidDocblockFromMagicMethodRector.php',
+        'Rector\\DeadCode\\Rector\\Class_\\RemoveRefactorDuplicatedNodeInstanceCheckRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Class_/RemoveRefactorDuplicatedNodeInstanceCheckRector.php',
         'Rector\\DeadCode\\Rector\\Closure\\RemoveUnusedClosureVariableUseRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Closure/RemoveUnusedClosureVariableUseRector.php',
         'Rector\\DeadCode\\Rector\\Concat\\RemoveConcatAutocastRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php',
         'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',
