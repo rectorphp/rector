@@ -7,6 +7,9 @@ use Rector\Skipper\FileSystem\FnMatchPathNormalizer;
 use Rector\Skipper\FileSystem\PathNormalizer;
 use Rector\Skipper\Fnmatcher;
 use Rector\Skipper\RealpathMatcher;
+/**
+ * @see \Rector\Tests\Skipper\Matcher\FileInfoMatcherTest
+ */
 final class FileInfoMatcher
 {
     /**
