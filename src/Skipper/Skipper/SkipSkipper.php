@@ -34,10 +34,11 @@ final class SkipSkipper
                 $this->usedSkipCollector->markUsed($skippedClass);
                 return \true;
             }
-            // mark the specific matched path used, so unused paths under the same rule are reported
+            // mark the specific matched path used, scoped to its rule via "class|path" - the same
+            // path can be skipped under multiple rules, so a path-only key would mark them all used
             $matchedPath = $this->fileInfoMatcher->matchPattern($filePath, $skippedFiles);
             if ($matchedPath !== null) {
-                $this->usedSkipCollector->markUsed($matchedPath);
+                $this->usedSkipCollector->markUsed($skippedClass . '|' . $matchedPath);
                 return \true;
             }
         }

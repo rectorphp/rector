@@ -110,7 +110,9 @@ final class UnusedSkipResolver
         foreach ($this->resolveRelativePathsByClass() as $rectorClass => $relativePaths) {
             $unusedRelativePaths = [];
             foreach ($relativePaths as $path => $relativePath) {
-                if (!in_array($path, $usedSkips, \true)) {
+                // used skips are tracked scoped to their rule as "class|path", so the same path
+                // skipped under another rule does not mark this one used (see SkipSkipper)
+                if (!in_array($rectorClass . '|' . $path, $usedSkips, \true)) {
                     $unusedRelativePaths[] = $relativePath;
                 }
             }
