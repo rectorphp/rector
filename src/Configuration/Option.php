@@ -133,6 +133,15 @@ final class Option
      */
     public const IS_RUN_NARROWED = 'is_run_narrowed';
     /**
+     * True when the unchanged-files cache dropped at least one file from the run, so rules only ran
+     * on the changed subset. Unused skip reporting is then disabled, as skips on cached files never
+     * get a chance to match and would all look falsely unused.
+     *
+     * @internal
+     * @var string
+     */
+    public const IS_CACHED_RUN = 'is_cached_run';
+    /**
      * @internal Use RectorConfig::fileExtensions() instead
      * @var string
      */

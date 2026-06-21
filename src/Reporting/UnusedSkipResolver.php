@@ -50,6 +50,11 @@ final class UnusedSkipResolver
         if (SimpleParameterProvider::provideBoolParameter(Option::IS_RUN_NARROWED, \false)) {
             return [];
         }
+        // a cached run only re-processes changed files, so skips on cached files never get a chance
+        // to match and would all look falsely unused - reporting them would be noise
+        if (SimpleParameterProvider::provideBoolParameter(Option::IS_CACHED_RUN, \false)) {
+            return [];
+        }
         // map of rule => (trackable skip path => relative display path); skips are tracked at
         // runtime by their path, but rule-scoped ones are printed grouped under their rule so the
         // user knows exactly what to remove. Skip-everywhere rule skips (null path) are forgotten
