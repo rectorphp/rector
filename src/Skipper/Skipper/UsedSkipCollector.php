@@ -12,18 +12,29 @@ namespace Rector\Skipper\Skipper;
 final class UsedSkipCollector
 {
     /**
-     * @var array<string, true>
+     * Map of skip element (rule class or global path) to the set of paths matched under it.
+     * Rule-scoped skips collect their matched paths; skip-everywhere rules and global path skips
+     * keep an empty path set, the same shape as the "->withSkip()" config.
+     *
+     * @var array<string, array<string, true>>
      */
     private array $usedSkips = [];
-    public function markUsed(string $skip): void
+    public function markUsed(string $skip, ?string $path = null): void
     {
-        $this->usedSkips[$skip] = \true;
+        $this->usedSkips[$skip] ??= [];
+        if ($path !== null) {
+            $this->usedSkips[$skip][$path] = \true;
+        }
     }
     /**
-     * @return string[]
+     * @return array<string, string[]>
      */
     public function provide(): array
     {
-        return array_keys($this->usedSkips);
+        $usedSkips = [];
+        foreach ($this->usedSkips as $skip => $paths) {
+            $usedSkips[$skip] = array_keys($paths);
+        }
+        return $usedSkips;
     }
 }

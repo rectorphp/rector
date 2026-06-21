@@ -23,13 +23,13 @@ final class ProcessResult
      */
     private int $totalChanged;
     /**
-     * @var string[]
+     * @var array<string, string[]>
      */
     private array $usedSkips = [];
     /**
      * @param SystemError[] $systemErrors
      * @param FileDiff[] $fileDiffs
-     * @param string[] $usedSkips
+     * @param array<string, string[]> $usedSkips
      */
     public function __construct(array $systemErrors, array $fileDiffs, int $totalChanged, array $usedSkips = [])
     {
@@ -39,7 +39,10 @@ final class ProcessResult
         $this->usedSkips = $usedSkips;
         Assert::allIsInstanceOf($systemErrors, SystemError::class);
         Assert::allIsInstanceOf($fileDiffs, FileDiff::class);
-        Assert::allString($usedSkips);
+        Assert::allString(array_keys($usedSkips));
+        foreach ($usedSkips as $usedSkip) {
+            Assert::allString($usedSkip);
+        }
     }
     /**
      * @return SystemError[]
@@ -71,19 +74,22 @@ final class ProcessResult
      * their result from worker processes only. Merge those main-process marks back in, or they would
      * be wrongly reported as unused.
      *
-     * @param string[] $usedSkips
+     * @param array<string, string[]> $usedSkips
      */
     public function addUsedSkips(array $usedSkips): void
     {
-        Assert::allString($usedSkips);
-        $this->usedSkips = array_values(array_unique(array_merge($this->usedSkips, $usedSkips)));
+        foreach ($usedSkips as $skip => $paths) {
+            Assert::allString($paths);
+            $existingPaths = $this->usedSkips[$skip] ?? [];
+            $this->usedSkips[$skip] = array_values(array_unique(array_merge($existingPaths, $paths)));
+        }
     }
     public function getTotalChanged(): int
     {
         return $this->totalChanged;
     }
     /**
-     * @return string[]
+     * @return array<string, string[]>
      */
     public function getUsedSkips(): array
     {
