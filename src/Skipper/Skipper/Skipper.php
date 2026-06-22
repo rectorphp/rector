@@ -7,6 +7,7 @@ use PhpParser\Node;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Skipper\SkipVoter\ClassSkipVoter;
+use Rector\Skipper\ValueObject\SkipMatch;
 /**
  * @api
  * @see \Rector\Tests\Skipper\Skipper\SkipperTest
@@ -25,11 +26,16 @@ final class Skipper
      * @readonly
      */
     private ClassSkipVoter $classSkipVoter;
-    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, ClassSkipVoter $classSkipVoter)
+    /**
+     * @readonly
+     */
+    private \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector;
+    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, ClassSkipVoter $classSkipVoter, \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector)
     {
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->pathSkipper = $pathSkipper;
         $this->classSkipVoter = $classSkipVoter;
+        $this->usedSkipCollector = $usedSkipCollector;
     }
     /**
      * @param string|object $element
@@ -47,20 +53,34 @@ final class Skipper
      */
     public function shouldSkipElementAndFilePath($element, string $filePath): bool
     {
-        if (!$this->classSkipVoter->match($element)) {
+        $skipMatch = $this->matchSkip($element, $filePath);
+        if (!$skipMatch instanceof SkipMatch) {
             return \false;
         }
-        return $this->classSkipVoter->shouldSkip($element, $filePath);
+        $this->markSkipUsed($skipMatch);
+        return \true;
+    }
+    /**
+     * Match a class/path skip without marking it used. Callers that can only tell whether the skip
+     * actually prevented a change later on must mark it used themselves via markSkipUsed().
+     * @param string|object $element
+     */
+    public function matchSkip($element, string $filePath): ?SkipMatch
+    {
+        if (!$this->classSkipVoter->match($element)) {
+            return null;
+        }
+        return $this->classSkipVoter->matchSkip($element, $filePath);
+    }
+    public function markSkipUsed(SkipMatch $skipMatch): void
+    {
+        $this->usedSkipCollector->markUsed($skipMatch->getSkippedClass(), $skipMatch->getMatchedPath());
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
-     * @param string|object $element
      */
-    public function shouldSkipCurrentNode($element, string $filePath, string $rectorClass, Node $node): bool
+    public function shouldSkipCurrentNode(string $rectorClass, Node $node): bool
     {
-        if ($this->shouldSkipElementAndFilePath($element, $filePath)) {
-            return \true;
-        }
         return $this->rectifiedAnalyzer->hasRectified($rectorClass, $node);
     }
 }

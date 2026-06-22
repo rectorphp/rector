@@ -4,26 +4,22 @@ declare (strict_types=1);
 namespace Rector\Skipper\Skipper;
 
 use Rector\Skipper\Matcher\FileInfoMatcher;
+use Rector\Skipper\ValueObject\SkipMatch;
 final class SkipSkipper
 {
     /**
      * @readonly
      */
     private FileInfoMatcher $fileInfoMatcher;
-    /**
-     * @readonly
-     */
-    private \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector;
-    public function __construct(FileInfoMatcher $fileInfoMatcher, \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector)
+    public function __construct(FileInfoMatcher $fileInfoMatcher)
     {
         $this->fileInfoMatcher = $fileInfoMatcher;
-        $this->usedSkipCollector = $usedSkipCollector;
     }
     /**
      * @param array<string, string[]|null> $skippedClasses
      * @param object|string $checker
      */
-    public function doesMatchSkip($checker, string $filePath, array $skippedClasses): bool
+    public function match($checker, string $filePath, array $skippedClasses): ?SkipMatch
     {
         foreach ($skippedClasses as $skippedClass => $skippedFiles) {
             if (!is_a($checker, $skippedClass, \true)) {
@@ -31,17 +27,15 @@ final class SkipSkipper
             }
             // skip everywhere
             if (!is_array($skippedFiles)) {
-                $this->usedSkipCollector->markUsed($skippedClass);
-                return \true;
+                return new SkipMatch($skippedClass, null);
             }
-            // mark the specific matched path used, scoped to its rule - the same path can be skipped
-            // under multiple rules, so the path is nested under its rule, not tracked on its own
+            // the same path can be skipped under multiple rules, so the matched path is reported
+            // scoped to its rule, not tracked on its own
             $matchedPath = $this->fileInfoMatcher->matchPattern($filePath, $skippedFiles);
             if ($matchedPath !== null) {
-                $this->usedSkipCollector->markUsed($skippedClass, $matchedPath);
-                return \true;
+                return new SkipMatch($skippedClass, $matchedPath);
             }
         }
-        return \false;
+        return null;
     }
 }
