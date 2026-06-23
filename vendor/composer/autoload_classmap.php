@@ -2377,6 +2377,7 @@ return array(
     'Rector\\PhpParser\\NodeVisitor\\GlobalVariableNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/GlobalVariableNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\NameNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/NameNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\ParamDefaultNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/ParamDefaultNodeVisitor.php',
+    'Rector\\PhpParser\\NodeVisitor\\PhpDocInfoRemovingNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/PhpDocInfoRemovingNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\PhpVersionConditionNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/PhpVersionConditionNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\PropertyOrClassConstDefaultNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/PropertyOrClassConstDefaultNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\StaticVariableNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/StaticVariableNodeVisitor.php',

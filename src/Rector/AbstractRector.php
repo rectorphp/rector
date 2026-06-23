@@ -34,6 +34,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\NodeFactory;
+use Rector\PhpParser\NodeVisitor\PhpDocInfoRemovingNodeVisitor;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\ValueObject\SkipMatch;
 use Rector\ValueObject\Application\File;
@@ -229,7 +230,7 @@ CODE_SAMPLE;
      */
     private function cloneNode(Node $node): Node
     {
-        $nodeTraverser = new NodeTraverser(new CloningVisitor());
+        $nodeTraverser = new NodeTraverser(new CloningVisitor(), new PhpDocInfoRemovingNodeVisitor());
         return $nodeTraverser->traverse([$node])[0];
     }
     /**
