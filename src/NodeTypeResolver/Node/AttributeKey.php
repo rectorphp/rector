@@ -179,6 +179,10 @@ final class AttributeKey
     /**
      * @var string
      */
+    public const IS_UNPACKED_ARG_VALUE = 'is_unpacked_arg_value';
+    /**
+     * @var string
+     */
     public const IS_PARAM_VAR = 'is_param_var';
     /**
      * @var string
