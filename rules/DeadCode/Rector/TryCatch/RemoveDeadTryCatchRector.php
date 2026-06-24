@@ -74,7 +74,7 @@ CODE_SAMPLE
             return null;
         }
         $onlyCatchStmt = $onlyCatch->stmts[0];
-        if (!($onlyCatchStmt instanceof Expression && $onlyCatchStmt->expr instanceof Throw_)) {
+        if (!$onlyCatchStmt instanceof Expression || !$onlyCatchStmt->expr instanceof Throw_) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($onlyCatch->var, $onlyCatchStmt->expr->expr)) {

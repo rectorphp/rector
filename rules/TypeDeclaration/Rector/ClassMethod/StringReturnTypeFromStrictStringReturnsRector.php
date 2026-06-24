@@ -130,7 +130,7 @@ CODE_SAMPLE
     {
         $found = \true;
         foreach ($returns as $return) {
-            if (!!(!$return->expr instanceof String_ && !$return->expr instanceof InterpolatedString)) {
+            if (!($return->expr instanceof String_ || $return->expr instanceof InterpolatedString)) {
                 $found = \false;
                 break;
             }

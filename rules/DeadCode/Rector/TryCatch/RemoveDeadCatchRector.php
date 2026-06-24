@@ -95,7 +95,7 @@ CODE_SAMPLE
             return \false;
         }
         $catchItemStmt = $catch->stmts[0];
-        if (!($catchItemStmt instanceof Expression && $catchItemStmt->expr instanceof Throw_)) {
+        if (!$catchItemStmt instanceof Expression || !$catchItemStmt->expr instanceof Throw_) {
             return \false;
         }
         if (!$this->nodeComparator->areNodesEqual($catch->var, $catchItemStmt->expr->expr)) {

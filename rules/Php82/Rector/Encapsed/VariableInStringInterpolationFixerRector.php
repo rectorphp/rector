@@ -45,7 +45,7 @@ CODE_SAMPLE
         $oldTokens = $this->getFile()->getOldTokens();
         $hasChanged = \false;
         foreach ($node->parts as $part) {
-            if (!$part instanceof Variable && !($part instanceof ArrayDimFetch && $part->var instanceof Variable)) {
+            if (!$part instanceof Variable && (!$part instanceof ArrayDimFetch || !$part->var instanceof Variable)) {
                 continue;
             }
             $startTokenPos = $part->getStartTokenPos();

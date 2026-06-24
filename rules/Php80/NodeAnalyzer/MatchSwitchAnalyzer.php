@@ -81,7 +81,7 @@ final class MatchSwitchAnalyzer
         if ($this->isNextStmtReturnWithExpr($switch, $nextStmt)) {
             return \false;
         }
-        return !($nextStmt instanceof Expression && $nextStmt->expr instanceof Throw_);
+        return !$nextStmt instanceof Expression || !$nextStmt->expr instanceof Throw_;
     }
     /**
      * @param CondAndExpr[] $condAndExprs
