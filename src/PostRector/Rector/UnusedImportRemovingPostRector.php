@@ -139,6 +139,8 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
                 $names = array_merge($names, $constFetchNodeNames);
                 $genericTagClassNames = $phpDocInfo->getGenericTagClassNames();
                 $names = array_merge($names, $genericTagClassNames);
+                $inlineGenericUsesTagClassNames = $phpDocInfo->getInlineGenericUsesTagClassNames();
+                $names = array_merge($names, $inlineGenericUsesTagClassNames);
                 $arrayItemTagClassNames = $phpDocInfo->getArrayItemNodeClassNames();
                 $names = array_merge($names, $arrayItemTagClassNames);
             }
