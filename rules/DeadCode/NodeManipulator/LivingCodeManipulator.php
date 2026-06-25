@@ -29,17 +29,24 @@ use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\ValueObject\MethodName;
 final class LivingCodeManipulator
 {
     /**
      * @readonly
      */
     private NodeTypeResolver $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @return Expr[]|mixed[]
@@ -52,6 +59,9 @@ final class LivingCodeManipulator
         }
         if ($expr instanceof Closure || $expr instanceof Scalar || $expr instanceof ConstFetch) {
             return [];
+        }
+        if ($expr instanceof Clone_ && $this->hasCloneMagicMethod($expr)) {
+            return [$expr];
         }
         if ($this->isNestedExpr($expr)) {
             return $this->keepLivingCodeFromExpr($expr->expr);
@@ -91,6 +101,19 @@ final class LivingCodeManipulator
     private function isNestedExpr(Expr $expr): bool
     {
         return $expr instanceof Cast || $expr instanceof Empty_ || $expr instanceof UnaryMinus || $expr instanceof UnaryPlus || $expr instanceof BitwiseNot || $expr instanceof BooleanNot || $expr instanceof Clone_;
+    }
+    private function hasCloneMagicMethod(Clone_ $clone): bool
+    {
+        $cloneObjectType = $this->nodeTypeResolver->getType($clone->expr);
+        foreach ($cloneObjectType->getObjectClassNames() as $className) {
+            if (!$this->reflectionProvider->hasClass($className)) {
+                continue;
+            }
+            if ($this->reflectionProvider->getClass($className)->hasNativeMethod(MethodName::CLONE)) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function isBinaryOpWithoutChange(Expr $expr): bool
     {
