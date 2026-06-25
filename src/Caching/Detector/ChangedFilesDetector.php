@@ -30,11 +30,18 @@ final class ChangedFilesDetector
      * @var array<string, true>
      */
     private array $cacheableFiles = [];
+    // scopes the per-file cache key to the active --only / --only-suffix selection (empty = full run)
+    private string $scopeSuffix = '';
     public function __construct(FileHashComputer $fileHashComputer, Cache $cache, FileHasher $fileHasher)
     {
         $this->fileHashComputer = $fileHashComputer;
         $this->cache = $cache;
         $this->fileHasher = $fileHasher;
+    }
+    public function setActiveScope(?string $onlyRule, ?string $onlySuffix): void
+    {
+        // each selection gets its own cache key, so --only and full runs coexist without clearing or poisoning
+        $this->scopeSuffix = $onlyRule === null && $onlySuffix === null ? '' : '|only:' . ($onlyRule ?? '') . '|suffix:' . ($onlySuffix ?? '');
     }
     public function cacheFile(string $filePath): void
     {
@@ -90,7 +97,7 @@ final class ChangedFilesDetector
     }
     private function getFilePathCacheKey(string $filePath): string
     {
-        return $this->fileHasher->hash($this->resolvePath($filePath));
+        return $this->fileHasher->hash($this->resolvePath($filePath) . $this->scopeSuffix);
     }
     private function hashFile(string $filePath): string
     {

@@ -98,6 +98,8 @@ final class ApplicationFileProcessor
     }
     public function run(Configuration $configuration, InputInterface $input): ProcessResult
     {
+        // scope the cache to this run's --only / --only-suffix selection before any cache read/write
+        $this->changedFilesDetector->setActiveScope($configuration->getOnlyRule(), $configuration->getOnlySuffix());
         $filePaths = $this->filesFinder->findFilesInPaths($configuration->getPaths(), $configuration);
         // no files found
         if ($filePaths === []) {
@@ -147,6 +149,8 @@ final class ApplicationFileProcessor
      */
     public function processFiles(array $filePaths, Configuration $configuration, ?callable $preFileCallback = null, ?callable $postFileCallback = null): ProcessResult
     {
+        // also set here: parallel workers reach processFiles() via WorkerCommand, bypassing run()
+        $this->changedFilesDetector->setActiveScope($configuration->getOnlyRule(), $configuration->getOnlySuffix());
         /** @var SystemError[] $systemErrors */
         $systemErrors = [];
         /** @var FileDiff[] $fileDiffs */
@@ -188,11 +192,8 @@ final class ApplicationFileProcessor
         if ($fileProcessResult->getSystemErrors() !== []) {
             $this->changedFilesDetector->invalidateFile($file->getFilePath());
         } elseif (!$configuration->isDryRun() || !$fileProcessResult->getFileDiff() instanceof FileDiff) {
-            // a file clean under a subset of rules is not necessarily clean under all rules,
-            // caching it would hide its pending changes from the next full run
-            if ($configuration->getOnlyRule() === null && $configuration->getOnlySuffix() === null) {
-                $this->changedFilesDetector->cacheFile($file->getFilePath());
-            }
+            // selective runs are safe to cache now — the key is scoped to the rule selection
+            $this->changedFilesDetector->cacheFile($file->getFilePath());
         }
         return $fileProcessResult;
     }
