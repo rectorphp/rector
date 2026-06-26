@@ -93,60 +93,56 @@ CODE_SAMPLE
         }
         return $this->refactorConstraintValidatorCall($node);
     }
-    private function refactorConstraintValidatorTestCaseCall(MethodCall $node): ?Node
+    private function refactorConstraintValidatorTestCaseCall(MethodCall $methodCall): ?Node
     {
-        if ($this->isName($node->name, 'validate') && \count($node->args) === 2) {
-            return $this->createThisValidateMethodCall($node->args[0], $node->args[1]);
+        if ($this->isName($methodCall->name, 'validate') && \count($methodCall->args) === 2) {
+            return $this->createThisValidateMethodCall($methodCall->args[0], $methodCall->args[1]);
         }
-        if ($this->isName($node->name, 'validateInContext') && \count($node->args) === 3) {
-            return $this->createThisValidateMethodCall($node->args[0], $node->args[1]);
+        if ($this->isName($methodCall->name, 'validateInContext') && \count($methodCall->args) === 3) {
+            return $this->createThisValidateMethodCall($methodCall->args[0], $methodCall->args[1]);
         }
         return null;
     }
-    private function refactorConstraintValidatorCall(MethodCall $node): ?Node
+    private function refactorConstraintValidatorCall(MethodCall $methodCall): ?Node
     {
-        if (!$this->isName($node->name, 'validate')) {
+        if (!$this->isName($methodCall->name, 'validate')) {
             return null;
         }
-        if (\count($node->args) !== 2) {
+        if (\count($methodCall->args) !== 2) {
             return null;
         }
-        if (!$this->isInsideConstraintValidator($node)) {
+        if (!$this->isInsideConstraintValidator($methodCall)) {
             return null;
         }
-        $node->name = new Identifier('validateInContext');
-        $node->args[] = new Arg($this->nodeFactory->createPropertyFetch(new Variable('this'), 'context'));
-        return $node;
+        $methodCall->name = new Identifier('validateInContext');
+        $methodCall->args[] = new Arg($this->nodeFactory->createPropertyFetch(new Variable('this'), 'context'));
+        return $methodCall;
     }
-    /**
-     * @param Arg $firstArg
-     * @param Arg $secondArg
-     */
     private function createThisValidateMethodCall(Arg $firstArg, Arg $secondArg): MethodCall
     {
         return new MethodCall(new Variable('this'), new Identifier('validate'), [$firstArg, $secondArg]);
     }
-    private function isThisValidatorPropertyFetch(Expr $node): bool
+    private function isThisValidatorPropertyFetch(Expr $expr): bool
     {
-        if (!$node instanceof PropertyFetch) {
+        if (!$expr instanceof PropertyFetch) {
             return \false;
         }
-        if (!$this->isName($node->name, 'validator')) {
+        if (!$this->isName($expr->name, 'validator')) {
             return \false;
         }
-        return $node->var instanceof Variable && $this->isName($node->var, 'this');
+        return $expr->var instanceof Variable && $this->isName($expr->var, 'this');
     }
-    private function isInsideConstraintValidatorTestCase(MethodCall $node): bool
+    private function isInsideConstraintValidatorTestCase(MethodCall $methodCall): bool
     {
-        return $this->isInsideClassSubclassOf($node, ConstraintValidatorTestCase::class);
+        return $this->isInsideClassSubclassOf($methodCall, ConstraintValidatorTestCase::class);
     }
-    private function isInsideConstraintValidator(MethodCall $node): bool
+    private function isInsideConstraintValidator(MethodCall $methodCall): bool
     {
-        return $this->isInsideClassSubclassOf($node, ConstraintValidator::class);
+        return $this->isInsideClassSubclassOf($methodCall, ConstraintValidator::class);
     }
-    private function isInsideClassSubclassOf(MethodCall $node, string $className): bool
+    private function isInsideClassSubclassOf(MethodCall $methodCall, string $className): bool
     {
-        $scope = ScopeFetcher::fetch($node);
+        $scope = ScopeFetcher::fetch($methodCall);
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return \false;

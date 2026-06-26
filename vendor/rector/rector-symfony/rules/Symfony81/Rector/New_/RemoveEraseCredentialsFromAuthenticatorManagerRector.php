@@ -72,9 +72,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$node instanceof New_) {
-            return null;
-        }
         if (!$this->isName($node->class, 'Symfony\Component\Security\Http\Authentication\AuthenticatorManager')) {
             return null;
         }

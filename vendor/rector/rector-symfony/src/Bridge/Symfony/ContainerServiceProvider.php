@@ -9,6 +9,9 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\Symfony\Enum\SymfonyClass;
 use RectorPrefix202606\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix202606\Webmozart\Assert\Assert;
+/**
+ * @see \Rector\Symfony\Tests\Bridge\Symfony\ContainerServiceProviderTest
+ */
 final class ContainerServiceProvider
 {
     private ?object $container = null;

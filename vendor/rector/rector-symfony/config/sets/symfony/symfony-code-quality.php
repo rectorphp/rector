@@ -9,6 +9,7 @@ use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
+use Rector\Symfony\CodeQuality\Rector\Class_\EventSubscriberMethodReturnVoidRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\InlineClassRoutePrefixRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
@@ -27,6 +28,7 @@ return static function (RectorConfig $rectorConfig): void {
         RedirectToRouteRector::class,
         EventListenerToEventSubscriberRector::class,
         ResponseReturnTypeControllerActionRector::class,
+        EventSubscriberMethodReturnVoidRector::class,
         // int and string literals to const fetches
         ResponseStatusCodeRector::class,
         LiteralGetToRequestClassConstantRector::class,

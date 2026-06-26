@@ -147,12 +147,14 @@ final class UnionCollectionTagValueNodeNarrower
      */
     private function hasCollectionDocblockType($complexTypeNode): bool
     {
-        foreach ($complexTypeNode->types as $singleType) {
-            if ($this->isCollectionIdentifierTypeNode($singleType)) {
-                return \true;
+        $found = \false;
+        foreach ($complexTypeNode->types as $typeNode) {
+            if ($this->isCollectionIdentifierTypeNode($typeNode)) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tagValueNode

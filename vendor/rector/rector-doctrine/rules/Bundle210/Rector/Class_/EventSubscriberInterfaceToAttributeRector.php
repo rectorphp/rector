@@ -10,6 +10,7 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -168,12 +169,14 @@ CODE_SAMPLE
     }
     private function hasImplements(Class_ $class, string $interfaceFQN): bool
     {
-        foreach ($class->implements as $implement) {
-            if ($this->isName($implement, $interfaceFQN)) {
-                return \true;
+        $found = \false;
+        foreach ($class->implements as $name) {
+            if ($this->isName($name, $interfaceFQN)) {
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param array<string> $interfaceFQNS

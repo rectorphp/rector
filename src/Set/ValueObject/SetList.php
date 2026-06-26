@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Set\ValueObject;
 
-use Deprecated;
 /**
  * @api
  */
@@ -27,9 +26,9 @@ final class SetList
      */
     public const DEAD_CODE = __DIR__ . '/../../../config/set/dead-code.php';
     /**
+     * @deprecated As too strict and not practical. Use code quality and coding style sets instead.
      * @var string
      */
-    #[Deprecated(message: 'As too strict and not practical. Use code quality and coding style sets instead.')]
     public const STRICT_BOOLEANS = __DIR__ . '/../../../config/set/strict-booleans.php';
     /**
      * @var string

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
+class ComposerStaticInite7732782e781a0db6ef2f014a417d492
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -2274,6 +2274,8 @@ class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\NarrowUnusedSetUpDefinedPropertyRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/NarrowUnusedSetUpDefinedPropertyRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitSelfCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitSelfCallRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitThisCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitThisCallRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferTestsWithCamelCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferTestsWithCamelCaseRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferTestsWithSnakeCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferTestsWithSnakeCaseRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\RemoveDataProviderParamKeysRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/RemoveDataProviderParamKeysRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\RemoveNeverUsedMockPropertyRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/RemoveNeverUsedMockPropertyRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\SetUpBeforeClassToSetUpRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/SetUpBeforeClassToSetUpRector.php',
@@ -2819,6 +2821,7 @@ class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
         'Rector\\Symfony\\CodeQuality\\Rector\\ClassMethod\\TemplateAnnotationToThisRenderRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\ControllerMethodInjectionToConstructorRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/ControllerMethodInjectionToConstructorRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventListenerToEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/EventListenerToEventSubscriberRector.php',
+        'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventSubscriberMethodReturnVoidRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/EventSubscriberMethodReturnVoidRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\InlineClassRoutePrefixRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/InlineClassRoutePrefixRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\LoadValidatorMetadataToAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\SplitAndSecurityAttributeToIsGrantedRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/SplitAndSecurityAttributeToIsGrantedRector.php',
@@ -3314,9 +3317,9 @@ class ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit311c1aff9403b33c90f3edae71d2b69d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite7732782e781a0db6ef2f014a417d492::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite7732782e781a0db6ef2f014a417d492::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite7732782e781a0db6ef2f014a417d492::$classMap;
 
         }, null, ClassLoader::class);
     }

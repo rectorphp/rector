@@ -48,11 +48,11 @@ CODE_SAMPLE
     {
         return [New_::class];
     }
+    /**
+     * @param New_ $node
+     */
     public function refactor(Node $node): ?Node
     {
-        if (!$node instanceof New_) {
-            return null;
-        }
         if ($node->isFirstClassCallable()) {
             return null;
         }

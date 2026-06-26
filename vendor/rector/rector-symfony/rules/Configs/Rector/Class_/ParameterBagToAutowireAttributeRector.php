@@ -135,12 +135,14 @@ CODE_SAMPLE
     }
     private function hasParameterBagInterfaceDependency(ClassMethod $classMethod): bool
     {
+        $found = \false;
         foreach ($classMethod->getParams() as $param) {
             if ($this->isParameterBagParam($param)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param Param[] $extraParams
