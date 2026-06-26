@@ -1693,6 +1693,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\DeadCode\\Rector\\ClassLike\\RemoveAnnotationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php',
         'Rector\\DeadCode\\Rector\\ClassLike\\RemoveTypedPropertyNonMockDocblockRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassLike/RemoveTypedPropertyNonMockDocblockRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveArgumentFromDefaultParentCallRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveArgumentFromDefaultParentCallRector.php',
+        'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDuplicatedReturnSelfDocblockRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveDuplicatedReturnSelfDocblockRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveNullTagValueNodeRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveNullTagValueNodeRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveParentDelegatingConstructorRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveParentDelegatingConstructorRector.php',
