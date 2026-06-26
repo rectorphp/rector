@@ -1430,6 +1430,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveArgumentFromDefaultParentCallRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveArgumentFromDefaultParentCallRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDuplicatedReturnSelfDocblockRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveDuplicatedReturnSelfDocblockRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
+    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveMixedDocblockOverruledByNativeTypeRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveMixedDocblockOverruledByNativeTypeRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveNullTagValueNodeRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveNullTagValueNodeRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveParentDelegatingConstructorRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveParentDelegatingConstructorRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',

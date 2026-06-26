@@ -1695,6 +1695,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveArgumentFromDefaultParentCallRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveArgumentFromDefaultParentCallRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDuplicatedReturnSelfDocblockRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveDuplicatedReturnSelfDocblockRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
+        'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveMixedDocblockOverruledByNativeTypeRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveMixedDocblockOverruledByNativeTypeRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveNullTagValueNodeRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveNullTagValueNodeRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveParentDelegatingConstructorRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveParentDelegatingConstructorRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',
