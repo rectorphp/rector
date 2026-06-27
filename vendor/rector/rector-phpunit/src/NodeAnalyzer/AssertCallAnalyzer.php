@@ -99,12 +99,14 @@ final class AssertCallAnalyzer
         if (!is_string($callName)) {
             return \false;
         }
+        $found = \false;
         foreach (self::ASSERT_METHOD_NAME_PREFIXES as $assertMethodNamePrefix) {
             if (strncmp($callName, $assertMethodNamePrefix, strlen($assertMethodNamePrefix)) === 0) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     private function hasDirectAssertOrMockCall(ClassMethod $classMethod): bool
     {

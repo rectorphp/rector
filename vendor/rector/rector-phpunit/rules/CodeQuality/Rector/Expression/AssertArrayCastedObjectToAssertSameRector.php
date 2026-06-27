@@ -136,12 +136,13 @@ CODE_SAMPLE
      */
     private function hasAllKeysString(array $assertedArrayValues): bool
     {
-        // all keys must be string
+        $found = \true;
         foreach (array_keys($assertedArrayValues) as $key) {
             if (!is_string($key)) {
-                return \false;
+                $found = \false;
+                break;
             }
         }
-        return \true;
+        return $found;
     }
 }

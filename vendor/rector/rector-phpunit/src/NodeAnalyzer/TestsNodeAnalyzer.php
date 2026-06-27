@@ -47,12 +47,14 @@ final class TestsNodeAnalyzer
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
+        $found = \false;
         foreach (PHPUnitClassName::TEST_CLASSES as $testCaseObjectClass) {
             if ($classReflection->is($testCaseObjectClass)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     public function isTestClassMethod(ClassMethod $classMethod): bool
     {

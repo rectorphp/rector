@@ -3,11 +3,19 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\PropertyItem;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
@@ -85,6 +93,9 @@ CODE_SAMPLE
             if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($propertyPhpDocInfo->getVarTagValueNode())) {
                 continue;
             }
+            if ($this->hasUsefulParentPropertyVarTag($node, $property, $propertyDefaultType)) {
+                continue;
+            }
             if ($this->nodeDocblockTypeDecorator->decorateGenericIterableVarType($propertyDefaultType, $propertyPhpDocInfo, $property)) {
                 $hasChanged = \true;
             }
@@ -93,5 +104,51 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    private function hasUsefulParentPropertyVarTag(Class_ $class, Property $property, Type $propertyDefaultType): bool
+    {
+        $propertyName = $this->getName($property);
+        if ($propertyName === null) {
+            return \false;
+        }
+        // private property doesn't override parent property
+        if ($property->isPrivate()) {
+            return \false;
+        }
+        $scope = ScopeFetcher::fetch($class);
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (!$parentClassReflection->hasNativeProperty($propertyName)) {
+                continue;
+            }
+            $parentPropertyReflection = $parentClassReflection->getNativeProperty($propertyName);
+            if ($parentPropertyReflection->isPrivate()) {
+                return \false;
+            }
+            if (!$parentPropertyReflection->hasPhpDocType()) {
+                continue;
+            }
+            $varTagValueNode = $this->resolveVarTagValueNode($parentPropertyReflection);
+            if (!$this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($varTagValueNode)) {
+                continue;
+            }
+            if ($parentPropertyReflection->getPhpDocType()->isSuperTypeOf($propertyDefaultType)->yes()) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    private function resolveVarTagValueNode(PhpPropertyReflection $phpPropertyReflection): ?VarTagValueNode
+    {
+        $docComment = $phpPropertyReflection->getDocComment();
+        if ($docComment === null) {
+            return null;
+        }
+        $property = new Property(0, [new PropertyItem($phpPropertyReflection->getName())]);
+        $property->setDocComment(new Doc($docComment));
+        return $this->phpDocInfoFactory->createFromNodeOrEmpty($property)->getVarTagValueNode();
     }
 }

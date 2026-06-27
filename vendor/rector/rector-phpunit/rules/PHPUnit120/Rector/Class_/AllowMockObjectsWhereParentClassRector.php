@@ -104,11 +104,13 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
+        $found = \false;
         foreach (self::PARENT_CLASSES as $parentClass) {
             if ($classReflection->is($parentClass)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

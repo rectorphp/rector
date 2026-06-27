@@ -101,6 +101,11 @@ CODE_SAMPLE
                     $useStaticAssert = \true;
                     return null;
                 }
+                // assert() inside an anonymous class has no $this of the test case
+                if ($node instanceof Class_ && $node->isAnonymous()) {
+                    $useStaticAssert = \true;
+                    return null;
+                }
                 if (!$node instanceof FuncCall) {
                     return null;
                 }

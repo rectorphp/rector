@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -75,7 +76,7 @@ CODE_SAMPLE
             if ($node->getMethod($newName) instanceof Node) {
                 continue;
             }
-            $classMethod->name = new Node\Identifier($newName);
+            $classMethod->name = new Identifier($newName);
             $hasChanged = \true;
         }
         if ($hasChanged === \false) {
@@ -86,7 +87,7 @@ CODE_SAMPLE
     private function toCamelCase(string $value): string
     {
         $words = explode(' ', str_replace(['-', '_'], ' ', $value));
-        $words = array_map(fn(string $word): string => ucfirst($word), $words);
-        return lcfirst(implode($words));
+        $words = array_map(\Closure::fromCallable('ucfirst'), $words);
+        return lcfirst(implode('', $words));
     }
 }

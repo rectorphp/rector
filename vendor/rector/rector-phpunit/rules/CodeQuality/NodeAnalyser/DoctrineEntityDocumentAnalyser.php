@@ -29,12 +29,13 @@ final class DoctrineEntityDocumentAnalyser
         if (!$resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
             return \false;
         }
+        $found = \false;
         foreach (self::ENTITY_DOCBLOCK_MARKERS as $entityDocBlockMarkers) {
             if (strpos($resolvedPhpDocBlock->getPhpDocString(), $entityDocBlockMarkers) !== \false) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        // @todo apply attributes as well
-        return \false;
+        return $found;
     }
 }

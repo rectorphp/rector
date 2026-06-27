@@ -1008,6 +1008,15 @@ class Parser
         }
         return (string) substr($this->currentLine, $offset, $cursor - $offset);
     }
+    private function lexInlineAnchorOrAlias(int &$cursor): string
+    {
+        $offset = $cursor;
+        ++$cursor;
+        while ($cursor < \strlen($this->currentLine) && !\in_array($this->currentLine[$cursor], [' ', "\t", ',', '[', ']', '{', '}'], \true)) {
+            ++$cursor;
+        }
+        return (string) substr($this->currentLine, $offset, $cursor - $offset);
+    }
     private function lexInlineMapping(int &$cursor = 0, bool $consumeUntilEol = \true): string
     {
         return $this->lexInlineStructure($cursor, '}', $consumeUntilEol);
@@ -1038,6 +1047,10 @@ class Parser
                         break;
                     case '[':
                         $value .= $this->lexInlineSequence($cursor, \false);
+                        break;
+                    case '&':
+                    case '*':
+                        $value .= $this->lexInlineAnchorOrAlias($cursor);
                         break;
                     case $closingTag:
                         $value .= $this->currentLine[$cursor];
