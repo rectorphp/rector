@@ -1351,6 +1351,7 @@ return array(
     'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => $baseDir . '/src/Comments/NodeDocBlock/DocBlockUpdater.php',
     'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => $baseDir . '/src/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
     'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => $baseDir . '/src/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
+    'Rector\\Composer\\ComposerJsonPackageVersionResolver' => $baseDir . '/src/Composer/ComposerJsonPackageVersionResolver.php',
     'Rector\\Composer\\InstalledPackageResolver' => $baseDir . '/src/Composer/InstalledPackageResolver.php',
     'Rector\\Composer\\ValueObject\\InstalledPackage' => $baseDir . '/src/Composer/ValueObject/InstalledPackage.php',
     'Rector\\Config\\Level\\CodeQualityLevel' => $baseDir . '/src/Config/Level/CodeQualityLevel.php',

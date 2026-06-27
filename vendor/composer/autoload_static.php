@@ -1616,6 +1616,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => __DIR__ . '/../..' . '/src/Comments/NodeDocBlock/DocBlockUpdater.php',
         'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => __DIR__ . '/../..' . '/src/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
         'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => __DIR__ . '/../..' . '/src/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
+        'Rector\\Composer\\ComposerJsonPackageVersionResolver' => __DIR__ . '/../..' . '/src/Composer/ComposerJsonPackageVersionResolver.php',
         'Rector\\Composer\\InstalledPackageResolver' => __DIR__ . '/../..' . '/src/Composer/InstalledPackageResolver.php',
         'Rector\\Composer\\ValueObject\\InstalledPackage' => __DIR__ . '/../..' . '/src/Composer/ValueObject/InstalledPackage.php',
         'Rector\\Config\\Level\\CodeQualityLevel' => __DIR__ . '/../..' . '/src/Config/Level/CodeQualityLevel.php',
