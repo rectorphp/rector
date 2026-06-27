@@ -1301,7 +1301,6 @@ return array(
     'Rector\\CodingStyle\\ClassNameImport\\ValueObject\\UsedImports' => $baseDir . '/rules/CodingStyle/ClassNameImport/ValueObject/UsedImports.php',
     'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => $baseDir . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
     'Rector\\CodingStyle\\Guard\\ArrowFunctionAndClosureFirstClassCallableGuard' => $baseDir . '/rules/CodingStyle/Guard/ArrowFunctionAndClosureFirstClassCallableGuard.php',
-    'Rector\\CodingStyle\\Guard\\StaticGuard' => $baseDir . '/rules/CodingStyle/Guard/StaticGuard.php',
     'Rector\\CodingStyle\\Naming\\ClassNaming' => $baseDir . '/rules/CodingStyle/Naming/ClassNaming.php',
     'Rector\\CodingStyle\\NodeAnalyzer\\UseImportNameMatcher' => $baseDir . '/rules/CodingStyle/NodeAnalyzer/UseImportNameMatcher.php',
     'Rector\\CodingStyle\\NodeFactory\\ArrayCallableToMethodCallFactory' => $baseDir . '/rules/CodingStyle/NodeFactory/ArrayCallableToMethodCallFactory.php',

@@ -51,7 +51,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        throw new ShouldNotHappenException(sprintf('"%s" is deprecated as depends on context. Cannot be automated. Use manually where needed instead', self::class));
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated as depends on context. Cannot be automated. Use manually or custom rule where needed instead', self::class));
     }
     public function provideMinPhpVersion(): int
     {

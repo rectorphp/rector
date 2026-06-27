@@ -1566,7 +1566,6 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\CodingStyle\\ClassNameImport\\ValueObject\\UsedImports' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ValueObject/UsedImports.php',
         'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => __DIR__ . '/../..' . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
         'Rector\\CodingStyle\\Guard\\ArrowFunctionAndClosureFirstClassCallableGuard' => __DIR__ . '/../..' . '/rules/CodingStyle/Guard/ArrowFunctionAndClosureFirstClassCallableGuard.php',
-        'Rector\\CodingStyle\\Guard\\StaticGuard' => __DIR__ . '/../..' . '/rules/CodingStyle/Guard/StaticGuard.php',
         'Rector\\CodingStyle\\Naming\\ClassNaming' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/ClassNaming.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\UseImportNameMatcher' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/UseImportNameMatcher.php',
         'Rector\\CodingStyle\\NodeFactory\\ArrayCallableToMethodCallFactory' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeFactory/ArrayCallableToMethodCallFactory.php',
