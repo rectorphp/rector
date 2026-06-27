@@ -1457,6 +1457,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\CodeQuality\\NodeManipulator\\NamedArgsSorter' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/NamedArgsSorter.php',
         'Rector\\CodeQuality\\Rector\\AssignOp\\NewArrayItemConcatAssignToAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/AssignOp/NewArrayItemConcatAssignToAssignRector.php',
         'Rector\\CodeQuality\\Rector\\Assign\\CombinedAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Assign/CombinedAssignRector.php',
+        'Rector\\CodeQuality\\Rector\\Attribute\\ExplicitAttributeNamedArgsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Attribute/ExplicitAttributeNamedArgsRector.php',
         'Rector\\CodeQuality\\Rector\\Attribute\\SortAttributeNamedArgsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Attribute/SortAttributeNamedArgsRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanAnd\\RemoveUselessIsObjectCheckRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanAnd/RemoveUselessIsObjectCheckRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanAnd\\RepeatedAndNotEqualToNotInArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanAnd/RepeatedAndNotEqualToNotInArrayRector.php',

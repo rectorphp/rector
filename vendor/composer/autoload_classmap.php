@@ -1192,6 +1192,7 @@ return array(
     'Rector\\CodeQuality\\NodeManipulator\\NamedArgsSorter' => $baseDir . '/rules/CodeQuality/NodeManipulator/NamedArgsSorter.php',
     'Rector\\CodeQuality\\Rector\\AssignOp\\NewArrayItemConcatAssignToAssignRector' => $baseDir . '/rules/CodeQuality/Rector/AssignOp/NewArrayItemConcatAssignToAssignRector.php',
     'Rector\\CodeQuality\\Rector\\Assign\\CombinedAssignRector' => $baseDir . '/rules/CodeQuality/Rector/Assign/CombinedAssignRector.php',
+    'Rector\\CodeQuality\\Rector\\Attribute\\ExplicitAttributeNamedArgsRector' => $baseDir . '/rules/CodeQuality/Rector/Attribute/ExplicitAttributeNamedArgsRector.php',
     'Rector\\CodeQuality\\Rector\\Attribute\\SortAttributeNamedArgsRector' => $baseDir . '/rules/CodeQuality/Rector/Attribute/SortAttributeNamedArgsRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanAnd\\RemoveUselessIsObjectCheckRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/RemoveUselessIsObjectCheckRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanAnd\\RepeatedAndNotEqualToNotInArrayRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/RepeatedAndNotEqualToNotInArrayRector.php',
