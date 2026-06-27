@@ -4,6 +4,9 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\ValueObject;
 
 use Rector\ValueObject\MethodName;
+/**
+ * @api designed for public use
+ */
 final class ObjectMagicMethods
 {
     /**

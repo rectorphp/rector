@@ -4,57 +4,19 @@ declare (strict_types=1);
 namespace Rector\Php70\Rector\StaticCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
-use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
-use Rector\Enum\ObjectReference;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
-use Rector\NodeCollector\StaticAnalyzer;
-use Rector\PHPStan\ScopeFetcher;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
+ * @deprecated as risky change with little value. Use manually or custom rule where needed instead.
  */
-final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector implements MinPhpVersionInterface
+final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector implements MinPhpVersionInterface, DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private StaticAnalyzer $staticAnalyzer;
-    /**
-     * @readonly
-     */
-    private ReflectionProvider $reflectionProvider;
-    /**
-     * @readonly
-     */
-    private ReflectionResolver $reflectionResolver;
-    /**
-     * @readonly
-     */
-    private ParentClassScopeResolver $parentClassScopeResolver;
-    public function __construct(StaticAnalyzer $staticAnalyzer, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, ParentClassScopeResolver $parentClassScopeResolver)
-    {
-        $this->staticAnalyzer = $staticAnalyzer;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->reflectionResolver = $reflectionResolver;
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
-    }
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::INSTANCE_CALL;
@@ -107,98 +69,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->name instanceof Expr) {
-            return null;
-        }
-        $methodName = $this->getName($node->name);
-        $className = $this->resolveStaticCallClassName($node);
-        if ($methodName === null) {
-            return null;
-        }
-        if ($className === null) {
-            return null;
-        }
-        $scope = ScopeFetcher::fetch($node);
-        if ($this->shouldSkip($methodName, $className, $node, $scope)) {
-            return null;
-        }
-        $classReflection = $scope->getClassReflection();
-        if ($classReflection instanceof ClassReflection && $classReflection->getName() === $className) {
-            // detect any scope where $this is unavailable or possibly unavailable
-            if (!$scope->hasVariableType('this')->yes()) {
-                return null;
-            }
-            return new MethodCall(new Variable('this'), $node->name, $node->args);
-        }
-        if ($this->isInstantiable($className, $scope)) {
-            $new = new New_($node->class);
-            return new MethodCall($new, $node->name, $node->args);
-        }
-        return null;
-    }
-    private function resolveStaticCallClassName(StaticCall $staticCall): ?string
-    {
-        if ($staticCall->class instanceof PropertyFetch) {
-            $objectType = $this->getType($staticCall->class);
-            if ($objectType instanceof ObjectType) {
-                return $objectType->getClassName();
-            }
-        }
-        return $this->getName($staticCall->class);
-    }
-    private function shouldSkip(string $methodName, string $className, StaticCall $staticCall, Scope $scope): bool
-    {
-        if (in_array($methodName, ObjectMagicMethods::METHOD_NAMES, \true)) {
-            return \true;
-        }
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return \true;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        if ($classReflection->isAbstract()) {
-            return \true;
-        }
-        // does the method even exist?
-        if (!$classReflection->hasMethod($methodName)) {
-            return \true;
-        }
-        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($classReflection, $methodName);
-        if ($isStaticMethod) {
-            return \true;
-        }
-        $currentClassReflection = $scope->getClassReflection();
-        if ($currentClassReflection instanceof ClassReflection && $this->reflectionProvider->hasClass($className) && $currentClassReflection->isSubclassOfClass($this->reflectionProvider->getClass($className))) {
-            return \true;
-        }
-        $className = $this->getName($staticCall->class);
-        if (in_array($className, [ObjectReference::PARENT, ObjectReference::SELF, ObjectReference::STATIC], \true)) {
-            return \true;
-        }
-        if ($className === 'class') {
-            return \true;
-        }
-        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($scope);
-        return $className === $parentClassName;
-    }
-    private function isInstantiable(string $className, Scope $scope): bool
-    {
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return \false;
-        }
-        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, '__callStatic', $scope);
-        if ($methodReflection instanceof MethodReflection) {
-            return \false;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $nativeReflection = $classReflection->getNativeReflection();
-        $reflectionMethod = $nativeReflection->getConstructor();
-        if (!$reflectionMethod instanceof ReflectionMethod) {
-            return \true;
-        }
-        if (!$reflectionMethod->isPublic()) {
-            return \false;
-        }
-        // required parameters in constructor, nothing we can do
-        return !(bool) $reflectionMethod->getNumberOfRequiredParameters();
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated as risky change with little value. Use manually or custom rule where needed instead', self::class));
     }
 }
