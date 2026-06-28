@@ -11,16 +11,17 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Reflection\ReflectionResolver;
@@ -42,21 +43,16 @@ final class ArgumentDefaultValueReplacer
     /**
      * @readonly
      */
-    private AstResolver $astResolver;
-    /**
-     * @readonly
-     */
     private NodeTypeResolver $nodeTypeResolver;
     /**
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    public function __construct(NodeFactory $nodeFactory, ValueResolver $valueResolver, ArgsAnalyzer $argsAnalyzer, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver)
+    public function __construct(NodeFactory $nodeFactory, ValueResolver $valueResolver, ArgsAnalyzer $argsAnalyzer, NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->valueResolver = $valueResolver;
         $this->argsAnalyzer = $argsAnalyzer;
-        $this->astResolver = $astResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
@@ -128,18 +124,15 @@ final class ArgumentDefaultValueReplacer
         // if it is, we use the position of the named argyment as the position to replace
         // if it is not, we cannot replace it
         if ($firstNamedArgPosition !== null && $position >= $firstNamedArgPosition) {
-            $call = $this->astResolver->resolveClassMethodOrFunctionFromCall($expr);
-            if ($call === null) {
+            $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($expr);
+            if (!$reflection instanceof MethodReflection && !$reflection instanceof FunctionReflection) {
                 return null;
             }
-            $paramName = null;
-            $variable = $call->params[$position]->var;
-            if ($variable instanceof Variable) {
-                $paramName = $variable->name;
-            }
+            $parametersAcceptor = ParametersAcceptorSelector::combineAcceptors($reflection->getVariants());
+            $parameterReflection = $parametersAcceptor->getParameters()[$position] ?? null;
             $newPosition = -1;
-            if (is_string($paramName)) {
-                $newPosition = $this->argsAnalyzer->resolveArgPosition($arguments, $paramName, $newPosition);
+            if ($parameterReflection !== null) {
+                $newPosition = $this->argsAnalyzer->resolveArgPosition($arguments, $parameterReflection->getName(), $newPosition);
             }
             if ($newPosition === -1) {
                 return null;
