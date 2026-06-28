@@ -196,10 +196,6 @@ final class SymfonyClass
     /**
      * @var string
      */
-    public const CONTAINER = 'Symfony\Component\DependencyInjection\Container';
-    /**
-     * @var string
-     */
     public const ABSTRACT_TYPE_EXTENSION = 'Symfony\Component\Form\AbstractTypeExtension';
     /**
      * @var string
