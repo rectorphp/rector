@@ -2069,7 +2069,6 @@ return array(
     'Rector\\PHPUnit\\Enum\\PHPUnitAttribute' => $vendorDir . '/rector/rector-phpunit/src/Enum/PHPUnitAttribute.php',
     'Rector\\PHPUnit\\Enum\\PHPUnitClassName' => $vendorDir . '/rector/rector-phpunit/src/Enum/PHPUnitClassName.php',
     'Rector\\PHPUnit\\Enum\\ProphecyClassName' => $vendorDir . '/rector/rector-phpunit/src/Enum/ProphecyClassName.php',
-    'Rector\\PHPUnit\\Enum\\WebmozartClassName' => $vendorDir . '/rector/rector-phpunit/src/Enum/WebmozartClassName.php',
     'Rector\\PHPUnit\\MethodCallRemover' => $vendorDir . '/rector/rector-phpunit/src/MethodCallRemover.php',
     'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => $vendorDir . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\ArgumentMover' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/ArgumentMover.php',

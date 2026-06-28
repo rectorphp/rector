@@ -2334,7 +2334,6 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\PHPUnit\\Enum\\PHPUnitAttribute' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/PHPUnitAttribute.php',
         'Rector\\PHPUnit\\Enum\\PHPUnitClassName' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/PHPUnitClassName.php',
         'Rector\\PHPUnit\\Enum\\ProphecyClassName' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/ProphecyClassName.php',
-        'Rector\\PHPUnit\\Enum\\WebmozartClassName' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Enum/WebmozartClassName.php',
         'Rector\\PHPUnit\\MethodCallRemover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/MethodCallRemover.php',
         'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\ArgumentMover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/ArgumentMover.php',
