@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ThisType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -32,12 +33,17 @@ final class UninitializedPropertyAnalyzer
      * @readonly
      */
     private NodeNameResolver $nodeNameResolver;
-    public function __construct(AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ConstructorAssignDetector $constructorAssignDetector, NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ConstructorAssignDetector $constructorAssignDetector, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->astResolver = $astResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function isUninitialized(Expr $expr): bool
     {
@@ -52,11 +58,16 @@ final class UninitializedPropertyAnalyzer
         if ($className === null) {
             return \false;
         }
+        $propertyName = (string) $this->nodeNameResolver->getName($expr);
+        // fast-path: a typed property with an explicit default is always initialized,
+        // so we can skip the heavy class parsing below
+        if ($this->hasTypedDefaultProperty($className, $propertyName)) {
+            return \false;
+        }
         $classLike = $this->astResolver->resolveClassFromName($className);
         if (!$classLike instanceof ClassLike) {
             return \false;
         }
-        $propertyName = (string) $this->nodeNameResolver->getName($expr);
         $property = $classLike->getProperty($propertyName);
         if (!$property instanceof Property) {
             return \false;
@@ -68,5 +79,18 @@ final class UninitializedPropertyAnalyzer
             return \false;
         }
         return !$this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
+    }
+    private function hasTypedDefaultProperty(string $className, string $propertyName): bool
+    {
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return \false;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if (!$classReflection->hasNativeProperty($propertyName)) {
+            return \false;
+        }
+        $nativeReflectionProperty = $classReflection->getNativeProperty($propertyName)->getNativeReflection();
+        // an untyped property has an implicit null default, which is not an explicit initialization
+        return $nativeReflectionProperty->hasType() && $nativeReflectionProperty->hasDefaultValue();
     }
 }
