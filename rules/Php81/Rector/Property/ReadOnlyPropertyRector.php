@@ -13,6 +13,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -176,6 +177,10 @@ CODE_SAMPLE
         if ($this->propertyFetchAssignManipulator->isAssignedMultipleTimesInConstructor($class, $property)) {
             return null;
         }
+        // returned by reference can be mutated outside the class, so it cannot be readonly
+        if ($this->isPropertyReturnedByRef($class, (string) $this->getName($property))) {
+            return null;
+        }
         $this->visibilityManipulator->makeReadonly($property);
         $this->removeReadOnlyDoc($property);
         return $property;
@@ -226,9 +231,32 @@ CODE_SAMPLE
         if ($this->isPromotedPropertyAssigned($class, $param)) {
             return null;
         }
+        // returned by reference can be mutated outside the class, so it cannot be readonly
+        if ($this->isPropertyReturnedByRef($class, (string) $this->getName($param))) {
+            return null;
+        }
         $this->visibilityManipulator->makeReadonly($param);
         $this->removeReadOnlyDoc($param);
         return $param;
+    }
+    private function isPropertyReturnedByRef(Class_ $class, string $propertyName): bool
+    {
+        foreach ($class->getMethods() as $classMethod) {
+            if (!$classMethod->byRef) {
+                continue;
+            }
+            $returns = $this->betterNodeFinder->findInstanceOf($classMethod, Return_::class);
+            foreach ($returns as $return) {
+                if (!$return->expr instanceof Expr) {
+                    continue;
+                }
+                $propertyFetch = $this->betterNodeFinder->findFirst($return->expr, fn(Node $subNode): bool => $subNode instanceof PropertyFetch && $this->isName($subNode->var, 'this') && $this->isName($subNode, $propertyName));
+                if ($propertyFetch instanceof PropertyFetch) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
     private function isPromotedPropertyAssigned(Class_ $class, Param $param): bool
     {
