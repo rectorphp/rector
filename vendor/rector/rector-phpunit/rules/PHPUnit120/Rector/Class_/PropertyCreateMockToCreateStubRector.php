@@ -134,6 +134,16 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($class)) {
             return \true;
         }
+        // skip abstract/base test classes, as property can be mocked in child classes
+        if ($class->isAbstract()) {
+            return \true;
+        }
+        if ($class->name instanceof Identifier) {
+            $shortClassName = $class->name->toString();
+            if (substr_compare($shortClassName, 'TestCase', -strlen('TestCase')) === 0 || strncmp($shortClassName, 'Abstract', strlen('Abstract')) === 0) {
+                return \true;
+            }
+        }
         $setUpClassMethod = $class->getMethod(MethodName::SET_UP);
         // the setup class method must be here, so we have a place where the createMock() is used
         return !$setUpClassMethod instanceof ClassMethod;
