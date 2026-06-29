@@ -60,6 +60,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->isAnonymous()) {
+            return null;
+        }
         if ($this->isReadonlyClass($node)) {
             return null;
         }
