@@ -58,6 +58,7 @@ use Rector\PHPUnit\CodeQuality\Rector\StmtsAwareInterface\DeclareStrictTypesTest
 use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubOverCreateMockArgRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\PropertyCreateMockToCreateStubRector;
 use Rector\PHPUnit\PHPUnit120\Rector\ClassMethod\ExpressionCreateMockToCreateStubRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Property\BareVarToStubIntersectionRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Property\MockObjectVarToStubRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\ReplaceAtMethodWithDesiredMatcherRector;
@@ -126,6 +127,7 @@ return static function (RectorConfig $rectorConfig): void {
         ExpressionCreateMockToCreateStubRector::class,
         PropertyCreateMockToCreateStubRector::class,
         MockObjectVarToStubRector::class,
+        BareVarToStubIntersectionRector::class,
         InlineStubPropertyToCreateStubMethodCallRector::class,
         // @test first, enable later
         // \Rector\PHPUnit\CodeQuality\Rector\Expression\ConfiguredMockEntityToSetterObjectRector::class,

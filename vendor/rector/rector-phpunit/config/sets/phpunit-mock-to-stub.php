@@ -8,6 +8,7 @@ use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubInCoalesceArgRector;
 use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubOverCreateMockArgRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\PropertyCreateMockToCreateStubRector;
 use Rector\PHPUnit\PHPUnit120\Rector\ClassMethod\ExpressionCreateMockToCreateStubRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Property\BareVarToStubIntersectionRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Property\MockObjectVarToStubRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
@@ -17,5 +18,6 @@ return static function (RectorConfig $rectorConfig): void {
         ExpressionCreateMockToCreateStubRector::class,
         PropertyCreateMockToCreateStubRector::class,
         MockObjectVarToStubRector::class,
+        BareVarToStubIntersectionRector::class,
     ]);
 };
