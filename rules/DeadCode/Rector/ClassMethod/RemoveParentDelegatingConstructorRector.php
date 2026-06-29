@@ -15,6 +15,7 @@ use PhpParser\NodeVisitor;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionParameter;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ExtendedMethodReflection;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Enum\ObjectReference;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
@@ -37,10 +38,15 @@ final class RemoveParentDelegatingConstructorRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(StaticTypeMapper $staticTypeMapper, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private PhpDocInfoFactory $phpDocInfoFactory;
+    public function __construct(StaticTypeMapper $staticTypeMapper, ValueResolver $valueResolver, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->valueResolver = $valueResolver;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -118,7 +124,18 @@ CODE_SAMPLE
         if ($this->doAttributeDecoratedParametersExist($node)) {
             return null;
         }
+        // keep when the docblock refines parameter types beyond the native signature,
+        // e.g. @param array<string, mixed> or @phpstan-param SomeShape $config — removing
+        // the constructor would drop that type information
+        if ($this->hasParamRefiningDocblock($node)) {
+            return null;
+        }
         return NodeVisitor::REMOVE_NODE;
+    }
+    private function hasParamRefiningDocblock(ClassMethod $classMethod): bool
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        return $phpDocInfo->hasByNames(['@param', '@phpstan-param', '@psalm-param']);
     }
     private function matchParentConstructorReflection(ClassMethod $classMethod): ?ExtendedMethodReflection
     {
