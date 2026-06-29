@@ -111,6 +111,11 @@ CODE_SAMPLE
                 }
                 /** @var ReflectionMethod $parentReflectionMethod */
                 $parentReflectionMethod = $nativeClassReflection->getMethod($methodName);
+                // private methods are not inherited, so the child method does not override them
+                // and its visibility must not be aligned to them
+                if ($parentReflectionMethod->isPrivate()) {
+                    continue;
+                }
                 if ($this->isClassMethodCompatibleWithParentReflectionMethod($classMethod, $parentReflectionMethod)) {
                     continue 2;
                 }
@@ -128,13 +133,7 @@ CODE_SAMPLE
         if ($reflectionMethod->isPublic() && $classMethod->isPublic()) {
             return \true;
         }
-        if ($reflectionMethod->isProtected() && $classMethod->isProtected()) {
-            return \true;
-        }
-        if (!$reflectionMethod->isPrivate()) {
-            return \false;
-        }
-        return $classMethod->isPrivate();
+        return $reflectionMethod->isProtected() && $classMethod->isProtected();
     }
     private function changeClassMethodVisibilityBasedOnReflectionMethod(ClassMethod $classMethod, ReflectionMethod $reflectionMethod): void
     {
@@ -144,10 +143,6 @@ CODE_SAMPLE
         }
         if ($reflectionMethod->isProtected()) {
             $this->visibilityManipulator->makeProtected($classMethod);
-            return;
-        }
-        if ($reflectionMethod->isPrivate()) {
-            $this->visibilityManipulator->makePrivate($classMethod);
         }
     }
 }
