@@ -128,9 +128,10 @@ final class MockObjectExprDetector
         if (!$property instanceof Property) {
             return \true;
         }
-        // find out, how many are used in call likes as args
+        // find out, how many are used in call likes as args;
+        // not scoped on purpose, as expects() can be nested in closures, e.g. willReturnCallback()
         /** @var array<Expr\MethodCall> $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstancesOfScoped($class->getMethods(), [MethodCall::class]);
+        $methodCalls = $this->betterNodeFinder->findInstancesOf($class->getMethods(), [MethodCall::class]);
         foreach ($methodCalls as $methodCall) {
             if (!$methodCall->var instanceof PropertyFetch) {
                 continue;
