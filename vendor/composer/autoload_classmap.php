@@ -1272,6 +1272,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\StmtsAwareInterface\\MoveInnerFunctionToTopLevelRector' => $baseDir . '/rules/CodeQuality/Rector/StmtsAwareInterface/MoveInnerFunctionToTopLevelRector.php',
     'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
     'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToIfRector.php',
+    'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToMatchRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToMatchRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\ArrayKeyExistsTernaryThenValueToCoalescingRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\NumberCompareToMaxFuncCallRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/NumberCompareToMaxFuncCallRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',

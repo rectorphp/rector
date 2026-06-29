@@ -1537,6 +1537,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\CodeQuality\\Rector\\StmtsAwareInterface\\MoveInnerFunctionToTopLevelRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/StmtsAwareInterface/MoveInnerFunctionToTopLevelRector.php',
         'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
         'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToIfRector.php',
+        'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToMatchRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToMatchRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\ArrayKeyExistsTernaryThenValueToCoalescingRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\NumberCompareToMaxFuncCallRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/NumberCompareToMaxFuncCallRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',
