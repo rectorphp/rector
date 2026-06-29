@@ -91,13 +91,6 @@ CODE_SAMPLE
             if ($stmt->else instanceof Else_) {
                 continue;
             }
-            // first condition must be without side effect
-            if ($this->sideEffectNodeDetector->detect($stmt->cond)) {
-                continue;
-            }
-            if ($this->isCondVariableUsedInIfBody($stmt)) {
-                continue;
-            }
             $nextStmt = $node->stmts[$key + 1] ?? null;
             if (!$nextStmt instanceof If_) {
                 continue;
@@ -110,6 +103,13 @@ CODE_SAMPLE
                 continue;
             }
             if ($nextStmt->else instanceof Else_) {
+                continue;
+            }
+            // first condition must be without side effect
+            if ($this->sideEffectNodeDetector->detect($stmt->cond)) {
+                continue;
+            }
+            if ($this->isCondVariableUsedInIfBody($stmt)) {
                 continue;
             }
             $stmt->setAttribute(AttributeKey::COMMENTS, array_merge($stmt->getAttribute(AttributeKey::COMMENTS) ?? [], $nextStmt->getAttribute(AttributeKey::COMMENTS) ?? []));

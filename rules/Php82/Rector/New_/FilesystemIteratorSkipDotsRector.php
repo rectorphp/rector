@@ -48,10 +48,10 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (!$this->isObjectType($node->class, new ObjectType('FilesystemIterator'))) {
+        if (!isset($node->args[1])) {
             return null;
         }
-        if (!isset($node->args[1])) {
+        if (!$this->isObjectType($node->class, new ObjectType('FilesystemIterator'))) {
             return null;
         }
         $flags = $node->getArgs()[1]->value;

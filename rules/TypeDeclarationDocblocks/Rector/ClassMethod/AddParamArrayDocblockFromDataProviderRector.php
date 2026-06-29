@@ -116,11 +116,11 @@ CODE_SAMPLE
             if (!$this->testsNodeAnalyzer->isTestClassMethod($classMethod)) {
                 continue;
             }
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             $dataProviderNodes = $this->dataProviderMethodsFinder->findDataProviderNodes($node, $classMethod);
             if ($dataProviderNodes->getClassMethods() === []) {
                 continue;
             }
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             foreach ($classMethod->getParams() as $paramPosition => $param) {
                 // we are interested only in array params
                 if (!$param->type instanceof Node) {

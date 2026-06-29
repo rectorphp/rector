@@ -60,14 +60,14 @@ CODE_SAMPLE
         if (!$node->class instanceof Name) {
             return null;
         }
-        $callerType = $this->nodeTypeResolver->getType($node->class);
-        if (!$callerType->isSuperTypeOf(new ObjectType('ReflectionFunction'))->yes()) {
-            return null;
-        }
         if (!$this->isName($node->name, 'export')) {
             return null;
         }
         if ($node->isFirstClassCallable()) {
+            return null;
+        }
+        $callerType = $this->nodeTypeResolver->getType($node->class);
+        if (!$callerType->isSuperTypeOf(new ObjectType('ReflectionFunction'))->yes()) {
             return null;
         }
         $firstArg = $node->getArgs()[0] ?? null;

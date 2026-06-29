@@ -57,8 +57,7 @@ CODE_SAMPLE
         if ($node instanceof FuncCall && !$this->isName($node->name, 'finfo_buffer')) {
             return null;
         }
-        $objectType = new ObjectType('finfo');
-        if ($node instanceof MethodCall && (!$this->nodeTypeResolver->isObjectType($node->var, $objectType) || !$this->isName($node->name, 'buffer'))) {
+        if ($node instanceof MethodCall && (!$this->isName($node->name, 'buffer') || !$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('finfo')))) {
             return null;
         }
         if ($this->removeContextArg($node)) {

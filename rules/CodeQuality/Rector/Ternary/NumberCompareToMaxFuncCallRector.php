@@ -56,14 +56,14 @@ CODE_SAMPLE
             return null;
         }
         $binaryOp = $node->cond;
-        if (!$this->areIntegersCompared($binaryOp)) {
-            return null;
-        }
         if ($binaryOp instanceof Smaller || $binaryOp instanceof SmallerOrEqual) {
             if (!$this->nodeComparator->areNodesEqual($binaryOp->left, $node->else)) {
                 return null;
             }
             if (!$this->nodeComparator->areNodesEqual($binaryOp->right, $node->if)) {
+                return null;
+            }
+            if (!$this->areIntegersCompared($binaryOp)) {
                 return null;
             }
             return $this->nodeFactory->createFuncCall('max', [$node->if, $node->else]);
@@ -73,6 +73,9 @@ CODE_SAMPLE
                 return null;
             }
             if (!$this->nodeComparator->areNodesEqual($binaryOp->right, $node->else)) {
+                return null;
+            }
+            if (!$this->areIntegersCompared($binaryOp)) {
                 return null;
             }
             return $this->nodeFactory->createFuncCall('max', [$node->if, $node->else]);

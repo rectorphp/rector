@@ -44,9 +44,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
-        $type = $this->nodeTypeResolver->getNativeType($node->left);
-        if ($node->left instanceof Assign && !$type->isBoolean()->yes()) {
-            return null;
+        if ($node->left instanceof Assign) {
+            $type = $this->nodeTypeResolver->getNativeType($node->left);
+            if (!$type->isBoolean()->yes()) {
+                return null;
+            }
         }
         return $this->refactorLogicalToBoolean($node);
     }

@@ -60,11 +60,11 @@ CODE_SAMPLE
             $node->args[count($node->getArgs())] = new Arg(new String_('\\'), \false, \false, [], new Identifier('escape'));
             return $node;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('SplFileObject'))) {
-            return null;
-        }
         $name = $this->getName($node->name);
         if (!in_array($name, ['setCsvControl', 'fputcsv', 'fgetcsv'], \true)) {
+            return null;
+        }
+        if (!$this->isObjectType($node->var, new ObjectType('SplFileObject'))) {
             return null;
         }
         if ($this->shouldSkipNamedArg($node)) {

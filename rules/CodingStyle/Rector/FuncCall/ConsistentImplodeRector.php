@@ -72,13 +72,13 @@ CODE_SAMPLE
             $node->args[0] = new Arg(new String_(''));
             return $node;
         }
+        if (count($node->getArgs()) !== 2) {
+            return null;
+        }
         $firstArg = $node->getArgs()[0];
         $firstArgumentValue = $firstArg->value;
         $firstArgumentType = $this->getType($firstArgumentValue);
         if ($firstArgumentType->isString()->yes()) {
-            return null;
-        }
-        if (count($node->getArgs()) !== 2) {
             return null;
         }
         $secondArg = $node->getArgs()[1];

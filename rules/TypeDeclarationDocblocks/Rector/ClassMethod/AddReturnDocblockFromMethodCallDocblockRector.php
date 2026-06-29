@@ -112,12 +112,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($phpDocInfo->getReturnTagValue())) {
-            return null;
-        }
         // definitely not an array return
         if (!$node->returnType instanceof Node || !$this->isName($node->returnType, 'array')) {
+            return null;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($phpDocInfo->getReturnTagValue())) {
             return null;
         }
         $onlyReturnWithExpr = $this->returnNodeFinder->findOnlyReturnWithExpr($node);

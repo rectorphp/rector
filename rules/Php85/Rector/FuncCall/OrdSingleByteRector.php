@@ -61,18 +61,18 @@ CODE_SAMPLE
         }
         $firstArg = $args[0];
         $argExpr = $firstArg->value;
-        $type = $this->nodeTypeResolver->getNativeType($argExpr);
-        if (!$type->isString()->yes() && !$type->isInteger()->yes()) {
-            return null;
-        }
-        $value = $this->valueResolver->getValue($argExpr);
-        $isInt = is_int($value);
         if ($argExpr instanceof String_ && strlen($argExpr->value) === 1) {
             return null;
         }
         if ($argExpr instanceof Int_ && strlen((string) $argExpr->value) === 1) {
             return null;
         }
+        $type = $this->nodeTypeResolver->getNativeType($argExpr);
+        if (!$type->isString()->yes() && !$type->isInteger()->yes()) {
+            return null;
+        }
+        $value = $this->valueResolver->getValue($argExpr);
+        $isInt = is_int($value);
         if (!$argExpr instanceof Int_) {
             return $this->refactorStringType($argExpr, $isInt, $args, $node);
         }
