@@ -36,7 +36,7 @@ final class AddReturnTypeWillChangeAttributeRector extends AbstractRector
      * on PHP 8.1+. Adding #[\ReturnTypeWillChange] suppresses those notices,
      * keeping the code compatible with older PHP versions simultaneously.
      */
-    private const INTERFACE_METHOD_MAP = ['ArrayAccess' => ['offsetGet', 'offsetExists', 'offsetSet', 'offsetUnset'], 'Countable' => ['count'], 'Iterator' => ['current', 'key', 'next', 'rewind', 'valid'], 'IteratorAggregate' => ['getIterator'], 'Stringable' => ['__toString']];
+    private const INTERFACE_METHOD_MAP = ['ArrayAccess' => ['offsetGet', 'offsetExists', 'offsetSet', 'offsetUnset'], 'Countable' => ['count'], 'Iterator' => ['current', 'key', 'next', 'rewind', 'valid'], 'IteratorAggregate' => ['getIterator'], 'JsonSerializable' => ['jsonSerialize'], 'Stringable' => ['__toString']];
     /**
      * @var string
      */
