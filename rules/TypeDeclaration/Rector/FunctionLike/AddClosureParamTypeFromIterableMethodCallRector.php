@@ -96,15 +96,15 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
+        if (!$node->name instanceof Identifier) {
+            return null;
+        }
         $varType = $this->getType($node->var);
         if (!$varType instanceof IntersectionType || !$varType->isIterable()->yes()) {
             return null;
         }
         $className = $varType->getObjectClassNames()[0] ?? null;
         if ($className === null) {
-            return null;
-        }
-        if (!$node->name instanceof Identifier) {
             return null;
         }
         $methodReflection = $this->methodReflectionResolver->resolveMethodReflection($className, $node->name->name, $node->getAttribute(AttributeKey::SCOPE));
