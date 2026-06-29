@@ -53,6 +53,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarRe
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureNeverReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
+use Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeFromAssertInstanceOfRector;
 use Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Empty_\EmptyOnNullableObjectToInstanceOfRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrayAnyAllClosureParamTypeRector;
@@ -154,5 +155,6 @@ final class TypeDeclarationLevel
         // PHP 8.4
         NarrowArrayAnyAllNullableParamTypeRector::class,
         AddArrayAnyAllClosureParamTypeRector::class,
+        ClosureReturnTypeFromAssertInstanceOfRector::class,
     ];
 }

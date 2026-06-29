@@ -2937,6 +2937,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedStaticPropertyInBehatContextRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedStaticPropertyInBehatContextRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureNeverReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureNeverReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',
+    'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeFromAssertInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeFromAssertInstanceOfRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
     'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrayAnyAllClosureParamTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/FuncCall/AddArrayAnyAllClosureParamTypeRector.php',

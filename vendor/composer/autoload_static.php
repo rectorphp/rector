@@ -3202,6 +3202,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedStaticPropertyInBehatContextRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedStaticPropertyInBehatContextRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureNeverReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureNeverReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeFromAssertInstanceOfRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeFromAssertInstanceOfRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\ClosureReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/ClosureReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
         'Rector\\TypeDeclaration\\Rector\\FuncCall\\AddArrayAnyAllClosureParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FuncCall/AddArrayAnyAllClosureParamTypeRector.php',
