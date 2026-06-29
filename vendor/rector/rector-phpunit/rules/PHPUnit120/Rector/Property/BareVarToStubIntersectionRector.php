@@ -83,7 +83,7 @@ private \PHPUnit\Framework\MockObject\Stub $formBuilder;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 /**
- * @var FormBuilderInterface&Stub
+ * @var FormBuilderInterface&\PHPUnit\Framework\MockObject\Stub
  */
 private \PHPUnit\Framework\MockObject\Stub $formBuilder;
 CODE_SAMPLE
@@ -121,7 +121,7 @@ CODE_SAMPLE
         if (in_array($this->resolveShortName($typeNode->name), ['Stub', 'MockObject'], \true)) {
             return \false;
         }
-        $varTagValueNode->type = new BracketsAwareIntersectionTypeNode([$typeNode, new IdentifierTypeNode('Stub')]);
+        $varTagValueNode->type = new BracketsAwareIntersectionTypeNode([$typeNode, new IdentifierTypeNode('\\' . PHPUnitClassName::STUB)]);
         return \true;
     }
     private function resolveShortName(string $name): string
