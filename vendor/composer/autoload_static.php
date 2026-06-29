@@ -2372,6 +2372,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\PropertyCreateMockToCreateStubRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/PropertyCreateMockToCreateStubRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\RemoveOverrideFinalConstructTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/RemoveOverrideFinalConstructTestCaseRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\MethodCall\\ExplicitMockExpectsCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/MethodCall/ExplicitMockExpectsCallRector.php',
+        'Rector\\PHPUnit\\PHPUnit120\\Rector\\Property\\MockObjectVarToStubRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Property/MockObjectVarToStubRector.php',
         'Rector\\PHPUnit\\PHPUnit50\\Rector\\StaticCall\\GetMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit50/Rector/StaticCall/GetMockRector.php',
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\ExceptionAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/ExceptionAnnotationRector.php',
