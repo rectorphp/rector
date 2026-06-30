@@ -17,6 +17,7 @@ use Rector\TypeDeclaration\Rector\Class_\ScalarTypedPropertyFromJMSSerializerAtt
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromContainerGetSetUpRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromDocblockSetUpDefinedRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromGetRepositorySetUpRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
@@ -138,6 +139,7 @@ final class TypeDeclarationLevel
         PropertyTypeFromStrictSetterGetterRector::class,
         ParamTypeByMethodCallTypeRector::class,
         TypedPropertyFromContainerGetSetUpRector::class,
+        TypedPropertyFromGetRepositorySetUpRector::class,
         TypedPropertyFromAssignsRector::class,
         AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
         ReturnTypeFromStrictFluentReturnRector::class,

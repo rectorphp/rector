@@ -2936,6 +2936,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromContainerGetSetUpRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromContainerGetSetUpRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromCreateMockAssignRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromCreateMockAssignRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromDocblockSetUpDefinedRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromDocblockSetUpDefinedRector.php',
+    'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromGetRepositorySetUpRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromGetRepositorySetUpRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\TypedStaticPropertyInBehatContextRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/TypedStaticPropertyInBehatContextRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureNeverReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureNeverReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',

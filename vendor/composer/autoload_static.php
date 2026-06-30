@@ -3201,6 +3201,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromContainerGetSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromContainerGetSetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromCreateMockAssignRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromCreateMockAssignRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromDocblockSetUpDefinedRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromDocblockSetUpDefinedRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromGetRepositorySetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromGetRepositorySetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedStaticPropertyInBehatContextRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedStaticPropertyInBehatContextRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureNeverReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureNeverReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureVoidReturnTypeWhereNoReturnRector.php',
