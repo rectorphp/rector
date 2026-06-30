@@ -10,7 +10,9 @@ use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Ternary;
 use Rector\NodeManipulator\BinaryOpManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php71\ValueObject\TwoNodeMatch;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -103,6 +105,12 @@ final class SimplifyConditionsRector extends AbstractRector
         $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOp);
         if ($inversedBinaryClass === null) {
             return null;
+        }
+        if ($binaryOp->left instanceof Ternary) {
+            $binaryOp->left->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+        }
+        if ($binaryOp->right instanceof Ternary) {
+            $binaryOp->right->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         }
         return new $inversedBinaryClass($binaryOp->left, $binaryOp->right);
     }
