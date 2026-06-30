@@ -12,7 +12,6 @@ use Rector\DeadCode\Rector\Block\ReplaceBlockToItsStmtsRector;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
-use Rector\DeadCode\Rector\ClassLike\RemoveTypedPropertyNonMockDocblockRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveArgumentFromDefaultParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDuplicatedReturnSelfDocblockRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
@@ -121,7 +120,6 @@ final class DeadCodeLevel
         // prioritize safe belt on RemoveUseless*TagRector that registered previously first
         RemoveNullTagValueNodeRector::class,
         RemovePhpVersionIdCheckRector::class,
-        RemoveTypedPropertyNonMockDocblockRector::class,
         RemoveAlwaysTrueIfConditionRector::class,
         ReduceAlwaysFalseIfOrRector::class,
         RemoveUnusedPrivateClassConstantRector::class,
