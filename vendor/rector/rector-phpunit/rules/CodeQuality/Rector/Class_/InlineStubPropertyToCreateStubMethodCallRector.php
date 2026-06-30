@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\StubPropertyResolver;
 use Rector\PHPUnit\CodeQuality\NodeFinder\PropertyFetchUsageFinder;
@@ -48,12 +49,17 @@ final class InlineStubPropertyToCreateStubMethodCallRector extends AbstractRecto
      * @readonly
      */
     private StubPropertyResolver $stubPropertyResolver;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PropertyFetchFinder $propertyFetchFinder, PropertyFetchUsageFinder $propertyFetchUsageFinder, StubPropertyResolver $stubPropertyResolver)
+    /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PropertyFetchFinder $propertyFetchFinder, PropertyFetchUsageFinder $propertyFetchUsageFinder, StubPropertyResolver $stubPropertyResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->propertyFetchUsageFinder = $propertyFetchUsageFinder;
         $this->stubPropertyResolver = $stubPropertyResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -139,21 +145,72 @@ CODE_SAMPLE
             $this->removeSetupPropertyFetchByPropertyName($setUpClassMethod, $propertyName);
             // 3. replace property fetch calls, with createStub()
             $stubClassName = $propertyNamesToStubClasses[$propertyName];
-            $this->traverseNodesWithCallable($node->getMethods(), function (Node $node) use ($propertyName, $stubClassName): ?MethodCall {
+            foreach ($node->getMethods() as $classMethod) {
+                $this->refactorClassMethod($classMethod, $propertyName, $stubClassName);
+            }
+        }
+        if ($hasChanged === \false) {
+            return null;
+        }
+        return $node;
+    }
+    private function refactorClassMethod(ClassMethod $classMethod, string $propertyName, string $stubClassName): void
+    {
+        $propertyFetches = $this->betterNodeFinder->find((array) $classMethod->stmts, fn(Node $node): bool => $node instanceof PropertyFetch && $this->isName($node->name, $propertyName));
+        if ($propertyFetches === []) {
+            return;
+        }
+        // single use → inline directly
+        if (count($propertyFetches) === 1) {
+            $this->traverseNodesWithCallable($classMethod, function (Node $node) use ($propertyName, $stubClassName): ?MethodCall {
                 if (!$node instanceof PropertyFetch) {
                     return null;
                 }
                 if (!$this->isName($node->name, $propertyName)) {
                     return null;
                 }
-                $classConstFetch = new ClassConstFetch(new FullyQualified($stubClassName), 'class');
-                return new MethodCall(new Variable('this'), new Identifier('createStub'), [new Arg($classConstFetch)]);
+                return $this->createCreateStubMethodCall($stubClassName);
             });
+            return;
         }
-        if ($hasChanged === \false) {
-            return null;
+        // multiple uses → assign to a local variable above first use and reuse it
+        $variableName = $this->resolveVariableName($propertyName);
+        $this->traverseNodesWithCallable($classMethod, function (Node $node) use ($propertyName, $variableName): ?Variable {
+            if (!$node instanceof PropertyFetch) {
+                return null;
+            }
+            if (!$this->isName($node->name, $propertyName)) {
+                return null;
+            }
+            return new Variable($variableName);
+        });
+        $assignExpression = new Expression(new Assign(new Variable($variableName), $this->createCreateStubMethodCall($stubClassName)));
+        $this->insertBeforeFirstVariableUse($classMethod, $variableName, $assignExpression);
+    }
+    private function insertBeforeFirstVariableUse(ClassMethod $classMethod, string $variableName, Expression $assignExpression): void
+    {
+        $stmts = (array) $classMethod->stmts;
+        foreach ($stmts as $key => $stmt) {
+            $firstVariable = $this->betterNodeFinder->findFirst($stmt, fn(Node $node): bool => $node instanceof Variable && $this->isName($node, $variableName));
+            if (!$firstVariable instanceof Variable) {
+                continue;
+            }
+            array_splice($stmts, $key, 0, [$assignExpression]);
+            $classMethod->stmts = $stmts;
+            return;
         }
-        return $node;
+    }
+    private function createCreateStubMethodCall(string $stubClassName): MethodCall
+    {
+        $classConstFetch = new ClassConstFetch(new FullyQualified($stubClassName), 'class');
+        return new MethodCall(new Variable('this'), new Identifier('createStub'), [new Arg($classConstFetch)]);
+    }
+    private function resolveVariableName(string $propertyName): string
+    {
+        if (substr_compare(strtolower($propertyName), 'stub', -strlen('stub')) === 0) {
+            return $propertyName;
+        }
+        return $propertyName . 'Stub';
     }
     private function removeSetupPropertyFetchByPropertyName(ClassMethod $setUpClassMethod, string $propertyName): void
     {
