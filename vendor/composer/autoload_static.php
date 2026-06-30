@@ -3198,6 +3198,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\TypeDeclaration\\Rector\\Class_\\PropertyTypeFromStrictSetterGetterRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/PropertyTypeFromStrictSetterGetterRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\ReturnTypeFromStrictTernaryRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/ReturnTypeFromStrictTernaryRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\ScalarTypedPropertyFromJMSSerializerAttributeTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/ScalarTypedPropertyFromJMSSerializerAttributeTypeRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromContainerGetSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromContainerGetSetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromCreateMockAssignRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromCreateMockAssignRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedPropertyFromDocblockSetUpDefinedRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedPropertyFromDocblockSetUpDefinedRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\TypedStaticPropertyInBehatContextRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/TypedStaticPropertyInBehatContextRector.php',

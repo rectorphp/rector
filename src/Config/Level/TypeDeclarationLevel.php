@@ -14,6 +14,7 @@ use Rector\TypeDeclaration\Rector\Class_\ObjectTypedPropertyFromJMSSerializerAtt
 use Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector;
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
 use Rector\TypeDeclaration\Rector\Class_\ScalarTypedPropertyFromJMSSerializerAttributeTypeRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromContainerGetSetUpRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromDocblockSetUpDefinedRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
@@ -136,6 +137,7 @@ final class TypeDeclarationLevel
         MergeDateTimePropertyTypeDeclarationRector::class,
         PropertyTypeFromStrictSetterGetterRector::class,
         ParamTypeByMethodCallTypeRector::class,
+        TypedPropertyFromContainerGetSetUpRector::class,
         TypedPropertyFromAssignsRector::class,
         AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
         ReturnTypeFromStrictFluentReturnRector::class,
