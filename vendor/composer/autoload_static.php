@@ -3168,6 +3168,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanConstReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanConstReturnsRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanStrictReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanStrictReturnsRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\KnownMagicClassMethodTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/KnownMagicClassMethodTypeRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\NarrowBoolDocblockReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/NarrowBoolDocblockReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\NarrowObjectReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/NarrowObjectReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\NumericReturnTypeFromStrictReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/NumericReturnTypeFromStrictReturnsRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\NumericReturnTypeFromStrictScalarReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/NumericReturnTypeFromStrictScalarReturnsRector.php',

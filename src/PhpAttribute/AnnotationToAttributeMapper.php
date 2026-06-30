@@ -32,8 +32,8 @@ final class AnnotationToAttributeMapper
         Assert::notEmpty($annotationToAttributeMappers);
     }
     /**
-     * @return mixed|DocTagNodeState::REMOVE_ARRAY
      * @param mixed $value
+     * @return mixed
      */
     public function map($value)
     {

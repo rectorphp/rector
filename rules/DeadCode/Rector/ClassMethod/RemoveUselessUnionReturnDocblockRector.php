@@ -99,8 +99,8 @@ CODE_SAMPLE
             return null;
         }
         $nativeReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
-        // keep array native type, the docblock may carry element types
-        if ($nativeReturnType->isArray()->yes()) {
+        // keep array-involving native type (array, ?array, union with array), the docblock may carry element types
+        if (!$nativeReturnType->isArray()->no()) {
             return null;
         }
         $docblockReturnType = $phpDocInfo->getReturnType();

@@ -15,7 +15,7 @@ final class MemoryCacheStorage implements CacheStorageInterface
      */
     private array $storage = [];
     /**
-     * @return null|mixed
+     * @return mixed
      */
     public function load(string $key, string $variableKey)
     {
