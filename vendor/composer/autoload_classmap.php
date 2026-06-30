@@ -1442,6 +1442,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessParamTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessParamTagRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnExprInConstructRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
+    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessUnionReturnDocblockRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessUnionReturnDocblockRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveVoidDocblockFromMagicMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveVoidDocblockFromMagicMethodRector.php',
     'Rector\\DeadCode\\Rector\\Class_\\RemoveRefactorDuplicatedNodeInstanceCheckRector' => $baseDir . '/rules/DeadCode/Rector/Class_/RemoveRefactorDuplicatedNodeInstanceCheckRector.php',
     'Rector\\DeadCode\\Rector\\Closure\\RemoveUnusedClosureVariableUseRector' => $baseDir . '/rules/DeadCode/Rector/Closure/RemoveUnusedClosureVariableUseRector.php',

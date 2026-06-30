@@ -1707,6 +1707,7 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessParamTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessParamTagRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnExprInConstructRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnExprInConstructRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
+        'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessUnionReturnDocblockRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessUnionReturnDocblockRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveVoidDocblockFromMagicMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveVoidDocblockFromMagicMethodRector.php',
         'Rector\\DeadCode\\Rector\\Class_\\RemoveRefactorDuplicatedNodeInstanceCheckRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Class_/RemoveRefactorDuplicatedNodeInstanceCheckRector.php',
         'Rector\\DeadCode\\Rector\\Closure\\RemoveUnusedClosureVariableUseRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Closure/RemoveUnusedClosureVariableUseRector.php',
