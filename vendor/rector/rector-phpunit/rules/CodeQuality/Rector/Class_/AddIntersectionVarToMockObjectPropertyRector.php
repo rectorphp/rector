@@ -6,10 +6,13 @@ namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
@@ -84,6 +87,11 @@ final class AddIntersectionVarToMockObjectPropertyRector extends AbstractRector
             }
             $intersectionTypeNode = new BracketsAwareIntersectionTypeNode([new IdentifierTypeNode('\\' . PHPUnitClassName::MOCK_OBJECT), new IdentifierTypeNode('\\' . $mockedClass)]);
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+            // already has an intersection @var, skip
+            $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+            if ($varTagValueNode instanceof VarTagValueNode && $varTagValueNode->type instanceof IntersectionTypeNode) {
+                continue;
+            }
             $this->phpDocTypeChanger->changeVarTypeNode($property, $phpDocInfo, $intersectionTypeNode);
             $hasChanged = \true;
         }
@@ -125,9 +133,12 @@ final class SomeTest extends TestCase
 CODE_SAMPLE
 )]);
     }
-    private function resolveMockedClass(MethodCall $methodCall): ?string
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $createMockCall
+     */
+    private function resolveMockedClass($createMockCall): ?string
     {
-        $firstArg = $methodCall->getArgs()[0] ?? null;
+        $firstArg = $createMockCall->getArgs()[0] ?? null;
         if ($firstArg === null) {
             return null;
         }

@@ -233,6 +233,12 @@ final class AttributeKey
      */
     public const IS_INSIDE_SYMFONY_PHP_CLOSURE = 'is_inside_symfony_php_closure';
     /**
+     * Array callable kept as data, not converted to first class callable,
+     * e.g. 'callback'/'factory' keyed array item, or Definition::setFactory() argument
+     * @var string
+     */
+    public const IS_ARRAY_AS_STRING_CALLABLE = 'is_array_as_string_callable';
+    /**
      * @var string
      */
     public const IS_INSIDE_BYREF_FUNCTION_LIKE = 'is_inside_byref_function_like';

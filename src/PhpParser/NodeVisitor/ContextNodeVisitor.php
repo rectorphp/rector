@@ -5,12 +5,14 @@ namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -18,8 +20,10 @@ use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Do_;
@@ -79,6 +83,14 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             $this->processContextInAttribute($node);
             return null;
         }
+        if ($node instanceof Array_) {
+            $this->processArrayInSerializedCallableKey($node);
+            return null;
+        }
+        if ($node instanceof MethodCall) {
+            $this->processSetFactoryArgument($node);
+            return null;
+        }
         if ($node instanceof If_ || $node instanceof Else_ || $node instanceof ElseIf_) {
             $this->processContextInIf($node);
             return null;
@@ -120,6 +132,47 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             foreach ($node->implements as $implement) {
                 $implement->setAttribute(AttributeKey::IS_CLASS_IMPLEMENT, \true);
             }
+        }
+    }
+    /**
+     * The array is data, not a callable to convert: 'callback'/'factory' keyed item holds
+     * a [$value, 'method'] pair likely to be serialized as a string.
+     */
+    private function processArrayInSerializedCallableKey(Array_ $array): void
+    {
+        foreach ($array->items as $arrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
+                continue;
+            }
+            if (!$arrayItem->key instanceof String_) {
+                continue;
+            }
+            if (!in_array($arrayItem->key->value, ['callback', 'factory', 'validation_groups'], \true)) {
+                continue;
+            }
+            if ($arrayItem->value instanceof Array_) {
+                $arrayItem->value->setAttribute(AttributeKey::IS_ARRAY_AS_STRING_CALLABLE, \true);
+            }
+        }
+    }
+    /**
+     * Symfony's Definition::setFactory() does not accept a first class callable,
+     * keep the [$value, 'method'] array as is.
+     */
+    private function processSetFactoryArgument(MethodCall $methodCall): void
+    {
+        if (!$methodCall->name instanceof Identifier) {
+            return;
+        }
+        if ($methodCall->name->toString() !== 'setFactory') {
+            return;
+        }
+        $firstArg = $methodCall->args[0] ?? null;
+        if (!$firstArg instanceof Arg) {
+            return;
+        }
+        if ($firstArg->value instanceof Array_) {
+            $firstArg->value->setAttribute(AttributeKey::IS_ARRAY_AS_STRING_CALLABLE, \true);
         }
     }
     private function processContextInAttribute(Attribute $attribute): void

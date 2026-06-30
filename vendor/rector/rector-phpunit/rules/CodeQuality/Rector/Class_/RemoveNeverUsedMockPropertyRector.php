@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -172,7 +173,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param array<string, MethodCall> $propertyNamesToCreateMockMethodCalls
+     * @param array<string, MethodCall|StaticCall> $propertyNamesToCreateMockMethodCalls
      * @return string[]
      */
     private function resolvePropertyNamesToRemove(array $propertyNamesToCreateMockMethodCalls, Class_ $class): array
