@@ -69,6 +69,10 @@ CODE_SAMPLE
         if (substr_compare($className, 'TestCase', -strlen('TestCase')) === 0) {
             return null;
         }
+        // skip classes without "Test" suffix, as those are meant to be extended
+        if (substr_compare($className, 'Test', -strlen('Test')) !== 0) {
+            return null;
+        }
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
