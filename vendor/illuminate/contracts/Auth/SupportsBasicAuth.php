@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202606\Illuminate\Contracts\Auth;
+namespace RectorPrefix202607\Illuminate\Contracts\Auth;
 
 interface SupportsBasicAuth
 {

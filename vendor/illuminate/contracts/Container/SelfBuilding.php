@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202606\Illuminate\Contracts\Container;
+namespace RectorPrefix202607\Illuminate\Contracts\Container;
 
 /**
  * @method static newInstance(): static

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202606;
+namespace RectorPrefix202607;
 
 /*
  * This file is part of the Symfony package.
@@ -138,5 +138,5 @@ if (\PHP_VERSION_ID < 80400) {
         }
     }
     // @author Daniel Scherzer <daniel.e.scherzer@gmail.com>
-    \class_alias('RectorPrefix202606\ReflectionConstant', 'ReflectionConstant', \false);
+    \class_alias('RectorPrefix202607\ReflectionConstant', 'ReflectionConstant', \false);
 }

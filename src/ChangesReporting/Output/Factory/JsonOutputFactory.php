@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\Output\Factory;
 
-use RectorPrefix202606\Nette\Utils\Json;
+use RectorPrefix202607\Nette\Utils\Json;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;

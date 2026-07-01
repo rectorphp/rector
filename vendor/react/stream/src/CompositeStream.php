@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202606\React\Stream;
+namespace RectorPrefix202607\React\Stream;
 
-use RectorPrefix202606\Evenement\EventEmitter;
+use RectorPrefix202607\Evenement\EventEmitter;
 final class CompositeStream extends EventEmitter implements DuplexStreamInterface
 {
     private $readable;

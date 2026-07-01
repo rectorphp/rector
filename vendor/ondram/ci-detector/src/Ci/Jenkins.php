@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202606\OndraM\CiDetector\Ci;
+namespace RectorPrefix202607\OndraM\CiDetector\Ci;
 
-use RectorPrefix202606\OndraM\CiDetector\CiDetector;
-use RectorPrefix202606\OndraM\CiDetector\Env;
-use RectorPrefix202606\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202607\OndraM\CiDetector\CiDetector;
+use RectorPrefix202607\OndraM\CiDetector\Env;
+use RectorPrefix202607\OndraM\CiDetector\TrinaryLogic;
 class Jenkins extends AbstractCi
 {
     public static function isDetected(Env $env): bool

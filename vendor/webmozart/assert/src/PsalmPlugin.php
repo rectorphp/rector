@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202606\Webmozart\Assert;
+namespace RectorPrefix202607\Webmozart\Assert;
 
-use RectorPrefix202606\Psalm\Internal\Analyzer\Statements\Expression\ExpressionIdentifier;
-use RectorPrefix202606\Psalm\Plugin\EventHandler\AfterMethodCallAnalysisInterface;
-use RectorPrefix202606\Psalm\Plugin\EventHandler\Event\AfterMethodCallAnalysisEvent;
-use RectorPrefix202606\Psalm\Plugin\PluginEntryPointInterface;
-use RectorPrefix202606\Psalm\PluginRegistrationSocket;
+use RectorPrefix202607\Psalm\Internal\Analyzer\Statements\Expression\ExpressionIdentifier;
+use RectorPrefix202607\Psalm\Plugin\EventHandler\AfterMethodCallAnalysisInterface;
+use RectorPrefix202607\Psalm\Plugin\EventHandler\Event\AfterMethodCallAnalysisEvent;
+use RectorPrefix202607\Psalm\Plugin\PluginEntryPointInterface;
+use RectorPrefix202607\Psalm\PluginRegistrationSocket;
 use SimpleXMLElement;
 final class PsalmPlugin implements PluginEntryPointInterface, AfterMethodCallAnalysisInterface
 {

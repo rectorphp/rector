@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Application;
 
-use RectorPrefix202606\Nette\Utils\FileSystem;
+use RectorPrefix202607\Nette\Utils\FileSystem;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\AnalysedCodeException;
@@ -26,7 +26,7 @@ use Rector\ValueObject\Application\File;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\FileProcessResult;
-use RectorPrefix202606\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202607\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class FileProcessor
 {

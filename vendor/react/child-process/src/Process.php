@@ -1,16 +1,16 @@
 <?php
 
-namespace RectorPrefix202606\React\ChildProcess;
+namespace RectorPrefix202607\React\ChildProcess;
 
-use RectorPrefix202606\Evenement\EventEmitter;
-use RectorPrefix202606\React\EventLoop\Loop;
-use RectorPrefix202606\React\EventLoop\LoopInterface;
-use RectorPrefix202606\React\Stream\ReadableResourceStream;
-use RectorPrefix202606\React\Stream\ReadableStreamInterface;
-use RectorPrefix202606\React\Stream\WritableResourceStream;
-use RectorPrefix202606\React\Stream\WritableStreamInterface;
-use RectorPrefix202606\React\Stream\DuplexResourceStream;
-use RectorPrefix202606\React\Stream\DuplexStreamInterface;
+use RectorPrefix202607\Evenement\EventEmitter;
+use RectorPrefix202607\React\EventLoop\Loop;
+use RectorPrefix202607\React\EventLoop\LoopInterface;
+use RectorPrefix202607\React\Stream\ReadableResourceStream;
+use RectorPrefix202607\React\Stream\ReadableStreamInterface;
+use RectorPrefix202607\React\Stream\WritableResourceStream;
+use RectorPrefix202607\React\Stream\WritableStreamInterface;
+use RectorPrefix202607\React\Stream\DuplexResourceStream;
+use RectorPrefix202607\React\Stream\DuplexStreamInterface;
 /**
  * Process component.
  *
@@ -113,7 +113,7 @@ class Process extends EventEmitter
             // manual type check to support legacy PHP < 7.1
             throw new \InvalidArgumentException('Argument #4 ($fds) expected null|array');
         }
-        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202606\proc_open')) {
+        if (!\function_exists('proc_open') && !\function_exists('RectorPrefix202607\proc_open')) {
             throw new \LogicException('The Process class relies on proc_open(), which is not available on your PHP installation.');
         }
         $this->cmd = $cmd;
@@ -405,7 +405,7 @@ class Process extends EventEmitter
         if (null !== self::$sigchild) {
             return self::$sigchild;
         }
-        if (!\function_exists('phpinfo') && !\function_exists('RectorPrefix202606\phpinfo')) {
+        if (!\function_exists('phpinfo') && !\function_exists('RectorPrefix202607\phpinfo')) {
             return self::$sigchild = \false;
             // @codeCoverageIgnore
         }

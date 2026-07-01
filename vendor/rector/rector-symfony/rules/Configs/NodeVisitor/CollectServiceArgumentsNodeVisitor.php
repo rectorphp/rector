@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Configs\NodeVisitor;
 
-use RectorPrefix202606\Nette\Utils\Strings;
+use RectorPrefix202607\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;

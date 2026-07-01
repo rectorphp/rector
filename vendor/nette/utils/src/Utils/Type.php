@@ -5,9 +5,9 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202606\Nette\Utils;
+namespace RectorPrefix202607\Nette\Utils;
 
-use RectorPrefix202606\Nette;
+use RectorPrefix202607\Nette;
 use function array_map, array_search, array_splice, array_values, count, explode, implode, is_a, is_resource, is_string, strcasecmp, strtolower, substr, trim;
 /**
  * PHP type reflection.

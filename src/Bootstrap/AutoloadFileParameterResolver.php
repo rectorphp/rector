@@ -5,7 +5,7 @@ namespace Rector\Bootstrap;
 
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use RectorPrefix202606\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202607\Symfony\Component\Console\Input\ArgvInput;
 /**
  * A different extra autoload changes what PHPStan can resolve, so cached results
  * must not survive it. Registering the file as a parameter folds it into the

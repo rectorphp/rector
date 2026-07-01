@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202606\Illuminate\Contracts\Filesystem;
+namespace RectorPrefix202607\Illuminate\Contracts\Filesystem;
 
 use Exception;
 class FileNotFoundException extends Exception

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\ValueObject\Error;
 
-use RectorPrefix202606\Nette\Utils\Strings;
+use RectorPrefix202607\Nette\Utils\Strings;
 use Rector\Parallel\ValueObject\BridgeItem;
-use RectorPrefix202606\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202607\Symplify\EasyParallel\Contract\SerializableInterface;
 /**
  * @see \Rector\Tests\ValueObject\Error\SystemErrorTest
  */

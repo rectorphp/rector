@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Composer;
 
-use RectorPrefix202606\Nette\Utils\FileSystem;
-use RectorPrefix202606\Nette\Utils\Json;
+use RectorPrefix202607\Nette\Utils\FileSystem;
+use RectorPrefix202607\Nette\Utils\Json;
 use Rector\Composer\ValueObject\InstalledPackage;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Skipper\FileSystem\PathNormalizer;
-use RectorPrefix202606\Webmozart\Assert\Assert;
+use RectorPrefix202607\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\InstalledPackageResolverTest
  */

@@ -8,7 +8,7 @@ use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\VendorMissAnalyseGuard;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\ValueObject\ProcessResult;
-use RectorPrefix202606\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202607\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\Tests\Reporting\MissConfigurationReporterTest
  */

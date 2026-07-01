@@ -15,11 +15,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
-use RectorPrefix202606\Symfony\Component\Validator\ConstraintValidator;
-use RectorPrefix202606\Symfony\Component\Validator\ConstraintValidatorInterface;
-use RectorPrefix202606\Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
-use RectorPrefix202606\Symfony\Component\Validator\Validator\ContextualValidatorInterface;
-use RectorPrefix202606\Symfony\Component\Validator\Validator\ValidatorInterface;
+use RectorPrefix202607\Symfony\Component\Validator\ConstraintValidator;
+use RectorPrefix202607\Symfony\Component\Validator\ConstraintValidatorInterface;
+use RectorPrefix202607\Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use RectorPrefix202607\Symfony\Component\Validator\Validator\ContextualValidatorInterface;
+use RectorPrefix202607\Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

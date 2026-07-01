@@ -5,10 +5,10 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202606\Nette\Utils;
+namespace RectorPrefix202607\Nette\Utils;
 
-use RectorPrefix202606\JetBrains\PhpStorm\Language;
-use RectorPrefix202606\Nette;
+use RectorPrefix202607\JetBrains\PhpStorm\Language;
+use RectorPrefix202607\Nette;
 use function array_combine, array_intersect_key, array_is_list, array_key_exists, array_key_first, array_key_last, array_keys, array_reverse, array_search, array_slice, array_walk_recursive, count, func_num_args, in_array, is_array, is_int, is_object, key, preg_split;
 use const PREG_GREP_INVERT, PREG_SPLIT_DELIM_CAPTURE, PREG_SPLIT_NO_EMPTY;
 /**

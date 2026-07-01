@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202606\Symfony\Component\Console\Helper;
+namespace RectorPrefix202607\Symfony\Component\Console\Helper;
 
-use RectorPrefix202606\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202606\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202606\Symfony\Component\Console\Question\ChoiceQuestion;
-use RectorPrefix202606\Symfony\Component\Console\Question\ConfirmationQuestion;
-use RectorPrefix202606\Symfony\Component\Console\Question\Question;
-use RectorPrefix202606\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202607\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202607\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202607\Symfony\Component\Console\Question\ChoiceQuestion;
+use RectorPrefix202607\Symfony\Component\Console\Question\ConfirmationQuestion;
+use RectorPrefix202607\Symfony\Component\Console\Question\Question;
+use RectorPrefix202607\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Symfony Style Guide compliant question helper.
  *

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202606\Illuminate\Contracts\Support;
+namespace RectorPrefix202607\Illuminate\Contracts\Support;
 
 use Countable;
 interface MessageBag extends Arrayable, Countable
