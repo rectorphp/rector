@@ -20,6 +20,7 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableArgumentRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableInstanceRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\BareCreateMockAssignToDirectUseRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ChangeMockObjectReturnUnionToIntersectionRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\DataProviderArrayItemsNewLinedRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\EntityDocumentCreateMockToDirectNewRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\NoSetupWithParentCallOverrideRector;
@@ -140,6 +141,7 @@ return static function (RectorConfig $rectorConfig): void {
         EntityDocumentCreateMockToDirectNewRector::class,
         ReplaceAtMethodWithDesiredMatcherRector::class,
         BareCreateMockAssignToDirectUseRector::class,
+        ChangeMockObjectReturnUnionToIntersectionRector::class,
         DecorateWillReturnMapWithExpectsMockRector::class,
         // dead code
         RemoveNeverUsedMockPropertyRector::class,

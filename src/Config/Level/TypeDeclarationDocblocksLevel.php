@@ -23,6 +23,7 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFe
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForJsonArrayRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockGetterReturnArrayFromPropertyDocblockVarRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\NarrowArrayCollectionUnionReturnDocblockRector;
 final class TypeDeclarationDocblocksLevel
 {
     /**
@@ -55,6 +56,7 @@ final class TypeDeclarationDocblocksLevel
         AddVarArrayDocblockFromDimFetchAssignRector::class,
         // return
         DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
+        NarrowArrayCollectionUnionReturnDocblockRector::class,
         // run latter after other rules, as more generic
         AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
     ];
