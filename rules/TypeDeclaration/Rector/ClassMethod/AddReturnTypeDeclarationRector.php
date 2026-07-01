@@ -91,6 +91,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
+        // skip guarded classes, where adding a return type would break child classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($node)) {
+            return null;
+        }
         foreach ($this->methodReturnTypes as $methodReturnType) {
             $objectType = $methodReturnType->getObjectType();
             if (!$this->isObjectType($node, $objectType)) {

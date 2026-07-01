@@ -41,6 +41,10 @@ final class ClassMethodReturnTypeOverrideGuard
     }
     public function shouldSkipClassMethod(ClassMethod $classMethod, Scope $scope): bool
     {
+        // user-guarded class: adding a return type here would break its child classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($classMethod)) {
+            return \true;
+        }
         if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
             return \true;
         }

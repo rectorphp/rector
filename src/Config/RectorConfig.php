@@ -258,6 +258,18 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::TREAT_CLASSES_AS_FINAL, $treatClassesAsFinal);
     }
     /**
+     * Guard the listed classes and their descendants against method signature changes that would
+     * break child classes - e.g. adding a return type or a param type. Only non-final classes are
+     * guarded, as final classes cannot be extended.
+     *
+     * @param string[] $classes
+     */
+    public function typeGuardedClasses(array $classes): void
+    {
+        Assert::allString($classes);
+        SimpleParameterProvider::setParameter(Option::TYPE_GUARDED_CLASSES, $classes);
+    }
+    /**
      * @param string[] $extensions
      */
     public function fileExtensions(array $extensions): void

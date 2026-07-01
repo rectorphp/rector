@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Reflection\ReflectionResolver;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 final class ClassMethodParamVendorLockResolver
 {
     /**
@@ -17,14 +18,23 @@ final class ClassMethodParamVendorLockResolver
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionResolver = $reflectionResolver;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function isVendorLocked(ClassMethod $classMethod): bool
     {
         if ($classMethod->isMagic()) {
+            return \true;
+        }
+        // user-guarded class: adding a param type here would break its child classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($classMethod)) {
             return \true;
         }
         if ($classMethod->isPrivate()) {

@@ -19,6 +19,7 @@ use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Rector\ValueObject\PhpVersionFeature;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202607\Webmozart\Assert\Assert;
@@ -40,15 +41,20 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
      */
     private StaticTypeMapper $staticTypeMapper;
     /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    /**
      * @var AddParamTypeDeclaration[]
      */
     private array $addParamTypeDeclarations = [];
     private bool $hasChanged = \false;
-    public function __construct(TypeComparator $typeComparator, PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper)
+    public function __construct(TypeComparator $typeComparator, PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->typeComparator = $typeComparator;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -83,6 +89,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $this->hasChanged = \false;
+        // skip guarded classes, where adding a param type would break child classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($node)) {
+            return null;
+        }
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkip($node, $classMethod)) {
                 continue;

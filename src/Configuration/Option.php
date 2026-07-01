@@ -318,4 +318,10 @@ final class Option
      * @var string
      */
     public const FILES_WITHOUT_EXTENSION = 'files_without_extension';
+    /**
+     * @internal Use
+     * @var string @see \Rector\Config\RectorConfig::typeGuardedClasses() instead
+     * @var string
+     */
+    public const TYPE_GUARDED_CLASSES = 'type_guarded_classes';
 }

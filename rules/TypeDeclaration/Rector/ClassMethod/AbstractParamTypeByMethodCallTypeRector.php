@@ -108,6 +108,10 @@ abstract class AbstractParamTypeByMethodCallTypeRector extends AbstractRector
     abstract protected function isMatchingParamType(Type $type): bool;
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
+        // user-guarded class: adding a param type here would break its child classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($classMethod)) {
+            return \true;
+        }
         $isMissingParameterTypes = \false;
         foreach ($classMethod->params as $param) {
             if ($param->type instanceof Node) {
