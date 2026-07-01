@@ -263,6 +263,13 @@ CODE_SAMPLE
                 return null;
             }
             $className = $classNames[0];
+            // skip anonymous classes, they have no usable name
+            if ($this->reflectionProvider->hasClass($className)) {
+                $returnedClassReflection = $this->reflectionProvider->getClass($className);
+                if ($returnedClassReflection->isAnonymous()) {
+                    return null;
+                }
+            }
             if ($returnedClass === null) {
                 $returnedClass = $className;
             } elseif ($returnedClass !== $className) {
