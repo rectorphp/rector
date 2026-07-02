@@ -4,43 +4,27 @@ declare (strict_types=1);
 namespace Rector\Symfony\Configs\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Configs\NodeFactory\AutowiredParamFactory;
-use Rector\Symfony\Enum\SymfonyAttribute;
-use Rector\Symfony\Enum\SymfonyClass;
-use Rector\ValueObject\MethodName;
-use Rector\ValueObject\PhpVersionFeature;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * The param/env is only available since Symfony 6.3
- * @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
- *
- * @see \Rector\Symfony\Tests\Configs\Rector\Class_\ParameterBagToAutowireAttributeRector\ParameterBagToAutowireAttributeRectorTest
+ * @deprecated Too specific and opinionated to maintain as a generic rule. Write a custom rule for your own ParameterBag-to-#[Autowire] convention instead.
  */
-final class ParameterBagToAutowireAttributeRector extends AbstractRector implements MinPhpVersionInterface
+final class ParameterBagToAutowireAttributeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private AutowiredParamFactory $autowiredParamFactory;
-    /**
-     * @readonly
-     */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(AutowiredParamFactory $autowiredParamFactory, ReflectionProvider $reflectionProvider)
+    public function getNodeTypes(): array
     {
-        $this->autowiredParamFactory = $autowiredParamFactory;
-        $this->reflectionProvider = $reflectionProvider;
+        return [Class_::class];
+    }
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as too specific and opinionated to maintain as a generic rule. Write a custom rule for your own ParameterBag-to-#[Autowire] convention instead', self::class));
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -74,97 +58,5 @@ final class CertificateFactory
 }
 CODE_SAMPLE
 )]);
-    }
-    public function getNodeTypes(): array
-    {
-        return [Class_::class];
-    }
-    /**
-     * @param Class_ $node
-     */
-    public function refactor(Node $node): ?Class_
-    {
-        if (!$this->reflectionProvider->hasClass(SymfonyAttribute::AUTOWIRE)) {
-            return null;
-        }
-        if ($node->isAnonymous()) {
-            return null;
-        }
-        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        // has parameter bag interface dependency?
-        if (!$this->hasParameterBagInterfaceDependency($constructClassMethod)) {
-            return null;
-        }
-        $extraParams = [];
-        $parameterBagCallCount = 0;
-        // replace all parameter bag interface "->get(...)" with #[Autowire] attributes
-        $this->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (Node $node) use (&$extraParams, &$parameterBagCallCount): ?Variable {
-            if (!$node instanceof MethodCall) {
-                return null;
-            }
-            if (!$this->isObjectType($node->var, new ObjectType(SymfonyClass::PARAMETER_BAG_INTERFACE))) {
-                return null;
-            }
-            ++$parameterBagCallCount;
-            if (!$this->isName($node->name, 'get')) {
-                return null;
-            }
-            $firstArg = $node->getArgs()[0];
-            $argValue = $firstArg->value;
-            if (!$argValue instanceof String_) {
-                return null;
-            }
-            // from underscore to camelcase
-            $variableName = lcfirst(str_replace('_', '', ucwords($argValue->value, '_')));
-            $extraParams[] = $this->autowiredParamFactory->create($variableName, $argValue);
-            return new Variable($variableName);
-        });
-        if ($extraParams === []) {
-            return null;
-        }
-        $this->removeParameterBagParamIfNotUsed($constructClassMethod, $extraParams, $parameterBagCallCount);
-        $constructClassMethod->params = array_merge($constructClassMethod->params, $extraParams);
-        return $node;
-    }
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::ATTRIBUTES;
-    }
-    private function hasParameterBagInterfaceDependency(ClassMethod $classMethod): bool
-    {
-        $found = \false;
-        foreach ($classMethod->getParams() as $param) {
-            if ($this->isParameterBagParam($param)) {
-                $found = \true;
-                break;
-            }
-        }
-        return $found;
-    }
-    /**
-     * @param Param[] $extraParams
-     */
-    private function removeParameterBagParamIfNotUsed(ClassMethod $constructClassMethod, array $extraParams, int $parameterBagCallCount): void
-    {
-        // all usages of ParameterBagInterface were replaced
-        if (count($extraParams) !== $parameterBagCallCount) {
-            return;
-        }
-        foreach ($constructClassMethod->params as $key => $param) {
-            if (!$this->isParameterBagParam($param)) {
-                continue;
-            }
-            unset($constructClassMethod->params[$key]);
-        }
-    }
-    private function isParameterBagParam(Param $param): bool
-    {
-        if (!$param->type instanceof Node) {
-            return \false;
-        }
-        return $this->isName($param->type, SymfonyClass::PARAMETER_BAG_INTERFACE);
     }
 }

@@ -238,11 +238,13 @@ CODE_SAMPLE
         if (!TypeCombinator::containsNull($parentReturnType)) {
             return \false;
         }
+        $found = \false;
         foreach ($parentReturnType->getTypes() as $type) {
             if ($type->equals($returnType)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

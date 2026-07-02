@@ -2571,7 +2571,6 @@ return array(
     'Rector\\Symfony\\Configs\\NodeAnalyser\\ConfigServiceArgumentsResolver' => $vendorDir . '/rector/rector-symfony/rules/Configs/NodeAnalyser/ConfigServiceArgumentsResolver.php',
     'Rector\\Symfony\\Configs\\NodeAnalyser\\SetServiceClassNameResolver' => $vendorDir . '/rector/rector-symfony/rules/Configs/NodeAnalyser/SetServiceClassNameResolver.php',
     'Rector\\Symfony\\Configs\\NodeDecorator\\ServiceDefaultsCallClosureDecorator' => $vendorDir . '/rector/rector-symfony/rules/Configs/NodeDecorator/ServiceDefaultsCallClosureDecorator.php',
-    'Rector\\Symfony\\Configs\\NodeFactory\\AutowiredParamFactory' => $vendorDir . '/rector/rector-symfony/rules/Configs/NodeFactory/AutowiredParamFactory.php',
     'Rector\\Symfony\\Configs\\NodeVisitor\\CollectServiceArgumentsNodeVisitor' => $vendorDir . '/rector/rector-symfony/rules/Configs/NodeVisitor/CollectServiceArgumentsNodeVisitor.php',
     'Rector\\Symfony\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/ClassMethod/AddRouteAnnotationRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Class_\\AutowireAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Class_/AutowireAttributeRector.php',

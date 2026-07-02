@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite7732782e781a0db6ef2f014a417d492
+class ComposerStaticInitd3f521d9d23215175d68be64e8ea1856
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -2836,7 +2836,6 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
         'Rector\\Symfony\\Configs\\NodeAnalyser\\ConfigServiceArgumentsResolver' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/NodeAnalyser/ConfigServiceArgumentsResolver.php',
         'Rector\\Symfony\\Configs\\NodeAnalyser\\SetServiceClassNameResolver' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/NodeAnalyser/SetServiceClassNameResolver.php',
         'Rector\\Symfony\\Configs\\NodeDecorator\\ServiceDefaultsCallClosureDecorator' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/NodeDecorator/ServiceDefaultsCallClosureDecorator.php',
-        'Rector\\Symfony\\Configs\\NodeFactory\\AutowiredParamFactory' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/NodeFactory/AutowiredParamFactory.php',
         'Rector\\Symfony\\Configs\\NodeVisitor\\CollectServiceArgumentsNodeVisitor' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/NodeVisitor/CollectServiceArgumentsNodeVisitor.php',
         'Rector\\Symfony\\Configs\\Rector\\ClassMethod\\AddRouteAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/ClassMethod/AddRouteAnnotationRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Class_\\AutowireAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Class_/AutowireAttributeRector.php',
@@ -3323,9 +3322,9 @@ class ComposerStaticInite7732782e781a0db6ef2f014a417d492
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite7732782e781a0db6ef2f014a417d492::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite7732782e781a0db6ef2f014a417d492::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite7732782e781a0db6ef2f014a417d492::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd3f521d9d23215175d68be64e8ea1856::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd3f521d9d23215175d68be64e8ea1856::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd3f521d9d23215175d68be64e8ea1856::$classMap;
 
         }, null, ClassLoader::class);
     }
