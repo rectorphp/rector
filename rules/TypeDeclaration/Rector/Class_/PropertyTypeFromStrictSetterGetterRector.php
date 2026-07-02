@@ -5,12 +5,15 @@ namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\FloatType;
@@ -20,12 +23,14 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Php74\Guard\MakePropertyTypedGuard;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\SetterTypeDeclarationPropertyTypeInferer;
+use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -55,13 +60,18 @@ final class PropertyTypeFromStrictSetterGetterRector extends AbstractRector impl
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, SetterTypeDeclarationPropertyTypeInferer $setterTypeDeclarationPropertyTypeInferer, MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, SetterTypeDeclarationPropertyTypeInferer $setterTypeDeclarationPropertyTypeInferer, MakePropertyTypedGuard $makePropertyTypedGuard, ReflectionResolver $reflectionResolver, StaticTypeMapper $staticTypeMapper, BetterNodeFinder $betterNodeFinder)
     {
         $this->getterTypeDeclarationPropertyTypeInferer = $getterTypeDeclarationPropertyTypeInferer;
         $this->setterTypeDeclarationPropertyTypeInferer = $setterTypeDeclarationPropertyTypeInferer;
         $this->makePropertyTypedGuard = $makePropertyTypedGuard;
         $this->reflectionResolver = $reflectionResolver;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -118,6 +128,10 @@ CODE_SAMPLE
                 continue;
             }
             if (!$property->isPrivate()) {
+                continue;
+            }
+            // constructor assignment can set a different type than the setter/getter → skip
+            if ($this->isAssignedInConstructor($node, $property)) {
                 continue;
             }
             $getterSetterPropertyType = $this->matchGetterSetterIdenticalType($property, $node);
@@ -232,6 +246,27 @@ CODE_SAMPLE
             return;
         }
         $propertyProperty->default = new ConstFetch(new Name('null'));
+    }
+    private function isAssignedInConstructor(Class_ $class, Property $property): bool
+    {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
+            return \false;
+        }
+        $propertyName = $this->getName($property);
+        foreach ($this->betterNodeFinder->findInstanceOf($constructClassMethod, Assign::class) as $assign) {
+            if (!$assign->var instanceof PropertyFetch) {
+                continue;
+            }
+            $propertyFetch = $assign->var;
+            if (!$this->isName($propertyFetch->var, 'this')) {
+                continue;
+            }
+            if ($this->isName($propertyFetch->name, $propertyName)) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function hasPropertyDefaultNull(Property $property): bool
     {
