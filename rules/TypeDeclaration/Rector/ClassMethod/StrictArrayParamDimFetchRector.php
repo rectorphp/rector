@@ -96,6 +96,9 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
             return null;
         }
+        if ($node instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($node)) {
+            return null;
+        }
         foreach ($node->getParams() as $param) {
             if ($param->type instanceof Node) {
                 continue;
