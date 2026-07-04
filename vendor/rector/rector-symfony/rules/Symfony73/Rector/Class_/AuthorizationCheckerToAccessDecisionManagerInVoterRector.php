@@ -49,7 +49,7 @@ final class AuthorizationCheckerVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        return $this->authorizationChecker->isGranted('ROLE_ADMIN');
+        return $this->authorizationChecker->isGranted('ROLE_ADMIN', $subject);
     }
 }
 CODE_SAMPLE
@@ -66,7 +66,7 @@ final class AuthorizationCheckerVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        return $this->accessDecisionManager->decide($token, ['ROLE_ADMIN']);
+        return $this->accessDecisionManager->decide($token, ['ROLE_ADMIN'], $subject);
     }
 }
 CODE_SAMPLE
@@ -153,7 +153,12 @@ CODE_SAMPLE
                     return null;
                 }
                 $attributeExpr = $attributeArg->value;
-                $node->args = [new Arg($tokenVariable), new Arg(new Array_([new ArrayItem($attributeExpr)]))];
+                $args = [new Arg($tokenVariable), new Arg(new Array_([new ArrayItem($attributeExpr)]))];
+                $subjectArg = $node->args[1] ?? null;
+                if ($subjectArg instanceof Arg) {
+                    $args[] = new Arg($subjectArg->value);
+                }
+                $node->args = $args;
                 $hasChanged = \true;
                 return $node;
             });
