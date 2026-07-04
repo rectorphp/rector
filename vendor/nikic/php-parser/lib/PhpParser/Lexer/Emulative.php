@@ -10,6 +10,7 @@ use PhpParser\Lexer\TokenEmulator\AsymmetricVisibilityTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\AttributeEmulator;
 use PhpParser\Lexer\TokenEmulator\EnumTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\ExplicitOctalEmulator;
+use PhpParser\Lexer\TokenEmulator\FnTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\MatchTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\NullsafeTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\PipeOperatorEmulator;
@@ -36,7 +37,7 @@ class Emulative extends Lexer
     {
         $this->targetPhpVersion = $phpVersion ?? PhpVersion::getNewestSupported();
         $this->hostPhpVersion = PhpVersion::getHostVersion();
-        $emulators = [new MatchTokenEmulator(), new NullsafeTokenEmulator(), new AttributeEmulator(), new EnumTokenEmulator(), new ReadonlyTokenEmulator(), new ExplicitOctalEmulator(), new ReadonlyFunctionTokenEmulator(), new PropertyTokenEmulator(), new AsymmetricVisibilityTokenEmulator(), new PipeOperatorEmulator(), new VoidCastEmulator()];
+        $emulators = [new FnTokenEmulator(), new MatchTokenEmulator(), new NullsafeTokenEmulator(), new AttributeEmulator(), new EnumTokenEmulator(), new ReadonlyTokenEmulator(), new ExplicitOctalEmulator(), new ReadonlyFunctionTokenEmulator(), new PropertyTokenEmulator(), new AsymmetricVisibilityTokenEmulator(), new PipeOperatorEmulator(), new VoidCastEmulator()];
         // Collect emulators that are relevant for the PHP version we're running
         // and the PHP version we're targeting for emulation.
         foreach ($emulators as $emulator) {

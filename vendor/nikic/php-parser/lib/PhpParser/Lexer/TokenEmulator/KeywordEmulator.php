@@ -15,7 +15,7 @@ abstract class KeywordEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmula
     /** @param Token[] $tokens */
     protected function isKeywordContext(array $tokens, int $pos): bool
     {
-        $prevToken = $this->getPreviousNonSpaceToken($tokens, $pos);
+        $prevToken = $this->getPreviousNonIgnorableToken($tokens, $pos);
         if ($prevToken === null) {
             return \false;
         }
@@ -32,13 +32,14 @@ abstract class KeywordEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmula
         return $tokens;
     }
     /** @param Token[] $tokens */
-    private function getPreviousNonSpaceToken(array $tokens, int $start): ?Token
+    private function getPreviousNonIgnorableToken(array $tokens, int $start): ?Token
     {
         for ($i = $start - 1; $i >= 0; --$i) {
-            if ($tokens[$i]->id === \T_WHITESPACE) {
+            $token = $tokens[$i];
+            if ($token->id === \T_WHITESPACE || $token->id == \T_COMMENT || $token->id === \T_DOC_COMMENT) {
                 continue;
             }
-            return $tokens[$i];
+            return $token;
         }
         return null;
     }
