@@ -39,6 +39,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNullableTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromGetRepositoryDocblockRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromMockObjectRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnCastRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnDirectArrayRector;
@@ -168,5 +169,7 @@ final class TypeDeclarationLevel
         NarrowArrayAnyAllNullableParamTypeRector::class,
         AddArrayAnyAllClosureParamTypeRector::class,
         ClosureReturnTypeFromAssertInstanceOfRector::class,
+        // docblock @return into native return type, intentionally last
+        ReturnTypeFromGetRepositoryDocblockRector::class,
     ];
 }

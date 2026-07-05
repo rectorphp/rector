@@ -3181,6 +3181,7 @@ class ComposerStaticInit36a27db8e97ef068052720aade401e51
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ParamTypeByParentCallTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ParamTypeByParentCallTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnNeverTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnNeverTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnNullableTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnNullableTypeRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromGetRepositoryDocblockRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromGetRepositoryDocblockRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromMockObjectRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromMockObjectRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromReturnCastRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnCastRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromReturnDirectArrayRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnDirectArrayRector.php',
