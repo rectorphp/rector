@@ -22,7 +22,7 @@ use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\ValueObject\RenameCast;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
-        #the_real_type
+        # the_real_type
         # https://wiki.php.net/rfc/deprecations_php_7_4
         'is_real' => 'is_float',
     ]);

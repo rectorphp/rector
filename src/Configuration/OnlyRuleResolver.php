@@ -25,9 +25,9 @@ final class OnlyRuleResolver
     }
     public function resolve(string $rule): string
     {
-        //fix wrongly double escaped backslashes
+        // fix wrongly double escaped backslashes
         $rule = str_replace('\\\\', '\\', $rule);
-        //remove single quotes appearing when single-quoting arguments on windows
+        // remove single quotes appearing when single-quoting arguments on windows
         if (strncmp($rule, "'", strlen("'")) === 0 && substr_compare($rule, "'", -strlen("'")) === 0) {
             $rule = (string) substr($rule, 1, -1);
         }
@@ -37,7 +37,7 @@ final class OnlyRuleResolver
                 return $rule;
             }
         }
-        //allow short rule names if there are not duplicates
+        // allow short rule names if there are not duplicates
         $matching = [];
         foreach ($this->rectors as $rector) {
             if (substr_compare(get_class($rector), '\\' . $rule, -strlen('\\' . $rule)) === 0) {

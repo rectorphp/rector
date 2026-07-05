@@ -220,7 +220,8 @@ final class EregToPcreTransformer
                     if ($b === ']') {
                         $cls .= $this->_ere2pcre_escape($a) . '\-';
                         break;
-                    } elseif (ord($a) > ord($b)) {
+                    }
+                    if (ord($a) > ord($b)) {
                         $errorMessage = sprintf('an invalid character range %d-%d"', (int) $a, (int) $b);
                         throw new InvalidEregException($errorMessage);
                     }

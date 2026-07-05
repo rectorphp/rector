@@ -82,12 +82,10 @@ final class ClassMethodReturnTypeOverrideGuard
         if ($fileName === null) {
             return \false;
         }
-        /*
+        /**
          * Below verify that both current file name and parent file name is not in the /vendor/, if yes, then allowed.
          * This can happen when rector run into /vendor/ directory while child and parent both are there.
-         *
          *  @see https://3v4l.org/Rc0RF#v8.0.13
-         *
          *     - both in /vendor/ -> allowed
          *     - one of them in /vendor/ -> not allowed
          *     - both not in /vendor/ -> allowed

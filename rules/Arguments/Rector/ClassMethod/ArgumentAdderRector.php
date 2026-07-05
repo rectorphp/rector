@@ -243,7 +243,7 @@ CODE_SAMPLE
             // Check if the parameter we're trying to add is before the first named argument
             if ($position < $firstNamedArgumentPosition) {
                 return \true;
-                //if that is the case, the parameter already exists, skip
+                // if that is the case, the parameter already exists, skip
             }
             // Check if the parameter we're trying to add is already present as a named argument
             if ($this->argsAnalyzer->resolveArgPosition($arguments, $argumentName, -1) !== -1) {

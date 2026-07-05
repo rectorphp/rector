@@ -103,7 +103,8 @@ CODE_SAMPLE
             if ($value instanceof MixedType) {
                 $values = [];
                 break;
-            } elseif ($value instanceof UnionType) {
+            }
+            if ($value instanceof UnionType) {
                 $values = array_merge($values, $value->getTypes());
             }
         }
@@ -111,7 +112,8 @@ CODE_SAMPLE
             if ($key instanceof MixedType) {
                 $keys = [];
                 break;
-            } elseif ($key instanceof UnionType) {
+            }
+            if ($key instanceof UnionType) {
                 $keys = array_merge($keys, $key->getTypes());
             }
         }

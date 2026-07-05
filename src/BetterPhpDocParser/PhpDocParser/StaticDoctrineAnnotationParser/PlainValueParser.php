@@ -91,7 +91,7 @@ final class PlainValueParser
                 $currentTokenValue .= ' ';
             }
             if (strncmp($currentTokenValue, '"', strlen('"')) === 0 && strpos($tokenIterator->currentTokenValue(), '"') !== \false && $currentTokenValue !== $tokenIterator->currentTokenValue()) {
-                //starts with '"' and current token contains '"', should be the end
+                // starts with '"' and current token contains '"', should be the end
                 $currentTokenValue .= substr($tokenIterator->currentTokenValue(), 0, (int) strpos($tokenIterator->currentTokenValue(), '"') + 1);
                 $tokenIterator->next();
                 break;
