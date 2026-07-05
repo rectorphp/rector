@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -117,6 +118,10 @@ CODE_SAMPLE
     private function isCurrentObjectReturnDocType(TypeNode $typeNode, ClassMethod $classMethod, ClassReflection $classReflection): bool
     {
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $classMethod);
+        // generic narrowing, e.g. @return self<TValue, never> is not a plain duplicate of the native self type
+        if ($docType instanceof GenericObjectType) {
+            return \false;
+        }
         // covers @return $this and @return static
         if ($docType instanceof StaticType) {
             return $docType->getClassName() === $classReflection->getName();

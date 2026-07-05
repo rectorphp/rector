@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
@@ -138,7 +139,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $variableName = ltrim($varTagValueNode->variableName, '$');
-                if ($variableName === '' && $this->isAllowedEmptyVariableName($stmt)) {
+                if ($variableName === '' && $this->isAllowedEmptyVariableName($stmt, $varTagValueNode)) {
                     continue;
                 }
                 if ($this->hasVariableName($stmt, $variableName)) {
@@ -214,11 +215,26 @@ CODE_SAMPLE
         }
         return strpos($varTagValueNode->description, '}') !== \false;
     }
-    private function isAllowedEmptyVariableName(Stmt $stmt): bool
+    private function isAllowedEmptyVariableName(Stmt $stmt, VarTagValueNode $varTagValueNode): bool
     {
         if ($stmt instanceof Return_ && $stmt->expr instanceof CallLike && !$stmt->expr instanceof New_) {
             return \true;
         }
+        // generic/template narrowing over the instantiated class, e.g. /** @var self<TValue, never> */ return new self(...)
+        if ($stmt instanceof Return_ && $stmt->expr instanceof New_ && $this->isGenericTypeOfNewClass($stmt->expr, $varTagValueNode)) {
+            return \true;
+        }
         return $stmt instanceof Expression && $stmt->expr instanceof Assign && $stmt->expr->var instanceof Variable;
+    }
+    private function isGenericTypeOfNewClass(New_ $new, VarTagValueNode $varTagValueNode): bool
+    {
+        if (!$varTagValueNode->type instanceof GenericTypeNode) {
+            return \false;
+        }
+        $newClassName = $this->getName($new->class);
+        if ($newClassName === null) {
+            return \false;
+        }
+        return strcasecmp($varTagValueNode->type->type->name, $newClassName) === 0;
     }
 }
