@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -145,14 +147,47 @@ CODE_SAMPLE
         if (count($returns) !== 1) {
             return \false;
         }
-        $methodCall = $returns[0]->expr;
-        if (!$methodCall instanceof MethodCall) {
-            return \false;
+        $returnedExpr = $returns[0]->expr;
+        // direct return: return $this->em->getRepository(...);
+        if ($returnedExpr instanceof MethodCall) {
+            return $this->isGetRepositoryMethodCall($returnedExpr);
         }
+        // indirect return: $repo = $this->em->getRepository(...); ...; return $repo;
+        if ($returnedExpr instanceof Variable) {
+            $assignedMethodCall = $this->findVariableAssignMethodCall($classMethod, $returnedExpr);
+            if (!$assignedMethodCall instanceof MethodCall) {
+                return \false;
+            }
+            return $this->isGetRepositoryMethodCall($assignedMethodCall);
+        }
+        return \false;
+    }
+    private function isGetRepositoryMethodCall(MethodCall $methodCall): bool
+    {
         if (!$this->isName($methodCall->name, 'getRepository')) {
             return \false;
         }
         return $this->isEntityManagerType($methodCall);
+    }
+    private function findVariableAssignMethodCall(ClassMethod $classMethod, Variable $variable): ?MethodCall
+    {
+        /** @var Assign[] $assigns */
+        $assigns = $this->betterNodeFinder->findInstanceOf($classMethod, Assign::class);
+        $methodCall = null;
+        foreach ($assigns as $assign) {
+            if (!$assign->var instanceof Variable) {
+                continue;
+            }
+            if (!$this->nodeComparator->areNodesEqual($assign->var, $variable)) {
+                continue;
+            }
+            // reassigned to something else, cannot be sure of the type
+            if (!$assign->expr instanceof MethodCall) {
+                return null;
+            }
+            $methodCall = $assign->expr;
+        }
+        return $methodCall;
     }
     private function isEntityManagerType(MethodCall $methodCall): bool
     {
