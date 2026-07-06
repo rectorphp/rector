@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\Generic\GenericStaticType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -119,7 +120,7 @@ CODE_SAMPLE
     {
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $classMethod);
         // generic narrowing, e.g. @return self<TValue, never> is not a plain duplicate of the native self type
-        if ($docType instanceof GenericObjectType) {
+        if ($docType instanceof GenericObjectType || $docType instanceof GenericStaticType) {
             return \false;
         }
         // covers @return $this and @return static
