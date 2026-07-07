@@ -128,7 +128,8 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if (!$this->reflectionProvider->hasClass(self::COVERS_FUNCTION_ATTRIBUTE)) {
+        // avoid partial apply that may cause error
+        if (!$this->reflectionProvider->hasClass(self::COVERS_FUNCTION_ATTRIBUTE) || !$this->reflectionProvider->hasClass(self::COVERTS_CLASS_ATTRIBUTE) || !$this->reflectionProvider->hasClass(self::COVERTS_TRAIT_ATTRIBUTE) || !$this->reflectionProvider->hasClass(self::COVERS_METHOD_ATTRIBUTE)) {
             return null;
         }
         if ($node instanceof Class_) {
@@ -154,9 +155,6 @@ CODE_SAMPLE
             $attributeValue = [trim($annotationValue, ':()')];
         } elseif (strpos($annotationValue, '::') !== \false) {
             $attributeClass = self::COVERS_METHOD_ATTRIBUTE;
-            if (!$this->reflectionProvider->hasClass($attributeClass)) {
-                return null;
-            }
             $attributeValue = [$this->getClass($annotationValue) . '::class', $this->getMethod($annotationValue)];
         } else {
             $attributeClass = self::COVERTS_CLASS_ATTRIBUTE;
@@ -284,9 +282,6 @@ CODE_SAMPLE
         $desiredTagValueNodes = $phpDocInfo->getTagsByName('covers');
         foreach ($desiredTagValueNodes as $desiredTagValueNode) {
             if (!$desiredTagValueNode->value instanceof GenericTagValueNode) {
-                continue;
-            }
-            if (strpos($desiredTagValueNode->value->value, '::') !== \false && !$this->reflectionProvider->hasClass(self::COVERS_METHOD_ATTRIBUTE)) {
                 continue;
             }
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
