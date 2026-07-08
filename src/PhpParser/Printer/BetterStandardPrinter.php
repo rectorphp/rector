@@ -13,13 +13,19 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Pipe;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Print_;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
@@ -377,11 +383,33 @@ final class BetterStandardPrinter extends Standard
         if ($node->right instanceof Assign && $this->origTokens instanceof TokenStream) {
             $node->right->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
+        // boolean operators (&&, ||) bind tighter than the logical ones (and, or); when
+        // LogicalToBooleanRector swaps them, operands with lower precedence must be reprinted
+        // so the pretty-printer re-adds the parentheses that keep the original semantics
+        if ($node instanceof BooleanAnd || $node instanceof BooleanOr) {
+            $this->reprintLowerPrecedenceOperand($node->left);
+            $this->reprintLowerPrecedenceOperand($node->right);
+        }
         if ($node->left instanceof BinaryOp && $node->left->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
             $node->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         if ($node->right instanceof BinaryOp && $node->right->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
             $node->right->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
+    }
+    /**
+     * @see https://github.com/rectorphp/rector/issues/9800
+     */
+    private function reprintLowerPrecedenceOperand(Node $node): void
+    {
+        if (!$node instanceof AssignRef && !$node instanceof AssignOp && !$node instanceof Ternary && !$node instanceof Print_ && !$node instanceof Yield_ && !$node instanceof YieldFrom) {
+            return;
+        }
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        // the format-preserving printer keeps yield's precedence parentheses only for the
+        // "yield from" and empty "yield" forms; "yield <value>" needs them added explicitly
+        if ($node instanceof Yield_ && $node->value instanceof Expr) {
+            $node->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         }
     }
     /**
