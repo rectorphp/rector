@@ -37,6 +37,7 @@ use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\Rector\AbstractRector;
+use Rector\Util\StringUtils;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -89,6 +90,11 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
      * @readonly
      */
     private \Rector\Php80\Rector\Class_\AttributeValueResolver $attributeValueResolver;
+    /**
+     * Any unicode letter, to tell a real doc comment apart from leftover annotation syntax
+     * @var string
+     */
+    private const LETTER_REGEX = '#\p{L}#u';
     /**
      * @var AnnotationToAttribute[]
      */
@@ -272,10 +278,72 @@ CODE_SAMPLE
         if ($this->phpAttributeAnalyzer->hasRemoveArrayState($attributeGroups)) {
             return [];
         }
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
         foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
+            // keep a doc comment that followed the annotation on the next line(s)
+            $trailingComment = $this->resolveTrailingComment((string) $doctrineTagValueNode->getOriginalContent());
+            if ($trailingComment === null) {
+                $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
+                continue;
+            }
+            foreach ($phpDocNode->children as $key => $phpDocChildNode) {
+                if (!$phpDocChildNode instanceof PhpDocTagNode) {
+                    continue;
+                }
+                if ($phpDocChildNode->value !== $doctrineTagValueNode) {
+                    continue;
+                }
+                $phpDocNode->children[$key] = new PhpDocTextNode($trailingComment);
+            }
         }
         return $attributeGroups;
+    }
+    /**
+     * A doctrine annotation swallows the doc comment placed on the line(s) below it into its original content.
+     * Split it back out, so it is not removed together with the converted annotation.
+     */
+    private function resolveTrailingComment(string $originalContent): ?string
+    {
+        if (strncmp($originalContent, '(', strlen('(')) !== 0) {
+            return null;
+        }
+        $depth = 0;
+        $inString = \false;
+        $stringChar = '';
+        $length = strlen($originalContent);
+        for ($i = 0; $i < $length; ++$i) {
+            $char = $originalContent[$i];
+            if ($inString) {
+                if ($char === '\\') {
+                    // skip escaped char
+                    ++$i;
+                } elseif ($char === $stringChar) {
+                    $inString = \false;
+                }
+                continue;
+            }
+            if ($char === '"' || $char === "'") {
+                $inString = \true;
+                $stringChar = $char;
+                continue;
+            }
+            if ($char === '(') {
+                ++$depth;
+                continue;
+            }
+            if ($char === ')') {
+                --$depth;
+                if ($depth === 0) {
+                    $trailingComment = trim((string) substr($originalContent, $i + 1));
+                    // keep only a real doc comment, not leftover annotation syntax (e.g. a stray ")")
+                    if (!StringUtils::isMatch($trailingComment, self::LETTER_REGEX)) {
+                        return null;
+                    }
+                    return $trailingComment;
+                }
+            }
+        }
+        return null;
     }
     private function matchAnnotationToAttribute(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): ?\Rector\Php80\ValueObject\AnnotationToAttribute
     {
