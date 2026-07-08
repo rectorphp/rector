@@ -5,7 +5,6 @@ namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -82,11 +81,12 @@ CODE_SAMPLE
                 continue;
             }
             $booleanOr = $stmt->expr;
+            // the right side becomes the final return, the left operands become early returns
             $left = $booleanOr->left;
-            $ifs = $this->createMultipleIfs($left, $stmt, []);
-            // ensure ifs not removed by other rules
-            if ($ifs === []) {
-                continue;
+            $leftOperands = $left instanceof BooleanOr ? $this->flattenBooleanOr($left) : [$left];
+            $ifs = [];
+            foreach ($leftOperands as $leftOperand) {
+                $ifs[] = new If_($leftOperand, ['stmts' => [new Return_($this->nodeFactory->createTrue())]]);
             }
             if (!$this->callAnalyzer->doesIfHasObjectCall($ifs)) {
                 continue;
@@ -103,41 +103,15 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param If_[] $ifs
-     * @return If_[]
+     * Flatten a left-associative "||" chain into its operands, in source order.
+     *
+     * @return Expr[]
      */
-    private function createMultipleIfs(Expr $expr, Return_ $return, array $ifs): array
-    {
-        while ($expr instanceof BooleanOr) {
-            $ifs = array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $return, $ifs));
-            $ifs[] = new If_($expr->right, ['stmts' => [new Return_($this->nodeFactory->createTrue())]]);
-            $expr = $expr->right;
-            if ($expr instanceof BooleanAnd) {
-                return [];
-            }
-            if (!$expr instanceof BooleanOr) {
-                continue;
-            }
-            return [];
-        }
-        $lastIf = new If_($expr, ['stmts' => [new Return_($this->nodeFactory->createTrue())]]);
-        // if empty, fallback to last if
-        if ($ifs === []) {
-            return [$lastIf];
-        }
-        return $ifs;
-    }
-    /**
-     * @param If_[] $ifs
-     * @return If_[]
-     */
-    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Return_ $return, array $ifs): array
+    private function flattenBooleanOr(BooleanOr $booleanOr): array
     {
         $left = $booleanOr->left;
-        if (!$left instanceof BooleanOr) {
-            $returnTrueIf = new If_($left, ['stmts' => [new Return_($this->nodeFactory->createTrue())]]);
-            return [$returnTrueIf];
-        }
-        return $this->createMultipleIfs($left, $return, $ifs);
+        $operands = $left instanceof BooleanOr ? $this->flattenBooleanOr($left) : [$left];
+        $operands[] = $booleanOr->right;
+        return $operands;
     }
 }
