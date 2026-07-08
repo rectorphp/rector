@@ -127,6 +127,10 @@ CODE_SAMPLE
         if (!$return->expr instanceof Expr) {
             return \true;
         }
+        // both branches return the same boolean → condition is pointless, transform would be unsound
+        if ($this->valueResolver->isTrueOrFalse($return->expr) && $this->valueResolver->isTrue($returnedExpr) === $this->valueResolver->isTrue($return->expr)) {
+            return \true;
+        }
         // negate + negate → skip for now
         if (!$this->valueResolver->isFalse($returnedExpr)) {
             return !$this->valueResolver->isTrueOrFalse($return->expr);
