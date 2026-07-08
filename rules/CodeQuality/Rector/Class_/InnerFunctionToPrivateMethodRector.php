@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -103,6 +104,10 @@ CODE_SAMPLE
             if (in_array($functionName, $existingMethodNames, \true)) {
                 continue;
             }
+            // avoid breaking string callables, e.g. usort($items, 'functionName')
+            if ($this->isReferencedAsStringCallable($classMethod, $functionName)) {
+                continue;
+            }
             $existingMethodNames[] = $functionName;
             $innerFunctions[] = $stmt;
             unset($classMethod->stmts[$key]);
@@ -111,6 +116,17 @@ CODE_SAMPLE
             $classMethod->stmts = array_values((array) $classMethod->stmts);
         }
         return $innerFunctions;
+    }
+    private function isReferencedAsStringCallable(ClassMethod $classMethod, string $functionName): bool
+    {
+        $isReferenced = \false;
+        $this->traverseNodesWithCallable($classMethod->stmts ?? [], function (Node $node) use ($functionName, &$isReferenced) {
+            if ($node instanceof String_ && $node->value === $functionName) {
+                $isReferenced = \true;
+            }
+            return null;
+        });
+        return $isReferenced;
     }
     private function createPrivateMethod(Function_ $innerFunction, bool $isStatic): ClassMethod
     {
