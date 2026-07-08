@@ -1335,6 +1335,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\FuncCall\\StrictArraySearchRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/StrictArraySearchRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\StrictInArrayRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/StrictInArrayRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
+    'Rector\\CodingStyle\\Rector\\If_\\AlternativeIfToBracketRector' => $baseDir . '/rules/CodingStyle/Rector/If_/AlternativeIfToBracketRector.php',
     'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => $baseDir . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',
     'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => $baseDir . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
     'Rector\\CodingStyle\\Rector\\Property\\SplitGroupedPropertiesRector' => $baseDir . '/rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php',
