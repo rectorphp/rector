@@ -1827,6 +1827,7 @@ return array(
     'Rector\\NodeAnalyzer\\ExprInTopStmtMatcher' => $vendorDir . '/rector/rector-downgrade-php/src/NodeAnalyzer/ExprInTopStmtMatcher.php',
     'Rector\\NodeAnalyzer\\MagicClassMethodAnalyzer' => $baseDir . '/src/NodeAnalyzer/MagicClassMethodAnalyzer.php',
     'Rector\\NodeAnalyzer\\ParamAnalyzer' => $baseDir . '/src/NodeAnalyzer/ParamAnalyzer.php',
+    'Rector\\NodeAnalyzer\\PowOperandAnalyzer' => $baseDir . '/src/NodeAnalyzer/PowOperandAnalyzer.php',
     'Rector\\NodeAnalyzer\\PropertyAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyAnalyzer.php',
     'Rector\\NodeAnalyzer\\PropertyFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyFetchAnalyzer.php',
     'Rector\\NodeAnalyzer\\PropertyPresenceChecker' => $baseDir . '/src/NodeAnalyzer/PropertyPresenceChecker.php',

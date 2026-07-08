@@ -2092,6 +2092,7 @@ class ComposerStaticInit36a27db8e97ef068052720aade401e51
         'Rector\\NodeAnalyzer\\ExprInTopStmtMatcher' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/ExprInTopStmtMatcher.php',
         'Rector\\NodeAnalyzer\\MagicClassMethodAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/MagicClassMethodAnalyzer.php',
         'Rector\\NodeAnalyzer\\ParamAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ParamAnalyzer.php',
+        'Rector\\NodeAnalyzer\\PowOperandAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PowOperandAnalyzer.php',
         'Rector\\NodeAnalyzer\\PropertyAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PropertyAnalyzer.php',
         'Rector\\NodeAnalyzer\\PropertyFetchAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PropertyFetchAnalyzer.php',
         'Rector\\NodeAnalyzer\\PropertyPresenceChecker' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PropertyPresenceChecker.php',
