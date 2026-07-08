@@ -37,6 +37,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarR
 use Rector\TypeDeclaration\Rector\ClassMethod\ObjectParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\PrivateMethodReturnTypeFromStrictNewArrayRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNullableTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromGetRepositoryDocblockRector;
@@ -94,6 +95,8 @@ final class TypeDeclarationLevel
         TypedPropertyFromCreateMockAssignRector::class,
         AddArrowFunctionReturnTypeRector::class,
         BoolReturnTypeFromBooleanConstReturnsRector::class,
+        // private methods first, as safest - no external contract
+        PrivateMethodReturnTypeFromStrictNewArrayRector::class,
         ReturnTypeFromStrictNewArrayRector::class,
         // scalar and array from constant
         ReturnTypeFromStrictConstantReturnRector::class,
