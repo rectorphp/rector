@@ -56,6 +56,9 @@ final class AddAssertArrayFromClassMethodDocblockRector extends AbstractRector i
     {
         return new RuleDefinition('Add key and value assert based on docblock @param type declarations (pick from "webmozart" or "beberlei" asserts)', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
+
+namespace RectorPrefix202607;
+
 class SomeClass
 {
     /**
