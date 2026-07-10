@@ -5,6 +5,7 @@ namespace Rector\Php81\NodeManipulator;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Cast\Int_ as CastInt_;
 use PhpParser\Node\Expr\Cast\String_ as CastString_;
 use PhpParser\Node\Expr\FuncCall;
@@ -109,6 +110,10 @@ final class NullToStrictStringIntConverter
     }
     private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait, string $targetType): bool
     {
+        // array dim fetch value is mixed, null is not known - skip to avoid wrong (string) cast
+        if ($expr instanceof ArrayDimFetch) {
+            return \true;
+        }
         if ($this->isPropertyFetchOnClassWithMagicGet($expr)) {
             return \true;
         }
