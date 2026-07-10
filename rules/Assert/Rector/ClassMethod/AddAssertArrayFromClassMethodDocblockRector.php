@@ -57,8 +57,6 @@ final class AddAssertArrayFromClassMethodDocblockRector extends AbstractRector i
         return new RuleDefinition('Add key and value assert based on docblock @param type declarations (pick from "webmozart" or "beberlei" asserts)', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix202607;
-
 class SomeClass
 {
     /**
@@ -68,15 +66,13 @@ class SomeClass
     {
     }
 }
-\class_alias('SomeClass', 'SomeClass', \false);
+
 
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
 
-namespace RectorPrefix202607;
-
-use RectorPrefix202607\Webmozart\Assert\Assert;
+use Webmozart\Assert\Assert;
 class SomeClass
 {
     /**
@@ -87,7 +83,7 @@ class SomeClass
         Assert::allInteger($items);
     }
 }
-\class_alias('SomeClass', 'SomeClass', \false);
+
 CODE_SAMPLE
 , [AssertClassName::WEBMOZART])]);
     }
