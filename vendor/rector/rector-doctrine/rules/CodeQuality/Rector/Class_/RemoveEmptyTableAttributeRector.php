@@ -27,7 +27,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
 }
-
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
@@ -37,7 +36,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
 }
-
 CODE_SAMPLE
 )]);
     }

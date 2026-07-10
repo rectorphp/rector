@@ -45,7 +45,6 @@ class SomeTest extends TestCase
         $this->assertSame($result, 'expected');
     }
 }
-
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
@@ -59,7 +58,6 @@ class SomeTest extends TestCase
         $this->assertSame('expected', $result);
     }
 }
-
 CODE_SAMPLE
 )]);
     }

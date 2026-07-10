@@ -67,7 +67,6 @@ class SomeClass
     }
 }
 
-
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 <?php
@@ -83,7 +82,6 @@ class SomeClass
         Assert::allInteger($items);
     }
 }
-
 CODE_SAMPLE
 , [AssertClassName::WEBMOZART])]);
     }
