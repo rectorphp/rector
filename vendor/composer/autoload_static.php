@@ -2281,6 +2281,7 @@ class ComposerStaticInit36a27db8e97ef068052720aade401e51
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddReturnTypeToDependedRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddReturnTypeToDependedRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddStubIntersectionVarToStubPropertyRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddStubIntersectionVarToStubPropertyRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AssertClassToThisAssertRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AssertClassToThisAssertRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\InlineStubPropertyToCreateStubMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/InlineStubPropertyToCreateStubMethodCallRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\NarrowUnusedSetUpDefinedPropertyRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/NarrowUnusedSetUpDefinedPropertyRector.php',

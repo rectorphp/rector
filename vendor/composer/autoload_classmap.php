@@ -2016,6 +2016,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddReturnTypeToDependedRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddReturnTypeToDependedRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddStubIntersectionVarToStubPropertyRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddStubIntersectionVarToStubPropertyRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AssertClassToThisAssertRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AssertClassToThisAssertRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\InlineStubPropertyToCreateStubMethodCallRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/InlineStubPropertyToCreateStubMethodCallRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\NarrowUnusedSetUpDefinedPropertyRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/NarrowUnusedSetUpDefinedPropertyRector.php',
