@@ -102,6 +102,9 @@ CODE_SAMPLE
             return null;
         }
         $nativeReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+        if ($this->isReturnTemplate($phpDocInfo, $returnTagValueNode)) {
+            return null;
+        }
         $docReturnType = $phpDocInfo->getReturnType();
         // a subtype/narrowing is legitimate; only a contradiction is dead
         if (!$nativeReturnType->isSuperTypeOf($docReturnType)->no()) {
@@ -128,5 +131,12 @@ CODE_SAMPLE
             return \false;
         }
         return $returnTagValueNode->type instanceof IdentifierTypeNode && isset($typeAliases[$returnTagValueNode->type->name]);
+    }
+    private function isReturnTemplate(PhpDocInfo $phpDocInfo, ReturnTagValueNode $returnTagValueNode): bool
+    {
+        if (!$returnTagValueNode->type instanceof IdentifierTypeNode) {
+            return \false;
+        }
+        return in_array($returnTagValueNode->type->name, $phpDocInfo->getTemplateNames(), \true);
     }
 }
