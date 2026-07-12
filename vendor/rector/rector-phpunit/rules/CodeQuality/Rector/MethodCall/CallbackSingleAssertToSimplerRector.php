@@ -106,6 +106,12 @@ CODE_SAMPLE
         if (!$innerClosure instanceof Closure) {
             return null;
         }
+        // skip closures capturing by reference, as the referenced value is likely modified above
+        foreach ($innerClosure->uses as $use) {
+            if ($use->byRef) {
+                return null;
+            }
+        }
         // exactly assertSame() expression + "return true;"
         $closureStmts = $innerClosure->getStmts();
         if (count($closureStmts) !== 2) {
