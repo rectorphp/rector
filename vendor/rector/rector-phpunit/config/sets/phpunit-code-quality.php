@@ -44,6 +44,7 @@ use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertNotOperatorRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\CallbackSingleAssertToSimplerRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\FlipAssertRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\MatchAssertSameExpectedTypeRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\MergeWithCallableAndWillReturnRector;
@@ -125,6 +126,7 @@ return static function (RectorConfig $rectorConfig): void {
          */
         RemoveExpectAnyFromMockRector::class,
         SingleMockPropertyTypeRector::class,
+        CallbackSingleAssertToSimplerRector::class,
         SimplerWithIsInstanceOfRector::class,
         DirectInstanceOverMockArgRector::class,
         // stub over mock

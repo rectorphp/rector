@@ -10,11 +10,13 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
@@ -228,19 +230,33 @@ CODE_SAMPLE
         if ($valueReturns === []) {
             return \false;
         }
-        // only strip side-effect-free values, to not lose behavior
+        // only strip side-effect-free values or a "return throw", to not lose behavior
         foreach ($valueReturns as $valueReturn) {
             $returnedExpr = $valueReturn->expr;
             if (!$returnedExpr instanceof Expr) {
+                continue;
+            }
+            // "return throw new X" becomes a bare "throw new X" statement below
+            if ($returnedExpr instanceof Throw_) {
                 continue;
             }
             if (!$this->isPureValue($returnedExpr)) {
                 return \false;
             }
         }
-        foreach ($valueReturns as $valueReturn) {
-            $valueReturn->expr = null;
-        }
+        $this->traverseNodesWithCallable($closure->stmts, static function (Node $subNode): ?Expression {
+            if (!$subNode instanceof Return_) {
+                return null;
+            }
+            // "return throw new X;" is itself invalid in a void function, unwrap to "throw new X;"
+            if ($subNode->expr instanceof Throw_) {
+                return new Expression($subNode->expr);
+            }
+            if ($subNode->expr instanceof Expr) {
+                $subNode->expr = null;
+            }
+            return null;
+        });
         // drop a now-empty trailing "return;"
         $lastStmt = $closure->stmts[array_key_last($closure->stmts)] ?? null;
         if ($lastStmt instanceof Return_ && !$lastStmt->expr instanceof Expr) {
