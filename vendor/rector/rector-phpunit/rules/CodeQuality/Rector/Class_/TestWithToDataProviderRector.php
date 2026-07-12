@@ -143,7 +143,7 @@ CODE_SAMPLE
             if (count($values) === 1) {
                 $arrayItemsSingleLine[] = new ArrayItem($this->createArrayItem($values[0]));
             }
-            //cleanup
+            // cleanup
             if ($this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $testWithPhpDocTagNode)) {
                 $this->hasChanged = \true;
             }

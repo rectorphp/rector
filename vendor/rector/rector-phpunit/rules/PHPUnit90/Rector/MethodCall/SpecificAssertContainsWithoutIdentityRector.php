@@ -88,12 +88,12 @@ CODE_SAMPLE
         if ($secondArgType instanceof StringType) {
             return null;
         }
-        //when less then 5 arguments given: do nothing
+        // when less then 5 arguments given: do nothing
         if (!isset($node->getArgs()[4])) {
             return null;
         }
         $fourthArg = $node->getArgs()[4];
-        //when 5th argument check identity is true: do nothing
+        // when 5th argument check identity is true: do nothing
         if ($this->valueResolver->isValue($fourthArg->value, \true)) {
             return null;
         }

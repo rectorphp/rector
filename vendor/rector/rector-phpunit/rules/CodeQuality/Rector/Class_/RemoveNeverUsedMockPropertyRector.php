@@ -94,6 +94,10 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
+        // skip abstract test case classes, as most likely extended and mock used in child classes
+        if (substr_compare((string) $this->getName($node), 'TestCase', -strlen('TestCase')) === 0) {
+            return null;
+        }
         $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
         if (!$setUpClassMethod instanceof ClassMethod) {
             return null;
