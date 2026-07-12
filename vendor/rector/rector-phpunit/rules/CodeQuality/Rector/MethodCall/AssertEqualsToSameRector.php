@@ -22,6 +22,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -107,6 +108,10 @@ final class AssertEqualsToSameRector extends AbstractRector
     {
         $firstArgType = $this->nodeTypeResolver->getNativeType($args[0]->value);
         $secondArgType = TypeCombinator::removeNull($this->nodeTypeResolver->getNativeType($args[1]->value));
+        // union type can hold different types that assertEquals() compares loosely, keep it safe
+        if ($secondArgType instanceof UnionType) {
+            return \true;
+        }
         // loose comparison
         if ($firstArgType instanceof IntegerType && ($secondArgType instanceof FloatType || $secondArgType instanceof StringType)) {
             return \true;

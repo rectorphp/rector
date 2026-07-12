@@ -55,5 +55,9 @@ final class PHPUnitSetList
     /**
      * @var string
      */
+    public const PHPUNIT_NARROW_ASSERTS = __DIR__ . '/../../config/sets/phpunit-narrow-asserts.php';
+    /**
+     * @var string
+     */
     public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/annotations-to-attributes.php';
 }
