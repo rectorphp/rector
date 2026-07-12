@@ -6,10 +6,14 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Analyser\Scope;
+use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -94,6 +98,9 @@ CODE_SAMPLE
         if ($returnTagValueNode->description !== '') {
             return null;
         }
+        if ($this->isClassTypeAlias($node, $returnTagValueNode)) {
+            return null;
+        }
         $nativeReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
         $docReturnType = $phpDocInfo->getReturnType();
         // a subtype/narrowing is legitimate; only a contradiction is dead
@@ -105,5 +112,21 @@ CODE_SAMPLE
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
+    }
+    private function isClassTypeAlias(Node $node, ReturnTagValueNode $returnTagValueNode): bool
+    {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope || !$scope->isInClass()) {
+            return \false;
+        }
+        $resolvedPhpDocBlock = $scope->getClassReflection()->getResolvedPhpDoc();
+        if (!$resolvedPhpDocBlock instanceof ResolvedPhpDocBlock) {
+            return \false;
+        }
+        $typeAliases = $resolvedPhpDocBlock->getTypeAliasTags() + $resolvedPhpDocBlock->getTypeAliasImportTags();
+        if ($typeAliases === []) {
+            return \false;
+        }
+        return $returnTagValueNode->type instanceof IdentifierTypeNode && isset($typeAliases[$returnTagValueNode->type->name]);
     }
 }
