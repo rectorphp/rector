@@ -115,6 +115,10 @@ CODE_SAMPLE
         if ($this->classAnalyzer->isAnonymousClass($class)) {
             return \true;
         }
+        // abstract class property might be accessed from child class
+        if ($class->isAbstract()) {
+            return \true;
+        }
         $className = (string) $this->getName($class);
         if (!$this->reflectionProvider->hasClass($className)) {
             return \true;
