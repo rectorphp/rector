@@ -166,7 +166,12 @@ CODE_SAMPLE
     }
     private function matchCallbackClosure(MethodCall $withMethodCall): ?Closure
     {
-        $withFirstArg = $withMethodCall->getArgs()[0] ?? null;
+        $withArgs = $withMethodCall->getArgs();
+        // a 2nd+ ->with() argument matches a further parameter, keep the callback matcher as is
+        if (count($withArgs) > 1) {
+            return null;
+        }
+        $withFirstArg = $withArgs[0] ?? null;
         if (!$withFirstArg instanceof Arg) {
             return null;
         }
