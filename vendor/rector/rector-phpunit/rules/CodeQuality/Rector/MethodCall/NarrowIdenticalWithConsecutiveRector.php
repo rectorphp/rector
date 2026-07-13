@@ -6,8 +6,10 @@ namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\PrettyPrinter\Standard;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,9 +23,14 @@ final class NarrowIdenticalWithConsecutiveRector extends AbstractRector
      * @readonly
      */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -89,6 +96,10 @@ CODE_SAMPLE
         $firstArg = $node->getArgs()[0];
         // skip as most likely nested array of unique values
         if ($firstArg->unpack) {
+            return null;
+        }
+        // skip new object instances, as each creates a fresh instance with possible property dependency
+        if ($this->betterNodeFinder->hasInstancesOf($node->getArgs(), [New_::class])) {
             return null;
         }
         $uniqueArgValues = $this->resolveUniqueArgValues($node);
