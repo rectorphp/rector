@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\NodeVisitor;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\NullableObjectAssignCollector;
 use Rector\PHPUnit\CodeQuality\NodeFactory\AssertMethodCallFactory;
 use Rector\PHPUnit\CodeQuality\TypeAnalyzer\SimpleTypeAnalyzer;
@@ -113,29 +112,32 @@ CODE_SAMPLE
         $variableNameToTypeCollection = $this->nullableObjectAssignCollector->collect($node);
         $next = 0;
         foreach ($node->stmts as $key => $stmt) {
-            // has callable on nullable variable of already collected name?
-            $matchedNullableVariableNameToType = $this->matchedNullableVariableNameToType($stmt, $variableNameToTypeCollection);
-            if (!$matchedNullableVariableNameToType instanceof VariableNameToType) {
-                continue;
+            // has callable on nullable variables of already collected names?
+            // a single statement can use multiple nullable variables at once
+            $matchedNullableVariableNameToTypes = $this->matchNullableVariableNameToTypes($stmt, $variableNameToTypeCollection);
+            foreach ($matchedNullableVariableNameToTypes as $matchedNullableVariableNameToType) {
+                // adding type here + popping the variable name out
+                $assertInstanceOfExpression = $this->assertMethodCallFactory->createAssertInstanceOf($matchedNullableVariableNameToType);
+                array_splice($node->stmts, $key + $next, 0, [$assertInstanceOfExpression]);
+                $hasChanged = \true;
+                // from now on, the variable is not nullable, remove to avoid double asserts
+                $variableNameToTypeCollection->remove($matchedNullableVariableNameToType);
+                ++$next;
             }
-            // adding type here + popping the variable name out
-            $assertInstanceOfExpression = $this->assertMethodCallFactory->createAssertInstanceOf($matchedNullableVariableNameToType);
-            array_splice($node->stmts, $key + $next, 0, [$assertInstanceOfExpression]);
-            // remove variable name from nullable ones
-            $hasChanged = \true;
-            // from now on, the variable is not nullable, remove to avoid double asserts
-            $variableNameToTypeCollection->remove($matchedNullableVariableNameToType);
-            ++$next;
         }
         if (!$hasChanged) {
             return null;
         }
         return $node;
     }
-    private function matchedNullableVariableNameToType(Stmt $stmt, VariableNameToTypeCollection $variableNameToTypeCollection): ?VariableNameToType
+    /**
+     * @return VariableNameToType[]
+     */
+    private function matchNullableVariableNameToTypes(Stmt $stmt, VariableNameToTypeCollection $variableNameToTypeCollection): array
     {
-        $matchedNullableVariableNameToType = null;
-        $this->traverseNodesWithCallable($stmt, function (Node $node) use ($variableNameToTypeCollection, &$matchedNullableVariableNameToType): ?int {
+        $matchedNullableVariableNameToTypes = [];
+        $matchedVariableNames = [];
+        $this->traverseNodesWithCallable($stmt, function (Node $node) use ($variableNameToTypeCollection, &$matchedNullableVariableNameToTypes, &$matchedVariableNames): ?int {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -150,10 +152,18 @@ CODE_SAMPLE
             if ($variableName === null) {
                 return null;
             }
+            // avoid duplicated assert for the same variable used multiple times in one statement
+            if (in_array($variableName, $matchedVariableNames, \true)) {
+                return null;
+            }
             $matchedNullableVariableNameToType = $variableNameToTypeCollection->matchByVariableName($variableName);
-            // is the variable we're interested in?
-            return NodeVisitor::STOP_TRAVERSAL;
+            if (!$matchedNullableVariableNameToType instanceof VariableNameToType) {
+                return null;
+            }
+            $matchedVariableNames[] = $variableName;
+            $matchedNullableVariableNameToTypes[] = $matchedNullableVariableNameToType;
+            return null;
         });
-        return $matchedNullableVariableNameToType;
+        return $matchedNullableVariableNameToTypes;
     }
 }

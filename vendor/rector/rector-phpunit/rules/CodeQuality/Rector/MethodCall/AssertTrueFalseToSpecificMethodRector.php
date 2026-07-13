@@ -10,7 +10,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\StringType;
+use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
 use Rector\Rector\AbstractRector;
@@ -26,12 +28,22 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
      */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
      * @var array<string,array<array-key,string>>
      */
     private const FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES = ['is_readable' => ['is_readable', 'assertIsReadable', 'assertNotIsReadable'], 'array_key_exists' => ['array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'], 'array_search' => ['array_search', 'assertContains', 'assertNotContains'], 'in_array' => ['in_array', 'assertContains', 'assertNotContains'], 'empty' => ['empty', 'assertEmpty', 'assertNotEmpty'], 'file_exists' => ['file_exists', 'assertFileExists', 'assertFileNotExists'], 'is_dir' => ['is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'], 'is_infinite' => ['is_infinite', 'assertInfinite', 'assertFinite'], 'is_null' => ['is_null', 'assertNull', 'assertNotNull'], 'is_writable' => ['is_writable', 'assertIsWritable', 'assertNotIsWritable'], 'is_nan' => ['is_nan', 'assertNan', ''], 'is_a' => ['is_a', 'assertInstanceOf', 'assertNotInstanceOf'], 'str_contains' => ['str_contains', 'assertStringContainsString', 'assertStringNotContainsString']];
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * Some assert methods were renamed in newer PHPUnit versions
+     * @var array<string, string>
+     */
+    private const RENAMED_ASSERT_METHOD_NAMES = ['assertFileNotExists' => 'assertFileDoesNotExist', 'assertDirectoryNotExists' => 'assertDirectoryDoesNotExist'];
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ReflectionProvider $reflectionProvider)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -101,7 +113,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         $identifierNode = $node->name;
         $oldMethodName = $identifierNode->toString();
         if (in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], \true)) {
-            $node->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
+            $node->name = new Identifier($this->resolveExistingAssertMethodName($functionNameWithAssertMethods->getAssetMethodName()));
         }
         if ($functionNameWithAssertMethods->getNotAssertMethodName() === '') {
             return;
@@ -109,7 +121,22 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         if (!in_array($oldMethodName, ['assertFalse', 'assertNotTrue'], \true)) {
             return;
         }
-        $node->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
+        $node->name = new Identifier($this->resolveExistingAssertMethodName($functionNameWithAssertMethods->getNotAssertMethodName()));
+    }
+    /**
+     * Verify the assert method exists on the PHPUnit Assert class,
+     * as some methods were renamed in newer PHPUnit versions
+     */
+    private function resolveExistingAssertMethodName(string $methodName): string
+    {
+        if (!$this->reflectionProvider->hasClass(PHPUnitClassName::ASSERT)) {
+            return $methodName;
+        }
+        $assertClassReflection = $this->reflectionProvider->getClass(PHPUnitClassName::ASSERT);
+        if ($assertClassReflection->hasNativeMethod($methodName)) {
+            return $methodName;
+        }
+        return self::RENAMED_ASSERT_METHOD_NAMES[$methodName] ?? $methodName;
     }
     /**
      * Before:

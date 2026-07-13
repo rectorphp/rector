@@ -16,14 +16,6 @@ final class SymfonyTestCaseAnalyzer
     {
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isInWebTestCase(Node $node): bool
-    {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof ClassReflection) {
-            return \false;
-        }
-        return $classReflection->is('Symfony\Bundle\FrameworkBundle\Test\WebTestCase');
-    }
     /**
      * @api
      */

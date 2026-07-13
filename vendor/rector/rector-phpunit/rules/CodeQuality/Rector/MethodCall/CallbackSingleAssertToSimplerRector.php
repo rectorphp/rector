@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -112,12 +113,18 @@ CODE_SAMPLE
                 return null;
             }
         }
-        // exactly assertSame() expression + "return true;"
+        // sole assertSame() expression, optionally followed by "return true;"
         $closureStmts = $innerClosure->getStmts();
-        if (count($closureStmts) !== 2) {
+        if (count($closureStmts) === 2) {
+            [$firstStmt, $secondStmt] = $closureStmts;
+            if (!$secondStmt instanceof Return_ || !$this->isTrueReturn($secondStmt)) {
+                return null;
+            }
+        } elseif (count($closureStmts) === 1) {
+            $firstStmt = $closureStmts[0];
+        } else {
             return null;
         }
-        [$firstStmt, $secondStmt] = $closureStmts;
         if (!$firstStmt instanceof Expression) {
             return null;
         }
@@ -125,10 +132,35 @@ CODE_SAMPLE
         if (!$firstStmtExpr instanceof MethodCall || !$this->isName($firstStmtExpr->name, 'assertSame')) {
             return null;
         }
-        if (!$secondStmt instanceof Return_ || !$this->isTrueReturn($secondStmt)) {
+        $assertSameArgs = $firstStmtExpr->getArgs();
+        if (count($assertSameArgs) !== 2) {
             return null;
         }
-        return $firstStmtExpr->getArgs()[0]->value;
+        $firstValue = $assertSameArgs[0]->value;
+        $secondValue = $assertSameArgs[1]->value;
+        // one side must be the whole closure parameter; the other side is the expected value
+        // nested access (e.g. $args['label']) is skipped, as equalTo() matches the whole argument
+        if ($this->isClosureSoleParam($innerClosure, $secondValue)) {
+            return $firstValue;
+        }
+        if ($this->isClosureSoleParam($innerClosure, $firstValue)) {
+            return $secondValue;
+        }
+        return null;
+    }
+    private function isClosureSoleParam(Closure $closure, Expr $expr): bool
+    {
+        if (count($closure->params) !== 1) {
+            return \false;
+        }
+        if (!$expr instanceof Variable) {
+            return \false;
+        }
+        $soleParam = $closure->params[0];
+        if (!$soleParam->var instanceof Variable) {
+            return \false;
+        }
+        return $this->nodeComparator->areNodesEqual($soleParam->var, $expr);
     }
     private function isTrueReturn(Return_ $return): bool
     {

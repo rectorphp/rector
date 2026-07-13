@@ -72,7 +72,7 @@ final class SomeTest extends TestCase
     {
         $this->someMock = $this->createMock(SomeClass::class);
 
-        $this->someMock->expects($this->exactly(2))
+        $this->someMock->expects($this->atLeast(2))
             ->method("someMethod")
             ->willReturnMap([
                 ["arg1", "arg2", "result1"],
@@ -144,7 +144,7 @@ CODE_SAMPLE
         }
         $array = $willReturnMapArg->value;
         $mapCount = count($array->items);
-        $topmostCall->var = new MethodCall($topmostCall->var, new Identifier('expects'), [new Arg(new MethodCall(new Variable('this'), new Identifier('exactly'), [new Arg(new Int_($mapCount))]))]);
+        $topmostCall->var = new MethodCall($topmostCall->var, new Identifier('expects'), [new Arg(new MethodCall(new Variable('this'), new Identifier('atLeast'), [new Arg(new Int_($mapCount))]))]);
         return \true;
     }
     private function resolveTopmostCall(MethodCall $methodCall): MethodCall
