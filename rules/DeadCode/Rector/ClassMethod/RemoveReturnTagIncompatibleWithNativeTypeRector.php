@@ -11,10 +11,13 @@ use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -103,10 +106,15 @@ CODE_SAMPLE
         if ($returnTagValueNode->type instanceof GenericTypeNode) {
             return null;
         }
-        if ($this->isClassTypeAlias($node, $returnTagValueNode)) {
+        $scope = ScopeFetcher::fetch($node);
+        if ($this->isClassTypeAlias($scope, $returnTagValueNode)) {
             return null;
         }
         $nativeReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection instanceof ClassReflection && $classReflection->isTrait() && $returnTagValueNode->type instanceof ThisTypeNode && $nativeReturnType instanceof ObjectType) {
+            return null;
+        }
         if ($this->isReturnTemplate($phpDocInfo, $returnTagValueNode)) {
             return null;
         }
@@ -121,10 +129,9 @@ CODE_SAMPLE
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return $node;
     }
-    private function isClassTypeAlias(Node $node, ReturnTagValueNode $returnTagValueNode): bool
+    private function isClassTypeAlias(Scope $scope, ReturnTagValueNode $returnTagValueNode): bool
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope || !$scope->isInClass()) {
+        if (!$scope->isInClass()) {
             return \false;
         }
         $resolvedPhpDocBlock = $scope->getClassReflection()->getResolvedPhpDoc();
