@@ -35,5 +35,9 @@ final class TwigSetList
     /**
      * @var string
      */
+    public const TWIG_30 = __DIR__ . '/../../config/sets/twig/twig30.php';
+    /**
+     * @var string
+     */
     public const TWIG_UNDERSCORE_TO_NAMESPACE = __DIR__ . '/../../config/sets/twig/twig-underscore-to-namespace.php';
 }

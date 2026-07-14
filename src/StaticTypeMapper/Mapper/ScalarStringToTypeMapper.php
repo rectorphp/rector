@@ -5,6 +5,7 @@ namespace Rector\StaticTypeMapper\Mapper;
 
 use RectorPrefix202607\Nette\Utils\Strings;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
+use PHPStan\Type\Accessory\AccessoryDecimalIntegerStringType;
 use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use PHPStan\Type\Accessory\AccessoryLowercaseStringType;
 use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
@@ -60,6 +61,24 @@ final class ScalarStringToTypeMapper
         }
         if ($loweredScalarName === 'array-key') {
             return new UnionType([new IntegerType(), new StringType()]);
+        }
+        if ($loweredScalarName === 'callable-string') {
+            return TypeCombinator::intersect(new StringType(), new CallableType());
+        }
+        if ($loweredScalarName === 'non-empty-lowercase-string') {
+            return TypeCombinator::intersect(new StringType(), new AccessoryNonEmptyStringType(), new AccessoryLowercaseStringType());
+        }
+        if ($loweredScalarName === 'non-empty-uppercase-string') {
+            return TypeCombinator::intersect(new StringType(), new AccessoryNonEmptyStringType(), new AccessoryUppercaseStringType());
+        }
+        if ($loweredScalarName === 'non-empty-literal-string') {
+            return TypeCombinator::intersect(new StringType(), new AccessoryNonEmptyStringType(), new AccessoryLiteralStringType());
+        }
+        if ($loweredScalarName === 'decimal-int-string') {
+            return TypeCombinator::intersect(new StringType(), new AccessoryDecimalIntegerStringType());
+        }
+        if ($loweredScalarName === 'non-decimal-int-string') {
+            return TypeCombinator::intersect(new StringType(), new AccessoryDecimalIntegerStringType(\true));
         }
         foreach (self::SCALAR_NAME_BY_TYPE as $objectType => $scalarNames) {
             if (!in_array($loweredScalarName, $scalarNames, \true)) {
