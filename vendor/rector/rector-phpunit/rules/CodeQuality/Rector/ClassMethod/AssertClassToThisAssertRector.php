@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitor;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
@@ -77,6 +78,10 @@ CODE_SAMPLE
         $hasChanged = \false;
         $this->traverseNodesWithCallable($node, function (Node $node) use (&$hasChanged) {
             if (($node instanceof Closure || $node instanceof ArrowFunction) && $node->static) {
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            // anonymous class has its own $this scope, that is not a test case
+            if ($node instanceof Class_) {
                 return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof StaticCall) {
