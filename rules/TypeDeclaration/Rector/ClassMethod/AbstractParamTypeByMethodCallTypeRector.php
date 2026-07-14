@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -108,6 +109,11 @@ abstract class AbstractParamTypeByMethodCallTypeRector extends AbstractRector
     abstract protected function isMatchingParamType(Type $type): bool;
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
+        // trait method can be used in a class that requires a contract type, adding a param type would break it
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope && $scope->isInTrait()) {
+            return \true;
+        }
         // user-guarded class: adding a param type here would break its child classes
         if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($classMethod)) {
             return \true;
