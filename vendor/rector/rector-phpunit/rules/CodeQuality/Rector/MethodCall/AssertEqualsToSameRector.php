@@ -14,6 +14,8 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
@@ -92,7 +94,7 @@ final class AssertEqualsToSameRector extends AbstractRector
         if (!$this->isScalarOrEnumValue($firstArgValue)) {
             return null;
         }
-        if ($this->shouldSkipConstantArrayType($firstArgValue)) {
+        if ($this->shouldSkipConstantArrayType($firstArgValue, $args[1]->value)) {
             return null;
         }
         if ($this->shouldSkipLooseComparison($args)) {
@@ -132,13 +134,38 @@ final class AssertEqualsToSameRector extends AbstractRector
         }
         return $args[0]->value instanceof String_ && is_numeric($args[0]->value->value);
     }
-    private function shouldSkipConstantArrayType(Expr $expr): bool
+    private function shouldSkipConstantArrayType(Expr $expectedExpr, Expr $actualExpr): bool
     {
-        $type = $this->nodeTypeResolver->getNativeType($expr);
-        if (!$type instanceof ConstantArrayType) {
+        $expectedType = $this->nodeTypeResolver->getNativeType($expectedExpr);
+        if (!$expectedType instanceof ConstantArrayType) {
             return \false;
         }
-        return $this->hasNonScalarType($type);
+        if ($this->hasNonScalarType($expectedType)) {
+            return \true;
+        }
+        // assertSame() compares arrays strictly, including key order, while assertEquals() ignores it;
+        // only safe to narrow when the actual value is a constant array with the very same keys in the same order
+        $actualType = $this->nodeTypeResolver->getNativeType($actualExpr);
+        if (!$actualType instanceof ConstantArrayType) {
+            return \true;
+        }
+        return !$this->hasSameKeyOrder($expectedType, $actualType);
+    }
+    private function hasSameKeyOrder(ConstantArrayType $expectedType, ConstantArrayType $actualType): bool
+    {
+        $expectedKeyTypes = $expectedType->getKeyTypes();
+        $actualKeyTypes = $actualType->getKeyTypes();
+        if (count($expectedKeyTypes) !== count($actualKeyTypes)) {
+            return \false;
+        }
+        $found = \true;
+        foreach ($expectedKeyTypes as $position => $expectedKeyType) {
+            if (!$expectedKeyType->equals($actualKeyTypes[$position])) {
+                $found = \false;
+                break;
+            }
+        }
+        return $found;
     }
     private function hasNonScalarType(ConstantArrayType $constantArrayType): bool
     {
