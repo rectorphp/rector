@@ -170,6 +170,11 @@ CODE_SAMPLE
             $return->expr = new \PhpParser\Node\Scalar\Int_(0);
             return;
         }
+        // false means the command failed, that is the 1 exit code
+        if ($this->valueResolver->isFalse($return->expr)) {
+            $return->expr = new \PhpParser\Node\Scalar\Int_(1);
+            return;
+        }
         if ($return->expr instanceof Coalesce && $this->valueResolver->isNull($return->expr->right)) {
             $return->expr->right = new \PhpParser\Node\Scalar\Int_(0);
             return;
