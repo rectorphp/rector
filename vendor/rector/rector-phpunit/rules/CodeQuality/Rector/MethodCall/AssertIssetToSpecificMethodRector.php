@@ -28,6 +28,10 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
      * @readonly
      */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
+    /**
+     * @var string[]
+     */
+    private const SUPER_GLOBAL_VARIABLE_NAMES = ['GLOBALS', '_SERVER', '_GET', '_POST', '_FILES', '_COOKIE', '_SESSION', '_REQUEST', '_ENV'];
     public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
@@ -63,6 +67,11 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
         }
         $issetExpr = $firstArgumentValue->vars[0];
         if (!$issetExpr instanceof ArrayDimFetch) {
+            return null;
+        }
+        // Keep the non-evaluating behavior of isset() for global state. A superglobal
+        // may be unavailable or unset, while passing it directly evaluates the variable.
+        if ($this->isNames($issetExpr->var, self::SUPER_GLOBAL_VARIABLE_NAMES)) {
             return null;
         }
         // isset() on an ArrayAccess object is not equivalent to assertArrayHasKey():
