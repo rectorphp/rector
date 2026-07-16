@@ -417,10 +417,10 @@ CODE_SAMPLE
         if ($param->default instanceof Expr) {
             $paramType = TypeCombinator::union($paramType, $this->getType($param->default));
         }
-        if ($this->typeComparator->isSubtype($paramType, $propertyType) && !$this->typeComparator->areTypesEqual($propertyType, $paramType)) {
-            return \false;
+        if (!$this->typeComparator->isSubtype($paramType, $propertyType)) {
+            return \true;
         }
-        return \true;
+        return $this->typeComparator->areTypesEqual($propertyType, $paramType);
     }
     private function shouldSkipPropertyAssignedNull(Class_ $class, string $propertyName): bool
     {
