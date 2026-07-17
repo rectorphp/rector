@@ -21,6 +21,10 @@ final class DataProviderMethodsFinder
      * @readonly
      */
     private NodeNameResolver $nodeNameResolver;
+    /**
+     * @var mixed[]
+     */
+    private const DATA_PROVIDER_ATTRIBUTES = [TestClassName::PHPUNIT_DATA_PROVIDER, TestClassName::CODECEPTION_DATA_PROVIDER];
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -57,7 +61,7 @@ final class DataProviderMethodsFinder
         $dataProviders = [];
         foreach ($classMethod->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if (!$this->nodeNameResolver->isName($attribute->name, TestClassName::DATA_PROVIDER)) {
+                if (!$this->nodeNameResolver->isNames($attribute->name, self::DATA_PROVIDER_ATTRIBUTES)) {
                     continue;
                 }
                 $dataProviders[] = $attribute;

@@ -8,5 +8,9 @@ final class TestClassName
     /**
      * @var string
      */
-    public const DATA_PROVIDER = 'PHPUnit\Framework\Attributes\DataProvider';
+    public const PHPUNIT_DATA_PROVIDER = 'PHPUnit\Framework\Attributes\DataProvider';
+    /**
+     * @var string
+     */
+    public const CODECEPTION_DATA_PROVIDER = 'Codeception\Attribute\DataProvider';
 }
