@@ -14,7 +14,7 @@ $loader = (static function () {
     // Restore the backup and ensure the excluded files are properly marked as loaded
     $GLOBALS['__composer_autoload_files'] = \array_merge(
         $existingComposerAutoloadFiles,
-        \array_fill_keys(['320cde22f66dd4f5d3fd621d3e88b98f', '9eaa6b0f3f04e58e17ae5ecb754ea313', '80dfc307f8b4b13bcd033cef5c977d19', '8825ede83f2f289127722d4e842cf7e8', 'acbe0d033c55cd0a032b415e08d14f4c', 'e69f7f6ee287b969198c3c9d6777bd38', '36dfd6ed9dd74e8062aa61f09caf8554', '0e6d7bf4a5811bfa5cf40c5ccd6fae6a', 'e4e9c4430b5a6c815e77a26074c8155a', '5928a00fa978807cf85d90ec3f4b0147', '9d2b9fc6db0f153a0a149fefb182415e', 'c18d2008c6f2fa913c7bba17deb24ff5', '7bfbed8d216c917b4d3e46b319a08b5c', '606a39d89246991a373564698c2d8383', 'c4dd194f5b50c0821acf143dcfed86ea'], true)
+        \array_fill_keys(['320cde22f66dd4f5d3fd621d3e88b98f', '9eaa6b0f3f04e58e17ae5ecb754ea313', '8825ede83f2f289127722d4e842cf7e8', '80dfc307f8b4b13bcd033cef5c977d19', 'acbe0d033c55cd0a032b415e08d14f4c', 'e69f7f6ee287b969198c3c9d6777bd38', '36dfd6ed9dd74e8062aa61f09caf8554', '0e6d7bf4a5811bfa5cf40c5ccd6fae6a', '5928a00fa978807cf85d90ec3f4b0147', 'e4e9c4430b5a6c815e77a26074c8155a', '7bfbed8d216c917b4d3e46b319a08b5c', '9d2b9fc6db0f153a0a149fefb182415e', 'c18d2008c6f2fa913c7bba17deb24ff5', '606a39d89246991a373564698c2d8383', 'c4dd194f5b50c0821acf143dcfed86ea'], true)
     );
 
     return $loader;
