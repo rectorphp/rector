@@ -12,19 +12,40 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\VariadicPlaceholder;
+use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix202607\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Php85\Rector\Expression\NestedFuncCallsToPipeOperatorRector\NestedFuncCallsToPipeOperatorRectorTest
  */
-final class NestedFuncCallsToPipeOperatorRector extends AbstractRector implements MinPhpVersionInterface
+final class NestedFuncCallsToPipeOperatorRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const MINIMUM_DEPTH = 'minimum_depth';
+    /**
+     * @var int
+     */
+    private const DEFAULT_MINIMUM_DEPTH = 2;
+    private int $minimumDepth = self::DEFAULT_MINIMUM_DEPTH;
+    /**
+     * @param array<string, mixed> $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $minimumDepth = $configuration[self::MINIMUM_DEPTH] ?? self::DEFAULT_MINIMUM_DEPTH;
+        Assert::integer($minimumDepth);
+        Assert::greaterThanEq($minimumDepth, 2);
+        $this->minimumDepth = $minimumDepth;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert multiple nested function calls in single line to |> pipe operator', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert multiple nested function calls in single line to |> pipe operator', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($input)
@@ -45,7 +66,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+, [self::MINIMUM_DEPTH => 3])]);
     }
     public function getNodeTypes(): array
     {
@@ -105,6 +126,9 @@ CODE_SAMPLE
         if ($expr->isFirstClassCallable()) {
             return null;
         }
+        if (!$deep && $this->countNestedFuncCalls($expr) < $this->minimumDepth) {
+            return null;
+        }
         if (count($expr->args) !== 1) {
             return null;
         }
@@ -127,5 +151,18 @@ CODE_SAMPLE
             }
         }
         return null;
+    }
+    private function countNestedFuncCalls(FuncCall $funcCall): int
+    {
+        $depth = 1;
+        while (count($funcCall->args) === 1) {
+            $arg = $funcCall->args[0];
+            if (!$arg instanceof Arg || $arg->unpack || !$arg->value instanceof FuncCall) {
+                break;
+            }
+            ++$depth;
+            $funcCall = $arg->value;
+        }
+        return $depth;
     }
 }
