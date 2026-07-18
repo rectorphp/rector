@@ -683,6 +683,7 @@ return array(
     'RectorPrefix202607\\Nette\\Utils\\AssertionException' => $vendorDir . '/nette/utils/src/Utils/exceptions.php',
     'RectorPrefix202607\\Nette\\Utils\\Callback' => $vendorDir . '/nette/utils/src/Utils/Callback.php',
     'RectorPrefix202607\\Nette\\Utils\\DateTime' => $vendorDir . '/nette/utils/src/Utils/DateTime.php',
+    'RectorPrefix202607\\Nette\\Utils\\DateTimeImmutable' => $vendorDir . '/nette/utils/src/Utils/DateTimeImmutable.php',
     'RectorPrefix202607\\Nette\\Utils\\FileInfo' => $vendorDir . '/nette/utils/src/Utils/FileInfo.php',
     'RectorPrefix202607\\Nette\\Utils\\FileSystem' => $vendorDir . '/nette/utils/src/Utils/FileSystem.php',
     'RectorPrefix202607\\Nette\\Utils\\Finder' => $vendorDir . '/nette/utils/src/Utils/Finder.php',

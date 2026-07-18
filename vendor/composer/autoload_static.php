@@ -948,6 +948,7 @@ class ComposerStaticInit7fadf112b1c8d4c7537fde7abb8070c3
         'RectorPrefix202607\\Nette\\Utils\\AssertionException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202607\\Nette\\Utils\\Callback' => __DIR__ . '/..' . '/nette/utils/src/Utils/Callback.php',
         'RectorPrefix202607\\Nette\\Utils\\DateTime' => __DIR__ . '/..' . '/nette/utils/src/Utils/DateTime.php',
+        'RectorPrefix202607\\Nette\\Utils\\DateTimeImmutable' => __DIR__ . '/..' . '/nette/utils/src/Utils/DateTimeImmutable.php',
         'RectorPrefix202607\\Nette\\Utils\\FileInfo' => __DIR__ . '/..' . '/nette/utils/src/Utils/FileInfo.php',
         'RectorPrefix202607\\Nette\\Utils\\FileSystem' => __DIR__ . '/..' . '/nette/utils/src/Utils/FileSystem.php',
         'RectorPrefix202607\\Nette\\Utils\\Finder' => __DIR__ . '/..' . '/nette/utils/src/Utils/Finder.php',

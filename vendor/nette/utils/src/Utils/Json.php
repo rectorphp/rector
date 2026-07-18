@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202607\Nette\Utils;
 
 use RectorPrefix202607\Nette;
-use function defined, is_int, json_decode, json_encode, json_last_error, json_last_error_msg;
+use function is_int, json_decode, json_encode, json_last_error, json_last_error_msg;
 use const JSON_BIGINT_AS_STRING, JSON_FORCE_OBJECT, JSON_HEX_AMP, JSON_HEX_APOS, JSON_HEX_QUOT, JSON_HEX_TAG, JSON_OBJECT_AS_ARRAY, JSON_PRESERVE_ZERO_FRACTION, JSON_PRETTY_PRINT, JSON_UNESCAPED_SLASHES, JSON_UNESCAPED_UNICODE;
 /**
  * JSON encoder and decoder.
@@ -37,8 +37,7 @@ final class Json
         } else {
             $flags = ($asciiSafe ? 0 : JSON_UNESCAPED_UNICODE) | ($pretty ? JSON_PRETTY_PRINT : 0) | ($forceObjects ? JSON_FORCE_OBJECT : 0) | ($htmlSafe ? JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG : 0);
         }
-        $flags |= JSON_UNESCAPED_SLASHES | (defined('JSON_PRESERVE_ZERO_FRACTION') ? JSON_PRESERVE_ZERO_FRACTION : 0);
-        // since PHP 5.6.6 & PECL JSON-C 1.3.7
+        $flags |= JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION;
         $json = json_encode($value, $flags);
         if ($error = json_last_error()) {
             throw new JsonException(json_last_error_msg(), $error);

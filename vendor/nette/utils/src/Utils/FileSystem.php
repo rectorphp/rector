@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202607\Nette\Utils;
 
 use RectorPrefix202607\Nette;
-use function array_pop, chmod, decoct, dirname, end, fclose, file_exists, file_get_contents, file_put_contents, fopen, implode, is_dir, is_file, is_link, mkdir, preg_match, preg_split, realpath, rename, rmdir, rtrim, sprintf, str_replace, stream_copy_to_stream, stream_is_local, strtr;
+use function array_pop, chmod, decoct, dirname, end, fclose, file_exists, file_get_contents, file_put_contents, fopen, implode, is_dir, is_file, is_link, mkdir, preg_match, preg_split, realpath, rename, rmdir, rtrim, sprintf, str_replace, stream_copy_to_stream, stream_is_local, strtr, uniqid, unlink, usleep;
 use const DIRECTORY_SEPARATOR;
 /**
  * File system tool.
@@ -169,6 +169,33 @@ final class FileSystem
         if ($mode !== null && !@chmod($file, $mode)) {
             // @ is escalated to exception
             throw new Nette\IOException(sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($file), decoct($mode), Helpers::getLastError()));
+        }
+    }
+    /**
+     * Writes the string to a file atomically: the content is written to a temporary file, which then replaces
+     * the target, so a concurrent reader never sees the file partially written or truncated.
+     * Creates the parent directory if it does not exist. Pass null as $mode to skip chmod.
+     * @throws Nette\IOException  on error occurred
+     */
+    public static function writeAtomic(string $file, string $content, ?int $mode = 0666): void
+    {
+        $file = realpath($file) ?: $file;
+        // writes through a symlink to its target, as write() does
+        $tmp = $file . '.' . uniqid('', \true) . '.tmp';
+        try {
+            static::write($tmp, $content, $mode);
+            // plain rename() is atomic; static::rename() must not be used here, it deletes the target first
+            for ($i = 0; !@rename($tmp, $file); $i++) {
+                // @ is escalated to exception
+                if (!Helpers::IsWindows || $i >= 20) {
+                    throw new Nette\IOException(sprintf("Unable to write file '%s'. %s", self::normalizePath($file), Helpers::getLastError()));
+                }
+                usleep(5000);
+                // on Windows, rename fails while the target is open in another process
+            }
+        } catch (\Throwable $e) {
+            @unlink($tmp);
+            throw $e;
         }
     }
     /**

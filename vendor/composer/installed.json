@@ -622,17 +622,17 @@
         },
         {
             "name": "nette\/utils",
-            "version": "v4.1.4",
-            "version_normalized": "4.1.4.0",
+            "version": "v4.1.5",
+            "version_normalized": "4.1.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/utils.git",
-                "reference": "7da6c396d7ebe142bc857c20479d5e70a5e1aac7"
+                "reference": "b043439dbdf954e6c28b5ea7e34b0100f83165e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/7da6c396d7ebe142bc857c20479d5e70a5e1aac7",
-                "reference": "7da6c396d7ebe142bc857c20479d5e70a5e1aac7",
+                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/b043439dbdf954e6c28b5ea7e34b0100f83165e0",
+                "reference": "b043439dbdf954e6c28b5ea7e34b0100f83165e0",
                 "shasum": ""
             },
             "require": {
@@ -652,13 +652,13 @@
             },
             "suggest": {
                 "ext-gd": "to use Image",
-                "ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
+                "ext-iconv": "to use Strings::chr(), ord() and reverse()",
                 "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
                 "ext-json": "to use Nette\\Utils\\Json",
                 "ext-mbstring": "to use Strings::lower() etc...",
                 "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
             },
-            "time": "2026-05-11T20:49:54+00:00",
+            "time": "2026-07-17T23:02:45+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -710,7 +710,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/utils\/issues",
-                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.1.4"
+                "source": "https:\/\/github.com\/nette\/utils\/tree\/v4.1.5"
             },
             "install-path": "..\/nette\/utils"
         },

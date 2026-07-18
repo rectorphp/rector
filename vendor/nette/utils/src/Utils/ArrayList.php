@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202607\Nette\Utils;
 
 use RectorPrefix202607\Nette;
-use function array_slice, array_splice, count, is_int;
+use function array_splice, array_unshift, count, is_int;
 /**
  * Generic list with integer indices.
  * @template T
@@ -102,8 +102,8 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function prepend($value): void
     {
-        $first = array_slice($this->list, 0, 1);
-        $this->offsetSet(0, $value);
-        array_splice($this->list, 1, 0, $first);
+        // route the value through offsetSet() first so a validation added in a subclass isn't bypassed
+        $this->offsetSet(null, $value);
+        array_unshift($this->list, ...array_splice($this->list, -1));
     }
 }

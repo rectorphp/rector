@@ -49,7 +49,7 @@
         "nette\/schema": "<1.2.2"
     },
     "suggest": {
-        "ext-iconv": "to use Strings::webalize(), toAscii(), chr() and reverse()",
+        "ext-iconv": "to use Strings::chr(), ord() and reverse()",
         "ext-json": "to use Nette\\Utils\\Json",
         "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
         "ext-mbstring": "to use Strings::lower() etc...",

@@ -175,6 +175,9 @@ final class Iterables
     {
         return new class(\Closure::fromCallable($factory)) implements \IteratorAggregate
         {
+            /**
+             * @readonly
+             */
             private \Closure $factory;
             public function __construct(\Closure $factory)
             {

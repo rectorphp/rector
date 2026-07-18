@@ -277,7 +277,7 @@ class Image
             case ImageType::WEBP:
                 return IMG_WEBP;
             case ImageType::AVIF:
-                return 256;
+                return \IMG_AVIF;
             case ImageType::BMP:
                 return IMG_BMP;
             default:
@@ -292,15 +292,7 @@ class Image
     {
         self::ensureExtension();
         $flag = imagetypes();
-        return array_filter([
-            $flag & IMG_GIF ? ImageType::GIF : null,
-            $flag & IMG_JPG ? ImageType::JPEG : null,
-            $flag & IMG_PNG ? ImageType::PNG : null,
-            $flag & IMG_WEBP ? ImageType::WEBP : null,
-            $flag & 256 ? ImageType::AVIF : null,
-            // IMG_AVIF
-            $flag & IMG_BMP ? ImageType::BMP : null,
-        ]);
+        return array_filter([$flag & IMG_GIF ? ImageType::GIF : null, $flag & IMG_JPG ? ImageType::JPEG : null, $flag & IMG_PNG ? ImageType::PNG : null, $flag & IMG_WEBP ? ImageType::WEBP : null, $flag & \IMG_AVIF ? ImageType::AVIF : null, $flag & IMG_BMP ? ImageType::BMP : null]);
     }
     /**
      * Wraps GD image.

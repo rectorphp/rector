@@ -182,7 +182,7 @@ final class Reflection
         try {
             $tokens = token_get_all($code, TOKEN_PARSE);
         } catch (\ParseError $e) {
-            trigger_error($e->getMessage(), \E_USER_NOTICE);
+            trigger_error($e->getMessage());
             $tokens = [];
         }
         $namespace = $class = null;

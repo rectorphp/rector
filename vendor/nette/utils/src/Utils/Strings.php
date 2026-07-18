@@ -9,7 +9,7 @@ namespace RectorPrefix202607\Nette\Utils;
 
 use RectorPrefix202607\JetBrains\PhpStorm\Language;
 use RectorPrefix202607\Nette;
-use function array_keys, array_map, array_shift, array_values, bin2hex, class_exists, defined, extension_loaded, function_exists, htmlspecialchars, htmlspecialchars_decode, iconv, iconv_strlen, iconv_substr, implode, in_array, is_array, is_callable, is_int, is_object, is_string, key, max, mb_convert_case, mb_strlen, mb_strtolower, mb_strtoupper, mb_substr, pack, preg_last_error, preg_last_error_msg, preg_quote, preg_replace, str_contains, str_ends_with, str_repeat, str_replace, str_starts_with, strlen, strpos, strrev, strrpos, strtolower, strtoupper, strtr, substr, trim, unpack, utf8_decode;
+use function array_keys, array_map, array_shift, array_values, bin2hex, class_exists, defined, extension_loaded, function_exists, htmlspecialchars, htmlspecialchars_decode, iconv, iconv_strlen, iconv_substr, implode, in_array, is_array, is_callable, is_int, is_object, is_string, key, max, mb_convert_case, mb_strlen, mb_strtolower, mb_strtoupper, mb_substr, pack, preg_last_error, preg_last_error_msg, preg_quote, preg_replace, str_contains, str_ends_with, str_repeat, str_replace, str_starts_with, strlen, strpos, strrev, strrpos, strtolower, strtoupper, strtr, substr, trim, unpack;
 use const ENT_IGNORE, ENT_NOQUOTES, ICONV_IMPL, MB_CASE_TITLE, PHP_EOL, PREG_OFFSET_CAPTURE, PREG_PATTERN_ORDER, PREG_SET_ORDER, PREG_SPLIT_DELIM_CAPTURE, PREG_SPLIT_NO_EMPTY, PREG_SPLIT_OFFSET_CAPTURE, PREG_UNMATCHED_AS_NULL;
 /**
  * String tools library.
@@ -283,10 +283,10 @@ class Strings
     public static function compare(string $left, string $right, ?int $length = null): bool
     {
         if (class_exists('Normalizer', \false)) {
-            $left = \Normalizer::normalize($left, \Normalizer::FORM_D);
-            // form NFD is faster
-            $right = \Normalizer::normalize($right, \Normalizer::FORM_D);
-            // form NFD is faster
+            $left = \Normalizer::normalize($left, \Normalizer::FORM_D) ?: $left;
+            // form NFD is faster, false on invalid UTF-8
+            $right = \Normalizer::normalize($right, \Normalizer::FORM_D) ?: $right;
+            // form NFD is faster, false on invalid UTF-8
         }
         if ($length < 0) {
             $left = self::substring($left, $length, -$length);
@@ -331,7 +331,7 @@ class Strings
             case extension_loaded('iconv'):
                 return (int) iconv_strlen($s, 'UTF-8');
             default:
-                return strlen(@utf8_decode($s));
+                return strlen((string) preg_replace('#[\x80-\xBF]#', '', $s));
         }
     }
     /**
@@ -340,7 +340,7 @@ class Strings
     public static function trim(string $s, string $charlist = self::TrimCharacters): string
     {
         $charlist = preg_quote($charlist, '#');
-        return self::replace($s, '#^[' . $charlist . ']+|[' . $charlist . ']+$#Du', '');
+        return self::replace($s, '#^[' . $charlist . ']+|[' . $charlist . ']+$#Du');
     }
     /**
      * Pads a UTF-8 string to given length by prepending the $pad string to the beginning.
