@@ -10,6 +10,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use RectorPrefix202607\Webmozart\Assert\Assert;
+use PHPStan\DependencyInjection\Container;
 /**
  * @see \Rector\Tests\Autoloading\BootstrapFilesIncluderTest
  */
@@ -19,7 +20,7 @@ final class BootstrapFilesIncluder
      * Inspired by
      * @see https://github.com/phpstan/phpstan-src/commit/aad1bf888ab7b5808898ee5fe2228bb8bb4e4cf1
      */
-    public function includeBootstrapFiles(): void
+    public function includeBootstrapFiles(Container $container): void
     {
         $bootstrapFiles = SimpleParameterProvider::provideArrayParameter(Option::BOOTSTRAP_FILES);
         Assert::allString($bootstrapFiles);
@@ -28,7 +29,10 @@ final class BootstrapFilesIncluder
             if (!is_file($bootstrapFile)) {
                 throw new ShouldNotHappenException(sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
             }
-            require $bootstrapFile;
+            // mimic PHPStan bootstrap file inclusion (bootstrap files have access to the global $container variable)
+            (static function (string $file) use ($container): void {
+                require $file;
+            })($bootstrapFile);
         }
         $this->requireRectorStubs();
     }

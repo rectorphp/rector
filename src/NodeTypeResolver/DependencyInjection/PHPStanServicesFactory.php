@@ -125,6 +125,13 @@ MESSAGE_ERROR;
         return $this->container->getByType(DynamicSourceLocatorProvider::class);
     }
     /**
+     * @api
+     */
+    public function getContainer(): Container
+    {
+        return $this->container;
+    }
+    /**
      * @return string[]
      */
     private function resolveAdditionalConfigFiles(): array
