@@ -29,6 +29,7 @@ use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\ValueObject\PhpVersionFeature;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -61,7 +62,11 @@ final class ResponseReturnTypeControllerActionRector extends AbstractRector impl
      * @readonly
      */
     private ReturnTypeInferer $returnTypeInferer;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, AttrinationFinder $attrinationFinder, BetterNodeFinder $betterNodeFinder, ReturnAnalyzer $returnAnalyzer, StaticTypeMapper $staticTypeMapper, ReturnTypeInferer $returnTypeInferer)
+    /**
+     * @readonly
+     */
+    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, AttrinationFinder $attrinationFinder, BetterNodeFinder $betterNodeFinder, ReturnAnalyzer $returnAnalyzer, StaticTypeMapper $staticTypeMapper, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->attrinationFinder = $attrinationFinder;
@@ -69,6 +74,7 @@ final class ResponseReturnTypeControllerActionRector extends AbstractRector impl
         $this->returnAnalyzer = $returnAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -121,6 +127,10 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->controllerAnalyzer->isInsideController($node)) {
+            return null;
+        }
+        // adding a return type would break child classes of user-guarded classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($node)) {
             return null;
         }
         if (!$this->isActionClassMethod($node)) {
@@ -180,7 +190,7 @@ CODE_SAMPLE
     }
     private function hasReturn(ClassMethod $classMethod): bool
     {
-        return $this->betterNodeFinder->hasInstancesOf($classMethod, [Return_::class]);
+        return $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
     }
     private function refactorResponse(ClassMethod $classMethod): ?ClassMethod
     {
