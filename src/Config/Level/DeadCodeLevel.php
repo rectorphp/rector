@@ -63,6 +63,7 @@ use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\DeadCode\Rector\Stmt\RemoveConditionExactReturnRector;
 use Rector\DeadCode\Rector\Stmt\RemoveNextSameValueConditionRector;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
+use Rector\DeadCode\Rector\StmtsAwareInterface\RemoveDeadInstanceOfAssertRector;
 use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 use Rector\DeadCode\Rector\Ternary\RemoveUselessTernaryRector;
 use Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
@@ -101,6 +102,7 @@ final class DeadCodeLevel
         ReplaceBlockToItsStmtsRector::class,
         RemoveFilterVarOnExactTypeRector::class,
         RemoveTypedPropertyDeadInstanceOfRector::class,
+        RemoveDeadInstanceOfAssertRector::class,
         TernaryToBooleanOrFalseToBooleanAndRector::class,
         RemoveUselessTernaryRector::class,
         RemoveDoubleAssignRector::class,

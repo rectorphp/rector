@@ -1485,6 +1485,7 @@ return array(
     'Rector\\DeadCode\\Rector\\Stmt\\RemoveConditionExactReturnRector' => $baseDir . '/rules/DeadCode/Rector/Stmt/RemoveConditionExactReturnRector.php',
     'Rector\\DeadCode\\Rector\\Stmt\\RemoveNextSameValueConditionRector' => $baseDir . '/rules/DeadCode/Rector/Stmt/RemoveNextSameValueConditionRector.php',
     'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => $baseDir . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
+    'Rector\\DeadCode\\Rector\\StmtsAwareInterface\\RemoveDeadInstanceOfAssertRector' => $baseDir . '/rules/DeadCode/Rector/StmtsAwareInterface/RemoveDeadInstanceOfAssertRector.php',
     'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => $baseDir . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
     'Rector\\DeadCode\\Rector\\Ternary\\RemoveUselessTernaryRector' => $baseDir . '/rules/DeadCode/Rector/Ternary/RemoveUselessTernaryRector.php',
     'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => $baseDir . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',

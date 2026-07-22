@@ -125,11 +125,6 @@ CODE_SAMPLE
                 break 2;
             }
         }
-        if (!$asCommandAttribute instanceof Attribute) {
-            $asCommandAttributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAttribute::AS_COMMAND);
-            $asCommandAttribute = $asCommandAttributeGroup->attrs[0];
-            $node->attrGroups[] = $asCommandAttributeGroup;
-        }
         $existingAttributeNames = array_map(function (Arg $arg): string {
             Assert::isInstanceOf($arg->name, Identifier::class);
             return $arg->name->toString();
@@ -144,7 +139,16 @@ CODE_SAMPLE
             }
             $attributeArgs[] = $this->createNamedArg($attributeName, $resolvedExpr);
         }
-        $asCommandAttribute->args = $attributeArgs;
+        // only create/update the attribute when there is something to fill it with,
+        // to avoid adding an empty #[AsCommand] to an already empty configure()
+        if ($attributeArgs !== []) {
+            if (!$asCommandAttribute instanceof Attribute) {
+                $asCommandAttributeGroup = $this->phpAttributeGroupFactory->createFromClass(SymfonyAttribute::AS_COMMAND);
+                $asCommandAttribute = $asCommandAttributeGroup->attrs[0];
+                $node->attrGroups[] = $asCommandAttributeGroup;
+            }
+            $asCommandAttribute->args = $attributeArgs;
+        }
         // remove left overs
         foreach ((array) $configureClassMethod->stmts as $key => $stmt) {
             if ($this->isExpressionVariableThis($stmt)) {
