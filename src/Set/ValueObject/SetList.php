@@ -138,6 +138,10 @@ final class SetList
     /**
      * @var string
      */
+    public const IF = __DIR__ . '/../../../config/set/if.php';
+    /**
+     * @var string
+     */
     public const CARBON = __DIR__ . '/../../../config/set/datetime-to-carbon.php';
     /**
      * @var string
