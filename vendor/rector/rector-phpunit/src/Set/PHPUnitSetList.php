@@ -47,6 +47,10 @@ final class PHPUnitSetList
     /**
      * @var string
      */
+    public const PHPUNIT_130 = __DIR__ . '/../../config/sets/phpunit130.php';
+    /**
+     * @var string
+     */
     public const PHPUNIT_MOCK_TO_STUB = __DIR__ . '/../../config/sets/phpunit-mock-to-stub.php';
     /**
      * @var string

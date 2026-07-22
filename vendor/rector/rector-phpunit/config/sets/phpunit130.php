@@ -1,0 +1,14 @@
+<?php
+
+declare (strict_types=1);
+namespace RectorPrefix202607;
+
+use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
+        // @see https://github.com/sebastianbergmann/phpunit/issues/6560
+        new MethodCallRename('PHPUnit\Framework\TestClass', 'expectExceptionMessage', 'expectExceptionMessageIsOrContains'),
+    ]);
+};
