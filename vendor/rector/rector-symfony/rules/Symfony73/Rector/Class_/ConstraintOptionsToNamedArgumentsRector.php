@@ -125,7 +125,12 @@ CODE_SAMPLE
                     return null;
                 }
             }
-            $arg = new Arg($item->value);
+            $argValue = $item->value;
+            // the "groups" constructor argument is typed as array, so a scalar option must be wrapped
+            if ($keyValue === 'groups' && !$argValue instanceof Array_) {
+                $argValue = new Array_([new ArrayItem($argValue)]);
+            }
+            $arg = new Arg($argValue);
             $arg->name = new Identifier($keyValue);
             $namedArgs[] = $arg;
         }
