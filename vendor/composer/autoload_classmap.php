@@ -1426,6 +1426,7 @@ return array(
     'Rector\\DeadCode\\PhpDoc\\TagRemover\\VarTagRemover' => $baseDir . '/rules/DeadCode/PhpDoc/TagRemover/VarTagRemover.php',
     'Rector\\DeadCode\\Rector\\Array_\\RemoveDuplicatedArrayKeyRector' => $baseDir . '/rules/DeadCode/Rector/Array_/RemoveDuplicatedArrayKeyRector.php',
     'Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveDoubleAssignRector.php',
+    'Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleSelfAssignRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveDoubleSelfAssignRector.php',
     'Rector\\DeadCode\\Rector\\Assign\\RemoveUnusedVariableAssignRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveUnusedVariableAssignRector.php',
     'Rector\\DeadCode\\Rector\\Block\\ReplaceBlockToItsStmtsRector' => $baseDir . '/rules/DeadCode/Rector/Block/ReplaceBlockToItsStmtsRector.php',
     'Rector\\DeadCode\\Rector\\BooleanAnd\\RemoveAndTrueRector' => $baseDir . '/rules/DeadCode/Rector/BooleanAnd/RemoveAndTrueRector.php',
