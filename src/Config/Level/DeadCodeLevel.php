@@ -18,6 +18,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveDuplicatedReturnSelfDocblockRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveMixedDocblockOverruledByNativeTypeRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveNullTagValueNodeRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveReturnTagIncompatibleWithNativeTypeRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
@@ -144,6 +145,7 @@ final class DeadCodeLevel
         UnwrapFutureCompatibleIfPhpVersionRector::class,
         RemoveParentCallWithoutParentRector::class,
         RemoveParentDelegatingConstructorRector::class,
+        RemoveParentDelegatingClassMethodRector::class,
         RemoveDeadConditionAboveReturnRector::class,
         RemoveDeadLoopRector::class,
         // removing methods could be risky if there is some magic loading them

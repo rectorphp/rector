@@ -1439,6 +1439,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveMixedDocblockOverruledByNativeTypeRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveMixedDocblockOverruledByNativeTypeRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveNullTagValueNodeRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveNullTagValueNodeRector.php',
+    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveParentDelegatingClassMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveParentDelegatingClassMethodRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveParentDelegatingConstructorRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveParentDelegatingConstructorRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveReturnTagIncompatibleWithNativeTypeRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveReturnTagIncompatibleWithNativeTypeRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',
