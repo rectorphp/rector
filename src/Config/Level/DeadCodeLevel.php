@@ -56,6 +56,7 @@ use Rector\DeadCode\Rector\MethodCall\RemoveNullArgOnNullDefaultParamRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveNullNamedArgOnNullDefaultParamRector;
 use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector;
+use Rector\DeadCode\Rector\Property\RemoveDefaultValueFromAssignedPropertyRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\DeadCode\Rector\Property\RemoveUselessReadOnlyTagRector;
 use Rector\DeadCode\Rector\Property\RemoveUselessVarTagRector;
@@ -100,6 +101,7 @@ final class DeadCodeLevel
         RemoveDeadContinueRector::class,
         RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
         RemoveNullPropertyInitializationRector::class,
+        RemoveDefaultValueFromAssignedPropertyRector::class,
         RemoveUselessReturnExprInConstructRector::class,
         ReplaceBlockToItsStmtsRector::class,
         RemoveFilterVarOnExactTypeRector::class,

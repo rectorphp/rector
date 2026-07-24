@@ -1744,6 +1744,7 @@ class ComposerStaticInit4f8bd32c3a7e872708a914d391161a4e
         'Rector\\DeadCode\\Rector\\Node\\RemoveNonExistingVarAnnotationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Node/RemoveNonExistingVarAnnotationRector.php',
         'Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php',
         'Rector\\DeadCode\\Rector\\PropertyProperty\\RemoveNullPropertyInitializationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/PropertyProperty/RemoveNullPropertyInitializationRector.php',
+        'Rector\\DeadCode\\Rector\\Property\\RemoveDefaultValueFromAssignedPropertyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveDefaultValueFromAssignedPropertyRector.php',
         'Rector\\DeadCode\\Rector\\Property\\RemoveUnusedPrivatePropertyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUnusedPrivatePropertyRector.php',
         'Rector\\DeadCode\\Rector\\Property\\RemoveUselessReadOnlyTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUselessReadOnlyTagRector.php',
         'Rector\\DeadCode\\Rector\\Property\\RemoveUselessVarTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Property/RemoveUselessVarTagRector.php',

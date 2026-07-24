@@ -18,7 +18,7 @@ final class NestedAnnotationToAttribute implements AnnotationToAttributeInterfac
     /**
      * @var AnnotationPropertyToAttributeClass[]
      */
-    private array $annotationPropertiesToAttributeClasses = [];
+    private array $annotationPropertiesToAttributeClasses;
     /**
      * @param array<string, string>|string[]|AnnotationPropertyToAttributeClass[] $annotationPropertiesToAttributeClasses
      */
