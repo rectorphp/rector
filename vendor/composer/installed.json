@@ -1801,12 +1801,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "ee79ecc79a78267ea196ea5e733d480b882b5464"
+                "reference": "93744acf20cafc6a85f2de2ee1207c93d2317979"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/ee79ecc79a78267ea196ea5e733d480b882b5464",
-                "reference": "ee79ecc79a78267ea196ea5e733d480b882b5464",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/93744acf20cafc6a85f2de2ee1207c93d2317979",
+                "reference": "93744acf20cafc6a85f2de2ee1207c93d2317979",
                 "shasum": ""
             },
             "require": {
@@ -1816,7 +1816,6 @@
                 "rector\/rector": "<2.0"
             },
             "require-dev": {
-                "boundwize\/structarmed": "^0.14",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^2.1.38",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
@@ -1834,7 +1833,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-07-22T05:13:20+00:00",
+            "time": "2026-07-24T09:16:04+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

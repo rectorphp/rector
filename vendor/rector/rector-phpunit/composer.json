@@ -7,7 +7,6 @@
         "php": ">=8.4"
     },
     "require-dev": {
-        "boundwize\/structarmed": "^0.14",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan": "^2.1.38",
         "phpstan\/phpstan-deprecation-rules": "^2.0",
