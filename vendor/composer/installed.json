@@ -1738,12 +1738,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "a0062f88fd8722362a346d8ce8eb18d140025a53"
+                "reference": "e77a75a01090f2f58e60d92944b82e5840b44718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/a0062f88fd8722362a346d8ce8eb18d140025a53",
-                "reference": "a0062f88fd8722362a346d8ce8eb18d140025a53",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/e77a75a01090f2f58e60d92944b82e5840b44718",
+                "reference": "e77a75a01090f2f58e60d92944b82e5840b44718",
                 "shasum": ""
             },
             "require": {
@@ -1756,7 +1756,7 @@
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^11.5",
                 "rector\/jack": "^0.5.1",
-                "rector\/rector-src": "dev-bump-phpstan-226",
+                "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.3",
                 "rector\/type-perfect": "^2.1",
                 "symplify\/easy-coding-standard": "^13.0",
@@ -1768,7 +1768,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.11"
             },
-            "time": "2026-07-26T23:39:31+00:00",
+            "time": "2026-07-27T06:00:33+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
