@@ -77,7 +77,7 @@ final class ConstructorAssignDetector
         foreach ($initializeClassMethods as $initializeClassMethod) {
             $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $initializeClassMethod->stmts, function (Node $node) use ($propertyName, &$isAssignedInConstructor, $allowConditional): ?int {
                 if ($this->isIfElseAssign($node, $propertyName)) {
-                    $isAssignedInConstructor = \true;
+                    $isAssignedInConstructor = !(bool) $node->getAttribute(AttributeKey::IS_IN_LOOP_OR_SWITCH);
                     return NodeVisitor::STOP_TRAVERSAL;
                 }
                 $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
