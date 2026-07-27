@@ -7,6 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\ValueObject\MethodName;
@@ -21,9 +23,14 @@ final class RemoveDefaultValueFromAssignedPropertyRector extends AbstractRector
      * @readonly
      */
     private ConstructorAssignDetector $constructorAssignDetector;
-    public function __construct(ConstructorAssignDetector $constructorAssignDetector)
+    /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    public function __construct(ConstructorAssignDetector $constructorAssignDetector, BetterNodeFinder $betterNodeFinder)
     {
         $this->constructorAssignDetector = $constructorAssignDetector;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -63,7 +70,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$node->getMethod(MethodName::CONSTRUCT) instanceof ClassMethod) {
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
+            return null;
+        }
+        // early return can skip the assign, so the default value is still needed
+        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($constructClassMethod, Return_::class)) {
             return null;
         }
         $hasChanged = \false;
