@@ -79,8 +79,9 @@ final class PhpDocFromTypeDeclarationDecorator
     private AstResolver $astResolver;
     /**
      * @var ClassMethodWillChangeReturnType[]
+     * @readonly
      */
-    private array $classMethodWillChangeReturnTypes = [];
+    private array $classMethodWillChangeReturnTypes;
     public function __construct(StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionResolver $reflectionResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpVersionProvider $phpVersionProvider, AstResolver $astResolver)
     {
         $this->staticTypeMapper = $staticTypeMapper;

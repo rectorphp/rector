@@ -10,7 +10,7 @@ final class CommentResolver
 {
     /**
      * @param int|float $rangeLine
-     * @return float|int
+     * @return int|float
      */
     public function resolveRangeLineFromComment($rangeLine, int $endLine, Stmt $nextStmt)
     {

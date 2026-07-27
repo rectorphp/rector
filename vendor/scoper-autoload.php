@@ -31,7 +31,7 @@ if (!function_exists('humbug_phpscoper_expose_class')) {
 }
 humbug_phpscoper_expose_class('AutoloadIncluder', 'RectorPrefix202607\AutoloadIncluder');
 humbug_phpscoper_expose_class('SomeClass', 'RectorPrefix202607\SomeClass');
-humbug_phpscoper_expose_class('ComposerAutoloaderInit4f8bd32c3a7e872708a914d391161a4e', 'RectorPrefix202607\ComposerAutoloaderInit4f8bd32c3a7e872708a914d391161a4e');
+humbug_phpscoper_expose_class('ComposerAutoloaderInitf1679ce1ac1447a9fc27f73d17087437', 'RectorPrefix202607\ComposerAutoloaderInitf1679ce1ac1447a9fc27f73d17087437');
 humbug_phpscoper_expose_class('Product', 'RectorPrefix202607\Product');
 humbug_phpscoper_expose_class('SomeTest', 'RectorPrefix202607\SomeTest');
 humbug_phpscoper_expose_class('Normalizer', 'RectorPrefix202607\Normalizer');

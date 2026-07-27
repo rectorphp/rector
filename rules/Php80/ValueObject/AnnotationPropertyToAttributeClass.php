@@ -12,7 +12,7 @@ final class AnnotationPropertyToAttributeClass
     private string $attributeClass;
     /**
      * @readonly
-     * @var int|string|null
+     * @var string|int|null
      */
     private $annotationProperty = null;
     /**
@@ -30,7 +30,7 @@ final class AnnotationPropertyToAttributeClass
         RectorAssert::className($attributeClass);
     }
     /**
-     * @return int|string|null
+     * @return string|int|null
      */
     public function getAnnotationProperty()
     {
