@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -87,12 +88,16 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
+        $isFinal = $node->isFinal() || FeatureFlags::treatClassesAsFinal($node);
         foreach ($node->getProperties() as $property) {
             // untyped properties are handled by RemoveNullPropertyInitializationRector
             if (!$property->type instanceof Node) {
                 continue;
             }
             if ($property->hooks !== []) {
+                continue;
+            }
+            if (!$property->isPrivate() && !$isFinal) {
                 continue;
             }
             foreach ($property->props as $propertyProperty) {
