@@ -34,6 +34,7 @@ humbug_phpscoper_expose_class('SomeClass', 'RectorPrefix202607\SomeClass');
 humbug_phpscoper_expose_class('ComposerAutoloaderInitf1679ce1ac1447a9fc27f73d17087437', 'RectorPrefix202607\ComposerAutoloaderInitf1679ce1ac1447a9fc27f73d17087437');
 humbug_phpscoper_expose_class('Product', 'RectorPrefix202607\Product');
 humbug_phpscoper_expose_class('SomeTest', 'RectorPrefix202607\SomeTest');
+humbug_phpscoper_expose_class('ValueError', 'RectorPrefix202607\ValueError');
 humbug_phpscoper_expose_class('Normalizer', 'RectorPrefix202607\Normalizer');
 humbug_phpscoper_expose_class('Deprecated', 'RectorPrefix202607\Deprecated');
 humbug_phpscoper_expose_class('RoundingMode', 'RectorPrefix202607\RoundingMode');
