@@ -8,7 +8,6 @@ use PhpParser\ParserFactory;
 use PhpParser\PhpVersion;
 use PHPStan\Parser\Parser;
 use PHPStan\Parser\RichParser;
-use Rector\DependencyInjection\PHPStan\PHPStanContainerMemento;
 use Rector\PhpParser\ValueObject\StmtsAndTokens;
 use Rector\Util\Reflection\PrivatesAccessor;
 final class RectorParser
@@ -29,7 +28,6 @@ final class RectorParser
     {
         $this->parser = $parser;
         $this->privatesAccessor = $privatesAccessor;
-        PHPStanContainerMemento::removeRichVisitors($parser);
     }
     /**
      * @api used by rector-symfony

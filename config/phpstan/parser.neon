@@ -22,6 +22,22 @@ services:
 
     rectorParser:
         class: PHPStan\Parser\RichParser
+        factory: @rectorRichParserFactory::create()
+        arguments!: []
+        autowired: no
+
+    # RichParser used directly by Rector, see PHPStanServicesFactory::createPHPStanParser()
+    currentPhpVersionRichParser:
+        class: PHPStan\Parser\RichParser
+        factory: @rectorRichParserFactory::create()
+        arguments!: []
+        autowired: no
+
+    rectorRichParserFactory:
+        class: Rector\DependencyInjection\PHPStan\RichParserFactory
         arguments:
             parser: @currentPhpVersionPhpParser
+            nodeVisitors:
+                - @PHPStan\Parser\AnonymousClassVisitor
+                - @PHPStan\Parser\ArrayMapArgVisitor
         autowired: no
