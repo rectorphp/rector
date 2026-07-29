@@ -91,6 +91,10 @@ CODE_SAMPLE
         if ($node->getMethods() === []) {
             return null;
         }
+        // unreliable to detect on anonymous class: doesn't make sense
+        if ($node->isAnonymous()) {
+            return null;
+        }
         $hasChanged = \false;
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
@@ -134,8 +138,11 @@ CODE_SAMPLE
     }
     private function shouldSkip(ClassMethod $classMethod, ClassReflection $classReflection): bool
     {
-        // unreliable to detect anonymous class: doesn't make sense
-        if ($classReflection->isAnonymous()) {
+        // unreliable to detect trait, interface: doesn't make sense
+        if ($classReflection->isTrait()) {
+            return \true;
+        }
+        if ($classReflection->isInterface()) {
             return \true;
         }
         // skip magic methods - @see https://www.php.net/manual/en/language.oop5.magic.php
