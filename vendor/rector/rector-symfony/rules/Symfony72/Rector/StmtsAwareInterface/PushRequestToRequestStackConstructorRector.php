@@ -6,10 +6,12 @@ namespace Rector\Symfony\Symfony72\Rector\StmtsAwareInterface;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Enum\NodeGroup;
@@ -84,49 +86,66 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $requestStack = null;
+        // keep every "new RequestStack()" per variable name, to append the request pushed on that very variable
+        $requestStackNewsByVariableName = [];
         $hasChanged = \false;
         foreach ($node->stmts as $key => $stmt) {
             if (!$stmt instanceof Expression) {
                 continue;
             }
-            if (!$requestStack instanceof New_) {
-                $requestStack = $this->matchRequestStackAssignExpr($stmt);
-            } elseif ($stmt->expr instanceof MethodCall) {
-                $pushMethodCall = $stmt->expr;
-                if ($this->isName($pushMethodCall->name, 'push')) {
-                    // possibly request stack push
-                    $array = new Array_([new ArrayItem($pushMethodCall->getArgs()[0]->value)]);
-                    $requestStack->args[] = new Arg($array);
-                    $requestStack->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-                    $hasChanged = \true;
-                    unset($node->stmts[$key]);
+            if ($stmt->expr instanceof Assign) {
+                $assign = $stmt->expr;
+                if (!$assign->var instanceof Variable || !is_string($assign->var->name)) {
+                    continue;
                 }
+                $emptyRequestStackNew = $this->matchEmptyRequestStackNew($assign->expr);
+                if ($emptyRequestStackNew instanceof New_) {
+                    $requestStackNewsByVariableName[$assign->var->name] = $emptyRequestStackNew;
+                }
+                continue;
             }
+            if (!$stmt->expr instanceof MethodCall) {
+                continue;
+            }
+            $pushMethodCall = $stmt->expr;
+            if (!$this->isName($pushMethodCall->name, 'push')) {
+                continue;
+            }
+            if ($pushMethodCall->getArgs() === []) {
+                continue;
+            }
+            if (!$pushMethodCall->var instanceof Variable || !is_string($pushMethodCall->var->name)) {
+                continue;
+            }
+            $variableName = $pushMethodCall->var->name;
+            $requestStackNew = $requestStackNewsByVariableName[$variableName] ?? null;
+            if (!$requestStackNew instanceof New_) {
+                continue;
+            }
+            $array = new Array_([new ArrayItem($pushMethodCall->getArgs()[0]->value)]);
+            $requestStackNew->args[] = new Arg($array);
+            $requestStackNew->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            // the constructor takes a single array of requests, so no further push can be merged
+            unset($requestStackNewsByVariableName[$variableName], $node->stmts[$key]);
+            $hasChanged = \true;
         }
         if ($hasChanged) {
             return $node;
         }
         return null;
     }
-    private function matchRequestStackAssignExpr(Expression $expression): ?New_
+    private function matchEmptyRequestStackNew(Expr $expr): ?New_
     {
-        // 1. find new RequestStack assign
-        if (!$expression->expr instanceof Assign) {
+        if (!$expr instanceof New_) {
             return null;
         }
-        $assign = $expression->expr;
-        if (!$assign->expr instanceof New_) {
-            return null;
-        }
-        $new = $assign->expr;
-        if (!$this->isName($new->class, SymfonyClass::REQUEST_STACK)) {
+        if (!$this->isName($expr->class, SymfonyClass::REQUEST_STACK)) {
             return null;
         }
         // skip if already some args are filled
-        if ($new->getArgs() !== []) {
+        if ($expr->getArgs() !== []) {
             return null;
         }
-        return $new;
+        return $expr;
     }
 }

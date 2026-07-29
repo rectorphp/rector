@@ -24,8 +24,9 @@ final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
     private ValueResolver $valueResolver;
     /**
      * @var ObjectType[]
+     * @readonly
      */
-    private array $definitionObjectTypes = [];
+    private array $definitionObjectTypes;
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;

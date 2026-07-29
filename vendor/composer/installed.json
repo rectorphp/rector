@@ -1864,12 +1864,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "c61d5dda397a61efd4610811f56a883ecf51efa7"
+                "reference": "42161d67b61d99d0c8cc79e74453614d04f66ff4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/c61d5dda397a61efd4610811f56a883ecf51efa7",
-                "reference": "c61d5dda397a61efd4610811f56a883ecf51efa7",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/42161d67b61d99d0c8cc79e74453614d04f66ff4",
+                "reference": "42161d67b61d99d0c8cc79e74453614d04f66ff4",
                 "shasum": ""
             },
             "require": {
@@ -1885,7 +1885,6 @@
                 "rector\/jack": "^0.5",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.4",
-                "rector\/type-perfect": "^2.1",
                 "symfony\/config": "^6.4",
                 "symfony\/dependency-injection": "^6.4",
                 "symfony\/http-kernel": "^7.4",
@@ -1898,11 +1897,11 @@
                 "symplify\/phpstan-rules": "^14.10",
                 "symplify\/vendor-patches": "^11.5",
                 "tomasvotruba\/class-leak": "^2.1",
-                "tomasvotruba\/type-coverage": "^2.2",
+                "tomasvotruba\/type-coverage": "^2.3",
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-07-24T09:16:17+00:00",
+            "time": "2026-07-29T22:04:24+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

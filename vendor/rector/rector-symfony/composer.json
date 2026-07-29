@@ -16,7 +16,6 @@
         "rector\/jack": "^0.5",
         "rector\/rector-src": "dev-main",
         "rector\/swiss-knife": "^2.4",
-        "rector\/type-perfect": "^2.1",
         "symfony\/config": "^6.4",
         "symfony\/dependency-injection": "^6.4",
         "symfony\/http-kernel": "^7.4",
@@ -29,7 +28,7 @@
         "symplify\/phpstan-rules": "^14.10",
         "symplify\/vendor-patches": "^11.5",
         "tomasvotruba\/class-leak": "^2.1",
-        "tomasvotruba\/type-coverage": "^2.2",
+        "tomasvotruba\/type-coverage": "^2.3",
         "tomasvotruba\/unused-public": "^2.2",
         "tracy\/tracy": "^2.12"
     },

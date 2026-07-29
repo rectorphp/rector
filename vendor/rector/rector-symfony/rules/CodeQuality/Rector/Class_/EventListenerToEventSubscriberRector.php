@@ -66,8 +66,9 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     ];
     /**
      * @var EventNameToClassAndConstant[]
+     * @readonly
      */
-    private array $eventNamesToClassConstants = [];
+    private array $eventNamesToClassConstants;
     public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, ClassNaming $classNaming)
     {
         $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;
