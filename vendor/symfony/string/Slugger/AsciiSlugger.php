@@ -52,7 +52,7 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
     }
     public function getLocale(): string
     {
-        return $this->defaultLocale;
+        return $this->defaultLocale ?? '';
     }
     /**
      * @param bool|string $emoji true will use the same locale,

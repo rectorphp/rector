@@ -161,10 +161,7 @@ CODE_SAMPLE
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
-            return \true;
-        }
-        return !$classReflection->isClass();
+        return !$classReflection instanceof ClassReflection;
     }
     private function isParamUsedInSpreadArg(ClassMethod $classMethod, Param $param): bool
     {

@@ -169,7 +169,11 @@ class ByteString extends AbstractString
         if ('' === $needle) {
             return null;
         }
-        $i = $this->ignoreCase ? stripos($this->string, $needle, $offset) : strpos($this->string, $needle, $offset);
+        try {
+            $i = $this->ignoreCase ? stripos($this->string, $needle, $offset) : strpos($this->string, $needle, $offset);
+        } catch (\ValueError $exception) {
+            return null;
+        }
         return \false === $i ? null : $i;
     }
     /**
@@ -185,7 +189,11 @@ class ByteString extends AbstractString
         if ('' === $needle) {
             return null;
         }
-        $i = $this->ignoreCase ? strripos($this->string, $needle, $offset) : strrpos($this->string, $needle, $offset);
+        try {
+            $i = $this->ignoreCase ? strripos($this->string, $needle, $offset) : strrpos($this->string, $needle, $offset);
+        } catch (\ValueError $exception) {
+            return null;
+        }
         return \false === $i ? null : $i;
     }
     public function isUtf8(): bool

@@ -103,7 +103,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $ancestors = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->isClass() && $ancestorClassReflection->getName() !== $classReflection->getName());
+        $ancestors = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $ancestorClassReflection->getName() !== $classReflection->getName());
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->isPrivate()) {
