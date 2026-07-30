@@ -33,8 +33,9 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
     private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @var ConstantWithAssertMethods[]
+     * @readonly
      */
-    private array $constantWithAssertMethods = [];
+    private array $constantWithAssertMethods;
     public function __construct(IdentifierManipulator $identifierManipulator, ArgumentMover $argumentMover, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;

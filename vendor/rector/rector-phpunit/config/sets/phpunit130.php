@@ -9,6 +9,6 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // @see https://github.com/sebastianbergmann/phpunit/issues/6560
-        new MethodCallRename('PHPUnit\Framework\TestClass', 'expectExceptionMessage', 'expectExceptionMessageIsOrContains'),
+        new MethodCallRename('PHPUnit\Framework\TestCase', 'expectExceptionMessage', 'expectExceptionMessageIsOrContains'),
     ]);
 };

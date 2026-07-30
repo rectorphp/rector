@@ -40,8 +40,9 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
     private TestsNodeAnalyzer $testsNodeAnalyzer;
     /**
      * @var BinaryOpWithAssertMethod[]
+     * @readonly
      */
-    private array $binaryOpWithAssertMethods = [];
+    private array $binaryOpWithAssertMethods;
     public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
