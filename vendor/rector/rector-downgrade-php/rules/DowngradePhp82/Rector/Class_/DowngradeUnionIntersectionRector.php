@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp82\Rector\Class_;
 
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;

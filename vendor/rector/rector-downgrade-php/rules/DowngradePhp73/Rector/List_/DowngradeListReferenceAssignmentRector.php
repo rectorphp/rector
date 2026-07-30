@@ -254,7 +254,7 @@ CODE_SAMPLE
         return new Expression($assignRef);
     }
     /**
-     * @param array<(ArrayItem | null)> $arrayItems
+     * @param array<(ArrayItem|null)> $arrayItems
      * @return ArrayItem[]
      */
     private function getItemsByRef(array $arrayItems, int $condition): array
