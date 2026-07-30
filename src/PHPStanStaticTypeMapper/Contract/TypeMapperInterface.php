@@ -16,9 +16,12 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 interface TypeMapperInterface
 {
     /**
-     * @return class-string<TType>
+     * A mapper can cover several types at once, when they all map to the same output,
+     * e.g. every accessory string type maps to "string"
+     *
+     * @return array<class-string<TType>>
      */
-    public function getNodeClass(): string;
+    public function getNodeClasses(): array;
     /**
      * @param TType $type
      */

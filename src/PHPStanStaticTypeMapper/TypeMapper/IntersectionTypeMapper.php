@@ -50,9 +50,12 @@ final class IntersectionTypeMapper implements TypeMapperInterface
         $this->objectTypeMapper = $objectTypeMapper;
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return IntersectionType::class;
+        return [IntersectionType::class];
     }
     /**
      * @param IntersectionType $type

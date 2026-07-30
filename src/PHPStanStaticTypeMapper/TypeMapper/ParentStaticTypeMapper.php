@@ -14,9 +14,12 @@ use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
  */
 final class ParentStaticTypeMapper implements TypeMapperInterface
 {
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return ParentStaticType::class;
+        return [ParentStaticType::class];
     }
     /**
      * @param ParentStaticType $type

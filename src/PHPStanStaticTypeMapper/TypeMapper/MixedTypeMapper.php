@@ -25,9 +25,12 @@ final class MixedTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return MixedType::class;
+        return [MixedType::class];
     }
     /**
      * @param MixedType $type

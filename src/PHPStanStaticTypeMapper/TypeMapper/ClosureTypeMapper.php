@@ -29,9 +29,12 @@ final class ClosureTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return ClosureType::class;
+        return [ClosureType::class];
     }
     /**
      * @param ClosureType $type

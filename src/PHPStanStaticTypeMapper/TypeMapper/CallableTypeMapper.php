@@ -16,9 +16,12 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
  */
 final class CallableTypeMapper implements TypeMapperInterface
 {
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return CallableType::class;
+        return [CallableType::class];
     }
     /**
      * @param CallableType $type

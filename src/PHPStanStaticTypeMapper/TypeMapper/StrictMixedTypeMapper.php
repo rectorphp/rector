@@ -29,9 +29,12 @@ final class StrictMixedTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return StrictMixedType::class;
+        return [StrictMixedType::class];
     }
     /**
      * @param StrictMixedType $type

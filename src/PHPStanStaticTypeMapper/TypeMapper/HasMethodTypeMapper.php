@@ -21,9 +21,12 @@ final class HasMethodTypeMapper implements TypeMapperInterface
     {
         $this->objectWithoutClassTypeMapper = $objectWithoutClassTypeMapper;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return HasMethodType::class;
+        return [HasMethodType::class];
     }
     /**
      * @param HasMethodType $type

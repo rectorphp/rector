@@ -24,9 +24,12 @@ final class TypeWithClassNameTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return TypeWithClassName::class;
+        return [TypeWithClassName::class];
     }
     /**
      * @param TypeWithClassName $type

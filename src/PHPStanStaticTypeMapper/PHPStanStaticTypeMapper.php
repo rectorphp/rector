@@ -30,7 +30,7 @@ final class PHPStanStaticTypeMapper
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         foreach ($this->typeMappers as $typeMapper) {
-            if (!is_a($type, $typeMapper->getNodeClass(), \true)) {
+            if (!$this->doesTypeMatch($type, $typeMapper)) {
                 continue;
             }
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type);
@@ -44,11 +44,25 @@ final class PHPStanStaticTypeMapper
     public function mapToPhpParserNode(Type $type, string $typeKind)
     {
         foreach ($this->typeMappers as $typeMapper) {
-            if (!is_a($type, $typeMapper->getNodeClass(), \true)) {
+            if (!$this->doesTypeMatch($type, $typeMapper)) {
                 continue;
             }
             return $typeMapper->mapToPhpParserNode($type, $typeKind);
         }
         throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($type));
+    }
+    /**
+     * @param TypeMapperInterface<Type> $typeMapper
+     */
+    private function doesTypeMatch(Type $type, TypeMapperInterface $typeMapper): bool
+    {
+        $found = \false;
+        foreach ($typeMapper->getNodeClasses() as $nodeClass) {
+            if ($type instanceof $nodeClass) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
 }

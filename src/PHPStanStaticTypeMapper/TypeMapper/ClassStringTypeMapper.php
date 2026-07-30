@@ -26,9 +26,12 @@ final class ClassStringTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return ClassStringType::class;
+        return [ClassStringType::class];
     }
     /**
      * @param ClassStringType $type

@@ -24,9 +24,12 @@ final class FloatTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return FloatType::class;
+        return [FloatType::class];
     }
     /**
      * @param FloatType $type

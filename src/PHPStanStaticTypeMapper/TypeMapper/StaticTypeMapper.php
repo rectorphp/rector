@@ -29,9 +29,12 @@ final class StaticTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return StaticType::class;
+        return [StaticType::class];
     }
     /**
      * @param StaticType $type

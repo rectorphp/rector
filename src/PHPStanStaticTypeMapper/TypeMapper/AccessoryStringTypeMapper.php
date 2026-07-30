@@ -6,15 +6,20 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
+use PHPStan\Type\Accessory\AccessoryNonFalsyStringType;
+use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Type;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\ValueObject\PhpVersionFeature;
 /**
- * @implements TypeMapperInterface<AccessoryNonEmptyStringType>
+ * Every accessory string type narrows "string" with an extra guarantee, so they all map back to "string"
+ *
+ * @implements TypeMapperInterface<AccessoryLiteralStringType|AccessoryNonEmptyStringType|AccessoryNonFalsyStringType|AccessoryNumericStringType>
  */
-final class AccessoryNonEmptyStringTypeMapper implements TypeMapperInterface
+final class AccessoryStringTypeMapper implements TypeMapperInterface
 {
     /**
      * @readonly
@@ -24,20 +29,17 @@ final class AccessoryNonEmptyStringTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
-    {
-        return AccessoryNonEmptyStringType::class;
-    }
     /**
-     * @param AccessoryNonEmptyStringType $type
+     * @return array<class-string<Type>>
      */
+    public function getNodeClasses(): array
+    {
+        return [AccessoryLiteralStringType::class, AccessoryNonEmptyStringType::class, AccessoryNonFalsyStringType::class, AccessoryNumericStringType::class];
+    }
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         return $type->toPhpDocNode();
     }
-    /**
-     * @param AccessoryNonEmptyStringType $type
-     */
     public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {

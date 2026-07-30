@@ -24,9 +24,12 @@ final class ConstantArrayTypeMapper implements TypeMapperInterface
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getNodeClass(): string
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
     {
-        return ConstantArrayType::class;
+        return [ConstantArrayType::class];
     }
     /**
      * @param ConstantArrayType $type
