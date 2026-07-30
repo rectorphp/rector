@@ -293,7 +293,8 @@ final class LazyContainerFactory
             return $phpStanServicesFactory->createDynamicSourceLocatorProvider();
         });
         // resettable
-        $rectorConfig->tag(DynamicSourceLocatorProvider::class, ResettableInterface::class);
+        // DynamicSourceLocatorProvider is autotagged on its singleton() call above,
+        // as RectorConfig autotags ResettableInterface
         $rectorConfig->tag(RenamedClassesDataCollector::class, ResettableInterface::class);
         // caching
         $rectorConfig->singleton(Cache::class, static function (Container $container): Cache {
@@ -340,7 +341,6 @@ final class LazyContainerFactory
         $this->registerTagged($rectorConfig, self::NODE_NAME_RESOLVER_CLASSES, NodeNameResolverInterface::class);
         $this->registerTagged($rectorConfig, self::NODE_TYPE_RESOLVER_CLASSES, NodeTypeResolverInterface::class);
         $this->registerTagged($rectorConfig, self::OUTPUT_FORMATTER_CLASSES, OutputFormatterInterface::class);
-        $this->registerTagged($rectorConfig, self::BASE_PHP_DOC_NODE_VISITORS, BasePhpDocNodeVisitorInterface::class);
         $this->registerTagged($rectorConfig, self::CLASS_NAME_IMPORT_SKIPPER_CLASSES, ClassNameImportSkipVoterInterface::class);
         $rectorConfig->alias(SymfonyStyle::class, RectorStyle::class);
         $rectorConfig->singleton(SymfonyStyle::class, static function (Container $container): SymfonyStyle {
