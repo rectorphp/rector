@@ -419,75 +419,18 @@ final class RectorConfigBuilder
             throw new InvalidConfigurationException(sprintf('Method "%s()" can be called only once. It always includes all previous sets UP TO the defined version.%sThe best practise is to call it once with no argument. That way it will pick up PHP version from composer.json and your project will always stay up to date.', __METHOD__, \PHP_EOL));
         }
         $this->isWithPhpSetsUsed = \true;
-        $pickedArguments = array_filter(func_get_args());
-        if ($pickedArguments !== []) {
+        $pickedPhpVersions = array_keys(array_filter([PhpVersion::PHP_53 => $php53, PhpVersion::PHP_54 => $php54, PhpVersion::PHP_55 => $php55, PhpVersion::PHP_56 => $php56, PhpVersion::PHP_70 => $php70, PhpVersion::PHP_71 => $php71, PhpVersion::PHP_72 => $php72, PhpVersion::PHP_73 => $php73, PhpVersion::PHP_74 => $php74, PhpVersion::PHP_80 => $php80, PhpVersion::PHP_81 => $php81, PhpVersion::PHP_82 => $php82, PhpVersion::PHP_83 => $php83, PhpVersion::PHP_84 => $php84, PhpVersion::PHP_85 => $php85, PhpVersion::PHP_86 => $php86]));
+        if ($pickedPhpVersions !== []) {
             Notifier::errorWithPhpSetsNotSuitableForPHP74AndLower();
         }
-        if (count($pickedArguments) > 1) {
+        if (count($pickedPhpVersions) > 1) {
             throw new InvalidConfigurationException(sprintf('Pick only one version target in "withPhpSets()". All rules up to this version will be used.%sTo use your composer.json PHP version, keep arguments empty.', \PHP_EOL));
         }
-        if ($pickedArguments === []) {
-            $projectPhpVersion = ComposerJsonPhpVersionResolver::resolveFromCwdOrFail();
-            $phpLevelSets = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($projectPhpVersion);
-            $this->sets = array_merge($this->sets, $phpLevelSets);
-            return $this;
+        // no version picked, resolve it from the project composer.json
+        if ($pickedPhpVersions === []) {
+            return $this->addPhpLevelSets(ComposerJsonPhpVersionResolver::resolveFromCwdOrFail());
         }
-        if ($php53) {
-            $this->withPhp53Sets();
-            return $this;
-        }
-        if ($php54) {
-            $this->withPhp54Sets();
-            return $this;
-        }
-        if ($php55) {
-            $this->withPhp55Sets();
-            return $this;
-        }
-        if ($php56) {
-            $this->withPhp56Sets();
-            return $this;
-        }
-        if ($php70) {
-            $this->withPhp70Sets();
-            return $this;
-        }
-        if ($php71) {
-            $this->withPhp71Sets();
-            return $this;
-        }
-        if ($php72) {
-            $this->withPhp72Sets();
-            return $this;
-        }
-        if ($php73) {
-            $this->withPhp73Sets();
-            return $this;
-        }
-        if ($php74) {
-            $this->withPhp74Sets();
-            return $this;
-        }
-        if ($php80) {
-            $targetPhpVersion = PhpVersion::PHP_80;
-        } elseif ($php81) {
-            $targetPhpVersion = PhpVersion::PHP_81;
-        } elseif ($php82) {
-            $targetPhpVersion = PhpVersion::PHP_82;
-        } elseif ($php83) {
-            $targetPhpVersion = PhpVersion::PHP_83;
-        } elseif ($php84) {
-            $targetPhpVersion = PhpVersion::PHP_84;
-        } elseif ($php85) {
-            $targetPhpVersion = PhpVersion::PHP_85;
-        } elseif ($php86) {
-            $targetPhpVersion = PhpVersion::PHP_86;
-        } else {
-            throw new InvalidConfigurationException('Invalid PHP version set');
-        }
-        $phpLevelSets = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($targetPhpVersion);
-        $this->sets = array_merge($this->sets, $phpLevelSets);
-        return $this;
+        return $this->addPhpLevelSets($pickedPhpVersions[0]);
     }
     /**
      * Following methods are suitable for PHP 7.4 and lower, before named args
@@ -495,57 +438,39 @@ final class RectorConfigBuilder
      */
     public function withPhp53Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_53));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_53);
     }
     public function withPhp54Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_54));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_54);
     }
     public function withPhp55Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_55));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_55);
     }
     public function withPhp56Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_56));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_56);
     }
     public function withPhp70Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_70));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_70);
     }
     public function withPhp71Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_71));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_71);
     }
     public function withPhp72Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_72));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_72);
     }
     public function withPhp73Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_73));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_73);
     }
     public function withPhp74Sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_74));
-        return $this;
+        return $this->addPhpLevelSets(PhpVersion::PHP_74);
     }
     // there is no withPhp80Sets() and above,
     // as we already use PHP 8.0 and should go with withPhpSets() instead
@@ -851,29 +776,11 @@ final class RectorConfigBuilder
     }
     public function withDowngradeSets(bool $php84 = \false, bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false): self
     {
-        $pickedArguments = array_filter(func_get_args());
-        if (count($pickedArguments) !== 1) {
+        $pickedDowngradeSets = array_keys(array_filter([DowngradeLevelSetList::DOWN_TO_PHP_84 => $php84, DowngradeLevelSetList::DOWN_TO_PHP_83 => $php83, DowngradeLevelSetList::DOWN_TO_PHP_82 => $php82, DowngradeLevelSetList::DOWN_TO_PHP_81 => $php81, DowngradeLevelSetList::DOWN_TO_PHP_80 => $php80, DowngradeLevelSetList::DOWN_TO_PHP_74 => $php74, DowngradeLevelSetList::DOWN_TO_PHP_73 => $php73, DowngradeLevelSetList::DOWN_TO_PHP_72 => $php72, DowngradeLevelSetList::DOWN_TO_PHP_71 => $php71]));
+        if (count($pickedDowngradeSets) !== 1) {
             throw new InvalidConfigurationException('Pick only one PHP version target in "withDowngradeSets()". All rules down to this version will be used.');
         }
-        if ($php84) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_84;
-        } elseif ($php83) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_83;
-        } elseif ($php82) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_82;
-        } elseif ($php81) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_81;
-        } elseif ($php80) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_80;
-        } elseif ($php74) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_74;
-        } elseif ($php73) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_73;
-        } elseif ($php72) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_72;
-        } elseif ($php71) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_71;
-        }
+        $this->sets[] = $pickedDowngradeSets[0];
         return $this;
     }
     public function withRealPathReporting(bool $absolutePath = \true): self
@@ -909,6 +816,15 @@ final class RectorConfigBuilder
             }
             $this->setProviders[$setProvider] = \true;
         }
+        return $this;
+    }
+    /**
+     * @param PhpVersion::* $phpVersion
+     */
+    private function addPhpLevelSets(int $phpVersion): self
+    {
+        $this->isWithPhpSetsUsed = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($phpVersion));
         return $this;
     }
     /**
