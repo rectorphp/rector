@@ -230,6 +230,9 @@ CODE_SAMPLE
             if ($this->shouldSkipPropertyAssignedNull($node, $propertyName)) {
                 continue;
             }
+            if ($this->shouldSkipUntypedParentProperty($classReflection, $propertyName)) {
+                continue;
+            }
             $hasChanged = \true;
             // remove property from class
             unset($node->stmts[$promotionCandidate->getPropertyStmtPosition()]);
@@ -304,6 +307,21 @@ CODE_SAMPLE
         }
         $paramType = TypeCombinator::union($paramType, $defaultType);
         $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
+    }
+    /**
+     * A parent property declared without a native type cannot be typed by a child. Promotion moves the param
+     * type onto the property, so promoting such a property makes the class fatal:
+     * "Type of Child::$property must not be defined (as in class Parent)".
+     */
+    private function shouldSkipUntypedParentProperty(ClassReflection $classReflection, string $propertyName): bool
+    {
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if (!$parentClassReflection->hasNativeProperty($propertyName)) {
+                continue;
+            }
+            return !$parentClassReflection->getNativeProperty($propertyName)->hasNativeType();
+        }
+        return \false;
     }
     private function shouldSkipParam(Param $param): bool
     {
