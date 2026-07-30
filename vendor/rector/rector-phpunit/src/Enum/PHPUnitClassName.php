@@ -27,6 +27,11 @@ final class PHPUnitClassName
      */
     public const INVOCATION_MOCKER = 'PHPUnit\Framework\MockObject\Builder\InvocationMocker';
     /**
+     * PHPUnit 13 moved the interface out of the Builder namespace
+     * @var string
+     */
+    public const INVOCATION_MOCKER_INTERFACE = 'PHPUnit\Framework\MockObject\InvocationMocker';
+    /**
      * @var string
      */
     public const INVOCATION_STUBBER = 'PHPUnit\Framework\MockObject\InvocationStubber';

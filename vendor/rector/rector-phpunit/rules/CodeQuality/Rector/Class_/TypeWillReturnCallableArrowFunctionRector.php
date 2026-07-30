@@ -163,7 +163,7 @@ CODE_SAMPLE
             }
             $methodName = $methodNameExpr->value;
             $callerType = $this->getType($parentMethodCall->var);
-            if ($callerType instanceof ObjectType && in_array($callerType->getClassName(), [PHPUnitClassName::INVOCATION_MOCKER, PHPUnitClassName::INVOCATION_STUBBER], \true)) {
+            if ($callerType instanceof ObjectType && in_array($callerType->getClassName(), [PHPUnitClassName::INVOCATION_MOCKER, PHPUnitClassName::INVOCATION_MOCKER_INTERFACE, PHPUnitClassName::INVOCATION_STUBBER], \true)) {
                 $parentMethodCall = $parentMethodCall->var;
                 if ($parentMethodCall instanceof MethodCall) {
                     $callerType = $this->getType($parentMethodCall->var);

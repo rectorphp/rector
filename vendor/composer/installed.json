@@ -1675,12 +1675,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "f0fb6104088ebeb65dc100ff36eaa15ec1da7592"
+                "reference": "db9bf1d7a96ffaddb9fe9a4bc482f30e57443cf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/f0fb6104088ebeb65dc100ff36eaa15ec1da7592",
-                "reference": "f0fb6104088ebeb65dc100ff36eaa15ec1da7592",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/db9bf1d7a96ffaddb9fe9a4bc482f30e57443cf2",
+                "reference": "db9bf1d7a96ffaddb9fe9a4bc482f30e57443cf2",
                 "shasum": ""
             },
             "require": {
@@ -1690,23 +1690,23 @@
             "require-dev": {
                 "doctrine\/doctrine-bundle": "^2.18|^3.0",
                 "doctrine\/orm": "^2.20|^3.0",
-                "phpecs\/phpecs": "^2.2",
+                "phpecs\/phpecs": "^2.3",
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "^2.1.14",
+                "phpstan\/phpstan": "^2.2",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
-                "phpunit\/phpunit": "^12.0",
-                "rector\/jack": "^0.5",
+                "phpunit\/phpunit": "^13.2",
+                "rector\/jack": "^1.0",
                 "rector\/rector-src": "dev-main",
-                "rector\/swiss-knife": "^2.3",
+                "rector\/swiss-knife": "^2.4",
                 "symplify\/phpstan-extensions": "^12.0",
-                "symplify\/phpstan-rules": "^14.9",
+                "symplify\/phpstan-rules": "^14.12",
                 "symplify\/vendor-patches": "^11.5",
                 "tomasvotruba\/class-leak": "^2.1",
                 "tomasvotruba\/type-coverage": "^2.3",
-                "tracy\/tracy": "^2.11"
+                "tracy\/tracy": "^2.12"
             },
-            "time": "2026-07-30T09:54:52+00:00",
+            "time": "2026-07-30T12:18:55+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1800,12 +1800,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "e902c4c97c1f4f7e8a3cf66db2c7e1b230f43c0f"
+                "reference": "d4878dd657c415b920187c510c2951c2e660eb49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/e902c4c97c1f4f7e8a3cf66db2c7e1b230f43c0f",
-                "reference": "e902c4c97c1f4f7e8a3cf66db2c7e1b230f43c0f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/d4878dd657c415b920187c510c2951c2e660eb49",
+                "reference": "d4878dd657c415b920187c510c2951c2e660eb49",
                 "shasum": ""
             },
             "require": {
@@ -1816,23 +1816,23 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.4",
-                "phpstan\/phpstan": "^2.1.38",
+                "phpstan\/phpstan": "^2.2",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
-                "phpunit\/phpunit": "^12.5",
-                "rector\/jack": "^0.5",
+                "phpunit\/phpunit": "^13.2",
+                "rector\/jack": "^1.0",
                 "rector\/rector-src": "dev-main",
-                "rector\/swiss-knife": "^2.3",
-                "symplify\/easy-coding-standard": "^13.0",
+                "rector\/swiss-knife": "^2.4",
+                "symplify\/easy-coding-standard": "^13.2",
                 "symplify\/phpstan-extensions": "^12.0",
-                "symplify\/phpstan-rules": "^14.9.11",
+                "symplify\/phpstan-rules": "^14.12",
                 "symplify\/vendor-patches": "^11.5",
                 "tomasvotruba\/class-leak": "^2.1",
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tomasvotruba\/unused-public": "^2.2",
-                "tracy\/tracy": "^2.11"
+                "tracy\/tracy": "^2.12"
             },
-            "time": "2026-07-30T09:54:32+00:00",
+            "time": "2026-07-30T12:18:59+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
