@@ -147,7 +147,6 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\ConditionalTypeForParameterMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ConditionalTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ConstantArrayTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\FloatTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\GenericClassStringTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\HasMethodTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\HasOffsetTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\HasOffsetValueTypeTypeMapper;
@@ -164,11 +163,9 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\OversizedArrayTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ParentStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ResourceTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\SelfObjectTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\StaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\StrictMixedTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\StringTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\ThisTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\TypeWithClassNameTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\VoidTypeMapper;
@@ -226,7 +223,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<TypeMapperInterface>>
      */
-    private const TYPE_MAPPER_CLASSES = [AccessoryLiteralStringTypeMapper::class, AccessoryNonEmptyStringTypeMapper::class, AccessoryNonFalsyStringTypeMapper::class, AccessoryNumericStringTypeMapper::class, ConstantArrayTypeMapper::class, ArrayTypeMapper::class, BooleanTypeMapper::class, CallableTypeMapper::class, ClassStringTypeMapper::class, ClosureTypeMapper::class, ConditionalTypeForParameterMapper::class, ConditionalTypeMapper::class, FloatTypeMapper::class, GenericClassStringTypeMapper::class, HasMethodTypeMapper::class, HasOffsetTypeMapper::class, HasOffsetValueTypeTypeMapper::class, HasPropertyTypeMapper::class, IntegerTypeMapper::class, IntersectionTypeMapper::class, IterableTypeMapper::class, MixedTypeMapper::class, NeverTypeMapper::class, NonEmptyArrayTypeMapper::class, NullTypeMapper::class, ObjectTypeMapper::class, ObjectWithoutClassTypeMapper::class, OversizedArrayTypeMapper::class, ParentStaticTypeMapper::class, ResourceTypeMapper::class, SelfObjectTypeMapper::class, StaticTypeMapper::class, StrictMixedTypeMapper::class, StringTypeMapper::class, ThisTypeMapper::class, TypeWithClassNameTypeMapper::class, UnionTypeMapper::class, VoidTypeMapper::class];
+    private const TYPE_MAPPER_CLASSES = [AccessoryLiteralStringTypeMapper::class, AccessoryNonEmptyStringTypeMapper::class, AccessoryNonFalsyStringTypeMapper::class, AccessoryNumericStringTypeMapper::class, ConstantArrayTypeMapper::class, ArrayTypeMapper::class, BooleanTypeMapper::class, CallableTypeMapper::class, ClassStringTypeMapper::class, ClosureTypeMapper::class, ConditionalTypeForParameterMapper::class, ConditionalTypeMapper::class, FloatTypeMapper::class, HasMethodTypeMapper::class, HasOffsetTypeMapper::class, HasOffsetValueTypeTypeMapper::class, HasPropertyTypeMapper::class, IntegerTypeMapper::class, IntersectionTypeMapper::class, IterableTypeMapper::class, MixedTypeMapper::class, NeverTypeMapper::class, NonEmptyArrayTypeMapper::class, NullTypeMapper::class, ObjectTypeMapper::class, ObjectWithoutClassTypeMapper::class, OversizedArrayTypeMapper::class, ParentStaticTypeMapper::class, ResourceTypeMapper::class, StaticTypeMapper::class, StrictMixedTypeMapper::class, StringTypeMapper::class, TypeWithClassNameTypeMapper::class, UnionTypeMapper::class, VoidTypeMapper::class];
     /**
      * @var array<class-string<PhpDocNodeDecoratorInterface>>
      */
@@ -293,7 +290,8 @@ final class LazyContainerFactory
             return $phpStanServicesFactory->createDynamicSourceLocatorProvider();
         });
         // resettable
-        $rectorConfig->tag(DynamicSourceLocatorProvider::class, ResettableInterface::class);
+        // DynamicSourceLocatorProvider is autotagged on its singleton() call above,
+        // as RectorConfig autotags ResettableInterface
         $rectorConfig->tag(RenamedClassesDataCollector::class, ResettableInterface::class);
         // caching
         $rectorConfig->singleton(Cache::class, static function (Container $container): Cache {
@@ -340,7 +338,6 @@ final class LazyContainerFactory
         $this->registerTagged($rectorConfig, self::NODE_NAME_RESOLVER_CLASSES, NodeNameResolverInterface::class);
         $this->registerTagged($rectorConfig, self::NODE_TYPE_RESOLVER_CLASSES, NodeTypeResolverInterface::class);
         $this->registerTagged($rectorConfig, self::OUTPUT_FORMATTER_CLASSES, OutputFormatterInterface::class);
-        $this->registerTagged($rectorConfig, self::BASE_PHP_DOC_NODE_VISITORS, BasePhpDocNodeVisitorInterface::class);
         $this->registerTagged($rectorConfig, self::CLASS_NAME_IMPORT_SKIPPER_CLASSES, ClassNameImportSkipVoterInterface::class);
         $rectorConfig->alias(SymfonyStyle::class, RectorStyle::class);
         $rectorConfig->singleton(SymfonyStyle::class, static function (Container $container): SymfonyStyle {
