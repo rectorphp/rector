@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9273ef9c31e7f9f96812c47453fb178e
+class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -1108,17 +1108,13 @@ class ComposerStaticInit9273ef9c31e7f9f96812c47453fb178e
         'RectorPrefix202607\\SebastianBergmann\\Diff\\Diff' => __DIR__ . '/..' . '/sebastian/diff/src/Diff.php',
         'RectorPrefix202607\\SebastianBergmann\\Diff\\Differ' => __DIR__ . '/..' . '/sebastian/diff/src/Differ.php',
         'RectorPrefix202607\\SebastianBergmann\\Diff\\Exception' => __DIR__ . '/..' . '/sebastian/diff/src/Exception/Exception.php',
-        'RectorPrefix202607\\SebastianBergmann\\Diff\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/diff/src/Exception/InvalidArgumentException.php',
         'RectorPrefix202607\\SebastianBergmann\\Diff\\Line' => __DIR__ . '/..' . '/sebastian/diff/src/Line.php',
-        'RectorPrefix202607\\SebastianBergmann\\Diff\\LongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/sebastian/diff/src/LongestCommonSubsequenceCalculator.php',
-        'RectorPrefix202607\\SebastianBergmann\\Diff\\MemoryEfficientLongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/sebastian/diff/src/MemoryEfficientLongestCommonSubsequenceCalculator.php',
-        'RectorPrefix202607\\SebastianBergmann\\Diff\\Output\\AbstractChunkOutputBuilder' => __DIR__ . '/..' . '/sebastian/diff/src/Output/AbstractChunkOutputBuilder.php',
+        'RectorPrefix202607\\SebastianBergmann\\Diff\\MyersDiff' => __DIR__ . '/..' . '/sebastian/diff/src/MyersDiff.php',
+        'RectorPrefix202607\\SebastianBergmann\\Diff\\NoMiddleSnakeFoundException' => __DIR__ . '/..' . '/sebastian/diff/src/Exception/NoMiddleSnakeFoundException.php',
         'RectorPrefix202607\\SebastianBergmann\\Diff\\Output\\DiffOnlyOutputBuilder' => __DIR__ . '/..' . '/sebastian/diff/src/Output/DiffOnlyOutputBuilder.php',
         'RectorPrefix202607\\SebastianBergmann\\Diff\\Output\\DiffOutputBuilderInterface' => __DIR__ . '/..' . '/sebastian/diff/src/Output/DiffOutputBuilderInterface.php',
         'RectorPrefix202607\\SebastianBergmann\\Diff\\Output\\StrictUnifiedDiffOutputBuilder' => __DIR__ . '/..' . '/sebastian/diff/src/Output/StrictUnifiedDiffOutputBuilder.php',
-        'RectorPrefix202607\\SebastianBergmann\\Diff\\Output\\UnifiedDiffOutputBuilder' => __DIR__ . '/..' . '/sebastian/diff/src/Output/UnifiedDiffOutputBuilder.php',
         'RectorPrefix202607\\SebastianBergmann\\Diff\\Parser' => __DIR__ . '/..' . '/sebastian/diff/src/Parser.php',
-        'RectorPrefix202607\\SebastianBergmann\\Diff\\TimeEfficientLongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/sebastian/diff/src/TimeEfficientLongestCommonSubsequenceCalculator.php',
         'RectorPrefix202607\\Symfony\\Component\\Console\\Application' => __DIR__ . '/..' . '/symfony/console/Application.php',
         'RectorPrefix202607\\Symfony\\Component\\Console\\Attribute\\AsCommand' => __DIR__ . '/..' . '/symfony/console/Attribute/AsCommand.php',
         'RectorPrefix202607\\Symfony\\Component\\Console\\CI\\GithubActionReporter' => __DIR__ . '/..' . '/symfony/console/CI/GithubActionReporter.php',
@@ -3343,9 +3339,9 @@ class ComposerStaticInit9273ef9c31e7f9f96812c47453fb178e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9273ef9c31e7f9f96812c47453fb178e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9273ef9c31e7f9f96812c47453fb178e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9273ef9c31e7f9f96812c47453fb178e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5::$classMap;
 
         }, null, ClassLoader::class);
     }

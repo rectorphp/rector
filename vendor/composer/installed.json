@@ -1928,31 +1928,31 @@
         },
         {
             "name": "sebastian\/diff",
-            "version": "7.0.0",
-            "version_normalized": "7.0.0.0",
+            "version": "9.0.0",
+            "version_normalized": "9.0.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sebastianbergmann\/diff.git",
-                "reference": "7ab1ea946c012266ca32390913653d844ecd085f"
+                "reference": "a3fb6a298a265ff487a91bbea46e03cd01dbb226"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sebastianbergmann\/diff\/zipball\/7ab1ea946c012266ca32390913653d844ecd085f",
-                "reference": "7ab1ea946c012266ca32390913653d844ecd085f",
+                "url": "https:\/\/api.github.com\/repos\/sebastianbergmann\/diff\/zipball\/a3fb6a298a265ff487a91bbea46e03cd01dbb226",
+                "reference": "a3fb6a298a265ff487a91bbea46e03cd01dbb226",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.3"
+                "php": ">=8.4"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^12.0",
-                "symfony\/process": "^7.2"
+                "phpunit\/phpunit": "^13.2",
+                "symfony\/process": "^7.4.13"
             },
-            "time": "2025-02-07T04:55:46+00:00",
+            "time": "2026-06-05T03:04:51+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "7.0-dev"
+                    "dev-main": "9.0-dev"
                 }
             },
             "installation-source": "dist",
@@ -1986,12 +1986,24 @@
             "support": {
                 "issues": "https:\/\/github.com\/sebastianbergmann\/diff\/issues",
                 "security": "https:\/\/github.com\/sebastianbergmann\/diff\/security\/policy",
-                "source": "https:\/\/github.com\/sebastianbergmann\/diff\/tree\/7.0.0"
+                "source": "https:\/\/github.com\/sebastianbergmann\/diff\/tree\/9.0.0"
             },
             "funding": [
                 {
                     "url": "https:\/\/github.com\/sebastianbergmann",
                     "type": "github"
+                },
+                {
+                    "url": "https:\/\/liberapay.com\/sebastianbergmann",
+                    "type": "liberapay"
+                },
+                {
+                    "url": "https:\/\/thanks.dev\/u\/gh\/sebastianbergmann",
+                    "type": "thanks_dev"
+                },
+                {
+                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/sebastian\/diff",
+                    "type": "tidelift"
                 }
             ],
             "install-path": "..\/sebastian\/diff"
