@@ -16,7 +16,7 @@
         "rector\/jack": "^1.0",
         "rector\/rector-src": "dev-main",
         "rector\/swiss-knife": "^2.4",
-        "symfony\/config": "^6.4",
+        "symfony\/config": "^8.1",
         "symfony\/dependency-injection": "^6.4",
         "symfony\/http-kernel": "^7.4",
         "symfony\/routing": "^6.4",

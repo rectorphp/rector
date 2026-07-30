@@ -1917,12 +1917,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "8f1570c6a0cd742c0156786d754078515aa18cb3"
+                "reference": "23c9185fa82d5436f8bddce88065482976f0d6c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/8f1570c6a0cd742c0156786d754078515aa18cb3",
-                "reference": "8f1570c6a0cd742c0156786d754078515aa18cb3",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/23c9185fa82d5436f8bddce88065482976f0d6c3",
+                "reference": "23c9185fa82d5436f8bddce88065482976f0d6c3",
                 "shasum": ""
             },
             "require": {
@@ -1938,7 +1938,7 @@
                 "rector\/jack": "^1.0",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.4",
-                "symfony\/config": "^6.4",
+                "symfony\/config": "^8.1",
                 "symfony\/dependency-injection": "^6.4",
                 "symfony\/http-kernel": "^7.4",
                 "symfony\/routing": "^6.4",
@@ -1954,7 +1954,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-07-30T12:18:04+00:00",
+            "time": "2026-07-30T14:18:06+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
