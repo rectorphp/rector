@@ -1,0 +1,17 @@
+{
+    "name": "anywherephp\/class-leak",
+    "description": "Detect leaking classes",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.2"
+    },
+    "bin": [
+        "bin\/class-leak",
+        "bin\/class-leak.php"
+    ],
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix202607\\TomasVotruba\\ClassLeak\\": "src"
+        }
+    }
+}

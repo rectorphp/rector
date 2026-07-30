@@ -4,15 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
+class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
         '606a39d89246991a373564698c2d8383' => __DIR__ . '/..' . '/symfony/polyfill-php85/bootstrap.php',
@@ -25,10 +22,7 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
             'Symplify\\RuleDocGenerator\\' => 26,
             'Symfony\\Polyfill\\Php85\\' => 23,
             'Symfony\\Polyfill\\Php84\\' => 23,
-            'Symfony\\Polyfill\\Mbstring\\' => 26,
-            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
-            'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
         'R' =>
         array (
@@ -40,6 +34,7 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
             'Rector\\Doctrine\\' => 16,
             'Rector\\' => 7,
             'RectorPrefix202607\\Webmozart\\Assert\\' => 36,
+            'RectorPrefix202607\\TomasVotruba\\ClassLeak\\' => 42,
             'RectorPrefix202607\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202607\\Symfony\\Contracts\\Service\\' => 45,
             'RectorPrefix202607\\Symfony\\Component\\Yaml\\' => 42,
@@ -64,6 +59,7 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
             'RectorPrefix202607\\Illuminate\\Container\\' => 40,
             'RectorPrefix202607\\Fidry\\CpuCoreCounter\\' => 40,
             'RectorPrefix202607\\Evenement\\' => 29,
+            'RectorPrefix202607\\Entropy\\' => 27,
             'RectorPrefix202607\\Doctrine\\Inflector\\' => 38,
             'RectorPrefix202607\\Composer\\XdebugHandler\\' => 42,
             'RectorPrefix202607\\Composer\\Semver\\' => 35,
@@ -90,21 +86,9 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php84',
         ),
-        'Symfony\\Polyfill\\Mbstring\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'Symfony\\Polyfill\\Intl\\Normalizer\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
-        ),
         'Symfony\\Polyfill\\Intl\\Grapheme\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
-        ),
-        'Symfony\\Polyfill\\Ctype\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
         'Rector\\Utils\\PHPStan\\' =>
         array (
@@ -143,6 +127,10 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
         'RectorPrefix202607\\Webmozart\\Assert\\' =>
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/tomasvotruba/class-leak/src',
         ),
         'RectorPrefix202607\\Symplify\\EasyParallel\\' =>
         array (
@@ -239,6 +227,10 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
         'RectorPrefix202607\\Evenement\\' =>
         array (
             0 => __DIR__ . '/..' . '/evenement/evenement/src',
+        ),
+        'RectorPrefix202607\\Entropy\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/entropy/entropy/src',
         ),
         'RectorPrefix202607\\Doctrine\\Inflector\\' =>
         array (
@@ -718,6 +710,49 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
         'RectorPrefix202607\\Doctrine\\Inflector\\Rules\\Word' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Word.php',
         'RectorPrefix202607\\Doctrine\\Inflector\\RulesetInflector' => __DIR__ . '/..' . '/doctrine/inflector/src/RulesetInflector.php',
         'RectorPrefix202607\\Doctrine\\Inflector\\WordInflector' => __DIR__ . '/..' . '/doctrine/inflector/src/WordInflector.php',
+        'RectorPrefix202607\\Entropy\\Attributes\\RelatedTest' => __DIR__ . '/..' . '/entropy/entropy/src/Attributes/RelatedTest.php',
+        'RectorPrefix202607\\Entropy\\Console\\CommandRegistry' => __DIR__ . '/..' . '/entropy/entropy/src/Console/CommandRegistry.php',
+        'RectorPrefix202607\\Entropy\\Console\\ConsoleApplication' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ConsoleApplication.php',
+        'RectorPrefix202607\\Entropy\\Console\\ConsoleTable\\ConsoleTable' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ConsoleTable/ConsoleTable.php',
+        'RectorPrefix202607\\Entropy\\Console\\ConsoleTable\\ValueObject\\TableRow' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ConsoleTable/ValueObject/TableRow.php',
+        'RectorPrefix202607\\Entropy\\Console\\ConsoleTable\\ValueObject\\TableView' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ConsoleTable/ValueObject/TableView.php',
+        'RectorPrefix202607\\Entropy\\Console\\ConsoleTable\\ViewRenderer' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ConsoleTable/ViewRenderer.php',
+        'RectorPrefix202607\\Entropy\\Console\\Contract\\CommandInterface' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Contract/CommandInterface.php',
+        'RectorPrefix202607\\Entropy\\Console\\Contract\\DefaultCommandInterface' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Contract/DefaultCommandInterface.php',
+        'RectorPrefix202607\\Entropy\\Console\\Contract\\HiddenCommandInterface' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Contract/HiddenCommandInterface.php',
+        'RectorPrefix202607\\Entropy\\Console\\Enum\\Color' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Enum/Color.php',
+        'RectorPrefix202607\\Entropy\\Console\\Enum\\ExitCode' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Enum/ExitCode.php',
+        'RectorPrefix202607\\Entropy\\Console\\Exception\\ConsoleInputMappingException' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Exception/ConsoleInputMappingException.php',
+        'RectorPrefix202607\\Entropy\\Console\\Exception\\InvalidCommandException' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Exception/InvalidCommandException.php',
+        'RectorPrefix202607\\Entropy\\Console\\Input\\InputParser' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Input/InputParser.php',
+        'RectorPrefix202607\\Entropy\\Console\\Mapper\\CLIRequestMapper' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Mapper/CLIRequestMapper.php',
+        'RectorPrefix202607\\Entropy\\Console\\Mapper\\CommandRunParametersMapper' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Mapper/CommandRunParametersMapper.php',
+        'RectorPrefix202607\\Entropy\\Console\\Output\\CommandHelpFactory' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Output/CommandHelpFactory.php',
+        'RectorPrefix202607\\Entropy\\Console\\Output\\HelpPrinter' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Output/HelpPrinter.php',
+        'RectorPrefix202607\\Entropy\\Console\\Output\\OutputColorizer' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Output/OutputColorizer.php',
+        'RectorPrefix202607\\Entropy\\Console\\Output\\OutputPrinter' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Output/OutputPrinter.php',
+        'RectorPrefix202607\\Entropy\\Console\\Output\\ProgressBar' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Output/ProgressBar.php',
+        'RectorPrefix202607\\Entropy\\Console\\Terminal\\Terminal' => __DIR__ . '/..' . '/entropy/entropy/src/Console/Terminal/Terminal.php',
+        'RectorPrefix202607\\Entropy\\Console\\ValueObject\\Argument' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ValueObject/Argument.php',
+        'RectorPrefix202607\\Entropy\\Console\\ValueObject\\ArgumentsAndOptions' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ValueObject/ArgumentsAndOptions.php',
+        'RectorPrefix202607\\Entropy\\Console\\ValueObject\\CLIRequest' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ValueObject/CLIRequest.php',
+        'RectorPrefix202607\\Entropy\\Console\\ValueObject\\Option' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ValueObject/Option.php',
+        'RectorPrefix202607\\Entropy\\Container\\Autodiscovery' => __DIR__ . '/..' . '/entropy/entropy/src/Container/Autodiscovery.php',
+        'RectorPrefix202607\\Entropy\\Container\\Container' => __DIR__ . '/..' . '/entropy/entropy/src/Container/Container.php',
+        'RectorPrefix202607\\Entropy\\Container\\Exception\\CreateServiceException' => __DIR__ . '/..' . '/entropy/entropy/src/Container/Exception/CreateServiceException.php',
+        'RectorPrefix202607\\Entropy\\Container\\Exception\\RegisterServiceException' => __DIR__ . '/..' . '/entropy/entropy/src/Container/Exception/RegisterServiceException.php',
+        'RectorPrefix202607\\Entropy\\FileSystem\\Exception\\FileSystemException' => __DIR__ . '/..' . '/entropy/entropy/src/FileSystem/Exception/FileSystemException.php',
+        'RectorPrefix202607\\Entropy\\FileSystem\\FileFinder' => __DIR__ . '/..' . '/entropy/entropy/src/FileSystem/FileFinder.php',
+        'RectorPrefix202607\\Entropy\\Reflection\\ClassNameResolver' => __DIR__ . '/..' . '/entropy/entropy/src/Reflection/ClassNameResolver.php',
+        'RectorPrefix202607\\Entropy\\Reflection\\ParameterDescriptionResolver' => __DIR__ . '/..' . '/entropy/entropy/src/Reflection/ParameterDescriptionResolver.php',
+        'RectorPrefix202607\\Entropy\\Reflection\\ParameterOptionMarkerResolver' => __DIR__ . '/..' . '/entropy/entropy/src/Reflection/ParameterOptionMarkerResolver.php',
+        'RectorPrefix202607\\Entropy\\Reflection\\ParameterTypesResolver' => __DIR__ . '/..' . '/entropy/entropy/src/Reflection/ParameterTypesResolver.php',
+        'RectorPrefix202607\\Entropy\\Reflection\\UseStatementsResolver' => __DIR__ . '/..' . '/entropy/entropy/src/Reflection/UseStatementsResolver.php',
+        'RectorPrefix202607\\Entropy\\Utils\\FileSystem' => __DIR__ . '/..' . '/entropy/entropy/src/Utils/FileSystem.php',
+        'RectorPrefix202607\\Entropy\\Utils\\FuzzyMatcher' => __DIR__ . '/..' . '/entropy/entropy/src/Utils/FuzzyMatcher.php',
+        'RectorPrefix202607\\Entropy\\Utils\\Json' => __DIR__ . '/..' . '/entropy/entropy/src/Utils/Json.php',
+        'RectorPrefix202607\\Entropy\\Utils\\Regex' => __DIR__ . '/..' . '/entropy/entropy/src/Utils/Regex.php',
+        'RectorPrefix202607\\Entropy\\Utils\\Strings' => __DIR__ . '/..' . '/entropy/entropy/src/Utils/Strings.php',
         'RectorPrefix202607\\Evenement\\EventEmitter' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitter.php',
         'RectorPrefix202607\\Evenement\\EventEmitterInterface' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitterInterface.php',
         'RectorPrefix202607\\Evenement\\EventEmitterTrait' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitterTrait.php',
@@ -977,7 +1012,6 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
         'RectorPrefix202607\\Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202607\\Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
         'RectorPrefix202607\\NoDiscard' => __DIR__ . '/..' . '/symfony/polyfill-php85/Resources/stubs/NoDiscard.php',
-        'RectorPrefix202607\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'RectorPrefix202607\\OndraM\\CiDetector\\CiDetector' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetector.php',
         'RectorPrefix202607\\OndraM\\CiDetector\\CiDetectorInterface' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetectorInterface.php',
         'RectorPrefix202607\\OndraM\\CiDetector\\Ci\\AbstractCi' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/AbstractCi.php',
@@ -1331,6 +1365,22 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
         'RectorPrefix202607\\Symplify\\EasyParallel\\ValueObject\\ParallelProcess' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ParallelProcess.php',
         'RectorPrefix202607\\Symplify\\EasyParallel\\ValueObject\\ProcessPool' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ProcessPool.php',
         'RectorPrefix202607\\Symplify\\EasyParallel\\ValueObject\\Schedule' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/Schedule.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\ClassNameResolver' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ClassNameResolver.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\Commands\\CheckCommand' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Commands/CheckCommand.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\DependencyInjection\\ContainerFactory' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/DependencyInjection/ContainerFactory.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\FileSystem\\StaticRelativeFilePathHelper' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/FileSystem/StaticRelativeFilePathHelper.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\Filtering\\PossiblyUnusedClassesFilter' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Filtering/PossiblyUnusedClassesFilter.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\Finder\\ClassNamesFinder' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Finder/ClassNamesFinder.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\Finder\\PhpFilesFinder' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Finder/PhpFilesFinder.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\NodeDecorator\\FullyQualifiedNameNodeDecorator' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/NodeDecorator/FullyQualifiedNameNodeDecorator.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\NodeVisitor\\ClassNameNodeVisitor' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/NodeVisitor/ClassNameNodeVisitor.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\NodeVisitor\\UsedClassNodeVisitor' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/NodeVisitor/UsedClassNodeVisitor.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\Reporting\\UnusedClassReporter' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Reporting/UnusedClassReporter.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\Reporting\\UnusedClassesResultFactory' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Reporting/UnusedClassesResultFactory.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\UseImportsResolver' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/UseImportsResolver.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\ValueObject\\ClassNames' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ValueObject/ClassNames.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\ValueObject\\FileWithClass' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ValueObject/FileWithClass.php',
+        'RectorPrefix202607\\TomasVotruba\\ClassLeak\\ValueObject\\UnusedClassesResult' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ValueObject/UnusedClassesResult.php',
         'RectorPrefix202607\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix202607\\Webmozart\\Assert\\HasAssert' => __DIR__ . '/..' . '/webmozart/assert/src/HasAssert.php',
         'RectorPrefix202607\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
@@ -3315,10 +3365,7 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
         'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
         'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
-        'Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',
         'Symfony\\Polyfill\\Intl\\Grapheme\\Grapheme' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/Grapheme.php',
-        'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
-        'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'Symfony\\Polyfill\\Php84\\Php84' => __DIR__ . '/..' . '/symfony/polyfill-php84/Php84.php',
         'Symfony\\Polyfill\\Php85\\Php85' => __DIR__ . '/..' . '/symfony/polyfill-php85/Php85.php',
         'Symplify\\RuleDocGenerator\\Contract\\Category\\CategoryInfererInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/Category/CategoryInfererInterface.php',
@@ -3339,9 +3386,9 @@ class ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfb0503b03fb61e516b10c5f65078bad5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita8c6b66c22937a4067be5bebe2caf769::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita8c6b66c22937a4067be5bebe2caf769::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita8c6b66c22937a4067be5bebe2caf769::$classMap;
 
         }, null, ClassLoader::class);
     }

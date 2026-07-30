@@ -1,0 +1,20 @@
+parameters:
+    level: 8
+
+    errorFormat: symplify
+    reportUnmatchedIgnoredErrors: false
+
+    paths:
+        - bin
+        - src
+        - tests
+
+    excludePaths:
+        - */Fixture/*
+        - */Source/*
+
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        # enum error type
+        - '#Method TomasVotruba\\ClassLeak\\Reporting\\UnusedClassReporter::reportResult\(\) never returns 2 so it can be removed from the return type#'

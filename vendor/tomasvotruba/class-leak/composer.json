@@ -1,0 +1,56 @@
+{
+    "name": "tomasvotruba\/class-leak",
+    "description": "Detect leaking classes",
+    "license": "MIT",
+    "bin": [
+        "bin\/class-leak",
+        "bin\/class-leak.php"
+    ],
+    "require": {
+        "php": ">=8.4",
+        "entropy\/entropy": "^0.4.6",
+        "nette\/utils": "^4.1",
+        "nikic\/php-parser": "^5.7",
+        "symfony\/finder": "^7.4|^8.0",
+        "webmozart\/assert": "^2.0"
+    },
+    "require-dev": {
+        "symplify\/easy-coding-standard": "^13.0",
+        "phpstan\/extension-installer": "^1.4",
+        "phpstan\/phpstan": "^2.2",
+        "phpunit\/phpunit": "^13.0",
+        "rector\/jack": "^1.0",
+        "rector\/rector": "^2.4",
+        "symplify\/phpstan-extensions": "^12",
+        "tomasvotruba\/unused-public": "^2.2",
+        "tracy\/tracy": "^2.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix202607\\TomasVotruba\\ClassLeak\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix202607\\TomasVotruba\\ClassLeak\\Tests\\": "tests"
+        }
+    },
+    "replace": {
+        "symfony\/polyfill-ctype": "*",
+        "symfony\/polyfill-intl-normalizer": "*",
+        "symfony\/polyfill-mbstring": "*"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform-check": false,
+        "allow-plugins": {
+            "phpstan\/extension-installer": true
+        }
+    },
+    "scripts": {
+        "check-cs": "vendor\/bin\/ecs check --ansi",
+        "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
+        "phpstan": "vendor\/bin\/phpstan analyse --ansi",
+        "rector": "vendor\/bin\/rector process --dry-run --ansi"
+    }
+}

@@ -389,6 +389,59 @@
             "install-path": "..\/doctrine\/inflector"
         },
         {
+            "name": "entropy\/entropy",
+            "version": "0.4.6",
+            "version_normalized": "0.4.6.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/TomasVotruba\/entropy.git",
+                "reference": "415f69258150409db7c36aa747923e28aa53e9f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/415f69258150409db7c36aa747923e28aa53e9f6",
+                "reference": "415f69258150409db7c36aa747923e28aa53e9f6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": "^8.4",
+                "webmozart\/assert": "^2.4"
+            },
+            "require-dev": {
+                "phpstan\/extension-installer": "^1.4",
+                "phpstan\/phpstan": "^2.1",
+                "phpunit\/phpunit": "^12.5",
+                "rector\/jack": "^1.0",
+                "rector\/rector": "^2.4",
+                "rector\/swiss-knife": "^2.4",
+                "shipmonk\/composer-dependency-analyser": "^1.8",
+                "symplify\/easy-coding-standard": "^13.1",
+                "symplify\/phpstan-rules": "^14.10",
+                "tomasvotruba\/type-coverage": "^2.2",
+                "tomasvotruba\/unused-public": "^2.2",
+                "tracy\/tracy": "^2.12"
+            },
+            "time": "2026-06-20T10:04:38+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix202607\\Entropy\\": "src"
+                }
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "proprietary"
+            ],
+            "description": "Entropy framework",
+            "support": {
+                "issues": "https:\/\/github.com\/TomasVotruba\/entropy\/issues",
+                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.6"
+            },
+            "install-path": "..\/entropy\/entropy"
+        },
+        {
             "name": "evenement\/evenement",
             "version": "v3.0.2",
             "version_normalized": "3.0.2.0",
@@ -2185,28 +2238,29 @@
         },
         {
             "name": "symfony\/filesystem",
-            "version": "v7.4.15",
-            "version_normalized": "7.4.15.0",
+            "version": "v8.1.2",
+            "version_normalized": "8.1.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/filesystem.git",
-                "reference": "ff16a16bf87fdf264638b8f6995b3515975e3c79"
+                "reference": "17856b7a222664a26a5ea1cb06ee0721c2438217"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/ff16a16bf87fdf264638b8f6995b3515975e3c79",
-                "reference": "ff16a16bf87fdf264638b8f6995b3515975e3c79",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/17856b7a222664a26a5ea1cb06ee0721c2438217",
+                "reference": "17856b7a222664a26a5ea1cb06ee0721c2438217",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2",
+                "php": ">=8.4.1",
+                "symfony\/deprecation-contracts": "^2.5|^3",
                 "symfony\/polyfill-ctype": "~1.8",
                 "symfony\/polyfill-mbstring": "~1.8"
             },
             "require-dev": {
-                "symfony\/process": "^6.4|^7.0|^8.0"
+                "symfony\/process": "^7.4|^8.0"
             },
-            "time": "2026-07-22T07:36:05+00:00",
+            "time": "2026-07-22T15:42:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2234,7 +2288,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v7.4.15"
+                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v8.1.2"
             },
             "funding": [
                 {
@@ -2258,26 +2312,26 @@
         },
         {
             "name": "symfony\/finder",
-            "version": "v6.4.42",
-            "version_normalized": "6.4.42.0",
+            "version": "v8.1.1",
+            "version_normalized": "8.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/finder.git",
-                "reference": "0b73dac42493acbadbba644207a715b254e9b029"
+                "reference": "e2989e762c70f9490fa3a00a0ac0fae5aa97a531"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/0b73dac42493acbadbba644207a715b254e9b029",
-                "reference": "0b73dac42493acbadbba644207a715b254e9b029",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/e2989e762c70f9490fa3a00a0ac0fae5aa97a531",
+                "reference": "e2989e762c70f9490fa3a00a0ac0fae5aa97a531",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.4.1"
             },
             "require-dev": {
-                "symfony\/filesystem": "^6.0|^7.0"
+                "symfony\/filesystem": "^7.4|^8.0"
             },
-            "time": "2026-06-26T15:18:24+00:00",
+            "time": "2026-06-27T09:05:56+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2305,7 +2359,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.4.42"
+                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v8.1.1"
             },
             "funding": [
                 {
@@ -2326,92 +2380,6 @@
                 }
             ],
             "install-path": "..\/symfony\/finder"
-        },
-        {
-            "name": "symfony\/polyfill-ctype",
-            "version": "v1.37.0",
-            "version_normalized": "1.37.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/polyfill-ctype.git",
-                "reference": "141046a8f9477948ff284fa65be2095baafb94f2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-ctype\/zipball\/141046a8f9477948ff284fa65be2095baafb94f2",
-                "reference": "141046a8f9477948ff284fa65be2095baafb94f2",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "provide": {
-                "ext-ctype": "*"
-            },
-            "suggest": {
-                "ext-ctype": "For best performance"
-            },
-            "time": "2026-04-10T16:19:22+00:00",
-            "type": "library",
-            "extra": {
-                "thanks": {
-                    "url": "https:\/\/github.com\/symfony\/polyfill",
-                    "name": "symfony\/polyfill"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Ctype\\": ""
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Symfony polyfill for ctype functions",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "compatibility",
-                "ctype",
-                "polyfill",
-                "portable"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-ctype\/tree\/v1.37.0"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/polyfill-ctype"
         },
         {
             "name": "symfony\/polyfill-intl-grapheme",
@@ -2497,182 +2465,6 @@
                 }
             ],
             "install-path": "..\/symfony\/polyfill-intl-grapheme"
-        },
-        {
-            "name": "symfony\/polyfill-intl-normalizer",
-            "version": "v1.38.0",
-            "version_normalized": "1.38.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer.git",
-                "reference": "2d446c214bdbe5b71bde5011b060a05fece3ae6b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-intl-normalizer\/zipball\/2d446c214bdbe5b71bde5011b060a05fece3ae6b",
-                "reference": "2d446c214bdbe5b71bde5011b060a05fece3ae6b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "suggest": {
-                "ext-intl": "For best performance"
-            },
-            "time": "2026-05-25T13:48:31+00:00",
-            "type": "library",
-            "extra": {
-                "thanks": {
-                    "url": "https:\/\/github.com\/symfony\/polyfill",
-                    "name": "symfony\/polyfill"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
-                },
-                "classmap": [
-                    "Resources\/stubs"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Symfony polyfill for intl's Normalizer class and related functions",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "compatibility",
-                "intl",
-                "normalizer",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-intl-normalizer\/tree\/v1.38.0"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/polyfill-intl-normalizer"
-        },
-        {
-            "name": "symfony\/polyfill-mbstring",
-            "version": "v1.38.2",
-            "version_normalized": "1.38.2.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/polyfill-mbstring.git",
-                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-mbstring\/zipball\/d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
-                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
-                "shasum": ""
-            },
-            "require": {
-                "ext-iconv": "*",
-                "php": ">=7.2"
-            },
-            "provide": {
-                "ext-mbstring": "*"
-            },
-            "suggest": {
-                "ext-mbstring": "For best performance"
-            },
-            "time": "2026-05-27T06:59:30+00:00",
-            "type": "library",
-            "extra": {
-                "thanks": {
-                    "url": "https:\/\/github.com\/symfony\/polyfill",
-                    "name": "symfony\/polyfill"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Mbstring\\": ""
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Symfony polyfill for the Mbstring extension",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "compatibility",
-                "mbstring",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-mbstring\/tree\/v1.38.2"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/polyfill-mbstring"
         },
         {
             "name": "symfony\/polyfill-php84",
@@ -2842,23 +2634,23 @@
         },
         {
             "name": "symfony\/process",
-            "version": "v7.4.13",
-            "version_normalized": "7.4.13.0",
+            "version": "v8.1.0",
+            "version_normalized": "8.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/process.git",
-                "reference": "f5804be144caceb570f6747519999636b664f24c"
+                "reference": "c4a9e58f235a6bf7f97ffbfedae2687353ac79e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/f5804be144caceb570f6747519999636b664f24c",
-                "reference": "f5804be144caceb570f6747519999636b664f24c",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/c4a9e58f235a6bf7f97ffbfedae2687353ac79e5",
+                "reference": "c4a9e58f235a6bf7f97ffbfedae2687353ac79e5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2"
+                "php": ">=8.4.1"
             },
-            "time": "2026-05-23T16:05:06+00:00",
+            "time": "2026-05-29T05:06:50+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2886,7 +2678,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/process\/tree\/v7.4.13"
+                "source": "https:\/\/github.com\/symfony\/process\/tree\/v8.1.0"
             },
             "funding": [
                 {
@@ -3293,6 +3085,78 @@
                 }
             ],
             "install-path": "..\/symplify\/rule-doc-generator-contracts"
+        },
+        {
+            "name": "tomasvotruba\/class-leak",
+            "version": "2.1.8",
+            "version_normalized": "2.1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/TomasVotruba\/class-leak.git",
+                "reference": "3ebe4d7bebfb40ab3a85a36431821367b0ac57ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/class-leak\/zipball\/3ebe4d7bebfb40ab3a85a36431821367b0ac57ab",
+                "reference": "3ebe4d7bebfb40ab3a85a36431821367b0ac57ab",
+                "shasum": ""
+            },
+            "require": {
+                "entropy\/entropy": "^0.4.6",
+                "nette\/utils": "^4.1",
+                "nikic\/php-parser": "^5.7",
+                "php": ">=8.4",
+                "symfony\/finder": "^7.4|^8.0",
+                "webmozart\/assert": "^2.0"
+            },
+            "replace": {
+                "symfony\/polyfill-ctype": "*",
+                "symfony\/polyfill-intl-normalizer": "*",
+                "symfony\/polyfill-mbstring": "*"
+            },
+            "require-dev": {
+                "phpstan\/extension-installer": "^1.4",
+                "phpstan\/phpstan": "^2.2",
+                "phpunit\/phpunit": "^13.0",
+                "rector\/jack": "^1.0",
+                "rector\/rector": "^2.4",
+                "symplify\/easy-coding-standard": "^13.0",
+                "symplify\/phpstan-extensions": "^12",
+                "tomasvotruba\/unused-public": "^2.2",
+                "tracy\/tracy": "^2.12"
+            },
+            "time": "2026-06-20T16:19:43+00:00",
+            "bin": [
+                "bin\/class-leak",
+                "bin\/class-leak.php"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix202607\\TomasVotruba\\ClassLeak\\": "src"
+                }
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Detect leaking classes",
+            "support": {
+                "issues": "https:\/\/github.com\/TomasVotruba\/class-leak\/issues",
+                "source": "https:\/\/github.com\/TomasVotruba\/class-leak\/tree\/2.1.8"
+            },
+            "funding": [
+                {
+                    "url": "https:\/\/www.paypal.me\/rectorphp",
+                    "type": "custom"
+                },
+                {
+                    "url": "https:\/\/github.com\/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "install-path": "..\/tomasvotruba\/class-leak"
         },
         {
             "name": "webmozart\/assert",
