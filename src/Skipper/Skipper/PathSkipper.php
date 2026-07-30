@@ -27,12 +27,11 @@ final class PathSkipper
     }
     public function shouldSkip(string $filePath): bool
     {
-        foreach ($this->skippedPathsResolver->resolve() as $skippedPath) {
-            if ($this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, [$skippedPath])) {
-                $this->usedSkipCollector->markUsed($skippedPath);
-                return \true;
-            }
+        $matchedPath = $this->fileInfoMatcher->matchPattern($filePath, $this->skippedPathsResolver->resolve());
+        if ($matchedPath === null) {
+            return \false;
         }
-        return \false;
+        $this->usedSkipCollector->markUsed($matchedPath);
+        return \true;
     }
 }

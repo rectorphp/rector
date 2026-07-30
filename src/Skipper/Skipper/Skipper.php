@@ -4,9 +4,10 @@ declare (strict_types=1);
 namespace Rector\Skipper\Skipper;
 
 use PhpParser\Node;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ProcessAnalyzer\RectifiedAnalyzer;
-use Rector\Skipper\SkipVoter\ClassSkipVoter;
+use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Skipper\ValueObject\SkipMatch;
 /**
  * @api
@@ -25,16 +26,26 @@ final class Skipper
     /**
      * @readonly
      */
-    private ClassSkipVoter $classSkipVoter;
+    private \Rector\Skipper\Skipper\SkipSkipper $skipSkipper;
+    /**
+     * @readonly
+     */
+    private SkippedClassResolver $skippedClassResolver;
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
      */
     private \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector;
-    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, ClassSkipVoter $classSkipVoter, \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector)
+    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, \Rector\Skipper\Skipper\SkipSkipper $skipSkipper, SkippedClassResolver $skippedClassResolver, ReflectionProvider $reflectionProvider, \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector)
     {
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->pathSkipper = $pathSkipper;
-        $this->classSkipVoter = $classSkipVoter;
+        $this->skipSkipper = $skipSkipper;
+        $this->skippedClassResolver = $skippedClassResolver;
+        $this->reflectionProvider = $reflectionProvider;
         $this->usedSkipCollector = $usedSkipCollector;
     }
     /**
@@ -67,10 +78,10 @@ final class Skipper
      */
     public function matchSkip($element, string $filePath): ?SkipMatch
     {
-        if (!$this->classSkipVoter->match($element)) {
+        if (!is_object($element) && !$this->reflectionProvider->hasClass($element)) {
             return null;
         }
-        return $this->classSkipVoter->matchSkip($element, $filePath);
+        return $this->skipSkipper->match($element, $filePath, $this->skippedClassResolver->resolve());
     }
     public function markSkipUsed(SkipMatch $skipMatch): void
     {

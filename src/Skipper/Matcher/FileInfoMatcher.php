@@ -3,40 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Skipper\Matcher;
 
-use Rector\Skipper\FileSystem\FnMatchPathNormalizer;
 use Rector\Skipper\FileSystem\PathNormalizer;
-use Rector\Skipper\Fnmatcher;
-use Rector\Skipper\RealpathMatcher;
 /**
  * @see \Rector\Tests\Skipper\Matcher\FileInfoMatcherTest
  */
 final class FileInfoMatcher
 {
-    /**
-     * @readonly
-     */
-    private FnMatchPathNormalizer $fnMatchPathNormalizer;
-    /**
-     * @readonly
-     */
-    private Fnmatcher $fnmatcher;
-    /**
-     * @readonly
-     */
-    private RealpathMatcher $realpathMatcher;
-    public function __construct(FnMatchPathNormalizer $fnMatchPathNormalizer, Fnmatcher $fnmatcher, RealpathMatcher $realpathMatcher)
-    {
-        $this->fnMatchPathNormalizer = $fnMatchPathNormalizer;
-        $this->fnmatcher = $fnmatcher;
-        $this->realpathMatcher = $realpathMatcher;
-    }
-    /**
-     * @param string[] $filePatterns
-     */
-    public function doesFileInfoMatchPatterns(string $filePath, array $filePatterns): bool
-    {
-        return $this->matchPattern($filePath, $filePatterns) !== null;
-    }
     /**
      * Returns the original (un-normalized) pattern that matched, so callers can report the exact
      * configured path. Returns null when no pattern matches.
@@ -63,7 +35,7 @@ final class FileInfoMatcher
         if ($filePath === $ignoredPath) {
             return \true;
         }
-        $ignoredPath = $this->fnMatchPathNormalizer->normalizeForFnmatch($ignoredPath);
+        $ignoredPath = $this->normalizeForFnmatch($ignoredPath);
         if ($ignoredPath === '') {
             return \false;
         }
@@ -73,9 +45,51 @@ final class FileInfoMatcher
         if (substr_compare($filePath, $ignoredPath, -strlen($ignoredPath)) === 0) {
             return \true;
         }
-        if ($this->fnmatcher->match($ignoredPath, $filePath)) {
+        if ($this->matchFnmatch($ignoredPath, $filePath)) {
             return \true;
         }
-        return $this->realpathMatcher->match($ignoredPath, $filePath);
+        return $this->matchRealpath($ignoredPath, $filePath);
+    }
+    private function normalizeForFnmatch(string $path): string
+    {
+        if (substr_compare($path, '*', -strlen('*')) === 0 || strncmp($path, '*', strlen('*')) === 0) {
+            return '*' . trim($path, '*') . '*';
+        }
+        if (strpos($path, '..') !== \false) {
+            $realPath = realpath($path);
+            if ($realPath === \false) {
+                return '';
+            }
+            return PathNormalizer::normalize($realPath);
+        }
+        return $path;
+    }
+    private function matchFnmatch(string $matchingPath, string $filePath): bool
+    {
+        if (fnmatch($matchingPath, $filePath)) {
+            return \true;
+        }
+        // in case of relative compare
+        return fnmatch('*/' . $matchingPath, $filePath);
+    }
+    private function matchRealpath(string $matchingPath, string $filePath): bool
+    {
+        $realPathMatchingPath = realpath($matchingPath);
+        if ($realPathMatchingPath === \false) {
+            return \false;
+        }
+        $realpathFilePath = realpath($filePath);
+        if ($realpathFilePath === \false) {
+            return \false;
+        }
+        $normalizedMatchingPath = PathNormalizer::normalize($realPathMatchingPath);
+        $normalizedFilePath = PathNormalizer::normalize($realpathFilePath);
+        // skip define direct path exactly equal
+        if ($normalizedMatchingPath === $normalizedFilePath) {
+            return \true;
+        }
+        // ensure add / suffix to ensure no same prefix directory
+        $suffixedMatchingPath = rtrim($normalizedMatchingPath, '/') . '/';
+        return strncmp($normalizedFilePath, $suffixedMatchingPath, strlen($suffixedMatchingPath)) === 0;
     }
 }
