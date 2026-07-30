@@ -55,7 +55,7 @@ final class FilePathHelper
             $scheme = self::SCHEME_UNDEFINED;
             $path = $originalPath;
         }
-        $normalizedPath = PathNormalizer::normalize((string) $path);
+        $normalizedPath = PathNormalizer::normalize($path);
         $path = Strings::replace($normalizedPath, self::TWO_AND_MORE_SLASHES_REGEX, '/');
         $pathRoot = strncmp($path, '/', strlen('/')) === 0 ? $directorySeparator : '';
         $pathParts = explode('/', trim($path, '/'));
