@@ -38,6 +38,14 @@ final class RectorConfig extends Container
      */
     private array $ruleConfigurations = [];
     /**
+     * @var array<class-string<RectorInterface>, true>
+     */
+    private array $registeredRectorClasses = [];
+    /**
+     * @var array<string, true>
+     */
+    private array $registeredComposerBoundRuleConfigurations = [];
+    /**
      * @var string[]
      */
     private array $autotagInterfaces = [Command::class, ResettableInterface::class];
@@ -157,8 +165,6 @@ final class RectorConfig extends Container
             $ruleConfiguration = $this->ruleConfigurations[$rectorClass];
             $configurableRector->configure($ruleConfiguration);
         });
-        // for cache invalidation in case of sets change
-        SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
     }
     /**
      * Register the rule configuration only if the package version installed in the analysed project satisfies
@@ -172,8 +178,13 @@ final class RectorConfig extends Container
     {
         $packageVersion = $this->resolveInstalledPackageVersion($packageName);
         $isActive = $packageVersion !== null && Semver::satisfies($packageVersion, $versionConstraint);
-        // reported by the "composer-based" command, the inactive ones as well
-        SimpleParameterProvider::addParameter(Option::COMPOSER_BOUND_RULE_CONFIGURATIONS, [new ComposerBoundRuleConfiguration($rectorClass, $packageName, $versionConstraint, $configuration, $isActive)]);
+        // the same rule configuration can be registered by multiple sets, report it only once
+        $configurationKey = $rectorClass . '|' . $packageName . '|' . $versionConstraint . '|' . serialize($configuration);
+        if (!isset($this->registeredComposerBoundRuleConfigurations[$configurationKey])) {
+            $this->registeredComposerBoundRuleConfigurations[$configurationKey] = \true;
+            // reported by the "composer-based" command, the inactive ones as well
+            SimpleParameterProvider::addParameter(Option::COMPOSER_BOUND_RULE_CONFIGURATIONS, [new ComposerBoundRuleConfiguration($rectorClass, $packageName, $versionConstraint, $configuration, $isActive)]);
+        }
         if (!$isActive) {
             return;
         }
@@ -187,9 +198,14 @@ final class RectorConfig extends Container
         Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
         $this->singleton($rectorClass);
-        $this->tag($rectorClass, RectorInterface::class);
-        // for cache invalidation in case of change
-        SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
+        // the same rule can be registered by multiple sets, tag it only once,
+        // otherwise it is run twice on every node and listed twice in the reports
+        if (!isset($this->registeredRectorClasses[$rectorClass])) {
+            $this->registeredRectorClasses[$rectorClass] = \true;
+            $this->tag($rectorClass, RectorInterface::class);
+            // for cache invalidation in case of change
+            SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
+        }
         if (is_a($rectorClass, RelatedConfigInterface::class, \true)) {
             $configFile = $rectorClass::getConfigFile();
             Assert::file($configFile, sprintf('The config path "%s" in "%s::getConfigFile()" could not be found', $configFile, $rectorClass));
@@ -344,6 +360,8 @@ final class RectorConfig extends Container
     public function resetRuleConfigurations(): void
     {
         $this->ruleConfigurations = [];
+        $this->registeredRectorClasses = [];
+        $this->registeredComposerBoundRuleConfigurations = [];
     }
     /**
      * Compiler passes-like method

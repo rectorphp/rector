@@ -299,6 +299,11 @@ final class Option
      */
     public const COMPOSER_BOUND_RULE_CONFIGURATIONS = 'composer_bound_rule_configurations';
     /**
+     * Run only rules bound to an installed composer package version
+     * @var string
+     */
+    public const COMPOSER_BASED = 'composer-based';
+    /**
      * @internal To filter files by specific suffix
      * @var string
      */

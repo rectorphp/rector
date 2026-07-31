@@ -85,11 +85,15 @@ final class Configuration
      */
     private bool $showRulesSummary = \false;
     /**
+     * @readonly
+     */
+    private bool $isComposerBased = \false;
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      * @param LevelOverflow[] $levelOverflows
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [], bool $showRulesSummary = \false)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [], bool $showRulesSummary = \false, bool $isComposerBased = \false)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -108,6 +112,11 @@ final class Configuration
         $this->onlySuffix = $onlySuffix;
         $this->levelOverflows = $levelOverflows;
         $this->showRulesSummary = $showRulesSummary;
+        $this->isComposerBased = $isComposerBased;
+    }
+    public function isComposerBased(): bool
+    {
+        return $this->isComposerBased;
     }
     public function isDryRun(): bool
     {
