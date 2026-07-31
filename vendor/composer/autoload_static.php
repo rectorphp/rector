@@ -2354,7 +2354,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertInstanceOfComparisonRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertInstanceOfComparisonRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertIssetToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertIssetToSpecificMethodRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertNotOperatorRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertNotOperatorRector.php',
-        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertPropertyExistsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertPropertyExistsRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertThatToDirectAssertRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertThatToDirectAssertRector.php',

@@ -2097,7 +2097,6 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertInstanceOfComparisonRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertInstanceOfComparisonRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertIssetToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertIssetToSpecificMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertNotOperatorRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertNotOperatorRector.php',
-    'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertPropertyExistsRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertPropertyExistsRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertThatToDirectAssertRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertThatToDirectAssertRector.php',
