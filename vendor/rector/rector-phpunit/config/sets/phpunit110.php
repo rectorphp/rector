@@ -4,16 +4,11 @@ declare (strict_types=1);
 namespace RectorPrefix202607;
 
 use Rector\Config\RectorConfig;
-use Rector\PHPUnit\PHPUnit110\Rector\CallLike\AssertContainsOnlyMethodCallRector;
 use Rector\PHPUnit\PHPUnit110\Rector\Class_\NamedArgumentForDataProviderRector;
-use Rector\PHPUnit\PHPUnit110\Rector\ClassMethod\MockObjectArgCreateStubToCreateMockRector;
-use Rector\PHPUnit\PHPUnit120\Rector\Class_\AssertIsTypeMethodCallRector;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([
-        NamedArgumentForDataProviderRector::class,
-        MockObjectArgCreateStubToCreateMockRector::class,
-        // deprecated in PHPUnit 11.5, guarded by composer package constraint
-        AssertContainsOnlyMethodCallRector::class,
-        AssertIsTypeMethodCallRector::class,
-    ]);
+    // MockObjectArgCreateStubToCreateMockRector, AssertContainsOnlyMethodCallRector
+    // and AssertIsTypeMethodCallRector are registered there, guarded by composer package constraint
+    $rectorConfig->sets([PHPUnitSetList::COMPOSER_BASED]);
+    $rectorConfig->rules([NamedArgumentForDataProviderRector::class]);
 };

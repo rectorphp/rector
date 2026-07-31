@@ -14,12 +14,14 @@ use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockObjectExprDetector;
 use Rector\PHPUnit\Enum\PHPUnitAttribute;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\PHPUnit120\Rector\Class_\AllowMockObjectsForDataProviderRector\AllowMockObjectsForDataProviderRectorTest
  */
-final class AllowMockObjectsForDataProviderRector extends AbstractRector
+final class AllowMockObjectsForDataProviderRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -47,6 +49,10 @@ final class AllowMockObjectsForDataProviderRector extends AbstractRector
     public function getNodeTypes(): array
     {
         return [Class_::class];
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ATTRIBUTES;
     }
     /**
      * @param Class_ $node
