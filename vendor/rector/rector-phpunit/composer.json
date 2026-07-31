@@ -13,7 +13,7 @@
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^13.2",
         "rector\/jack": "^1.0",
-        "rector\/rector-src": "dev-composer-triggered-set-version-constraint as dev-main",
+        "rector\/rector-src": "dev-main",
         "rector\/swiss-knife": "^2.4",
         "symplify\/easy-coding-standard": "^13.2",
         "symplify\/phpstan-extensions": "^12.0",
