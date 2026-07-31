@@ -269,6 +269,11 @@ final class Option
      */
     public const CACHE_META_EXTENSIONS = 'cache_meta_extensions';
     /**
+     * @internal For reporting deprecated withPhp53Sets() ... withPhp74Sets() methods
+     * @var string
+     */
+    public const DEPRECATED_PHP_SETS_METHODS = 'deprecated_php_sets_methods';
+    /**
      * @internal For collect skipped start with short open tag files to be reported
      * @var string
      */

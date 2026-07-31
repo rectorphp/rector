@@ -59,6 +59,14 @@ final class DeprecatedRulesReporter
             $this->symfonyStyle->warning(sprintf('Cache meta extension "%s" is deprecated and no longer applied. It is a niche mechanism, let Rector handle cache on its own. If custom invalidation is needed, handle it in CI in a more generic way, e.g. by clearing the cache directory.', $cacheMetumExtension));
         }
     }
+    public function reportDeprecatedPhpSetsMethods(): void
+    {
+        /** @var string[] $deprecatedPhpSetsMethods */
+        $deprecatedPhpSetsMethods = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_PHP_SETS_METHODS);
+        foreach (array_unique($deprecatedPhpSetsMethods) as $deprecatedPhpSetsMethod) {
+            $this->symfonyStyle->warning(sprintf('The "->%s()" method is deprecated and no longer applied. Use "->withPhpLevel()" instead, to raise PHP level one rule at a time.', $deprecatedPhpSetsMethod));
+        }
+    }
     public function reportDeprecatedRectorUnsupportedMethods(): void
     {
         // to be added in related PR
