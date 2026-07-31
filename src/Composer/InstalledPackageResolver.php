@@ -15,21 +15,18 @@ use RectorPrefix202607\Webmozart\Assert\Assert;
 final class InstalledPackageResolver
 {
     /**
-     * @readonly
-     */
-    private ?string $projectDirectory = null;
-    /**
      * @var null|array<string, InstalledPackage>
      */
     private ?array $resolvedInstalledPackages = null;
+    /**
+     * @readonly
+     */
+    private string $projectDirectory;
     public function __construct(?string $projectDirectory = null)
     {
-        $this->projectDirectory = $projectDirectory;
         // fallback to root project directory
-        if ($projectDirectory === null) {
-            $projectDirectory = getcwd();
-        }
-        Assert::directory($projectDirectory);
+        $this->projectDirectory = $projectDirectory ?? (string) getcwd();
+        Assert::directory($this->projectDirectory);
     }
     /**
      * @return array<string, InstalledPackage>
