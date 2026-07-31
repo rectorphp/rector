@@ -2133,6 +2133,7 @@ return array(
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\ExpectsMethodCallDecorator' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/ExpectsMethodCallDecorator.php',
     'Rector\\PHPUnit\\PHPUnit100\\Rector\\StmtsAwareInterface\\WithConsecutiveRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit100/Rector/StmtsAwareInterface/WithConsecutiveRector.php',
     'Rector\\PHPUnit\\PHPUnit110\\Rector\\CallLike\\AssertContainsOnlyMethodCallRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit110/Rector/CallLike/AssertContainsOnlyMethodCallRector.php',
+    'Rector\\PHPUnit\\PHPUnit110\\Rector\\ClassMethod\\ExpectsParamToMockObjectRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit110/Rector/ClassMethod/ExpectsParamToMockObjectRector.php',
     'Rector\\PHPUnit\\PHPUnit110\\Rector\\ClassMethod\\MockObjectArgCreateStubToCreateMockRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit110/Rector/ClassMethod/MockObjectArgCreateStubToCreateMockRector.php',
     'Rector\\PHPUnit\\PHPUnit110\\Rector\\Class_\\NamedArgumentForDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit110/Rector/Class_/NamedArgumentForDataProviderRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\CallLike\\CreateStubInCoalesceArgRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/CallLike/CreateStubInCoalesceArgRector.php',
