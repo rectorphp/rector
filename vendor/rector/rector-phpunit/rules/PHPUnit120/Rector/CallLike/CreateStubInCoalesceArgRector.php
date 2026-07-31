@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\PHPUnit120\Rector\CallLike\CreateStubInCoalesceArgRector\CreateStubInCoalesceArgRectorTest
  */
-final class CreateStubInCoalesceArgRector extends AbstractRector
+final class CreateStubInCoalesceArgRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -28,6 +30,10 @@ final class CreateStubInCoalesceArgRector extends AbstractRector
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=11.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

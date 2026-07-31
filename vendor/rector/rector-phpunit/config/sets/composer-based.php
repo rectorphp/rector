@@ -13,9 +13,17 @@ use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\TicketAnnotationToAttri
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DependsAnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\TestWithAnnotationToAttributeRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\AddIntersectionVarToMockObjectPropertyRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\AddStubIntersectionVarToStubPropertyRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\BareCreateMockAssignToDirectUseRector;
 use Rector\PHPUnit\PHPUnit110\Rector\CallLike\AssertContainsOnlyMethodCallRector;
 use Rector\PHPUnit\PHPUnit110\Rector\ClassMethod\MockObjectArgCreateStubToCreateMockRector;
+use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubInCoalesceArgRector;
+use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubOverCreateMockArgRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\AssertIsTypeMethodCallRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Class_\PropertyCreateMockToCreateStubRector;
+use Rector\PHPUnit\PHPUnit120\Rector\ClassMethod\ExpressionCreateMockToCreateStubRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Property\MockObjectVarToStubRector;
 use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
 /**
  * Rules and configuration bound to the PHPUnit version installed in the analysed project,
@@ -34,7 +42,16 @@ return static function (RectorConfig $rectorConfig): void {
         CoversAnnotationWithValueToAttributeRector::class,
         RequiresAnnotationWithValueToAttributeRector::class,
         DependsAnnotationWithValueToAttributeRector::class,
-        // stubs are required over mocks since PHPUnit 11.0
+        // stubs over mocks, where no expectations are set, since PHPUnit 11.0
+        CreateStubOverCreateMockArgRector::class,
+        CreateStubInCoalesceArgRector::class,
+        ExpressionCreateMockToCreateStubRector::class,
+        PropertyCreateMockToCreateStubRector::class,
+        MockObjectVarToStubRector::class,
+        AddIntersectionVarToMockObjectPropertyRector::class,
+        AddStubIntersectionVarToStubPropertyRector::class,
+        BareCreateMockAssignToDirectUseRector::class,
+        // mocks back over stubs, where a mock object is required
         MockObjectArgCreateStubToCreateMockRector::class,
         // deprecated in PHPUnit 11.5
         AssertContainsOnlyMethodCallRector::class,

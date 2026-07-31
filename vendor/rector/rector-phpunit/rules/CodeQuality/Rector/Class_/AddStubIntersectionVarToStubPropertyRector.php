@@ -21,12 +21,14 @@ use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\Class_\AddStubIntersectionVarToStubPropertyRector\AddStubIntersectionVarToStubPropertyRectorTest
  */
-final class AddStubIntersectionVarToStubPropertyRector extends AbstractRector
+final class AddStubIntersectionVarToStubPropertyRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -88,6 +90,10 @@ final class AddStubIntersectionVarToStubPropertyRector extends AbstractRector
             return null;
         }
         return $node;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=11.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

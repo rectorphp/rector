@@ -15,12 +15,14 @@ use Rector\PHPUnit\CodeQuality\NodeAnalyser\AssignedMocksCollector;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockObjectExprDetector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\PHPUnit120\Rector\ClassMethod\ExpressionCreateMockToCreateStubRector\ExpressionCreateMockToCreateStubRectorTest
  */
-final class ExpressionCreateMockToCreateStubRector extends AbstractRector
+final class ExpressionCreateMockToCreateStubRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -39,6 +41,10 @@ final class ExpressionCreateMockToCreateStubRector extends AbstractRector
         $this->assignedMocksCollector = $assignedMocksCollector;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->mockObjectExprDetector = $mockObjectExprDetector;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=11.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

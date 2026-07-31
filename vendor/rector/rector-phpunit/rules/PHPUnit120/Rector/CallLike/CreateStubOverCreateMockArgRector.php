@@ -28,6 +28,8 @@ use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -35,7 +37,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\PHPUnit\Tests\PHPUnit120\Rector\CallLike\CreateStubOverCreateMockArgRector\CreateStubOverCreateMockArgRectorTest
  */
-final class CreateStubOverCreateMockArgRector extends AbstractRector
+final class CreateStubOverCreateMockArgRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -54,6 +56,10 @@ final class CreateStubOverCreateMockArgRector extends AbstractRector
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->mockObjectExprDetector = $mockObjectExprDetector;
         $this->reflectionResolver = $reflectionResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=11.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {
