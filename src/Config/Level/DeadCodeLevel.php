@@ -21,6 +21,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveNullTagValueNodeRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveReturnTagIncompatibleWithNativeTypeRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveTestsOverriddenPrivateMethodParameterRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
@@ -153,6 +154,7 @@ final class DeadCodeLevel
         // removing methods could be risky if there is some magic loading them
         RemoveUnusedPromotedPropertyRector::class,
         RemoveUnusedPrivateMethodParameterRector::class,
+        RemoveTestsOverriddenPrivateMethodParameterRector::class,
         RemoveUnusedPublicMethodParameterRector::class,
         RemoveUnusedPrivateMethodRector::class,
         RemoveUnreachableStatementRector::class,
