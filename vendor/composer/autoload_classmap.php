@@ -1402,7 +1402,6 @@ return array(
     'Rector\\CodingStyle\\Rector\\String_\\UseClassKeywordForClassNameResolutionRector' => $baseDir . '/rules/CodingStyle/Rector/String_/UseClassKeywordForClassNameResolutionRector.php',
     'Rector\\CodingStyle\\Rector\\Ternary\\TernaryConditionVariableAssignmentRector' => $baseDir . '/rules/CodingStyle/Rector/Ternary/TernaryConditionVariableAssignmentRector.php',
     'Rector\\CodingStyle\\Rector\\Use_\\SeparateMultiUseImportsRector' => $baseDir . '/rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php',
-    'Rector\\CodingStyle\\ValueObject\\ConditionAndResult' => $baseDir . '/rules/CodingStyle/ValueObject/ConditionAndResult.php',
     'Rector\\CodingStyle\\ValueObject\\ObjectMagicMethods' => $baseDir . '/rules/CodingStyle/ValueObject/ObjectMagicMethods.php',
     'Rector\\CodingStyle\\ValueObject\\VariableAndExprAssign' => $baseDir . '/rules/CodingStyle/ValueObject/VariableAndExprAssign.php',
     'Rector\\Comments\\CommentRemover' => $baseDir . '/src/Comments/CommentRemover.php',

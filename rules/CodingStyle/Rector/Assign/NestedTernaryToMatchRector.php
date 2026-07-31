@@ -4,20 +4,16 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Match_;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\MatchArm;
-use Rector\CodingStyle\ValueObject\ConditionAndResult;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodingStyle\Rector\Assign\NestedTernaryToMatchRector\NestedTernaryToMatchRectorTest
+ * @deprecated This rule is deprecated, as match(true) with nested conditions is often less readable and more confusing than the original ternary. Refactor to an explicit intent instead, e.g. early returns or a named method.
  */
-final class NestedTernaryToMatchRector extends AbstractRector
+final class NestedTernaryToMatchRector extends AbstractRector implements DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -57,75 +53,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Assign
     {
-        if (!$node->expr instanceof Ternary) {
-            return null;
-        }
-        $ternary = $node->expr;
-        // traverse nested ternaries to collect them all
-        $currentTernary = $ternary;
-        /** @var ConditionAndResult[] $conditionsAndResults */
-        $conditionsAndResults = [];
-        $defaultExpr = null;
-        while ($currentTernary instanceof Ternary) {
-            if (!$currentTernary->if instanceof Expr) {
-                // short ternary, skip
-                return null;
-            }
-            $conditionsAndResults[] = new ConditionAndResult($currentTernary->cond, $currentTernary->if);
-            $currentTernary = $currentTernary->else;
-            if (!$currentTernary instanceof Ternary) {
-                $defaultExpr = $currentTernary;
-            }
-        }
-        // nothing long enough
-        if (count($conditionsAndResults) < 2 || !$defaultExpr instanceof Expr) {
-            return null;
-        }
-        $match = $this->createMatch($conditionsAndResults, $defaultExpr);
-        $node->expr = $match;
-        return $node;
-    }
-    /**
-     * @param ConditionAndResult[] $conditionsAndResults
-     */
-    private function createMatch(array $conditionsAndResults, Expr $defaultExpr): Match_
-    {
-        $singleVariableName = $this->matchAlwaysIdenticalVariableName($conditionsAndResults);
-        if (is_string($singleVariableName)) {
-            $isVariableIdentical = \true;
-            $match = new Match_(new Variable($singleVariableName));
-        } else {
-            $isVariableIdentical = \false;
-            $match = new Match_($this->nodeFactory->createTrue());
-        }
-        foreach ($conditionsAndResults as $conditionAndResult) {
-            $match->arms[] = new MatchArm([$isVariableIdentical ? $conditionAndResult->getIdenticalExpr() : $conditionAndResult->getConditionExpr()], $conditionAndResult->getResultExpr());
-        }
-        $match->arms[] = new MatchArm(null, $defaultExpr);
-        return $match;
-    }
-    /**
-     * @param ConditionAndResult[] $conditionsAndResults
-     * @return mixed
-     */
-    private function matchAlwaysIdenticalVariableName(array $conditionsAndResults)
-    {
-        $identicalVariableNames = [];
-        foreach ($conditionsAndResults as $conditionAndResult) {
-            if (!$conditionAndResult->isIdenticalCompare()) {
-                return null;
-            }
-            $variableName = $conditionAndResult->getIdenticalVariableName();
-            if (!is_string($variableName)) {
-                return null;
-            }
-            $identicalVariableNames[] = $variableName;
-        }
-        $uniqueIdenticalVariableNames = array_unique($identicalVariableNames);
-        $uniqueIdenticalVariableNames = array_values($uniqueIdenticalVariableNames);
-        if (count($uniqueIdenticalVariableNames) === 1) {
-            return $uniqueIdenticalVariableNames[0];
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as match(true) with nested conditions is often less readable than the original ternary', self::class));
     }
 }
