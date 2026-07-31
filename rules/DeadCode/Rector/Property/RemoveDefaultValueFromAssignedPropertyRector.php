@@ -97,6 +97,10 @@ CODE_SAMPLE
             if ($property->hooks !== []) {
                 continue;
             }
+            // static property can be read before the constructor is called
+            if ($property->isStatic()) {
+                continue;
+            }
             if (!$property->isPrivate() && !$isFinal) {
                 continue;
             }
