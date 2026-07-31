@@ -4,38 +4,17 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
-use Rector\PHPUnit\Enum\PHPUnitAttribute;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector\ReplaceTestAnnotationWithPrefixedFunctionRectorTest
+ * @deprecated This rule is deprecated as it is not a common upgrade path and it is not part of any set. Implement it as a custom rule instead.
  */
-final class ReplaceTestFunctionPrefixWithAttributeRector extends AbstractRector
+final class ReplaceTestFunctionPrefixWithAttributeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private TestsNodeAnalyzer $testsNodeAnalyzer;
-    /**
-     * @readonly
-     */
-    private PhpAttributeGroupFactory $phpAttributeGroupFactory;
-    /**
-     * @readonly
-     */
-    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer)
-    {
-        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
-        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace @test with prefixed function', [new CodeSample(<<<'CODE_SAMPLE'
@@ -71,29 +50,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
-            return null;
-        }
-        if (strncmp($node->name->toString(), 'test', strlen('test')) !== 0) {
-            return null;
-        }
-        if ($this->phpAttributeAnalyzer->hasPhpAttributes($node, [PHPUnitAttribute::TEST])) {
-            return null;
-        }
-        if ($node->name->toString() !== 'test' && $node->name->toString() !== 'test_') {
-            if (strncmp($node->name->toString(), 'test_', strlen('test_')) === 0) {
-                $node->name->name = lcfirst((string) substr($node->name->name, 5));
-            } elseif (strncmp($node->name->toString(), 'test', strlen('test')) === 0) {
-                $node->name->name = lcfirst((string) substr($node->name->name, 4));
-            }
-        }
-        $coversAttributeGroup = $this->createAttributeGroup();
-        $node->attrGroups = array_merge($node->attrGroups, [$coversAttributeGroup]);
-        return $node;
-    }
-    private function createAttributeGroup(): AttributeGroup
-    {
-        $attributeClass = 'PHPUnit\Framework\Attributes\Test';
-        return $this->phpAttributeGroupFactory->createFromClassWithItems($attributeClass, []);
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated and should not be used anymore. Remove it from your config files.', self::class));
     }
 }
