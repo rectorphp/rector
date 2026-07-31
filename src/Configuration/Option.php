@@ -264,6 +264,11 @@ final class Option
      */
     public const SKIPPED_RECTOR_RULES = 'skipped_rector_rules';
     /**
+     * @internal For reporting deprecated cache meta extensions
+     * @var string
+     */
+    public const CACHE_META_EXTENSIONS = 'cache_meta_extensions';
+    /**
      * @internal For collect skipped start with short open tag files to be reported
      * @var string
      */

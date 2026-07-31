@@ -24,6 +24,7 @@ final class DoctrineSetList
     /**
      * @var string
      */
+    #[Deprecated(message: 'The YamlToAttributeDoctrineMappingRector rule this set configured was deprecated, as incomplete and prone to create buggy code. Use custom rules tailored to your YAML mapping instead')]
     public const YAML_TO_ANNOTATIONS = __DIR__ . '/../../config/yaml-to-annotations.php';
     /**
      * @var string

@@ -1832,6 +1832,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromColumnTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromColumnTypeRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromToOneRelationTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromToOneRelationTypeRector.php',
         'Rector\\Doctrine\\CodeQuality\\SetterCollectionResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/SetterCollectionResolver.php',
+        'Rector\\Doctrine\\CodeQuality\\Utils\\CaseStringHelper' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Utils/CaseStringHelper.php',
         'Rector\\Doctrine\\Collection22\\Rector\\CriteriaOrderingConstantsDeprecationRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Collection22/Rector/CriteriaOrderingConstantsDeprecationRector.php',
         'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ExtractArrayArgOnQueryBuilderSelectRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ExtractArrayArgOnQueryBuilderSelectRector.php',
         'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ReplaceFetchAllMethodCallRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php',

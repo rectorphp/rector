@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
+use Deprecated;
 use PhpParser\NodeVisitor;
 use Rector\Bridge\SetProviderCollector;
 use Rector\Bridge\SetRectorsResolver;
-use Rector\Caching\Contract\CacheMetaExtensionInterface;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Composer\InstalledPackageResolver;
 use Rector\Config\Level\CodeQualityLevel;
@@ -86,10 +86,6 @@ final class RectorConfigBuilder
     private ?string $cacheClass = null;
     private ?string $cacheDirectory = null;
     private ?string $containerCacheDirectory = null;
-    /**
-     * @var array<class-string<CacheMetaExtensionInterface>>
-     */
-    private array $cacheMetaExtensions = [];
     private ?bool $parallel = null;
     private int $parallelTimeoutSeconds = 120;
     private int $parallelMaxNumberOfProcess = Defaults::PARALLEL_MAX_NUMBER_OF_PROCESS;
@@ -226,9 +222,6 @@ final class RectorConfigBuilder
         }
         if ($this->containerCacheDirectory !== null) {
             $rectorConfig->containerCacheDirectory($this->containerCacheDirectory);
-        }
-        foreach ($this->cacheMetaExtensions as $cacheMetumExtension) {
-            $rectorConfig->cacheMetaExtension($cacheMetumExtension);
         }
         if ($this->importNames || $this->importDocBlockNames) {
             $rectorConfig->importNames($this->importNames, $this->importDocBlockNames);
@@ -525,11 +518,11 @@ final class RectorConfigBuilder
         return $this;
     }
     /**
-     * @param class-string<CacheMetaExtensionInterface> $cacheMetaExtensionClass
+     * @param class-string $cacheMetaExtensionClass
      */
     public function withCacheMetaExtension(string $cacheMetaExtensionClass): self
     {
-        $this->cacheMetaExtensions[] = $cacheMetaExtensionClass;
+        SimpleParameterProvider::addParameter(\Rector\Configuration\Option::CACHE_META_EXTENSIONS, $cacheMetaExtensionClass);
         return $this;
     }
     /**

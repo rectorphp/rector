@@ -1575,6 +1575,7 @@ return array(
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromColumnTypeRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromColumnTypeRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromToOneRelationTypeRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromToOneRelationTypeRector.php',
     'Rector\\Doctrine\\CodeQuality\\SetterCollectionResolver' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/SetterCollectionResolver.php',
+    'Rector\\Doctrine\\CodeQuality\\Utils\\CaseStringHelper' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Utils/CaseStringHelper.php',
     'Rector\\Doctrine\\Collection22\\Rector\\CriteriaOrderingConstantsDeprecationRector' => $vendorDir . '/rector/rector-doctrine/rules/Collection22/Rector/CriteriaOrderingConstantsDeprecationRector.php',
     'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ExtractArrayArgOnQueryBuilderSelectRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ExtractArrayArgOnQueryBuilderSelectRector.php',
     'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ReplaceFetchAllMethodCallRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php',

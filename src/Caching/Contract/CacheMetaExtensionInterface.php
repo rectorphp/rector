@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Caching\Contract;
 
 /**
- * Allows extensions to provide additional metadata for cache invalidation.
- * When any extension's hash changes, all cached files are reprocessed.
- *
  * @api
+ *
+ * @deprecated Niche mechanism, no longer applied. Let Rector handle cache on its own. If custom
+ * invalidation is needed, handle it in CI in a more generic way, e.g. by clearing the cache directory.
  */
 interface CacheMetaExtensionInterface
 {

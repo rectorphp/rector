@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Config;
 
+use Deprecated;
 use RectorPrefix202607\Composer\Semver\Semver;
 use RectorPrefix202607\Illuminate\Container\Container;
 use Override;
-use Rector\Caching\Contract\CacheMetaExtensionInterface;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Composer\InstalledPackageResolver;
 use Rector\Configuration\Option;
@@ -337,13 +337,11 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::CACHE_CLASS, $cacheClass);
     }
     /**
-     * @param class-string<CacheMetaExtensionInterface> $cacheMetaExtensionClass
+     * @param class-string $cacheMetaExtensionClass
      */
     public function cacheMetaExtension(string $cacheMetaExtensionClass): void
     {
-        Assert::isAOf($cacheMetaExtensionClass, CacheMetaExtensionInterface::class);
-        $this->singleton($cacheMetaExtensionClass);
-        $this->tag($cacheMetaExtensionClass, CacheMetaExtensionInterface::class);
+        SimpleParameterProvider::addParameter(Option::CACHE_META_EXTENSIONS, $cacheMetaExtensionClass);
     }
     /**
      * @see https://github.com/nikic/PHP-Parser/issues/723#issuecomment-712401963
