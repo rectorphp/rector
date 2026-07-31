@@ -1489,7 +1489,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\ChangesReporting\\Output\\Factory\\JsonOutputFactory' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/Factory/JsonOutputFactory.php',
         'Rector\\ChangesReporting\\Output\\GitHubOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/GitHubOutputFormatter.php',
         'Rector\\ChangesReporting\\Output\\GitlabOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/GitlabOutputFormatter.php',
-        'Rector\\ChangesReporting\\Output\\JUnitOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/JUnitOutputFormatter.php',
         'Rector\\ChangesReporting\\Output\\JsonOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/JsonOutputFormatter.php',
         'Rector\\ChangesReporting\\ValueObjectFactory\\ErrorFactory' => __DIR__ . '/../..' . '/src/ChangesReporting/ValueObjectFactory/ErrorFactory.php',
         'Rector\\ChangesReporting\\ValueObjectFactory\\FileDiffFactory' => __DIR__ . '/../..' . '/src/ChangesReporting/ValueObjectFactory/FileDiffFactory.php',
