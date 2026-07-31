@@ -1689,6 +1689,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Configuration\\RectorConfigBuilder' => __DIR__ . '/../..' . '/src/Configuration/RectorConfigBuilder.php',
         'Rector\\Configuration\\RenamedClassesDataCollector' => __DIR__ . '/../..' . '/src/Configuration/RenamedClassesDataCollector.php',
         'Rector\\Configuration\\VendorMissAnalyseGuard' => __DIR__ . '/../..' . '/src/Configuration/VendorMissAnalyseGuard.php',
+        'Rector\\Console\\Command\\ComposerBasedCommand' => __DIR__ . '/../..' . '/src/Console/Command/ComposerBasedCommand.php',
         'Rector\\Console\\Command\\CustomRuleCommand' => __DIR__ . '/../..' . '/src/Console/Command/CustomRuleCommand.php',
         'Rector\\Console\\Command\\ListRulesCommand' => __DIR__ . '/../..' . '/src/Console/Command/ListRulesCommand.php',
         'Rector\\Console\\Command\\ProcessCommand' => __DIR__ . '/../..' . '/src/Console/Command/ProcessCommand.php',

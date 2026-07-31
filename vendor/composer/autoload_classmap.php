@@ -1432,6 +1432,7 @@ return array(
     'Rector\\Configuration\\RectorConfigBuilder' => $baseDir . '/src/Configuration/RectorConfigBuilder.php',
     'Rector\\Configuration\\RenamedClassesDataCollector' => $baseDir . '/src/Configuration/RenamedClassesDataCollector.php',
     'Rector\\Configuration\\VendorMissAnalyseGuard' => $baseDir . '/src/Configuration/VendorMissAnalyseGuard.php',
+    'Rector\\Console\\Command\\ComposerBasedCommand' => $baseDir . '/src/Console/Command/ComposerBasedCommand.php',
     'Rector\\Console\\Command\\CustomRuleCommand' => $baseDir . '/src/Console/Command/CustomRuleCommand.php',
     'Rector\\Console\\Command\\ListRulesCommand' => $baseDir . '/src/Console/Command/ListRulesCommand.php',
     'Rector\\Console\\Command\\ProcessCommand' => $baseDir . '/src/Console/Command/ProcessCommand.php',
