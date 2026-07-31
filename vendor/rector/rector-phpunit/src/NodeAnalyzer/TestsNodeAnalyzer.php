@@ -47,6 +47,10 @@ final class TestsNodeAnalyzer
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
+        // traits have no parent, so the test case check below can never match them
+        if ($classReflection->isTrait()) {
+            return $this->isInTestTrait($classReflection, $node);
+        }
         $found = \false;
         foreach (PHPUnitClassName::TEST_CLASSES as $testCaseObjectClass) {
             if ($classReflection->is($testCaseObjectClass)) {
@@ -89,6 +93,41 @@ final class TestsNodeAnalyzer
         }
         /** @var StaticCall|MethodCall $node */
         return $this->nodeNameResolver->isName($node->name, $name);
+    }
+    /**
+     * Test traits live next to the test cases that use them, so the namespace is the main hint.
+     * Only public non-static methods can be test methods, and a "test" prefixed one is a test
+     * method even outside a tests namespace.
+     */
+    private function isInTestTrait(ClassReflection $classReflection, Node $node): bool
+    {
+        if (!$node instanceof ClassMethod) {
+            return $this->isInTestsNamespace($classReflection);
+        }
+        if (!$node->isPublic()) {
+            return \false;
+        }
+        if ($node->isStatic()) {
+            return \false;
+        }
+        if ($this->isInTestsNamespace($classReflection)) {
+            return \true;
+        }
+        return strncmp($node->name->toString(), 'test', strlen('test')) === 0;
+    }
+    private function isInTestsNamespace(ClassReflection $classReflection): bool
+    {
+        $nameParts = explode('\\', $classReflection->getName());
+        // drop the short trait name, only the namespace matters here
+        array_pop($nameParts);
+        $found = \false;
+        foreach ($nameParts as $namePart) {
+            if (in_array($namePart, ['Test', 'Tests'], \true)) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
     /**
      * @param string[] $names
