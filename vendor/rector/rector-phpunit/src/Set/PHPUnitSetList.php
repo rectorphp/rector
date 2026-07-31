@@ -64,4 +64,8 @@ final class PHPUnitSetList
      * @var string
      */
     public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/annotations-to-attributes.php';
+    /**
+     * @var string
+     */
+    public const COMPOSER_BASED = __DIR__ . '/../../config/sets/composer-based.php';
 }
