@@ -1890,7 +1890,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Doctrine\\Orm28\\Rector\\MethodCall\\IterateToToIterableRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm28/Rector/MethodCall/IterateToToIterableRector.php',
         'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\CastDoctrineExprToStringRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/CastDoctrineExprToStringRector.php',
         'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\SetParametersArrayToCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/SetParametersArrayToCollectionRector.php',
-        'Rector\\Doctrine\\PhpDocParser\\DoctrineDocBlockResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDocParser/DoctrineDocBlockResolver.php',
         'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
         'Rector\\Doctrine\\Set\\DoctrineSetList' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
         'Rector\\Doctrine\\Set\\SetProvider\\DoctrineSetProvider' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Set/SetProvider/DoctrineSetProvider.php',

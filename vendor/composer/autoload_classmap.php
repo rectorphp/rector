@@ -1633,7 +1633,6 @@ return array(
     'Rector\\Doctrine\\Orm28\\Rector\\MethodCall\\IterateToToIterableRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm28/Rector/MethodCall/IterateToToIterableRector.php',
     'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\CastDoctrineExprToStringRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/CastDoctrineExprToStringRector.php',
     'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\SetParametersArrayToCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/SetParametersArrayToCollectionRector.php',
-    'Rector\\Doctrine\\PhpDocParser\\DoctrineDocBlockResolver' => $vendorDir . '/rector/rector-doctrine/src/PhpDocParser/DoctrineDocBlockResolver.php',
     'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => $vendorDir . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
     'Rector\\Doctrine\\Set\\DoctrineSetList' => $vendorDir . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
     'Rector\\Doctrine\\Set\\SetProvider\\DoctrineSetProvider' => $vendorDir . '/rector/rector-doctrine/src/Set/SetProvider/DoctrineSetProvider.php',
