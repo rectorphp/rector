@@ -3341,6 +3341,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\VersionBonding\\Contract\\MinPhpVersionInterface' => __DIR__ . '/../..' . '/src/VersionBonding/Contract/MinPhpVersionInterface.php',
         'Rector\\VersionBonding\\Contract\\RelatedPolyfillInterface' => __DIR__ . '/../..' . '/src/VersionBonding/Contract/RelatedPolyfillInterface.php',
         'Rector\\VersionBonding\\PhpVersionedFilter' => __DIR__ . '/../..' . '/src/VersionBonding/PhpVersionedFilter.php',
+        'Rector\\VersionBonding\\ValueObject\\ComposerBoundRuleConfiguration' => __DIR__ . '/../..' . '/src/VersionBonding/ValueObject/ComposerBoundRuleConfiguration.php',
         'Rector\\VersionBonding\\ValueObject\\ComposerPackageConstraint' => __DIR__ . '/../..' . '/src/VersionBonding/ValueObject/ComposerPackageConstraint.php',
         'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',
         'Rector\\Visibility\\Rector\\ClassMethod\\ChangeMethodVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ChangeMethodVisibilityRector.php',

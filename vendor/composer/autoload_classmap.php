@@ -3084,6 +3084,7 @@ return array(
     'Rector\\VersionBonding\\Contract\\MinPhpVersionInterface' => $baseDir . '/src/VersionBonding/Contract/MinPhpVersionInterface.php',
     'Rector\\VersionBonding\\Contract\\RelatedPolyfillInterface' => $baseDir . '/src/VersionBonding/Contract/RelatedPolyfillInterface.php',
     'Rector\\VersionBonding\\PhpVersionedFilter' => $baseDir . '/src/VersionBonding/PhpVersionedFilter.php',
+    'Rector\\VersionBonding\\ValueObject\\ComposerBoundRuleConfiguration' => $baseDir . '/src/VersionBonding/ValueObject/ComposerBoundRuleConfiguration.php',
     'Rector\\VersionBonding\\ValueObject\\ComposerPackageConstraint' => $baseDir . '/src/VersionBonding/ValueObject/ComposerPackageConstraint.php',
     'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => $baseDir . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',
     'Rector\\Visibility\\Rector\\ClassMethod\\ChangeMethodVisibilityRector' => $baseDir . '/rules/Visibility/Rector/ClassMethod/ChangeMethodVisibilityRector.php',

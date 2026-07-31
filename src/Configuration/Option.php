@@ -293,6 +293,12 @@ final class Option
      */
     public const COMPOSER_BASED_SETS = 'composer_based_sets';
     /**
+     * @internal To report rule configuration bound to an installed package version
+     * @see \Rector\Config\RectorConfig::ruleWithConfigurationComposerVersionBound()
+     * @var string
+     */
+    public const COMPOSER_BOUND_RULE_CONFIGURATIONS = 'composer_bound_rule_configurations';
+    /**
      * @internal To filter files by specific suffix
      * @var string
      */
