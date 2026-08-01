@@ -13,6 +13,7 @@ use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\TicketAnnotationToAttri
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DependsAnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\TestWithAnnotationToAttributeRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\AddIntersectionParamToMockObjectParamRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddIntersectionVarToMockObjectPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddStubIntersectionVarToStubPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\BareCreateMockAssignToDirectUseRector;
@@ -55,6 +56,7 @@ return static function (RectorConfig $rectorConfig): void {
         // mocks back over stubs, where a mock object is required
         MockObjectArgCreateStubToCreateMockRector::class,
         ExpectsParamToMockObjectRector::class,
+        AddIntersectionParamToMockObjectParamRector::class,
         // deprecated in PHPUnit 11.5
         AssertContainsOnlyMethodCallRector::class,
         AssertIsTypeMethodCallRector::class,
