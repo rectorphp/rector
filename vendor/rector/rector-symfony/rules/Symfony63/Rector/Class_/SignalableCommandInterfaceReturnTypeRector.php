@@ -15,12 +15,14 @@ use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony63\Rector\Class_\SignalableCommandInterfaceReturnTypeRector\SignalableCommandInterfaceReturnTypeRectorTest
  */
-final class SignalableCommandInterfaceReturnTypeRector extends AbstractRector
+final class SignalableCommandInterfaceReturnTypeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -39,6 +41,10 @@ final class SignalableCommandInterfaceReturnTypeRector extends AbstractRector
         $this->classAnalyzer = $classAnalyzer;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->staticTypeMapper = $staticTypeMapper;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/console', '>=6.3');
     }
     public function getRuleDefinition(): RuleDefinition
     {

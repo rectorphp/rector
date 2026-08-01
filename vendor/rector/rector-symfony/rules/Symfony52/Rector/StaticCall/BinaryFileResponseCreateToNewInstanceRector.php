@@ -8,14 +8,20 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation
  * @see \Rector\Symfony\Tests\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector\BinaryFileResponseCreateToNewInstanceRectorTest
  */
-final class BinaryFileResponseCreateToNewInstanceRector extends AbstractRector
+final class BinaryFileResponseCreateToNewInstanceRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/http-foundation', '>=5.2');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change deprecated BinaryFileResponse::create() to use __construct() instead', [new CodeSample(<<<'CODE_SAMPLE'

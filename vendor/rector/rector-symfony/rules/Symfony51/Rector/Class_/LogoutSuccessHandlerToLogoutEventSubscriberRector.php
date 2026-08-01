@@ -14,6 +14,8 @@ use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnSuccessLogoutClassMethodFactory;
 use Rector\Symfony\ValueObject\EventReferenceToMethodNameWithPriority;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector\LogoutSuccessHandlerToLogoutEventSubscriberRectorTest
  */
-final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRector
+final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -45,6 +47,10 @@ final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRe
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
         $this->classAnalyzer = $classAnalyzer;
         $this->successHandlerObjectType = new ObjectType(SymfonyClass::LOGOUT_SUCCESS_HANDLER);
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/security-http', '>=5.1');
     }
     public function getRuleDefinition(): RuleDefinition
     {

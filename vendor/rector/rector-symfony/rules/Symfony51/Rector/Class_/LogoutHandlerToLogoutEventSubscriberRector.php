@@ -13,6 +13,8 @@ use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory;
 use Rector\Symfony\ValueObject\EventReferenceToMethodName;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony51\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector\LogoutHandlerToLogoutEventSubscriberRectorTest
  */
-final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
+final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -39,6 +41,10 @@ final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
         $this->onLogoutClassMethodFactory = $onLogoutClassMethodFactory;
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
         $this->logoutHandlerObjectType = new ObjectType(SymfonyClass::LOGOUT_HANDLER_INTERFACE);
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/security-http', '>=5.1');
     }
     public function getRuleDefinition(): RuleDefinition
     {

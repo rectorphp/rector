@@ -19,13 +19,15 @@ use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\TerminatedNodeAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/pull/33775/files
  * @see \Rector\Symfony\Tests\Symfony44\Rector\ClassMethod\ConsoleExecuteReturnIntRector\ConsoleExecuteReturnIntRectorTest
  */
-final class ConsoleExecuteReturnIntRector extends AbstractRector
+final class ConsoleExecuteReturnIntRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -40,6 +42,10 @@ final class ConsoleExecuteReturnIntRector extends AbstractRector
     {
         $this->terminatedNodeAnalyzer = $terminatedNodeAnalyzer;
         $this->valueResolver = $valueResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/console', '>=4.4');
     }
     public function getRuleDefinition(): RuleDefinition
     {

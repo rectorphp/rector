@@ -14,6 +14,8 @@ use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\ValueObject\ConstantMap\SymfonyCommandConstantMap;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector\CommandConstantReturnCodeRectorTest
  */
-final class CommandConstantReturnCodeRector extends AbstractRector
+final class CommandConstantReturnCodeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -35,6 +37,10 @@ final class CommandConstantReturnCodeRector extends AbstractRector
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/console', '>=5.1');
     }
     public function getRuleDefinition(): RuleDefinition
     {

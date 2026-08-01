@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -17,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony52\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector\PropertyAccessorCreationBooleanToFlagsRectorTest
  */
-final class PropertyAccessorCreationBooleanToFlagsRector extends AbstractRector
+final class PropertyAccessorCreationBooleanToFlagsRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -26,6 +28,10 @@ final class PropertyAccessorCreationBooleanToFlagsRector extends AbstractRector
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/property-access', '>=5.2');
     }
     public function getRuleDefinition(): RuleDefinition
     {

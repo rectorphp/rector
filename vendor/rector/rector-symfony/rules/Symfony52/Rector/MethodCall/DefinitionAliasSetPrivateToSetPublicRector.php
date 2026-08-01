@@ -10,13 +10,15 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#dependencyinjection
  * @see \Rector\Symfony\Tests\Symfony52\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector\DefinitionAliasSetPrivateToSetPublicRectorTest
  */
-final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
+final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -31,6 +33,10 @@ final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
         $this->definitionObjectTypes = [new ObjectType('Symfony\Component\DependencyInjection\Alias'), new ObjectType('Symfony\Component\DependencyInjection\Definition')];
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/dependency-injection', '>=5.2');
     }
     public function getRuleDefinition(): RuleDefinition
     {

@@ -17,6 +17,8 @@ use PHPStan\Type\StringType;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\Util\Reflection\PrivatesAccessor;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use RectorPrefix202608\Symfony\Component\Console\Input\StringInput;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony42\Rector\New_\StringToArrayArgumentProcessRector\StringToArrayArgumentProcessRectorTest
  */
-final class StringToArrayArgumentProcessRector extends AbstractRector
+final class StringToArrayArgumentProcessRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -38,6 +40,10 @@ final class StringToArrayArgumentProcessRector extends AbstractRector
     public function __construct(NodeTransformer $nodeTransformer)
     {
         $this->nodeTransformer = $nodeTransformer;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/process', '>=4.2');
     }
     public function getRuleDefinition(): RuleDefinition
     {

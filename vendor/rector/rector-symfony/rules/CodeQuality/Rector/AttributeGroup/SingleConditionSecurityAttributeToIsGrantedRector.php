@@ -12,6 +12,8 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\CodeQuality\NodeAnalyzer\AttributePresenceDetector;
 use Rector\Symfony\Enum\SensioAttribute;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector\SingleConditionSecurityAttributeToIsGrantedRectorTest
  */
-final class SingleConditionSecurityAttributeToIsGrantedRector extends AbstractRector
+final class SingleConditionSecurityAttributeToIsGrantedRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -29,6 +31,10 @@ final class SingleConditionSecurityAttributeToIsGrantedRector extends AbstractRe
     public function __construct(AttributePresenceDetector $attributePresenceDetector)
     {
         $this->attributePresenceDetector = $attributePresenceDetector;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/security-http', '>=6.2');
     }
     public function getRuleDefinition(): RuleDefinition
     {
