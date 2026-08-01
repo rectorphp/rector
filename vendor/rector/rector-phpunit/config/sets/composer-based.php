@@ -17,6 +17,7 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\AddIntersectionParamToMockObjectPar
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddIntersectionVarToMockObjectPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\AddStubIntersectionVarToStubPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\BareCreateMockAssignToDirectUseRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveExpectAnyFromMockRector;
 use Rector\PHPUnit\PHPUnit110\Rector\CallLike\AssertContainsOnlyMethodCallRector;
 use Rector\PHPUnit\PHPUnit110\Rector\ClassMethod\ExpectsParamToMockObjectRector;
 use Rector\PHPUnit\PHPUnit110\Rector\ClassMethod\MockObjectArgCreateStubToCreateMockRector;
@@ -59,6 +60,7 @@ return static function (RectorConfig $rectorConfig): void {
         AddIntersectionVarToMockObjectPropertyRector::class,
         AddStubIntersectionVarToStubPropertyRector::class,
         BareCreateMockAssignToDirectUseRector::class,
+        RemoveExpectAnyFromMockRector::class,
         // mocks back over stubs, where a mock object is required
         MockObjectArgCreateStubToCreateMockRector::class,
         ExpectsParamToMockObjectRector::class,
