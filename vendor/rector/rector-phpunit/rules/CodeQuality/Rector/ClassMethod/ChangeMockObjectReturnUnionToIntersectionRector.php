@@ -16,12 +16,14 @@ use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\ClassMethod\ChangeMockObjectReturnUnionToIntersectionRector\ChangeMockObjectReturnUnionToIntersectionRectorTest
  */
-final class ChangeMockObjectReturnUnionToIntersectionRector extends AbstractRector
+final class ChangeMockObjectReturnUnionToIntersectionRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -40,6 +42,10 @@ final class ChangeMockObjectReturnUnionToIntersectionRector extends AbstractRect
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=11.0');
     }
     public function getNodeTypes(): array
     {

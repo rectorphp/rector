@@ -26,12 +26,14 @@ use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\Class_\InlineStubPropertyToCreateStubMethodCallRector\InlineStubPropertyToCreateStubMethodCallRectorTest
  */
-final class InlineStubPropertyToCreateStubMethodCallRector extends AbstractRector
+final class InlineStubPropertyToCreateStubMethodCallRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -60,6 +62,10 @@ final class InlineStubPropertyToCreateStubMethodCallRector extends AbstractRecto
         $this->propertyFetchUsageFinder = $propertyFetchUsageFinder;
         $this->stubPropertyResolver = $stubPropertyResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=11.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

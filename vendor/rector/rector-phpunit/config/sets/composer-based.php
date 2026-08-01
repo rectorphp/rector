@@ -22,11 +22,17 @@ use Rector\PHPUnit\PHPUnit110\Rector\ClassMethod\ExpectsParamToMockObjectRector;
 use Rector\PHPUnit\PHPUnit110\Rector\ClassMethod\MockObjectArgCreateStubToCreateMockRector;
 use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubInCoalesceArgRector;
 use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubOverCreateMockArgRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Class_\AllowMockObjectsForDataProviderRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Class_\AllowMockObjectsWhereParentClassRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Class_\AllowMockObjectsWithoutExpectationsAttributeRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\AssertIsTypeMethodCallRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\PropertyCreateMockToCreateStubRector;
+use Rector\PHPUnit\PHPUnit120\Rector\Class_\RemoveOverrideFinalConstructTestCaseRector;
 use Rector\PHPUnit\PHPUnit120\Rector\ClassMethod\ExpressionCreateMockToCreateStubRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Property\MockObjectVarToStubRector;
 use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
 /**
  * Rules and configuration bound to the PHPUnit version installed in the analysed project,
  * as not every attribute and method exists in every PHPUnit version.
@@ -60,6 +66,12 @@ return static function (RectorConfig $rectorConfig): void {
         // deprecated in PHPUnit 11.5
         AssertContainsOnlyMethodCallRector::class,
         AssertIsTypeMethodCallRector::class,
+        // the TestCase::__construct() is final since PHPUnit 12.0.3
+        RemoveOverrideFinalConstructTestCaseRector::class,
+        // the AllowMockObjectsWithoutExpectations attribute exists since PHPUnit 12.5.2
+        AllowMockObjectsWhereParentClassRector::class,
+        AllowMockObjectsForDataProviderRector::class,
+        AllowMockObjectsWithoutExpectationsAttributeRector::class,
     ]);
     // both attributes were added in PHPUnit 10.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationWithValueToAttributeRector::class, [
@@ -69,4 +81,22 @@ return static function (RectorConfig $rectorConfig): void {
     ], 'phpunit/phpunit', '>=10.0');
     // the RunClassInSeparateProcess attribute was added in PHPUnit 10.0 and removed in PHPUnit 13.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationToAttributeRector::class, [new AnnotationToAttribute('runClassInSeparateProcess', 'PHPUnit\Framework\Attributes\RunClassInSeparateProcess')], 'phpunit/phpunit', '>=10.0 <13.0');
+    // the MockBuilder::onlyMethods() method was added in PHPUnit 8.3
+    // @see https://github.com/sebastianbergmann/phpunit/pull/3687
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('PHPUnit\Framework\MockObject\MockBuilder', 'setMethods', 'onlyMethods')], 'phpunit/phpunit', '>=8.3');
+    // the expectExceptionMessageMatches() method was added in PHPUnit 8.4
+    // @see https://github.com/sebastianbergmann/phpunit/issues/3957
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('PHPUnit\Framework\TestCase', 'expectExceptionMessageRegExp', 'expectExceptionMessageMatches')], 'phpunit/phpunit', '>=8.4');
+    // all these assert methods were added in PHPUnit 9.1
+    // @see https://github.com/sebastianbergmann/phpunit/blob/9.1.0/ChangeLog-9.1.md
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('PHPUnit\Framework\Assert', 'assertRegExp', 'assertMatchesRegularExpression'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertNotRegExp', 'assertDoesNotMatchRegularExpression'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertFileNotExists', 'assertFileDoesNotExist'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertFileNotIsReadable', 'assertFileIsNotReadable'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertDirectoryNotExists', 'assertDirectoryDoesNotExist'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertDirectoryNotIsReadable', 'assertDirectoryIsNotReadable'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertDirectoryNotIsWritable', 'assertDirectoryIsNotWritable'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertNotIsReadable', 'assertIsNotReadable'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertNotIsWritable', 'assertIsNotWritable')], 'phpunit/phpunit', '>=9.1');
+    // the numberOfInvocations() method was added in PHPUnit 10.0
+    // @see https://github.com/sebastianbergmann/phpunit/commit/2ba8b7fded44a1a75cf5712a3b7310a8de0b6bb8
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('PHPUnit\Framework\MockObject\Rule\InvocationOrder', 'getInvocationCount', 'numberOfInvocations')], 'phpunit/phpunit', '>=10.0');
+    // the assertObjectHasProperty() and assertObjectNotHasProperty() methods were added in PHPUnit 10.1
+    // @see https://github.com/sebastianbergmann/phpunit/issues/5220
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('PHPUnit\Framework\Assert', 'assertObjectHasAttribute', 'assertObjectHasProperty'), new MethodCallRename('PHPUnit\Framework\Assert', 'assertObjectNotHasAttribute', 'assertObjectNotHasProperty')], 'phpunit/phpunit', '>=10.1');
+    // the expectExceptionMessageIsOrContains() method was added in PHPUnit 13.2
+    // @see https://github.com/sebastianbergmann/phpunit/issues/6560
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('PHPUnit\Framework\TestCase', 'expectExceptionMessage', 'expectExceptionMessageIsOrContains')], 'phpunit/phpunit', '>=13.2');
 };

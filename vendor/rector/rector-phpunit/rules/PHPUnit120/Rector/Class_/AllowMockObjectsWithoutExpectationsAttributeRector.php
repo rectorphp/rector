@@ -24,15 +24,19 @@ use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
+ * The AllowMockObjectsWithoutExpectations attribute was added in PHPUnit 12.5.2
+ *
  * @see \Rector\PHPUnit\Tests\PHPUnit120\Rector\Class_\AllowMockObjectsWithoutExpectationsAttributeRector\AllowMockObjectsWithoutExpectationsAttributeRectorTest
  *
  * @see https://github.com/sebastianbergmann/phpunit/commit/24c208d6a340c3071f28a9b5cce02b9377adfd43
  */
-final class AllowMockObjectsWithoutExpectationsAttributeRector extends AbstractRector implements MinPhpVersionInterface
+final class AllowMockObjectsWithoutExpectationsAttributeRector extends AbstractRector implements MinPhpVersionInterface, ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -56,6 +60,10 @@ final class AllowMockObjectsWithoutExpectationsAttributeRector extends AbstractR
         $this->attributeFinder = $attributeFinder;
         $this->reflectionProvider = $reflectionProvider;
         $this->betterNodeFinder = $betterNodeFinder;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=12.5.2');
     }
     public function getNodeTypes(): array
     {
