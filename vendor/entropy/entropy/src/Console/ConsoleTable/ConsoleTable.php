@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\Entropy\Console\ConsoleTable;
+namespace RectorPrefix202608\Entropy\Console\ConsoleTable;
 
-use RectorPrefix202607\Entropy\Attributes\RelatedTest;
-use RectorPrefix202607\Entropy\Console\Output\OutputPrinter;
-use RectorPrefix202607\Entropy\Tests\Console\ConsoleTable\ConsoleTableTest;
+use RectorPrefix202608\Entropy\Attributes\RelatedTest;
+use RectorPrefix202608\Entropy\Console\Output\OutputPrinter;
+use RectorPrefix202608\Entropy\Tests\Console\ConsoleTable\ConsoleTableTest;
 final class ConsoleTable
 {
     /**

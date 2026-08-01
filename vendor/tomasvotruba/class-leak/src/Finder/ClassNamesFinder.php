@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\TomasVotruba\ClassLeak\Finder;
+namespace RectorPrefix202608\TomasVotruba\ClassLeak\Finder;
 
 use Closure;
-use RectorPrefix202607\TomasVotruba\ClassLeak\ClassNameResolver;
-use RectorPrefix202607\TomasVotruba\ClassLeak\ValueObject\ClassNames;
-use RectorPrefix202607\TomasVotruba\ClassLeak\ValueObject\FileWithClass;
+use RectorPrefix202608\TomasVotruba\ClassLeak\ClassNameResolver;
+use RectorPrefix202608\TomasVotruba\ClassLeak\ValueObject\ClassNames;
+use RectorPrefix202608\TomasVotruba\ClassLeak\ValueObject\FileWithClass;
 final class ClassNamesFinder
 {
     /**

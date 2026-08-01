@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607;
+namespace RectorPrefix202608;
 
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Config\RectorConfig;

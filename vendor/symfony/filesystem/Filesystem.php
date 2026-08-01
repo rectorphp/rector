@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202607\Symfony\Component\Filesystem;
+namespace RectorPrefix202608\Symfony\Component\Filesystem;
 
-use RectorPrefix202607\Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use RectorPrefix202607\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
-use RectorPrefix202607\Symfony\Component\Filesystem\Exception\IOException;
+use RectorPrefix202608\Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use RectorPrefix202608\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
+use RectorPrefix202608\Symfony\Component\Filesystem\Exception\IOException;
 /**
  * Provides basic utility to manipulate the file system.
  *

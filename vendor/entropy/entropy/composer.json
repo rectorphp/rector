@@ -23,13 +23,13 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202607\\Entropy\\": "src"
+            "RectorPrefix202608\\Entropy\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202607\\Entropy\\Tests\\": "tests",
-            "RectorPrefix202607\\App\\Project\\": [
+            "RectorPrefix202608\\Entropy\\Tests\\": "tests",
+            "RectorPrefix202608\\App\\Project\\": [
                 "tests\/Container\/Autodiscovery\/Fixture\/project-with-value-objects\/src"
             ]
         }

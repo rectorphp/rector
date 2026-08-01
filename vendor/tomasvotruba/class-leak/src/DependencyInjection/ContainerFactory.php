@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\TomasVotruba\ClassLeak\DependencyInjection;
+namespace RectorPrefix202608\TomasVotruba\ClassLeak\DependencyInjection;
 
-use RectorPrefix202607\Entropy\Container\Container;
+use RectorPrefix202608\Entropy\Container\Container;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 /**

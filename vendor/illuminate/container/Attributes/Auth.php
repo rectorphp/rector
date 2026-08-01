@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202607\Illuminate\Container\Attributes;
+namespace RectorPrefix202608\Illuminate\Container\Attributes;
 
 use Attribute;
-use RectorPrefix202607\Illuminate\Contracts\Container\Container;
-use RectorPrefix202607\Illuminate\Contracts\Container\ContextualAttribute;
+use RectorPrefix202608\Illuminate\Contracts\Container\Container;
+use RectorPrefix202608\Illuminate\Contracts\Container\ContextualAttribute;
 #[Attribute(Attribute::TARGET_PARAMETER)]
 class Auth implements ContextualAttribute
 {

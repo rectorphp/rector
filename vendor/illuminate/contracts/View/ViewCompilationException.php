@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202607\Illuminate\Contracts\View;
+namespace RectorPrefix202608\Illuminate\Contracts\View;
 
 use Exception;
 class ViewCompilationException extends Exception

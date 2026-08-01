@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202607\Illuminate\Contracts\JsonSchema;
+namespace RectorPrefix202608\Illuminate\Contracts\JsonSchema;
 
 use Closure;
 interface JsonSchema

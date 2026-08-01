@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\TomasVotruba\ClassLeak\NodeVisitor;
+namespace RectorPrefix202608\TomasVotruba\ClassLeak\NodeVisitor;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;

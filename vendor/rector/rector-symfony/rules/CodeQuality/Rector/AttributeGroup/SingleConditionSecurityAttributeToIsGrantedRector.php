@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\AttributeGroup;
 
-use RectorPrefix202607\Nette\Utils\Strings;
+use RectorPrefix202608\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;

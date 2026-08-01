@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\Entropy\Console\Input;
+namespace RectorPrefix202608\Entropy\Console\Input;
 
-use RectorPrefix202607\Entropy\Attributes\RelatedTest;
-use RectorPrefix202607\Entropy\Console\ValueObject\CLIRequest;
-use RectorPrefix202607\Entropy\Tests\Console\Input\InputParserTest;
+use RectorPrefix202608\Entropy\Attributes\RelatedTest;
+use RectorPrefix202608\Entropy\Console\ValueObject\CLIRequest;
+use RectorPrefix202608\Entropy\Tests\Console\Input\InputParserTest;
 final class InputParser
 {
     /**

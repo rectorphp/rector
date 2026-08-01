@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Config;
 
 use Deprecated;
-use RectorPrefix202607\Composer\Semver\Semver;
-use RectorPrefix202607\Illuminate\Container\Container;
+use RectorPrefix202608\Composer\Semver\Semver;
+use RectorPrefix202608\Illuminate\Container\Container;
 use Override;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Composer\InstalledPackageResolver;
@@ -25,8 +25,8 @@ use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\ValueObject\ComposerBoundRuleConfiguration;
-use RectorPrefix202607\Symfony\Component\Console\Command\Command;
-use RectorPrefix202607\Webmozart\Assert\Assert;
+use RectorPrefix202608\Symfony\Component\Console\Command\Command;
+use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * @api
  * @see \Rector\Tests\Config\RectorConfigTest

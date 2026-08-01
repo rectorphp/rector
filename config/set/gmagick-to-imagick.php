@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607;
+namespace RectorPrefix202608;
 
 use Rector\Config\RectorConfig;
 # @deprecated Niche set for a rarely used extension, it is empty now and will be removed.

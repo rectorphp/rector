@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607;
+namespace RectorPrefix202608;
 
 require __DIR__ . '/vendor/autoload.php';
 $nowDateTime = new \DateTime('now');

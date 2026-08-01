@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202607\\TomasVotruba\\ClassLeak\\": "src"
+            "RectorPrefix202608\\TomasVotruba\\ClassLeak\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202607\\TomasVotruba\\ClassLeak\\Tests\\": "tests"
+            "RectorPrefix202608\\TomasVotruba\\ClassLeak\\Tests\\": "tests"
         }
     },
     "replace": {

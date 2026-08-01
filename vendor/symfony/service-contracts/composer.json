@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202607\\Symfony\\Contracts\\Service\\": ""
+            "RectorPrefix202608\\Symfony\\Contracts\\Service\\": ""
         },
         "exclude-from-classmap": [
             "\/Test\/"

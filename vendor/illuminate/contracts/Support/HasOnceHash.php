@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202607\Illuminate\Contracts\Support;
+namespace RectorPrefix202608\Illuminate\Contracts\Support;
 
 interface HasOnceHash
 {

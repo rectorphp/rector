@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Console\Command;
 
-use RectorPrefix202607\Composer\Semver\Semver;
-use RectorPrefix202607\Nette\Utils\Strings;
+use RectorPrefix202608\Composer\Semver\Semver;
+use RectorPrefix202608\Nette\Utils\Strings;
 use Rector\Composer\InstalledPackageResolver;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -12,10 +12,12 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerBoundRuleConfiguration;
 use ReflectionObject;
-use RectorPrefix202607\Symfony\Component\Console\Command\Command;
-use RectorPrefix202607\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202607\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202607\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202608\Symfony\Component\Console\Command\Command;
+use RectorPrefix202608\Symfony\Component\Console\Helper\TableCell;
+use RectorPrefix202608\Symfony\Component\Console\Helper\TableSeparator;
+use RectorPrefix202608\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202608\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202608\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\Tests\Console\Command\ComposerBasedCommandTest
  */
@@ -63,7 +65,16 @@ final class ComposerBasedCommand extends Command
         }
         if ($configurationTableRows !== []) {
             $this->symfonyStyle->title('Composer package bound rule configuration');
-            $this->symfonyStyle->table(['Rule', 'Package', 'Requires', 'Installed', 'Active', 'Configuration'], $configurationTableRows);
+            $headers = ['Rule', 'Package', 'Requires', 'Installed', 'Active'];
+            $table = $this->symfonyStyle->createTable();
+            $table->setHeaders($headers);
+            $table->setRows($this->createConfigurationDisplayRows($configurationTableRows));
+            // keep columns as narrow as their content, so the full-width configuration line does not stretch them
+            foreach ($headers as $columnPosition => $header) {
+                $columnWidth = max(array_map(static fn(array $configurationTableRow): int => strlen($configurationTableRow[$columnPosition]), $configurationTableRows));
+                $table->setColumnMaxWidth($columnPosition, max($columnWidth, strlen($header)));
+            }
+            $table->render();
         }
         $allTableRows = array_merge($tableRows, $configurationTableRows);
         $activeCount = count(array_filter($allTableRows, static fn(array $tableRow): bool => $tableRow[4] === 'yes'));
@@ -107,6 +118,24 @@ final class ComposerBasedCommand extends Command
             $tableRows[] = [$this->printShortClassName($composerBoundRuleConfiguration->getRectorClass()), $packageName, $composerBoundRuleConfiguration->getVersionConstraint(), $installedVersion ?? '-', $composerBoundRuleConfiguration->isActive() ? 'yes' : 'no', $this->printConfiguration($composerBoundRuleConfiguration->getConfiguration())];
         }
         return $tableRows;
+    }
+    /**
+     * The configuration is printed on a separated full-width line, to avoid breaking the table layout
+     *
+     * @param array<array{string, string, string, string, string, string}> $configurationTableRows
+     * @return array<array<TableCell|string>|TableSeparator>
+     */
+    private function createConfigurationDisplayRows(array $configurationTableRows): array
+    {
+        $displayRows = [];
+        foreach ($configurationTableRows as $configurationTableRow) {
+            if ($displayRows !== []) {
+                $displayRows[] = new TableSeparator();
+            }
+            $displayRows[] = array_slice($configurationTableRow, 0, 5);
+            $displayRows[] = [new TableCell($configurationTableRow[5], ['colspan' => 5])];
+        }
+        return $displayRows;
     }
     /**
      * @param mixed[] $configuration

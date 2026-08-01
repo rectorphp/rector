@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202607\React\Socket;
+namespace RectorPrefix202608\React\Socket;
 
-use RectorPrefix202607\React\EventLoop\Loop;
-use RectorPrefix202607\React\EventLoop\LoopInterface;
-use RectorPrefix202607\React\Promise;
+use RectorPrefix202608\React\EventLoop\Loop;
+use RectorPrefix202608\React\EventLoop\LoopInterface;
+use RectorPrefix202608\React\Promise;
 use InvalidArgumentException;
 use RuntimeException;
 /**

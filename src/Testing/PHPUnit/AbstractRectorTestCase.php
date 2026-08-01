@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
-use RectorPrefix202607\Illuminate\Container\RewindableGenerator;
+use RectorPrefix202608\Illuminate\Container\RewindableGenerator;
 use Iterator;
-use RectorPrefix202607\Nette\Utils\FileSystem;
-use RectorPrefix202607\Nette\Utils\Strings;
+use RectorPrefix202608\Nette\Utils\FileSystem;
+use RectorPrefix202608\Nette\Utils\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
 use Rector\Application\ApplicationFileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;

@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Set\ValueObject;
 
-use RectorPrefix202607\Composer\Semver\Semver;
-use RectorPrefix202607\Nette\Utils\Strings;
+use RectorPrefix202608\Composer\Semver\Semver;
+use RectorPrefix202608\Nette\Utils\Strings;
 use Rector\Composer\ValueObject\InstalledPackage;
 use Rector\Set\Contract\SetInterface;
-use RectorPrefix202607\Webmozart\Assert\Assert;
+use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  * @see \Rector\Tests\Set\ValueObject\ComposerTriggeredSetTest

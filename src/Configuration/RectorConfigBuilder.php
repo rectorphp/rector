@@ -38,8 +38,8 @@ use Rector\Symfony\Set\SymfonyInternalSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
-use RectorPrefix202607\Symfony\Component\Finder\Finder;
-use RectorPrefix202607\Webmozart\Assert\Assert;
+use RectorPrefix202608\Symfony\Component\Finder\Finder;
+use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * @api
  */

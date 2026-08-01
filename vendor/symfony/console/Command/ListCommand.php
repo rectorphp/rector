@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202607\Symfony\Component\Console\Command;
+namespace RectorPrefix202608\Symfony\Component\Console\Command;
 
-use RectorPrefix202607\Symfony\Component\Console\Descriptor\ApplicationDescription;
-use RectorPrefix202607\Symfony\Component\Console\Helper\DescriptorHelper;
-use RectorPrefix202607\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202607\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202607\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202607\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202608\Symfony\Component\Console\Descriptor\ApplicationDescription;
+use RectorPrefix202608\Symfony\Component\Console\Helper\DescriptorHelper;
+use RectorPrefix202608\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202608\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202608\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202608\Symfony\Component\Console\Output\OutputInterface;
 /**
  * ListCommand displays the list of all available commands for the application.
  *

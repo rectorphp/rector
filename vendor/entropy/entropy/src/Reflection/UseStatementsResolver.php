@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\Entropy\Reflection;
+namespace RectorPrefix202608\Entropy\Reflection;
 
 final class UseStatementsResolver
 {

@@ -7,7 +7,7 @@
  *
  * @generated
  */
-namespace RectorPrefix202607\Composer;
+namespace RectorPrefix202608\Composer;
 
 $GLOBALS['_composer_bin_dir'] = __DIR__;
 $GLOBALS['_composer_autoload_path'] = __DIR__ . '/..' . '/autoload.php';

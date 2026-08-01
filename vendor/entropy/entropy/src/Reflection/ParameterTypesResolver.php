@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\Entropy\Reflection;
+namespace RectorPrefix202608\Entropy\Reflection;
 
-use RectorPrefix202607\Entropy\Attributes\RelatedTest;
-use RectorPrefix202607\Entropy\Container\Exception\CreateServiceException;
-use RectorPrefix202607\Entropy\Tests\Reflection\ParameterTypesResolver\ParameterTypesResolverTest;
+use RectorPrefix202608\Entropy\Attributes\RelatedTest;
+use RectorPrefix202608\Entropy\Container\Exception\CreateServiceException;
+use RectorPrefix202608\Entropy\Tests\Reflection\ParameterTypesResolver\ParameterTypesResolverTest;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;

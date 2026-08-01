@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202607\React\Socket;
+namespace RectorPrefix202608\React\Socket;
 
 /**
  * Decorates an existing Connector to always use a fixed, preconfigured URI

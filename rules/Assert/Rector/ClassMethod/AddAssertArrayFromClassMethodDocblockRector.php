@@ -30,7 +30,7 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202607\Webmozart\Assert\Assert;
+use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * @experimental Check generic array key/value types in runtime with assert. Generics for impatient people.
  *

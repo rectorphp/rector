@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607;
+namespace RectorPrefix202608;
 
 use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
 use Rector\CodeQuality\Rector\Expression\TernaryFalseExpressionToIfRector;

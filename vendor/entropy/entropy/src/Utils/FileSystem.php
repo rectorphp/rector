@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\Entropy\Utils;
+namespace RectorPrefix202608\Entropy\Utils;
 
-use RectorPrefix202607\Entropy\FileSystem\Exception\FileSystemException;
-use RectorPrefix202607\Webmozart\Assert\Assert;
+use RectorPrefix202608\Entropy\FileSystem\Exception\FileSystemException;
+use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * @api public api to use
  */

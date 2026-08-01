@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202607\Illuminate\Contracts\Encryption;
+namespace RectorPrefix202608\Illuminate\Contracts\Encryption;
 
 use RuntimeException;
 class DecryptException extends RuntimeException

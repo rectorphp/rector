@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607;
+namespace RectorPrefix202608;
 
-use RectorPrefix202607\Illuminate\Container\Container;
+use RectorPrefix202608\Illuminate\Container\Container;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Console\Style\SymfonyStyleFactory;
 use Rector\PhpParser\Node\FileNode;
 use Rector\Util\NodePrinter;
-use RectorPrefix202607\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202608\Symfony\Component\Console\Output\OutputInterface;
 if (!\function_exists('print_node')) {
     /**
      * @param Node|Node[] $node

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\TomasVotruba\ClassLeak\Filtering;
+namespace RectorPrefix202608\TomasVotruba\ClassLeak\Filtering;
 
-use RectorPrefix202607\TomasVotruba\ClassLeak\ValueObject\FileWithClass;
-use RectorPrefix202607\Webmozart\Assert\Assert;
+use RectorPrefix202608\TomasVotruba\ClassLeak\ValueObject\FileWithClass;
+use RectorPrefix202608\Webmozart\Assert\Assert;
 final class PossiblyUnusedClassesFilter
 {
     /**
@@ -15,67 +15,67 @@ final class PossiblyUnusedClassesFilter
      */
     private const DEFAULT_TYPES_TO_SKIP = [
         // http-kernel
-        'RectorPrefix202607\Symfony\Component\Console\Application',
-        'RectorPrefix202607\Symfony\Component\HttpKernel\DependencyInjection\Extension',
-        'RectorPrefix202607\Symfony\Bundle\FrameworkBundle\Controller\Controller',
-        'RectorPrefix202607\Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
-        'RectorPrefix202607\Livewire\Component',
-        'RectorPrefix202607\Illuminate\Routing\Controller',
-        'RectorPrefix202607\Illuminate\Contracts\Http\Kernel',
-        'RectorPrefix202607\Illuminate\Support\ServiceProvider',
+        'RectorPrefix202608\Symfony\Component\Console\Application',
+        'RectorPrefix202608\Symfony\Component\HttpKernel\DependencyInjection\Extension',
+        'RectorPrefix202608\Symfony\Bundle\FrameworkBundle\Controller\Controller',
+        'RectorPrefix202608\Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
+        'RectorPrefix202608\Livewire\Component',
+        'RectorPrefix202608\Illuminate\Routing\Controller',
+        'RectorPrefix202608\Illuminate\Contracts\Http\Kernel',
+        'RectorPrefix202608\Illuminate\Support\ServiceProvider',
         // events
-        'RectorPrefix202607\Symfony\Component\EventDispatcher\EventSubscriberInterface',
-        'RectorPrefix202607\Symfony\Component\Form\FormTypeExtensionInterface',
-        'RectorPrefix202607\Symfony\Component\Security\Core\Authentication\SimpleAuthenticatorInterface',
-        'RectorPrefix202607\Vich\UploaderBundle\Naming\DirectoryNamerInterface',
+        'RectorPrefix202608\Symfony\Component\EventDispatcher\EventSubscriberInterface',
+        'RectorPrefix202608\Symfony\Component\Form\FormTypeExtensionInterface',
+        'RectorPrefix202608\Symfony\Component\Security\Core\Authentication\SimpleAuthenticatorInterface',
+        'RectorPrefix202608\Vich\UploaderBundle\Naming\DirectoryNamerInterface',
         // validator
-        'RectorPrefix202607\Symfony\Component\Validator\Constraint',
-        'RectorPrefix202607\Symfony\Component\Validator\ConstraintValidator',
-        'RectorPrefix202607\Symfony\Component\Validator\ConstraintValidatorInterface',
-        'RectorPrefix202607\Symfony\Component\Security\Core\Authorization\Voter\VoterInterface',
-        'RectorPrefix202607\Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface',
-        'RectorPrefix202607\Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface',
-        'RectorPrefix202607\Symfony\Component\Security\Http\Authorization\AccessDeniedHandlerInterface',
-        'RectorPrefix202607\Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface',
+        'RectorPrefix202608\Symfony\Component\Validator\Constraint',
+        'RectorPrefix202608\Symfony\Component\Validator\ConstraintValidator',
+        'RectorPrefix202608\Symfony\Component\Validator\ConstraintValidatorInterface',
+        'RectorPrefix202608\Symfony\Component\Security\Core\Authorization\Voter\VoterInterface',
+        'RectorPrefix202608\Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface',
+        'RectorPrefix202608\Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface',
+        'RectorPrefix202608\Symfony\Component\Security\Http\Authorization\AccessDeniedHandlerInterface',
+        'RectorPrefix202608\Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface',
         // symfony forms
-        'RectorPrefix202607\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface',
-        'RectorPrefix202607\Symfony\Component\Form\AbstractType',
+        'RectorPrefix202608\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface',
+        'RectorPrefix202608\Symfony\Component\Form\AbstractType',
         // doctrine
-        'RectorPrefix202607\Doctrine\Common\DataFixtures\FixtureInterface',
-        'RectorPrefix202607\Doctrine\Common\EventSubscriber',
-        'RectorPrefix202607\Nelmio\Alice\ProcessorInterface',
+        'RectorPrefix202608\Doctrine\Common\DataFixtures\FixtureInterface',
+        'RectorPrefix202608\Doctrine\Common\EventSubscriber',
+        'RectorPrefix202608\Nelmio\Alice\ProcessorInterface',
         // kernel
-        'RectorPrefix202607\Symfony\Component\HttpKernel\Bundle\BundleInterface',
-        'RectorPrefix202607\Symfony\Component\HttpKernel\KernelInterface',
-        'RectorPrefix202607\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
+        'RectorPrefix202608\Symfony\Component\HttpKernel\Bundle\BundleInterface',
+        'RectorPrefix202608\Symfony\Component\HttpKernel\KernelInterface',
+        'RectorPrefix202608\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
         // console
-        'RectorPrefix202607\Symfony\Component\Console\Command\Command',
-        'RectorPrefix202607\Entropy\Console\Contract\CommandInterface',
-        'RectorPrefix202607\Twig\Extension\ExtensionInterface',
-        'RectorPrefix202607\PhpCsFixer\Fixer\FixerInterface',
-        'RectorPrefix202607\PHPUnit\Framework\TestCase',
+        'RectorPrefix202608\Symfony\Component\Console\Command\Command',
+        'RectorPrefix202608\Entropy\Console\Contract\CommandInterface',
+        'RectorPrefix202608\Twig\Extension\ExtensionInterface',
+        'RectorPrefix202608\PhpCsFixer\Fixer\FixerInterface',
+        'RectorPrefix202608\PHPUnit\Framework\TestCase',
         'PHPStan\Rules\Rule',
         'PHPStan\Command\ErrorFormatter\ErrorFormatter',
         // tests
-        'RectorPrefix202607\Behat\Behat\Context\Context',
+        'RectorPrefix202608\Behat\Behat\Context\Context',
         // jms
-        'RectorPrefix202607\JMS\Serializer\Handler\SubscribingHandlerInterface',
+        'RectorPrefix202608\JMS\Serializer\Handler\SubscribingHandlerInterface',
         // laravel
-        'RectorPrefix202607\Illuminate\Support\ServiceProvider',
-        'RectorPrefix202607\Illuminate\Foundation\Http\Kernel',
-        'RectorPrefix202607\Illuminate\Contracts\Console\Kernel',
-        'RectorPrefix202607\Illuminate\Routing\Controller',
+        'RectorPrefix202608\Illuminate\Support\ServiceProvider',
+        'RectorPrefix202608\Illuminate\Foundation\Http\Kernel',
+        'RectorPrefix202608\Illuminate\Contracts\Console\Kernel',
+        'RectorPrefix202608\Illuminate\Routing\Controller',
         // Doctrine
-        'RectorPrefix202607\Doctrine\Migrations\AbstractMigration',
+        'RectorPrefix202608\Doctrine\Migrations\AbstractMigration',
     ];
     /**
      * @var string[]
      */
     private const DEFAULT_ATTRIBUTES_TO_SKIP = [
         // Symfony
-        'RectorPrefix202607\Symfony\Component\Console\Attribute\AsCommand',
-        'RectorPrefix202607\Symfony\Component\HttpKernel\Attribute\AsController',
-        'RectorPrefix202607\Symfony\Component\EventDispatcher\Attribute\AsEventListener',
+        'RectorPrefix202608\Symfony\Component\Console\Attribute\AsCommand',
+        'RectorPrefix202608\Symfony\Component\HttpKernel\Attribute\AsController',
+        'RectorPrefix202608\Symfony\Component\EventDispatcher\Attribute\AsEventListener',
     ];
     /**
      * @param FileWithClass[] $filesWithClasses

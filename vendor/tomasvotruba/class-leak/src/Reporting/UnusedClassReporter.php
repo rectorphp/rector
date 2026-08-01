@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202607\TomasVotruba\ClassLeak\Reporting;
+namespace RectorPrefix202608\TomasVotruba\ClassLeak\Reporting;
 
-use RectorPrefix202607\Entropy\Console\Enum\ExitCode;
-use RectorPrefix202607\Entropy\Console\Output\OutputPrinter;
-use RectorPrefix202607\Nette\Utils\Json;
-use RectorPrefix202607\TomasVotruba\ClassLeak\ValueObject\FileWithClass;
-use RectorPrefix202607\TomasVotruba\ClassLeak\ValueObject\UnusedClassesResult;
+use RectorPrefix202608\Entropy\Console\Enum\ExitCode;
+use RectorPrefix202608\Entropy\Console\Output\OutputPrinter;
+use RectorPrefix202608\Nette\Utils\Json;
+use RectorPrefix202608\TomasVotruba\ClassLeak\ValueObject\FileWithClass;
+use RectorPrefix202608\TomasVotruba\ClassLeak\ValueObject\UnusedClassesResult;
 final class UnusedClassReporter
 {
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202607\Illuminate\Contracts\Database\Eloquent;
+namespace RectorPrefix202608\Illuminate\Contracts\Database\Eloquent;
 
-use RectorPrefix202607\Illuminate\Database\Eloquent\Model;
+use RectorPrefix202608\Illuminate\Database\Eloquent\Model;
 interface ComparesCastableAttributes
 {
     /**
