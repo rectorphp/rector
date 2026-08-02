@@ -4,51 +4,21 @@ declare (strict_types=1);
 namespace Rector\Symfony\Configs\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Configs\NodeAnalyser\ConfigServiceArgumentsResolver;
-use Rector\Symfony\Enum\SymfonyAttribute;
-use Rector\ValueObject\MethodName;
-use RectorPrefix202608\Symfony\Component\Finder\Finder;
-use RectorPrefix202608\Symfony\Component\Finder\SplFileInfo;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
- * The param/env is only available since Symfony 6.3
- * @see https://symfony.com/blog/new-in-symfony-6-3-dependency-injection-improvements#new-options-for-autowire-attribute
- *
- * @see \Rector\Symfony\Tests\Configs\Rector\Class_\AutowireAttributeRector\AutowireAttributeRectorTest
+ * @deprecated Far-fetched and not reliable, as it pairs constructor params with config arguments by name and position,
+ * across configs the rule has no way to tell apart. Custom autowiring should be handled with care, one service at a time.
  */
-final class AutowireAttributeRector extends AbstractRector implements ConfigurableRectorInterface
+final class AutowireAttributeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ConfigServiceArgumentsResolver $configServiceArgumentsResolver;
-    /**
-     * @var string
-     */
-    public const CONFIGS_DIRECTORY = 'configs_directory';
-    private ?string $configsDirectory = null;
-    public function __construct(ConfigServiceArgumentsResolver $configServiceArgumentsResolver)
-    {
-        $this->configServiceArgumentsResolver = $configServiceArgumentsResolver;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change explicit configuration parameter pass into #[Autowire] attributes', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change explicit configuration parameter pass into #[Autowire] attributes', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function __construct(
@@ -72,7 +42,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::CONFIGS_DIRECTORY => __DIR__ . '/config'])]);
+)]);
     }
     public function getNodeTypes(): array
     {
@@ -83,89 +53,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Class_
     {
-        if ($node->isAnonymous()) {
-            return null;
-        }
-        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        if ($this->configsDirectory === null) {
-            throw new ShouldNotHappenException('Configure paths first');
-        }
-        $phpConfigFileInfos = $this->findPhpConfigs($this->configsDirectory);
-        $servicesArguments = $this->configServiceArgumentsResolver->resolve($phpConfigFileInfos);
-        if ($servicesArguments === []) {
-            // nothing to resolve, maybe false positive!
-            return null;
-        }
-        $className = $this->getName($node);
-        if (!is_string($className)) {
-            return null;
-        }
-        $hasChanged = \false;
-        foreach ($servicesArguments as $serviceArgument) {
-            if ($className !== $serviceArgument->getClassName()) {
-                continue;
-            }
-            foreach ($constructClassMethod->params as $position => $constructorParam) {
-                if (!$constructorParam->var instanceof Variable) {
-                    continue;
-                }
-                $constructorParameterName = $constructorParam->var->name;
-                if (!is_string($constructorParameterName)) {
-                    continue;
-                }
-                $currentEnv = $serviceArgument->getEnvs()[$constructorParameterName] ?? $serviceArgument->getEnvs()[$position] ?? null;
-                if ($currentEnv) {
-                    $constructorParam->attrGroups[] = new AttributeGroup([$this->createAutowireAttribute($currentEnv, 'env')]);
-                    $hasChanged = \true;
-                }
-                $currentParameter = $serviceArgument->getParams()[$constructorParameterName] ?? $serviceArgument->getParams()[$position] ?? null;
-                if ($currentParameter) {
-                    $constructorParam->attrGroups[] = new AttributeGroup([$this->createAutowireAttribute($currentParameter, 'param')]);
-                    $hasChanged = \true;
-                }
-            }
-        }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
-    }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        if (!$configuration[self::CONFIGS_DIRECTORY]) {
-            return;
-        }
-        $configsDirectory = $configuration[self::CONFIGS_DIRECTORY];
-        Assert::string($configsDirectory);
-        Assert::directory($configsDirectory);
-        $this->configsDirectory = $configsDirectory;
-    }
-    /**
-     * @return SplFileInfo[]
-     */
-    private function findPhpConfigs(string $configsDirectory): array
-    {
-        $phpConfigsFinder = Finder::create()->files()->in($configsDirectory)->name('*.php')->sortByName();
-        if ($phpConfigsFinder->count() === 0) {
-            throw new ShouldNotHappenException(sprintf('Could not find any PHP configs in "%s"', $this->configsDirectory));
-        }
-        return iterator_to_array($phpConfigsFinder->getIterator());
-    }
-    /**
-     * @param string|\PhpParser\Node\Expr $value
-     */
-    private function createAutowireAttribute($value, string $argName): Attribute
-    {
-        if (is_string($value)) {
-            $value = new String_($value);
-        }
-        $args = [new Arg($value, \false, \false, [], new Identifier($argName))];
-        return new Attribute(new FullyQualified(SymfonyAttribute::AUTOWIRE), $args);
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as pairing constructor params with config arguments by name and position is far-fetched and not reliable. Handle custom autowiring with care, one service at a time', self::class));
     }
 }
