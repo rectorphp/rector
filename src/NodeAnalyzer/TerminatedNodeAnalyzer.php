@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -24,9 +25,15 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
+use PhpParser\NodeVisitor;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\FileNode;
 final class TerminatedNodeAnalyzer
 {
+    /**
+     * @readonly
+     */
+    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     /**
      * @var array<class-string<Node>>
      */
@@ -39,6 +46,10 @@ final class TerminatedNodeAnalyzer
      * @var array<class-string<Node>>
      */
     private const ALLOWED_CONTINUE_CURRENT_STMTS = [InlineHTML::class, Nop::class];
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    {
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+    }
     /**
      * @param StmtsAware $stmtsAware
      */
@@ -54,15 +65,15 @@ final class TerminatedNodeAnalyzer
             return $this->isTerminatedNode($node, $currentStmt);
         }
         if ($node instanceof TryCatch) {
-            return $this->isTerminatedInLastStmtsTryCatch($node, $currentStmt);
+            return $this->isTerminatedInLastStmtsTryCatch($node);
         }
         if ($node instanceof If_) {
-            return $this->isTerminatedInLastStmtsIf($node, $currentStmt);
+            return $this->isTerminatedInLastStmtsIf($node);
         }
         /** @var Switch_ $node */
-        return $this->isTerminatedInLastStmtsSwitch($node, $currentStmt);
+        return $this->isTerminatedInLastStmtsSwitch($node);
     }
-    private function isTerminatedNode(Node $previousNode, Node $currentStmt): bool
+    private function isTerminatedNode(Stmt $previousNode, Stmt $currentStmt): bool
     {
         if (in_array(get_class($previousNode), self::TERMINABLE_NODES, \true)) {
             return \true;
@@ -75,9 +86,13 @@ final class TerminatedNodeAnalyzer
         }
         return \false;
     }
-    private function isTerminatedInLastStmtsSwitch(Switch_ $switch, Stmt $stmt): bool
+    private function isTerminatedInLastStmtsSwitch(Switch_ $switch): bool
     {
         if ($switch->cases === []) {
+            return \false;
+        }
+        // a break/continue jumps out of the Switch_, so the next stmt is still executable
+        if ($this->hasEscapingJump($switch)) {
             return \false;
         }
         $hasDefault = \false;
@@ -88,56 +103,74 @@ final class TerminatedNodeAnalyzer
             if ($case->stmts === [] && isset($switch->cases[$key + 1])) {
                 continue;
             }
-            if (!$this->isTerminatedInLastStmts($case->stmts, $stmt)) {
+            if (!$this->isTerminatedInLastStmts($case->stmts)) {
                 return \false;
             }
         }
         return $hasDefault;
     }
-    private function isTerminatedInLastStmtsTryCatch(TryCatch $tryCatch, Stmt $stmt): bool
+    private function hasEscapingJump(Switch_ $switch): bool
     {
-        if ($tryCatch->finally instanceof Finally_ && $this->isTerminatedInLastStmts($tryCatch->finally->stmts, $stmt)) {
+        $hasEscapingJump = \false;
+        foreach ($switch->cases as $case) {
+            $this->simpleCallableNodeTraverser->traverseNodesWithCallable($case->stmts, static function (Node $node) use (&$hasEscapingJump): ?int {
+                // nested scopes bring their own jump targets
+                if ($node instanceof FunctionLike || $node instanceof ClassLike) {
+                    return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                }
+                if (!$node instanceof Break_ && !$node instanceof Continue_ && !$node instanceof Goto_) {
+                    return null;
+                }
+                $hasEscapingJump = \true;
+                return NodeVisitor::STOP_TRAVERSAL;
+            });
+            if ($hasEscapingJump) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    private function isTerminatedInLastStmtsTryCatch(TryCatch $tryCatch): bool
+    {
+        if ($tryCatch->finally instanceof Finally_ && $this->isTerminatedInLastStmts($tryCatch->finally->stmts)) {
             return \true;
         }
         foreach ($tryCatch->catches as $catch) {
-            if (!$this->isTerminatedInLastStmts($catch->stmts, $stmt)) {
+            if (!$this->isTerminatedInLastStmts($catch->stmts)) {
                 return \false;
             }
         }
-        return $this->isTerminatedInLastStmts($tryCatch->stmts, $stmt);
+        return $this->isTerminatedInLastStmts($tryCatch->stmts);
     }
-    private function isTerminatedInLastStmtsIf(If_ $if, Stmt $stmt): bool
+    private function isTerminatedInLastStmtsIf(If_ $if): bool
     {
         // Without ElseIf_[] and Else_, after If_ is possibly executable
         if ($if->elseifs === [] && !$if->else instanceof Else_) {
             return \false;
         }
         foreach ($if->elseifs as $elseif) {
-            if (!$this->isTerminatedInLastStmts($elseif->stmts, $stmt)) {
+            if (!$this->isTerminatedInLastStmts($elseif->stmts)) {
                 return \false;
             }
         }
-        if (!$this->isTerminatedInLastStmts($if->stmts, $stmt)) {
+        if (!$this->isTerminatedInLastStmts($if->stmts)) {
             return \false;
         }
         if (!$if->else instanceof Else_) {
             return \false;
         }
-        return $this->isTerminatedInLastStmts($if->else->stmts, $stmt);
+        return $this->isTerminatedInLastStmts($if->else->stmts);
     }
     /**
      * @param Stmt[] $stmts
      */
-    private function isTerminatedInLastStmts(array $stmts, Node $node): bool
+    private function isTerminatedInLastStmts(array $stmts): bool
     {
         if ($stmts === []) {
             return \false;
         }
         $lastKey = array_key_last($stmts);
         $lastNode = $stmts[$lastKey];
-        if (isset($stmts[$lastKey - 1]) && !$this->isTerminatedNode($stmts[$lastKey - 1], $node)) {
-            return \false;
-        }
         if ($lastNode instanceof Expression) {
             return $lastNode->expr instanceof Exit_ || $lastNode->expr instanceof Throw_;
         }
