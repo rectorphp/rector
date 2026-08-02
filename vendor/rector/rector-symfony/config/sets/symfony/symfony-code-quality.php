@@ -11,7 +11,7 @@ use Rector\Symfony\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstruc
 use Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventSubscriberMethodReturnVoidRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\InlineClassRoutePrefixRector;
-use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector;
+use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ActionSuffixRemoverRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector;
@@ -37,7 +37,7 @@ return static function (RectorConfig $rectorConfig): void {
         // controller
         ActionSuffixRemoverRector::class,
         ControllerMethodInjectionToConstructorRector::class,
-        LoadValidatorMetadataToAnnotationRector::class,
+        LoadValidatorMetadataToAttributeRector::class,
         // request method
         RequestIsMainRector::class,
         ParameterBagTypedGetMethodCallRector::class,

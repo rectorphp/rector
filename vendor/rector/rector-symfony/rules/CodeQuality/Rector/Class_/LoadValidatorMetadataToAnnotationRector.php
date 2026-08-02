@@ -5,55 +5,19 @@ namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\NodeAnalyzer\Annotations\ClassAnnotationAssertResolver;
-use Rector\Symfony\NodeAnalyzer\Annotations\MethodCallAnnotationAssertResolver;
-use Rector\Symfony\NodeAnalyzer\Annotations\PropertyAnnotationAssertResolver;
-use Rector\Symfony\ValueObject\ValidatorAssert\ClassMethodAndAnnotation;
-use Rector\Symfony\ValueObject\ValidatorAssert\PropertyAndAnnotation;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
+ * @deprecated Since Symfony 5.2 the validator loads constraints from PHP attributes, and Doctrine annotations are deprecated since Symfony 6.4. Use LoadValidatorMetadataToAttributeRector instead.
+ *
  * @changelog https://symfony.com/doc/current/components/validator/metadata.html
  * @changelog https://symfony.com/doc/current/validation.html#the-basics-of-validation
- *
- * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector\LoadValidatorMetadataToAnnotationRectorTest
  */
-final class LoadValidatorMetadataToAnnotationRector extends AbstractRector
+final class LoadValidatorMetadataToAnnotationRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private MethodCallAnnotationAssertResolver $methodCallAnnotationAssertResolver;
-    /**
-     * @readonly
-     */
-    private PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver;
-    /**
-     * @readonly
-     */
-    private ClassAnnotationAssertResolver $classAnnotationAssertResolver;
-    /**
-     * @readonly
-     */
-    private DocBlockUpdater $docBlockUpdater;
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    public function __construct(MethodCallAnnotationAssertResolver $methodCallAnnotationAssertResolver, PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver, ClassAnnotationAssertResolver $classAnnotationAssertResolver, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->methodCallAnnotationAssertResolver = $methodCallAnnotationAssertResolver;
-        $this->propertyAnnotationAssertResolver = $propertyAnnotationAssertResolver;
-        $this->classAnnotationAssertResolver = $classAnnotationAssertResolver;
-        $this->docBlockUpdater = $docBlockUpdater;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Move metadata from loadValidatorMetadata() to property/getter/method annotations', [new CodeSample(<<<'CODE_SAMPLE'
@@ -98,71 +62,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($node->stmts as $classStmtKey => $classStmt) {
-            if (!$classStmt instanceof ClassMethod) {
-                continue;
-            }
-            if (!$this->isName($classStmt, 'loadValidatorMetadata')) {
-                continue;
-            }
-            $loadValidatorMetadataClassMethod = $classStmt;
-            if ($classStmt->stmts === null) {
-                return null;
-            }
-            foreach ((array) $loadValidatorMetadataClassMethod->stmts as $classMethodStmtKey => $methodStmt) {
-                // 1. class
-                $doctrineAnnotationTagValueNode = $this->classAnnotationAssertResolver->resolve($methodStmt);
-                if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-                    $this->refactorClassAnnotation($node, $doctrineAnnotationTagValueNode, $loadValidatorMetadataClassMethod, $classMethodStmtKey);
-                }
-                // 2. class methods
-                $classMethodAndAnnotation = $this->methodCallAnnotationAssertResolver->resolve($methodStmt);
-                if ($classMethodAndAnnotation instanceof ClassMethodAndAnnotation) {
-                    $this->refactorClassMethodAndAnnotation($node, $classMethodAndAnnotation, $loadValidatorMetadataClassMethod, $classMethodStmtKey);
-                }
-                // 3. properties
-                $propertyAndAnnotation = $this->propertyAnnotationAssertResolver->resolve($methodStmt);
-                if ($propertyAndAnnotation instanceof PropertyAndAnnotation) {
-                    $this->refactorPropertyAndAnnotation($node, $propertyAndAnnotation, $loadValidatorMetadataClassMethod, $classMethodStmtKey);
-                }
-            }
-            // remove empty class method
-            if ($loadValidatorMetadataClassMethod->stmts === []) {
-                unset($node->stmts[$classStmtKey]);
-            }
-            return $node;
-        }
-        return null;
-    }
-    private function refactorClassMethodAndAnnotation(Class_ $class, ClassMethodAndAnnotation $classMethodAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey): void
-    {
-        foreach ($classMethodAndAnnotation->getPossibleMethodNames() as $possibleMethodName) {
-            $classMethod = $class->getMethod($possibleMethodName);
-            if (!$classMethod instanceof ClassMethod) {
-                continue;
-            }
-            $getterPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            $getterPhpDocInfo->addTagValueNode($classMethodAndAnnotation->getDoctrineAnnotationTagValueNode());
-            $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
-            unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
-        }
-    }
-    private function refactorPropertyAndAnnotation(Class_ $class, PropertyAndAnnotation $propertyAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey): void
-    {
-        $property = $class->getProperty($propertyAndAnnotation->getProperty());
-        if (!$property instanceof Property) {
-            return;
-        }
-        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $propertyPhpDocInfo->addTagValueNode($propertyAndAnnotation->getDoctrineAnnotationTagValueNode());
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
-        unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
-    }
-    private function refactorClassAnnotation(Class_ $class, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey): void
-    {
-        $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $classPhpDocInfo->addTagValueNode($doctrineAnnotationTagValueNode);
-        unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($class);
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as the validator loads constraints from PHP attributes since Symfony 5.2. Use "%s" instead.', self::class, \Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector::class));
     }
 }
