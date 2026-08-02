@@ -17,8 +17,4 @@ final class SymfonyAnnotation
      * @var string
      */
     public const MAP_ENTITY = 'Symfony\Bridge\Doctrine\Attribute\MapEntity';
-    /**
-     * @var string
-     */
-    public const TEMPLATE = 'Sensio\Bundle\FrameworkExtraBundle\Configuration\Template';
 }
