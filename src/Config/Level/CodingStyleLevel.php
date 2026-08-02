@@ -19,7 +19,6 @@ use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
 use Rector\CodingStyle\Rector\FuncCall\StrictInArrayRector;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
-use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\CodingStyle\Rector\Property\SplitGroupedPropertiesRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\CodingStyle\Rector\Stmt\RemoveUselessAliasInUseStatementRector;
@@ -49,7 +48,7 @@ final class CodingStyleLevel
      *
      * @var array<class-string<RectorInterface>>
      */
-    public const RULES = [SeparateMultiUseImportsRector::class, NewlineBetweenClassLikeStmtsRector::class, NewlineAfterStatementRector::class, NullableCompareToNullRector::class, ConsistentImplodeRector::class, SimplifyQuoteEscapeRector::class, StringClassNameToClassConstantRector::class, CatchExceptionNameMatchingTypeRector::class, SplitDoubleAssignRector::class, WrapEncapsedVariableInCurlyBracesRector::class, NewlineBeforeNewAssignSetRector::class, MakeInheritedMethodVisibilitySameAsParentRector::class, CallUserFuncArrayToVariadicRector::class, VersionCompareFuncCallToConstantRector::class, CountArrayToEmptyArrayComparisonRector::class, CallUserFuncToMethodCallRector::class, FuncGetArgsToVariadicParamRector::class, StrictArraySearchRector::class, StrictInArrayRector::class, UseClassKeywordForClassNameResolutionRector::class, SplitGroupedPropertiesRector::class, SplitGroupedClassConstantsRector::class, RemoveUselessAliasInUseStatementRector::class, BinaryOpStandaloneAssignsToDirectRector::class, MinMaxToClampRector::class];
+    public const RULES = [SeparateMultiUseImportsRector::class, NewlineBetweenClassLikeStmtsRector::class, NewlineAfterStatementRector::class, ConsistentImplodeRector::class, SimplifyQuoteEscapeRector::class, StringClassNameToClassConstantRector::class, CatchExceptionNameMatchingTypeRector::class, SplitDoubleAssignRector::class, WrapEncapsedVariableInCurlyBracesRector::class, NewlineBeforeNewAssignSetRector::class, MakeInheritedMethodVisibilitySameAsParentRector::class, CallUserFuncArrayToVariadicRector::class, VersionCompareFuncCallToConstantRector::class, CountArrayToEmptyArrayComparisonRector::class, CallUserFuncToMethodCallRector::class, FuncGetArgsToVariadicParamRector::class, StrictArraySearchRector::class, StrictInArrayRector::class, UseClassKeywordForClassNameResolutionRector::class, SplitGroupedPropertiesRector::class, SplitGroupedClassConstantsRector::class, RemoveUselessAliasInUseStatementRector::class, BinaryOpStandaloneAssignsToDirectRector::class, MinMaxToClampRector::class];
     /**
      * @var array<class-string<RectorInterface>, mixed[]>
      */
