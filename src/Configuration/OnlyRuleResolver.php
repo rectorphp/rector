@@ -54,6 +54,17 @@ final class OnlyRuleResolver
             throw new RectorRuleNameAmbiguousException($message);
         }
         if (strpos($rule, '\\') === \false) {
+            // the shell has eaten unescaped backslashes, e.g. --only=\Rector\Some\Rule
+            $flattenMatching = [];
+            foreach ($this->rectors as $rector) {
+                if (str_replace('\\', '', get_class($rector)) === $rule) {
+                    $flattenMatching[] = get_class($rector);
+                }
+            }
+            $flattenMatching = array_unique($flattenMatching);
+            if (count($flattenMatching) === 1) {
+                return $flattenMatching[0];
+            }
             $message = sprintf('Rule "%s" was not found.%sThe rule has no namespace. Make sure to escape the backslashes, and add quotes around the rule name: --only="My\Rector\Rule"', $rule, \PHP_EOL);
         } else {
             $message = sprintf('Rule "%s" was not found.%sMake sure it is registered in your config or in one of the sets', $rule, \PHP_EOL);
