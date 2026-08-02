@@ -49,6 +49,7 @@ use Rector\Symfony\Symfony42\Rector\New_\StringToArrayArgumentProcessRector;
 use Rector\Symfony\Symfony43\Rector\ClassMethod\EventDispatcherParentConstructRector;
 use Rector\Symfony\Symfony43\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Symfony44\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
+use Rector\Symfony\Symfony44\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;
 use Rector\Symfony\Symfony51\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector;
@@ -102,6 +103,8 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/console 4.4 and 5.1
         ConsoleExecuteReturnIntRector::class,
         CommandConstantReturnCodeRector::class,
+        // symfony/security-core 4.4
+        AuthorizationCheckerIsGrantedExtractorRector::class,
         // symfony/security-http 5.1
         LogoutHandlerToLogoutEventSubscriberRector::class,
         LogoutSuccessHandlerToLogoutEventSubscriberRector::class,
