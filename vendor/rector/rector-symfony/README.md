@@ -55,45 +55,6 @@ return RectorConfig::configure()
 
 That's it! Now you can run the `StringFormTypeToClassRector` and get your form classes converted safely.
 
----
-
-### Provide Symfony PHP Container
-
-Some rules like `AddRouteAnnotationRector` require additional access to your Symfony container. The rule takes container service "router" to load metadata about your routes.
-
-```php
-use Rector\Config\RectorConfig;
-use Rector\Symfony\Bridge\Symfony\Routing\SymfonyRoutesProvider;
-use Rector\Symfony\Configs\Rector\ClassMethod\AddRouteAnnotationRector;
-use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
-
-return RectorConfig::configure()
-    ->withSymfonyContainerPhp(__DIR__ . '/tests/symfony-container.php')
-    ->registerService(SymfonyRoutesProvider::class, SymfonyRoutesProviderInterface::class);
-```
-
-The `tests/symfony-container.php` should provide your dependency injection container. The way you create the container is up to you. It can be as simple as:
-
-```php
-// tests/symfony-container.php
-
-use App\Kernel;
-
-require __DIR__ . '/bootstrap.php';
-
-$appKernel = new Kernel('test', false);
-$appKernel->boot();
-
-return $appKernel->getContainer();
-```
-
-The version of your Symfony can be quite old. Public methods are stable from Symfony 2 to through 6 and the router have not changed much. The `AddRouteAnnotationRector` rule was tested and developed on Symfony 2.8 project.
-
----
-
-> [!NOTE]
-> In this case, container cache PHP file located in `/var/cache/<env>/appProjectContainer.php` is not enough. Why? Few services require Kernel to be set, e.g. routes that are resolved in lazy way. This container file is only dumped without Kernel and [would crash with missing "kernel" error](https://github.com/symfony/symfony/issues/19840). That's why the rule needs full blown container.
-
 <br>
 
 ## Learn Rector Faster
