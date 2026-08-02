@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Config\Level;
 
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
+use Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
@@ -106,6 +107,7 @@ final class DeadCodeLevel
         RemoveUselessReturnExprInConstructRector::class,
         ReplaceBlockToItsStmtsRector::class,
         RemoveFilterVarOnExactTypeRector::class,
+        RemoveFinalFromConstRector::class,
         RemoveTypedPropertyDeadInstanceOfRector::class,
         RemoveDeadInstanceOfAssertRector::class,
         TernaryToBooleanOrFalseToBooleanAndRector::class,
