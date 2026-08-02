@@ -11,6 +11,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 use Rector\Application\ApplicationFileProcessor;
 use Rector\Autoloading\AdditionalAutoloader;
 use Rector\Autoloading\BootstrapFilesIncluder;
+use Rector\Composer\InstalledPackageResolver;
 use Rector\Configuration\ConfigurationFactory;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -64,6 +65,13 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         // boot once for config + test case to avoid booting again and again for every test fixture
         $cacheKey = sha1($configFile . static::class);
         if (!isset(self::$cacheByRuleAndConfig[$cacheKey])) {
+            // rules bonded to a composer package are filtered out unless the package is installed.
+            // the composer package constraint filter keeps the very first resolver it is given, so the binding must
+            // stay untouched; only the file it reads changes, on every test case, so it never leaks to the next one
+            if (!$rectorConfig->bound(InstalledPackageResolver::class)) {
+                $rectorConfig->singleton(InstalledPackageResolver::class);
+            }
+            $rectorConfig->make(InstalledPackageResolver::class)->changeComposerJsonFilePath($this->provideComposerJsonFilePath());
             // reset
             /** @var RewindableGenerator<int, ResettableInterface> $resettables */
             $resettables = $rectorConfig->tagged(ResettableInterface::class);
@@ -103,6 +111,17 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     protected static function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
         return FixtureFileFinder::yieldDirectory($directory, $suffix);
+    }
+    /**
+     * Override to test a rule that implements @see \Rector\VersionBonding\Contract\ComposerPackageConstraintInterface
+     * against a package that is not installed. The versions are read from the "require" and "require-dev" sections of
+     * the provided "composer.json", instead of the installed packages.
+     *
+     * @api used by extensions
+     */
+    protected function provideComposerJsonFilePath(): ?string
+    {
+        return null;
     }
     protected function doTestFile(string $fixtureFilePath, bool $includeFixtureDirectoryAsSource = \false): void
     {
