@@ -1659,7 +1659,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\CodingStyle\\Rector\\Ternary\\TernaryConditionVariableAssignmentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Ternary/TernaryConditionVariableAssignmentRector.php',
         'Rector\\CodingStyle\\Rector\\Use_\\SeparateMultiUseImportsRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php',
         'Rector\\CodingStyle\\ValueObject\\ObjectMagicMethods' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ObjectMagicMethods.php',
-        'Rector\\CodingStyle\\ValueObject\\VariableAndExprAssign' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/VariableAndExprAssign.php',
         'Rector\\Comments\\CommentRemover' => __DIR__ . '/../..' . '/src/Comments/CommentRemover.php',
         'Rector\\Comments\\CommentResolver' => __DIR__ . '/../..' . '/src/Comments/CommentResolver.php',
         'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => __DIR__ . '/../..' . '/src/Comments/NodeDocBlock/DocBlockUpdater.php',

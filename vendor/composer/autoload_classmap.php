@@ -1402,7 +1402,6 @@ return array(
     'Rector\\CodingStyle\\Rector\\Ternary\\TernaryConditionVariableAssignmentRector' => $baseDir . '/rules/CodingStyle/Rector/Ternary/TernaryConditionVariableAssignmentRector.php',
     'Rector\\CodingStyle\\Rector\\Use_\\SeparateMultiUseImportsRector' => $baseDir . '/rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php',
     'Rector\\CodingStyle\\ValueObject\\ObjectMagicMethods' => $baseDir . '/rules/CodingStyle/ValueObject/ObjectMagicMethods.php',
-    'Rector\\CodingStyle\\ValueObject\\VariableAndExprAssign' => $baseDir . '/rules/CodingStyle/ValueObject/VariableAndExprAssign.php',
     'Rector\\Comments\\CommentRemover' => $baseDir . '/src/Comments/CommentRemover.php',
     'Rector\\Comments\\CommentResolver' => $baseDir . '/src/Comments/CommentResolver.php',
     'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => $baseDir . '/src/Comments/NodeDocBlock/DocBlockUpdater.php',
