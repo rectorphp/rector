@@ -6,6 +6,7 @@ namespace Rector\Doctrine\CodeQuality\Utils;
 use RectorPrefix202608\Nette\Utils\Strings;
 /**
  * @api used by rector-drupal
+ * @see \Rector\Doctrine\Tests\CodeQuality\Utils\CaseStringHelperTest
  */
 final class CaseStringHelper
 {

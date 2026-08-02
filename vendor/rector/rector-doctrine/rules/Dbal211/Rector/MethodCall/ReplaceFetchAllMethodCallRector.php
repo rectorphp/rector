@@ -11,6 +11,8 @@ use PhpParser\Node\Identifier;
 use PHPStan\Type\ObjectType;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -18,8 +20,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @changelog https://github.com/doctrine/dbal/pull/4019
  */
-final class ReplaceFetchAllMethodCallRector extends AbstractRector
+final class ReplaceFetchAllMethodCallRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('doctrine/dbal', '>=2.11');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change Doctrine\DBAL\Connection and Doctrine\DBAL\Driver\ResultStatement ->fetchAll() to ->fetchAllAssociative() and other replacements', [new CodeSample(<<<'CODE_SAMPLE'

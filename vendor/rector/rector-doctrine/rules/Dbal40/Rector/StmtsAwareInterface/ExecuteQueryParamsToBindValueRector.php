@@ -17,13 +17,19 @@ use PHPStan\Type\ObjectType;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Dbal40\Rector\StmtsAwareInterface\ExecuteQueryParamsToBindValueRector\ExecuteQueryParamsToBindValueRectorTest
  */
-final class ExecuteQueryParamsToBindValueRector extends AbstractRector
+final class ExecuteQueryParamsToBindValueRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('doctrine/dbal', '>=4.0');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change executeQuery() with parameters to bindValue() with explicit values', [new CodeSample(<<<'CODE_SAMPLE'

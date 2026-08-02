@@ -14,6 +14,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,8 +23,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Doctrine\Tests\Dbal42\Rector\New_\AddArrayResultColumnNamesRector\AddArrayResultColumnNamesRectorTest
  */
-final class AddArrayResultColumnNamesRector extends AbstractRector
+final class AddArrayResultColumnNamesRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('doctrine/dbal', '>=4.2');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add column names argument to ArrayResult object', [new CodeSample(<<<'CODE_SAMPLE'

@@ -20,6 +20,8 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -28,8 +30,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Doctrine\Tests\Orm30\Rector\MethodCall\SetParametersArrayToCollectionRector\SetParametersArrayToCollectionRectorTest
  */
-final class SetParametersArrayToCollectionRector extends AbstractRector
+final class SetParametersArrayToCollectionRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('doctrine/orm', '>=3.0');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change the argument type for setParameters from array to ArrayCollection and Parameter calls', [new CodeSample(<<<'CODE_SAMPLE'

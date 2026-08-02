@@ -10,18 +10,24 @@ use PHPStan\Type\ObjectType;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Doctrine\Enum\EventClass;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/doctrine/orm/pull/10086
  * @see \Rector\Doctrine\Tests\Orm214\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEventArgsRector\ReplaceLifecycleEventArgsByDedicatedEventArgsRectorTest
  */
-final class ReplaceLifecycleEventArgsByDedicatedEventArgsRector extends AbstractRector
+final class ReplaceLifecycleEventArgsByDedicatedEventArgsRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @var array<string, EventClass::*>
      */
     private const EVENT_CLASSES = ['prePersist' => EventClass::PRE_PERSIST_EVENT_ARGS, 'preUpdate' => EventClass::PRE_UPDATE_EVENT_ARGS, 'preRemove' => EventClass::PRE_REMOVE_EVENT_ARGS, 'postPersist' => EventClass::POST_PERSIST_EVENT_ARGS, 'postUpdate' => EventClass::POST_UPDATE_EVENT_ARGS, 'postRemove' => EventClass::POST_REMOVE_EVENT_ARGS, 'postLoad' => EventClass::POST_LOAD_EVENT_ARGS];
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('doctrine/orm', '>=2.14');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace Doctrine\ORM\Event\LifecycleEventArgs with specific event classes based on the function call', [new CodeSample(<<<'CODE_SAMPLE'

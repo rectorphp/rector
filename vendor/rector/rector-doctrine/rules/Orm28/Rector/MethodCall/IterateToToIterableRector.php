@@ -14,6 +14,8 @@ use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ObjectType;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Doctrine\Tests\Orm28\Rector\MethodCall\IterateToToIterableRector\IterateToToIterableRectorTest
  */
-final class IterateToToIterableRector extends AbstractRector
+final class IterateToToIterableRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @return array<class-string<Node>>
@@ -30,6 +32,10 @@ final class IterateToToIterableRector extends AbstractRector
     public function getNodeTypes(): array
     {
         return [MethodCall::class, ClassMethod::class, Foreach_::class];
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('doctrine/orm', '>=2.8');
     }
     public function getRuleDefinition(): RuleDefinition
     {
