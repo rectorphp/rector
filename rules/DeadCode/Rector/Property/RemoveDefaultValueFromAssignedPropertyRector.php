@@ -7,8 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Configuration\Parameter\FeatureFlags;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -84,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
         // early return can skip the assign, so the default value is still needed
-        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($constructClassMethod, Return_::class)) {
+        if ($this->hasEarlyReturn($node, $constructClassMethod)) {
             return null;
         }
         $hasChanged = \false;
@@ -124,6 +126,39 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    /**
+     * The constructor itself, or any local method it calls, can skip the assign with an early return
+     */
+    private function hasEarlyReturn(Class_ $class, ClassMethod $constructClassMethod): bool
+    {
+        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($constructClassMethod, Return_::class)) {
+            return \true;
+        }
+        foreach ((array) $constructClassMethod->stmts as $stmt) {
+            if (!$stmt instanceof Expression) {
+                continue;
+            }
+            if (!$stmt->expr instanceof MethodCall) {
+                continue;
+            }
+            $methodCall = $stmt->expr;
+            if (!$this->isName($methodCall->var, 'this')) {
+                continue;
+            }
+            $methodName = $this->getName($methodCall->name);
+            if ($methodName === null) {
+                continue;
+            }
+            $calledClassMethod = $class->getMethod($methodName);
+            if (!$calledClassMethod instanceof ClassMethod) {
+                continue;
+            }
+            if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($calledClassMethod, Return_::class)) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function isAssignedViaArrayDimFetch(Class_ $class, string $propertyName): bool
     {
