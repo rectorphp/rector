@@ -2170,7 +2170,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\NodeNameResolver\\NodeNameResolver\\PropertyNameResolver' => __DIR__ . '/../..' . '/src/NodeNameResolver/NodeNameResolver/PropertyNameResolver.php',
         'Rector\\NodeNameResolver\\NodeNameResolver\\UseNameResolver' => __DIR__ . '/../..' . '/src/NodeNameResolver/NodeNameResolver/UseNameResolver.php',
         'Rector\\NodeNameResolver\\NodeNameResolver\\VariableNameResolver' => __DIR__ . '/../..' . '/src/NodeNameResolver/NodeNameResolver/VariableNameResolver.php',
-        'Rector\\NodeNameResolver\\Regex\\RegexPatternDetector' => __DIR__ . '/../..' . '/src/NodeNameResolver/Regex/RegexPatternDetector.php',
         'Rector\\NodeNestingScope\\ContextAnalyzer' => __DIR__ . '/../..' . '/src/NodeNestingScope/ContextAnalyzer.php',
         'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => __DIR__ . '/../..' . '/src/NodeNestingScope/ValueObject/ControlStructure.php',
         'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverAwareInterface' => __DIR__ . '/../..' . '/src/NodeTypeResolver/Contract/NodeTypeResolverAwareInterface.php',

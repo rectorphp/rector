@@ -3,33 +3,18 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix202608\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeNameResolver\Regex\RegexPatternDetector;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector\SimplifyRegexPatternRectorTest
+ * @deprecated This rule is deprecated, as shortening ranges like "[a-zA-Z0-9_]" to "\w" is a matter of personal preference. It can worsen regex readability and is rather a coding standard change.
  */
-final class SimplifyRegexPatternRector extends AbstractRector
+final class SimplifyRegexPatternRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private RegexPatternDetector $regexPatternDetector;
-    /**
-     * Using double quote "\d", "\w", "\s" to avoid unescaped issue on scoped build
-     * Reproduced with php-scoper 0.18.17, @see https://github.com/rectorphp/rector/issues/9395
-     *
-     * @var array<string, string>
-     */
-    private const COMPLEX_PATTERN_TO_SIMPLE = ['[0-9]' => "\\d", '[a-zA-Z0-9_]' => "\\w", '[A-Za-z0-9_]' => "\\w", '[0-9a-zA-Z_]' => "\\w", '[0-9A-Za-z_]' => "\\w", '[\r\n\t\f\v ]' => "\\s"];
-    public function __construct(RegexPatternDetector $regexPatternDetector)
-    {
-        $this->regexPatternDetector = $regexPatternDetector;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify regex pattern to known ranges', [new CodeSample(<<<'CODE_SAMPLE'
@@ -62,26 +47,8 @@ CODE_SAMPLE
     /**
      * @param String_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?String_
     {
-        if (!$this->regexPatternDetector->isRegexPattern($node->value)) {
-            return null;
-        }
-        foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $simple) {
-            $originalValue = $node->value;
-            $simplifiedValue = Strings::replace($node->value, '#' . preg_quote($complexPattern, '#') . '#', $simple);
-            if ($originalValue === $simplifiedValue) {
-                continue;
-            }
-            if (strpos($originalValue, '[^' . $complexPattern) !== \false) {
-                continue;
-            }
-            if ($complexPattern === $node->value) {
-                continue;
-            }
-            $node->value = $simplifiedValue;
-            return $node;
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as simplifying regex ranges is a personal preference that can worsen readability', self::class));
     }
 }

@@ -1913,7 +1913,6 @@ return array(
     'Rector\\NodeNameResolver\\NodeNameResolver\\PropertyNameResolver' => $baseDir . '/src/NodeNameResolver/NodeNameResolver/PropertyNameResolver.php',
     'Rector\\NodeNameResolver\\NodeNameResolver\\UseNameResolver' => $baseDir . '/src/NodeNameResolver/NodeNameResolver/UseNameResolver.php',
     'Rector\\NodeNameResolver\\NodeNameResolver\\VariableNameResolver' => $baseDir . '/src/NodeNameResolver/NodeNameResolver/VariableNameResolver.php',
-    'Rector\\NodeNameResolver\\Regex\\RegexPatternDetector' => $baseDir . '/src/NodeNameResolver/Regex/RegexPatternDetector.php',
     'Rector\\NodeNestingScope\\ContextAnalyzer' => $baseDir . '/src/NodeNestingScope/ContextAnalyzer.php',
     'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => $baseDir . '/src/NodeNestingScope/ValueObject/ControlStructure.php',
     'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverAwareInterface' => $baseDir . '/src/NodeTypeResolver/Contract/NodeTypeResolverAwareInterface.php',
