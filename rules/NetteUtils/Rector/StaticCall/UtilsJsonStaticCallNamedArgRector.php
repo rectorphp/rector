@@ -9,13 +9,23 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\Enum\NetteClassName;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\NetteUtils\Rector\StaticCall\UtilsJsonStaticCallNamedArgRector\UtilsJsonStaticCallNamedArgRectorTest
  */
-final class UtilsJsonStaticCallNamedArgRector extends AbstractRector
+final class UtilsJsonStaticCallNamedArgRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    /**
+     * The bool $pretty and bool $forceArrays params were added in nette/utils 4.0,
+     * before that both methods took int $flags
+     */
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('nette/utils', '>=4.0');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change `' . Json::class . '::encode()` and `decode()` to named args', [new CodeSample(<<<'CODE_SAMPLE'
