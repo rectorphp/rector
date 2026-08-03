@@ -14,6 +14,8 @@ use Rector\Doctrine\DoctrineFixture\Reflection\ParameterTypeResolver;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see https://github.com/doctrine/data-fixtures/pull/409/files
  */
-final class AddGetReferenceTypeRector extends AbstractRector
+final class AddGetReferenceTypeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -30,6 +32,10 @@ final class AddGetReferenceTypeRector extends AbstractRector
     public function __construct(ParameterTypeResolver $parameterTypeResolver)
     {
         $this->parameterTypeResolver = $parameterTypeResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('doctrine/data-fixtures', '>=1.6');
     }
     /**
      * @return array<class-string<Node>>

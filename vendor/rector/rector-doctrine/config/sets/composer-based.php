@@ -16,10 +16,16 @@ use Rector\Doctrine\Dbal36\Rector\MethodCall\MigrateQueryBuilderResetQueryPartRe
 use Rector\Doctrine\Dbal40\Rector\MethodCall\ChangeCompositeExpressionAddMultipleWithWithRector;
 use Rector\Doctrine\Dbal40\Rector\StmtsAwareInterface\ExecuteQueryParamsToBindValueRector;
 use Rector\Doctrine\Dbal42\Rector\New_\AddArrayResultColumnNamesRector;
+use Rector\Doctrine\DoctrineFixture\Rector\MethodCall\AddGetReferenceTypeRector;
 use Rector\Doctrine\Orm214\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEventArgsRector;
 use Rector\Doctrine\Orm28\Rector\MethodCall\IterateToToIterableRector;
 use Rector\Doctrine\Orm30\Rector\MethodCall\CastDoctrineExprToStringRector;
 use Rector\Doctrine\Orm30\Rector\MethodCall\SetParametersArrayToCollectionRector;
+use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
+use Rector\Php80\Rector\Property\NestedAnnotationToAttributeRector;
+use Rector\Php80\ValueObject\AnnotationPropertyToAttributeClass;
+use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Php80\ValueObject\NestedAnnotationToAttribute;
 use Rector\Removing\Rector\ClassMethod\ArgumentRemoverRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
 use Rector\Renaming\Rector\Class_\RenameAttributeRector;
@@ -63,6 +69,8 @@ return static function (RectorConfig $rectorConfig): void {
         // doctrine/doctrine-bundle 2.3 and 2.8
         AddAnnotationToRepositoryRector::class,
         EventSubscriberInterfaceToAttributeRector::class,
+        // doctrine/data-fixtures 1.6
+        AddGetReferenceTypeRector::class,
     ]);
     // doctrine/data-fixtures 1.7
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Doctrine\Common\DataFixtures\OrderedFixtureInterface', 'getOrder', new IntegerType())], 'doctrine/data-fixtures', '>=1.7');
@@ -186,4 +194,66 @@ return static function (RectorConfig $rectorConfig): void {
         // @see https://github.com/doctrine/dbal/blob/4.0.x/UPGRADE.md#bc-break-removed-connection_schemamanager-and-connectiongetschemamanager
         new MethodCallRename('Doctrine\DBAL\Connection', 'getSchemaManager', 'createSchemaManager'),
     ], 'doctrine/dbal', '>=4.0');
+    // doctrine/orm 2.9, the first version to ship mapping classes as PHP 8 attributes
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(NestedAnnotationToAttributeRector::class, [
+        /** @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.13/reference/attributes-reference.html#joincolumn-inversejoincolumn */
+        new NestedAnnotationToAttribute('Doctrine\ORM\Mapping\JoinTable', [new AnnotationPropertyToAttributeClass('Doctrine\ORM\Mapping\JoinColumn', 'joinColumns'), new AnnotationPropertyToAttributeClass('Doctrine\ORM\Mapping\InverseJoinColumn', 'inverseJoinColumns', \true)]),
+        /** @see https://www.doctrine-project.org/projects/doctrine-orm/en/latest/reference/annotations-reference.html#joincolumns */
+        new NestedAnnotationToAttribute('Doctrine\ORM\Mapping\JoinColumns', [new AnnotationPropertyToAttributeClass('Doctrine\ORM\Mapping\JoinColumn')], \true),
+        new NestedAnnotationToAttribute('Doctrine\ORM\Mapping\Table', [new AnnotationPropertyToAttributeClass('Doctrine\ORM\Mapping\Index', 'indexes', \true), new AnnotationPropertyToAttributeClass('Doctrine\ORM\Mapping\UniqueConstraint', 'uniqueConstraints', \true)]),
+    ], 'doctrine/orm', '>=2.9');
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationToAttributeRector::class, [
+        // class
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity', null, ['repositoryClass']),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\Column'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\UniqueConstraint'),
+        // id
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\Id'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\GeneratedValue'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\SequenceGenerator'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\Index'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\CustomIdGenerator', null, ['class']),
+        // relations
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\OneToOne', null, ['targetEntity']),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\OneToMany', null, ['targetEntity']),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\ManyToMany', null, ['targetEntity']),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\JoinTable'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\ManyToOne', null, ['targetEntity']),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\OrderBy'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\JoinColumn'),
+        // embed
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\Embeddable'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\Embedded', null, ['class']),
+        // inheritance
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\MappedSuperclass', null, ['repositoryClass']),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\InheritanceType'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\DiscriminatorColumn'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\DiscriminatorMap'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\Version'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\ChangeTrackingPolicy'),
+        // events
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\HasLifecycleCallbacks'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\PostLoad'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\PostPersist'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\PostRemove'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\PostUpdate'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\PreFlush'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\PrePersist'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\PreRemove'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\PreUpdate'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\Cache'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\EntityListeners'),
+        // Overrides
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\AssociationOverrides'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\AssociationOverride'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\AttributeOverrides'),
+        new AnnotationToAttribute('Doctrine\ORM\Mapping\AttributeOverride'),
+    ], 'doctrine/orm', '>=2.9');
+    // doctrine/mongodb-odm 2.3, the first version to ship mapping classes as PHP 8 attributes
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(NestedAnnotationToAttributeRector::class, [new NestedAnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\Indexes', [new AnnotationPropertyToAttributeClass('Doctrine\ODM\MongoDB\Mapping\Annotations\Index'), new AnnotationPropertyToAttributeClass('Doctrine\ODM\MongoDB\Mapping\Annotations\UniqueIndex')], \true)], 'doctrine/mongodb-odm', '>=2.3');
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationToAttributeRector::class, [new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\File\ChunkSize'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\File\Filename'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\File\Length'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\File\Metadata'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\File\UploadDate'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\AlsoLoad'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\ChangeTrackingPolicy'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\DefaultDiscriminatorValue'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\DiscriminatorField'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\DiscriminatorMap'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\DiscriminatorValue'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\Document'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\EmbeddedDocument'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\EmbedMany'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\EmbedOne'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\Field'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\File'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\HasLifecycleCallbacks'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\Id'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\Index'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\InheritanceType'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\Lock'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\MappedSuperclass'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PostLoad'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PostPersist'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PostRemove'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PostUpdate'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PreFlush'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PreLoad'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PrePersist'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PreRemove'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\PreUpdate'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\QueryResultDocument'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\ReadPreference'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceMany'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\ShardKey'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\UniqueIndex'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\Validation'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\Version'), new AnnotationToAttribute('Doctrine\ODM\MongoDB\Mapping\Annotations\View')], 'doctrine/mongodb-odm', '>=2.3');
+    // doctrine/mongodb-odm-bundle 4.4, the first version to ship the constraint as PHP 8 attribute
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationToAttributeRector::class, [new AnnotationToAttribute('Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique')], 'doctrine/mongodb-odm-bundle', '>=4.4');
+    // gedmo/doctrine-extensions 3.5, the first version to ship mapping classes as PHP 8 attributes
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(AnnotationToAttributeRector::class, [new AnnotationToAttribute('Gedmo\Mapping\Annotation\Blameable'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\IpTraceable'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Language'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Locale'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Loggable'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Reference'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\ReferenceIntegrity'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\ReferenceMany'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\ReferenceManyEmbed'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\ReferenceOne'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Slug'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\SlugHandler'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\SlugHandlerOption'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\SoftDeleteable'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\SortableGroup'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\SortablePosition'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Timestampable'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Translatable'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TranslationEntity'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Tree'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreeClosure'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreeLeft'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreeLevel'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreeLockTime'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreeParent'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreePath'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreePathHash'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreePathSource'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreeRight'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\TreeRoot'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Uploadable'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\UploadableFileMimeType'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\UploadableFileName'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\UploadableFilePath'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\UploadableFileSize'), new AnnotationToAttribute('Gedmo\Mapping\Annotation\Versioned')], 'gedmo/doctrine-extensions', '>=3.5');
 };

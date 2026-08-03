@@ -20,7 +20,7 @@ final class DoctrineSetProvider implements SetProviderInterface
      *
      * @var array<string, string>
      */
-    private const COMPOSER_BASED_TRIGGER_PACKAGES = ['doctrine/data-fixtures' => '>=1.7', 'doctrine/common' => '>=2.0', 'doctrine/collections' => '>=2.2', 'doctrine/doctrine-bundle' => '>=2.3', 'doctrine/orm' => '>=2.5', 'doctrine/dbal' => '>=2.11', 'doctrine/mongodb-odm' => '>=2.16'];
+    private const COMPOSER_BASED_TRIGGER_PACKAGES = ['doctrine/data-fixtures' => '>=1.6', 'doctrine/common' => '>=2.0', 'doctrine/collections' => '>=2.2', 'doctrine/doctrine-bundle' => '>=2.3', 'doctrine/orm' => '>=2.5', 'doctrine/dbal' => '>=2.11', 'doctrine/mongodb-odm' => '>=2.3', 'doctrine/mongodb-odm-bundle' => '>=4.4', 'gedmo/doctrine-extensions' => '>=3.5'];
     /**
      * @return SetInterface[]
      */
