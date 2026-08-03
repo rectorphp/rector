@@ -12,6 +12,10 @@ final class DoctrineSetList
     /**
      * @var string
      */
+    public const COMPOSER_BASED = __DIR__ . '/../../config/sets/composer-based.php';
+    /**
+     * @var string
+     */
     public const TYPED_COLLECTIONS = __DIR__ . '/../../config/sets/typed-collections.php';
     /**
      * @var string
@@ -86,11 +90,6 @@ final class DoctrineSetList
      */
     #[Deprecated(message: 'Use withComposerBased() instead, see https://getrector.com/blog/introducing-composer-version-based-sets')]
     public const DOCTRINE_ORM_300 = __DIR__ . '/../../config/sets/doctrine-orm-300.php';
-    /**
-     * @var string
-     */
-    #[Deprecated(message: 'Use withComposerBased() instead, see https://getrector.com/blog/introducing-composer-version-based-sets')]
-    public const DOCTRINE_BUNDLE_210 = __DIR__ . '/../../config/sets/doctrine-bundle-210.php';
     /**
      * @var string
      */

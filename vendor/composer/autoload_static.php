@@ -1854,7 +1854,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Doctrine\\NodeAnalyzer\\ConstructorAssignPropertyAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/ConstructorAssignPropertyAnalyzer.php',
         'Rector\\Doctrine\\NodeAnalyzer\\DoctrineEntityDetector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/DoctrineEntityDetector.php',
         'Rector\\Doctrine\\NodeAnalyzer\\MethodUniqueReturnedPropertyResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/MethodUniqueReturnedPropertyResolver.php',
-        'Rector\\Doctrine\\NodeAnalyzer\\RepositoryClassResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/RepositoryClassResolver.php',
         'Rector\\Doctrine\\NodeAnalyzer\\TargetEntityResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/TargetEntityResolver.php',
         'Rector\\Doctrine\\NodeFactory\\ArrayCollectionAssignFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/ArrayCollectionAssignFactory.php',
         'Rector\\Doctrine\\NodeFactory\\ValueAssignFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/ValueAssignFactory.php',
