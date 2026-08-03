@@ -2606,6 +2606,7 @@ return array(
     'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceTagsToDefaultsAutoconfigureRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceTagsToDefaultsAutoconfigureRector.php',
+    'Rector\\Symfony\\Configs\\Rector\\MethodCall\\EnableValidationAttributesRector' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/MethodCall/EnableValidationAttributesRector.php',
     'Rector\\Symfony\\Configs\\Rector\\Reflection\\ConstructorReflectionTypesResolver' => $vendorDir . '/rector/rector-symfony/rules/Configs/Rector/Reflection/ConstructorReflectionTypesResolver.php',
     'Rector\\Symfony\\Contract\\EventReferenceToMethodNameInterface' => $vendorDir . '/rector/rector-symfony/src/Contract/EventReferenceToMethodNameInterface.php',
     'Rector\\Symfony\\Contract\\Tag\\TagInterface' => $vendorDir . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',

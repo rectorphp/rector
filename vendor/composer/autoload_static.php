@@ -2863,6 +2863,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Closure\\ServiceTagsToDefaultsAutoconfigureRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Closure/ServiceTagsToDefaultsAutoconfigureRector.php',
+        'Rector\\Symfony\\Configs\\Rector\\MethodCall\\EnableValidationAttributesRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/MethodCall/EnableValidationAttributesRector.php',
         'Rector\\Symfony\\Configs\\Rector\\Reflection\\ConstructorReflectionTypesResolver' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Configs/Rector/Reflection/ConstructorReflectionTypesResolver.php',
         'Rector\\Symfony\\Contract\\EventReferenceToMethodNameInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/EventReferenceToMethodNameInterface.php',
         'Rector\\Symfony\\Contract\\Tag\\TagInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',
