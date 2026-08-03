@@ -483,6 +483,12 @@ final class RectorConfigBuilder
             // single set, as every rule inside is bound to the installed PHPUnit version on its own
             $this->sets[] = PHPUnitSetList::COMPOSER_BASED;
         }
+        if ($doctrine) {
+            // $this->sets[] = DoctrineSetList::COMPOSER_BASED;
+        }
+        if ($twig) {
+            // $this->sets[] = TwigSetList::COMPOSER_BASED;
+        }
         if ($symfony) {
             // single set, as every rule inside is bound to the installed Symfony package version on its own
             $this->sets[] = SymfonySetList::COMPOSER_BASED;
