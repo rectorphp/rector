@@ -11,6 +11,10 @@ final class TwigSetList
     /**
      * @var string
      */
+    public const COMPOSER_BASED = __DIR__ . '/../../config/sets/twig/composer-based.php';
+    /**
+     * @var string
+     */
     public const TWIG_112 = __DIR__ . '/../../config/sets/twig/twig112.php';
     /**
      * @var string

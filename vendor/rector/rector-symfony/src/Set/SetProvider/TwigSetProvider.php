@@ -14,6 +14,16 @@ final class TwigSetProvider implements SetProviderInterface
      */
     public function provide(): array
     {
-        return [new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '1.12', __DIR__ . '/../../../config/sets/twig/twig112.php'), new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '1.27', __DIR__ . '/../../../config/sets/twig/twig127.php'), new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '1.34', __DIR__ . '/../../../config/sets/twig/twig134.php'), new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '1.40', __DIR__ . '/../../../config/sets/twig/twig140.php'), new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '2.0', __DIR__ . '/../../../config/sets/twig/twig20.php'), new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '2.4', __DIR__ . '/../../../config/sets/twig/twig24.php'), new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '3.0', __DIR__ . '/../../../config/sets/twig/twig30.php')];
+        return [
+            // the composer-based set holds rules bound to the exact Twig package version they are available from
+            new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '>=1.12', __DIR__ . '/../../../config/sets/twig/composer-based.php'),
+            new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '1.12', __DIR__ . '/../../../config/sets/twig/twig112.php'),
+            new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '1.27', __DIR__ . '/../../../config/sets/twig/twig127.php'),
+            new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '1.34', __DIR__ . '/../../../config/sets/twig/twig134.php'),
+            new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '1.40', __DIR__ . '/../../../config/sets/twig/twig140.php'),
+            new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '2.0', __DIR__ . '/../../../config/sets/twig/twig20.php'),
+            new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '2.4', __DIR__ . '/../../../config/sets/twig/twig24.php'),
+            new ComposerTriggeredSet(SetGroup::TWIG, 'twig/twig', '3.0', __DIR__ . '/../../../config/sets/twig/twig30.php'),
+        ];
     }
 }

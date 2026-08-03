@@ -19,6 +19,8 @@ use PHPStan\Type\Type;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Twig134\Rector\Return_\SimpleFunctionAndFilterRector\SimpleFunctionAndFilterRectorTest
  */
-final class SimpleFunctionAndFilterRector extends AbstractRector
+final class SimpleFunctionAndFilterRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -44,6 +46,10 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->valueResolver = $valueResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('twig/twig', '>=1.34');
     }
     public function getRuleDefinition(): RuleDefinition
     {

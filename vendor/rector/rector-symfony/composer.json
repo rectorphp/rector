@@ -30,7 +30,8 @@
         "tomasvotruba\/class-leak": "^2.1",
         "tomasvotruba\/type-coverage": "^2.3",
         "tomasvotruba\/unused-public": "^2.2",
-        "tracy\/tracy": "^2.12"
+        "tracy\/tracy": "^2.12",
+        "twig\/twig": "^3.21"
     },
     "autoload": {
         "psr-4": {
