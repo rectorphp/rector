@@ -7,34 +7,44 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\Enum\SymfonyFunctionName;
-use Rector\Symfony\ValueObject\ReplaceServiceArgument;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Symfony\Tests\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector\ReplaceServiceArgumentRectorTest
+ * @changelog https://github.com/symfony/symfony/pull/42149
+ *
+ * @see \Rector\Symfony\Tests\Symfony60\Rector\FuncCall\ContainerInterfaceServiceToServiceContainerRector\ContainerInterfaceServiceToServiceContainerRectorTest
  */
-final class ReplaceServiceArgumentRector extends AbstractRector implements ConfigurableRectorInterface
+final class ContainerInterfaceServiceToServiceContainerRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
      */
     private ValueResolver $valueResolver;
     /**
-     * @var ReplaceServiceArgument[]
+     * @var string[]
      */
-    private array $replaceServiceArguments = [];
+    private const CONTAINER_INTERFACES = [SymfonyClass::PSR_CONTAINER_INTERFACE, SymfonyClass::DEPENDENCY_INJECTION_CONTAINER_INTERFACE];
+    /**
+     * @var string
+     */
+    private const SERVICE_CONTAINER = 'service_container';
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/dependency-injection', '>=6.0');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace defined service() argument in Symfony PHP config', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace removed ContainerInterface alias with "service_container" service id in service() call', [new CodeSample(<<<'CODE_SAMPLE'
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return service(ContainerInterface::class);
@@ -44,7 +54,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return service('service_container');
 CODE_SAMPLE
-, [new ReplaceServiceArgument('ContainerInterface', new String_('service_container'))])]);
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -61,25 +71,17 @@ CODE_SAMPLE
         if (!$this->isName($node->name, SymfonyFunctionName::SERVICE)) {
             return null;
         }
-        $firstArg = $node->args[0];
+        $firstArg = $node->args[0] ?? null;
         if (!$firstArg instanceof Arg) {
             return null;
         }
-        foreach ($this->replaceServiceArguments as $replaceServiceArgument) {
-            if (!$this->valueResolver->isValue($firstArg->value, $replaceServiceArgument->getOldValue())) {
+        foreach (self::CONTAINER_INTERFACES as $containerInterface) {
+            if (!$this->valueResolver->isValue($firstArg->value, $containerInterface)) {
                 continue;
             }
-            $node->args[0] = new Arg($replaceServiceArgument->getNewValueExpr());
+            $node->args[0] = new Arg(new String_(self::SERVICE_CONTAINER));
             return $node;
         }
         return null;
-    }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        Assert::allIsAOf($configuration, ReplaceServiceArgument::class);
-        $this->replaceServiceArguments = $configuration;
     }
 }

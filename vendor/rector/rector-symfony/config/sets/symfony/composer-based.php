@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace RectorPrefix202608;
 
-use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
@@ -88,7 +87,7 @@ use Rector\Symfony\Symfony52\Rector\New_\PropertyAccessorCreationBooleanToFlagsR
 use Rector\Symfony\Symfony52\Rector\New_\PropertyPathMapperToDataMapperRector;
 use Rector\Symfony\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
 use Rector\Symfony\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector;
-use Rector\Symfony\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector;
+use Rector\Symfony\Symfony60\Rector\FuncCall\ContainerInterfaceServiceToServiceContainerRector;
 use Rector\Symfony\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector;
 use Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector;
 use Rector\Symfony\Symfony61\Rector\Class_\CommandPropertyToAttributeRector;
@@ -114,7 +113,6 @@ use Rector\Symfony\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToVali
 use Rector\Symfony\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector;
 use Rector\Symfony\Symfony81\Rector\New_\RemoveEraseCredentialsFromAuthenticatorManagerRector;
 use Rector\Symfony\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector;
-use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
@@ -219,6 +217,8 @@ return static function (RectorConfig $rectorConfig): void {
         ValidatorBuilderEnableAnnotationMappingRector::class,
         // symfony/framework-bundle 5.3
         KernelTestCaseContainerPropertyDeprecationRector::class,
+        // symfony/dependency-injection 6.0
+        ContainerInterfaceServiceToServiceContainerRector::class,
         // symfony/framework-bundle 6.0
         GetHelperControllerToServiceRector::class,
         // symfony/console 6.1
@@ -648,7 +648,6 @@ return static function (RectorConfig $rectorConfig): void {
     ], 'symfony/contracts', '>=6.0');
     // symfony/dependency-injection 6.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass', 'processValue', new MixedType()), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface', 'getConfiguration', new UnionType([new NullType(), $configurationType])), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\Extension', 'getXsdValidationBasePath', new UnionType([new StringType(), new ConstantBooleanType(\false)])), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\Extension', 'getNamespace', new StringType()), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\Extension', 'getConfiguration', new UnionType([new NullType(), $configurationType])), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\ExtensionInterface', 'getNamespace', new StringType()), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\ExtensionInterface', 'getXsdValidationBasePath', new UnionType([new StringType(), new ConstantBooleanType(\false)])), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Extension\ExtensionInterface', 'getAlias', new StringType()), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\LazyProxy\Instantiator\InstantiatorInterface', 'instantiateProxy', new ObjectWithoutClassType()), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\Container', 'getParameter', new UnionType($scalarTypes)), new AddReturnTypeDeclaration('Symfony\Component\DependencyInjection\ContainerInterface', 'getParameter', new UnionType($scalarTypes))], 'symfony/dependency-injection', '>=6.0');
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ReplaceServiceArgumentRector::class, [new ReplaceServiceArgument('Psr\Container\ContainerInterface', new String_('service_container')), new ReplaceServiceArgument('Symfony\Component\DependencyInjection\ContainerInterface', new String_('service_container'))], 'symfony/dependency-injection', '>=6.0');
     // symfony/doctrine-bridge 6.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40403
