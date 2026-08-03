@@ -2908,6 +2908,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstantExpressionAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/ConstantExpressionAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstraintAttributeTargetAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/ConstraintAttributeTargetAnalyzer.php',
+        'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstraintConstructorAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/ConstraintConstructorAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\MetadataConstraintResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/MetadataConstraintResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\StmtMethodCallMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/StmtMethodCallMatcher.php',
         'Rector\\Symfony\\NodeFactory\\BareLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/BareLogoutClassMethodFactory.php',

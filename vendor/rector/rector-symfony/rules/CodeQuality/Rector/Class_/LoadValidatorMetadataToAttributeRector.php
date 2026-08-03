@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstantExpressionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintAttributeTargetAnalyzer;
+use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintConstructorAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\MetadataConstraintResolver;
 use Rector\Symfony\NodeFactory\ValidatorAssert\ConstraintAttributeGroupFactory;
 use Rector\Symfony\ValueObject\ValidatorAssert\ClassMethodAndConstraint;
@@ -46,12 +47,17 @@ final class LoadValidatorMetadataToAttributeRector extends AbstractRector implem
      * @readonly
      */
     private ConstantExpressionAnalyzer $constantExpressionAnalyzer;
-    public function __construct(MetadataConstraintResolver $metadataConstraintResolver, ConstraintAttributeTargetAnalyzer $constraintAttributeTargetAnalyzer, ConstraintAttributeGroupFactory $constraintAttributeGroupFactory, ConstantExpressionAnalyzer $constantExpressionAnalyzer)
+    /**
+     * @readonly
+     */
+    private ConstraintConstructorAnalyzer $constraintConstructorAnalyzer;
+    public function __construct(MetadataConstraintResolver $metadataConstraintResolver, ConstraintAttributeTargetAnalyzer $constraintAttributeTargetAnalyzer, ConstraintAttributeGroupFactory $constraintAttributeGroupFactory, ConstantExpressionAnalyzer $constantExpressionAnalyzer, ConstraintConstructorAnalyzer $constraintConstructorAnalyzer)
     {
         $this->metadataConstraintResolver = $metadataConstraintResolver;
         $this->constraintAttributeTargetAnalyzer = $constraintAttributeTargetAnalyzer;
         $this->constraintAttributeGroupFactory = $constraintAttributeGroupFactory;
         $this->constantExpressionAnalyzer = $constantExpressionAnalyzer;
+        $this->constraintConstructorAnalyzer = $constraintConstructorAnalyzer;
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
@@ -203,6 +209,10 @@ CODE_SAMPLE
         }
         $constraintClass = $this->getName($new->class);
         if (!is_string($constraintClass)) {
+            return null;
+        }
+        // e.g. new UniqueUserAlias(['field' => 'alias']) - the options have no matching constructor arguments
+        if ($new->args !== [] && !$this->constraintConstructorAnalyzer->hasOwnConstructor($constraintClass)) {
             return null;
         }
         return $constraintClass;

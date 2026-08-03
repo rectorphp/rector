@@ -2651,6 +2651,7 @@ return array(
     'Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstantExpressionAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/ConstantExpressionAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstraintAttributeTargetAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/ConstraintAttributeTargetAnalyzer.php',
+    'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstraintConstructorAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/ConstraintConstructorAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\MetadataConstraintResolver' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/MetadataConstraintResolver.php',
     'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\StmtMethodCallMatcher' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/StmtMethodCallMatcher.php',
     'Rector\\Symfony\\NodeFactory\\BareLogoutClassMethodFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/BareLogoutClassMethodFactory.php',
