@@ -158,6 +158,10 @@ final class ComposerBasedCommand extends Command
             $printedPropertyValues = [];
             $reflectionObject = new ReflectionObject($value);
             foreach ($reflectionObject->getProperties() as $reflectionProperty) {
+                // lazy-initialized property, e.g. PHPStan UnionType::$normalized
+                if (!$reflectionProperty->isInitialized($value)) {
+                    continue;
+                }
                 $printedPropertyValues[] = $this->printConfigurationValue($reflectionProperty->getValue($value));
             }
             return $this->printShortClassName(get_class($value)) . '(' . implode(', ', $printedPropertyValues) . ')';
