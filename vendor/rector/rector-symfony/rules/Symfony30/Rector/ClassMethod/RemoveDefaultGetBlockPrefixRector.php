@@ -13,6 +13,8 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony30\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector\RemoveDefaultGetBlockPrefixRectorTest
  */
-final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
+final class RemoveDefaultGetBlockPrefixRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -34,6 +36,10 @@ final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
     {
         $this->valueResolver = $valueResolver;
         $this->classNaming = $classNaming;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=3.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

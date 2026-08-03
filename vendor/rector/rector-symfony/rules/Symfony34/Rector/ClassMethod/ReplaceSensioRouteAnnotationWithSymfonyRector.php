@@ -17,6 +17,8 @@ use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SensioAnnotation;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -25,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony34\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector\ReplaceSensioRouteAnnotationWithSymfonyRectorTest
  */
-final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
+final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -54,6 +56,10 @@ final class ReplaceSensioRouteAnnotationWithSymfonyRector extends AbstractRector
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/routing', '>=3.4');
     }
     public function getRuleDefinition(): RuleDefinition
     {

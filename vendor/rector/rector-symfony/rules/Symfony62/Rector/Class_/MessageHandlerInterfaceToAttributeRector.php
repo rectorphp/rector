@@ -13,13 +13,15 @@ use Rector\Symfony\Helper\MessengerHelper;
 use Rector\Symfony\NodeManipulator\ClassManipulator;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector\MessageHandlerToAttributeRectorTest
  */
-final class MessageHandlerInterfaceToAttributeRector extends AbstractRector implements MinPhpVersionInterface
+final class MessageHandlerInterfaceToAttributeRector extends AbstractRector implements MinPhpVersionInterface, ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -47,6 +49,10 @@ final class MessageHandlerInterfaceToAttributeRector extends AbstractRector impl
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/messenger', '>=6.2');
     }
     public function getRuleDefinition(): RuleDefinition
     {

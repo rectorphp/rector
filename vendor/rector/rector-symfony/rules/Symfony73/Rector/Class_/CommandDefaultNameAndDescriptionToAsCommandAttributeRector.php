@@ -17,6 +17,8 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -24,8 +26,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\CommandDefaultNameAndDescriptionToAsCommandAttributeRector\CommandDefaultNameAndDescriptionToAsCommandAttributeRectorTest
  */
-final class CommandDefaultNameAndDescriptionToAsCommandAttributeRector extends AbstractRector
+final class CommandDefaultNameAndDescriptionToAsCommandAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/console', '>=7.3');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace getDefaultName() and getDefaultDescription() by #[AsCommand] attribute', [new CodeSample(<<<'CODE_SAMPLE'

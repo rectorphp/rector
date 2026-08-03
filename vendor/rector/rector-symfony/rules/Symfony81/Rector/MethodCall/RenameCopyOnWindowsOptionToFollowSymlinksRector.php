@@ -13,6 +13,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,8 +22,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector\RenameCopyOnWindowsOptionToFollowSymlinksRectorTest
  */
-final class RenameCopyOnWindowsOptionToFollowSymlinksRector extends AbstractRector
+final class RenameCopyOnWindowsOptionToFollowSymlinksRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/filesystem', '>=8.1');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename copy_on_windows option to follow_symlinks in Filesystem::mirror()', [new CodeSample(<<<'CODE_SAMPLE'

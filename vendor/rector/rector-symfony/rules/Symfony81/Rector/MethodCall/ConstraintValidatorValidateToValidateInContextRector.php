@@ -15,6 +15,8 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use RectorPrefix202608\Symfony\Component\Validator\ConstraintValidator;
 use RectorPrefix202608\Symfony\Component\Validator\ConstraintValidatorInterface;
 use RectorPrefix202608\Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -28,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToValidateInContextRector\ConstraintValidatorValidateToValidateInContextRectorTest
  */
-final class ConstraintValidatorValidateToValidateInContextRector extends AbstractRector
+final class ConstraintValidatorValidateToValidateInContextRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -37,6 +39,10 @@ final class ConstraintValidatorValidateToValidateInContextRector extends Abstrac
     public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/validator', '>=8.1');
     }
     public function getRuleDefinition(): RuleDefinition
     {

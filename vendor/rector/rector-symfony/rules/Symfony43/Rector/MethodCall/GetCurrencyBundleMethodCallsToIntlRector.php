@@ -10,6 +10,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\ValueObject\IntlBundleClassToNewClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -18,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony43\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector\GetCurrencyBundleMethodCallsToIntlRectorTest
  */
-final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector
+final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @var IntlBundleClassToNewClass[]
@@ -29,6 +31,10 @@ final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector
         $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\Component\Intl\ResourceBundle\LanguageBundleInterface', 'Symfony\Component\Intl\Languages', ['getLanguageNames' => 'getNames', 'getLanguageName' => 'getName']);
         $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\Component\Intl\ResourceBundle\RegionBundleInterface', 'Symfony\Component\Intl\Currencies', ['getCountryNames' => 'getNames', 'getCountryName' => 'getName']);
         $this->intlBundleClassesToNewClasses[] = new IntlBundleClassToNewClass('Symfony\Component\Intl\ResourceBundle\CurrencyBundleInterface', 'Symfony\Component\Intl\Currencies', ['getCurrencyNames' => 'getNames', 'getCurrencyName' => 'getName', 'getCurrencySymbol' => 'getSymbol', 'getFractionDigits' => 'getFractionDigits']);
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/intl', '>=4.3');
     }
     public function getRuleDefinition(): RuleDefinition
     {

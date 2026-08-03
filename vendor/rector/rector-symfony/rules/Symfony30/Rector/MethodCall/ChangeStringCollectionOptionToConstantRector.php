@@ -15,6 +15,8 @@ use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -24,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony30\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector\ChangeStringCollectionOptionToConstantRectorTest
  */
-final class ChangeStringCollectionOptionToConstantRector extends AbstractRector
+final class ChangeStringCollectionOptionToConstantRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -53,6 +55,10 @@ final class ChangeStringCollectionOptionToConstantRector extends AbstractRector
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
         $this->formCollectionAnalyzer = $formCollectionAnalyzer;
         $this->valueResolver = $valueResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=3.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

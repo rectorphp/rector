@@ -17,6 +17,8 @@ use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormInstanceToFormClassConstFetchConverter;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -30,7 +32,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony30\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */
-final class FormTypeInstanceToClassConstRector extends AbstractRector
+final class FormTypeInstanceToClassConstRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -64,6 +66,10 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
         $this->formCollectionAnalyzer = $formCollectionAnalyzer;
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->valueResolver = $valueResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/framework-bundle', '>=3.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

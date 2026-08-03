@@ -8,14 +8,20 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
  * @see \Rector\Symfony\Tests\Symfony52\Rector\New_\PropertyPathMapperToDataMapperRector\PropertyPathMapperToDataMapperRectorTest
  */
-final class PropertyPathMapperToDataMapperRector extends AbstractRector
+final class PropertyPathMapperToDataMapperRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=5.2');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Migrate from PropertyPathMapper to DataMapper and PropertyPathAccessor', [new CodeSample(<<<'CODE_SAMPLE'

@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -17,8 +19,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector\AddFormatArgumentToIsValidRectorTest
  */
-final class AddFormatArgumentToIsValidRector extends AbstractRector
+final class AddFormatArgumentToIsValidRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/uid', '>=8.1');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add $format argument to Ulid::isValid()', [new CodeSample(<<<'CODE_SAMPLE'

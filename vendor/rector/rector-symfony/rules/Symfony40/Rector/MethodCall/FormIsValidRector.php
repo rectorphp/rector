@@ -11,13 +11,19 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
 use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony40\Rector\MethodCall\FormIsValidRector\FormIsValidRectorTest
  */
-final class FormIsValidRector extends AbstractRector
+final class FormIsValidRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=4.0');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'

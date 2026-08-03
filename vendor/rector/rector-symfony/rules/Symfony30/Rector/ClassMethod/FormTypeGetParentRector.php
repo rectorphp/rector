@@ -13,12 +13,14 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony30\Rector\ClassMethod\FormTypeGetParentRector\FormTypeGetParentRectorTest
  */
-final class FormTypeGetParentRector extends AbstractRector
+final class FormTypeGetParentRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -27,6 +29,10 @@ final class FormTypeGetParentRector extends AbstractRector
     public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
     {
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=3.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

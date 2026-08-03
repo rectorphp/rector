@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -17,8 +19,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony80\Rector\Class_\RemoveEraseCredentialsRector\RemoveEraseCredentialsRectorTest
  */
-final class RemoveEraseCredentialsRector extends AbstractRector
+final class RemoveEraseCredentialsRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/security-core', '>=8.0');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove unused UserInterface::eraseCredentials() method, make it part of serialize if needed', [new CodeSample(<<<'CODE_SAMPLE'

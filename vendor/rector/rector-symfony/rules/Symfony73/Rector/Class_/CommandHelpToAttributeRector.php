@@ -29,7 +29,9 @@ use Rector\Symfony\Enum\CommandMethodName;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -37,7 +39,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\CommandHelpToAttributeRector\CommandHelpToAttributeRectorTest
  */
-final class CommandHelpToAttributeRector extends AbstractRector implements MinPhpVersionInterface
+final class CommandHelpToAttributeRector extends AbstractRector implements MinPhpVersionInterface, ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -55,6 +57,10 @@ final class CommandHelpToAttributeRector extends AbstractRector implements MinPh
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::ATTRIBUTES;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/console', '>=7.3');
     }
     public function getRuleDefinition(): RuleDefinition
     {

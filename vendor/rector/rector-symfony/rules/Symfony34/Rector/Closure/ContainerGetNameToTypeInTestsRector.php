@@ -13,12 +13,14 @@ use PHPStan\Type\ObjectType;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector\ContainerGetNameToTypeInTestsRectorTest
  */
-final class ContainerGetNameToTypeInTestsRector extends AbstractRector
+final class ContainerGetNameToTypeInTestsRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -32,6 +34,10 @@ final class ContainerGetNameToTypeInTestsRector extends AbstractRector
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->serviceTypeMethodCallResolver = $serviceTypeMethodCallResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/dependency-injection', '>=3.4');
     }
     public function getRuleDefinition(): RuleDefinition
     {

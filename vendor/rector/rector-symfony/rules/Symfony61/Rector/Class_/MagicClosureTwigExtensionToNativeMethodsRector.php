@@ -19,7 +19,9 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\TwigClass;
 use Rector\ValueObject\PhpVersion;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see PHP 8.1 way to handle functions/filters https://github.com/symfony/symfony/blob/e0ad2eead3513a558c09d8aa3ae9e867fb10b419/src/Symfony/Bridge/Twig/Extension/CodeExtension.php#L41-L52
  */
-final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractRector implements MinPhpVersionInterface
+final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractRector implements MinPhpVersionInterface, ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -118,6 +120,10 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_81;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/twig-bridge', '>=6.1');
     }
     private function refactorClassMethod(ClassMethod $classMethod, Scope $scope): bool
     {

@@ -44,27 +44,75 @@ use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
+use Rector\Symfony\Symfony25\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
+use Rector\Symfony\Symfony27\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector;
+use Rector\Symfony\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector;
+use Rector\Symfony\Symfony28\Rector\StaticCall\ParseFileRector;
+use Rector\Symfony\Symfony30\Rector\ClassMethod\FormTypeGetParentRector;
+use Rector\Symfony\Symfony30\Rector\ClassMethod\GetRequestRector;
+use Rector\Symfony\Symfony30\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
+use Rector\Symfony\Symfony30\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
+use Rector\Symfony\Symfony30\Rector\MethodCall\FormTypeInstanceToClassConstRector;
+use Rector\Symfony\Symfony30\Rector\MethodCall\OptionNameRector;
+use Rector\Symfony\Symfony30\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
+use Rector\Symfony\Symfony30\Rector\MethodCall\StringFormTypeToClassRector;
+use Rector\Symfony\Symfony33\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector;
+use Rector\Symfony\Symfony34\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector;
+use Rector\Symfony\Symfony34\Rector\ClassMethod\RemoveServiceFromSensioRouteRector;
+use Rector\Symfony\Symfony34\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;
+use Rector\Symfony\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector;
+use Rector\Symfony\Symfony40\Rector\ConstFetch\ConstraintUrlOptionRector;
+use Rector\Symfony\Symfony40\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector;
+use Rector\Symfony\Symfony40\Rector\MethodCall\FormIsValidRector;
+use Rector\Symfony\Symfony40\Rector\MethodCall\VarDumperTestTraitMethodArgsRector;
 use Rector\Symfony\Symfony42\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Symfony42\Rector\New_\StringToArrayArgumentProcessRector;
 use Rector\Symfony\Symfony43\Rector\ClassMethod\EventDispatcherParentConstructRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector;
 use Rector\Symfony\Symfony43\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
+use Rector\Symfony\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
 use Rector\Symfony\Symfony44\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
 use Rector\Symfony\Symfony44\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;
 use Rector\Symfony\Symfony51\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector;
 use Rector\Symfony\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector;
+use Rector\Symfony\Symfony51\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
+use Rector\Symfony\Symfony52\Rector\MethodCall\FormBuilderSetDataMapperRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector;
 use Rector\Symfony\Symfony52\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
+use Rector\Symfony\Symfony52\Rector\New_\PropertyPathMapperToDataMapperRector;
 use Rector\Symfony\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
+use Rector\Symfony\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector;
 use Rector\Symfony\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector;
+use Rector\Symfony\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector;
+use Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector;
+use Rector\Symfony\Symfony61\Rector\Class_\CommandPropertyToAttributeRector;
+use Rector\Symfony\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector;
 use Rector\Symfony\Symfony61\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector;
+use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
+use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\Class_\SecurityAttributeToIsGrantedAttributeRector;
 use Rector\Symfony\Symfony62\Rector\ClassMethod\ClassMethod\ArgumentValueResolverToValueResolverRector;
+use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
 use Rector\Symfony\Symfony63\Rector\Class_\ParamAndEnvAttributeRector;
 use Rector\Symfony\Symfony63\Rector\Class_\SignalableCommandInterfaceReturnTypeRector;
+use Rector\Symfony\Symfony72\Rector\StmtsAwareInterface\PushRequestToRequestStackConstructorRector;
+use Rector\Symfony\Symfony73\Rector\Class_\AddVoteArgumentToVoteOnAttributeRector;
+use Rector\Symfony\Symfony73\Rector\Class_\AuthorizationCheckerToAccessDecisionManagerInVoterRector;
+use Rector\Symfony\Symfony73\Rector\Class_\CommandDefaultNameAndDescriptionToAsCommandAttributeRector;
+use Rector\Symfony\Symfony73\Rector\Class_\CommandHelpToAttributeRector;
+use Rector\Symfony\Symfony73\Rector\Class_\ConstraintOptionsToNamedArgumentsRector;
+use Rector\Symfony\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector;
+use Rector\Symfony\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector;
+use Rector\Symfony\Symfony80\Rector\Class_\RemoveEraseCredentialsRector;
+use Rector\Symfony\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToValidateInContextRector;
+use Rector\Symfony\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector;
+use Rector\Symfony\Symfony81\Rector\New_\RemoveEraseCredentialsFromAuthenticatorManagerRector;
+use Rector\Symfony\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
@@ -92,41 +140,130 @@ return static function (RectorConfig $rectorConfig): void {
     // each of these rules declares the exact Symfony package and the version its target API was added in,
     // @see ComposerPackageConstraintInterface
     $rectorConfig->rules([
+        // symfony/form 2.5
+        MaxLengthSymfonyFormOptionToAttrRector::class,
         // symfony/validator 2.5
         AddViolationToBuildViolationRector::class,
         // symfony/framework-bundle 2.6
         RedirectToRouteRector::class,
+        // symfony/form 2.7
+        ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class,
+        // symfony/framework-bundle 2.8
+        GetToConstructorInjectionRector::class,
+        // symfony/yaml 2.8
+        ParseFileRector::class,
+        // symfony/form 3.0
+        ChangeStringCollectionOptionToConstantRector::class,
+        FormTypeGetParentRector::class,
+        OptionNameRector::class,
+        ReadOnlyOptionToAttributeRector::class,
+        RemoveDefaultGetBlockPrefixRector::class,
+        StringFormTypeToClassRector::class,
+        // symfony/framework-bundle 3.0
+        FormTypeInstanceToClassConstRector::class,
+        GetRequestRector::class,
+        // symfony/console 3.3
+        ConsoleExceptionToErrorEventConstantRector::class,
+        // symfony/dependency-injection 3.4
+        ContainerGetNameToTypeInTestsRector::class,
+        // symfony/routing 3.4
+        MergeMethodAnnotationToRouteAnnotationRector::class,
+        RemoveServiceFromSensioRouteRector::class,
+        ReplaceSensioRouteAnnotationWithSymfonyRector::class,
+        // symfony/dependency-injection 4.0
+        ContainerBuilderCompileEnvArgumentRector::class,
+        // symfony/form 4.0
+        FormIsValidRector::class,
+        // symfony/validator 4.0
+        ConstraintUrlOptionRector::class,
+        // symfony/var-dumper 4.0
+        VarDumperTestTraitMethodArgsRector::class,
         // symfony/config 4.2
         RootNodeTreeBuilderRector::class,
         // symfony/process 4.2
         StringToArrayArgumentProcessRector::class,
         // symfony/event-dispatcher 4.3
-        MakeDispatchFirstArgumentEventRector::class,
         EventDispatcherParentConstructRector::class,
-        // symfony/console 4.4 and 5.1
+        MakeDispatchFirstArgumentEventRector::class,
+        // symfony/framework-bundle 4.3
+        ConvertRenderTemplateShortNotationToBundleSyntaxRector::class,
+        // symfony/intl 4.3
+        GetCurrencyBundleMethodCallsToIntlRector::class,
+        // symfony/twig-bundle 4.3
+        TwigBundleFilesystemLoaderToTwigRector::class,
+        // symfony/console 4.4
         ConsoleExecuteReturnIntRector::class,
-        CommandConstantReturnCodeRector::class,
         // symfony/security-core 4.4
         AuthorizationCheckerIsGrantedExtractorRector::class,
+        // symfony/console 5.1
+        CommandConstantReturnCodeRector::class,
+        // symfony/framework-bundle 5.1
+        RouteCollectionBuilderToRoutingConfiguratorRector::class,
         // symfony/security-http 5.1
         LogoutHandlerToLogoutEventSubscriberRector::class,
         LogoutSuccessHandlerToLogoutEventSubscriberRector::class,
-        // symfony/* 5.2
+        // symfony/dependency-injection 5.2
         DefinitionAliasSetPrivateToSetPublicRector::class,
-        ReflectionExtractorEnableMagicCallExtractorRector::class,
-        ValidatorBuilderEnableAnnotationMappingRector::class,
-        PropertyAccessorCreationBooleanToFlagsRector::class,
+        // symfony/form 5.2
+        FormBuilderSetDataMapperRector::class,
+        PropertyPathMapperToDataMapperRector::class,
+        // symfony/http-foundation 5.2
         BinaryFileResponseCreateToNewInstanceRector::class,
+        // symfony/property-access 5.2
+        PropertyAccessorCreationBooleanToFlagsRector::class,
+        // symfony/property-info 5.2
+        ReflectionExtractorEnableMagicCallExtractorRector::class,
+        // symfony/validator 5.2
+        ValidatorBuilderEnableAnnotationMappingRector::class,
+        // symfony/framework-bundle 5.3
+        KernelTestCaseContainerPropertyDeprecationRector::class,
+        // symfony/framework-bundle 6.0
+        GetHelperControllerToServiceRector::class,
+        // symfony/console 6.1
+        CommandConfigureToAttributeRector::class,
+        CommandPropertyToAttributeRector::class,
+        // symfony/twig-bridge 6.1
+        MagicClosureTwigExtensionToNativeMethodsRector::class,
         // symfony/validator 6.1
         ErrorNamesPropertyToConstantRector::class,
-        // attributes added in Symfony 6.2
+        // symfony/doctrine-bridge 6.2
+        ParamConverterAttributeToMapEntityAttributeRector::class,
+        // symfony/http-kernel 6.2
+        ArgumentValueResolverToValueResolverRector::class,
+        // symfony/messenger 6.2
+        MessageHandlerInterfaceToAttributeRector::class,
+        MessageSubscriberInterfaceToAttributeRector::class,
+        // symfony/security-http 6.2
         SecurityAttributeToIsGrantedAttributeRector::class,
         SingleConditionSecurityAttributeToIsGrantedRector::class,
         SplitAndSecurityAttributeToIsGrantedRector::class,
-        ArgumentValueResolverToValueResolverRector::class,
-        // symfony/dependency-injection and symfony/console 6.3
-        ParamAndEnvAttributeRector::class,
+        // symfony/console 6.3
         SignalableCommandInterfaceReturnTypeRector::class,
+        // symfony/dependency-injection 6.3
+        ParamAndEnvAttributeRector::class,
+        // symfony/http-foundation 7.2
+        PushRequestToRequestStackConstructorRector::class,
+        // symfony/console 7.3
+        CommandDefaultNameAndDescriptionToAsCommandAttributeRector::class,
+        CommandHelpToAttributeRector::class,
+        // symfony/security-core 7.3
+        AddVoteArgumentToVoteOnAttributeRector::class,
+        AuthorizationCheckerToAccessDecisionManagerInVoterRector::class,
+        // symfony/validator 7.3
+        ConstraintOptionsToNamedArgumentsRector::class,
+        // symfony/security-core 8.0
+        RemoveEraseCredentialsRector::class,
+        // symfony/filesystem 8.1
+        RenameCopyOnWindowsOptionToFollowSymlinksRector::class,
+        // symfony/security-http 8.1
+        RemoveEraseCredentialsFromAuthenticatorManagerRector::class,
+        // symfony/uid 8.1
+        AddFormatArgumentToIsValidRector::class,
+        // symfony/validator 8.1
+        ConstraintValidatorValidateToValidateInContextRector::class,
+        // twig/twig 3.21
+        GetFiltersToAsTwigFilterAttributeRector::class,
+        GetFunctionsToAsTwigFunctionAttributeRector::class,
     ]);
     // shared types used by the configuration below
     $arrayType = new ArrayType(new MixedType(), new MixedType());

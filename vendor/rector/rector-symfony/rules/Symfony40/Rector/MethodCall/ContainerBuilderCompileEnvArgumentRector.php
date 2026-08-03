@@ -7,13 +7,19 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony40\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector\ContainerBuilderCompileEnvArgumentRectorTest
  */
-final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
+final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/dependency-injection', '>=4.0');
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turns old default value to parameter in ContainerBuilder->build() method in DI in Symfony', [new CodeSample(<<<'CODE_SAMPLE'

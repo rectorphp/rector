@@ -15,6 +15,8 @@ use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -23,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector\GetHelperControllerToServiceRectorTest
  */
-final class GetHelperControllerToServiceRector extends AbstractRector
+final class GetHelperControllerToServiceRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -42,6 +44,10 @@ final class GetHelperControllerToServiceRector extends AbstractRector
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->propertyNaming = $propertyNaming;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/framework-bundle', '>=6.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

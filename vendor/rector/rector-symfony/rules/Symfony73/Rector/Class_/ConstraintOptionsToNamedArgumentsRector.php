@@ -15,12 +15,14 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\SymfonyClass;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\ConstraintOptionsToNamedArgumentsRector\ConstraintOptionsToNamedArgumentsRectorTest
  */
-final class ConstraintOptionsToNamedArgumentsRector extends AbstractRector
+final class ConstraintOptionsToNamedArgumentsRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -29,6 +31,10 @@ final class ConstraintOptionsToNamedArgumentsRector extends AbstractRector
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/validator', '>=7.3');
     }
     public function getRuleDefinition(): RuleDefinition
     {
