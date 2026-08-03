@@ -2612,7 +2612,6 @@ return array(
     'Rector\\Symfony\\DataProvider\\ServiceMapProvider' => $vendorDir . '/rector/rector-symfony/src/DataProvider/ServiceMapProvider.php',
     'Rector\\Symfony\\DataProvider\\ServiceNameToTypeUniqueProvider' => $vendorDir . '/rector/rector-symfony/src/DataProvider/ServiceNameToTypeUniqueProvider.php',
     'Rector\\Symfony\\DependencyInjection\\NodeDecorator\\CommandConstructorDecorator' => $vendorDir . '/rector/rector-symfony/rules/DependencyInjection/NodeDecorator/CommandConstructorDecorator.php',
-    'Rector\\Symfony\\DependencyInjection\\NodeFactory\\AutowireClassMethodFactory' => $vendorDir . '/rector/rector-symfony/rules/DependencyInjection/NodeFactory/AutowireClassMethodFactory.php',
     'Rector\\Symfony\\DependencyInjection\\Rector\\Class_\\CommandGetByTypeToConstructorInjectionRector' => $vendorDir . '/rector/rector-symfony/rules/DependencyInjection/Rector/Class_/CommandGetByTypeToConstructorInjectionRector.php',
     'Rector\\Symfony\\DependencyInjection\\Rector\\Class_\\ControllerGetByTypeToConstructorInjectionRector' => $vendorDir . '/rector/rector-symfony/rules/DependencyInjection/Rector/Class_/ControllerGetByTypeToConstructorInjectionRector.php',
     'Rector\\Symfony\\DependencyInjection\\Rector\\Class_\\GetBySymfonyStringToConstructorInjectionRector' => $vendorDir . '/rector/rector-symfony/rules/DependencyInjection/Rector/Class_/GetBySymfonyStringToConstructorInjectionRector.php',
