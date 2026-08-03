@@ -2649,6 +2649,7 @@ return array(
     'Rector\\Symfony\\NodeAnalyzer\\ServiceTypeMethodCallResolver' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ServiceTypeMethodCallResolver.php',
     'Rector\\Symfony\\NodeAnalyzer\\SymfonyPhpClosureDetector' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyPhpClosureDetector.php',
     'Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php',
+    'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstantExpressionAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/ConstantExpressionAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\ConstraintAttributeTargetAnalyzer' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/ConstraintAttributeTargetAnalyzer.php',
     'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\MetadataConstraintResolver' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/MetadataConstraintResolver.php',
     'Rector\\Symfony\\NodeAnalyzer\\ValidatorAssert\\StmtMethodCallMatcher' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/ValidatorAssert/StmtMethodCallMatcher.php',

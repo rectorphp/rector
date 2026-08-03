@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstantExpressionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintAttributeTargetAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\MetadataConstraintResolver;
 use Rector\Symfony\NodeFactory\ValidatorAssert\ConstraintAttributeGroupFactory;
@@ -41,11 +42,16 @@ final class LoadValidatorMetadataToAttributeRector extends AbstractRector implem
      * @readonly
      */
     private ConstraintAttributeGroupFactory $constraintAttributeGroupFactory;
-    public function __construct(MetadataConstraintResolver $metadataConstraintResolver, ConstraintAttributeTargetAnalyzer $constraintAttributeTargetAnalyzer, ConstraintAttributeGroupFactory $constraintAttributeGroupFactory)
+    /**
+     * @readonly
+     */
+    private ConstantExpressionAnalyzer $constantExpressionAnalyzer;
+    public function __construct(MetadataConstraintResolver $metadataConstraintResolver, ConstraintAttributeTargetAnalyzer $constraintAttributeTargetAnalyzer, ConstraintAttributeGroupFactory $constraintAttributeGroupFactory, ConstantExpressionAnalyzer $constantExpressionAnalyzer)
     {
         $this->metadataConstraintResolver = $metadataConstraintResolver;
         $this->constraintAttributeTargetAnalyzer = $constraintAttributeTargetAnalyzer;
         $this->constraintAttributeGroupFactory = $constraintAttributeGroupFactory;
+        $this->constantExpressionAnalyzer = $constantExpressionAnalyzer;
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
@@ -191,6 +197,10 @@ CODE_SAMPLE
     }
     private function resolveConstraintClass(New_ $new): ?string
     {
+        // e.g. new Assert\Callback(function () {...}) has no constant expression form, the attribute would not parse
+        if (!$this->constantExpressionAnalyzer->areArgsConstant($new->args)) {
+            return null;
+        }
         $constraintClass = $this->getName($new->class);
         if (!is_string($constraintClass)) {
             return null;
