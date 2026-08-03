@@ -4,16 +4,16 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Token;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector\WrapEncapsedVariableInCurlyBracesRectorTest
+ * @deprecated This rule is deprecated, as it is a coding standard preference with no real value. Use a coding standard tool instead.
  */
-final class WrapEncapsedVariableInCurlyBracesRector extends AbstractRector
+final class WrapEncapsedVariableInCurlyBracesRector extends AbstractRector implements DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -43,22 +43,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasVariableBeenWrapped = \false;
-        $oldTokens = $this->getFile()->getOldTokens();
-        foreach ($node->parts as $index => $nodePart) {
-            if ($nodePart instanceof Variable && $nodePart->getStartTokenPos() >= 0) {
-                $start = $oldTokens[$nodePart->getStartTokenPos() - 1] ?? null;
-                $end = $oldTokens[$nodePart->getEndTokenPos() + 1] ?? null;
-                if ($start instanceof Token && $end instanceof Token && $start->text === '{' && $end->text === '}') {
-                    continue;
-                }
-                $hasVariableBeenWrapped = \true;
-                $node->parts[$index] = new Variable($nodePart->name);
-            }
-        }
-        if (!$hasVariableBeenWrapped) {
-            return null;
-        }
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it is a coding standard preference with no real value', self::class));
     }
 }
