@@ -4,33 +4,17 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Variable;
-use Rector\Php\PhpVersionProvider;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\PhpVersionFeature;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Php74ArraySpreadInsteadOfArrayMergeRectorTest
- * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Php81ArraySpreadInsteadOfArrayMergeRectorTest
+ * @deprecated This rule is deprecated, as it is a personal preference. The spread operator makes array merges harder to read and look dangerous.
  */
-final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector implements MinPhpVersionInterface
+final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private PhpVersionProvider $phpVersionProvider;
-    public function __construct(PhpVersionProvider $phpVersionProvider)
-    {
-        $this->phpVersionProvider = $phpVersionProvider;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change array_merge() to spread operator', [new CodeSample(<<<'CODE_SAMPLE'
@@ -74,95 +58,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isName($node, 'array_merge')) {
-            return $this->refactorArray($node);
-        }
-        return null;
-    }
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::ARRAY_SPREAD;
-    }
-    private function refactorArray(FuncCall $funcCall): ?Array_
-    {
-        if ($funcCall->isFirstClassCallable()) {
-            return null;
-        }
-        $array = new Array_();
-        foreach ($funcCall->args as $arg) {
-            if (!$arg instanceof Arg) {
-                continue;
-            }
-            // cannot handle unpacked arguments
-            if ($arg->unpack) {
-                return null;
-            }
-            $value = $arg->value;
-            if ($this->shouldSkipArrayForInvalidKeys($value)) {
-                return null;
-            }
-            if ($value instanceof Array_) {
-                $array->items = array_merge($array->items, $value->items);
-                continue;
-            }
-            $value = $this->resolveValue($value);
-            $array->items[] = $this->createUnpackedArrayItem($value);
-        }
-        return $array;
-    }
-    private function shouldSkipArrayForInvalidKeys(Expr $expr): bool
-    {
-        $type = $this->getType($expr);
-        if ($type->getIterableKeyType()->isInteger()->yes()) {
-            // when on PHP 8.0+, pass non-array values already error on the first place
-            // this check avoid unpack non-array values that cause error on php 7.4 as well,
-            // @see https://3v4l.org/DuYHu#v7.4.33
-            if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_ON_ARRAY_MERGE)) {
-                $nativeType = $this->nodeTypeResolver->getNativeType($expr);
-                return !$nativeType->isArray()->yes();
-            }
-            return \false;
-        }
-        // php 8.1+ allow mixed key: int, string, and null
-        return !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD_STRING_KEYS);
-    }
-    private function resolveValue(Expr $expr): Expr
-    {
-        if ($expr instanceof FuncCall && $this->isIteratorToArrayFuncCall($expr)) {
-            /** @var Arg $arg */
-            $arg = $expr->args[0];
-            /** @var FuncCall $expr */
-            $expr = $arg->value;
-        }
-        if (!$expr instanceof Ternary) {
-            return $expr;
-        }
-        if (!$expr->cond instanceof FuncCall) {
-            return $expr;
-        }
-        if (!$this->isName($expr->cond, 'is_array')) {
-            return $expr;
-        }
-        if ($expr->if instanceof Variable && $this->isIteratorToArrayFuncCall($expr->else)) {
-            return $expr->if;
-        }
-        return $expr;
-    }
-    private function createUnpackedArrayItem(Expr $expr): ArrayItem
-    {
-        return new ArrayItem($expr, null, \false, [], \true);
-    }
-    private function isIteratorToArrayFuncCall(Expr $expr): bool
-    {
-        if (!$expr instanceof FuncCall) {
-            return \false;
-        }
-        if (!$this->isName($expr, 'iterator_to_array')) {
-            return \false;
-        }
-        if ($expr->isFirstClassCallable()) {
-            return \false;
-        }
-        return isset($expr->getArgs()[0]);
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it is a personal preference that makes array merges harder to read', self::class));
     }
 }
