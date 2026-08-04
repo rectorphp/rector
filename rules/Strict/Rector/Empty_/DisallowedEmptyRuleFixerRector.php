@@ -4,44 +4,29 @@ declare (strict_types=1);
 namespace Rector\Strict\Rector\Empty_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
-use PhpParser\Node\Expr\Isset_;
-use PHPStan\Analyser\Scope;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\NodeAnalyzer\ExprAnalyzer;
-use Rector\PHPStan\ScopeFetcher;
-use Rector\Strict\NodeAnalyzer\UninitializedPropertyAnalyzer;
-use Rector\Strict\NodeFactory\ExactCompareFactory;
-use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector\DisallowedEmptyRuleFixerRectorTest
+ * @deprecated This rule is deprecated, as it creates unreadable code with messy isset()/comparison checks. Refactor the value to a single sole type instead, then the empty() check can be replaced by a clear comparison.
  */
-final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerRector implements ConfigurableRectorInterface
+final class DisallowedEmptyRuleFixerRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
     /**
-     * @readonly
+     * @api
+     * @var string
      */
-    private ExactCompareFactory $exactCompareFactory;
+    public const TREAT_AS_NON_EMPTY = 'treat_as_non_empty';
     /**
-     * @readonly
+     * @param array<string, mixed> $configuration
      */
-    private ExprAnalyzer $exprAnalyzer;
-    /**
-     * @readonly
-     */
-    private UninitializedPropertyAnalyzer $uninitializedPropertyAnalyzer;
-    public function __construct(ExactCompareFactory $exactCompareFactory, ExprAnalyzer $exprAnalyzer, UninitializedPropertyAnalyzer $uninitializedPropertyAnalyzer)
+    public function configure(array $configuration): void
     {
-        $this->exactCompareFactory = $exactCompareFactory;
-        $this->exprAnalyzer = $exprAnalyzer;
-        $this->uninitializedPropertyAnalyzer = $uninitializedPropertyAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -75,62 +60,8 @@ CODE_SAMPLE
     /**
      * @param Empty_|BooleanNot $node
      */
-    public function refactor(Node $node): ?\PhpParser\Node\Expr
+    public function refactor(Node $node): ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
-        if ($node instanceof BooleanNot) {
-            return $this->refactorBooleanNot($node, $scope);
-        }
-        if ($node->expr instanceof ArrayDimFetch) {
-            return null;
-        }
-        return $this->refactorEmpty($node, $scope, $this->treatAsNonEmpty);
-    }
-    private function refactorBooleanNot(BooleanNot $booleanNot, Scope $scope): ?\PhpParser\Node\Expr
-    {
-        if (!$booleanNot->expr instanceof Empty_) {
-            return null;
-        }
-        $empty = $booleanNot->expr;
-        if ($empty->expr instanceof ArrayDimFetch) {
-            return $this->createDimFetchBooleanAnd($empty->expr);
-        }
-        if ($this->exprAnalyzer->isNonTypedFromParam($empty->expr)) {
-            return null;
-        }
-        $emptyExprType = $scope->getNativeType($empty->expr);
-        $result = $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr, $this->treatAsNonEmpty);
-        if (!$result instanceof Expr) {
-            return null;
-        }
-        if ($this->uninitializedPropertyAnalyzer->isUninitialized($empty->expr)) {
-            return new BooleanAnd(new Isset_([$empty->expr]), $result);
-        }
-        return $result;
-    }
-    private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty): ?\PhpParser\Node\Expr
-    {
-        if ($this->exprAnalyzer->isNonTypedFromParam($empty->expr)) {
-            return null;
-        }
-        $exprType = $scope->getNativeType($empty->expr);
-        $result = $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);
-        if (!$result instanceof Expr) {
-            return null;
-        }
-        if ($this->uninitializedPropertyAnalyzer->isUninitialized($empty->expr)) {
-            return new BooleanOr(new BooleanNot(new Isset_([$empty->expr])), $result);
-        }
-        return $result;
-    }
-    private function createDimFetchBooleanAnd(ArrayDimFetch $arrayDimFetch): ?BooleanAnd
-    {
-        $exprType = $this->nodeTypeResolver->getNativeType($arrayDimFetch);
-        $isset = new Isset_([$arrayDimFetch]);
-        $compareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $arrayDimFetch, \false);
-        if (!$compareExpr instanceof Expr) {
-            return null;
-        }
-        return new BooleanAnd($isset, $compareExpr);
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it creates unreadable code with messy checks; refactor the value to a sole type instead', self::class));
     }
 }
