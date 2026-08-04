@@ -4,19 +4,28 @@ declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
 use Exception;
+use PhpParser\Modifiers;
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\NodeManipulator\ClassDependencyManipulator;
+use Rector\NodeManipulator\ClassInsertManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -24,6 +33,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Rector\Symfony\CodeQuality\NodeAnalyzer\ParamConverterClassesResolver;
 use Rector\Symfony\Enum\FosClass;
+use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\ValueObject\MethodName;
@@ -51,6 +61,10 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
     /**
      * @readonly
      */
+    private ClassInsertManipulator $classInsertManipulator;
+    /**
+     * @readonly
+     */
     private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
@@ -68,11 +82,21 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
      * @var string[]
      */
     private const COMMON_ENTITY_CONTAINS_SUBNAMESPACES = ["\\Entity\\", "\\Document\\", "\\Model\\"];
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, StaticTypeMapper $staticTypeMapper, ParamConverterClassesResolver $paramConverterClassesResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ReflectionResolver $reflectionResolver)
+    /**
+     * @var string
+     */
+    private const AUTOWIRE_METHOD_NAME = 'autowire';
+    /**
+     * Used when a parent class already defines autowire(), to avoid overriding it
+     * @var string
+     */
+    private const FALLBACK_AUTOWIRE_METHOD_NAME = 'autowireServices';
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, ControllerMethodAnalyzer $controllerMethodAnalyzer, ClassDependencyManipulator $classDependencyManipulator, ClassInsertManipulator $classInsertManipulator, StaticTypeMapper $staticTypeMapper, ParamConverterClassesResolver $paramConverterClassesResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ReflectionResolver $reflectionResolver)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
         $this->classDependencyManipulator = $classDependencyManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->paramConverterClassesResolver = $paramConverterClassesResolver;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
@@ -80,7 +104,7 @@ final class ControllerMethodInjectionToConstructorRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change Symfony controller method injection to direct constructor dependency, to separate params and services clearly', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change Symfony controller method injection to direct constructor dependency, to separate params and services clearly. If a parent class has a constructor, use #[Required] autowire() method instead, to avoid repeating all parent params', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -113,6 +137,39 @@ final class SomeController extends AbstractController
         Request $request
     ) {
         $data = $this->someService->getData();
+    }
+}
+CODE_SAMPLE
+), new CodeSample(<<<'CODE_SAMPLE'
+use Symfony\Component\Routing\Annotation\Route;
+
+final class SomeController extends SomeParentControllerWithConstructor
+{
+    #[Route('/some-path', name: 'some_name')]
+    public function someAction(SomeService $someService)
+    {
+        $data = $someService->getData();
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Service\Attribute\Required;
+
+final class SomeController extends SomeParentControllerWithConstructor
+{
+    private SomeService $someService;
+
+    #[Route('/some-path', name: 'some_name')]
+    public function someAction()
+    {
+        $data = $this->someService->getData();
+    }
+
+    #[Required]
+    public function autowire(SomeService $someService): void
+    {
+        $this->someService = $someService;
     }
 }
 CODE_SAMPLE
@@ -221,9 +278,16 @@ CODE_SAMPLE
         foreach ($paramsToRemove as [$methodToModify, $paramKey]) {
             unset($methodToModify->params[$paramKey]);
         }
-        // 1. update constructor
-        foreach ($propertyMetadatas as $propertyMetadata) {
-            $this->classDependencyManipulator->addConstructorDependency($node, $propertyMetadata);
+        // 1. add dependencies
+        if ($propertyMetadatas !== []) {
+            if ($this->hasParentConstructor($node)) {
+                // constructor would have to repeat all parent params, use setter injection instead
+                $this->addRequiredAutowireClassMethod($node, $propertyMetadatas);
+            } else {
+                foreach ($propertyMetadatas as $propertyMetadata) {
+                    $this->classDependencyManipulator->addConstructorDependency($node, $propertyMetadata);
+                }
+            }
         }
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkipClassMethod($classMethod)) {
@@ -322,6 +386,57 @@ CODE_SAMPLE
             return $objectType->isSuperTypeOf($nativePropertyReflection->getReadableType())->yes();
         }
         return \false;
+    }
+    /**
+     * @param PropertyMetadata[] $propertyMetadatas
+     */
+    private function addRequiredAutowireClassMethod(Class_ $class, array $propertyMetadatas): void
+    {
+        $autowireMethodName = $this->resolveAutowireMethodName($class);
+        $autowireClassMethod = $class->getMethod($autowireMethodName);
+        $isNewClassMethod = !$autowireClassMethod instanceof ClassMethod;
+        if (!$autowireClassMethod instanceof ClassMethod) {
+            $autowireClassMethod = new ClassMethod(new Identifier($autowireMethodName), ['flags' => Modifiers::PUBLIC, 'returnType' => new Identifier('void'), 'attrGroups' => [new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::REQUIRED))])], 'stmts' => []]);
+        }
+        foreach ($propertyMetadatas as $propertyMetadata) {
+            $propertyName = $propertyMetadata->getName();
+            $propertyType = $propertyMetadata->getType();
+            $property = $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $propertyType);
+            $this->classInsertManipulator->addAsFirstMethod($class, $property);
+            $autowireClassMethod->params[] = new Param(new Variable($propertyName), null, $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PARAM));
+            $autowireClassMethod->stmts[] = new Expression(new Assign(new PropertyFetch(new Variable('this'), $propertyName), new Variable($propertyName)));
+        }
+        if ($isNewClassMethod) {
+            $class->stmts[] = $autowireClassMethod;
+        }
+    }
+    private function resolveAutowireMethodName(Class_ $class): string
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (!$classReflection instanceof ClassReflection) {
+            return self::AUTOWIRE_METHOD_NAME;
+        }
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if ($parentClassReflection->hasNativeMethod(self::AUTOWIRE_METHOD_NAME)) {
+                return self::FALLBACK_AUTOWIRE_METHOD_NAME;
+            }
+        }
+        return self::AUTOWIRE_METHOD_NAME;
+    }
+    private function hasParentConstructor(Class_ $class): bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        $found = \false;
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            if ($parentClassReflection->hasNativeMethod(MethodName::CONSTRUCT)) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
     private function isUsedInStaticClosureUse(ClassMethod $classMethod, string $paramName): bool
     {
