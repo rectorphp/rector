@@ -36,6 +36,10 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const EVENT = 'Symfony\Contracts\EventDispatcher\Event';
+    /**
+     * @var string
+     */
     public const VALIDATOR_INTERFACE = 'Symfony\Component\Validator\Validator\ValidatorInterface';
     /**
      * @var string
