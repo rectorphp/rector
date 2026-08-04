@@ -3,7 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Config\Level;
 
+use Rector\CodeQuality\Rector\FuncCall\UnwrapSprintfOneArgumentRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
+use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 use Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
@@ -108,6 +110,8 @@ final class DeadCodeLevel
         ReplaceBlockToItsStmtsRector::class,
         RemoveFilterVarOnExactTypeRector::class,
         RemoveFinalFromConstRector::class,
+        UnwrapSprintfOneArgumentRector::class,
+        SimplifyBoolIdenticalTrueRector::class,
         RemoveTypedPropertyDeadInstanceOfRector::class,
         RemoveDeadInstanceOfAssertRector::class,
         TernaryToBooleanOrFalseToBooleanAndRector::class,
