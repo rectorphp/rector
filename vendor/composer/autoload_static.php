@@ -2664,6 +2664,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
         'Rector\\PhpParser\\NodeTraverser\\SimpleNodeTraverser' => __DIR__ . '/../..' . '/src/PhpParser/NodeTraverser/SimpleNodeTraverser.php',
         'Rector\\PhpParser\\NodeVisitor\\ArgNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/ArgNodeVisitor.php',
+        'Rector\\PhpParser\\NodeVisitor\\ArgNotAcceptingClosureNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/ArgNotAcceptingClosureNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\AssignedToNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/AssignedToNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\ByRefReturnNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/ByRefReturnNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\ByRefVariableNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/ByRefVariableNodeVisitor.php',

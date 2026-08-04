@@ -266,4 +266,10 @@ final class AttributeKey
      * @var string
      */
     public const NEWLINE_ON_FLUENT_CALL = 'newline_on_fluent_call';
+    /**
+     * The arg value is passed to a parameter whose type does not accept a Closure,
+     * e.g. an array callable passed to a "string|array|null" parameter
+     * @var string
+     */
+    public const IS_ARG_NOT_ACCEPTING_CLOSURE = 'is_arg_not_accepting_closure';
 }

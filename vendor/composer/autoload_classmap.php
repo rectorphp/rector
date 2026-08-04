@@ -2407,6 +2407,7 @@ return array(
     'Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
     'Rector\\PhpParser\\NodeTraverser\\SimpleNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/SimpleNodeTraverser.php',
     'Rector\\PhpParser\\NodeVisitor\\ArgNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/ArgNodeVisitor.php',
+    'Rector\\PhpParser\\NodeVisitor\\ArgNotAcceptingClosureNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/ArgNotAcceptingClosureNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\AssignedToNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/AssignedToNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\ByRefReturnNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/ByRefReturnNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\ByRefVariableNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/ByRefVariableNodeVisitor.php',
