@@ -391,10 +391,11 @@ CODE_SAMPLE
      */
     private function addRequiredAutowireClassMethod(Class_ $class, array $propertyMetadatas): void
     {
-        $autowireMethodName = $this->resolveAutowireMethodName($class);
-        $autowireClassMethod = $class->getMethod($autowireMethodName);
+        // re-use existing #[Required] method, to keep single injection point
+        $autowireClassMethod = $this->resolveExistingRequiredClassMethod($class);
         $isNewClassMethod = !$autowireClassMethod instanceof ClassMethod;
         if (!$autowireClassMethod instanceof ClassMethod) {
+            $autowireMethodName = $this->resolveAutowireMethodName($class);
             $autowireClassMethod = new ClassMethod(new Identifier($autowireMethodName), ['flags' => Modifiers::PUBLIC, 'returnType' => new Identifier('void'), 'attrGroups' => [new AttributeGroup([new Attribute(new FullyQualified(SymfonyAttribute::REQUIRED))])], 'stmts' => []]);
         }
         foreach ($propertyMetadatas as $propertyMetadata) {
@@ -408,6 +409,38 @@ CODE_SAMPLE
         if ($isNewClassMethod) {
             $class->stmts[] = $autowireClassMethod;
         }
+    }
+    /**
+     * Existing #[Required] setter method, or a method named autowire*(), to re-use as injection point
+     */
+    private function resolveExistingRequiredClassMethod(Class_ $class): ?ClassMethod
+    {
+        foreach ($class->getMethods() as $classMethod) {
+            if (!$classMethod->isPublic()) {
+                continue;
+            }
+            if ($classMethod->isStatic() || $classMethod->stmts === null) {
+                continue;
+            }
+            if ($this->hasRequiredAttribute($classMethod)) {
+                return $classMethod;
+            }
+            if (strncmp($classMethod->name->toString(), self::AUTOWIRE_METHOD_NAME_PREFIX, strlen(self::AUTOWIRE_METHOD_NAME_PREFIX)) === 0) {
+                return $classMethod;
+            }
+        }
+        return null;
+    }
+    private function hasRequiredAttribute(ClassMethod $classMethod): bool
+    {
+        foreach ($classMethod->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+                if ($this->isName($attribute->name, SymfonyAttribute::REQUIRED)) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
     /**
      * Suffix with the short class name, to keep the method unique in case of inheritance
