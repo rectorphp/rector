@@ -2666,7 +2666,6 @@ return array(
     'Rector\\Symfony\\Set\\SetProvider\\Symfony6SetProvider' => $vendorDir . '/rector/rector-symfony/src/Set/SetProvider/Symfony6SetProvider.php',
     'Rector\\Symfony\\Set\\SetProvider\\Symfony7SetProvider' => $vendorDir . '/rector/rector-symfony/src/Set/SetProvider/Symfony7SetProvider.php',
     'Rector\\Symfony\\Set\\SetProvider\\Symfony8SetProvider' => $vendorDir . '/rector/rector-symfony/src/Set/SetProvider/Symfony8SetProvider.php',
-    'Rector\\Symfony\\Set\\SetProvider\\SymfonySetProvider' => $vendorDir . '/rector/rector-symfony/src/Set/SetProvider/SymfonySetProvider.php',
     'Rector\\Symfony\\Set\\SetProvider\\TwigSetProvider' => $vendorDir . '/rector/rector-symfony/src/Set/SetProvider/TwigSetProvider.php',
     'Rector\\Symfony\\Set\\SwiftMailerSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SwiftMailerSetList.php',
     'Rector\\Symfony\\Set\\SymfonyInternalSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SymfonyInternalSetList.php',

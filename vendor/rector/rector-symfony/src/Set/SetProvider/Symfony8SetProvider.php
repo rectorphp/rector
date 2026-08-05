@@ -5,8 +5,12 @@ namespace Rector\Symfony\Set\SetProvider;
 
 use Rector\Set\Contract\SetInterface;
 use Rector\Set\Contract\SetProviderInterface;
-use Rector\Set\Enum\SetGroup;
-use Rector\Set\ValueObject\ComposerTriggeredSet;
+/**
+ * All the Symfony 8.x sets are now part of the composer-based set,
+ * where every rule is bound to the exact package version it is available from.
+ *
+ * @see \Rector\Symfony\Set\SetProvider\SymfonySetProvider
+ */
 final class Symfony8SetProvider implements SetProviderInterface
 {
     /**
@@ -14,6 +18,6 @@ final class Symfony8SetProvider implements SetProviderInterface
      */
     public function provide(): array
     {
-        return [new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/security-core', '8.0', __DIR__ . '/../../../config/sets/symfony/symfony8/symfony80/symfony80-security-core.php'), new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/dependency-injection', '8.1', __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-dependency-injection.php'), new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/uid', '8.1', __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-uid.php'), new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/serializer', '8.1', __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-serializer.php'), new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/filesystem', '8.1', __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-filesystem.php'), new ComposerTriggeredSet(SetGroup::SYMFONY, 'symfony/security', '8.1', __DIR__ . '/../../../config/sets/symfony/symfony8/symfony81/symfony81-security.php')];
+        return [];
     }
 }

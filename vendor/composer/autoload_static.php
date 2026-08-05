@@ -2923,7 +2923,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Symfony\\Set\\SetProvider\\Symfony6SetProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SetProvider/Symfony6SetProvider.php',
         'Rector\\Symfony\\Set\\SetProvider\\Symfony7SetProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SetProvider/Symfony7SetProvider.php',
         'Rector\\Symfony\\Set\\SetProvider\\Symfony8SetProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SetProvider/Symfony8SetProvider.php',
-        'Rector\\Symfony\\Set\\SetProvider\\SymfonySetProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SetProvider/SymfonySetProvider.php',
         'Rector\\Symfony\\Set\\SetProvider\\TwigSetProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SetProvider/TwigSetProvider.php',
         'Rector\\Symfony\\Set\\SwiftMailerSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SwiftMailerSetList.php',
         'Rector\\Symfony\\Set\\SymfonyInternalSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonyInternalSetList.php',
