@@ -2162,7 +2162,6 @@ return array(
     'Rector\\PHPUnit\\PhpDoc\\DataProviderMethodRenamer' => $vendorDir . '/rector/rector-phpunit/src/PhpDoc/DataProviderMethodRenamer.php',
     'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => $vendorDir . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
     'Rector\\PHPUnit\\Set\\PHPUnitSetList' => $vendorDir . '/rector/rector-phpunit/src/Set/PHPUnitSetList.php',
-    'Rector\\PHPUnit\\Set\\SetProvider\\PHPUnitSetProvider' => $vendorDir . '/rector/rector-phpunit/src/Set/SetProvider/PHPUnitSetProvider.php',
     'Rector\\PHPUnit\\ValueObject\\AnnotationWithValueToAttribute' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/AnnotationWithValueToAttribute.php',
     'Rector\\PHPUnit\\ValueObject\\BinaryOpWithAssertMethod' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/BinaryOpWithAssertMethod.php',
     'Rector\\PHPUnit\\ValueObject\\ConstantWithAssertMethods' => $vendorDir . '/rector/rector-phpunit/src/ValueObject/ConstantWithAssertMethods.php',
