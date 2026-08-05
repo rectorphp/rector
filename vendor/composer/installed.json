@@ -1728,12 +1728,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "67f49fe777dd58aa889b2512db3533609f30eb6a"
+                "reference": "2bf34183fa64740ecb973aac456bdd2f15323786"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/67f49fe777dd58aa889b2512db3533609f30eb6a",
-                "reference": "67f49fe777dd58aa889b2512db3533609f30eb6a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/2bf34183fa64740ecb973aac456bdd2f15323786",
+                "reference": "2bf34183fa64740ecb973aac456bdd2f15323786",
                 "shasum": ""
             },
             "require": {
@@ -1759,7 +1759,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-08-03T16:02:41+00:00",
+            "time": "2026-08-05T12:21:14+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1917,12 +1917,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "0b27abd2f535e7cb83b2f08f7a69ac49358ff21a"
+                "reference": "26a911e2776737b45d2c4b7a286533698caa7ea1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/0b27abd2f535e7cb83b2f08f7a69ac49358ff21a",
-                "reference": "0b27abd2f535e7cb83b2f08f7a69ac49358ff21a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/26a911e2776737b45d2c4b7a286533698caa7ea1",
+                "reference": "26a911e2776737b45d2c4b7a286533698caa7ea1",
                 "shasum": ""
             },
             "require": {
@@ -1955,7 +1955,7 @@
                 "tracy\/tracy": "^2.12",
                 "twig\/twig": "^3.21"
             },
-            "time": "2026-08-05T12:17:57+00:00",
+            "time": "2026-08-05T12:21:45+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

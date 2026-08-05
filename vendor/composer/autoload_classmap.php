@@ -1611,7 +1611,6 @@ return array(
     'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\SetParametersArrayToCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/SetParametersArrayToCollectionRector.php',
     'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => $vendorDir . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
     'Rector\\Doctrine\\Set\\DoctrineSetList' => $vendorDir . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
-    'Rector\\Doctrine\\Set\\SetProvider\\DoctrineSetProvider' => $vendorDir . '/rector/rector-doctrine/src/Set/SetProvider/DoctrineSetProvider.php',
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeFactory' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeFactory.php',
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeResolver' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeResolver.php',
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionVarTagValueNodeResolver' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionVarTagValueNodeResolver.php',

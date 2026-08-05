@@ -190,5 +190,5 @@ return RectorConfig::configure()->withConfiguredRule(RenameClassRector::class, [
     'Twig_TokenParser_Deprecated' => 'Twig\TokenParser\DeprecatedTokenParser',
     'Twig_Util_DeprecationCollector' => 'Twig\Util\DeprecationCollector',
     'Twig_Util_TemplateDirIterator' => 'Twig\Util\TemplateDirIterator',
-    'Twig_Tests_EnvironmentTest_Extension' => 'Twig\Tests\EnvironmentTest\Extensio',
+    'Twig_Tests_EnvironmentTest_Extension' => 'Twig\Tests\EnvironmentTest\Extension',
 ]);

@@ -228,6 +228,7 @@ return static function (RectorConfig $rectorConfig): void {
         'Twig_TokenParser_Deprecated' => 'Twig\TokenParser\DeprecatedTokenParser',
         'Twig_Util_DeprecationCollector' => 'Twig\Util\DeprecationCollector',
         'Twig_Util_TemplateDirIterator' => 'Twig\Util\TemplateDirIterator',
+        'Twig_Tests_EnvironmentTest_Extension' => 'Twig\Tests\EnvironmentTest\Extension',
     ], 'twig/twig', '>=1.40');
     // twig/twig 3.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Twig\Extension\ExtensionInterface', 'getFilters', $arrayType), new AddReturnTypeDeclaration('Twig\Extension\ExtensionInterface', 'getTests', $arrayType), new AddReturnTypeDeclaration('Twig\Extension\ExtensionInterface', 'getFunctions', $arrayType)], 'twig/twig', '>=3.0');
