@@ -178,6 +178,45 @@ CODE_SAMPLE
         return \false;
     }
     /**
+     * The variable is filled as a string later on, so it has to stay a string here as well
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function isReAssignedAsString(Variable $variable, $node): bool
+    {
+        if ($node->stmts === null) {
+            return \false;
+        }
+        $variableName = $this->getName($variable);
+        if ($variableName === null) {
+            return \false;
+        }
+        $isReAssignedAsString = \false;
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($variable, $variableName, &$isReAssignedAsString): ?int {
+            if (!$node instanceof Assign) {
+                return null;
+            }
+            if (!$node->var instanceof Variable) {
+                return null;
+            }
+            if (!$this->isName($node->var, $variableName)) {
+                return null;
+            }
+            if ($node->var->getStartTokenPos() <= $variable->getStartTokenPos()) {
+                return null;
+            }
+            // an empty string assign is a candidate for the very same re-type, so it is no proof of a string
+            if ($this->isEmptyString($node->expr)) {
+                return null;
+            }
+            if (!$this->nodeTypeResolver->getNativeType($node->expr)->isString()->yes()) {
+                return null;
+            }
+            $isReAssignedAsString = \true;
+            return NodeVisitor::STOP_TRAVERSAL;
+        });
+        return $isReAssignedAsString;
+    }
+    /**
      * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
     private function refactorAssign(Assign $assign, $node): ?Assign
@@ -193,6 +232,9 @@ CODE_SAMPLE
             return null;
         }
         if ($type instanceof UnionType) {
+            return null;
+        }
+        if ($this->isReAssignedAsString($assign->var, $node)) {
             return null;
         }
         $variableAssignArrayDimFetches = $this->findSameNamedVariableAssigns($assign->var, $node);
