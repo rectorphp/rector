@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\Configuration\RectorRuleNameAmbiguousException;
 use Rector\Exception\Configuration\RectorRuleNotFoundException;
@@ -17,11 +18,16 @@ final class OnlyRuleResolver
      */
     private array $rectors;
     /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors)
+    public function __construct(array $rectors, ReflectionProvider $reflectionProvider)
     {
         $this->rectors = $rectors;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function resolve(string $rule): string
     {
@@ -67,8 +73,31 @@ final class OnlyRuleResolver
             }
             $message = sprintf('Rule "%s" was not found.%sThe rule has no namespace. Make sure to escape the backslashes, and add quotes around the rule name: --only="My\Rector\Rule"', $rule, \PHP_EOL);
         } else {
+            // the rule class exists, it is just missing in the config
+            if ($this->isRectorRuleClass($rule)) {
+                throw new RectorRuleNotFoundException($this->createUnregisteredMessage($rule));
+            }
             $message = sprintf('Rule "%s" was not found.%sMake sure it is registered in your config or in one of the sets', $rule, \PHP_EOL);
         }
         throw new RectorRuleNotFoundException($message);
+    }
+    /**
+     * Is this an existing rule class, that is just not registered in the config?
+     */
+    private function isRectorRuleClass(string $className): bool
+    {
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return \false;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if ($classReflection->isAbstract()) {
+            return \false;
+        }
+        return $classReflection->implementsInterface(RectorInterface::class);
+    }
+    private function createUnregisteredMessage(string $ruleClass): string
+    {
+        $shortRuleClass = (string) substr((string) strrchr($ruleClass, '\\'), 1);
+        return sprintf('Rule "%s" exists, but is not registered in your Rector config.%sRegister it in your rector.php:' . \PHP_EOL . \PHP_EOL . '    ->withRules([%s::class])', $ruleClass, \PHP_EOL, $shortRuleClass);
     }
 }
