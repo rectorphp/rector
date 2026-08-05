@@ -14,7 +14,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-security.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-process.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-property-access.php');
-    $rectorConfig->import(__DIR__ . '/symfony30/symfony30-http-foundation.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-http-kernel.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-validator.php');
     $rectorConfig->import(__DIR__ . '/symfony30/symfony30-translation.php');

@@ -50,7 +50,7 @@ final class GetRequestRector extends AbstractRector implements ComposerPackageCo
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/framework-bundle', '>=3.0');
+        return new ComposerPackageConstraint('symfony/framework-bundle', '>=2.5');
     }
     public function getRuleDefinition(): RuleDefinition
     {

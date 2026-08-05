@@ -143,6 +143,8 @@ return static function (RectorConfig $rectorConfig): void {
         MaxLengthSymfonyFormOptionToAttrRector::class,
         // symfony/validator 2.5
         AddViolationToBuildViolationRector::class,
+        // symfony/framework-bundle 2.5
+        GetRequestRector::class,
         // symfony/framework-bundle 2.6
         RedirectToRouteRector::class,
         // symfony/form 2.7
@@ -160,7 +162,6 @@ return static function (RectorConfig $rectorConfig): void {
         StringFormTypeToClassRector::class,
         // symfony/framework-bundle 3.0
         FormTypeInstanceToClassConstRector::class,
-        GetRequestRector::class,
         // symfony/console 3.3
         ConsoleExceptionToErrorEventConstantRector::class,
         // symfony/dependency-injection 3.4
