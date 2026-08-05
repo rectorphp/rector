@@ -473,7 +473,7 @@ final class RectorConfigBuilder
     }
     public function withComposerBased(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false, bool $symfony = \false, bool $netteUtils = \false, bool $laravel = \false, bool $drupal = \false): self
     {
-        $setMap = [SetGroup::TWIG => $twig, SetGroup::DOCTRINE => $doctrine, SetGroup::LARAVEL => $laravel, SetGroup::DRUPAL => $drupal];
+        $setMap = [SetGroup::DOCTRINE => $doctrine, SetGroup::LARAVEL => $laravel, SetGroup::DRUPAL => $drupal];
         foreach ($setMap as $setPath => $isEnabled) {
             if ($isEnabled) {
                 $this->setGroups[] = $setPath;

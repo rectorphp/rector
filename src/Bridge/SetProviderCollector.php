@@ -3,13 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Bridge;
 
-use Rector\Doctrine\Set\SetProvider\DoctrineSetProvider;
 use Rector\Set\Contract\SetInterface;
 use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\SetProvider\CoreSetProvider;
 use Rector\Set\SetProvider\PHPSetProvider;
 use Rector\Set\ValueObject\ComposerTriggeredSet;
-use Rector\Symfony\Set\SetProvider\TwigSetProvider;
 /**
  * @api
  *
@@ -31,8 +29,6 @@ final class SetProviderCollector
             // register all known set providers here
             new PHPSetProvider(),
             new CoreSetProvider(),
-            new DoctrineSetProvider(),
-            new TwigSetProvider(),
         ];
         $this->setProviders = array_merge($setProviders, $extraSetProviders);
     }
