@@ -11,13 +11,15 @@ use PHPStan\Type\StringType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/sebastianbergmann/phpunit/issues/3426
  * @see \Rector\PHPUnit\Tests\PHPUnit90\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector\SpecificAssertContainsWithoutIdentityRectorTest
  */
-final class SpecificAssertContainsWithoutIdentityRector extends AbstractRector
+final class SpecificAssertContainsWithoutIdentityRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -27,6 +29,13 @@ final class SpecificAssertContainsWithoutIdentityRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
+    /**
+     * inherited from the PHPUnit 9.0 set
+     */
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=9.0');
+    }
     /**
      * @var array<string, array<string, string>>
      */

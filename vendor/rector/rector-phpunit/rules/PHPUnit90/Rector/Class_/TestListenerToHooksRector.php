@@ -11,6 +11,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,8 +22,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/sebastianbergmann/phpunit/tree/master/src/Runner/Hook
  * @see \Rector\PHPUnit\Tests\PHPUnit90\Rector\Class_\TestListenerToHooksRector\TestListenerToHooksRectorTest
  */
-final class TestListenerToHooksRector extends AbstractRector
+final class TestListenerToHooksRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
+    /**
+     * inherited from the PHPUnit 9.0 set; the hook interfaces were removed in PHPUnit 10.0
+     */
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=9.0 <10.0');
+    }
     /**
      * @var array<string, array<class-string|string>>
      */

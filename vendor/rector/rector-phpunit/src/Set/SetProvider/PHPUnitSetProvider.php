@@ -6,7 +6,6 @@ namespace Rector\PHPUnit\Set\SetProvider;
 use Rector\Set\Contract\SetInterface;
 use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\Enum\SetGroup;
-use Rector\Set\ValueObject\ComposerTriggeredSet;
 use Rector\Set\ValueObject\Set;
 /**
  * @api collected in core
@@ -19,20 +18,9 @@ final class PHPUnitSetProvider implements SetProviderInterface
     public function provide(): array
     {
         return [
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '4.0', __DIR__ . '/../../../config/sets/phpunit40.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '5.0', __DIR__ . '/../../../config/sets/phpunit50.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '6.0', __DIR__ . '/../../../config/sets/phpunit60.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '7.0', __DIR__ . '/../../../config/sets/phpunit70.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '8.0', __DIR__ . '/../../../config/sets/phpunit80.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '9.0', __DIR__ . '/../../../config/sets/phpunit90.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '10.0', __DIR__ . '/../../../config/sets/phpunit100.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '11.0', __DIR__ . '/../../../config/sets/phpunit110.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '12.0', __DIR__ . '/../../../config/sets/phpunit120.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '12.5', __DIR__ . '/../../../config/sets/phpunit125.php'),
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '13.0', __DIR__ . '/../../../config/sets/phpunit130.php'),
-            // applies to any installed PHPUnit version, the rules and configuration inside are bound
-            // to the exact version they are available from
-            new ComposerTriggeredSet(SetGroup::PHPUNIT, 'phpunit/phpunit', '>=4.0', __DIR__ . '/../../../config/sets/composer-based.php'),
+            // holds every rule bound to the exact PHPUnit version it is available from,
+            // so the whole set can be run at once, no matter the PHPUnit version in the project
+            new Set(SetGroup::PHPUNIT, 'Composer Based', __DIR__ . '/../../../config/sets/composer-based.php'),
             new Set(SetGroup::PHPUNIT, 'Code Quality', __DIR__ . '/../../../config/sets/phpunit-code-quality.php'),
             new Set(SetGroup::ATTRIBUTES, 'PHPUnit Attributes', __DIR__ . '/../../../config/sets/annotations-to-attributes.php'),
         ];
