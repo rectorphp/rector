@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
@@ -42,20 +41,6 @@ final class CallAnalyzer
         $found = \false;
         foreach (self::OBJECT_CALL_TYPES as $objectCallType) {
             if ($expr instanceof $objectCallType) {
-                $found = \true;
-                break;
-            }
-        }
-        return $found;
-    }
-    /**
-     * @param If_[] $ifs
-     */
-    public function doesIfHasObjectCall(array $ifs): bool
-    {
-        $found = \false;
-        foreach ($ifs as $if) {
-            if ($this->isObjectCall($if->cond)) {
                 $found = \true;
                 break;
             }
