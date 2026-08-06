@@ -1739,6 +1739,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Assign/RemoveDoubleAssignRector.php',
         'Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleSelfAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Assign/RemoveDoubleSelfAssignRector.php',
         'Rector\\DeadCode\\Rector\\Assign\\RemoveUnusedVariableAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Assign/RemoveUnusedVariableAssignRector.php',
+        'Rector\\DeadCode\\Rector\\BinaryOp\\RemoveRedundantTypeCheckRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/BinaryOp/RemoveRedundantTypeCheckRector.php',
         'Rector\\DeadCode\\Rector\\Block\\ReplaceBlockToItsStmtsRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Block/ReplaceBlockToItsStmtsRector.php',
         'Rector\\DeadCode\\Rector\\BooleanAnd\\RemoveAndTrueRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/BooleanAnd/RemoveAndTrueRector.php',
         'Rector\\DeadCode\\Rector\\Cast\\RecastingRemovalRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Cast/RecastingRemovalRector.php',
