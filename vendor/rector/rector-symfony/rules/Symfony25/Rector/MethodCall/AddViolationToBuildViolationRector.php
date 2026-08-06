@@ -98,7 +98,7 @@ CODE_SAMPLE
     private function buildFluentWithInvalidValue(MethodCall $methodCall, array $args): MethodCall
     {
         if (isset($args[3])) {
-            $methodCall = new MethodCall($methodCall, 'setInvalidValue', [new Arg($args[3]->value)]);
+            return new MethodCall($methodCall, 'setInvalidValue', [new Arg($args[3]->value)]);
         }
         return $methodCall;
     }
@@ -108,7 +108,7 @@ CODE_SAMPLE
     private function buildFluentWithPlural(MethodCall $methodCall, array $args): MethodCall
     {
         if (isset($args[4])) {
-            $methodCall = new MethodCall($methodCall, 'setPlural', [new Arg($args[4]->value)]);
+            return new MethodCall($methodCall, 'setPlural', [new Arg($args[4]->value)]);
         }
         return $methodCall;
     }
@@ -118,7 +118,7 @@ CODE_SAMPLE
     private function buildFluentWithCode(MethodCall $methodCall, array $args): MethodCall
     {
         if (isset($args[5])) {
-            $methodCall = new MethodCall($methodCall, 'setCode', [new Arg($args[5]->value)]);
+            return new MethodCall($methodCall, 'setCode', [new Arg($args[5]->value)]);
         }
         return $methodCall;
     }
