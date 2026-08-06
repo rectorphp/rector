@@ -108,6 +108,10 @@ CODE_SAMPLE
         if (!$parentMethodReflection instanceof ExtendedMethodReflection) {
             return null;
         }
+        // removing public constructor would expose the narrower parent one
+        if (!$parentMethodReflection->isPublic()) {
+            return null;
+        }
         $soleStmt = $node->stmts[0];
         $parentCallArgs = $this->matchParentConstructorCallArgs($soleStmt);
         if ($parentCallArgs === null) {
