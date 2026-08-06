@@ -7,6 +7,13 @@ use Rector\Set\Contract\SetInterface;
 use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
+ *
+ * @deprecated Bond the rules themselves instead, by implementing the ComposerPackageConstraintInterface. A set
+ * described as an object only existed to be matched against the installed packages; a bonded rule states the exact
+ * package version its target API is available from and applies from there upwards, so a plain set file is enough.
+ *
+ * @see \Rector\VersionBonding\Contract\ComposerPackageConstraintInterface
+ * @see https://github.com/rectorphp/rector-src/pull/8296
  */
 final class Set implements SetInterface
 {

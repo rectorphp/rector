@@ -7,6 +7,14 @@ use Rector\Set\Contract\SetInterface;
 use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\ValueObject\Set;
+/**
+ * @deprecated Bond the rules themselves instead, by implementing the ComposerPackageConstraintInterface. A set
+ * described as an object only existed to be matched against the installed packages; a bonded rule states the exact
+ * package version its target API is available from and applies from there upwards, so a plain set file is enough.
+ *
+ * @see \Rector\VersionBonding\Contract\ComposerPackageConstraintInterface
+ * @see https://github.com/rectorphp/rector-src/pull/8296
+ */
 final class PHPSetProvider implements SetProviderInterface
 {
     /**
