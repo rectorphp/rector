@@ -118,12 +118,18 @@ try {
     $outputFormat = $argvInput->getParameterOption('--' . Option::OUTPUT_FORMAT);
     // report fatal error in json format
     if ($outputFormat === JsonOutputFormatter::NAME) {
-        echo Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
+        $errors = [];
+        do {
+            $errors[] = $throwable->getMessage();
+        } while ($throwable = $throwable->getPrevious());
+        echo Json::encode(['fatal_errors' => $errors]);
     } else {
         // report fatal errors in console format
         $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesAccessor());
         $symfonyStyle = $symfonyStyleFactory->create();
-        $symfonyStyle->error(\str_replace("\r\n", "\n", $throwable->getMessage()));
+        do {
+            $symfonyStyle->error(\str_replace("\r\n", "\n", $throwable->getMessage()));
+        } while ($throwable = $throwable->getPrevious());
     }
     exit(Command::FAILURE);
 }
