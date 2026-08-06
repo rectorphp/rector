@@ -36,6 +36,7 @@ use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonyInternalSetList;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\Symfony\Set\TwigSetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
 use RectorPrefix202608\Symfony\Component\Finder\Finder;
@@ -473,7 +474,7 @@ final class RectorConfigBuilder
     }
     public function withComposerBased(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false, bool $symfony = \false, bool $netteUtils = \false, bool $laravel = \false, bool $drupal = \false): self
     {
-        $setMap = [SetGroup::DOCTRINE => $doctrine, SetGroup::LARAVEL => $laravel, SetGroup::DRUPAL => $drupal];
+        $setMap = [SetGroup::LARAVEL => $laravel, SetGroup::DRUPAL => $drupal];
         foreach ($setMap as $setPath => $isEnabled) {
             if ($isEnabled) {
                 $this->setGroups[] = $setPath;
@@ -484,10 +485,10 @@ final class RectorConfigBuilder
             $this->sets[] = PHPUnitSetList::COMPOSER_BASED;
         }
         if ($doctrine) {
-            // $this->sets[] = DoctrineSetList::COMPOSER_BASED;
+            $this->sets[] = DoctrineSetList::COMPOSER_BASED;
         }
         if ($twig) {
-            // $this->sets[] = TwigSetList::COMPOSER_BASED;
+            $this->sets[] = TwigSetList::COMPOSER_BASED;
         }
         if ($symfony) {
             // single set, as every rule inside is bound to the installed Symfony package version on its own
