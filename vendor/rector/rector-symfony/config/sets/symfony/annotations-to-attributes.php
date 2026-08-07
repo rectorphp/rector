@@ -6,10 +6,9 @@ namespace RectorPrefix202608;
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\Symfony\Set\SymfonySetList;
 // @see https://symfony.com/blog/new-in-symfony-5-2-constraints-as-php-attributes
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->sets([SymfonySetList::SYMFONY_52_VALIDATOR_ATTRIBUTES]);
+    $rectorConfig->sets([__DIR__ . '/symfony5/symfony52-validator-attributes.php']);
     $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [
         // @see https://symfony.com/blog/new-in-symfony-5-2-php-8-attributes
         new AnnotationToAttribute('required', 'Symfony\Contracts\Service\Attribute\Required'),

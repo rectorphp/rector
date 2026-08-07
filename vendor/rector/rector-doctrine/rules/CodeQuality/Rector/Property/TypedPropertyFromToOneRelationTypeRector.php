@@ -13,7 +13,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Doctrine\NodeManipulator\ToOneRelationPropertyTypeResolver;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -23,13 +22,12 @@ use Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
 use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Property\TypedPropertyFromToOneRelationTypeRector\TypedPropertyFromToOneRelationTypeRectorTest
  */
-final class TypedPropertyFromToOneRelationTypeRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface
+final class TypedPropertyFromToOneRelationTypeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -55,11 +53,6 @@ final class TypedPropertyFromToOneRelationTypeRector extends AbstractRector impl
      * @readonly
      */
     private StaticTypeMapper $staticTypeMapper;
-    /**
-     * @var string
-     */
-    public const FORCE_NULLABLE = 'force_nullable';
-    private bool $forceNullable = \true;
     public function __construct(PropertyTypeDecorator $propertyTypeDecorator, PhpDocTypeChanger $phpDocTypeChanger, ToOneRelationPropertyTypeResolver $toOneRelationPropertyTypeResolver, PhpVersionProvider $phpVersionProvider, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
@@ -71,7 +64,7 @@ final class TypedPropertyFromToOneRelationTypeRector extends AbstractRector impl
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Complete @var annotations or types based on @ORM\*toOne annotations or attributes', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Complete @var annotations or types based on @ORM\*toOne annotations or attributes', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 class SimpleColumn
@@ -95,41 +88,7 @@ class SimpleColumn
     private ?\App\Company\Entity\Company $company = null;
 }
 CODE_SAMPLE
-, ['force_nullable' => \true]), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
-use Doctrine\ORM\Mapping as ORM;
-
-class SimpleColumn
-{
-    /**
-     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $company;
-}
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-use Doctrine\ORM\Mapping as ORM;
-
-class SimpleColumn
-{
-    /**
-     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private \App\Company\Entity\Company $company;
-}
-CODE_SAMPLE
-, ['force_nullable' => \false])]);
-    }
-    /**
-     * @param array<string, bool> $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        if (isset($configuration[self::FORCE_NULLABLE])) {
-            Assert::boolean($configuration[self::FORCE_NULLABLE]);
-            $this->forceNullable = $configuration[self::FORCE_NULLABLE];
-        }
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -146,7 +105,7 @@ CODE_SAMPLE
         if ($node->type !== null) {
             return null;
         }
-        $propertyType = $this->toOneRelationPropertyTypeResolver->resolve($node, $this->forceNullable);
+        $propertyType = $this->toOneRelationPropertyTypeResolver->resolve($node);
         if (!$propertyType instanceof Type) {
             return null;
         }

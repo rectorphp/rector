@@ -5,16 +5,16 @@ namespace Rector\Doctrine\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Doctrine\Enum\MappingClass;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\PhpVersionFeature;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\RemoveEmptyTableAttributeRector\RemoveEmptyTableAttributeRectorTest
+ * @deprecated as the removal has no effect on the mapping, while the missing attribute makes the entity harder to
+ *             read. Keeping an explicit #[ORM\Table] is a valid style choice.
  */
-final class RemoveEmptyTableAttributeRector extends AbstractRector implements MinPhpVersionInterface
+final class RemoveEmptyTableAttributeRector extends AbstractRector implements DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -51,29 +51,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = \false;
-        foreach ($node->attrGroups as $attrGroupKey => $attrGroup) {
-            foreach ($attrGroup->attrs as $key => $attribute) {
-                if (!$this->isName($attribute, MappingClass::TABLE)) {
-                    continue;
-                }
-                if ($attribute->args !== []) {
-                    continue;
-                }
-                unset($attrGroup->attrs[$key]);
-                $hasChanged = \true;
-            }
-            if ($attrGroup->attrs === []) {
-                unset($node->attrGroups[$attrGroupKey]);
-            }
-        }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
-    }
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::ATTRIBUTES;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated and should not be used anymore. Remove it from your config files.', self::class));
     }
 }

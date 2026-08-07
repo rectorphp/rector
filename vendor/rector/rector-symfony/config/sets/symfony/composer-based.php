@@ -287,6 +287,13 @@ return static function (RectorConfig $rectorConfig): void {
     $scalarArrayObjectUnionType = $unionTypeReflectionClass->newInstanceWithoutConstructor();
     $privatesAccessor = new PrivatesAccessor();
     $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
+    // symfony/form 2.7
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+        // @see https://symfony.com/blog/new-in-symfony-2-7-form-and-validator-updates#deprecated-setdefaultoptions-in-favor-of-configureoptions
+        new MethodCallRename('Symfony\Component\Form\AbstractType', 'setDefaultOptions', 'configureOptions'),
+    ], 'symfony/form', '>=2.7');
+    // symfony/options-resolver 2.7
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, ['Symfony\Component\OptionsResolver\OptionsResolverInterface' => 'Symfony\Component\OptionsResolver\OptionsResolver'], 'symfony/options-resolver', '>=2.7');
     // symfony/bridge-swift-mailer 3.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
         // swift mailer
