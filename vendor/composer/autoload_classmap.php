@@ -1751,6 +1751,7 @@ return array(
     'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayAnyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayAnyRector.php',
     'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayFindKeyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayFindKeyRector.php',
     'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayFindRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayFindRector.php',
+    'Rector\\DowngradePhp84\\Rector\\FuncCall\\DowngradeExitNamedArgumentRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/FuncCall/DowngradeExitNamedArgumentRector.php',
     'Rector\\DowngradePhp84\\Rector\\FuncCall\\DowngradeRoundingModeEnumRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/FuncCall/DowngradeRoundingModeEnumRector.php',
     'Rector\\DowngradePhp84\\Rector\\MethodCall\\DowngradeNewMethodCallWithoutParenthesesRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/MethodCall/DowngradeNewMethodCallWithoutParenthesesRector.php',
     'Rector\\DowngradePhp85\\Rector\\Class_\\DowngradeFinalPropertyPromotionRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/Class_/DowngradeFinalPropertyPromotionRector.php',

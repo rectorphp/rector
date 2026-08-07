@@ -2003,6 +2003,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayAnyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayAnyRector.php',
         'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayFindKeyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayFindKeyRector.php',
         'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayFindRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayFindRector.php',
+        'Rector\\DowngradePhp84\\Rector\\FuncCall\\DowngradeExitNamedArgumentRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/FuncCall/DowngradeExitNamedArgumentRector.php',
         'Rector\\DowngradePhp84\\Rector\\FuncCall\\DowngradeRoundingModeEnumRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/FuncCall/DowngradeRoundingModeEnumRector.php',
         'Rector\\DowngradePhp84\\Rector\\MethodCall\\DowngradeNewMethodCallWithoutParenthesesRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/MethodCall/DowngradeNewMethodCallWithoutParenthesesRector.php',
         'Rector\\DowngradePhp85\\Rector\\Class_\\DowngradeFinalPropertyPromotionRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/Class_/DowngradeFinalPropertyPromotionRector.php',
