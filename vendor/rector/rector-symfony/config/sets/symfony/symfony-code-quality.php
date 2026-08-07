@@ -7,7 +7,6 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector;
-use Rector\Symfony\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventSubscriberMethodReturnVoidRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\InlineClassRoutePrefixRector;
@@ -36,7 +35,6 @@ return static function (RectorConfig $rectorConfig): void {
         ParamTypeFromRouteRequiredRegexRector::class,
         // controller
         ActionSuffixRemoverRector::class,
-        ControllerMethodInjectionToConstructorRector::class,
         LoadValidatorMetadataToAttributeRector::class,
         // request method
         RequestIsMainRector::class,

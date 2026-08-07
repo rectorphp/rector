@@ -14,7 +14,7 @@ $loader = (static function () {
     // Restore the backup and ensure the excluded files are properly marked as loaded
     $GLOBALS['__composer_autoload_files'] = \array_merge(
         $existingComposerAutoloadFiles,
-        \array_fill_keys(['80dfc307f8b4b13bcd033cef5c977d19', 'acbe0d033c55cd0a032b415e08d14f4c', '8825ede83f2f289127722d4e842cf7e8', '7bfbed8d216c917b4d3e46b319a08b5c', '9d2b9fc6db0f153a0a149fefb182415e', 'c18d2008c6f2fa913c7bba17deb24ff5', 'c4dd194f5b50c0821acf143dcfed86ea', '606a39d89246991a373564698c2d8383'], true)
+        \array_fill_keys(['80dfc307f8b4b13bcd033cef5c977d19', '8825ede83f2f289127722d4e842cf7e8', 'acbe0d033c55cd0a032b415e08d14f4c', 'c18d2008c6f2fa913c7bba17deb24ff5', '7bfbed8d216c917b4d3e46b319a08b5c', '9d2b9fc6db0f153a0a149fefb182415e', '606a39d89246991a373564698c2d8383', 'c4dd194f5b50c0821acf143dcfed86ea'], true)
     );
 
     return $loader;
@@ -70,7 +70,6 @@ if (!function_exists('grapheme_strripos')) { function grapheme_strripos() { retu
 if (!function_exists('grapheme_strrpos')) { function grapheme_strrpos() { return \RectorPrefix202608\grapheme_strrpos(...func_get_args()); } }
 if (!function_exists('grapheme_strstr')) { function grapheme_strstr() { return \RectorPrefix202608\grapheme_strstr(...func_get_args()); } }
 if (!function_exists('grapheme_substr')) { function grapheme_substr() { return \RectorPrefix202608\grapheme_substr(...func_get_args()); } }
-if (!function_exists('includeIfExists')) { function includeIfExists() { return \RectorPrefix202608\includeIfExists(...func_get_args()); } }
 if (!function_exists('locale_is_right_to_left')) { function locale_is_right_to_left() { return \RectorPrefix202608\locale_is_right_to_left(...func_get_args()); } }
 if (!function_exists('mb_lcfirst')) { function mb_lcfirst() { return \RectorPrefix202608\mb_lcfirst(...func_get_args()); } }
 if (!function_exists('mb_ltrim')) { function mb_ltrim() { return \RectorPrefix202608\mb_ltrim(...func_get_args()); } }

@@ -21,7 +21,6 @@ return array(
     'RectorPrefix202608\\TomasVotruba\\ClassLeak\\' => array($vendorDir . '/tomasvotruba/class-leak/src'),
     'RectorPrefix202608\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
     'RectorPrefix202608\\Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
-    'RectorPrefix202608\\Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'RectorPrefix202608\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix202608\\Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'RectorPrefix202608\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),

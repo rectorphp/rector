@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
 {
     public static $files = array (
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
@@ -37,7 +37,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
             'RectorPrefix202608\\TomasVotruba\\ClassLeak\\' => 42,
             'RectorPrefix202608\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202608\\Symfony\\Contracts\\Service\\' => 45,
-            'RectorPrefix202608\\Symfony\\Component\\Yaml\\' => 42,
             'RectorPrefix202608\\Symfony\\Component\\String\\' => 44,
             'RectorPrefix202608\\Symfony\\Component\\Process\\' => 45,
             'RectorPrefix202608\\Symfony\\Component\\Finder\\' => 44,
@@ -139,10 +138,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'RectorPrefix202608\\Symfony\\Contracts\\Service\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
-        ),
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
         'RectorPrefix202608\\Symfony\\Component\\String\\' =>
         array (
@@ -1327,19 +1322,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'RectorPrefix202608\\Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
         'RectorPrefix202608\\Symfony\\Component\\String\\TruncateMode' => __DIR__ . '/..' . '/symfony/string/TruncateMode.php',
         'RectorPrefix202608\\Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Command\\LintCommand' => __DIR__ . '/..' . '/symfony/yaml/Command/LintCommand.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Dumper' => __DIR__ . '/..' . '/symfony/yaml/Dumper.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Escaper' => __DIR__ . '/..' . '/symfony/yaml/Escaper.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Exception\\DumpException' => __DIR__ . '/..' . '/symfony/yaml/Exception/DumpException.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/yaml/Exception/ExceptionInterface.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Exception\\ParseException' => __DIR__ . '/..' . '/symfony/yaml/Exception/ParseException.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/yaml/Exception/RuntimeException.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Inline' => __DIR__ . '/..' . '/symfony/yaml/Inline.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Parser' => __DIR__ . '/..' . '/symfony/yaml/Parser.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\ParserState' => __DIR__ . '/..' . '/symfony/yaml/ParserState.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Tag\\TaggedValue' => __DIR__ . '/..' . '/symfony/yaml/Tag/TaggedValue.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Unescaper' => __DIR__ . '/..' . '/symfony/yaml/Unescaper.php',
-        'RectorPrefix202608\\Symfony\\Component\\Yaml\\Yaml' => __DIR__ . '/..' . '/symfony/yaml/Yaml.php',
         'RectorPrefix202608\\Symfony\\Contracts\\Service\\Attribute\\Required' => __DIR__ . '/..' . '/symfony/service-contracts/Attribute/Required.php',
         'RectorPrefix202608\\Symfony\\Contracts\\Service\\Attribute\\SubscribedService' => __DIR__ . '/..' . '/symfony/service-contracts/Attribute/SubscribedService.php',
         'RectorPrefix202608\\Symfony\\Contracts\\Service\\ContainerAwareInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ContainerAwareInterface.php',
@@ -2823,7 +2805,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Symfony\\Bridge\\NodeAnalyzer\\ControllerMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/Bridge/NodeAnalyzer/ControllerMethodAnalyzer.php',
         'Rector\\Symfony\\CodeQuality\\Enum\\ResponseClass' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Enum/ResponseClass.php',
         'Rector\\Symfony\\CodeQuality\\NodeAnalyzer\\AttributePresenceDetector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/NodeAnalyzer/AttributePresenceDetector.php',
-        'Rector\\Symfony\\CodeQuality\\NodeAnalyzer\\ParamConverterClassesResolver' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/NodeAnalyzer/ParamConverterClassesResolver.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\AttributeGroup\\SingleConditionSecurityAttributeToIsGrantedRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/AttributeGroup/SingleConditionSecurityAttributeToIsGrantedRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\BinaryOp\\RequestIsMainRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/BinaryOp/RequestIsMainRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\BinaryOp\\ResponseStatusCodeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/BinaryOp/ResponseStatusCodeRector.php',
@@ -2871,7 +2852,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php',
         'Rector\\Symfony\\Enum\\CommandMethodName' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/CommandMethodName.php',
         'Rector\\Symfony\\Enum\\FosAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/FosAnnotation.php',
-        'Rector\\Symfony\\Enum\\FosClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/FosClass.php',
         'Rector\\Symfony\\Enum\\JMSAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/JMSAnnotation.php',
         'Rector\\Symfony\\Enum\\SensioAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAnnotation.php',
         'Rector\\Symfony\\Enum\\SensioAttribute' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAttribute.php',

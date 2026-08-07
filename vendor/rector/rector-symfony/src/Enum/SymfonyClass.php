@@ -36,10 +36,6 @@ final class SymfonyClass
     /**
      * @var string
      */
-    public const EVENT = 'Symfony\Contracts\EventDispatcher\Event';
-    /**
-     * @var string
-     */
     public const VALIDATOR_INTERFACE = 'Symfony\Component\Validator\Validator\ValidatorInterface';
     /**
      * @var string
@@ -185,10 +181,6 @@ final class SymfonyClass
      * @var string
      */
     public const ACCESS_DECISION_MANAGER_INTERFACE = 'Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface';
-    /**
-     * @var string
-     */
-    public const UUID = 'Symfony\Component\Uid\AbstractUid';
     /**
      * @var string
      */
