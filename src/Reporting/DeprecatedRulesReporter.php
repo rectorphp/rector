@@ -67,6 +67,14 @@ final class DeprecatedRulesReporter
             $this->symfonyStyle->warning(sprintf('The "->%s()" method is deprecated and no longer applied. Use "->withPhpLevel()" instead, to raise PHP level one rule at a time.', $deprecatedPhpSetsMethod));
         }
     }
+    public function reportDeprecatedAttributesSetsArgs(): void
+    {
+        /** @var string[] $deprecatedAttributesSetsArgs */
+        $deprecatedAttributesSetsArgs = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_ATTRIBUTES_SETS_ARGS);
+        foreach (array_unique($deprecatedAttributesSetsArgs) as $deprecatedAttributesSetsArg) {
+            $this->symfonyStyle->warning(sprintf('The "->withAttributesSets(%s: true)" argument is deprecated and no longer applied. It is already included in the "symfony: true" argument, use it instead.', $deprecatedAttributesSetsArg));
+        }
+    }
     public function reportDeprecatedRectorUnsupportedMethods(): void
     {
         // to be added in related PR

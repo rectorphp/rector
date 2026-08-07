@@ -274,6 +274,11 @@ final class Option
      */
     public const DEPRECATED_PHP_SETS_METHODS = 'deprecated_php_sets_methods';
     /**
+     * @internal For reporting deprecated withAttributesSets() arguments
+     * @var string
+     */
+    public const DEPRECATED_ATTRIBUTES_SETS_ARGS = 'deprecated_attributes_sets_args';
+    /**
      * @internal For collect skipped start with short open tag files to be reported
      * @var string
      */

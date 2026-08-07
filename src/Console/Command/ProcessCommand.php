@@ -193,6 +193,7 @@ EOF
         $this->deprecatedRulesReporter->reportDeprecatedRectorUnsupportedMethods();
         $this->deprecatedRulesReporter->reportDeprecatedCacheMetaExtensions();
         $this->deprecatedRulesReporter->reportDeprecatedPhpSetsMethods();
+        $this->deprecatedRulesReporter->reportDeprecatedAttributesSetsArgs();
         $this->missConfigurationReporter->reportSkippedNeverRegisteredRules();
         $this->missConfigurationReporter->reportUnusedSkips($processResult);
         return $this->resolveReturnCode($processResult, $configuration);
