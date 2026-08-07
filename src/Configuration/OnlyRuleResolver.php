@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\Configuration\RectorRuleNameAmbiguousException;
 use Rector\Exception\Configuration\RectorRuleNotFoundException;
@@ -18,16 +17,11 @@ final class OnlyRuleResolver
      */
     private array $rectors;
     /**
-     * @readonly
-     */
-    private ReflectionProvider $reflectionProvider;
-    /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, ReflectionProvider $reflectionProvider)
+    public function __construct(array $rectors)
     {
         $this->rectors = $rectors;
-        $this->reflectionProvider = $reflectionProvider;
     }
     public function resolve(string $rule): string
     {
@@ -86,14 +80,14 @@ final class OnlyRuleResolver
      */
     private function isRectorRuleClass(string $className): bool
     {
-        if (!$this->reflectionProvider->hasClass($className)) {
+        if (!class_exists($className)) {
             return \false;
         }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        if ($classReflection->isAbstract()) {
+        $reflectionClass = new \ReflectionClass($className);
+        if ($reflectionClass->isAbstract()) {
             return \false;
         }
-        return $classReflection->implementsInterface(RectorInterface::class);
+        return $reflectionClass->implementsInterface(RectorInterface::class);
     }
     private function createUnregisteredMessage(string $ruleClass): string
     {
