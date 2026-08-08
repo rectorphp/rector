@@ -52,6 +52,10 @@ final class PHPUnitClassName
      */
     public const SYMFONY_TYPE_TEST_CASE = 'Symfony\Component\Form\Test\TypeTestCase';
     /**
+     * @var string
+     */
+    public const TWIG_INTEGRATION_TEST_CASE = 'Twig\Test\IntegrationTestCase';
+    /**
      * @var string[]
      */
     public const TEST_CLASSES = [self::TEST_CASE, self::TEST_CASE_LEGACY];
