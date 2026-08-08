@@ -4,24 +4,18 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Coalesce;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Variable;
-use PHPStan\Type\ErrorType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\UnionType;
-use Rector\PHPStan\ScopeFetcher;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\Coalesce\CoalesceToTernaryRector\CoalesceToTernaryRectorTest
+ * @deprecated This rule is deprecated, as risky. The "??" and "?:" operators are not interchangeable: "?:" also falls back on empty string, "0" and empty array. A regression must be fixed manually, so the rule is removed instead.
  *
  * @see https://github.com/rectorphp/rector/issues/9730
  */
-final class CoalesceToTernaryRector extends AbstractRector
+final class CoalesceToTernaryRector extends AbstractRector implements DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -51,36 +45,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /**
-         * indexed data maybe false positive
-         */
-        if ($node->left instanceof ArrayDimFetch) {
-            return null;
-        }
-        /**
-         * Scope needs to use parent Coalesce to properly get type from left side of coalesce
-         */
-        $scope = ScopeFetcher::fetch($node);
-        $nativeType = $scope->getNativeType($node->left);
-        if ($nativeType instanceof ErrorType) {
-            return null;
-        }
-        if ($nativeType instanceof MixedType) {
-            return null;
-        }
-        if ($nativeType instanceof NullType) {
-            return null;
-        }
-        if ($nativeType instanceof UnionType) {
-            foreach ($nativeType->getTypes() as $unionedType) {
-                if ($unionedType instanceof NullType) {
-                    return null;
-                }
-            }
-        }
-        if ($node->left instanceof Variable && !$scope->hasVariableType((string) $this->getName($node->left))->yes()) {
-            return null;
-        }
-        return new Ternary($node->left, null, $node->right);
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as risky. The "??" and "?:" operators are not interchangeable and a regression has to be fixed manually', self::class));
     }
 }
