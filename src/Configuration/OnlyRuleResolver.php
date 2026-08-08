@@ -6,6 +6,7 @@ namespace Rector\Configuration;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\Configuration\RectorRuleNameAmbiguousException;
 use Rector\Exception\Configuration\RectorRuleNotFoundException;
+use ReflectionClass;
 /**
  * @see \Rector\Tests\Configuration\OnlyRuleResolverTest
  */
@@ -83,7 +84,7 @@ final class OnlyRuleResolver
         if (!class_exists($className)) {
             return \false;
         }
-        $reflectionClass = new \ReflectionClass($className);
+        $reflectionClass = new ReflectionClass($className);
         if ($reflectionClass->isAbstract()) {
             return \false;
         }
