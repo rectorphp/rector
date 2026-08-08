@@ -5,7 +5,9 @@ namespace Rector\Validation;
 
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 final class RectorConfigValidator
 {
     /**
@@ -26,7 +28,12 @@ final class RectorConfigValidator
     {
         $nonExistingRules = [];
         $skippedRectorRules = [];
+        $skippedNonRectorClasses = [];
         foreach ($skip as $key => $value) {
+            if (is_string($key) && self::isNonRectorClass($key)) {
+                $skippedNonRectorClasses[] = $key;
+                continue;
+            }
             if (self::isRectorClassValue($key)) {
                 if (class_exists($key)) {
                     $skippedRectorRules[] = $key;
@@ -45,6 +52,7 @@ final class RectorConfigValidator
             $nonExistingRules[] = $value;
         }
         SimpleParameterProvider::addParameter(Option::SKIPPED_RECTOR_RULES, $skippedRectorRules);
+        SimpleParameterProvider::addParameter(Option::SKIPPED_NON_RECTOR_CLASSES, $skippedNonRectorClasses);
         if ($nonExistingRules === []) {
             return;
         }
@@ -53,6 +61,20 @@ final class RectorConfigValidator
             $nonExistingRulesString .= ' * ' . $nonExistingRule . \PHP_EOL;
         }
         throw new ShouldNotHappenException('These rules from "$rectorConfig->skip()" do not exist - remove them or fix their names:' . \PHP_EOL . $nonExistingRulesString);
+    }
+    /**
+     * Only Rector rules are matched against skipped classes, so any other class can never be skipped
+     */
+    private static function isNonRectorClass(string $key): bool
+    {
+        // interfaces are allowed, as they can mark a group of Rector rules
+        if (!class_exists($key)) {
+            return \false;
+        }
+        if (is_a($key, RectorInterface::class, \true)) {
+            return \false;
+        }
+        return !is_a($key, PostRectorInterface::class, \true);
     }
     /**
      * @param mixed $value

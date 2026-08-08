@@ -6,6 +6,7 @@ namespace Rector\Reporting;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\VendorMissAnalyseGuard;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\ValueObject\ProcessResult;
 use RectorPrefix202608\Symfony\Component\Console\Style\SymfonyStyle;
@@ -59,6 +60,15 @@ final class MissConfigurationReporter
         }
         $this->symfonyStyle->warning(sprintf('%s never registered. You can remove %s from "->withSkip()"', count($neverRegisteredSkippedRules) > 1 ? 'These skipped rules are' : 'This skipped rule is', count($neverRegisteredSkippedRules) > 1 ? 'them' : 'it'));
         $this->symfonyStyle->listing($neverRegisteredSkippedRules);
+    }
+    public function reportSkippedNonRectorClasses(): void
+    {
+        $skippedNonRectorClasses = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_NON_RECTOR_CLASSES);
+        if ($skippedNonRectorClasses === []) {
+            return;
+        }
+        $this->symfonyStyle->warning(sprintf('%s not a Rector rule, so %s never be skipped. Only classes that implement "%s" can be used in "->withSkip()"', count($skippedNonRectorClasses) > 1 ? 'These skipped classes are' : 'This skipped class is', count($skippedNonRectorClasses) > 1 ? 'they can' : 'it can', RectorInterface::class));
+        $this->symfonyStyle->listing($skippedNonRectorClasses);
     }
     /**
      * @param string[] $filePaths
