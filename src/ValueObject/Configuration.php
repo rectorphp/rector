@@ -89,11 +89,15 @@ final class Configuration
      */
     private bool $isComposerBased = \false;
     /**
+     * @readonly
+     */
+    private bool $isPhpOnly = \false;
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      * @param LevelOverflow[] $levelOverflows
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [], bool $showRulesSummary = \false, bool $isComposerBased = \false)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [], bool $showRulesSummary = \false, bool $isComposerBased = \false, bool $isPhpOnly = \false)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -113,10 +117,15 @@ final class Configuration
         $this->levelOverflows = $levelOverflows;
         $this->showRulesSummary = $showRulesSummary;
         $this->isComposerBased = $isComposerBased;
+        $this->isPhpOnly = $isPhpOnly;
     }
     public function isComposerBased(): bool
     {
         return $this->isComposerBased;
+    }
+    public function isPhpOnly(): bool
+    {
+        return $this->isPhpOnly;
     }
     public function isDryRun(): bool
     {

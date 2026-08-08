@@ -327,6 +327,11 @@ final class Option
      */
     public const COMPOSER_BASED = 'composer-based';
     /**
+     * Run only rules bound to a minimal PHP version
+     * @var string
+     */
+    public const PHP = 'php';
+    /**
      * @internal To filter files by specific suffix
      * @var string
      */

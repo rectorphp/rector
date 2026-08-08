@@ -21,6 +21,7 @@ final class ProcessConfigureDecorator
         // filter by rule and path
         $command->addOption(Option::ONLY, null, InputOption::VALUE_REQUIRED, 'Fully qualified rule class name');
         $command->addOption(Option::COMPOSER_BASED, null, InputOption::VALUE_NONE, 'Run only rules bound to an installed composer package version');
+        $command->addOption(Option::PHP, null, InputOption::VALUE_NONE, 'Run only PHP rules, e.g. rules bound to a minimal PHP version');
         $command->addOption(Option::ONLY_SUFFIX, null, InputOption::VALUE_REQUIRED, 'Filter only files with specific suffix in name, e.g. "Controller"');
         $command->addOption(Option::DEBUG, null, InputOption::VALUE_NONE, 'Display debug output.');
         $command->addOption(Option::MEMORY_LIMIT, null, InputOption::VALUE_REQUIRED, 'Memory limit for process');

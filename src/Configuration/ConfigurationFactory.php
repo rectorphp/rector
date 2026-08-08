@@ -75,7 +75,12 @@ final class ConfigurationFactory
         if ($isComposerBased) {
             SimpleParameterProvider::setParameter(\Rector\Configuration\Option::IS_RUN_NARROWED, \true);
         }
-        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $showRulesSummary, $isComposerBased);
+        $isPhpOnly = (bool) $input->getOption(\Rector\Configuration\Option::PHP);
+        // "--php" narrows the run the same way "--only" does
+        if ($isPhpOnly) {
+            SimpleParameterProvider::setParameter(\Rector\Configuration\Option::IS_RUN_NARROWED, \true);
+        }
+        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $showRulesSummary, $isComposerBased, $isPhpOnly);
     }
     private function shouldShowProgressBar(InputInterface $input, string $outputFormat): bool
     {
