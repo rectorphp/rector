@@ -12,7 +12,6 @@ use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php80\Rector\NotIdentical\StrContainsRector;
 use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
 use Rector\Php83\Rector\BooleanAnd\JsonValidateRector;
-use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php84\Rector\Foreach_\ForeachToArrayAllRector;
 use Rector\Php84\Rector\Foreach_\ForeachToArrayAnyRector;
@@ -32,7 +31,6 @@ return static function (RectorConfig $rectorConfig): void {
         MbStrContainsRector::class,
         // PHP 8.3
         JsonValidateRector::class,
-        AddOverrideAttributeToOverriddenMethodsRector::class,
         // PHP 8.4
         ForeachToArrayAllRector::class,
         ForeachToArrayAnyRector::class,

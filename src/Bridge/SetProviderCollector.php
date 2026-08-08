@@ -24,13 +24,13 @@ final class SetProviderCollector
      * @var SetProviderInterface[]
      * @readonly
      */
-    private array $setProviders;
+    private array $setProviders = [];
     /**
-     * @param SetProviderInterface[] $extraSetProviders
+     * @param SetProviderInterface[] $setProviders
      */
-    public function __construct(array $extraSetProviders = [])
+    public function __construct(array $setProviders = [])
     {
-        $this->setProviders = $extraSetProviders;
+        $this->setProviders = $setProviders;
     }
     /**
      * @return array<SetProviderInterface>
