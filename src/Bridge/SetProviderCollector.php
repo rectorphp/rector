@@ -5,8 +5,6 @@ namespace Rector\Bridge;
 
 use Rector\Set\Contract\SetInterface;
 use Rector\Set\Contract\SetProviderInterface;
-use Rector\Set\SetProvider\CoreSetProvider;
-use Rector\Set\SetProvider\PHPSetProvider;
 use Rector\Set\ValueObject\ComposerTriggeredSet;
 /**
  * @api
@@ -32,12 +30,7 @@ final class SetProviderCollector
      */
     public function __construct(array $extraSetProviders = [])
     {
-        $setProviders = [
-            // register all known set providers here
-            new PHPSetProvider(),
-            new CoreSetProvider(),
-        ];
-        $this->setProviders = array_merge($setProviders, $extraSetProviders);
+        $this->setProviders = $extraSetProviders;
     }
     /**
      * @return array<SetProviderInterface>

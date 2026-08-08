@@ -2752,8 +2752,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Set\\Contract\\SetProviderInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetProviderInterface.php',
         'Rector\\Set\\Enum\\SetGroup' => __DIR__ . '/../..' . '/src/Set/Enum/SetGroup.php',
         'Rector\\Set\\SetManager' => __DIR__ . '/../..' . '/src/Set/SetManager.php',
-        'Rector\\Set\\SetProvider\\CoreSetProvider' => __DIR__ . '/../..' . '/src/Set/SetProvider/CoreSetProvider.php',
-        'Rector\\Set\\SetProvider\\PHPSetProvider' => __DIR__ . '/../..' . '/src/Set/SetProvider/PHPSetProvider.php',
         'Rector\\Set\\ValueObject\\ComposerTriggeredSet' => __DIR__ . '/../..' . '/src/Set/ValueObject/ComposerTriggeredSet.php',
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
