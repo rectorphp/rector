@@ -88,6 +88,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // A child class may bypass the constructor and depend on the declared property default
+        if (!$node->isFinal()) {
+            return null;
+        }
         $hasChanged = \false;
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
