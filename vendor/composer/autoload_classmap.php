@@ -2119,6 +2119,7 @@ return array(
     'Rector\\PHPUnit\\PHPUnit110\\Rector\\ClassMethod\\ExpectsParamToMockObjectRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit110/Rector/ClassMethod/ExpectsParamToMockObjectRector.php',
     'Rector\\PHPUnit\\PHPUnit110\\Rector\\ClassMethod\\MockObjectArgCreateStubToCreateMockRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit110/Rector/ClassMethod/MockObjectArgCreateStubToCreateMockRector.php',
     'Rector\\PHPUnit\\PHPUnit110\\Rector\\Class_\\NamedArgumentForDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit110/Rector/Class_/NamedArgumentForDataProviderRector.php',
+    'Rector\\PHPUnit\\PHPUnit120\\Rector\\Assign\\AnyMatcherToNewAnyInvokedCountRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Assign/AnyMatcherToNewAnyInvokedCountRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\CallLike\\CreateStubInCoalesceArgRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/CallLike/CreateStubInCoalesceArgRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\CallLike\\CreateStubOverCreateMockArgRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/CallLike/CreateStubOverCreateMockArgRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\ClassMethod\\ExpressionCreateMockToCreateStubRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/ClassMethod/ExpressionCreateMockToCreateStubRector.php',

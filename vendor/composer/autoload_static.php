@@ -2371,6 +2371,7 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\PHPUnit\\PHPUnit110\\Rector\\ClassMethod\\ExpectsParamToMockObjectRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit110/Rector/ClassMethod/ExpectsParamToMockObjectRector.php',
         'Rector\\PHPUnit\\PHPUnit110\\Rector\\ClassMethod\\MockObjectArgCreateStubToCreateMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit110/Rector/ClassMethod/MockObjectArgCreateStubToCreateMockRector.php',
         'Rector\\PHPUnit\\PHPUnit110\\Rector\\Class_\\NamedArgumentForDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit110/Rector/Class_/NamedArgumentForDataProviderRector.php',
+        'Rector\\PHPUnit\\PHPUnit120\\Rector\\Assign\\AnyMatcherToNewAnyInvokedCountRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Assign/AnyMatcherToNewAnyInvokedCountRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\CallLike\\CreateStubInCoalesceArgRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/CallLike/CreateStubInCoalesceArgRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\CallLike\\CreateStubOverCreateMockArgRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/CallLike/CreateStubOverCreateMockArgRector.php',
         'Rector\\PHPUnit\\PHPUnit120\\Rector\\ClassMethod\\ExpressionCreateMockToCreateStubRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit120/Rector/ClassMethod/ExpressionCreateMockToCreateStubRector.php',
