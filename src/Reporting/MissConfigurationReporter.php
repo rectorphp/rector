@@ -67,8 +67,7 @@ final class MissConfigurationReporter
         if ($skippedNonRectorClasses === []) {
             return;
         }
-        $this->symfonyStyle->warning(sprintf('%s not a Rector rule, so %s never be skipped. Only classes that implement "%s" can be used in "->withSkip()"', count($skippedNonRectorClasses) > 1 ? 'These skipped classes are' : 'This skipped class is', count($skippedNonRectorClasses) > 1 ? 'they can' : 'it can', RectorInterface::class));
-        $this->symfonyStyle->listing($skippedNonRectorClasses);
+        $this->symfonyStyle->warning(sprintf('%s "%s" %s not a Rector rule, so %s never be skipped. Only classes that implement "%s" can be used in "->withSkip()"', count($skippedNonRectorClasses) > 1 ? 'These skipped classes' : 'This skipped class', implode('", "', $skippedNonRectorClasses), count($skippedNonRectorClasses) > 1 ? 'are' : 'is', count($skippedNonRectorClasses) > 1 ? 'they can' : 'it can', RectorInterface::class));
     }
     /**
      * @param string[] $filePaths
