@@ -1832,7 +1832,6 @@ return array(
     'Rector\\Naming\\ValueObject\\VariableAndCallAssign' => $baseDir . '/rules/Naming/ValueObject/VariableAndCallAssign.php',
     'Rector\\Naming\\ValueObject\\VariableAndCallForeach' => $baseDir . '/rules/Naming/ValueObject/VariableAndCallForeach.php',
     'Rector\\Naming\\VariableRenamer' => $baseDir . '/rules/Naming/VariableRenamer.php',
-    'Rector\\NetteUtils\\Rector\\StaticCall\\UtilsJsonStaticCallNamedArgRector' => $baseDir . '/rules/NetteUtils/Rector/StaticCall/UtilsJsonStaticCallNamedArgRector.php',
     'Rector\\NodeAnalyzer\\ArgsAnalyzer' => $baseDir . '/src/NodeAnalyzer/ArgsAnalyzer.php',
     'Rector\\NodeAnalyzer\\BinaryOpAnalyzer' => $baseDir . '/src/NodeAnalyzer/BinaryOpAnalyzer.php',
     'Rector\\NodeAnalyzer\\CallAnalyzer' => $baseDir . '/src/NodeAnalyzer/CallAnalyzer.php',

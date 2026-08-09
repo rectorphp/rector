@@ -292,6 +292,11 @@ final class Option
      */
     public const DEPRECATED_ATTRIBUTES_SETS_ARGS = 'deprecated_attributes_sets_args';
     /**
+     * @internal For reporting deprecated withComposerBased() arguments
+     * @var string
+     */
+    public const DEPRECATED_COMPOSER_BASED_ARGS = 'deprecated_composer_based_args';
+    /**
      * @internal For collect skipped start with short open tag files to be reported
      * @var string
      */

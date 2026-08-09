@@ -2084,7 +2084,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Naming\\ValueObject\\VariableAndCallAssign' => __DIR__ . '/../..' . '/rules/Naming/ValueObject/VariableAndCallAssign.php',
         'Rector\\Naming\\ValueObject\\VariableAndCallForeach' => __DIR__ . '/../..' . '/rules/Naming/ValueObject/VariableAndCallForeach.php',
         'Rector\\Naming\\VariableRenamer' => __DIR__ . '/../..' . '/rules/Naming/VariableRenamer.php',
-        'Rector\\NetteUtils\\Rector\\StaticCall\\UtilsJsonStaticCallNamedArgRector' => __DIR__ . '/../..' . '/rules/NetteUtils/Rector/StaticCall/UtilsJsonStaticCallNamedArgRector.php',
         'Rector\\NodeAnalyzer\\ArgsAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ArgsAnalyzer.php',
         'Rector\\NodeAnalyzer\\BinaryOpAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/BinaryOpAnalyzer.php',
         'Rector\\NodeAnalyzer\\CallAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/CallAnalyzer.php',
