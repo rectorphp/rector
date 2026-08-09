@@ -139,7 +139,10 @@ final class GetMethodToAsTwigAttributeTransformer
             unset($returnArray->items[$conversion->getItemKey()]);
         }
         $this->returnEmptyArrayMethodRemover->removeClassMethodIfArrayEmpty($class, $returnArray, $methodName);
-        // "extends AbstractExtension" is kept on purpose, as it can be required by tests or other code
+        // a kept built-in override leaves the array non-empty, so the class still needs the parent extension
+        if ($returnArray->items === [] && $class->extends instanceof FullyQualified && $class->extends->toString() === TwigClass::TWIG_EXTENSION) {
+            $class->extends = null;
+        }
         return \true;
     }
     private function matchReturnArray(ClassMethod $classMethod): ?Array_
