@@ -42,6 +42,10 @@ final class PHPUnitAttribute
      */
     public const TEST = 'PHPUnit\Framework\Attributes\Test';
     /**
+     * @var string
+     */
+    public const DOES_NOT_PERFORM_ASSERTIONS = 'PHPUnit\Framework\Attributes\DoesNotPerformAssertions';
+    /**
      * Since PHPUnit 12.5.2
      * @see https://github.com/sebastianbergmann/phpunit/commit/24c208d6a340c3071f28a9b5cce02b9377adfd43
      * @var string

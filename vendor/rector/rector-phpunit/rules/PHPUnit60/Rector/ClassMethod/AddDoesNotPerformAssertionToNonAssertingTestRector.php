@@ -4,7 +4,10 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\PHPUnit60\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
@@ -12,9 +15,11 @@ use PhpParser\NodeVisitor;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Rector\PHPUnit\Enum\PHPUnitAttribute;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer;
@@ -62,13 +67,17 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
      */
     private ReflectionResolver $reflectionResolver;
     /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
      * inherited from the PHPUnit 6.0 set
      */
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
         return new ComposerPackageConstraint('phpunit/phpunit', '>=6.0');
     }
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssertCallAnalyzer $assertCallAnalyzer, MockedVariableAnalyzer $mockedVariableAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssertCallAnalyzer $assertCallAnalyzer, MockedVariableAnalyzer $mockedVariableAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->assertCallAnalyzer = $assertCallAnalyzer;
@@ -77,10 +86,11 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Tests without assertion will have @doesNotPerformAssertion', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Tests without assertion will have #[DoesNotPerformAssertions] attribute, or @doesNotPerformAssertions annotation on PHPUnit below 10', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -96,9 +106,7 @@ use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
 {
-    /**
-     * @doesNotPerformAssertions
-     */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function test()
     {
         $nothing = 5;
@@ -123,6 +131,11 @@ CODE_SAMPLE
             return null;
         }
         $this->removeAddToAssertionCountCalls($node);
+        // the attribute is available since PHPUnit 10, prefer it over the annotation
+        if ($this->reflectionProvider->hasClass(PHPUnitAttribute::DOES_NOT_PERFORM_ASSERTIONS)) {
+            $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(PHPUnitAttribute::DOES_NOT_PERFORM_ASSERTIONS))]);
+            return $node;
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@doesNotPerformAssertions', new GenericTagValueNode('')));
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
@@ -137,6 +150,10 @@ CODE_SAMPLE
             return \true;
         }
         if ($classMethod->isAbstract()) {
+            return \true;
+        }
+        // we have no idea how the trait is used, the using class can assert on its own
+        if ($this->isInTrait($classMethod)) {
             return \true;
         }
         // the parent test case asserts in its own integration methods
@@ -185,6 +202,14 @@ CODE_SAMPLE
         }
         return $this->isName($methodCall->name, 'addToAssertionCount');
     }
+    private function isInTrait(ClassMethod $classMethod): bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        return $classReflection->isTrait();
+    }
     private function isInTwigIntegrationTestCase(ClassMethod $classMethod): bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
@@ -199,6 +224,6 @@ CODE_SAMPLE
         if ($phpDocInfo->hasByNames(['doesNotPerformAssertions', 'expectedException'])) {
             return \true;
         }
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'PHPUnit\Framework\Attributes\DoesNotPerformAssertions');
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, PHPUnitAttribute::DOES_NOT_PERFORM_ASSERTIONS);
     }
 }
