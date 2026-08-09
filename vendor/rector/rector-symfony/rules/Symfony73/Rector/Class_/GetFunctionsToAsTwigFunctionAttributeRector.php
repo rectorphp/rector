@@ -54,10 +54,11 @@ class SomeClass extends AbstractExtension
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
+use Twig\Extension\AbstractExtension;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Environment;
 
-class SomeClass
+class SomeClass extends AbstractExtension
 {
     #[AsTwigFunction(name: 'function_name', needsEnvironment: true)]
     public function localMethod(Environment $env, $value)
