@@ -2551,7 +2551,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
         'Rector\\Php81\\NodeManipulator\\NullToStrictStringIntConverter' => __DIR__ . '/../..' . '/rules/Php81/NodeManipulator/NullToStrictStringIntConverter.php',
         'Rector\\Php81\\Rector\\Array_\\ArrayToFirstClassCallableRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Array_/ArrayToFirstClassCallableRector.php',
-        'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
         'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
         'Rector\\Php81\\Rector\\FuncCall\\NullToStrictIntPregSlitFuncCallLimitArgRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/NullToStrictIntPregSlitFuncCallLimitArgRector.php',
