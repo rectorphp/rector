@@ -2573,8 +2573,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Php83\\Rector\\FuncCall\\DynamicClassConstFetchRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/DynamicClassConstFetchRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\RemoveGetClassGetParentClassNoArgsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/RemoveGetClassGetParentClassNoArgsRector.php',
         'Rector\\Php84\\NodeAnalyzer\\ForeachKeyUsedInConditionalAnalyzer' => __DIR__ . '/../..' . '/rules/Php84/NodeAnalyzer/ForeachKeyUsedInConditionalAnalyzer.php',
-        'Rector\\Php84\\NodeFactory\\PropertyHookFactory' => __DIR__ . '/../..' . '/rules/Php84/NodeFactory/PropertyHookFactory.php',
-        'Rector\\Php84\\NodeFinder\\SetterAndGetterFinder' => __DIR__ . '/../..' . '/rules/Php84/NodeFinder/SetterAndGetterFinder.php',
         'Rector\\Php84\\Rector\\Class_\\DeprecatedAnnotationToDeprecatedAttributeRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Class_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
         'Rector\\Php84\\Rector\\Class_\\PropertyHookRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Class_/PropertyHookRector.php',
         'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayAllRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Foreach_/ForeachToArrayAllRector.php',
