@@ -17,7 +17,6 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFrom
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForArrayDimAssignedObjectRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForCommonObjectDenominatorRector;
-use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForJsonArrayRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockGetterReturnArrayFromPropertyDocblockVarRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
@@ -52,7 +51,5 @@ final class TypeDeclarationDocblocksLevel
         // return
         DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
         NarrowArrayCollectionUnionReturnDocblockRector::class,
-        // run latter after other rules, as more generic
-        AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
     ];
 }
