@@ -86,10 +86,6 @@ final class RectorConfigBuilder
      * @var string[]
      */
     private array $fileExtensions = [];
-    /**
-     * @var null|class-string<CacheStorageInterface>
-     */
-    private ?string $cacheClass = null;
     private ?string $cacheDirectory = null;
     private ?string $containerCacheDirectory = null;
     private ?bool $parallel = null;
@@ -223,9 +219,6 @@ final class RectorConfigBuilder
         }
         if ($this->fileExtensions !== []) {
             $rectorConfig->fileExtensions($this->fileExtensions);
-        }
-        if ($this->cacheClass !== null) {
-            $rectorConfig->cacheClass($this->cacheClass);
         }
         if ($this->cacheDirectory !== null) {
             $rectorConfig->cacheDirectory($this->cacheDirectory);
@@ -542,12 +535,14 @@ final class RectorConfigBuilder
         return $this;
     }
     /**
+     * The $cacheClass argument is deprecated and ignored. Cache storage is selected automatically:
+     * file cache locally, in-memory cache in CI.
+     *
      * @param class-string<CacheStorageInterface>|null $cacheClass
      */
     public function withCache(?string $cacheDirectory = null, ?string $cacheClass = null, ?string $containerCacheDirectory = null): self
     {
         $this->cacheDirectory = $cacheDirectory;
-        $this->cacheClass = $cacheClass;
         $this->containerCacheDirectory = $containerCacheDirectory;
         return $this;
     }

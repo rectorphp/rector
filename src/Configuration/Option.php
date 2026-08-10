@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
-use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
-use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 final class Option
 {
     /**
@@ -159,14 +157,6 @@ final class Option
      * @var string
      */
     public const CACHE_DIR = 'cache_dir';
-    /**
-     * Cache backend. Most of the time we cache in files, but in ephemeral environment (e.g. CI), a faster `MemoryCacheStorage` can be useful.
-     * @internal Use RectorConfig::cacheClass() instead
-     *
-     * @var class-string<CacheStorageInterface>
-     * @internal
-     */
-    public const CACHE_CLASS = FileCacheStorage::class;
     /**
      * @var string
      */

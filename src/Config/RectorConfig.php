@@ -334,7 +334,6 @@ final class RectorConfig extends Container
     public function cacheClass(string $cacheClass): void
     {
         Assert::isAOf($cacheClass, CacheStorageInterface::class);
-        SimpleParameterProvider::setParameter(Option::CACHE_CLASS, $cacheClass);
     }
     /**
      * @param class-string $cacheMetaExtensionClass
