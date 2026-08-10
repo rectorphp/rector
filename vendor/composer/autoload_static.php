@@ -1387,8 +1387,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\Arguments\\ValueObject\\RemoveMethodCallParam' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/RemoveMethodCallParam.php',
         'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
-        'Rector\\Assert\\Enum\\AssertClassName' => __DIR__ . '/../..' . '/rules/Assert/Enum/AssertClassName.php',
-        'Rector\\Assert\\NodeAnalyzer\\ExistingAssertStaticCallResolver' => __DIR__ . '/../..' . '/rules/Assert/NodeAnalyzer/ExistingAssertStaticCallResolver.php',
         'Rector\\Assert\\Rector\\ClassMethod\\AddAssertArrayFromClassMethodDocblockRector' => __DIR__ . '/../..' . '/rules/Assert/Rector/ClassMethod/AddAssertArrayFromClassMethodDocblockRector.php',
         'Rector\\Autoloading\\AdditionalAutoloader' => __DIR__ . '/../..' . '/src/Autoloading/AdditionalAutoloader.php',
         'Rector\\Autoloading\\BootstrapFilesIncluder' => __DIR__ . '/../..' . '/src/Autoloading/BootstrapFilesIncluder.php',
