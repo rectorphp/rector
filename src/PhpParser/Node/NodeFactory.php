@@ -212,6 +212,7 @@ final class NodeFactory
         return $this->createMethodCall($variable, $method, $arguments);
     }
     /**
+     * @api symfony, doctrine, phpunit
      * @param mixed[] $arguments
      * @param \PhpParser\Node\Expr|string $exprOrVariableName
      */
