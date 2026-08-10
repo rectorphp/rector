@@ -11,21 +11,18 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ScalarValueToConstFetch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\Scalar\ScalarValueToConstFetchRector\ScalarValueToConstFetchRectorTest
+ * @deprecated This rule is deprecated, as the scalar value target is too wide. The very same value can be used in an unrelated context, e.g. an array key, a version number or a message, and get replaced by a constant that does not belong there. Use a custom rule scoped to the exact context instead.
  */
-final class ScalarValueToConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
+final class ScalarValueToConstFetchRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var ScalarValueToConstFetch[]
-     */
-    private array $scalarValueToConstFetches;
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replaces Scalar values with a ConstFetch or ClassConstFetch', [new ConfiguredCodeSample(<<<'SAMPLE'
@@ -46,16 +43,12 @@ SAMPLE
      */
     public function refactor(Node $node)
     {
-        foreach ($this->scalarValueToConstFetches as $scalarValueToConstFetch) {
-            if ($node->value === $scalarValueToConstFetch->getScalar()->value) {
-                return $scalarValueToConstFetch->getConstFetch();
-            }
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as the scalar value target is too wide and replaces values in unrelated contexts; use a custom rule scoped to the exact context instead', self::class));
     }
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, ScalarValueToConstFetch::class);
-        $this->scalarValueToConstFetches = $configuration;
     }
 }
