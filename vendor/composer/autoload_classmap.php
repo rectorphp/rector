@@ -2635,7 +2635,6 @@ return array(
     'Rector\\Symfony\\NodeManipulator\\ArrayManipulator' => $vendorDir . '/rector/rector-symfony/src/NodeManipulator/ArrayManipulator.php',
     'Rector\\Symfony\\NodeManipulator\\ClassManipulator' => $vendorDir . '/rector/rector-symfony/src/NodeManipulator/ClassManipulator.php',
     'Rector\\Symfony\\PhpDocNode\\SymfonyRouteTagValueNodeFactory' => $vendorDir . '/rector/rector-symfony/src/PhpDocNode/SymfonyRouteTagValueNodeFactory.php',
-    'Rector\\Symfony\\Set\\SwiftMailerSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SwiftMailerSetList.php',
     'Rector\\Symfony\\Set\\SymfonyInternalSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SymfonyInternalSetList.php',
     'Rector\\Symfony\\Set\\SymfonySetList' => $vendorDir . '/rector/rector-symfony/src/Set/SymfonySetList.php',
     'Rector\\Symfony\\Set\\TwigSetList' => $vendorDir . '/rector/rector-symfony/src/Set/TwigSetList.php',

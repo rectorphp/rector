@@ -4,29 +4,18 @@ declare (strict_types=1);
 namespace Rector\Symfony\SwiftMailer\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
-use PHPStan\Type\ObjectType;
-use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\SwiftMailer\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector\SwiftSetBodyToHtmlPlainMethodCallRectorTest
- *
- * @changelog https://github.com/laravel/framework/pull/38481/files#diff-2310168aa86b70a22595ba784039cbdde829bd38245c9586eedd111dfd0f806d
+ * @deprecated The renamed html()/text() methods only exist on Symfony Mailer Email objects, but the rule renames the
+ *             call while the object is still a Swift_Message. Migrate to Symfony Mailer manually instead.
  */
-final class SwiftSetBodyToHtmlPlainMethodCallRector extends AbstractRector
+final class SwiftSetBodyToHtmlPlainMethodCallRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes setBody() method call on Swift_Message into a html() or plain() based on second argument', [new CodeSample(<<<'CODE_SAMPLE'
@@ -59,25 +48,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isName($node->name, 'setBody')) {
-            return null;
-        }
-        if (!$this->isObjectType($node->var, new ObjectType('Swift_Message'))) {
-            return null;
-        }
-        if (count($node->args) === 2) {
-            $firstArg = $node->args[1];
-            if (!$firstArg instanceof Arg) {
-                return null;
-            }
-            $secondArgValue = $this->valueResolver->getValue($firstArg->value);
-            if ($secondArgValue === 'text/html') {
-                unset($node->args[1]);
-                $node->name = new Identifier('html');
-                return $node;
-            }
-        }
-        $node->name = new Identifier('plain');
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as it renames the call to methods that only exist on a Symfony Mailer Email, while the object is still a Swift_Message. Migrate to Symfony Mailer manually instead.', self::class));
     }
 }
