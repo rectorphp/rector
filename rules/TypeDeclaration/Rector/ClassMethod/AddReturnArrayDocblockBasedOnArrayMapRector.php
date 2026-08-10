@@ -4,63 +4,18 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnArrayDocblockBasedOnArrayMapRector\AddReturnArrayDocblockBasedOnArrayMapRectorTest
+ * @deprecated This rule is deprecated, as too niche and of little practical value. It only fires when array_map() gets an inline closure with an explicit return type, where static analysis already knows the item type without the docblock.
  */
-final class AddReturnArrayDocblockBasedOnArrayMapRector extends AbstractRector
+final class AddReturnArrayDocblockBasedOnArrayMapRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    /**
-     * @readonly
-     */
-    private ReturnAnalyzer $returnAnalyzer;
-    /**
-     * @readonly
-     */
-    private StaticTypeMapper $staticTypeMapper;
-    /**
-     * @readonly
-     */
-    private TypeFactory $typeFactory;
-    /**
-     * @readonly
-     */
-    private PhpDocTypeChanger $phpDocTypeChanger;
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ReturnAnalyzer $returnAnalyzer, StaticTypeMapper $staticTypeMapper, TypeFactory $typeFactory, PhpDocTypeChanger $phpDocTypeChanger, PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->returnAnalyzer = $returnAnalyzer;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->typeFactory = $typeFactory;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add @return array docblock based on array_map() return strict type', [new CodeSample(<<<'CODE_SAMPLE'
@@ -100,74 +55,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
-        $returnsScoped = $this->betterNodeFinder->findReturnsScoped($node);
-        if ($this->hasNonArrayReturnType($node)) {
-            return null;
-        }
-        // nothing to return? skip it
-        if ($returnsScoped === []) {
-            return null;
-        }
-        // only returns with expr and no void
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returnsScoped)) {
-            return null;
-        }
-        $closureReturnTypes = [];
-        foreach ($returnsScoped as $returnScoped) {
-            if (!$returnScoped->expr instanceof FuncCall) {
-                return null;
-            }
-            $arrayMapClosure = $this->matchArrayMapClosure($returnScoped->expr);
-            if (!$arrayMapClosure instanceof FunctionLike) {
-                return null;
-            }
-            if (!$arrayMapClosure->returnType instanceof Node) {
-                return null;
-            }
-            $closureReturnTypes[] = $this->staticTypeMapper->mapPhpParserNodePHPStanType($arrayMapClosure->returnType);
-        }
-        $returnType = $this->typeFactory->createMixedPassedOrUnionType($closureReturnTypes);
-        $arrayType = new ArrayType(new MixedType(), $returnType);
-        $functionLikePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $returnOriginalType = $functionLikePhpDocInfo->getReturnType();
-        if ($returnOriginalType instanceof ArrayType && !$returnOriginalType->getItemType() instanceof MixedType) {
-            return null;
-        }
-        if ($returnOriginalType instanceof IntersectionType) {
-            return null;
-        }
-        $hasChanged = $this->phpDocTypeChanger->changeReturnType($node, $functionLikePhpDocInfo, $arrayType);
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     */
-    private function hasNonArrayReturnType($functionLike): bool
-    {
-        if (!$functionLike->returnType instanceof Identifier) {
-            return \false;
-        }
-        return $functionLike->returnType->toLowerString() !== 'array';
-    }
-    /**
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction|null
-     */
-    private function matchArrayMapClosure(FuncCall $funcCall)
-    {
-        if (!$this->isName($funcCall, 'array_map')) {
-            return null;
-        }
-        if ($funcCall->isFirstClassCallable()) {
-            return null;
-        }
-        // lets infer strict array_map() type
-        $firstArg = $funcCall->getArgs()[0];
-        if (!$firstArg->value instanceof Closure && !$firstArg->value instanceof ArrowFunction) {
-            return null;
-        }
-        return $firstArg->value;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as too niche and of little practical value. The item type is already known from the inline closure return type', self::class));
     }
 }

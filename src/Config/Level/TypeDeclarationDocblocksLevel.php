@@ -5,7 +5,6 @@ namespace Rector\Config\Level;
 
 use Rector\Contract\Rector\RectorInterface;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamArrayDocblockBasedOnCallableNativeFuncCallRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnArrayDocblockBasedOnArrayMapRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnDocblockForScalarArrayFromAssignsRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\AddVarArrayDocblockFromDimFetchAssignRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\ClassMethodArrayDocblockParamFromLocalCallsRector;
@@ -36,7 +35,6 @@ final class TypeDeclarationDocblocksLevel
         AddParamArrayDocblockBasedOnCallableNativeFuncCallRector::class,
         // return
         AddReturnDocblockForCommonObjectDenominatorRector::class,
-        AddReturnArrayDocblockBasedOnArrayMapRector::class,
         AddReturnDocblockForScalarArrayFromAssignsRector::class,
         DocblockReturnArrayFromDirectArrayInstanceRector::class,
         AddReturnDocblockForArrayDimAssignedObjectRector::class,
