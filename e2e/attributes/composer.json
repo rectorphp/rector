@@ -1,5 +1,0 @@
-{
-    "autoload-dev": {
-        "directories": ["stubs"]
-    }
-}
