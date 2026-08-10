@@ -56,6 +56,13 @@ final class RectorConfigBuilder
      */
     private const LEVEL_METHOD_TO_SET = ['withTypeCoverageLevel' => [SetList::TYPE_DECLARATION, 'type declarations'], 'withTypeCoverageDocblockLevel' => [SetList::TYPE_DECLARATION_DOCBLOCKS, 'type declaration docblocks'], 'withDeadCodeLevel' => [SetList::DEAD_CODE, 'dead code'], 'withCodeQualityLevel' => [SetList::CODE_QUALITY, 'code quality'], 'withCodingStyleLevel' => [SetList::CODING_STYLE, 'coding style']];
     /**
+     * The composer-based set of the extensions that rector-src does not require, so their set list class cannot be
+     * imported here. Resolved at run-time; an extension that ships no such set falls back to its set group.
+     *
+     * @var array<SetGroup::*, string>
+     */
+    private const EXTENSION_COMPOSER_BASED_SET_LISTS = [SetGroup::LARAVEL => 'RectorLaravel\Set\LaravelSetList::COMPOSER_BASED', SetGroup::DRUPAL => 'DrupalRector\Set\DrupalSetList::COMPOSER_BASED'];
+    /**
      * @var string[]
      */
     private array $paths = [];
@@ -476,10 +483,21 @@ final class RectorConfigBuilder
     public function withComposerBased(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false, bool $symfony = \false, bool $netteUtils = \false, bool $laravel = \false, bool $drupal = \false): self
     {
         $setMap = [SetGroup::LARAVEL => $laravel, SetGroup::DRUPAL => $drupal];
-        foreach ($setMap as $setPath => $isEnabled) {
-            if ($isEnabled) {
-                $this->setGroups[] = $setPath;
+        foreach ($setMap as $setGroup => $isEnabled) {
+            if (!$isEnabled) {
+                continue;
             }
+            $setListConstant = self::EXTENSION_COMPOSER_BASED_SET_LISTS[$setGroup];
+            if (defined($setListConstant)) {
+                $setFilePath = constant($setListConstant);
+                Assert::string($setFilePath);
+                // single set, as every rule inside is bound to the installed package version on its own
+                $this->sets[] = $setFilePath;
+                continue;
+            }
+            // @deprecated fallback for extensions that still describe their sets as objects,
+            // instead of bonding the rules themselves
+            $this->setGroups[] = $setGroup;
         }
         if ($phpunit) {
             // single set, as every rule inside is bound to the installed PHPUnit version on its own
