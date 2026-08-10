@@ -4,46 +4,30 @@ declare (strict_types=1);
 namespace Rector\Php82\Rector\Param;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Php82\Rector\Param\AddSensitiveParameterAttributeRector\AddSensitiveParameterAttributeRectorTest
+ * @deprecated This rule is deprecated, as it relies on a provided variable name list. Matching parameters by name is vague and risky, as the same name can hold a non-sensitive value. Add the #[\SensitiveParameter] attribute per case instead.
  */
-final class AddSensitiveParameterAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
+final class AddSensitiveParameterAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface, DeprecatedInterface
 {
     /**
-     * @readonly
-     */
-    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    /**
+     * @api
      * @var string
      */
     public const SENSITIVE_PARAMETERS = 'sensitive_parameters';
-    /**
-     * @var string[]
-     */
-    private array $sensitiveParameters = [];
-    public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer)
-    {
-        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
-    }
     /**
      * @param array<string, mixed> $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allString($configuration[self::SENSITIVE_PARAMETERS] ?? []);
-        $this->sensitiveParameters = (array) ($configuration[self::SENSITIVE_PARAMETERS] ?? []);
     }
     public function getNodeTypes(): array
     {
@@ -54,14 +38,7 @@ final class AddSensitiveParameterAttributeRector extends AbstractRector implemen
      */
     public function refactor(Node $node): ?Param
     {
-        if (!$this->isNames($node, $this->sensitiveParameters)) {
-            return null;
-        }
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($node, 'SensitiveParameter')) {
-            return null;
-        }
-        $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified('SensitiveParameter'))]);
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as matching sensitive parameters by name is vague and risky. Add the #[\SensitiveParameter] attribute per case instead', self::class));
     }
     public function getRuleDefinition(): RuleDefinition
     {
