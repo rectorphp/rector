@@ -3051,7 +3051,6 @@ class ComposerStaticInita8c6b66c22937a4067be5bebe2caf769
         'Rector\\TypeDeclarationDocblocks\\NodeAnalyzer\\ConstructorAssignedTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeAnalyzer/ConstructorAssignedTypeResolver.php',
         'Rector\\TypeDeclarationDocblocks\\NodeDocblockTypeDecorator' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeDocblockTypeDecorator.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\ArrayDimFetchFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/ArrayDimFetchFinder.php',
-        'Rector\\TypeDeclarationDocblocks\\NodeFinder\\ArrayMapClosureExprFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/ArrayMapClosureExprFinder.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\DataProviderMethodsFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/DataProviderMethodsFinder.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\GetterClassMethodPropertyFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/GetterClassMethodPropertyFinder.php',
         'Rector\\TypeDeclarationDocblocks\\NodeFinder\\PropertyGetterFinder' => __DIR__ . '/../..' . '/rules/TypeDeclarationDocblocks/NodeFinder/PropertyGetterFinder.php',
