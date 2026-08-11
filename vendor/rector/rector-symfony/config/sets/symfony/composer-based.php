@@ -895,7 +895,7 @@ return static function (RectorConfig $rectorConfig): void {
         'Symfony\Component\Serializer\NameConverter\AdvancedNameConverterInterface' => 'Symfony\Component\Serializer\NameConverter\NameConverterInterface',
     ], 'symfony/serializer', '>=7.2');
     // symfony/translation 7.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, ['Symfony\Component\Translation\Test\ProviderFactoryTestCase;' => 'Symfony\Component\Translation\Test\AbstractProviderFactoryTestCase'], 'symfony/translation', '>=7.2');
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, ['Symfony\Component\Translation\Test\ProviderFactoryTestCase' => 'Symfony\Component\Translation\Test\AbstractProviderFactoryTestCase'], 'symfony/translation', '>=7.2');
     // symfony/console 7.4
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('Symfony\Component\Console\Application', 'add', 'addCommand')], 'symfony/console', '>=7.4');
     // symfony/framework-bundle 7.4
