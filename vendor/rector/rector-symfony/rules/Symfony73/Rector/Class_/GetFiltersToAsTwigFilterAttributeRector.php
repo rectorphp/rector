@@ -5,36 +5,21 @@ namespace Rector\Symfony\Symfony73\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Type\ObjectType;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Symfony\Enum\TwigClass;
-use Rector\Symfony\Symfony73\GetMethodToAsTwigAttributeTransformer;
-use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
-use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://symfony.com/blog/new-in-symfony-7-3-twig-extension-attributes
- *
- * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector\GetFiltersToAsTwigFilterAttributeRectorTest
+ * @deprecated Handling getFilters() alone leaves the sibling getFunctions()/getTests() methods behind and can produce
+ *             a half-converted extension. Use the GetFiltersAndFunctionsToAsTwigAttributeRector rule instead, that
+ *             converts all the get methods at once.
  */
-final class GetFiltersToAsTwigFilterAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
+final class GetFiltersToAsTwigFilterAttributeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private GetMethodToAsTwigAttributeTransformer $getMethodToAsTwigAttributeTransformer;
-    public function __construct(GetMethodToAsTwigAttributeTransformer $getMethodToAsTwigAttributeTransformer)
-    {
-        $this->getMethodToAsTwigAttributeTransformer = $getMethodToAsTwigAttributeTransformer;
-    }
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint
-    {
-        return new ComposerPackageConstraint('twig/twig', '>=3.21');
-    }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes getFilters() in TwigExtension to #[TwigFilter] marker attribute above function', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes getFilters() in TwigExtension to #[AsTwigFilter] marker attribute above local class method', [new CodeSample(<<<'CODE_SAMPLE'
 use Twig\Extension\AbstractExtension;
 use Twig\Environment;
 
@@ -60,7 +45,7 @@ use Twig\Environment;
 
 class SomeClass extends AbstractExtension
 {
-    #[TwigFilter('filter_name', needsEnvironment: true)]
+    #[AsTwigFilter('filter_name', needsEnvironment: true)]
     public function localMethod(Environment $env, $value)
     {
         return $value;
@@ -69,6 +54,9 @@ class SomeClass extends AbstractExtension
 CODE_SAMPLE
 )]);
     }
+    /**
+     * @return array<class-string<Node>>
+     */
     public function getNodeTypes(): array
     {
         return [Class_::class];
@@ -78,17 +66,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Class_
     {
-        if ($node->isAbstract() || $node->isAnonymous()) {
-            return null;
-        }
-        $twigExtensionObjectType = new ObjectType(TwigClass::TWIG_EXTENSION);
-        if (!$this->isObjectType($node, $twigExtensionObjectType)) {
-            return null;
-        }
-        $hasChanged = $this->getMethodToAsTwigAttributeTransformer->transformClassGetMethodToAttributeMarker($node, 'getFilters', TwigClass::AS_TWIG_FILTER_ATTRIBUTE, $twigExtensionObjectType, ['preserves_safety' => 'preservesSafety', 'pre_escape' => 'preEscape']);
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as it converts getFilters() only and leaves getFunctions()/getTests() behind. Use "%s" instead.', self::class, \Rector\Symfony\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector::class));
     }
 }

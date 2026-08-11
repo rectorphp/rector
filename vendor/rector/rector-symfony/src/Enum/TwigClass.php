@@ -20,6 +20,10 @@ final class TwigClass
     /**
      * @var string
      */
+    public const AS_TWIG_TEST_ATTRIBUTE = 'Twig\Attribute\AsTwigTest';
+    /**
+     * @var string
+     */
     public const EXTENSION_INTERFACE = 'Twig\Extension\ExtensionInterface';
     /**
      * @var string

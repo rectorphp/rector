@@ -26,6 +26,8 @@ use Rector\Symfony\Symfony73\NodeTransformer\CommandUnusedInputOutputRemover;
 use Rector\Symfony\Symfony73\NodeTransformer\ConsoleOptionAndArgumentMethodCallVariableReplacer;
 use Rector\Symfony\Symfony73\NodeTransformer\OutputInputSymfonyStyleReplacer;
 use Rector\ValueObject\MethodName;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -36,7 +38,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Symfony73\Rector\Class_\InvokableCommandInputAttributeRector\InvokableCommandInputAttributeRectorTest
  */
-final class InvokableCommandInputAttributeRector extends AbstractRector
+final class InvokableCommandInputAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -79,6 +81,10 @@ final class InvokableCommandInputAttributeRector extends AbstractRector
         $this->consoleOptionAndArgumentMethodCallVariableReplacer = $consoleOptionAndArgumentMethodCallVariableReplacer;
         $this->outputInputSymfonyStyleReplacer = $outputInputSymfonyStyleReplacer;
         $this->commandUnusedInputOutputRemover = $commandUnusedInputOutputRemover;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/console', '>=7.3');
     }
     public function getRuleDefinition(): RuleDefinition
     {

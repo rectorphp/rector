@@ -13,12 +13,14 @@ use Rector\PhpAttribute\GenericAnnotationToAttributeConverter;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\Enum\JMSAnnotation;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\JMS\Rector\Property\AccessorAnnotationToAttributeRector\AccessorAnnotationToAttributeRectorTest
  */
-final class AccessorAnnotationToAttributeRector extends AbstractRector
+final class AccessorAnnotationToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -37,6 +39,10 @@ final class AccessorAnnotationToAttributeRector extends AbstractRector
         $this->docBlockUpdater = $docBlockUpdater;
         $this->valueResolver = $valueResolver;
         $this->genericAnnotationToAttributeConverter = $genericAnnotationToAttributeConverter;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('jms/serializer', '>=3.14');
     }
     public function getRuleDefinition(): RuleDefinition
     {

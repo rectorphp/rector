@@ -43,6 +43,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Symfony\CodeQuality\Rector\AttributeGroup\SingleConditionSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
+use Rector\Symfony\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector;
+use Rector\Symfony\JMS\Rector\Property\AccessorAnnotationToAttributeRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
@@ -105,8 +107,7 @@ use Rector\Symfony\Symfony73\Rector\Class_\AuthorizationCheckerToAccessDecisionM
 use Rector\Symfony\Symfony73\Rector\Class_\CommandDefaultNameAndDescriptionToAsCommandAttributeRector;
 use Rector\Symfony\Symfony73\Rector\Class_\CommandHelpToAttributeRector;
 use Rector\Symfony\Symfony73\Rector\Class_\ConstraintOptionsToNamedArgumentsRector;
-use Rector\Symfony\Symfony73\Rector\Class_\GetFiltersToAsTwigFilterAttributeRector;
-use Rector\Symfony\Symfony73\Rector\Class_\GetFunctionsToAsTwigFunctionAttributeRector;
+use Rector\Symfony\Symfony73\Rector\Class_\GetFiltersAndFunctionsToAsTwigAttributeRector;
 use Rector\Symfony\Symfony80\Rector\Class_\RemoveEraseCredentialsRector;
 use Rector\Symfony\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToValidateInContextRector;
 use Rector\Symfony\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector;
@@ -263,8 +264,10 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/validator 8.1
         ConstraintValidatorValidateToValidateInContextRector::class,
         // twig/twig 3.21
-        GetFiltersToAsTwigFilterAttributeRector::class,
-        GetFunctionsToAsTwigFunctionAttributeRector::class,
+        GetFiltersAndFunctionsToAsTwigAttributeRector::class,
+        // jms/serializer 3.14
+        AccessTypeAnnotationToAttributeRector::class,
+        AccessorAnnotationToAttributeRector::class,
     ]);
     // shared types used by the configuration below
     $arrayType = new ArrayType(new MixedType(), new MixedType());
@@ -303,6 +306,12 @@ return static function (RectorConfig $rectorConfig): void {
         new ReplaceArgumentDefaultValue('Symfony\Component\Routing\Generator\UrlGeneratorInterface', 'generate', 2, 'relative', 'Symfony\Component\Routing\Generator\UrlGeneratorInterface::RELATIVE_PATH'),
         new ReplaceArgumentDefaultValue('Symfony\Component\Routing\Generator\UrlGeneratorInterface', 'generate', 2, 'network', 'Symfony\Component\Routing\Generator\UrlGeneratorInterface::NETWORK_PATH'),
     ], 'symfony/routing', '>=2.8');
+    // symfony/symfony 2.8
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+        // @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#security
+        'Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface' => 'Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface',
+        'Symfony\Component\Security\Core\Authentication\SimpleFormAuthenticatorInterface' => 'Symfony\Component\Security\Http\Authentication\SimpleFormAuthenticatorInterface',
+    ], 'symfony/symfony', '>=2.8');
     // symfony/bridge-swift-mailer 3.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
         // swift mailer
