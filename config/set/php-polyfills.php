@@ -12,7 +12,6 @@ use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php80\Rector\NotIdentical\StrContainsRector;
 use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
 use Rector\Php83\Rector\BooleanAnd\JsonValidateRector;
-use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php84\Rector\Foreach_\ForeachToArrayAllRector;
 use Rector\Php84\Rector\Foreach_\ForeachToArrayAnyRector;
 use Rector\Php84\Rector\Foreach_\ForeachToArrayFindKeyRector;
@@ -36,6 +35,5 @@ return static function (RectorConfig $rectorConfig): void {
         ForeachToArrayAnyRector::class,
         ForeachToArrayFindRector::class,
         ForeachToArrayFindKeyRector::class,
-        DeprecatedAnnotationToDeprecatedAttributeRector::class,
     ]);
 };
