@@ -7,26 +7,18 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\PhpAttribute\DeprecatedAnnotationToDeprecatedAttributeConverter;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
-use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector\DeprecatedAnnotationToDeprecatedAttributeRectorTest
+ * @deprecated This rule is deprecated, as the #[Deprecated] attribute triggers a runtime deprecation, while the @deprecated annotation is a static hint only. Those have a different purpose and are not interchangeable. Use "phpstan/phpstan-deprecation-rules" to report the annotation instead.
  */
-final class DeprecatedAnnotationToDeprecatedAttributeRector extends AbstractRector implements MinPhpVersionInterface
+final class DeprecatedAnnotationToDeprecatedAttributeRector extends AbstractRector implements MinPhpVersionInterface, DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private DeprecatedAnnotationToDeprecatedAttributeConverter $deprecatedAnnotationToDeprecatedAttributeConverter;
-    public function __construct(DeprecatedAnnotationToDeprecatedAttributeConverter $deprecatedAnnotationToDeprecatedAttributeConverter)
-    {
-        $this->deprecatedAnnotationToDeprecatedAttributeConverter = $deprecatedAnnotationToDeprecatedAttributeConverter;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change @deprecated annotation to Deprecated attribute', [new CodeSample(<<<'CODE_SAMPLE'
@@ -54,7 +46,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->deprecatedAnnotationToDeprecatedAttributeConverter->convert($node);
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as the #[Deprecated] attribute triggers a runtime deprecation, unlike the @deprecated annotation; use "phpstan/phpstan-deprecation-rules" to report the annotation instead', self::class));
     }
     public function provideMinPhpVersion(): int
     {

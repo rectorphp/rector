@@ -2355,7 +2355,6 @@ return array(
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\StringNodeAnnotationToAttributeMapper' => $baseDir . '/src/PhpAttribute/AnnotationToAttributeMapper/StringNodeAnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AttributeArrayNameInliner' => $baseDir . '/src/PhpAttribute/AttributeArrayNameInliner.php',
     'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => $baseDir . '/src/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
-    'Rector\\PhpAttribute\\DeprecatedAnnotationToDeprecatedAttributeConverter' => $baseDir . '/src/PhpAttribute/DeprecatedAnnotationToDeprecatedAttributeConverter.php',
     'Rector\\PhpAttribute\\Enum\\DocTagNodeState' => $baseDir . '/src/PhpAttribute/Enum/DocTagNodeState.php',
     'Rector\\PhpAttribute\\GenericAnnotationToAttributeConverter' => $baseDir . '/src/PhpAttribute/GenericAnnotationToAttributeConverter.php',
     'Rector\\PhpAttribute\\NodeFactory\\AnnotationToAttributeIntegerValueCaster' => $baseDir . '/src/PhpAttribute/NodeFactory/AnnotationToAttributeIntegerValueCaster.php',

@@ -2607,7 +2607,6 @@ class ComposerStaticInitd39f15e0ab454d5bd1b6164e92fe7456
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\StringNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/src/PhpAttribute/AnnotationToAttributeMapper/StringNodeAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AttributeArrayNameInliner' => __DIR__ . '/../..' . '/src/PhpAttribute/AttributeArrayNameInliner.php',
         'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => __DIR__ . '/../..' . '/src/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
-        'Rector\\PhpAttribute\\DeprecatedAnnotationToDeprecatedAttributeConverter' => __DIR__ . '/../..' . '/src/PhpAttribute/DeprecatedAnnotationToDeprecatedAttributeConverter.php',
         'Rector\\PhpAttribute\\Enum\\DocTagNodeState' => __DIR__ . '/../..' . '/src/PhpAttribute/Enum/DocTagNodeState.php',
         'Rector\\PhpAttribute\\GenericAnnotationToAttributeConverter' => __DIR__ . '/../..' . '/src/PhpAttribute/GenericAnnotationToAttributeConverter.php',
         'Rector\\PhpAttribute\\NodeFactory\\AnnotationToAttributeIntegerValueCaster' => __DIR__ . '/../..' . '/src/PhpAttribute/NodeFactory/AnnotationToAttributeIntegerValueCaster.php',
