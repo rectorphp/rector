@@ -624,8 +624,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v12.65.0",
-            "version_normalized": "12.65.0.0",
+            "version": "v12.66.0",
+            "version_normalized": "12.66.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
@@ -1916,12 +1916,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "7c936c18be81e0d86d08475a402a17aa46238466"
+                "reference": "123f33473b1c282d1dfe36c5cd9f22c202a5f127"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/7c936c18be81e0d86d08475a402a17aa46238466",
-                "reference": "7c936c18be81e0d86d08475a402a17aa46238466",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/123f33473b1c282d1dfe36c5cd9f22c202a5f127",
+                "reference": "123f33473b1c282d1dfe36c5cd9f22c202a5f127",
                 "shasum": ""
             },
             "require": {
@@ -1954,7 +1954,7 @@
                 "tracy\/tracy": "^2.12",
                 "twig\/twig": "^3.21"
             },
-            "time": "2026-08-11T13:47:02+00:00",
+            "time": "2026-08-12T01:48:41+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
