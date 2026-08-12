@@ -4,125 +4,18 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\PHPUnit120\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\NeverType;
-use PHPStan\Type\ObjectType;
-use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PHPUnit\Enum\PHPUnitAttribute;
-use Rector\PHPUnit\Enum\PHPUnitClassName;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\MethodName;
-use Rector\ValueObject\PhpVersionFeature;
-use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * The AllowMockObjectsWithoutExpectations attribute was added in PHPUnit 12.5.2
- *
- * @see \Rector\PHPUnit\Tests\PHPUnit120\Rector\Class_\AllowMockObjectsWithoutExpectationsAttributeRector\AllowMockObjectsWithoutExpectationsAttributeRectorTest
- *
- * @see https://github.com/sebastianbergmann/phpunit/commit/24c208d6a340c3071f28a9b5cce02b9377adfd43
+ * @deprecated This rule is deprecated, as the attribute only silences the notice. The correct fix is to add the missing
+ * expects() to the test methods that use the mock, which requires knowing the test intent and cannot be automated.
  */
-final class AllowMockObjectsWithoutExpectationsAttributeRector extends AbstractRector implements MinPhpVersionInterface, ComposerPackageConstraintInterface
+final class AllowMockObjectsWithoutExpectationsAttributeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private TestsNodeAnalyzer $testsNodeAnalyzer;
-    /**
-     * @readonly
-     */
-    private AttributeFinder $attributeFinder;
-    /**
-     * @readonly
-     */
-    private ReflectionProvider $reflectionProvider;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AttributeFinder $attributeFinder, ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder)
-    {
-        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->attributeFinder = $attributeFinder;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->betterNodeFinder = $betterNodeFinder;
-    }
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint
-    {
-        return new ComposerPackageConstraint('phpunit/phpunit', '>=12.5.2');
-    }
-    public function getNodeTypes(): array
-    {
-        return [Class_::class];
-    }
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::ATTRIBUTES;
-    }
-    /**
-     * @param Class_ $node
-     */
-    public function refactor(Node $node): ?Class_
-    {
-        if ($this->shouldSkipClass($node)) {
-            return null;
-        }
-        // even for 0 mocked properties, the variable in setUp() can be mocked
-        $mockObjectPropertyNames = $this->matchMockObjectPropertyNames($node);
-        $missedTestMethodsByMockPropertyName = [];
-        $usingTestMethodsByMockPropertyName = [];
-        $testMethodCount = 0;
-        foreach ($mockObjectPropertyNames as $mockObjectPropertyName) {
-            $missedTestMethodsByMockPropertyName[$mockObjectPropertyName] = [];
-            $usingTestMethodsByMockPropertyName[$mockObjectPropertyName] = [];
-            foreach ($node->getMethods() as $classMethod) {
-                if (!$this->testsNodeAnalyzer->isTestClassMethod($classMethod)) {
-                    continue;
-                }
-                ++$testMethodCount;
-                // is a mock property used in the class method, as part of some method call? guessing mock expectation is set
-                // skip if so
-                if ($this->isClassMethodUsingMethodCallOnPropertyNamed($classMethod, $mockObjectPropertyName)) {
-                    $usingTestMethodsByMockPropertyName[$mockObjectPropertyName][] = $this->getName($classMethod);
-                    continue;
-                }
-                $missedTestMethodsByMockPropertyName[$mockObjectPropertyName][] = $this->getName($classMethod);
-            }
-        }
-        // or find a ->method() calls on a setUp() mocked property
-        $hasAnyMethodInSetup = $this->isMissingExpectsOnMockObjectMethodCallInSetUp($node);
-        if ($hasAnyMethodInSetup) {
-            $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS))]);
-            return $node;
-        }
-        if (!$this->shouldAddAttribute($missedTestMethodsByMockPropertyName)) {
-            return null;
-        }
-        // skip sole test method, as those are expected to use all mocks
-        if ($testMethodCount < 2) {
-            return null;
-        }
-        if (!$this->isAtLeastOneMockPropertyMockedOnce($usingTestMethodsByMockPropertyName)) {
-            return null;
-        }
-        // add attribute
-        $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS))]);
-        return $node;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add #[AllowMockObjectsWithoutExpectations] attribute to PHPUnit test classes with mock properties used in multiple methods but one, to avoid irrelevant notices in tests run', [new CodeSample(<<<'CODE_SAMPLE'
@@ -179,103 +72,17 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @return string[]
+     * @return array<class-string<Node>>
      */
-    private function matchMockObjectPropertyNames(Class_ $class): array
+    public function getNodeTypes(): array
     {
-        $propertyNames = [];
-        foreach ($class->getProperties() as $property) {
-            if (!$property->type instanceof Name) {
-                continue;
-            }
-            if (!$this->isName($property->type, PHPUnitClassName::MOCK_OBJECT)) {
-                continue;
-            }
-            $propertyNames[] = $this->getName($property->props[0]);
-        }
-        return $propertyNames;
-    }
-    private function shouldSkipClass(Class_ $class): bool
-    {
-        if (!$this->testsNodeAnalyzer->isInTestClass($class)) {
-            return \true;
-        }
-        // attribute must exist for the rule to work
-        if (!$this->reflectionProvider->hasClass(PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS)) {
-            return \true;
-        }
-        // already filled
-        if ($this->attributeFinder->hasAttributeByClasses($class, [PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS])) {
-            return \true;
-        }
-        // has mock objects properties and setUp() method?
-        $setupClassMethod = $class->getMethod(MethodName::SET_UP);
-        return !$setupClassMethod instanceof ClassMethod;
-    }
-    private function isClassMethodUsingMethodCallOnPropertyNamed(ClassMethod $classMethod, string $mockObjectPropertyName): bool
-    {
-        /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstancesOfScoped([$classMethod], [MethodCall::class]);
-        foreach ($methodCalls as $methodCall) {
-            if (!$methodCall->var instanceof PropertyFetch) {
-                continue;
-            }
-            $propertyFetch = $methodCall->var;
-            // we found a method call on a property fetch named
-            if ($this->isName($propertyFetch, $mockObjectPropertyName)) {
-                return \true;
-            }
-        }
-        return \false;
+        return [Class_::class];
     }
     /**
-     * @param array<string, string[]> $missedTestMethodsByMockPropertyName
+     * @param Class_ $node
      */
-    private function shouldAddAttribute(array $missedTestMethodsByMockPropertyName): bool
+    public function refactor(Node $node): ?Node
     {
-        foreach ($missedTestMethodsByMockPropertyName as $missedTestMethods) {
-            // all test methods are using method calls on the mock property, so skip
-            if (count($missedTestMethods) === 0) {
-                continue;
-            }
-            return \true;
-        }
-        return \false;
-    }
-    /**
-     * @param array<string, string[]> $usingTestMethodsByMockPropertyName
-     */
-    private function isAtLeastOneMockPropertyMockedOnce(array $usingTestMethodsByMockPropertyName): bool
-    {
-        $found = \false;
-        foreach ($usingTestMethodsByMockPropertyName as $usingTestMethods) {
-            if ($usingTestMethods !== []) {
-                $found = \true;
-                break;
-            }
-        }
-        return $found;
-    }
-    private function isMissingExpectsOnMockObjectMethodCallInSetUp(Class_ $class): bool
-    {
-        $setupClassMethod = $class->getMethod(MethodName::SET_UP);
-        if (!$setupClassMethod instanceof ClassMethod) {
-            return \false;
-        }
-        /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstancesOfScoped((array) $setupClassMethod->stmts, MethodCall::class);
-        foreach ($methodCalls as $methodCall) {
-            if (!$this->isName($methodCall->name, 'method')) {
-                continue;
-            }
-            $type = $this->getType($methodCall->var);
-            if (!$type instanceof NeverType && !$this->isObjectType($methodCall->var, new ObjectType(PHPUnitClassName::MOCK_OBJECT))) {
-                continue;
-            }
-            if ($methodCall->var instanceof Variable || $methodCall->var instanceof PropertyFetch) {
-                return \true;
-            }
-        }
-        return \false;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as the attribute only silences the notice. Add the missing expects() to the test methods that use the mock instead.', self::class));
     }
 }

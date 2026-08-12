@@ -90,6 +90,7 @@ use Rector\Symfony\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInst
 use Rector\Symfony\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector;
 use Rector\Symfony\Symfony60\Rector\FuncCall\ContainerInterfaceServiceToServiceContainerRector;
 use Rector\Symfony\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector;
+use Rector\Symfony\Symfony61\Rector\Attribute\RouteRequirementStringToConstantRector;
 use Rector\Symfony\Symfony61\Rector\Class_\CommandConfigureToAttributeRector;
 use Rector\Symfony\Symfony61\Rector\Class_\CommandPropertyToAttributeRector;
 use Rector\Symfony\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector;
@@ -224,6 +225,8 @@ return static function (RectorConfig $rectorConfig): void {
         // symfony/console 6.1
         CommandConfigureToAttributeRector::class,
         CommandPropertyToAttributeRector::class,
+        // symfony/routing 6.1
+        RouteRequirementStringToConstantRector::class,
         // symfony/twig-bridge 6.1
         MagicClosureTwigExtensionToNativeMethodsRector::class,
         // symfony/validator 6.1

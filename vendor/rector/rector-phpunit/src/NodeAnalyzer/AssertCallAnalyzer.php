@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -41,6 +42,11 @@ final class AssertCallAnalyzer
      * @var int
      */
     private const MAX_NESTED_METHOD_CALL_LEVEL = 5;
+    /**
+     * @see https://docs.phpunit.de/en/12.4/assertions.html
+     * @var string
+     */
+    private const PHPUNIT_FUNCTION_NAMESPACE = 'PHPUnit\Framework\\';
     /**
      * @var string[]
      */
@@ -130,8 +136,31 @@ final class AssertCallAnalyzer
             if ($node instanceof StaticCall) {
                 return $this->isAssertMethodCall($node);
             }
+            // standalone function assert, e.g. "use function PHPUnit\Framework\assertNotNull;"
+            if ($node instanceof FuncCall) {
+                return $this->isAssertFuncCall($node);
+            }
             return \false;
         });
+    }
+    private function isAssertFuncCall(FuncCall $funcCall): bool
+    {
+        $funcCallName = $this->nodeNameResolver->getName($funcCall);
+        if (!is_string($funcCallName)) {
+            return \false;
+        }
+        if (strncmp($funcCallName, self::PHPUNIT_FUNCTION_NAMESPACE, strlen(self::PHPUNIT_FUNCTION_NAMESPACE)) !== 0) {
+            return \false;
+        }
+        $shortFuncCallName = (string) substr($funcCallName, strlen(self::PHPUNIT_FUNCTION_NAMESPACE));
+        $found = \false;
+        foreach (self::ASSERT_METHOD_NAME_PREFIXES as $assertMethodNamePrefix) {
+            if (strncmp($shortFuncCallName, $assertMethodNamePrefix, strlen($assertMethodNamePrefix)) === 0) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
     private function hasNestedAssertCall(ClassMethod $classMethod): bool
     {

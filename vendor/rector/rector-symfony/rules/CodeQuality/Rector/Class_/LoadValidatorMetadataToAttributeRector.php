@@ -4,10 +4,13 @@ declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstantExpressionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintAttributeTargetAnalyzer;
@@ -115,6 +118,11 @@ CODE_SAMPLE
             if ($classStmt->stmts === null) {
                 return null;
             }
+            // a Callback constraint holding a closure cannot be turned into an attribute; moving the
+            // surrounding constraints out would break the validation, so the whole method is left untouched
+            if ($this->hasClosureCallbackConstraint($classStmt)) {
+                return null;
+            }
             $hasChanged = \false;
             foreach ($classStmt->stmts as $classMethodStmtKey => $methodStmt) {
                 // 1. class
@@ -151,6 +159,24 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    private function hasClosureCallbackConstraint(ClassMethod $classMethod): bool
+    {
+        $nodeFinder = new NodeFinder();
+        foreach ((array) $classMethod->stmts as $methodStmt) {
+            $classConstraintNew = $this->metadataConstraintResolver->resolveClassConstraint($methodStmt);
+            if (!$classConstraintNew instanceof New_) {
+                continue;
+            }
+            if (!$this->isName($classConstraintNew->class, 'Symfony\Component\Validator\Constraints\Callback')) {
+                continue;
+            }
+            $closure = $nodeFinder->findFirst($classConstraintNew->args, static fn(Node $node): bool => $node instanceof Closure || $node instanceof ArrowFunction);
+            if ($closure instanceof Node) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function refactorClassConstraint(Class_ $class, New_ $constraintNew): bool
     {

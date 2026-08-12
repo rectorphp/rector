@@ -2688,6 +2688,7 @@ return array(
     'Rector\\Symfony\\Symfony53\\Rector\\StaticPropertyFetch\\KernelTestCaseContainerPropertyDeprecationRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony53/Rector/StaticPropertyFetch/KernelTestCaseContainerPropertyDeprecationRector.php',
     'Rector\\Symfony\\Symfony60\\Rector\\FuncCall\\ContainerInterfaceServiceToServiceContainerRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony60/Rector/FuncCall/ContainerInterfaceServiceToServiceContainerRector.php',
     'Rector\\Symfony\\Symfony60\\Rector\\MethodCall\\GetHelperControllerToServiceRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony60/Rector/MethodCall/GetHelperControllerToServiceRector.php',
+    'Rector\\Symfony\\Symfony61\\Rector\\Attribute\\RouteRequirementStringToConstantRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony61/Rector/Attribute/RouteRequirementStringToConstantRector.php',
     'Rector\\Symfony\\Symfony61\\Rector\\Class_\\CommandConfigureToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony61/Rector/Class_/CommandConfigureToAttributeRector.php',
     'Rector\\Symfony\\Symfony61\\Rector\\Class_\\CommandPropertyToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony61/Rector/Class_/CommandPropertyToAttributeRector.php',
     'Rector\\Symfony\\Symfony61\\Rector\\Class_\\MagicClosureTwigExtensionToNativeMethodsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony61/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php',

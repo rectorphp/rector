@@ -36,7 +36,6 @@ use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubInCoalesceArgRector;
 use Rector\PHPUnit\PHPUnit120\Rector\CallLike\CreateStubOverCreateMockArgRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\AllowMockObjectsForDataProviderRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\AllowMockObjectsWhereParentClassRector;
-use Rector\PHPUnit\PHPUnit120\Rector\Class_\AllowMockObjectsWithoutExpectationsAttributeRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\AssertIsTypeMethodCallRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\PropertyCreateMockToCreateStubRector;
 use Rector\PHPUnit\PHPUnit120\Rector\Class_\RemoveOverrideFinalConstructTestCaseRector;
@@ -107,7 +106,6 @@ return static function (RectorConfig $rectorConfig): void {
         // the AllowMockObjectsWithoutExpectations attribute exists since PHPUnit 12.5.2
         AllowMockObjectsWhereParentClassRector::class,
         AllowMockObjectsForDataProviderRector::class,
-        AllowMockObjectsWithoutExpectationsAttributeRector::class,
         // the upgrade rules of the per-version sets, each bound to the PHPUnit version
         // its target API is available from
         // expectException() and friends, PHPUnit 5.2
