@@ -12,6 +12,7 @@ use Rector\Doctrine\Bundle230\Rector\Class_\AddAnnotationToRepositoryRector;
 use Rector\Doctrine\Collection22\Rector\CriteriaOrderingConstantsDeprecationRector;
 use Rector\Doctrine\Dbal211\Rector\MethodCall\ExtractArrayArgOnQueryBuilderSelectRector;
 use Rector\Doctrine\Dbal211\Rector\MethodCall\ReplaceFetchAllMethodCallRector;
+use Rector\Doctrine\Dbal31\Rector\MethodCall\QueryBuilderExecuteToExecuteQueryOrExecuteStatementRector;
 use Rector\Doctrine\Dbal36\Rector\MethodCall\MigrateQueryBuilderResetQueryPartRector;
 use Rector\Doctrine\Dbal40\Rector\MethodCall\ChangeCompositeExpressionAddMultipleWithWithRector;
 use Rector\Doctrine\Dbal40\Rector\StmtsAwareInterface\ExecuteQueryParamsToBindValueRector;
@@ -62,6 +63,8 @@ return static function (RectorConfig $rectorConfig): void {
         ReplaceFetchAllMethodCallRector::class,
         // doctrine/dbal 3.8
         MigrateQueryBuilderResetQueryPartRector::class,
+        // doctrine/dbal 3.1
+        QueryBuilderExecuteToExecuteQueryOrExecuteStatementRector::class,
         // doctrine/dbal 4.0 and 4.2
         ChangeCompositeExpressionAddMultipleWithWithRector::class,
         ExecuteQueryParamsToBindValueRector::class,
