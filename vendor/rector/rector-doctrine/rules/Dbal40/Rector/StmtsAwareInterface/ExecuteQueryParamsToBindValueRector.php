@@ -7,8 +7,11 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Plus;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
@@ -39,7 +42,7 @@ class SomeClass
 {
     public function run(Statement $statement, array $params): void
     {
-        $result = $statement->executeQuery($params)
+        $result = $statement->executeQuery($params);
     }
 }
 CODE_SAMPLE
@@ -50,8 +53,8 @@ class SomeClass
 {
     public function run(Statement $statement, array $params): void
     {
-        foreach ($params as $key=> $value) {
-            $statement->bindValue($key + 1, $value);
+        foreach ($params as $key => $parameter) {
+            $statement->bindValue(is_int($key) ? $key + 1 : $key, $parameter);
         }
 
         $result = $statement->executeQuery();
@@ -111,10 +114,11 @@ CODE_SAMPLE
     }
     private function createBindValueForeach(Expr $statementExpr, Expr $stmtsExpr): Foreach_
     {
-        $positionVariable = new Variable('position');
+        $keyVariable = new Variable('key');
         $parameterVariable = new Variable('parameter');
-        $foreach = new Foreach_($stmtsExpr, $parameterVariable, ['keyVar' => $positionVariable]);
-        $bindValueMethodCall = new MethodCall($statementExpr, 'bindValue', [new Arg(new Plus($positionVariable, new Int_(1))), new Arg($parameterVariable)]);
+        $foreach = new Foreach_($stmtsExpr, $parameterVariable, ['keyVar' => $keyVariable]);
+        $ternary = new Ternary(new FuncCall(new Name('is_int'), [new Arg($keyVariable)]), new Plus($keyVariable, new Int_(1)), $keyVariable);
+        $bindValueMethodCall = new MethodCall($statementExpr, 'bindValue', [new Arg($ternary), new Arg($parameterVariable)]);
         $foreach->stmts[] = new Expression($bindValueMethodCall);
         return $foreach;
     }
