@@ -143,6 +143,13 @@ return static function (RectorConfig $rectorConfig): void {
         // @see https://github.com/doctrine/orm/pull/9906
         'Doctrine\ORM\Event\LifecycleEventArgs' => 'Doctrine\Persistence\Event\LifecycleEventArgs',
     ], 'doctrine/orm', '>=2.13');
+    // doctrine/orm 3.5
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+        // @see https://github.com/doctrine/orm/pull/12022
+        new MethodCallRename('Doctrine\ORM\ORMSetup', 'createAttributeMetadataConfiguration', 'createAttributeMetadataConfig'),
+        new MethodCallRename('Doctrine\ORM\ORMSetup', 'createXMLMetadataConfiguration', 'createXMLMetadataConfig'),
+        new MethodCallRename('Doctrine\ORM\ORMSetup', 'createConfiguration', 'createConfig'),
+    ], 'doctrine/orm', '>=3.5');
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
         // @see https://github.com/doctrine/orm/pull/9876
         new MethodCallRename('Doctrine\ORM\Event\LifecycleEventArgs', 'getEntityManager', 'getObjectManager'),
