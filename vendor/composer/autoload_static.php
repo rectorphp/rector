@@ -1458,7 +1458,6 @@ class ComposerStaticInit640664dbd40b7ff859fac59f57f58953
         'Rector\\Caching\\ValueObject\\CacheFilePaths' => __DIR__ . '/../..' . '/src/Caching/ValueObject/CacheFilePaths.php',
         'Rector\\Caching\\ValueObject\\CacheItem' => __DIR__ . '/../..' . '/src/Caching/ValueObject/CacheItem.php',
         'Rector\\Caching\\ValueObject\\Storage\\FileCacheStorage' => __DIR__ . '/../..' . '/src/Caching/ValueObject/Storage/FileCacheStorage.php',
-        'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => __DIR__ . '/../..' . '/src/Caching/ValueObject/Storage/MemoryCacheStorage.php',
         'Rector\\Carbon\\NodeFactory\\CarbonCallFactory' => __DIR__ . '/../..' . '/rules/Carbon/NodeFactory/CarbonCallFactory.php',
         'Rector\\Carbon\\Rector\\FuncCall\\DateFuncCallToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/FuncCall/DateFuncCallToCarbonRector.php',
         'Rector\\Carbon\\Rector\\FuncCall\\TimeFuncCallToCarbonRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/FuncCall/TimeFuncCallToCarbonRector.php',

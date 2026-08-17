@@ -1206,7 +1206,6 @@ return array(
     'Rector\\Caching\\ValueObject\\CacheFilePaths' => $baseDir . '/src/Caching/ValueObject/CacheFilePaths.php',
     'Rector\\Caching\\ValueObject\\CacheItem' => $baseDir . '/src/Caching/ValueObject/CacheItem.php',
     'Rector\\Caching\\ValueObject\\Storage\\FileCacheStorage' => $baseDir . '/src/Caching/ValueObject/Storage/FileCacheStorage.php',
-    'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => $baseDir . '/src/Caching/ValueObject/Storage/MemoryCacheStorage.php',
     'Rector\\Carbon\\NodeFactory\\CarbonCallFactory' => $baseDir . '/rules/Carbon/NodeFactory/CarbonCallFactory.php',
     'Rector\\Carbon\\Rector\\FuncCall\\DateFuncCallToCarbonRector' => $baseDir . '/rules/Carbon/Rector/FuncCall/DateFuncCallToCarbonRector.php',
     'Rector\\Carbon\\Rector\\FuncCall\\TimeFuncCallToCarbonRector' => $baseDir . '/rules/Carbon/Rector/FuncCall/TimeFuncCallToCarbonRector.php',
