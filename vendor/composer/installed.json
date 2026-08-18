@@ -624,8 +624,8 @@
         },
         {
             "name": "illuminate\/contracts",
-            "version": "v12.66.0",
-            "version_normalized": "12.66.0.0",
+            "version": "v12.67.0",
+            "version_normalized": "12.67.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/illuminate\/contracts.git",
