@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix202608;
 
 use Rector\Config\RectorConfig;
-use Rector\Symfony\CodeQuality\Rector\BinaryOp\RequestIsMainRector;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventSubscriberMethodReturnVoidRector;
@@ -26,8 +25,6 @@ return static function (RectorConfig $rectorConfig): void {
         ParamTypeFromRouteRequiredRegexRector::class,
         // controller
         LoadValidatorMetadataToAttributeRector::class,
-        // request method
-        RequestIsMainRector::class,
         // tests
         AssertSameResponseCodeWithDebugContentsRector::class,
         StringCastDebugResponseRector::class,
