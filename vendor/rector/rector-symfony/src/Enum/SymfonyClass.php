@@ -104,22 +104,6 @@ final class SymfonyClass
     /**
      * @var string
      */
-    public const ABSTRACT_BROWSER = 'Symfony\Component\BrowserKit\AbstractBrowser';
-    /**
-     * @var string
-     */
-    public const HTTP_CLIENT = 'Symfony\Component\HttpKernel\Client';
-    /**
-     * @var string
-     */
-    public const KERNEL_BROWSER = 'Symfony\Bundle\FrameworkBundle\KernelBrowser';
-    /**
-     * @var string
-     */
-    public const FORM_BUILDER = 'Symfony\Component\Form\FormBuilderInterface';
-    /**
-     * @var string
-     */
     public const CONTAINER_CONFIGURATOR = 'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator';
     /**
      * @var string

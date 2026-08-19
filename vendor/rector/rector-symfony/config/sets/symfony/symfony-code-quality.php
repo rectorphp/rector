@@ -14,9 +14,7 @@ use Rector\Symfony\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRege
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\AssertSameResponseCodeWithDebugContentsRector;
-use Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\StringCastDebugResponseRector;
-use Rector\Symfony\CodeQuality\Rector\Trait_\AddTraitGetterReturnTypeBasedOnSetterRequiredRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         EventListenerToEventSubscriberRector::class,
@@ -24,7 +22,6 @@ return static function (RectorConfig $rectorConfig): void {
         EventSubscriberMethodReturnVoidRector::class,
         // int and string literals to const fetches
         ResponseStatusCodeRector::class,
-        LiteralGetToRequestClassConstantRector::class,
         RemoveUnusedRequestParamRector::class,
         ParamTypeFromRouteRequiredRegexRector::class,
         // controller
@@ -36,6 +33,5 @@ return static function (RectorConfig $rectorConfig): void {
         StringCastDebugResponseRector::class,
         // routing
         InlineClassRoutePrefixRector::class,
-        AddTraitGetterReturnTypeBasedOnSetterRequiredRector::class,
     ]);
 };

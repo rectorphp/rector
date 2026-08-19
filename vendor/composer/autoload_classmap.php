@@ -2737,7 +2737,6 @@ return array(
     'Rector\\Symfony\\ValueObjectFactory\\ServiceMapFactory' => $vendorDir . '/rector/rector-symfony/src/ValueObjectFactory/ServiceMapFactory.php',
     'Rector\\Symfony\\ValueObject\\ClassNameAndFilePath' => $vendorDir . '/rector/rector-symfony/src/ValueObject/ClassNameAndFilePath.php',
     'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyCommandConstantMap' => $vendorDir . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyCommandConstantMap.php',
-    'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyRequestConstantMap' => $vendorDir . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyRequestConstantMap.php',
     'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyResponseConstantMap' => $vendorDir . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyResponseConstantMap.php',
     'Rector\\Symfony\\ValueObject\\EventNameToClassAndConstant' => $vendorDir . '/rector/rector-symfony/src/ValueObject/EventNameToClassAndConstant.php',
     'Rector\\Symfony\\ValueObject\\EventReferenceToMethodName' => $vendorDir . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodName.php',
