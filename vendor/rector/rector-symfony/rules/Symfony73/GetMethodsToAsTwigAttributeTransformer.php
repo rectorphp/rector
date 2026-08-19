@@ -9,8 +9,10 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -232,8 +234,13 @@ final class GetMethodsToAsTwigAttributeTransformer
         if (!$this->isLocalCallable($secondArg->value)) {
             return null;
         }
-        $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArg->value, $objectType);
-        if (!is_string($localMethodName)) {
+        $secondArgValue = $secondArg->value;
+        if ($secondArgValue instanceof ArrowFunction && $secondArgValue->expr instanceof MethodCall && $secondArgValue->expr->name instanceof Identifier) {
+            $localMethodName = $secondArgValue->expr->name->toString();
+        } else {
+            $localMethodName = $this->localArrayMethodCallableMatcher->match($secondArgValue, $objectType);
+        }
+        if (!\is_string($localMethodName)) {
             return null;
         }
         $localMethod = $class->getMethod($localMethodName);
@@ -293,7 +300,16 @@ final class GetMethodsToAsTwigAttributeTransformer
         if ($expr instanceof MethodCall && $expr->isFirstClassCallable()) {
             return \true;
         }
-        return $expr instanceof Array_ && count($expr->items) === 2;
+        if ($expr instanceof Array_ && \count($expr->items) === 2) {
+            return \true;
+        }
+        if ($expr instanceof ArrowFunction && $expr->expr instanceof MethodCall) {
+            $methodCall = $expr->expr;
+            if ($methodCall->var instanceof Variable && $methodCall->var->name === 'this') {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @return Arg[]|null

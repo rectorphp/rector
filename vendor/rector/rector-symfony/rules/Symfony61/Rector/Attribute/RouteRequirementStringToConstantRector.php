@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Symfony61\Rector\Attribute;
 
-use PhpParser\Node\Identifier;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Rector\AbstractRector;
