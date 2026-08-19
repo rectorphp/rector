@@ -76,6 +76,7 @@ CODE_SAMPLE
         if (!$optionsArray instanceof Array_) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($optionsArray->items as $arrayItemNode) {
             if (!$arrayItemNode instanceof ArrayItem) {
                 continue;
@@ -83,13 +84,22 @@ CODE_SAMPLE
             if (!$arrayItemNode->key instanceof String_) {
                 continue;
             }
-            $this->processStringKey($arrayItemNode->key);
+            if ($this->processStringKey($arrayItemNode->key)) {
+                $hasChanged = \true;
+            }
+        }
+        if (!$hasChanged) {
+            return null;
         }
         return $node;
     }
-    private function processStringKey(String_ $string): void
+    private function processStringKey(String_ $string): bool
     {
         $currentOptionName = $string->value;
-        $string->value = self::OLD_TO_NEW_OPTION[$currentOptionName] ?? $string->value;
+        if (!isset(self::OLD_TO_NEW_OPTION[$currentOptionName])) {
+            return \false;
+        }
+        $string->value = self::OLD_TO_NEW_OPTION[$currentOptionName];
+        return \true;
     }
 }
