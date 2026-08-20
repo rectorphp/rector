@@ -8,7 +8,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use Rector\PHPUnit\CodeQuality\Reflection\MethodParametersAndReturnTypesResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -22,9 +24,14 @@ final class MatchAssertSameExpectedTypeRector extends AbstractRector
      * @readonly
      */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @readonly
+     */
+    private MethodParametersAndReturnTypesResolver $methodParametersAndReturnTypesResolver;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, MethodParametersAndReturnTypesResolver $methodParametersAndReturnTypesResolver)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->methodParametersAndReturnTypesResolver = $methodParametersAndReturnTypesResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -89,7 +96,15 @@ CODE_SAMPLE
         }
         $expectedType = $this->getType($expectedArg->value);
         $variableExpr = $node->getArgs()[1]->value;
-        $variableType = $this->nodeTypeResolver->getNativeType($variableExpr);
+        if ($variableExpr instanceof MethodCall || $variableExpr instanceof StaticCall) {
+            // an earlier assert can leave the scope type narrowed, even after the caller is mutated
+            $variableType = $this->methodParametersAndReturnTypesResolver->resolveCallReturnType($variableExpr);
+            if (!$variableType instanceof Type) {
+                return null;
+            }
+        } else {
+            $variableType = $this->nodeTypeResolver->getNativeType($variableExpr);
+        }
         $directVariableType = TypeCombinator::removeNull($variableType);
         if ($expectedType->isLiteralString()->yes() && $directVariableType->isInteger()->yes()) {
             // update expected type to provided type

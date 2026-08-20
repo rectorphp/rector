@@ -101,6 +101,29 @@ final class MethodParametersAndReturnTypesResolver
         return $this->resolveParameterTypes($extendedMethodReflection, $classReflection);
     }
     /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $callLike
+     */
+    public function resolveCallReturnType($callLike): ?Type
+    {
+        if (!$callLike->name instanceof Identifier) {
+            return null;
+        }
+        $methodName = $callLike->name->toString();
+        $callerType = $this->resolveObjectType($this->nodeTypeResolver->getType($callLike instanceof MethodCall ? $callLike->var : $callLike->class));
+        if (!$callerType instanceof ObjectType) {
+            return null;
+        }
+        $classReflection = $callerType->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        if (!$classReflection->hasNativeMethod($methodName)) {
+            return null;
+        }
+        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($classReflection->getNativeMethod($methodName)->getVariants());
+        return $extendedParametersAcceptor->getNativeReturnType();
+    }
+    /**
      * @return string[]
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $callLike
      */
