@@ -2487,6 +2487,7 @@ class ComposerStaticInit640664dbd40b7ff859fac59f57f58953
         'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\MoneyFormatToNumberFormatRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\RestoreIncludePathToIniRestoreRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/RestoreIncludePathToIniRestoreRector.php',
+        'Rector\\Php74\\Rector\\If_\\IfToNullCoalescingAssignRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/If_/IfToNullCoalescingAssignRector.php',
         'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
         'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',

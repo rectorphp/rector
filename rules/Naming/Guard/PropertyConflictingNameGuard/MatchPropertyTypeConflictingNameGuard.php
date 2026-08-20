@@ -41,10 +41,7 @@ final class MatchPropertyTypeConflictingNameGuard
         $expectedNames = [];
         foreach ($classLike->getProperties() as $property) {
             $expectedName = $this->matchPropertyTypeExpectedNameResolver->resolve($property, $classLike);
-            if ($expectedName === null) {
-                // fallback to existing name
-                $expectedName = $this->nodeNameResolver->getName($property);
-            }
+            $expectedName ??= $this->nodeNameResolver->getName($property);
             $expectedNames[] = $expectedName;
         }
         return $this->arrayFilter->filterWithAtLeastTwoOccurrences($expectedNames);

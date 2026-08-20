@@ -210,9 +210,7 @@ final class PhpDocInfoPrinter
     private function printEnd(string $output): string
     {
         $lastTokenPosition = $this->getCurrentPhpDocInfo()->getPhpDocNode()->getAttribute(PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION);
-        if ($lastTokenPosition === null) {
-            $lastTokenPosition = $this->currentTokenPosition;
-        }
+        $lastTokenPosition ??= $this->currentTokenPosition;
         if ($lastTokenPosition === 0) {
             return $output . "\n */";
         }

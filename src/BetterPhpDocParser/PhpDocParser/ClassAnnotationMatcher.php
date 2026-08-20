@@ -51,9 +51,7 @@ final class ClassAnnotationMatcher
         $tag = ltrim($tag, '@');
         $uses = $this->useImportsResolver->resolve();
         $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
-        if ($fullyQualifiedClass === null) {
-            $fullyQualifiedClass = $tag;
-        }
+        $fullyQualifiedClass ??= $tag;
         $this->fullyQualifiedNameByHash[$uniqueId] = $fullyQualifiedClass;
         return $fullyQualifiedClass;
     }

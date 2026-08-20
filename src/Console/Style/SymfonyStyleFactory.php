@@ -23,10 +23,7 @@ final class SymfonyStyleFactory
      */
     public function create(): \Rector\Console\Style\RectorStyle
     {
-        // to prevent missing argv indexes
-        if (!isset($_SERVER['argv'])) {
-            $_SERVER['argv'] = [];
-        }
+        $_SERVER['argv'] ??= [];
         $argvInput = new ArgvInput();
         $consoleOutput = new ConsoleOutput();
         // to configure all -v, -vv, -vvv options without memory-lock to Application run() arguments

@@ -14,6 +14,7 @@ use Rector\Php74\Rector\FuncCall\HebrevcToNl2brHebrevRector;
 use Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
 use Rector\Php74\Rector\FuncCall\MoneyFormatToNumberFormatRector;
 use Rector\Php74\Rector\FuncCall\RestoreIncludePathToIniRestoreRector;
+use Rector\Php74\Rector\If_\IfToNullCoalescingAssignRector;
 use Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
 use Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector;
 use Rector\Php74\Rector\Ternary\ParenthesizeNestedTernaryRector;
@@ -26,6 +27,6 @@ return static function (RectorConfig $rectorConfig): void {
         # https://wiki.php.net/rfc/deprecations_php_7_4
         'is_real' => 'is_float',
     ]);
-    $rectorConfig->rules([ArrayKeyExistsOnPropertyRector::class, FilterVarToAddSlashesRector::class, ExportToReflectionFunctionRector::class, MbStrrposEncodingArgumentPositionRector::class, NullCoalescingOperatorRector::class, ClosureToArrowFunctionRector::class, RestoreDefaultNullToNullableTypePropertyRector::class, CurlyToSquareBracketArrayStringRector::class, MoneyFormatToNumberFormatRector::class, ParenthesizeNestedTernaryRector::class, RestoreIncludePathToIniRestoreRector::class, HebrevcToNl2brHebrevRector::class]);
+    $rectorConfig->rules([ArrayKeyExistsOnPropertyRector::class, FilterVarToAddSlashesRector::class, ExportToReflectionFunctionRector::class, MbStrrposEncodingArgumentPositionRector::class, NullCoalescingOperatorRector::class, IfToNullCoalescingAssignRector::class, ClosureToArrowFunctionRector::class, RestoreDefaultNullToNullableTypePropertyRector::class, CurlyToSquareBracketArrayStringRector::class, MoneyFormatToNumberFormatRector::class, ParenthesizeNestedTernaryRector::class, RestoreIncludePathToIniRestoreRector::class, HebrevcToNl2brHebrevRector::class]);
     $rectorConfig->ruleWithConfiguration(RenameCastRector::class, [new RenameCast(Double::class, Double::KIND_REAL, Double::KIND_FLOAT)]);
 };

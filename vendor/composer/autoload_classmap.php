@@ -2235,6 +2235,7 @@ return array(
     'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\MoneyFormatToNumberFormatRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\RestoreIncludePathToIniRestoreRector' => $baseDir . '/rules/Php74/Rector/FuncCall/RestoreIncludePathToIniRestoreRector.php',
+    'Rector\\Php74\\Rector\\If_\\IfToNullCoalescingAssignRector' => $baseDir . '/rules/Php74/Rector/If_/IfToNullCoalescingAssignRector.php',
     'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => $baseDir . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
     'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => $baseDir . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
     'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => $baseDir . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',
