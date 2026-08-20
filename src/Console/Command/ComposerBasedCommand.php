@@ -92,11 +92,14 @@ final class ComposerBasedCommand extends Command
                 continue;
             }
             $composerPackageConstraint = $rector->provideComposerPackageConstraint();
-            $packageName = $composerPackageConstraint->getPackageName();
-            $constraint = $composerPackageConstraint->getConstraint();
-            $installedVersion = $this->installedPackageResolver->resolvePackageVersion($packageName);
-            $isActive = $installedVersion !== null && Semver::satisfies($installedVersion, $constraint);
-            $tableRows[] = [$this->printShortClassName(get_class($rector)), $packageName, $constraint, $installedVersion ?? '-', $isActive ? 'yes' : 'no'];
+            $composerPackageConstraints = is_array($composerPackageConstraint) ? $composerPackageConstraint : [$composerPackageConstraint];
+            foreach ($composerPackageConstraints as $composerPackageConstraint) {
+                $packageName = $composerPackageConstraint->getPackageName();
+                $constraint = $composerPackageConstraint->getConstraint();
+                $installedVersion = $this->installedPackageResolver->resolvePackageVersion($packageName);
+                $isActive = $installedVersion !== null && Semver::satisfies($installedVersion, $constraint);
+                $tableRows[] = [$this->printShortClassName(get_class($rector)), $packageName, $constraint, $installedVersion ?? '-', $isActive ? 'yes' : 'no'];
+            }
         }
         // sort by package name first, then by rule class
         usort($tableRows, static fn(array $firstTableRow, array $secondTableRow): int => [$firstTableRow[1], $firstTableRow[0]] <=> [$secondTableRow[1], $secondTableRow[0]]);

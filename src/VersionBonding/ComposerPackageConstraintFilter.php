@@ -41,10 +41,17 @@ final class ComposerPackageConstraintFilter
     private function satisfiesComposerPackageConstraint(ComposerPackageConstraintInterface $rector): bool
     {
         $composerPackageConstraint = $rector->provideComposerPackageConstraint();
-        $packageVersion = $this->installedPackageResolver->resolvePackageVersion($composerPackageConstraint->getPackageName());
-        if ($packageVersion === null) {
-            return \false;
+        $composerPackageConstraints = is_array($composerPackageConstraint) ? $composerPackageConstraint : [$composerPackageConstraint];
+        // every constraint must be satisfied, so the rule fits every required package at once
+        foreach ($composerPackageConstraints as $composerPackageConstraint) {
+            $packageVersion = $this->installedPackageResolver->resolvePackageVersion($composerPackageConstraint->getPackageName());
+            if ($packageVersion === null) {
+                return \false;
+            }
+            if (!Semver::satisfies($packageVersion, $composerPackageConstraint->getConstraint())) {
+                return \false;
+            }
         }
-        return Semver::satisfies($packageVersion, $composerPackageConstraint->getConstraint());
+        return \true;
     }
 }

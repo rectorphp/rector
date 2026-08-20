@@ -13,5 +13,11 @@ use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
  */
 interface ComposerPackageConstraintInterface
 {
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint;
+    /**
+     * Return a single constraint, or a list of constraints that must all be satisfied at once,
+     * e.g. an attribute that only works when both a library and its framework integration are new enough.
+     *
+     * @return ComposerPackageConstraint|list<ComposerPackageConstraint>
+     */
+    public function provideComposerPackageConstraint();
 }
