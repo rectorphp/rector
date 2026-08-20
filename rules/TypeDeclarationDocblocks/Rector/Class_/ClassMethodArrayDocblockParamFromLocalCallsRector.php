@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\NodeManipulator\ClassMethodManipulator;
 use Rector\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
@@ -42,13 +43,18 @@ final class ClassMethodArrayDocblockParamFromLocalCallsRector extends AbstractRe
      * @readonly
      */
     private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, CallTypesResolver $callTypesResolver, LocalMethodCallFinder $localMethodCallFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
+    /**
+     * @readonly
+     */
+    private ClassMethodManipulator $classMethodManipulator;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, CallTypesResolver $callTypesResolver, LocalMethodCallFinder $localMethodCallFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator, ClassMethodManipulator $classMethodManipulator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->callTypesResolver = $callTypesResolver;
         $this->localMethodCallFinder = $localMethodCallFinder;
         $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
         $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
+        $this->classMethodManipulator = $classMethodManipulator;
     }
     public function getNodeTypes(): array
     {
@@ -95,6 +101,10 @@ CODE_SAMPLE
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->getParams() === []) {
+                continue;
+            }
+            // parent/interface method may declare a wider @param contract; local calls are narrower, so skip to keep LSP
+            if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($node, $this->getName($classMethod))) {
                 continue;
             }
             $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
