@@ -1728,37 +1728,36 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "ba3bc9cd85fa790bd890cfed44b6b5ecd6f9c472"
+                "reference": "1d83468bac420bd04da021df1e96d3486b89e72d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/ba3bc9cd85fa790bd890cfed44b6b5ecd6f9c472",
-                "reference": "ba3bc9cd85fa790bd890cfed44b6b5ecd6f9c472",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/1d83468bac420bd04da021df1e96d3486b89e72d",
+                "reference": "1d83468bac420bd04da021df1e96d3486b89e72d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.4"
             },
             "require-dev": {
-                "doctrine\/doctrine-bundle": "^2.18|^3.0",
-                "doctrine\/orm": "^2.20|^3.0",
-                "phpecs\/phpecs": "^2.3",
+                "doctrine\/doctrine-bundle": "^3.0",
+                "doctrine\/orm": "^3.0",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^2.2",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
-                "phpunit\/phpunit": "^13.2",
-                "rector\/jack": "^1.0",
+                "phpunit\/phpunit": "^13.3",
+                "rector\/jack": "^1.1",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.4",
-                "symplify\/phpstan-extensions": "^12.0",
+                "symplify\/easy-coding-standard": "^13.2",
                 "symplify\/phpstan-rules": "^14.12",
                 "symplify\/vendor-patches": "^11.5",
-                "tomasvotruba\/class-leak": "^2.1",
+                "tomasvotruba\/class-leak": "^2.1.8",
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-08-21T07:04:14+00:00",
+            "time": "2026-08-21T07:12:20+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
