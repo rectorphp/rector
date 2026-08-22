@@ -218,7 +218,7 @@ class Application implements ResetInterface
             // Errors must be ignored, full binding/validation happens later when the command is known.
         }
         $name = $this->getCommandName($input);
-        if (\true === $input->hasParameterOption(['--help', '-h'], \true)) {
+        if ($input->hasParameterOption(['--help', '-h'], \true)) {
             if (!$name) {
                 $name = 'help';
                 $input = new ArrayInput(['command_name' => $this->defaultCommand]);
@@ -1099,7 +1099,7 @@ class Application implements ResetInterface
         $parts = explode(':', $name, -1);
         $namespaces = [];
         foreach ($parts as $part) {
-            if (\count($namespaces)) {
+            if ($namespaces) {
                 $namespaces[] = end($namespaces) . ':' . $part;
             } else {
                 $namespaces[] = $part;

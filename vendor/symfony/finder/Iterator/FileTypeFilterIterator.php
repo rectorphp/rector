@@ -45,6 +45,6 @@ class FileTypeFilterIterator extends \FilterIterator
         } elseif (self::ONLY_FILES === (self::ONLY_FILES & $this->mode) && $fileinfo->isDir()) {
             return \false;
         }
-        return \true;
+        return !$fileinfo->isLink() || $fileinfo->isFile() || $fileinfo->isDir();
     }
 }

@@ -52,7 +52,7 @@ class ProcessHelper extends Helper
             throw new \InvalidArgumentException(\sprintf('Invalid command provided to "%s()": the command should be an array whose first element is either the path to the binary to run or a "Process" object.', __METHOD__));
         }
         if ($verbosity <= $output->getVerbosity()) {
-            $output->write($formatter->start(spl_object_hash($process), $this->escapeString($process->getCommandLine())));
+            $output->write($formatter->start(spl_object_id($process), $this->escapeString($process->getCommandLine())));
         }
         if ($output->isDebug()) {
             $callback = $this->wrapCallback($output, $process, $callback);
@@ -60,7 +60,7 @@ class ProcessHelper extends Helper
         $process->run($callback, $cmd);
         if ($verbosity <= $output->getVerbosity()) {
             $message = $process->isSuccessful() ? 'Command ran successfully' : \sprintf('%s Command did not run successfully', $process->getExitCode());
-            $output->write($formatter->stop(spl_object_hash($process), $message, $process->isSuccessful()));
+            $output->write($formatter->stop(spl_object_id($process), $message, $process->isSuccessful()));
         }
         if (!$process->isSuccessful() && null !== $error) {
             $output->writeln(\sprintf('<error>%s</error>', $this->escapeString($error)));
@@ -99,7 +99,7 @@ class ProcessHelper extends Helper
         }
         $formatter = $this->getHelperSet()->get('debug_formatter');
         return function ($type, $buffer) use ($output, $process, $callback, $formatter) {
-            $output->write($formatter->progress(spl_object_hash($process), $this->escapeString($buffer), Process::ERR === $type));
+            $output->write($formatter->progress(spl_object_id($process), $this->escapeString($buffer), Process::ERR === $type));
             if (null !== $callback) {
                 $callback($type, $buffer);
             }

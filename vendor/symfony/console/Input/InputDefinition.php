@@ -343,7 +343,7 @@ class InputDefinition
                 $elements[] = \sprintf('[%s--%s%s%s]', $shortcut, $option->getName(), $value, $negation);
             }
         }
-        if (\count($elements) && $this->getArguments()) {
+        if ($elements && $this->getArguments()) {
             $elements[] = '[--]';
         }
         $tail = '';

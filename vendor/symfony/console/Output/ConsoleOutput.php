@@ -89,7 +89,7 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
      */
     protected function hasStdoutSupport(): bool
     {
-        return \false === $this->isRunningOS400();
+        return !$this->isRunningOS400();
     }
     /**
      * Returns true if current environment supports writing console output to
@@ -97,7 +97,7 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
      */
     protected function hasStderrSupport(): bool
     {
-        return \false === $this->isRunningOS400();
+        return !$this->isRunningOS400();
     }
     /**
      * Checks if current executing environment is IBM iSeries (OS400), which

@@ -49,7 +49,7 @@ final class Color
         foreach ($this->options as $option) {
             $setCodes[] = $option['set'];
         }
-        if (0 === \count($setCodes)) {
+        if (!$setCodes) {
             return '';
         }
         return \sprintf("\x1b[%sm", implode(';', $setCodes));
@@ -66,7 +66,7 @@ final class Color
         foreach ($this->options as $option) {
             $unsetCodes[] = $option['unset'];
         }
-        if (0 === \count($unsetCodes)) {
+        if (!$unsetCodes) {
             return '';
         }
         return \sprintf("\x1b[%sm", implode(';', $unsetCodes));
