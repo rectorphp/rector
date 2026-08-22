@@ -95,19 +95,35 @@ final class InstalledPackageResolver
     private function createInstalledPackages(array $packages): array
     {
         $packageConstraints = $this->resolvePackageConstraints();
+        $isLibrary = $this->isLibrary();
         $installedPackages = [];
         foreach ($packages as $package) {
             $name = $package['name'];
             $version = $package['version_normalized'];
             $constraint = $packageConstraints[$name] ?? null;
             if (is_string($constraint)) {
-                // the "installed.json" can be outdated, e.g. after a branch switch;
-                // in such case the "composer.json" constraint has a priority
-                $version = $this->matchConstraintVersion($version, $constraint) ?? $version;
+                if ($isLibrary) {
+                    // a library must stay compatible with the lowest version it declares,
+                    // regardless of which one happens to be installed locally
+                    $version = $this->resolveConstraintLowestVersion($constraint) ?? $version;
+                } else {
+                    // the "installed.json" can be outdated, e.g. after a branch switch;
+                    // in such case the "composer.json" constraint has a priority
+                    $version = $this->matchConstraintVersion($version, $constraint) ?? $version;
+                }
             }
             $installedPackages[$name] = new InstalledPackage($name, $version);
         }
         return $installedPackages;
+    }
+    /**
+     * A library declares a compatibility range in its "composer.json"; the version-specific rules must target the
+     * lowest declared version, not the one that happens to be installed locally.
+     */
+    private function isLibrary(): bool
+    {
+        $projectComposerJson = $this->loadProjectComposerJson();
+        return ($projectComposerJson['type'] ?? null) === 'library';
     }
     /**
      * There is no vendor to read the installed versions from, so the constraints themselves are the only source
