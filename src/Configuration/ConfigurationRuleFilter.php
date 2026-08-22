@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ValueObject\Configuration;
@@ -26,6 +27,9 @@ final class ConfigurationRuleFilter
      */
     public function filter(array $rectors): array
     {
+        // deprecated rules only warn via DeprecatedRulesReporter; they must never run, as their
+        // refactor() throws to signal the deprecation - keep them out of the active set
+        $rectors = array_values(array_filter($rectors, static fn(RectorInterface $rector): bool => !$rector instanceof DeprecatedInterface));
         if (!$this->configuration instanceof Configuration) {
             return $rectors;
         }
