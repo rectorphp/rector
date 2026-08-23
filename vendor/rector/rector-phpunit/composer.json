@@ -18,7 +18,6 @@
         "symplify\/easy-coding-standard": "^13.2",
         "symplify\/phpstan-extensions": "^12.0",
         "symplify\/phpstan-rules": "^14.12",
-        "symplify\/vendor-patches": "^11.5",
         "tomasvotruba\/class-leak": "^2.1",
         "tomasvotruba\/type-coverage": "^2.3",
         "tomasvotruba\/unused-public": "^2.2",
@@ -58,9 +57,6 @@
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
         "rector": "vendor\/bin\/rector process --ansi"
     },
-    "extra": {
-        "enable-patching": true
-    },
     "conflict": {
         "rector\/rector": "<2.0"
     },
@@ -69,7 +65,6 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "cweagans\/composer-patches": true,
             "rector\/extension-installer": true,
             "phpstan\/extension-installer": true
         }

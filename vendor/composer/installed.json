@@ -1556,12 +1556,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "6b8e03db69a15474566bd4aad90cf58c6ef0f4f5"
+                "reference": "1e596a9b01afed66519c816aa707f21b1b7a82a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/6b8e03db69a15474566bd4aad90cf58c6ef0f4f5",
-                "reference": "6b8e03db69a15474566bd4aad90cf58c6ef0f4f5",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/1e596a9b01afed66519c816aa707f21b1b7a82a1",
+                "reference": "1e596a9b01afed66519c816aa707f21b1b7a82a1",
                 "shasum": ""
             },
             "require": {
@@ -1580,17 +1580,13 @@
                 "rector\/swiss-knife": "^2.4",
                 "symplify\/easy-coding-standard": "^13.2",
                 "symplify\/phpstan-rules": "^14.12",
-                "symplify\/vendor-patches": "^11.5",
                 "tomasvotruba\/class-leak": "^2.1.8",
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-08-22T18:24:38+00:00",
+            "time": "2026-08-23T10:07:49+00:00",
             "default-branch": true,
             "type": "rector-extension",
-            "extra": {
-                "enable-patching": true
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -1617,12 +1613,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "399f1855f7bc02c62e603f3f7d5ae8e3cd6002e0"
+                "reference": "b5f9ce1e1f00dac97d8a1ea742aa0ec864718136"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/399f1855f7bc02c62e603f3f7d5ae8e3cd6002e0",
-                "reference": "399f1855f7bc02c62e603f3f7d5ae8e3cd6002e0",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b5f9ce1e1f00dac97d8a1ea742aa0ec864718136",
+                "reference": "b5f9ce1e1f00dac97d8a1ea742aa0ec864718136",
                 "shasum": ""
             },
             "require": {
@@ -1641,18 +1637,14 @@
                 "symplify\/phpstan-extensions": "^12.0",
                 "symplify\/phpstan-rules": "^14.12",
                 "symplify\/rule-doc-generator": "^12.2",
-                "symplify\/vendor-patches": "^11.5",
                 "tomasvotruba\/class-leak": "^2.1",
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-08-12T23:00:00+00:00",
+            "time": "2026-08-23T10:07:59+00:00",
             "default-branch": true,
             "type": "rector-extension",
-            "extra": {
-                "enable-patching": true
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -1679,12 +1671,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "e9265f2df3567b8db4f1fe7d0f0997a566eac0d0"
+                "reference": "0f24ff481b99c26ddbe122e1d66437e1cfa4ddea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/e9265f2df3567b8db4f1fe7d0f0997a566eac0d0",
-                "reference": "e9265f2df3567b8db4f1fe7d0f0997a566eac0d0",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/0f24ff481b99c26ddbe122e1d66437e1cfa4ddea",
+                "reference": "0f24ff481b99c26ddbe122e1d66437e1cfa4ddea",
                 "shasum": ""
             },
             "require": {
@@ -1705,18 +1697,14 @@
                 "symplify\/easy-coding-standard": "^13.2",
                 "symplify\/phpstan-extensions": "^12.0",
                 "symplify\/phpstan-rules": "^14.12",
-                "symplify\/vendor-patches": "^11.5",
                 "tomasvotruba\/class-leak": "^2.1",
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-08-20T16:01:15+00:00",
+            "time": "2026-08-23T10:07:51+00:00",
             "default-branch": true,
             "type": "rector-extension",
-            "extra": {
-                "enable-patching": true
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -1743,12 +1731,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "9e1e11a62fd3840c5011dc062af8356e2d225c68"
+                "reference": "b984034c1027c574257677b9624f27188c4068ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/9e1e11a62fd3840c5011dc062af8356e2d225c68",
-                "reference": "9e1e11a62fd3840c5011dc062af8356e2d225c68",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b984034c1027c574257677b9624f27188c4068ea",
+                "reference": "b984034c1027c574257677b9624f27188c4068ea",
                 "shasum": ""
             },
             "require": {
@@ -1774,19 +1762,15 @@
                 "symfony\/web-link": "^6.4",
                 "symplify\/easy-coding-standard": "^13.2",
                 "symplify\/phpstan-rules": "^14.12",
-                "symplify\/vendor-patches": "^11.5",
                 "tomasvotruba\/class-leak": "^2.1",
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12",
                 "twig\/twig": "^3.21"
             },
-            "time": "2026-08-20T17:05:15+00:00",
+            "time": "2026-08-23T10:07:54+00:00",
             "default-branch": true,
             "type": "rector-extension",
-            "extra": {
-                "enable-patching": true
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {

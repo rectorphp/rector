@@ -26,7 +26,6 @@
         "symfony\/web-link": "^6.4",
         "symplify\/easy-coding-standard": "^13.2",
         "symplify\/phpstan-rules": "^14.12",
-        "symplify\/vendor-patches": "^11.5",
         "tomasvotruba\/class-leak": "^2.1",
         "tomasvotruba\/type-coverage": "^2.3",
         "tomasvotruba\/unused-public": "^2.2",
@@ -59,15 +58,11 @@
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi"
     },
-    "extra": {
-        "enable-patching": true
-    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "cweagans\/composer-patches": true,
             "rector\/extension-installer": true,
             "phpstan\/extension-installer": true
         }
