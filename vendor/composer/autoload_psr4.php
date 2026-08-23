@@ -7,8 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
-    'Symfony\\Polyfill\\Php85\\' => array($vendorDir . '/symfony/polyfill-php85'),
-    'Symfony\\Polyfill\\Php84\\' => array($vendorDir . '/symfony/polyfill-php84'),
     'Symfony\\Polyfill\\Intl\\Grapheme\\' => array($vendorDir . '/symfony/polyfill-intl-grapheme'),
     'Rector\\Utils\\PHPStan\\' => array($baseDir . '/utils/phpstan/src'),
     'Rector\\Utils\\' => array($baseDir . '/utils'),
@@ -33,13 +31,10 @@ return array(
     'RectorPrefix202608\\React\\Dns\\' => array($vendorDir . '/react/dns/src'),
     'RectorPrefix202608\\React\\ChildProcess\\' => array($vendorDir . '/react/child-process/src'),
     'RectorPrefix202608\\React\\Cache\\' => array($vendorDir . '/react/cache/src'),
-    'RectorPrefix202608\\Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'RectorPrefix202608\\Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
     'RectorPrefix202608\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'RectorPrefix202608\\OndraM\\CiDetector\\' => array($vendorDir . '/ondram/ci-detector/src'),
     'RectorPrefix202608\\Nette\\' => array($vendorDir . '/nette/utils/src'),
-    'RectorPrefix202608\\Illuminate\\Contracts\\' => array($vendorDir . '/illuminate/contracts'),
-    'RectorPrefix202608\\Illuminate\\Container\\' => array($vendorDir . '/illuminate/container'),
     'RectorPrefix202608\\Fidry\\CpuCoreCounter\\' => array($vendorDir . '/fidry/cpu-core-counter/src'),
     'RectorPrefix202608\\Evenement\\' => array($vendorDir . '/evenement/evenement/src'),
     'RectorPrefix202608\\Entropy\\' => array($vendorDir . '/entropy/entropy/src'),

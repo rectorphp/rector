@@ -14,7 +14,7 @@ final class OutputFormatterCollector
     /**
      * @param OutputFormatterInterface[] $outputFormatters
      */
-    public function __construct(iterable $outputFormatters)
+    public function __construct(array $outputFormatters)
     {
         foreach ($outputFormatters as $outputFormatter) {
             $this->outputFormatters[$outputFormatter->getName()] = $outputFormatter;

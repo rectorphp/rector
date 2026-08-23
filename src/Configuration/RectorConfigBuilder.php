@@ -15,11 +15,9 @@ use Rector\Config\Level\DeadCodeLevel;
 use Rector\Config\Level\TypeDeclarationDocblocksLevel;
 use Rector\Config\Level\TypeDeclarationLevel;
 use Rector\Config\RectorConfig;
-use Rector\Config\RegisteredService;
 use Rector\Configuration\Levels\LevelRulesResolver;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Notifier;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Doctrine\Set\DoctrineSetList;
@@ -132,7 +130,7 @@ final class RectorConfigBuilder
      */
     private array $typeGuardedClasses = [];
     /**
-     * @var RegisteredService[]
+     * @var array<class-string>
      */
     private array $registerServices = [];
     /**
@@ -198,13 +196,7 @@ final class RectorConfigBuilder
         }
         // must be in upper part, as these services might be used by rule registered bellow
         foreach ($this->registerServices as $registerService) {
-            $rectorConfig->singleton($registerService->getClassName());
-            if ($registerService->getAlias()) {
-                $rectorConfig->alias($registerService->getClassName(), $registerService->getAlias());
-            }
-            if ($registerService->getTag()) {
-                $rectorConfig->tag($registerService->getClassName(), $registerService->getTag());
-            }
+            $rectorConfig->singleton($registerService);
         }
         if ($this->skip !== []) {
             $rectorConfig->skip($this->skip);
@@ -750,9 +742,12 @@ final class RectorConfigBuilder
         $this->typeGuardedClasses = $typeGuardedClasses;
         return $this;
     }
-    public function registerService(string $className, ?string $alias = null, ?string $tag = null): self
+    /**
+     * @param class-string $className
+     */
+    public function registerService(string $className): self
     {
-        $this->registerServices[] = new RegisteredService($className, $alias, $tag);
+        $this->registerServices[] = $className;
         return $this;
     }
     /**
@@ -763,7 +758,7 @@ final class RectorConfigBuilder
     public function registerDecoratingNodeVisitor(string $decoratingNodeVisitorClass): self
     {
         Assert::isAOf($decoratingNodeVisitorClass, NodeVisitor::class);
-        $this->registerServices[] = new RegisteredService($decoratingNodeVisitorClass, null, DecoratingNodeVisitorInterface::class);
+        $this->registerServices[] = $decoratingNodeVisitorClass;
         return $this;
     }
     public function withDowngradeSets(bool $php84 = \false, bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false): self

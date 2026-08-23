@@ -13,16 +13,6 @@ use ReflectionProperty;
 final class PrivatesAccessor
 {
     /**
-     * @param callable(mixed $value): mixed $closure
-     */
-    public function propertyClosure(object $object, string $propertyName, callable $closure): void
-    {
-        $property = $this->getPrivateProperty($object, $propertyName);
-        // modify value
-        $property = $closure($property);
-        $this->setPrivateProperty($object, $propertyName, $property);
-    }
-    /**
      * @param object|class-string $object
      * @param mixed[] $arguments
      * @api

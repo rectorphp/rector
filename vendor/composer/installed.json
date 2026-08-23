@@ -390,17 +390,17 @@
         },
         {
             "name": "entropy\/entropy",
-            "version": "0.4.6",
-            "version_normalized": "0.4.6.0",
+            "version": "0.4.9",
+            "version_normalized": "0.4.9.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/TomasVotruba\/entropy.git",
-                "reference": "415f69258150409db7c36aa747923e28aa53e9f6"
+                "reference": "856fea65681d3fe0fb17b947ae0eacef895dd407"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/415f69258150409db7c36aa747923e28aa53e9f6",
-                "reference": "415f69258150409db7c36aa747923e28aa53e9f6",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/856fea65681d3fe0fb17b947ae0eacef895dd407",
+                "reference": "856fea65681d3fe0fb17b947ae0eacef895dd407",
                 "shasum": ""
             },
             "require": {
@@ -422,7 +422,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-06-20T10:04:38+00:00",
+            "time": "2026-08-22T21:35:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -437,7 +437,7 @@
             "description": "Entropy framework",
             "support": {
                 "issues": "https:\/\/github.com\/TomasVotruba\/entropy\/issues",
-                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.6"
+                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.9"
             },
             "install-path": "..\/entropy\/entropy"
         },
@@ -554,124 +554,6 @@
                 }
             ],
             "install-path": "..\/fidry\/cpu-core-counter"
-        },
-        {
-            "name": "illuminate\/container",
-            "version": "v12.39.0",
-            "version_normalized": "12.39.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/illuminate\/container.git",
-                "reference": "17ec6c2f741b11564420acc737dea9334d69988c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/container\/zipball\/17ec6c2f741b11564420acc737dea9334d69988c",
-                "reference": "17ec6c2f741b11564420acc737dea9334d69988c",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate\/contracts": "^12.0",
-                "php": "^8.2",
-                "psr\/container": "^1.1.1|^2.0.1",
-                "symfony\/polyfill-php84": "^1.33",
-                "symfony\/polyfill-php85": "^1.33"
-            },
-            "provide": {
-                "psr\/container-implementation": "1.1|2.0"
-            },
-            "suggest": {
-                "illuminate\/auth": "Required to use the Auth attribute",
-                "illuminate\/cache": "Required to use the Cache attribute",
-                "illuminate\/config": "Required to use the Config attribute",
-                "illuminate\/database": "Required to use the DB attribute",
-                "illuminate\/filesystem": "Required to use the Storage attribute",
-                "illuminate\/log": "Required to use the Log or Context attributes"
-            },
-            "time": "2025-11-14T15:29:05+00:00",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "12.x-dev"
-                },
-                "patches_applied": [
-                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/illuminate-container-container-php.patch"
-                ]
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix202608\\Illuminate\\Container\\": ""
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                }
-            ],
-            "description": "The Illuminate Container package.",
-            "homepage": "https:\/\/laravel.com",
-            "support": {
-                "issues": "https:\/\/github.com\/laravel\/framework\/issues",
-                "source": "https:\/\/github.com\/laravel\/framework"
-            },
-            "install-path": "..\/illuminate\/container"
-        },
-        {
-            "name": "illuminate\/contracts",
-            "version": "v12.67.0",
-            "version_normalized": "12.67.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/illuminate\/contracts.git",
-                "reference": "c16fd7ba7d8e6b8f336639ceb6b7e1ff6ed0efb5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/illuminate\/contracts\/zipball\/c16fd7ba7d8e6b8f336639ceb6b7e1ff6ed0efb5",
-                "reference": "c16fd7ba7d8e6b8f336639ceb6b7e1ff6ed0efb5",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.2",
-                "psr\/container": "^1.1.1|^2.0.1",
-                "psr\/simple-cache": "^1.0|^2.0|^3.0"
-            },
-            "time": "2026-06-09T13:20:54+00:00",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "12.x-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix202608\\Illuminate\\Contracts\\": ""
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                }
-            ],
-            "description": "The Illuminate Contracts package.",
-            "homepage": "https:\/\/laravel.com",
-            "support": {
-                "issues": "https:\/\/github.com\/laravel\/framework\/issues",
-                "source": "https:\/\/github.com\/laravel\/framework"
-            },
-            "install-path": "..\/illuminate\/contracts"
         },
         {
             "name": "nette\/utils",
@@ -1066,60 +948,6 @@
                 "source": "https:\/\/github.com\/php-fig\/log\/tree\/3.0.2"
             },
             "install-path": "..\/psr\/log"
-        },
-        {
-            "name": "psr\/simple-cache",
-            "version": "3.0.0",
-            "version_normalized": "3.0.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/php-fig\/simple-cache.git",
-                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/php-fig\/simple-cache\/zipball\/764e0b3939f5ca87cb904f570ef9be2d78a07865",
-                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0.0"
-            },
-            "time": "2021-10-29T13:26:27+00:00",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0.x-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix202608\\Psr\\SimpleCache\\": "src\/"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https:\/\/www.php-fig.org\/"
-                }
-            ],
-            "description": "Common interfaces for simple caching",
-            "keywords": [
-                "cache",
-                "caching",
-                "psr",
-                "psr-16",
-                "simple-cache"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/php-fig\/simple-cache\/tree\/3.0.0"
-            },
-            "install-path": "..\/psr\/simple-cache"
         },
         {
             "name": "react\/cache",
@@ -2464,172 +2292,6 @@
                 }
             ],
             "install-path": "..\/symfony\/polyfill-intl-grapheme"
-        },
-        {
-            "name": "symfony\/polyfill-php84",
-            "version": "v1.38.1",
-            "version_normalized": "1.38.1.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/polyfill-php84.git",
-                "reference": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php84\/zipball\/f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
-                "reference": "f4e1dfaee5b74aba5964fe1fd4dfc7ba5e3085fa",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "time": "2026-05-26T12:51:13+00:00",
-            "type": "library",
-            "extra": {
-                "thanks": {
-                    "url": "https:\/\/github.com\/symfony\/polyfill",
-                    "name": "symfony\/polyfill"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php84\\": ""
-                },
-                "classmap": [
-                    "Resources\/stubs"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 8.4+ features to lower PHP versions",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-php84\/tree\/v1.38.1"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/polyfill-php84"
-        },
-        {
-            "name": "symfony\/polyfill-php85",
-            "version": "v1.41.0",
-            "version_normalized": "1.41.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/polyfill-php85.git",
-                "reference": "255fab485aaa1006ed411040c42aecd7b5302d7a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/polyfill-php85\/zipball\/255fab485aaa1006ed411040c42aecd7b5302d7a",
-                "reference": "255fab485aaa1006ed411040c42aecd7b5302d7a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2"
-            },
-            "time": "2026-07-01T12:47:55+00:00",
-            "type": "library",
-            "extra": {
-                "thanks": {
-                    "url": "https:\/\/github.com\/symfony\/polyfill",
-                    "name": "symfony\/polyfill"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php85\\": ""
-                },
-                "classmap": [
-                    "Resources\/stubs"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 8.5+ features to lower PHP versions",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/polyfill-php85\/tree\/v1.41.0"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/polyfill-php85"
         },
         {
             "name": "symfony\/process",

@@ -98,7 +98,7 @@ final class NodeTypeResolver
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
-    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, \Rector\NodeTypeResolver\NodeTypeCorrector $nodeTypeCorrector, ReflectionProvider $reflectionProvider, RenamedClassesDataCollector $renamedClassesDataCollector, NodeNameResolver $nodeNameResolver, PhpVersionProvider $phpVersionProvider, iterable $nodeTypeResolvers)
+    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, \Rector\NodeTypeResolver\NodeTypeCorrector $nodeTypeCorrector, ReflectionProvider $reflectionProvider, RenamedClassesDataCollector $renamedClassesDataCollector, NodeNameResolver $nodeNameResolver, PhpVersionProvider $phpVersionProvider, array $nodeTypeResolvers)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;

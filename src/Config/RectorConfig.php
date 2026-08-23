@@ -5,7 +5,7 @@ namespace Rector\Config;
 
 use RectorPrefix202608\Composer\Semver\Semver;
 use Deprecated;
-use RectorPrefix202608\Illuminate\Container\Container;
+use RectorPrefix202608\Entropy\Container\Container;
 use Override;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Composer\InstalledPackageResolver;
@@ -13,10 +13,8 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\RectorConfigBuilder;
 use Rector\Contract\DependencyInjection\RelatedConfigInterface;
-use Rector\Contract\DependencyInjection\ResettableInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\DependencyInjection\Laravel\ContainerMemento;
 use Rector\Enum\Config\Defaults;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
@@ -46,13 +44,21 @@ final class RectorConfig extends Container
      */
     private array $registeredComposerBoundRuleConfigurations = [];
     /**
-     * @var string[]
-     */
-    private array $autotagInterfaces = [Command::class, ResettableInterface::class];
-    /**
      * Optional override, e.g. injected by a test to read the versions from a standalone "composer.json"
      */
     private ?InstalledPackageResolver $installedPackageResolver = null;
+    /**
+     * Explicitly registered service ids, used for bound() and to drive forgetting on skip()/reset.
+     *
+     * @var array<class-string, true>
+     */
+    private array $boundAbstracts = [];
+    /**
+     * Service ids that got a factory closure registered on the entropy container.
+     *
+     * @var array<class-string, true>
+     */
+    private array $factoryBound = [];
     private static ?bool $recreated = null;
     /**
      * @internal Resets the root-config detection, so tests that assert on root
@@ -174,8 +180,12 @@ final class RectorConfig extends Container
         $this->ruleConfigurations[$rectorClass] = array_merge($this->ruleConfigurations[$rectorClass] ?? [], $configuration);
         $this->rule($rectorClass);
         $this->afterResolving($rectorClass, function (ConfigurableRectorInterface $configurableRector) use ($rectorClass): void {
-            $ruleConfiguration = $this->ruleConfigurations[$rectorClass];
-            $configurableRector->configure($ruleConfiguration);
+            // the rule may have been re-registered without configuration since this callback was
+            // queued (e.g. a later test reusing the rule via a set), so skip when it has no config
+            if (!isset($this->ruleConfigurations[$rectorClass])) {
+                return;
+            }
+            $configurableRector->configure($this->ruleConfigurations[$rectorClass]);
         });
     }
     /**
@@ -210,11 +220,10 @@ final class RectorConfig extends Container
         Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
         $this->singleton($rectorClass);
-        // the same rule can be registered by multiple sets, tag it only once,
+        // the same rule can be registered by multiple sets, record it only once,
         // otherwise it is run twice on every node and listed twice in the reports
         if (!isset($this->registeredRectorClasses[$rectorClass])) {
             $this->registeredRectorClasses[$rectorClass] = \true;
-            $this->tag($rectorClass, RectorInterface::class);
             // for cache invalidation in case of change
             SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
         }
@@ -230,7 +239,6 @@ final class RectorConfig extends Container
     public function command(string $commandClass): void
     {
         $this->singleton($commandClass);
-        $this->tag($commandClass, Command::class);
     }
     public function import(string $filePath): void
     {
@@ -384,29 +392,65 @@ final class RectorConfig extends Container
                 continue;
             }
             // completely forget the Rector rule only when no path specified
-            ContainerMemento::forgetService($this, $skippedClass);
+            $this->forgetByContract($skippedClass);
         }
     }
     /**
-     * @internal Use to add tag on service registrations
+     * Register a shared service. Without a $concrete factory the entropy container autowires the
+     * class on demand via reflection; register() makes it discoverable by the interfaces it
+     * implements, so findByContract() can find it without any explicit tagging.
+     *
+     * @param class-string $abstract
+     * @param (callable(self): object)|null $concrete
      */
-    public function autotagInterface(string $interface): void
+    public function singleton(string $abstract, ?callable $concrete = null): void
     {
-        $this->autotagInterfaces[] = $interface;
+        $this->boundAbstracts[$abstract] = \true;
+        if ($concrete === null) {
+            // no factory: let the entropy container discover it by contract
+            $this->register($abstract);
+            return;
+        }
+        if (!isset($this->factoryBound[$abstract])) {
+            $this->factoryBound[$abstract] = \true;
+            // entropy calls the factory with the container instance, which is always this RectorConfig
+            parent::service($abstract, fn(): object => $concrete($this));
+        }
     }
     /**
-     * @param string $abstract
-     * @param mixed $concrete
+     * PSR-11 style accessor, kept for call sites that read services eagerly.
+     *
+     * @template TObject of object
+     * @param class-string<TObject> $id
+     * @return TObject
+     */
+    public function get(string $id): object
+    {
+        return $this->make($id);
+    }
+    /**
+     * @param class-string $abstract
+     */
+    public function bound(string $abstract): bool
+    {
+        return isset($this->boundAbstracts[$abstract]);
+    }
+    /**
+     * Forget every service of the contract, both from the entropy container and from the local
+     * bookkeeping, so a skipped or reset service is not seen as bound and cannot be resurrected
+     * through discovery.
+     *
+     * @param class-string $contract
      */
     #[Override]
-    public function singleton($abstract, $concrete = null): void
+    public function forgetByContract(string $contract): void
     {
-        parent::singleton($abstract, $concrete);
-        foreach ($this->autotagInterfaces as $autotagInterface) {
-            if (!is_a($abstract, $autotagInterface, \true)) {
+        parent::forgetByContract($contract);
+        foreach (array_keys($this->boundAbstracts) as $abstract) {
+            if (!is_a($abstract, $contract, \true)) {
                 continue;
             }
-            $this->tag($abstract, $autotagInterface);
+            unset($this->boundAbstracts[$abstract], $this->factoryBound[$abstract], $this->registeredRectorClasses[$abstract]);
         }
     }
     public function reportingRealPath(bool $absolute = \true): void
@@ -435,7 +479,7 @@ final class RectorConfig extends Container
      */
     public function getMainRectorClasses(): array
     {
-        return $this->tags[RectorInterface::class] ?? [];
+        return array_keys($this->registeredRectorClasses);
     }
     /**
      * @internal used to report level overflows in configuration

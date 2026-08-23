@@ -20,7 +20,7 @@ final class ClassNameImportSkipper
      * @var ClassNameImportSkipVoterInterface[]
      * @readonly
      */
-    private iterable $classNameImportSkipVoters;
+    private array $classNameImportSkipVoters;
     /**
      * @readonly
      */
@@ -28,19 +28,21 @@ final class ClassNameImportSkipper
     /**
      * @param ClassNameImportSkipVoterInterface[] $classNameImportSkipVoters
      */
-    public function __construct(iterable $classNameImportSkipVoters, UseImportsResolver $useImportsResolver)
+    public function __construct(array $classNameImportSkipVoters, UseImportsResolver $useImportsResolver)
     {
         $this->classNameImportSkipVoters = $classNameImportSkipVoters;
         $this->useImportsResolver = $useImportsResolver;
     }
     public function shouldSkipNameForFullyQualifiedObjectType(File $file, Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
+        $found = \false;
         foreach ($this->classNameImportSkipVoters as $classNameImportSkipVoter) {
             if ($classNameImportSkipVoter->shouldSkip($file, $fullyQualifiedObjectType, $node)) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
     /**
      * @param array<Use_|GroupUse> $uses

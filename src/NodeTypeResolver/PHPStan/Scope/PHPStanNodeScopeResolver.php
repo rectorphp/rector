@@ -149,7 +149,7 @@ final class PHPStanNodeScopeResolver
     /**
      * @param DecoratingNodeVisitorInterface[] $decoratingNodeVisitors
      */
-    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $decoratingNodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
+    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, array $decoratingNodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
     {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->reflectionProvider = $reflectionProvider;

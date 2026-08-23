@@ -40,6 +40,25 @@ class Container
      * @var list<class-string>
      */
     private array $makingStack = [];
+    /**
+     * Classes registered for autowiring and contract discovery, without a factory.
+     * @var array<class-string, true>
+     */
+    private array $registeredClasses = [];
+    /**
+     * Callbacks run once, right after a matching instance is built, keyed by the type they apply to.
+     * @var array<class-string, list<callable(object, self): void>>
+     */
+    private array $afterResolvingCallbacks = [];
+    /**
+     * Instances built during the current top-level make() that still wait for their afterResolving
+     * callbacks. Draining is deferred to the outermost make() so a service and the collection it
+     * belongs to can resolve without tripping the circular-dependency guard.
+     * @var list<object>
+     */
+    private array $pendingAfterResolving = [];
+    private int $resolutionDepth = 0;
+    private bool $isDraining = \false;
     public function __construct()
     {
         // setup default console service
@@ -84,7 +103,42 @@ class Container
             // avoid service override
             throw new RegisterServiceException(sprintf('Service for "%s" class is already registered', $class));
         }
+        // a factory supersedes a bare registration of the same class
+        unset($this->registeredClasses[$class]);
         $this->serviceFactories[$class] = $factory;
+    }
+    /**
+     * Register a class for autowiring and contract discovery, without a factory. The container builds it
+     * via reflection on demand, and findByContract() can then find it among its implementations.
+     * Idempotent, unlike service(); a class already backed by a factory is left untouched.
+     *
+     * @param class-string $class
+     */
+    public function register(string $class): void
+    {
+        if (isset($this->serviceFactories[$class])) {
+            return;
+        }
+        $this->registeredClasses[$class] = \true;
+    }
+    /**
+     * Register a callback run once, right after an instance of $class (or a subtype) is built.
+     * Useful for setter injection that would otherwise create a dependency cycle. Draining is
+     * deferred to the outermost make(), so the callback can resolve the collection $class belongs to.
+     *
+     * @template TObject of object
+     * @param class-string<TObject> $class
+     * @param callable(TObject, self): void $callback
+     */
+    public function afterResolving(string $class, callable $callback): void
+    {
+        // wrap in a widening closure so the heterogeneous store stays type-safe; the guard narrows
+        // the built instance back to TObject before handing it to the typed callback
+        $this->afterResolvingCallbacks[$class][] = function (object $instance, self $container) use ($callback, $class): void {
+            if ($instance instanceof $class) {
+                $callback($instance, $container);
+            }
+        };
     }
     /**
      * @template TType as object
@@ -108,12 +162,14 @@ class Container
         // mark as "currently being created"
         $this->making[$class] = \true;
         $this->makingStack[] = $class;
+        ++$this->resolutionDepth;
         try {
             // factories / registered services
             if (isset($this->serviceFactories[$class])) {
                 $factory = $this->serviceFactories[$class];
                 $instance = $factory($this);
                 $this->instances[$class] = $instance;
+                $this->queueAfterResolving($instance);
                 return $instance;
             }
             // autowire via reflection
@@ -121,6 +177,7 @@ class Container
             if ($reflectionClass->isInstantiable()) {
                 $instance = $this->createInstanceFromReflection($reflectionClass);
                 $this->instances[$class] = $instance;
+                $this->queueAfterResolving($instance);
                 return $instance;
             }
             throw new CreateServiceException(sprintf('No service found for "%s" class', $class));
@@ -128,18 +185,51 @@ class Container
             // always unmark, even if construction throws
             array_pop($this->makingStack);
             unset($this->making[$class]);
+            // drain queued callbacks once the outermost make() has unwound, so their re-entrant
+            // lookups see fully built instances instead of hitting the circular-dependency guard
+            --$this->resolutionDepth;
+            if ($this->resolutionDepth === 0 && !$this->isDraining) {
+                $this->drainAfterResolving();
+            }
         }
     }
     /**
      * @template TType as object
      *
      * @param class-string<TType> $contractClass
-     * @return array<TType>
+     * @return list<TType>
      */
     public function findByContract(string $contractClass): array
     {
         $this->warmUpInstanceServices($contractClass);
-        return array_filter($this->instances, fn(object $instance): bool => $instance instanceof $contractClass);
+        $matches = array_filter($this->instances, fn(object $instance): bool => $instance instanceof $contractClass);
+        // return a plain 0-indexed list; class-string keys would turn a variadic spread
+        // (e.g. new Traverser(...$services)) into named arguments
+        return array_values($matches);
+    }
+    /**
+     * Forget every factory, discovery registration and cached instance whose class is-a $contract,
+     * so make() and findByContract() no longer return them. A later make() rebuilds a fresh instance.
+     *
+     * @param class-string $contract
+     */
+    public function forgetByContract(string $contract): void
+    {
+        foreach (array_keys($this->serviceFactories) as $class) {
+            if (is_a($class, $contract, \true)) {
+                unset($this->serviceFactories[$class]);
+            }
+        }
+        foreach (array_keys($this->registeredClasses) as $class) {
+            if (is_a($class, $contract, \true)) {
+                unset($this->registeredClasses[$class]);
+            }
+        }
+        foreach (array_keys($this->instances) as $class) {
+            if (is_a($class, $contract, \true)) {
+                unset($this->instances[$class]);
+            }
+        }
     }
     /**
      * @param ReflectionParameter[] $reflectionParameters
@@ -157,16 +247,45 @@ class Container
     }
     private function warmUpInstanceServices(string $contractClass): void
     {
-        // warm up instances with registered service of contract
-        foreach (array_keys($this->serviceFactories) as $class) {
-            if (!is_a($class, $contractClass, \true)) {
+        // warm up both factory-backed services and bare-registered classes of the contract
+        $knownClasses = array_merge(array_keys($this->serviceFactories), array_keys($this->registeredClasses));
+        foreach ($knownClasses as $knownClass) {
+            if (!is_a($knownClass, $contractClass, \true)) {
                 continue;
             }
-            if (isset($this->instances[$class])) {
+            if (isset($this->instances[$knownClass])) {
                 continue;
             }
             // warm up cache if not yet
-            $this->instances[$class] = $this->make($class);
+            $this->instances[$knownClass] = $this->make($knownClass);
+        }
+    }
+    private function queueAfterResolving(object $instance): void
+    {
+        foreach (array_keys($this->afterResolvingCallbacks) as $registeredClass) {
+            if ($instance instanceof $registeredClass) {
+                $this->pendingAfterResolving[] = $instance;
+                return;
+            }
+        }
+    }
+    private function drainAfterResolving(): void
+    {
+        $this->isDraining = \true;
+        try {
+            while ($this->pendingAfterResolving !== []) {
+                $instance = array_shift($this->pendingAfterResolving);
+                foreach ($this->afterResolvingCallbacks as $registeredClass => $callbacks) {
+                    if (!$instance instanceof $registeredClass) {
+                        continue;
+                    }
+                    foreach ($callbacks as $callback) {
+                        $callback($instance, $this);
+                    }
+                }
+            }
+        } finally {
+            $this->isDraining = \false;
         }
     }
     private function createInstanceFromReflection(ReflectionClass $reflectionClass): object

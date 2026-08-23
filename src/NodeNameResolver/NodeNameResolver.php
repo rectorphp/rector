@@ -41,7 +41,7 @@ final class NodeNameResolver
      * @var NodeNameResolverInterface[]
      * @readonly
      */
-    private iterable $nodeNameResolvers = [];
+    private array $nodeNameResolvers;
     /**
      * Used to check if a string might contain a regex or fnmatch pattern
      * @var mixed[]
@@ -54,7 +54,7 @@ final class NodeNameResolver
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
-    public function __construct(ClassNaming $classNaming, CallAnalyzer $callAnalyzer, iterable $nodeNameResolvers = [])
+    public function __construct(ClassNaming $classNaming, CallAnalyzer $callAnalyzer, array $nodeNameResolvers)
     {
         $this->classNaming = $classNaming;
         $this->callAnalyzer = $callAnalyzer;
