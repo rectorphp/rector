@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeVisitor;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector;
-use Rector\ValueObject\PhpVersion;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,14 +26,9 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector
      * @readonly
      */
     private PhpVersionProvider $phpVersionProvider;
-    /**
-     * @var PhpVersion::*|null
-     */
-    private $phpVersion;
     public function __construct(PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->phpVersion = $this->phpVersionProvider->provide();
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -75,7 +69,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
-        $this->phpVersion ??= $this->phpVersionProvider->provide();
         if (!$node->cond instanceof BinaryOp) {
             return null;
         }
@@ -126,7 +119,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersion >= $value->value) {
+        if ($this->phpVersionProvider->provide() >= $value->value) {
             return NodeVisitor::REMOVE_NODE;
         }
         return null;
@@ -140,7 +133,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersion < $value->value) {
+        if ($this->phpVersionProvider->provide() < $value->value) {
             return null;
         }
         if ($if->stmts === []) {
@@ -157,7 +150,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersion < $value->value) {
+        if ($this->phpVersionProvider->provide() < $value->value) {
             return null;
         }
         if ($if->stmts === []) {
@@ -174,7 +167,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersion >= $value->value) {
+        if ($this->phpVersionProvider->provide() >= $value->value) {
             return NodeVisitor::REMOVE_NODE;
         }
         return null;
@@ -201,7 +194,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersion < $value->value) {
+        if ($this->phpVersionProvider->provide() < $value->value) {
             return null;
         }
         if ($if->stmts === []) {
@@ -218,7 +211,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersion >= $value->value) {
+        if ($this->phpVersionProvider->provide() >= $value->value) {
             return NodeVisitor::REMOVE_NODE;
         }
         return null;

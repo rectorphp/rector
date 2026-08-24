@@ -1139,7 +1139,6 @@ return array(
     'Rector\\CodeQuality\\TypeResolver\\AssignVariableTypeResolver' => $baseDir . '/rules/CodeQuality/TypeResolver/AssignVariableTypeResolver.php',
     'Rector\\CodeQuality\\ValueObject\\ComparedExprAndValueExpr' => $baseDir . '/rules/CodeQuality/ValueObject/ComparedExprAndValueExpr.php',
     'Rector\\CodeQuality\\ValueObject\\DefinedPropertyWithType' => $baseDir . '/rules/CodeQuality/ValueObject/DefinedPropertyWithType.php',
-    'Rector\\CodeQuality\\ValueObject\\KeyAndExpr' => $baseDir . '/rules/CodeQuality/ValueObject/KeyAndExpr.php',
     'Rector\\CodingStyle\\ClassNameImport\\AliasUsesResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/AliasUsesResolver.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\AliasClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/AliasClassNameImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ClassLikeNameClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ClassLikeNameClassNameImportSkipVoter.php',

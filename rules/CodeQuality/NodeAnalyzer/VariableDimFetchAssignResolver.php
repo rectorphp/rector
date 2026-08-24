@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\CodeQuality\ValueObject\KeyAndExpr;
 use Rector\Exception\NotImplementedYetException;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -31,7 +30,7 @@ final class VariableDimFetchAssignResolver
     }
     /**
      * @param Stmt[] $stmts
-     * @return array<mixed, KeyAndExpr[]>
+     * @return mixed[]
      */
     public function resolveFromStmtsAndVariable(array $stmts, ?Assign $emptyArrayAssign): array
     {

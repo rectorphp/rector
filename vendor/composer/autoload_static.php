@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit02b20d7ba3cad62a06164aeaf0abca07
+class ComposerStaticInitac057519d542f6268293961514769bf4
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1364,7 +1364,6 @@ class ComposerStaticInit02b20d7ba3cad62a06164aeaf0abca07
         'Rector\\CodeQuality\\TypeResolver\\AssignVariableTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/AssignVariableTypeResolver.php',
         'Rector\\CodeQuality\\ValueObject\\ComparedExprAndValueExpr' => __DIR__ . '/../..' . '/rules/CodeQuality/ValueObject/ComparedExprAndValueExpr.php',
         'Rector\\CodeQuality\\ValueObject\\DefinedPropertyWithType' => __DIR__ . '/../..' . '/rules/CodeQuality/ValueObject/DefinedPropertyWithType.php',
-        'Rector\\CodeQuality\\ValueObject\\KeyAndExpr' => __DIR__ . '/../..' . '/rules/CodeQuality/ValueObject/KeyAndExpr.php',
         'Rector\\CodingStyle\\ClassNameImport\\AliasUsesResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/AliasUsesResolver.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\AliasClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/AliasClassNameImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ClassLikeNameClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ClassLikeNameClassNameImportSkipVoter.php',
@@ -3071,9 +3070,9 @@ class ComposerStaticInit02b20d7ba3cad62a06164aeaf0abca07
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit02b20d7ba3cad62a06164aeaf0abca07::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit02b20d7ba3cad62a06164aeaf0abca07::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit02b20d7ba3cad62a06164aeaf0abca07::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitac057519d542f6268293961514769bf4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitac057519d542f6268293961514769bf4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitac057519d542f6268293961514769bf4::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php55\Rector\String_;
 
-use Deprecated;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
@@ -26,11 +25,6 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      * @readonly
      */
     private ReflectionProvider $reflectionProvider;
-    /**
-     * @var string
-     */
-    #[Deprecated(message: 'since 2.2.12. Default behavior now.')]
-    public const SHOULD_KEEP_PRE_SLASH = 'should_keep_pre_slash';
     /**
      * @var string[]
      */

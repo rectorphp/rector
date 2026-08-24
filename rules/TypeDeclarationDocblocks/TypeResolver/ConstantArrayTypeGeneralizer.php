@@ -23,10 +23,9 @@ final class ConstantArrayTypeGeneralizer
      */
     private TypeNormalizer $typeNormalizer;
     /**
-     * @var int
-     *
      * Using 10-level array @return docblocks makes code very hard to read,
      * lets limit it to reasonable level
+     * @var int
      */
     private const MAX_NESTING = 3;
     private int $currentNesting = 0;
