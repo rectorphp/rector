@@ -26,7 +26,7 @@ final class SymfonySetList
      */
     public const SYMFONY_CONSTRUCTOR_INJECTION = __DIR__ . '/../../config/sets/symfony/symfony-constructor-injection.php';
     /**
-     * @deprecated Use ->withAttributesSets(symfony: true) in rector.php config instead
+     * @internal Use ->withAttributesSets(symfony: true) in rector.php config instead
      * @var string
      */
     public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/symfony/annotations-to-attributes.php';
