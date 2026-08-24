@@ -2028,6 +2028,7 @@ return array(
     'Rector\\Php73\\Rector\\BooleanOr\\IsCountableRector' => $baseDir . '/rules/Php73/Rector/BooleanOr/IsCountableRector.php',
     'Rector\\Php73\\Rector\\ConstFetch\\SensitiveConstantNameRector' => $baseDir . '/rules/Php73/Rector/ConstFetch/SensitiveConstantNameRector.php',
     'Rector\\Php73\\Rector\\FuncCall\\ArrayKeyFirstLastRector' => $baseDir . '/rules/Php73/Rector/FuncCall/ArrayKeyFirstLastRector.php',
+    'Rector\\Php73\\Rector\\FuncCall\\ArrayKeysToArrayKeyFirstLastRector' => $baseDir . '/rules/Php73/Rector/FuncCall/ArrayKeysToArrayKeyFirstLastRector.php',
     'Rector\\Php73\\Rector\\FuncCall\\JsonThrowOnErrorRector' => $baseDir . '/rules/Php73/Rector/FuncCall/JsonThrowOnErrorRector.php',
     'Rector\\Php73\\Rector\\FuncCall\\RegexDashEscapeRector' => $baseDir . '/rules/Php73/Rector/FuncCall/RegexDashEscapeRector.php',
     'Rector\\Php73\\Rector\\FuncCall\\SensitiveDefineRector' => $baseDir . '/rules/Php73/Rector/FuncCall/SensitiveDefineRector.php',

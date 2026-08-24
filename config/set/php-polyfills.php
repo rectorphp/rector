@@ -6,6 +6,7 @@ namespace RectorPrefix202608;
 use Rector\Config\RectorConfig;
 use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
+use Rector\Php73\Rector\FuncCall\ArrayKeysToArrayKeyFirstLastRector;
 use Rector\Php80\Rector\Identical\StrEndsWithRector;
 use Rector\Php80\Rector\Identical\StrStartsWithRector;
 use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
@@ -22,6 +23,7 @@ use Rector\Php84\Rector\Foreach_\ForeachToArrayFindRector;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         ArrayKeyFirstLastRector::class,
+        ArrayKeysToArrayKeyFirstLastRector::class,
         IsCountableRector::class,
         GetDebugTypeRector::class,
         StrStartsWithRector::class,

@@ -2253,6 +2253,7 @@ class ComposerStaticInit02b20d7ba3cad62a06164aeaf0abca07
         'Rector\\Php73\\Rector\\BooleanOr\\IsCountableRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/BooleanOr/IsCountableRector.php',
         'Rector\\Php73\\Rector\\ConstFetch\\SensitiveConstantNameRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/ConstFetch/SensitiveConstantNameRector.php',
         'Rector\\Php73\\Rector\\FuncCall\\ArrayKeyFirstLastRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/FuncCall/ArrayKeyFirstLastRector.php',
+        'Rector\\Php73\\Rector\\FuncCall\\ArrayKeysToArrayKeyFirstLastRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/FuncCall/ArrayKeysToArrayKeyFirstLastRector.php',
         'Rector\\Php73\\Rector\\FuncCall\\JsonThrowOnErrorRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/FuncCall/JsonThrowOnErrorRector.php',
         'Rector\\Php73\\Rector\\FuncCall\\RegexDashEscapeRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/FuncCall/RegexDashEscapeRector.php',
         'Rector\\Php73\\Rector\\FuncCall\\SensitiveDefineRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/FuncCall/SensitiveDefineRector.php',
