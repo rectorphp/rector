@@ -53,13 +53,8 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\AnnotationToAttributeMapper\ArrayAnnotationToAttributeMapper;
 use Rector\PhpAttribute\AnnotationToAttributeMapper\ArrayItemNodeAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\ClassConstFetchAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\ConstExprNodeAnnotationToAttributeMapper;
 use Rector\PhpAttribute\AnnotationToAttributeMapper\CurlyListNodeAnnotationToAttributeMapper;
 use Rector\PhpAttribute\AnnotationToAttributeMapper\DoctrineAnnotationAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\StringAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\StringNodeAnnotationToAttributeMapper;
-use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\NodeFactory;
@@ -131,10 +126,6 @@ final class LazyContainerFactory
      * @var array<class-string<BasePhpDocNodeVisitorInterface>>
      */
     private const BASE_PHP_DOC_NODE_VISITORS = [ArrayTypePhpDocNodeVisitor::class, CallableTypePhpDocNodeVisitor::class, IntersectionTypeNodePhpDocNodeVisitor::class, TemplatePhpDocNodeVisitor::class, UnionTypeNodePhpDocNodeVisitor::class];
-    /**
-     * @var array<class-string<AnnotationToAttributeMapperInterface>>
-     */
-    private const ANNOTATION_TO_ATTRIBUTE_MAPPER_CLASSES = [ArrayAnnotationToAttributeMapper::class, ArrayItemNodeAnnotationToAttributeMapper::class, ClassConstFetchAnnotationToAttributeMapper::class, ConstExprNodeAnnotationToAttributeMapper::class, CurlyListNodeAnnotationToAttributeMapper::class, DoctrineAnnotationAnnotationToAttributeMapper::class, StringAnnotationToAttributeMapper::class, StringNodeAnnotationToAttributeMapper::class];
     /**
      * @var array<class-string<DecoratingNodeVisitorInterface>>
      */
@@ -254,7 +245,7 @@ final class LazyContainerFactory
     private function registerTaggedServices(RectorConfig $rectorConfig): void
     {
         // PHP 8.0 attributes
-        $this->registerTagged($rectorConfig, self::ANNOTATION_TO_ATTRIBUTE_MAPPER_CLASSES, AnnotationToAttributeMapperInterface::class);
+        $rectorConfig->autodiscover(__DIR__ . '/../PhpAttribute/AnnotationToAttributeMapper');
         $this->registerTagged($rectorConfig, self::TYPE_MAPPER_CLASSES, TypeMapperInterface::class);
         $rectorConfig->autodiscover(__DIR__ . '/../StaticTypeMapper/PhpDocParser');
         $rectorConfig->autodiscover(__DIR__ . '/../NodeNameResolver/NodeNameResolver');

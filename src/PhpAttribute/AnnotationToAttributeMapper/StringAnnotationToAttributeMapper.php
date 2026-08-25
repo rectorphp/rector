@@ -16,7 +16,12 @@ final class StringAnnotationToAttributeMapper implements AnnotationToAttributeMa
      */
     public function isCandidate($value): bool
     {
-        return is_string($value);
+        if (!is_string($value)) {
+            return \false;
+        }
+        // an unquoted "Class::CONST" reference is handled by the class const fetch mapper;
+        // excluding it here keeps the two mappers mutually exclusive, so match order no longer matters
+        return strpos($value, '::') === \false || strncmp($value, '"', strlen('"')) === 0;
     }
     /**
      * @param string $value
