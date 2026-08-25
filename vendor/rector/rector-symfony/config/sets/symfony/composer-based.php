@@ -919,6 +919,11 @@ return static function (RectorConfig $rectorConfig): void {
         // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.2.md#typeinfo
         new MethodCallRename('Symfony\Component\TypeInfo\Type', 'is', 'isSatisfiedBy'),
     ], 'symfony/type-info', '>=7.2');
+    // symfony/dependency-injection 7.3
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [
+        // @see https://github.com/symfony/symfony/blob/7.4/UPGRADE-7.3.md#dependencyinjection
+        new MethodCallRename('Symfony\Component\DependencyInjection\ContainerBuilder', 'getAutoconfiguredAttributes', 'getAttributeAutoconfigurators'),
+    ], 'symfony/dependency-injection', '>=7.3');
     // symfony/console 7.4
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('Symfony\Component\Console\Application', 'add', 'addCommand')], 'symfony/console', '>=7.4');
     // symfony/framework-bundle 7.4
