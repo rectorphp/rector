@@ -23,11 +23,35 @@ use function preg_split;
 final class Parser
 {
     /**
+     * @var string
+     */
+    private const LINE_BREAK = '(\r\n|\r|\n)';
+    /**
+     * @var string
+     */
+    private const FROM_FILE_HEADER = '#^---\h+"?(?P<file>[^\v\t"]+)#';
+    /**
+     * @var string
+     */
+    private const TO_FILE_HEADER = '#^\+\+\+\h+"?(?P<file>[^\v\t"]+)#';
+    /**
+     * @var string
+     */
+    private const METADATA_HEADER = '/^(?:diff --git |index [\da-f.]+|(?:---|\+\+\+) [ab]\/)/';
+    /**
+     * @var string
+     */
+    private const CHUNK_HEADER = '/^@@\s+-(?P<start>\d+)(?:,\s*(?P<startrange>\d+))?\s+\+(?P<end>\d+)(?:,\s*(?P<endrange>\d+))?\s+@@/';
+    /**
+     * @var string
+     */
+    private const CHUNK_LINE = '/^(?P<type>[+ -])?(?P<line>.*)/';
+    /**
      * @return list<Diff>
      */
     public function parse(string $string): array
     {
-        $lines = preg_split('(\r\n|\r|\n)', $string);
+        $lines = preg_split(self::LINE_BREAK, $string);
         if ($lines === \false) {
             return [];
         }
@@ -38,13 +62,36 @@ final class Parser
         $diffs = [];
         $diff = null;
         $collected = [];
+        $fromLinesLeft = 0;
+        $toLinesLeft = 0;
         for ($i = 0; $i < $lineCount; $i++) {
             if (!isset($lines[$i])) {
                 continue;
             }
             $line = $lines[$i];
             $nextLine = $lines[$i + 1] ?? null;
-            if ($nextLine !== null && preg_match('#^---\h+"?(?P<file>[^\v\t"]+)#', $line, $fromMatch) === 1 && preg_match('#^\+\+\+\h+"?(?P<file>[^\v\t"]+)#', $nextLine, $toMatch) === 1) {
+            if ($fromLinesLeft > 0 || $toLinesLeft > 0) {
+                $marker = $line === '' ? ' ' : $line[0];
+                if ($marker === ' ' || $marker === '+' || $marker === '-' || $marker === '\\') {
+                    $collected[] = $line;
+                    if ($marker !== '+' && $marker !== '\\') {
+                        $fromLinesLeft--;
+                    }
+                    if ($marker !== '-' && $marker !== '\\') {
+                        $toLinesLeft--;
+                    }
+                    continue;
+                }
+                $fromLinesLeft = 0;
+                $toLinesLeft = 0;
+            }
+            if (preg_match(self::CHUNK_HEADER, $line, $chunkMatch, PREG_UNMATCHED_AS_NULL) === 1) {
+                $fromLinesLeft = isset($chunkMatch['startrange']) ? max(0, (int) $chunkMatch['startrange']) : 1;
+                $toLinesLeft = isset($chunkMatch['endrange']) ? max(0, (int) $chunkMatch['endrange']) : 1;
+                $collected[] = $line;
+                continue;
+            }
+            if ($nextLine !== null && preg_match(self::FROM_FILE_HEADER, $line, $fromMatch) === 1 && preg_match(self::TO_FILE_HEADER, $nextLine, $toMatch) === 1) {
                 if ($diff !== null) {
                     $this->parseFileDiff($diff, $collected);
                     $diffs[] = $diff;
@@ -54,7 +101,7 @@ final class Parser
                 $i++;
                 continue;
             }
-            if (preg_match('/^(?:diff --git |index [\da-f.]+|[+-]{3} [ab])/', $line) === 1) {
+            if (preg_match(self::METADATA_HEADER, $line) === 1) {
                 continue;
             }
             $collected[] = $line;
@@ -74,13 +121,13 @@ final class Parser
         $chunk = null;
         $diffLines = [];
         foreach ($lines as $line) {
-            if (preg_match('/^@@\s+-(?P<start>\d+)(?:,\s*(?P<startrange>\d+))?\s+\+(?P<end>\d+)(?:,\s*(?P<endrange>\d+))?\s+@@/', $line, $match, PREG_UNMATCHED_AS_NULL) === 1) {
+            if (preg_match(self::CHUNK_HEADER, $line, $match, PREG_UNMATCHED_AS_NULL) === 1) {
                 $chunk = new Chunk((int) $match['start'], isset($match['startrange']) ? max(0, (int) $match['startrange']) : 1, (int) $match['end'], isset($match['endrange']) ? max(0, (int) $match['endrange']) : 1);
                 $chunks[] = $chunk;
                 $diffLines = [];
                 continue;
             }
-            if (preg_match('/^(?P<type>[+ -])?(?P<line>.*)/', $line, $match) === 1) {
+            if (preg_match(self::CHUNK_LINE, $line, $match) === 1) {
                 $type = Line::UNCHANGED;
                 if ($match['type'] === '+') {
                     $type = Line::ADDED;

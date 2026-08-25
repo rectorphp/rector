@@ -390,17 +390,17 @@
         },
         {
             "name": "entropy\/entropy",
-            "version": "0.4.10",
-            "version_normalized": "0.4.10.0",
+            "version": "0.4.12",
+            "version_normalized": "0.4.12.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/TomasVotruba\/entropy.git",
-                "reference": "697ad55bc7a2522c4eab8746160ec899d09f88c1"
+                "reference": "fa763e4fc4271658e9a7e1f41279ed2a4911765c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/697ad55bc7a2522c4eab8746160ec899d09f88c1",
-                "reference": "697ad55bc7a2522c4eab8746160ec899d09f88c1",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/fa763e4fc4271658e9a7e1f41279ed2a4911765c",
+                "reference": "fa763e4fc4271658e9a7e1f41279ed2a4911765c",
                 "shasum": ""
             },
             "require": {
@@ -422,7 +422,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-08-25T07:22:55+00:00",
+            "time": "2026-08-25T15:38:26+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -437,7 +437,7 @@
             "description": "Entropy framework",
             "support": {
                 "issues": "https:\/\/github.com\/TomasVotruba\/entropy\/issues",
-                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.10"
+                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.12"
             },
             "install-path": "..\/entropy\/entropy"
         },
@@ -1731,12 +1731,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "d07935945a8d93026f0a52fd84a94f58c4c96bc6"
+                "reference": "5221bca688e11fa9ffed3879676f262d3e9651a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d07935945a8d93026f0a52fd84a94f58c4c96bc6",
-                "reference": "d07935945a8d93026f0a52fd84a94f58c4c96bc6",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5221bca688e11fa9ffed3879676f262d3e9651a8",
+                "reference": "5221bca688e11fa9ffed3879676f262d3e9651a8",
                 "shasum": ""
             },
             "require": {
@@ -1768,7 +1768,7 @@
                 "tracy\/tracy": "^2.12",
                 "twig\/twig": "^3.21"
             },
-            "time": "2026-08-24T21:08:28+00:00",
+            "time": "2026-08-25T15:34:52+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1792,27 +1792,27 @@
         },
         {
             "name": "sebastian\/diff",
-            "version": "9.0.0",
-            "version_normalized": "9.0.0.0",
+            "version": "9.0.1",
+            "version_normalized": "9.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sebastianbergmann\/diff.git",
-                "reference": "a3fb6a298a265ff487a91bbea46e03cd01dbb226"
+                "reference": "a2df6626c1baf31d5a88674882a3072f151b5a26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sebastianbergmann\/diff\/zipball\/a3fb6a298a265ff487a91bbea46e03cd01dbb226",
-                "reference": "a3fb6a298a265ff487a91bbea46e03cd01dbb226",
+                "url": "https:\/\/api.github.com\/repos\/sebastianbergmann\/diff\/zipball\/a2df6626c1baf31d5a88674882a3072f151b5a26",
+                "reference": "a2df6626c1baf31d5a88674882a3072f151b5a26",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.4"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^13.2",
-                "symfony\/process": "^7.4.13"
+                "phpunit\/phpunit": "^13.3.1",
+                "symfony\/process": "^7.4.17"
             },
-            "time": "2026-06-05T03:04:51+00:00",
+            "time": "2026-08-25T15:38:55+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1850,7 +1850,7 @@
             "support": {
                 "issues": "https:\/\/github.com\/sebastianbergmann\/diff\/issues",
                 "security": "https:\/\/github.com\/sebastianbergmann\/diff\/security\/policy",
-                "source": "https:\/\/github.com\/sebastianbergmann\/diff\/tree\/9.0.0"
+                "source": "https:\/\/github.com\/sebastianbergmann\/diff\/tree\/9.0.1"
             },
             "funding": [
                 {

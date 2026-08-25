@@ -2,6 +2,12 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [9.0.1] - 2026-08-25
+
+### Fixed
+
+* Parser drops lines that look like file headers
+
 ## [9.0.0] - 2026-06-05
 
 ### Changed
@@ -52,6 +58,12 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 ### Removed
 
 * This component is no longer supported on PHP 8.3
+
+## [7.0.1] - 2026-08-25
+
+### Fixed
+
+* Parser drops lines that look like file headers
 
 ## [7.0.0] - 2025-02-07
 
@@ -208,12 +220,14 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 
 * This component is no longer supported on PHP 5.6
 
+[9.0.1]: https://github.com/sebastianbergmann/diff/compare/9.0.0...9.0.1
 [9.0.0]: https://github.com/sebastianbergmann/diff/compare/8.3.0...9.0.0
 [8.3.0]: https://github.com/sebastianbergmann/diff/compare/8.2.1...8.3.0
 [8.2.1]: https://github.com/sebastianbergmann/diff/compare/8.2.0...8.2.1
 [8.2.0]: https://github.com/sebastianbergmann/diff/compare/8.1.0...8.2.0
 [8.1.0]: https://github.com/sebastianbergmann/diff/compare/8.0.0...8.1.0
 [8.0.0]: https://github.com/sebastianbergmann/diff/compare/7.0...8.0.0
+[7.0.1]: https://github.com/sebastianbergmann/diff/compare/7.0.0...7.0.1
 [7.0.0]: https://github.com/sebastianbergmann/diff/compare/6.0.2...7.0.0
 [6.0.2]: https://github.com/sebastianbergmann/diff/compare/6.0.1...6.0.2
 [6.0.1]: https://github.com/sebastianbergmann/diff/compare/6.0.0...6.0.1
