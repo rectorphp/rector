@@ -46,18 +46,7 @@ use Rector\Console\ConsoleApplication;
 use Rector\Console\Style\SymfonyStyleFactory;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeDecorator\CreatedByRuleDecorator;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\ClassConstFetchNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\ClassConstNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\ClassNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\FuncCallNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\FunctionNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\NameNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\ParamNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\PropertyNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\UseNameResolver;
-use Rector\NodeNameResolver\NodeNameResolver\VariableNameResolver;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -124,12 +113,7 @@ use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Rector\AbstractRector;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\Skipper\UsedSkipCollector;
-use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-use Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper;
-use Rector\StaticTypeMapper\PhpDocParser\IntersectionPhpDocTypeMapper;
-use Rector\StaticTypeMapper\PhpDocParser\NullablePhpDocTypeMapper;
-use Rector\StaticTypeMapper\PhpDocParser\UnionPhpDocTypeMapper;
 use Rector\StaticTypeMapper\PhpParser\ExprNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper;
@@ -144,10 +128,6 @@ use RectorPrefix202608\Webmozart\Assert\Assert;
 final class LazyContainerFactory
 {
     /**
-     * @var array<class-string<NodeNameResolverInterface>>
-     */
-    private const NODE_NAME_RESOLVER_CLASSES = [ClassConstFetchNameResolver::class, ClassConstNameResolver::class, ClassNameResolver::class, FuncCallNameResolver::class, FunctionNameResolver::class, NameNameResolver::class, ParamNameResolver::class, PropertyNameResolver::class, UseNameResolver::class, VariableNameResolver::class];
-    /**
      * @var array<class-string<BasePhpDocNodeVisitorInterface>>
      */
     private const BASE_PHP_DOC_NODE_VISITORS = [ArrayTypePhpDocNodeVisitor::class, CallableTypePhpDocNodeVisitor::class, IntersectionTypeNodePhpDocNodeVisitor::class, TemplatePhpDocNodeVisitor::class, UnionTypeNodePhpDocNodeVisitor::class];
@@ -159,10 +139,6 @@ final class LazyContainerFactory
      * @var array<class-string<DecoratingNodeVisitorInterface>>
      */
     private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, ClosureWithVariadicParametersNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ParamDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class, CallLikeThisBoundClosureArgsNodeVisitor::class, ArgNotAcceptingClosureNodeVisitor::class];
-    /**
-     * @var array<class-string<PhpDocTypeMapperInterface>>
-     */
-    private const PHPDOC_TYPE_MAPPER_CLASSES = [IdentifierPhpDocTypeMapper::class, IntersectionPhpDocTypeMapper::class, NullablePhpDocTypeMapper::class, UnionPhpDocTypeMapper::class];
     /**
      * @var array<class-string<TypeMapperInterface>>
      */
@@ -280,8 +256,8 @@ final class LazyContainerFactory
         // PHP 8.0 attributes
         $this->registerTagged($rectorConfig, self::ANNOTATION_TO_ATTRIBUTE_MAPPER_CLASSES, AnnotationToAttributeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::TYPE_MAPPER_CLASSES, TypeMapperInterface::class);
-        $this->registerTagged($rectorConfig, self::PHPDOC_TYPE_MAPPER_CLASSES, PhpDocTypeMapperInterface::class);
-        $this->registerTagged($rectorConfig, self::NODE_NAME_RESOLVER_CLASSES, NodeNameResolverInterface::class);
+        $rectorConfig->autodiscover(__DIR__ . '/../StaticTypeMapper/PhpDocParser');
+        $rectorConfig->autodiscover(__DIR__ . '/../NodeNameResolver/NodeNameResolver');
         $rectorConfig->autodiscover(__DIR__ . '/../NodeTypeResolver/NodeTypeResolver');
         $rectorConfig->autodiscover(__DIR__ . '/../ChangesReporting/Output');
         $rectorConfig->autodiscover(__DIR__ . '/../../rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter');
