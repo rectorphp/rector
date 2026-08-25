@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\BetterPhpDocParser\PhpDocParser;
+namespace Rector\BetterPhpDocParser\NodeDecorator;
 
 use RectorPrefix202608\Nette\Utils\Strings;
 use PhpParser\Node;
@@ -20,6 +20,8 @@ use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
+use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
+use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
@@ -34,11 +36,11 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
     /**
      * @readonly
      */
-    private \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher;
+    private ClassAnnotationMatcher $classAnnotationMatcher;
     /**
      * @readonly
      */
-    private \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser;
+    private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser;
     /**
      * @readonly
      */
@@ -76,7 +78,7 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
      * @var string
      */
     private const STAR_COMMENT_REGEX = '#^\s*\*#ms';
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher, \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, TokenIteratorFactory $tokenIteratorFactory, AttributeMirrorer $attributeMirrorer, ObjectTypeSpecifier $objectTypeSpecifier)
+    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher, StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, TokenIteratorFactory $tokenIteratorFactory, AttributeMirrorer $attributeMirrorer, ObjectTypeSpecifier $objectTypeSpecifier)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;

@@ -1,21 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\BetterPhpDocParser\PhpDocParser;
+namespace Rector\BetterPhpDocParser\NodeDecorator;
 
 use PhpParser\Node as PhpNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 /**
- * Decorate node with fully qualified class name for const epxr,
- * e.g. Direction::*
+ * Decorate node with fully qualified class name for generic annotations for @uses, @used-by, and @see
+ * e.g. @uses Direction::*
+ *
+ * @see https://docs.phpdoc.org/guide/references/phpdoc/tags/uses.html
  */
-final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
+final class PhpDocTagGenericUsesDecorator implements PhpDocNodeDecoratorInterface
 {
     /**
      * @readonly
@@ -37,17 +40,31 @@ final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
             return;
         }
         $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
-            if (!$node instanceof ConstFetchNode) {
+            if (!$node instanceof PhpDocTagNode) {
                 return null;
             }
-            $className = $this->resolveFullyQualifiedClass($node, $phpNode);
-            $node->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $className);
+            if (!$node->value instanceof GenericTagValueNode) {
+                return null;
+            }
+            if (!in_array($node->name, ['@uses', '@used-by', '@see'], \true)) {
+                return null;
+            }
+            $reference = $node->value->value;
+            if (strpos($reference, '::') === \false) {
+                return null;
+            }
+            if ($node->value->hasAttribute(PhpDocAttributeKey::RESOLVED_CLASS)) {
+                return null;
+            }
+            $classValue = explode('::', $reference)[0];
+            $className = $this->resolveFullyQualifiedClass($classValue, $phpNode);
+            $node->value->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $className);
             return $node;
         });
     }
-    private function resolveFullyQualifiedClass(ConstFetchNode $constFetchNode, PhpNode $phpNode): string
+    private function resolveFullyQualifiedClass(string $classValue, PhpNode $phpNode): string
     {
         $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($phpNode);
-        return $nameScope->resolveStringName($constFetchNode->className);
+        return $nameScope->resolveStringName($classValue);
     }
 }
