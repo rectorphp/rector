@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\NodeVisitor;
 use PHPStan\Type\ObjectType;
@@ -136,6 +137,15 @@ CODE_SAMPLE
         $variableNameToTypeCollection = $this->nullableObjectAssignCollector->collect($node);
         $next = 0;
         foreach ($node->stmts as $key => $stmt) {
+            // already asserted in a previous run? drop the variable to keep the rule idempotent
+            $assertedVariableName = $this->matchAssertInstanceOfVariableName($stmt);
+            if (is_string($assertedVariableName)) {
+                $alreadyAssertedVariableNameToType = $variableNameToTypeCollection->matchByVariableName($assertedVariableName);
+                if ($alreadyAssertedVariableNameToType instanceof VariableNameToType) {
+                    $variableNameToTypeCollection->remove($alreadyAssertedVariableNameToType);
+                }
+                continue;
+            }
             // has callable on nullable variable of already collected name?
             $matchedNullableVariableNameToType = $this->matchedNullableArgumentNameToType($stmt, $variableNameToTypeCollection);
             if (!$matchedNullableVariableNameToType instanceof VariableNameToType) {
@@ -196,5 +206,30 @@ CODE_SAMPLE
             return null;
         });
         return $matchedNullableVariableNameToType;
+    }
+    private function matchAssertInstanceOfVariableName(Stmt $stmt): ?string
+    {
+        if (!$stmt instanceof Expression) {
+            return null;
+        }
+        if (!$stmt->expr instanceof MethodCall) {
+            return null;
+        }
+        $methodCall = $stmt->expr;
+        if (!$this->isName($methodCall->name, 'assertInstanceOf')) {
+            return null;
+        }
+        $args = $methodCall->getArgs();
+        if (!isset($args[1])) {
+            return null;
+        }
+        if (!$args[1]->value instanceof Variable) {
+            return null;
+        }
+        $variableName = $this->getName($args[1]->value);
+        if (!is_string($variableName)) {
+            return null;
+        }
+        return $variableName;
     }
 }
