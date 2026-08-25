@@ -72,37 +72,11 @@ use Rector\PhpParser\NodeVisitor\ParamDefaultNodeVisitor;
 use Rector\PhpParser\NodeVisitor\PhpVersionConditionNodeVisitor;
 use Rector\PhpParser\NodeVisitor\PropertyOrClassConstDefaultNodeVisitor;
 use Rector\PhpParser\NodeVisitor\StaticVariableNodeVisitor;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\AccessoryArrayTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\AccessoryStringTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\BooleanTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\CallableTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\ClassStringTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\ClosureTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ConditionalTypeForParameterMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ConditionalTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\ConstantArrayTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\FloatTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\HasMethodTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\HasPropertyTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\IntegerTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\IntersectionTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\IterableTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\MixedTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\NeverTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\NullTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\ParentStaticTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\ResourceTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\StaticTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\StrictMixedTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\StringTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\TypeWithClassNameTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\VoidTypeMapper;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Rector\AbstractRector;
 use Rector\Skipper\Skipper\Skipper;
@@ -129,10 +103,6 @@ final class LazyContainerFactory
      * @var array<class-string<DecoratingNodeVisitorInterface>>
      */
     private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, ClosureWithVariadicParametersNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ParamDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class, ArgNotAcceptingClosureNodeVisitor::class];
-    /**
-     * @var array<class-string<TypeMapperInterface>>
-     */
-    private const TYPE_MAPPER_CLASSES = [AccessoryArrayTypeMapper::class, AccessoryStringTypeMapper::class, ConstantArrayTypeMapper::class, ArrayTypeMapper::class, BooleanTypeMapper::class, CallableTypeMapper::class, ClassStringTypeMapper::class, ClosureTypeMapper::class, ConditionalTypeForParameterMapper::class, ConditionalTypeMapper::class, FloatTypeMapper::class, HasMethodTypeMapper::class, HasPropertyTypeMapper::class, IntegerTypeMapper::class, IntersectionTypeMapper::class, IterableTypeMapper::class, MixedTypeMapper::class, NeverTypeMapper::class, NullTypeMapper::class, ObjectTypeMapper::class, ObjectWithoutClassTypeMapper::class, ParentStaticTypeMapper::class, ResourceTypeMapper::class, StaticTypeMapper::class, StrictMixedTypeMapper::class, StringTypeMapper::class, TypeWithClassNameTypeMapper::class, UnionTypeMapper::class, VoidTypeMapper::class];
     /**
      * @var array<class-string<PhpDocNodeDecoratorInterface>>
      */
@@ -245,7 +215,7 @@ final class LazyContainerFactory
     {
         // PHP 8.0 attributes
         $rectorConfig->autodiscover(__DIR__ . '/../PhpAttribute/AnnotationToAttributeMapper');
-        $this->registerTagged($rectorConfig, self::TYPE_MAPPER_CLASSES, TypeMapperInterface::class);
+        $rectorConfig->autodiscover(__DIR__ . '/../PHPStanStaticTypeMapper/TypeMapper');
         $rectorConfig->autodiscover(__DIR__ . '/../StaticTypeMapper/PhpDocParser');
         $rectorConfig->autodiscover(__DIR__ . '/../NodeNameResolver/NodeNameResolver');
         $rectorConfig->autodiscover(__DIR__ . '/../NodeTypeResolver/NodeTypeResolver');
