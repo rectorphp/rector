@@ -58,20 +58,14 @@ use Rector\PhpAttribute\AnnotationToAttributeMapper\DoctrineAnnotationAnnotation
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\NodeFactory;
-use Rector\PhpParser\NodeVisitor\ArgNodeVisitor;
-use Rector\PhpParser\NodeVisitor\ArgNotAcceptingClosureNodeVisitor;
 use Rector\PhpParser\NodeVisitor\AssignedToNodeVisitor;
-use Rector\PhpParser\NodeVisitor\ByRefReturnNodeVisitor;
-use Rector\PhpParser\NodeVisitor\ByRefVariableNodeVisitor;
-use Rector\PhpParser\NodeVisitor\ClassConstFetchNodeVisitor;
-use Rector\PhpParser\NodeVisitor\ClosureWithVariadicParametersNodeVisitor;
+use Rector\PhpParser\NodeVisitor\ByRefNodeVisitor;
+use Rector\PhpParser\NodeVisitor\CallLikeReflectionNodeVisitor;
 use Rector\PhpParser\NodeVisitor\ContextNodeVisitor;
-use Rector\PhpParser\NodeVisitor\GlobalVariableNodeVisitor;
-use Rector\PhpParser\NodeVisitor\NameNodeVisitor;
-use Rector\PhpParser\NodeVisitor\ParamDefaultNodeVisitor;
+use Rector\PhpParser\NodeVisitor\DefaultValueNodeVisitor;
+use Rector\PhpParser\NodeVisitor\LocalVariableScopeNodeVisitor;
+use Rector\PhpParser\NodeVisitor\NameAndArgNodeVisitor;
 use Rector\PhpParser\NodeVisitor\PhpVersionConditionNodeVisitor;
-use Rector\PhpParser\NodeVisitor\PropertyOrClassConstDefaultNodeVisitor;
-use Rector\PhpParser\NodeVisitor\StaticVariableNodeVisitor;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ConditionalTypeForParameterMapper;
@@ -93,7 +87,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<DecoratingNodeVisitorInterface>>
      */
-    private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, ClosureWithVariadicParametersNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ParamDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class, ArgNotAcceptingClosureNodeVisitor::class];
+    private const DECORATING_NODE_VISITOR_CLASSES = [CallLikeReflectionNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, ByRefNodeVisitor::class, ContextNodeVisitor::class, LocalVariableScopeNodeVisitor::class, NameAndArgNodeVisitor::class, DefaultValueNodeVisitor::class];
     /**
      * @var array<class-string<PhpDocNodeDecoratorInterface>>
      */
