@@ -249,10 +249,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_CLOSURE_USES_THIS = 'has_this_closure';
-    /**
-     * @var string
-     */
     public const HAS_CLOSURE_WITH_VARIADIC_ARGS = 'has_closure_with_variadic_args';
     /**
      * @var string

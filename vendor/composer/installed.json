@@ -390,17 +390,17 @@
         },
         {
             "name": "entropy\/entropy",
-            "version": "0.4.9",
-            "version_normalized": "0.4.9.0",
+            "version": "0.4.10",
+            "version_normalized": "0.4.10.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/TomasVotruba\/entropy.git",
-                "reference": "856fea65681d3fe0fb17b947ae0eacef895dd407"
+                "reference": "697ad55bc7a2522c4eab8746160ec899d09f88c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/856fea65681d3fe0fb17b947ae0eacef895dd407",
-                "reference": "856fea65681d3fe0fb17b947ae0eacef895dd407",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/697ad55bc7a2522c4eab8746160ec899d09f88c1",
+                "reference": "697ad55bc7a2522c4eab8746160ec899d09f88c1",
                 "shasum": ""
             },
             "require": {
@@ -422,7 +422,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-08-22T21:35:13+00:00",
+            "time": "2026-08-25T07:22:55+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -437,7 +437,7 @@
             "description": "Entropy framework",
             "support": {
                 "issues": "https:\/\/github.com\/TomasVotruba\/entropy\/issues",
-                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.9"
+                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.10"
             },
             "install-path": "..\/entropy\/entropy"
         },

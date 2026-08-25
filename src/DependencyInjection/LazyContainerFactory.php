@@ -63,7 +63,6 @@ use Rector\PhpParser\NodeVisitor\ArgNotAcceptingClosureNodeVisitor;
 use Rector\PhpParser\NodeVisitor\AssignedToNodeVisitor;
 use Rector\PhpParser\NodeVisitor\ByRefReturnNodeVisitor;
 use Rector\PhpParser\NodeVisitor\ByRefVariableNodeVisitor;
-use Rector\PhpParser\NodeVisitor\CallLikeThisBoundClosureArgsNodeVisitor;
 use Rector\PhpParser\NodeVisitor\ClassConstFetchNodeVisitor;
 use Rector\PhpParser\NodeVisitor\ClosureWithVariadicParametersNodeVisitor;
 use Rector\PhpParser\NodeVisitor\ContextNodeVisitor;
@@ -129,7 +128,7 @@ final class LazyContainerFactory
     /**
      * @var array<class-string<DecoratingNodeVisitorInterface>>
      */
-    private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, ClosureWithVariadicParametersNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ParamDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class, CallLikeThisBoundClosureArgsNodeVisitor::class, ArgNotAcceptingClosureNodeVisitor::class];
+    private const DECORATING_NODE_VISITOR_CLASSES = [ArgNodeVisitor::class, ClosureWithVariadicParametersNodeVisitor::class, PhpVersionConditionNodeVisitor::class, AssignedToNodeVisitor::class, ByRefReturnNodeVisitor::class, ByRefVariableNodeVisitor::class, ContextNodeVisitor::class, GlobalVariableNodeVisitor::class, NameNodeVisitor::class, StaticVariableNodeVisitor::class, PropertyOrClassConstDefaultNodeVisitor::class, ParamDefaultNodeVisitor::class, ClassConstFetchNodeVisitor::class, ArgNotAcceptingClosureNodeVisitor::class];
     /**
      * @var array<class-string<TypeMapperInterface>>
      */
