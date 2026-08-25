@@ -33,19 +33,6 @@ use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayP
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
-use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\ChangesReporting\Output\GitHubOutputFormatter;
-use Rector\ChangesReporting\Output\GitlabOutputFormatter;
-use Rector\ChangesReporting\Output\JsonOutputFormatter;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\AliasClassNameImportSkipVoter;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\ClassLikeNameClassNameImportSkipVoter;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\FullyQualifiedNameClassNameImportSkipVoter;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\OriginalNameImportSkipVoter;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\ReservedClassNameImportSkipVoter;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\ShortClassImportSkipVoter;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter\UsesClassNameImportSkipVoter;
-use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\Config\RectorConfig;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Configuration\RenamedClassesDataCollector;
@@ -71,25 +58,9 @@ use Rector\NodeNameResolver\NodeNameResolver\ParamNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\PropertyNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\UseNameResolver;
 use Rector\NodeNameResolver\NodeNameResolver\VariableNameResolver;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\CastTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\ClassAndInterfaceTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\ClassConstFetchTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\NameTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\NewTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\ParamTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\PropertyTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\ScalarTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\StaticCallMethodCallTypeResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver\TraitTypeResolver;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use Rector\Php80\AttributeDecorator\DoctrineConverterAttributeDecorator;
-use Rector\Php80\AttributeDecorator\SensioParamConverterAttributeDecorator;
-use Rector\Php80\Contract\ConverterAttributeDecoratorInterface;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\AnnotationToAttributeMapper\ArrayAnnotationToAttributeMapper;
 use Rector\PhpAttribute\AnnotationToAttributeMapper\ArrayItemNodeAnnotationToAttributeMapper;
@@ -193,10 +164,6 @@ final class LazyContainerFactory
      */
     private const PHPDOC_TYPE_MAPPER_CLASSES = [IdentifierPhpDocTypeMapper::class, IntersectionPhpDocTypeMapper::class, NullablePhpDocTypeMapper::class, UnionPhpDocTypeMapper::class];
     /**
-     * @var array<class-string<ClassNameImportSkipVoterInterface>>
-     */
-    private const CLASS_NAME_IMPORT_SKIPPER_CLASSES = [AliasClassNameImportSkipVoter::class, ClassLikeNameClassNameImportSkipVoter::class, FullyQualifiedNameClassNameImportSkipVoter::class, UsesClassNameImportSkipVoter::class, ReservedClassNameImportSkipVoter::class, ShortClassImportSkipVoter::class, OriginalNameImportSkipVoter::class];
-    /**
      * @var array<class-string<TypeMapperInterface>>
      */
     private const TYPE_MAPPER_CLASSES = [AccessoryArrayTypeMapper::class, AccessoryStringTypeMapper::class, ConstantArrayTypeMapper::class, ArrayTypeMapper::class, BooleanTypeMapper::class, CallableTypeMapper::class, ClassStringTypeMapper::class, ClosureTypeMapper::class, ConditionalTypeForParameterMapper::class, ConditionalTypeMapper::class, FloatTypeMapper::class, HasMethodTypeMapper::class, HasPropertyTypeMapper::class, IntegerTypeMapper::class, IntersectionTypeMapper::class, IterableTypeMapper::class, MixedTypeMapper::class, NeverTypeMapper::class, NullTypeMapper::class, ObjectTypeMapper::class, ObjectWithoutClassTypeMapper::class, ParentStaticTypeMapper::class, ResourceTypeMapper::class, StaticTypeMapper::class, StrictMixedTypeMapper::class, StringTypeMapper::class, TypeWithClassNameTypeMapper::class, UnionTypeMapper::class, VoidTypeMapper::class];
@@ -209,21 +176,9 @@ final class LazyContainerFactory
      */
     private const PUBLIC_PHPSTAN_SERVICE_TYPES = [ScopeFactory::class, TypeNodeResolver::class, NodeScopeResolver::class, ReflectionProvider::class, PhpVersionFactory::class];
     /**
-     * @var array<class-string<OutputFormatterInterface>>
-     */
-    private const OUTPUT_FORMATTER_CLASSES = [ConsoleOutputFormatter::class, JsonOutputFormatter::class, GitlabOutputFormatter::class, GitHubOutputFormatter::class];
-    /**
-     * @var array<class-string<NodeTypeResolverInterface>>
-     */
-    private const NODE_TYPE_RESOLVER_CLASSES = [CastTypeResolver::class, StaticCallMethodCallTypeResolver::class, ClassAndInterfaceTypeResolver::class, IdentifierTypeResolver::class, NameTypeResolver::class, NewTypeResolver::class, ParamTypeResolver::class, PropertyFetchTypeResolver::class, ClassConstFetchTypeResolver::class, PropertyTypeResolver::class, ScalarTypeResolver::class, TraitTypeResolver::class];
-    /**
      * @var array<class-string<PhpParserNodeMapperInterface>>
      */
     private const PHP_PARSER_NODE_MAPPER_CLASSES = [FullyQualifiedNodeMapper::class, IdentifierNodeMapper::class, IntersectionTypeNodeMapper::class, NameNodeMapper::class, NullableTypeNodeMapper::class, StringNodeMapper::class, UnionTypeNodeMapper::class, ExprNodeMapper::class];
-    /**
-     * @var array<class-string<ConverterAttributeDecoratorInterface>>
-     */
-    private const CONVERTER_ATTRIBUTE_DECORATOR_CLASSES = [SensioParamConverterAttributeDecorator::class, DoctrineConverterAttributeDecorator::class];
     /**
      * @api used as next rectorConfig factory
      */
@@ -309,7 +264,7 @@ final class LazyContainerFactory
     private function registerNodeNameResolvers(RectorConfig $rectorConfig): void
     {
         // node name resolvers
-        $this->registerTagged($rectorConfig, self::CONVERTER_ATTRIBUTE_DECORATOR_CLASSES, ConverterAttributeDecoratorInterface::class);
+        $rectorConfig->autodiscover(__DIR__ . '/../../rules/Php80/AttributeDecorator');
     }
     private function registerRectorAutowiring(RectorConfig $rectorConfig): void
     {
@@ -327,9 +282,9 @@ final class LazyContainerFactory
         $this->registerTagged($rectorConfig, self::TYPE_MAPPER_CLASSES, TypeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::PHPDOC_TYPE_MAPPER_CLASSES, PhpDocTypeMapperInterface::class);
         $this->registerTagged($rectorConfig, self::NODE_NAME_RESOLVER_CLASSES, NodeNameResolverInterface::class);
-        $this->registerTagged($rectorConfig, self::NODE_TYPE_RESOLVER_CLASSES, NodeTypeResolverInterface::class);
-        $this->registerTagged($rectorConfig, self::OUTPUT_FORMATTER_CLASSES, OutputFormatterInterface::class);
-        $this->registerTagged($rectorConfig, self::CLASS_NAME_IMPORT_SKIPPER_CLASSES, ClassNameImportSkipVoterInterface::class);
+        $rectorConfig->autodiscover(__DIR__ . '/../NodeTypeResolver/NodeTypeResolver');
+        $rectorConfig->autodiscover(__DIR__ . '/../ChangesReporting/Output');
+        $rectorConfig->autodiscover(__DIR__ . '/../../rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter');
         $rectorConfig->singleton(SymfonyStyle::class, static function (RectorConfig $rectorConfig): SymfonyStyle {
             $symfonyStyleFactory = $rectorConfig->make(SymfonyStyleFactory::class);
             return $symfonyStyleFactory->create();
