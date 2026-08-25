@@ -81,15 +81,6 @@ use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Rector\AbstractRector;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\Skipper\UsedSkipCollector;
-use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-use Rector\StaticTypeMapper\PhpParser\ExprNodeMapper;
-use Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper;
-use Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper;
-use Rector\StaticTypeMapper\PhpParser\IntersectionTypeNodeMapper;
-use Rector\StaticTypeMapper\PhpParser\NameNodeMapper;
-use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
-use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
-use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
 use RectorPrefix202608\Symfony\Component\Console\Application;
 use RectorPrefix202608\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202608\Webmozart\Assert\Assert;
@@ -111,10 +102,6 @@ final class LazyContainerFactory
      * @var array<class-string>
      */
     private const PUBLIC_PHPSTAN_SERVICE_TYPES = [ScopeFactory::class, TypeNodeResolver::class, NodeScopeResolver::class, ReflectionProvider::class, PhpVersionFactory::class];
-    /**
-     * @var array<class-string<PhpParserNodeMapperInterface>>
-     */
-    private const PHP_PARSER_NODE_MAPPER_CLASSES = [FullyQualifiedNodeMapper::class, IdentifierNodeMapper::class, IntersectionTypeNodeMapper::class, NameNodeMapper::class, NullableTypeNodeMapper::class, StringNodeMapper::class, UnionTypeNodeMapper::class, ExprNodeMapper::class];
     /**
      * @api used as next rectorConfig factory
      */
@@ -207,7 +194,7 @@ final class LazyContainerFactory
         $rectorConfig->afterResolving(AbstractRector::class, static function (AbstractRector $rector) use ($rectorConfig): void {
             $rector->autowire($rectorConfig->get(NodeNameResolver::class), $rectorConfig->get(NodeTypeResolver::class), $rectorConfig->get(SimpleCallableNodeTraverser::class), $rectorConfig->get(NodeFactory::class), $rectorConfig->get(Skipper::class), $rectorConfig->get(NodeComparator::class), $rectorConfig->get(CurrentFileProvider::class), $rectorConfig->get(CreatedByRuleDecorator::class), $rectorConfig->get(ChangedNodeScopeRefresher::class), $rectorConfig->get(CommentsMerger::class));
         });
-        $this->registerTagged($rectorConfig, self::PHP_PARSER_NODE_MAPPER_CLASSES, PhpParserNodeMapperInterface::class);
+        $rectorConfig->autodiscover(__DIR__ . '/../StaticTypeMapper/PhpParser');
         $this->registerTagged($rectorConfig, self::PHP_DOC_NODE_DECORATOR_CLASSES, PhpDocNodeDecoratorInterface::class);
         $this->registerTagged($rectorConfig, self::BASE_PHP_DOC_NODE_VISITORS, BasePhpDocNodeVisitorInterface::class);
     }
