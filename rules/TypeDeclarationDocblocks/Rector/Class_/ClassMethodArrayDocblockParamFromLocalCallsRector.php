@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -130,6 +131,13 @@ CODE_SAMPLE
                 }
                 // in case of array type declaration, null cannot be passed or is already casted
                 $resolvedParameterType = TypeCombinator::removeNull($resolvedParameterType);
+                // the param default value must always be accepted; a locally inferred, flow-narrowed type such as
+                // "non-empty-array" would otherwise contradict an "= []" default - unite with the default type so
+                // the resulting @param never conflicts with the method signature
+                if ($param->default instanceof Expr) {
+                    $defaultType = $this->nodeTypeResolver->getType($param->default);
+                    $resolvedParameterType = TypeCombinator::union($resolvedParameterType, $defaultType);
+                }
                 $hasClassMethodChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($resolvedParameterType, $classMethodPhpDocInfo, $classMethod, $param, $parameterName);
                 if ($hasClassMethodChanged) {
                     $hasChanged = \true;
