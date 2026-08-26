@@ -2477,6 +2477,7 @@ return array(
     'Rector\\Symfony\\Symfony43\\Rector\\StmtsAwareInterface\\TwigBundleFilesystemLoaderToTwigRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony43/Rector/StmtsAwareInterface/TwigBundleFilesystemLoaderToTwigRector.php',
     'Rector\\Symfony\\Symfony44\\Rector\\ClassMethod\\ConsoleExecuteReturnIntRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony44/Rector/ClassMethod/ConsoleExecuteReturnIntRector.php',
     'Rector\\Symfony\\Symfony44\\Rector\\MethodCall\\AuthorizationCheckerIsGrantedExtractorRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony44/Rector/MethodCall/AuthorizationCheckerIsGrantedExtractorRector.php',
+    'Rector\\Symfony\\Symfony44\\Rector\\MethodCall\\WebLinkStringRelationsToConstantsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony44/Rector/MethodCall/WebLinkStringRelationsToConstantsRector.php',
     'Rector\\Symfony\\Symfony51\\Rector\\ClassMethod\\CommandConstantReturnCodeRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony51/Rector/ClassMethod/CommandConstantReturnCodeRector.php',
     'Rector\\Symfony\\Symfony51\\Rector\\ClassMethod\\RouteCollectionBuilderToRoutingConfiguratorRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony51/Rector/ClassMethod/RouteCollectionBuilderToRoutingConfiguratorRector.php',
     'Rector\\Symfony\\Symfony51\\Rector\\Class_\\LogoutHandlerToLogoutEventSubscriberRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony51/Rector/Class_/LogoutHandlerToLogoutEventSubscriberRector.php',
