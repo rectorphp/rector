@@ -34,7 +34,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     /**
      * @var array<string,array<array-key,string>>
      */
-    private const FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES = ['is_readable' => ['is_readable', 'assertIsReadable', 'assertNotIsReadable'], 'array_key_exists' => ['array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'], 'array_search' => ['array_search', 'assertContains', 'assertNotContains'], 'in_array' => ['in_array', 'assertContains', 'assertNotContains'], 'empty' => ['empty', 'assertEmpty', 'assertNotEmpty'], 'file_exists' => ['file_exists', 'assertFileExists', 'assertFileNotExists'], 'is_dir' => ['is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'], 'is_infinite' => ['is_infinite', 'assertInfinite', 'assertFinite'], 'is_null' => ['is_null', 'assertNull', 'assertNotNull'], 'is_writable' => ['is_writable', 'assertIsWritable', 'assertNotIsWritable'], 'is_nan' => ['is_nan', 'assertNan', ''], 'is_a' => ['is_a', 'assertInstanceOf', 'assertNotInstanceOf'], 'str_contains' => ['str_contains', 'assertStringContainsString', 'assertStringNotContainsString']];
+    private const FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES = ['is_readable' => ['is_readable', 'assertIsReadable', 'assertNotIsReadable'], 'array_key_exists' => ['array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'], 'array_search' => ['array_search', 'assertContains', 'assertNotContains'], 'in_array' => ['in_array', 'assertContains', 'assertNotContains'], 'empty' => ['empty', 'assertEmpty', 'assertNotEmpty'], 'file_exists' => ['file_exists', 'assertFileExists', 'assertFileNotExists'], 'is_dir' => ['is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'], 'is_infinite' => ['is_infinite', 'assertInfinite', 'assertFinite'], 'is_null' => ['is_null', 'assertNull', 'assertNotNull'], 'is_writable' => ['is_writable', 'assertIsWritable', 'assertNotIsWritable'], 'is_nan' => ['is_nan', 'assertNan', ''], 'is_a' => ['is_a', 'assertInstanceOf', 'assertNotInstanceOf'], 'str_contains' => ['str_contains', 'assertStringContainsString', 'assertStringNotContainsString'], 'is_array' => ['is_array', 'assertIsArray', 'assertIsNotArray'], 'is_bool' => ['is_bool', 'assertIsBool', 'assertIsNotBool'], 'is_callable' => ['is_callable', 'assertIsCallable', 'assertIsNotCallable'], 'is_float' => ['is_float', 'assertIsFloat', 'assertIsNotFloat'], 'is_int' => ['is_int', 'assertIsInt', 'assertIsNotInt'], 'is_iterable' => ['is_iterable', 'assertIsIterable', 'assertIsNotIterable'], 'is_numeric' => ['is_numeric', 'assertIsNumeric', 'assertIsNotNumeric'], 'is_object' => ['is_object', 'assertIsObject', 'assertIsNotObject'], 'is_scalar' => ['is_scalar', 'assertIsScalar', 'assertIsNotScalar'], 'is_string' => ['is_string', 'assertIsString', 'assertIsNotString']];
     /**
      * Some assert methods were renamed in newer PHPUnit versions
      * @var array<string, string>
@@ -79,6 +79,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         if ($firstArgumentName === null || !array_key_exists($firstArgumentName, self::FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES)) {
             return null;
         }
+        if ($firstArgumentValue instanceof FuncCall && $this->hasUnmovableArgs($firstArgumentValue)) {
+            return null;
+        }
         if ($firstArgumentName === 'is_a') {
             /** @var FuncCall $firstArgumentValue */
             $args = $firstArgumentValue->getArgs();
@@ -88,6 +91,13 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
             }
             $firstArgumentType = $this->nodeTypeResolver->getType($args[0]->value);
             if ($firstArgumentType instanceof StringType) {
+                return null;
+            }
+        }
+        // the is_callable() $syntax_only and $callable_name arguments have no counterpart in assertIsCallable()
+        if ($firstArgumentName === 'is_callable') {
+            /** @var FuncCall $firstArgumentValue */
+            if (count($firstArgumentValue->getArgs()) > 1) {
                 return null;
             }
         }
@@ -103,6 +113,28 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     private function resolveFirstArgument($firstArgumentValue): ?string
     {
         return $firstArgumentValue instanceof Empty_ ? 'empty' : $this->getName($firstArgumentValue);
+    }
+    /**
+     * Args are moved up by position, so a named arg only survives when the assert method happens to
+     * use the same parameter name: is_readable(filename:) fits assertIsReadable(), while
+     * is_string(value:) does not fit assertIsString(), whose parameter is $actual. Bail out instead
+     * of tracking a parameter name per mapped function. Spread args cannot be moved up either,
+     * as their count is unknown.
+     */
+    private function hasUnmovableArgs(FuncCall $funcCall): bool
+    {
+        if ($funcCall->isFirstClassCallable()) {
+            return \true;
+        }
+        foreach ($funcCall->getArgs() as $arg) {
+            if ($arg->name instanceof Identifier) {
+                return \true;
+            }
+            if ($arg->unpack) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
