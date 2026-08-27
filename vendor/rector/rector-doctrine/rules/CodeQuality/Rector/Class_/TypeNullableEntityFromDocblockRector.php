@@ -18,6 +18,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer;
 use Rector\Doctrine\CodeQuality\Helper\SetterGetterFinder;
 use Rector\Doctrine\NodeAnalyzer\DoctrineEntityDetector;
@@ -28,9 +29,12 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
+ * @deprecated as too opinionated and narrow use-cased. Blindly forcing all entity properties to nullable native types
+ *             from docblocks is a niche stepping-stone that does not fit a general code-quality set.
+ *
  * @see \Rector\Doctrine\Tests\CodeQuality\Rector\Class_\TypeNullableEntityFromDocblockRector\TypeNullableEntityFromDocblockRectorTest
  */
-final class TypeNullableEntityFromDocblockRector extends AbstractRector
+final class TypeNullableEntityFromDocblockRector extends AbstractRector implements DeprecatedInterface
 {
     /**
      * @readonly
