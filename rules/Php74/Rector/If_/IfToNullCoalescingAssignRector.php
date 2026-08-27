@@ -100,7 +100,9 @@ CODE_SAMPLE
         if ($selfReference instanceof Node) {
             return null;
         }
-        return new Expression(new AssignCoalesce($assign->var, $assign->expr));
+        $expression = new Expression(new AssignCoalesce($assign->var, $assign->expr));
+        $this->mirrorComments($expression, $node);
+        return $expression;
     }
     public function provideMinPhpVersion(): int
     {
