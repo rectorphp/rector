@@ -11,9 +11,13 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\TypeCombinator;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
@@ -87,6 +91,10 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($assign->var, $testedExpr)) {
             return null;
         }
+        // a typed non-nullable property can never be null on the left of ??=
+        if ($this->isNonNullableProperty($testedExpr)) {
+            return null;
+        }
         // the assigned value must not reference the target, e.g. $x = $x + 1
         $selfReference = $this->betterNodeFinder->findFirst($assign->expr, fn(Node $subNode): bool => $this->nodeComparator->areNodesEqual($subNode, $assign->var));
         if ($selfReference instanceof Node) {
@@ -97,6 +105,17 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NULL_COALESCE_ASSIGN;
+    }
+    private function isNonNullableProperty(Expr $expr): bool
+    {
+        if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
+            return \false;
+        }
+        $propertyType = $this->nodeTypeResolver->getType($expr);
+        if ($propertyType instanceof MixedType) {
+            return \false;
+        }
+        return !TypeCombinator::containsNull($propertyType);
     }
     private function matchNullGuardedExpr(Expr $expr): ?Expr
     {
