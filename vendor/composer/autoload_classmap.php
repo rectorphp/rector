@@ -1377,6 +1377,7 @@ return array(
     'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ExtractArrayArgOnQueryBuilderSelectRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ExtractArrayArgOnQueryBuilderSelectRector.php',
     'Rector\\Doctrine\\Dbal211\\Rector\\MethodCall\\ReplaceFetchAllMethodCallRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal211/Rector/MethodCall/ReplaceFetchAllMethodCallRector.php',
     'Rector\\Doctrine\\Dbal31\\Rector\\MethodCall\\QueryBuilderExecuteToExecuteQueryOrExecuteStatementRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal31/Rector/MethodCall/QueryBuilderExecuteToExecuteQueryOrExecuteStatementRector.php',
+    'Rector\\Doctrine\\Dbal32\\Rector\\Identical\\PlatformGetNameToInstanceofRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal32/Rector/Identical/PlatformGetNameToInstanceofRector.php',
     'Rector\\Doctrine\\Dbal36\\Rector\\MethodCall\\MigrateQueryBuilderResetQueryPartRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal36/Rector/MethodCall/MigrateQueryBuilderResetQueryPartRector.php',
     'Rector\\Doctrine\\Dbal40\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal40/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
     'Rector\\Doctrine\\Dbal40\\Rector\\StmtsAwareInterface\\ExecuteQueryParamsToBindValueRector' => $vendorDir . '/rector/rector-doctrine/rules/Dbal40/Rector/StmtsAwareInterface/ExecuteQueryParamsToBindValueRector.php',
