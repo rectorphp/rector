@@ -15,6 +15,8 @@ use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\ProcessResult;
 /**
+ * @deprecated Will be removed in next minor version, as Rector is not a static analysis tool.
+ *
  * @phpstan-type AnnotationProperties array{title?: string|null, file?: string|null, col?: int|null, endColumn?: int|null, line?: int|null, endLine?: int|null}
  * @see \Rector\Tests\ChangesReporting\Output\GitHubOutputFormatterTest
  */

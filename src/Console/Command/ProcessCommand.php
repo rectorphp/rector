@@ -185,6 +185,10 @@ EOF
         // 3. reporting phaseRunning 2nd time with collectors data
         // report diffs and errors
         $outputFormat = $configuration->getOutputFormat();
+        // warn about deprecated static-analysis-oriented output formats, to be removed in next minor version
+        if (in_array($outputFormat, ['github', 'gitlab'], \true)) {
+            $this->symfonyStyle->getErrorStyle()->warning(sprintf('The "%s" output format is deprecated and will be removed in the next minor version, as Rector is not a static analysis tool.', $outputFormat));
+        }
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         $outputFormatter->report($processResult, $configuration);
         // 4. Deprecations reporter
