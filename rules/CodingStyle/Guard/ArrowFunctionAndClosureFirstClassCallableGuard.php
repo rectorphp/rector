@@ -102,7 +102,7 @@ final class ArrowFunctionAndClosureFirstClassCallableGuard
         if ($this->isBuiltinReflection($reflection)) {
             return \false;
         }
-        return count($parameters) > 1;
+        return count($parameters) !== count($args);
     }
     /**
      * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $reflection
