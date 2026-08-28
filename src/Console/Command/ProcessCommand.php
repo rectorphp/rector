@@ -11,7 +11,6 @@ use Rector\Configuration\ConfigInitializer;
 use Rector\Configuration\ConfigurationFactory;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\ExitCode;
 use Rector\Console\Output\OutputFormatterCollector;
 use Rector\Console\ProcessConfigureDecorator;
@@ -174,10 +173,6 @@ EOF
         if (!$configuration->isParallel()) {
             $this->additionalAutoloader->autoloadPaths();
         }
-        // show debug info
-        if ($configuration->isDebug()) {
-            $this->reportLoadedComposerBasedSets();
-        }
         // MAIN PHASE
         // 2. run Rector
         $processResult = $this->applicationFileProcessor->run($configuration, $input);
@@ -237,18 +232,6 @@ EOF
             return ExitCode::CHANGED_CODE;
         }
         return ExitCode::SUCCESS;
-    }
-    private function reportLoadedComposerBasedSets(): void
-    {
-        if (!SimpleParameterProvider::hasParameter(Option::COMPOSER_BASED_SETS)) {
-            return;
-        }
-        $composerBasedSets = SimpleParameterProvider::provideArrayParameter(Option::COMPOSER_BASED_SETS);
-        if ($composerBasedSets === []) {
-            return;
-        }
-        $this->symfonyStyle->writeln('[info] Sets loaded based on installed packages:');
-        $this->symfonyStyle->listing($composerBasedSets);
     }
     private function reportLevelOverflow(LevelOverflow $levelOverflow): void
     {

@@ -2523,7 +2523,6 @@ class ComposerStaticInitde06eaa12aa21c2f652809601c70a851
         'Rector\\Set\\Contract\\SetInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetInterface.php',
         'Rector\\Set\\Contract\\SetProviderInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetProviderInterface.php',
         'Rector\\Set\\Enum\\SetGroup' => __DIR__ . '/../..' . '/src/Set/Enum/SetGroup.php',
-        'Rector\\Set\\SetManager' => __DIR__ . '/../..' . '/src/Set/SetManager.php',
         'Rector\\Set\\ValueObject\\ComposerTriggeredSet' => __DIR__ . '/../..' . '/src/Set/ValueObject/ComposerTriggeredSet.php',
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',

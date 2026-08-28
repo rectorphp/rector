@@ -310,12 +310,6 @@ final class Option
      */
     public const TREAT_CLASSES_AS_FINAL = 'treat_classes_as_final';
     /**
-     * @internal To report composer based loaded sets
-     * @see \Rector\Configuration\RectorConfigBuilder::withComposerBased()
-     * @var string
-     */
-    public const COMPOSER_BASED_SETS = 'composer_based_sets';
-    /**
      * @internal To report rule configuration bound to an installed package version
      * @see \Rector\Config\RectorConfig::ruleWithConfigurationComposerVersionBound()
      * @var string

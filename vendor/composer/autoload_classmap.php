@@ -2298,7 +2298,6 @@ return array(
     'Rector\\Set\\Contract\\SetInterface' => $baseDir . '/src/Set/Contract/SetInterface.php',
     'Rector\\Set\\Contract\\SetProviderInterface' => $baseDir . '/src/Set/Contract/SetProviderInterface.php',
     'Rector\\Set\\Enum\\SetGroup' => $baseDir . '/src/Set/Enum/SetGroup.php',
-    'Rector\\Set\\SetManager' => $baseDir . '/src/Set/SetManager.php',
     'Rector\\Set\\ValueObject\\ComposerTriggeredSet' => $baseDir . '/src/Set/ValueObject/ComposerTriggeredSet.php',
     'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => $vendorDir . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
     'Rector\\Set\\ValueObject\\DowngradeSetList' => $vendorDir . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
