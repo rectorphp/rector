@@ -1599,7 +1599,6 @@ return array(
     'Rector\\FileSystem\\FilesystemTweaker' => $baseDir . '/src/FileSystem/FilesystemTweaker.php',
     'Rector\\FileSystem\\InitFilePathsResolver' => $baseDir . '/src/FileSystem/InitFilePathsResolver.php',
     'Rector\\FileSystem\\JsonFileSystem' => $baseDir . '/src/FileSystem/JsonFileSystem.php',
-    'Rector\\Git\\RepositoryHelper' => $baseDir . '/src/Git/RepositoryHelper.php',
     'Rector\\Instanceof_\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => $baseDir . '/rules/Instanceof_/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
     'Rector\\Naming\\ExpectedNameResolver\\InflectorSingularResolver' => $baseDir . '/rules/Naming/ExpectedNameResolver/InflectorSingularResolver.php',
     'Rector\\Naming\\ExpectedNameResolver\\MatchParamTypeExpectedNameResolver' => $baseDir . '/rules/Naming/ExpectedNameResolver/MatchParamTypeExpectedNameResolver.php',

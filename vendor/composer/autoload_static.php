@@ -1824,7 +1824,6 @@ class ComposerStaticInitde06eaa12aa21c2f652809601c70a851
         'Rector\\FileSystem\\FilesystemTweaker' => __DIR__ . '/../..' . '/src/FileSystem/FilesystemTweaker.php',
         'Rector\\FileSystem\\InitFilePathsResolver' => __DIR__ . '/../..' . '/src/FileSystem/InitFilePathsResolver.php',
         'Rector\\FileSystem\\JsonFileSystem' => __DIR__ . '/../..' . '/src/FileSystem/JsonFileSystem.php',
-        'Rector\\Git\\RepositoryHelper' => __DIR__ . '/../..' . '/src/Git/RepositoryHelper.php',
         'Rector\\Instanceof_\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => __DIR__ . '/../..' . '/rules/Instanceof_/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
         'Rector\\Naming\\ExpectedNameResolver\\InflectorSingularResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/InflectorSingularResolver.php',
         'Rector\\Naming\\ExpectedNameResolver\\MatchParamTypeExpectedNameResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/MatchParamTypeExpectedNameResolver.php',
