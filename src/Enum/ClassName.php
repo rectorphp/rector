@@ -25,8 +25,4 @@ final class ClassName
      * @var string
      */
     public const DOCTRINE_ENTITY = 'Doctrine\ORM\Mapping\Entity';
-    /**
-     * @var string
-     */
-    public const DATA_PROVIDER = 'PHPUnit\Framework\Attributes\DataProvider';
 }
