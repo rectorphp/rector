@@ -16,11 +16,13 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\TypeCombinator;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -38,10 +40,15 @@ final class IfToNullCoalescingAssignRector extends AbstractRector implements Min
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    public function __construct(BetterNodeFinder $betterNodeFinder, ValueResolver $valueResolver, ReflectionResolver $reflectionResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->valueResolver = $valueResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -113,7 +120,11 @@ CODE_SAMPLE
         if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
             return \false;
         }
-        $propertyType = $this->nodeTypeResolver->getType($expr);
+        $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($expr);
+        if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
+            return \false;
+        }
+        $propertyType = $phpPropertyReflection->getReadableType();
         if ($propertyType instanceof MixedType) {
             return \false;
         }
