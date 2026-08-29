@@ -45,70 +45,87 @@ final class SetList
      */
     public const RECTOR_PRESET = __DIR__ . '/../../../config/set/rector-preset.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_52 = __DIR__ . '/../../../config/set/php52.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_53 = __DIR__ . '/../../../config/set/php53.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_54 = __DIR__ . '/../../../config/set/php54.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_55 = __DIR__ . '/../../../config/set/php55.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_56 = __DIR__ . '/../../../config/set/php56.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_70 = __DIR__ . '/../../../config/set/php70.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_71 = __DIR__ . '/../../../config/set/php71.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_72 = __DIR__ . '/../../../config/set/php72.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_73 = __DIR__ . '/../../../config/set/php73.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_74 = __DIR__ . '/../../../config/set/php74.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_80 = __DIR__ . '/../../../config/set/php80.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_81 = __DIR__ . '/../../../config/set/php81.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_82 = __DIR__ . '/../../../config/set/php82.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_83 = __DIR__ . '/../../../config/set/php83.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_84 = __DIR__ . '/../../../config/set/php84.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_85 = __DIR__ . '/../../../config/set/php85.php';
     /**
+     * @deprecated Use withPhpSets() or withPhpLevel() instead
      * @var string
      */
     public const PHP_86 = __DIR__ . '/../../../config/set/php86.php';
@@ -145,4 +162,9 @@ final class SetList
      * @var string
      */
     public const BEHAT_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../../config/set/behat-annotations-to-attributes.php';
+    /**
+     * All PHP version rules in one set; each rule gates itself by PHP version at runtime
+     * @var string
+     */
+    public const PHP_VERSION_BASED_SET = __DIR__ . '/../../../config/set/php-version-based.php';
 }

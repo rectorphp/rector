@@ -8,13 +8,26 @@ parameters:
         - bin
         - src
         - tests
+        - packages
 
     excludePaths:
         - */Fixture/*
         - */Source/*
+        - */stubs/*
 
     treatPhpDocTypesAsCertain: false
 
     ignoreErrors:
         # enum error type
         - '#Method TomasVotruba\\ClassLeak\\Reporting\\UnusedClassReporter::reportResult\(\) never returns 2 so it can be removed from the return type#'
+
+        # unused-public package - phpstan extension internals
+        -
+            identifier: missingType.generics
+            path: packages/unused-public/*
+        -
+            identifier: phpstanApi.instanceofType
+            path: packages/unused-public/*
+        -
+            identifier: phpstanApi.instanceofAssumption
+            path: packages/unused-public/src/MethodTypeDetector.php

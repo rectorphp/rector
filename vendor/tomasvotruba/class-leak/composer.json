@@ -22,18 +22,22 @@
         "rector\/jack": "^1.0",
         "rector\/rector": "^2.4",
         "symplify\/phpstan-extensions": "^12",
-        "tomasvotruba\/unused-public": "^2.2",
         "tracy\/tracy": "^2.12"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202608\\TomasVotruba\\ClassLeak\\": "src"
+            "RectorPrefix202608\\TomasVotruba\\ClassLeak\\": "src",
+            "RectorPrefix202608\\TomasVotruba\\UnusedPublic\\": "packages\/unused-public\/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202608\\TomasVotruba\\ClassLeak\\Tests\\": "tests"
-        }
+            "RectorPrefix202608\\TomasVotruba\\ClassLeak\\Tests\\": "tests",
+            "RectorPrefix202608\\TomasVotruba\\UnusedPublic\\Tests\\": "packages\/unused-public\/tests"
+        },
+        "classmap": [
+            "packages\/unused-public\/stubs"
+        ]
     },
     "replace": {
         "symfony\/polyfill-ctype": "*",

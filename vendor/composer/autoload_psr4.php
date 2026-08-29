@@ -16,6 +16,7 @@ return array(
     'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src', $vendorDir . '/rector/rector-doctrine/rules'),
     'Rector\\' => array($baseDir . '/rules', $baseDir . '/src', $vendorDir . '/rector/rector-downgrade-php/src', $vendorDir . '/rector/rector-downgrade-php/rules'),
     'RectorPrefix202608\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
+    'RectorPrefix202608\\TomasVotruba\\UnusedPublic\\' => array($vendorDir . '/tomasvotruba/class-leak/packages/unused-public/src'),
     'RectorPrefix202608\\TomasVotruba\\ClassLeak\\' => array($vendorDir . '/tomasvotruba/class-leak/src'),
     'RectorPrefix202608\\Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
     'RectorPrefix202608\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),

@@ -51,7 +51,13 @@ final class PhpVersionedFilter
                 $activeRectors[] = $rector;
                 continue;
             }
-            $maxPhpVersion = $rector instanceof RelatedPolyfillInterface && $ceilingPhpVersion !== null ? $ceilingPhpVersion : $minProjectPhpVersion;
+            // an explicitly picked withPhpSets() version caps the whole set:
+            // polyfilled rules up to the ceiling, the rest up to the lower of ceiling and project version
+            if ($ceilingPhpVersion !== null) {
+                $maxPhpVersion = $rector instanceof RelatedPolyfillInterface ? $ceilingPhpVersion : min($ceilingPhpVersion, $minProjectPhpVersion);
+            } else {
+                $maxPhpVersion = $minProjectPhpVersion;
+            }
             // does satisfy version? → include
             if ($rector->provideMinPhpVersion() <= $maxPhpVersion) {
                 $activeRectors[] = $rector;

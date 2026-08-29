@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use Deprecated;
+use RectorPrefix202608\DrupalRector\Set\DrupalSetList;
+use RectorPrefix202608\Nette\Utils\Strings;
 use PhpParser\NodeVisitor;
 use Rector\Bridge\SetRectorsResolver;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
@@ -42,6 +44,11 @@ final class RectorConfigBuilder
      * @var int
      */
     private const MAX_LEVEL_GAP = 10;
+    /**
+     * Matches the deprecated per-version PHP set files, e.g. .../config/set/php82.php
+     * @var string
+     */
+    private const DEPRECATED_PHP_SET_REGEX = '#/config/set/php\d+\.php$#';
     /**
      * A level method and the set that contains the very same rules,
      * so they are never enabled both at once
@@ -129,6 +136,11 @@ final class RectorConfigBuilder
     private ?bool $isWithPhpLevelUsed = null;
     private ?int $pickedPhpSetsVersion = null;
     /**
+     * Only an explicitly picked withPhpSets(phpXX) version acts as a ceiling; the composer.json
+     * fallback must not, so polyfilled rules can still be raised above the project PHP version
+     */
+    private bool $isPhpSetsVersionPicked = \false;
+    /**
      * @var LevelOverflow[]
      */
     private array $levelOverflows = [];
@@ -138,7 +150,7 @@ final class RectorConfigBuilder
         if ($this->isWithPhpSetsUsed === \true) {
             $this->sets[] = SetList::PHP_POLYFILLS;
         }
-        if ($this->pickedPhpSetsVersion !== null) {
+        if ($this->isPhpSetsVersionPicked && $this->pickedPhpSetsVersion !== null) {
             SimpleParameterProvider::setParameter(\Rector\Configuration\Option::POLYFILL_CEILING_PHP_VERSION, $this->pickedPhpSetsVersion);
         }
         $uniqueSets = array_unique($this->sets);
@@ -291,6 +303,12 @@ final class RectorConfigBuilder
      */
     public function withSets(array $sets): self
     {
+        foreach ($sets as $set) {
+            if (Strings::match($set, self::DEPRECATED_PHP_SET_REGEX) === null) {
+                continue;
+            }
+            Notifier::notifyDeprecatedPhpSet($set);
+        }
         $this->sets = array_merge($this->sets, $sets);
         return $this;
     }
@@ -377,12 +395,12 @@ final class RectorConfigBuilder
         if (count($pickedPhpVersions) > 1) {
             throw new InvalidConfigurationException(sprintf('Pick only one version target in "withPhpSets()". All rules up to this version will be used.%sTo use your composer.json PHP version, keep arguments empty.', \PHP_EOL));
         }
-        // no version picked, resolve it from the project composer.json
+        // no version picked, target the project composer.json PHP version
         if ($pickedPhpVersions === []) {
             return $this->addPhpLevelSets(ComposerJsonPhpVersionResolver::resolveFromCwdOrFail());
         }
         // explicitly picked version is a ceiling, even for polyfilled rules
-        $this->pickedPhpSetsVersion = $pickedPhpVersions[0];
+        $this->isPhpSetsVersionPicked = \true;
         return $this->addPhpLevelSets($pickedPhpVersions[0]);
     }
     public function withPhp53Sets(): self
@@ -441,7 +459,7 @@ final class RectorConfigBuilder
         }
         if ($drupal && class_exists('DrupalRector\Set\DrupalSetList') && constant('DrupalRector\Set\DrupalSetList::COMPOSER_BASED')) {
             // waits on https://github.com/palantirnet/drupal-rector/pull/419/files#diff-c6bd4ee854830efc1363a7d99c1b6a2e7e64f2499a51e503174ab777de7e64e5
-            $this->sets[] = \RectorPrefix202608\DrupalRector\Set\DrupalSetList::COMPOSER_BASED;
+            $this->sets[] = DrupalSetList::COMPOSER_BASED;
         }
         if ($phpunit) {
             // single set, as every rule inside is bound to the installed PHPUnit version on its own
@@ -636,10 +654,8 @@ final class RectorConfigBuilder
     {
         Assert::natural($level);
         $this->isWithPhpLevelUsed = \true;
-        $phpVersion = ComposerJsonPhpVersionResolver::resolveFromCwdOrFail();
         $setRectorsResolver = new SetRectorsResolver();
-        $setFilePaths = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($phpVersion);
-        $rectorRulesWithConfiguration = $setRectorsResolver->resolveFromFilePathsIncludingConfiguration($setFilePaths);
+        $rectorRulesWithConfiguration = $setRectorsResolver->resolveFromFilePathIncludingConfiguration(SetList::PHP_VERSION_BASED_SET);
         foreach ($rectorRulesWithConfiguration as $position => $rectorRuleWithConfiguration) {
             // add rules until level is reached
             if ($position > $level) {
@@ -762,7 +778,8 @@ final class RectorConfigBuilder
     private function addPhpLevelSets(int $phpVersion): self
     {
         $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($phpVersion));
+        $this->pickedPhpSetsVersion = $phpVersion;
+        $this->sets[] = SetList::PHP_VERSION_BASED_SET;
         return $this;
     }
     private function reportDeprecatedPhpSetsMethod(string $methodName): self

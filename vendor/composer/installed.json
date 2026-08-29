@@ -2525,17 +2525,17 @@
         },
         {
             "name": "tomasvotruba\/class-leak",
-            "version": "2.1.8",
-            "version_normalized": "2.1.8.0",
+            "version": "2.2.0",
+            "version_normalized": "2.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/TomasVotruba\/class-leak.git",
-                "reference": "3ebe4d7bebfb40ab3a85a36431821367b0ac57ab"
+                "reference": "cdc1c116f3deaa68ebd338fa2f791a0b4a52ad87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/class-leak\/zipball\/3ebe4d7bebfb40ab3a85a36431821367b0ac57ab",
-                "reference": "3ebe4d7bebfb40ab3a85a36431821367b0ac57ab",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/class-leak\/zipball\/cdc1c116f3deaa68ebd338fa2f791a0b4a52ad87",
+                "reference": "cdc1c116f3deaa68ebd338fa2f791a0b4a52ad87",
                 "shasum": ""
             },
             "require": {
@@ -2559,10 +2559,9 @@
                 "rector\/rector": "^2.4",
                 "symplify\/easy-coding-standard": "^13.0",
                 "symplify\/phpstan-extensions": "^12",
-                "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-06-20T16:19:43+00:00",
+            "time": "2026-08-29T20:55:33+00:00",
             "bin": [
                 "bin\/class-leak",
                 "bin\/class-leak.php"
@@ -2571,7 +2570,8 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202608\\TomasVotruba\\ClassLeak\\": "src"
+                    "RectorPrefix202608\\TomasVotruba\\ClassLeak\\": "src",
+                    "RectorPrefix202608\\TomasVotruba\\UnusedPublic\\": "packages\/unused-public\/src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2581,7 +2581,7 @@
             "description": "Detect leaking classes",
             "support": {
                 "issues": "https:\/\/github.com\/TomasVotruba\/class-leak\/issues",
-                "source": "https:\/\/github.com\/TomasVotruba\/class-leak\/tree\/2.1.8"
+                "source": "https:\/\/github.com\/TomasVotruba\/class-leak\/tree\/2.2.0"
             },
             "funding": [
                 {
