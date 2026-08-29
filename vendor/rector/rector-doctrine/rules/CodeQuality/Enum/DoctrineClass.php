@@ -11,8 +11,8 @@ use Deprecated;
 final class DoctrineClass
 {
     /**
+     * @deprecated BC only
      * @var string
      */
-    #[Deprecated(message: 'BC only')]
     public const COLLECTION = \Rector\Doctrine\Enum\DoctrineClass::COLLECTION;
 }

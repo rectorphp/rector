@@ -190,6 +190,9 @@ final class Type
     {
         return $this->singleName !== null;
     }
+    /**
+     * @deprecated use isSimple()
+     */
     public function isSingle(): bool
     {
         return $this->singleName !== null;

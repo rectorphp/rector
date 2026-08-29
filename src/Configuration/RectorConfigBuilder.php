@@ -403,38 +403,65 @@ final class RectorConfigBuilder
         $this->isPhpSetsVersionPicked = \true;
         return $this->addPhpLevelSets($pickedPhpVersions[0]);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp53Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp54Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp55Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp56Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp70Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp71Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp72Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp73Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
     }
+    /**
+     * @deprecated Use "withPhpLevel()" instead, it raises PHP level one rule at a time.
+     */
     public function withPhp74Sets(): self
     {
         return $this->reportDeprecatedPhpSetsMethod(__FUNCTION__);
@@ -523,6 +550,7 @@ final class RectorConfigBuilder
     /**
      * @param class-string $cacheMetaExtensionClass
      * @deprecated Niche mechanism, no longer applied. Let Rector handle cache on its own.
+     * @deprecated Niche mechanism, no longer applied. Let Rector handle cache on its own. If custom invalidation is needed, handle it in CI in a more generic way, e.g. by clearing the cache directory.
      */
     public function withCacheMetaExtension(string $cacheMetaExtensionClass): self
     {

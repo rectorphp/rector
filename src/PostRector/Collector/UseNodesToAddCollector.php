@@ -74,6 +74,7 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
+     * @deprecated Use $file->getFileNode()->getPendingImports()->addUseImport($type) instead.
      */
     public function addUseImport(FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
@@ -86,6 +87,7 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
+     * @deprecated Use $file->getFileNode()->getPendingImports()->addConstantUseImport($type) instead.
      */
     public function addConstantUseImport(FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
@@ -98,6 +100,7 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
+     * @deprecated Use $file->getFileNode()->getPendingImports()->addFunctionUseImport($type) instead.
      */
     public function addFunctionUseImport(FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
@@ -112,6 +115,7 @@ final class UseNodesToAddCollector
      * @api
      *
      * @return array<AliasedObjectType|FullyQualifiedObjectType>
+     * @deprecated Use $file->getFileNode()->resolveUsedImportTypes() instead.
      */
     public function getUseImportTypesByNode(File $file): array
     {
@@ -124,6 +128,7 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
+     * @deprecated Use $file->getFileNode()->hasImport($type) instead.
      */
     public function hasImport(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
@@ -136,6 +141,7 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
+     * @deprecated Use $file->getFileNode()->getPendingImports()->isShortImported($type) instead.
      */
     public function isShortImported(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
@@ -148,6 +154,7 @@ final class UseNodesToAddCollector
     }
     /**
      * @api
+     * @deprecated Use $file->getFileNode()->getPendingImports()->isImportShortable($type) instead.
      */
     public function isImportShortable(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
@@ -162,6 +169,7 @@ final class UseNodesToAddCollector
      * @api
      *
      * @return FullyQualifiedObjectType[]
+     * @deprecated Use $file->getFileNode()->getPendingImports()->getUseImports() instead.
      */
     public function getObjectImportsByFilePath(string $filePath): array
     {
@@ -176,6 +184,7 @@ final class UseNodesToAddCollector
      * @api
      *
      * @return FullyQualifiedObjectType[]
+     * @deprecated Use $file->getFileNode()->getPendingImports()->getConstantImports() instead.
      */
     public function getConstantImportsByFilePath(string $filePath): array
     {
@@ -190,6 +199,7 @@ final class UseNodesToAddCollector
      * @api
      *
      * @return FullyQualifiedObjectType[]
+     * @deprecated Use $file->getFileNode()->getPendingImports()->getFunctionImports() instead.
      */
     public function getFunctionImportsByFilePath(string $filePath): array
     {

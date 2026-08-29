@@ -18,7 +18,9 @@ class Strings
 {
     use Nette\StaticClass;
     public const TrimCharacters = " \t\n\r\x00\v            ​ 　";
-    #[\Deprecated('use Strings::TrimCharacters')]
+    /**
+     * @deprecated use Strings::TrimCharacters
+     */
     public const TRIM_CHARACTERS = self::TrimCharacters;
     /**
      * @deprecated use Nette\Utils\Validators::isUnicode()

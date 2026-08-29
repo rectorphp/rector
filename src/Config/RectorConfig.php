@@ -361,6 +361,7 @@ final class RectorConfig extends Container
     }
     /**
      * @param class-string<CacheStorageInterface> $cacheClass
+     * @deprecated Cache storage is selected automatically: file cache locally, in-memory cache in CI, where the ephemeral workspace makes writing a cache that is never re-read wasted IO. The passed value is ignored.
      */
     public function cacheClass(string $cacheClass): void
     {
@@ -368,6 +369,7 @@ final class RectorConfig extends Container
     }
     /**
      * @param class-string $cacheMetaExtensionClass
+     * @deprecated Niche mechanism, no longer applied. Let Rector handle cache on its own. If custom invalidation is needed, handle it in CI in a more generic way, e.g. by clearing the cache directory.
      */
     public function cacheMetaExtension(string $cacheMetaExtensionClass): void
     {
