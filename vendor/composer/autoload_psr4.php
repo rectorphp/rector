@@ -19,7 +19,6 @@ return array(
     'RectorPrefix202608\\TomasVotruba\\ClassLeak\\' => array($vendorDir . '/tomasvotruba/class-leak/src'),
     'RectorPrefix202608\\Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
     'RectorPrefix202608\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
-    'RectorPrefix202608\\Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'RectorPrefix202608\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'RectorPrefix202608\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
     'RectorPrefix202608\\Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
