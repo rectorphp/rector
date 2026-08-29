@@ -6,9 +6,9 @@ namespace Rector\ValueObject\Reporting;
 use RectorPrefix202608\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Parallel\Contract\SerializableInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
 use Rector\Util\RectorClassesSorter;
-use RectorPrefix202608\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\ValueObject\Reporting\FileDiffTest

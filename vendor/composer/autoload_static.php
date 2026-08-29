@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb2fba6614baf3084a15daa214518a340
+class ComposerStaticInit9be9f5cf86597e60a41eb4492741190c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -31,7 +31,6 @@ class ComposerStaticInitb2fba6614baf3084a15daa214518a340
             'Rector\\' => 7,
             'RectorPrefix202608\\Webmozart\\Assert\\' => 36,
             'RectorPrefix202608\\TomasVotruba\\ClassLeak\\' => 42,
-            'RectorPrefix202608\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202608\\Symfony\\Contracts\\Service\\' => 45,
             'RectorPrefix202608\\Symfony\\Component\\String\\' => 44,
             'RectorPrefix202608\\Symfony\\Component\\Process\\' => 45,
@@ -115,10 +114,6 @@ class ComposerStaticInitb2fba6614baf3084a15daa214518a340
         'RectorPrefix202608\\TomasVotruba\\ClassLeak\\' =>
         array (
             0 => __DIR__ . '/..' . '/tomasvotruba/class-leak/src',
-        ),
-        'RectorPrefix202608\\Symplify\\EasyParallel\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symplify/easy-parallel/src',
         ),
         'RectorPrefix202608\\Symfony\\Contracts\\Service\\' =>
         array (
@@ -1119,20 +1114,6 @@ class ComposerStaticInitb2fba6614baf3084a15daa214518a340
         'RectorPrefix202608\\Symfony\\Contracts\\Service\\ServiceProviderInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceProviderInterface.php',
         'RectorPrefix202608\\Symfony\\Contracts\\Service\\ServiceSubscriberInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberInterface.php',
         'RectorPrefix202608\\Symfony\\Contracts\\Service\\ServiceSubscriberTrait' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberTrait.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\CommandLine\\WorkerCommandLineFactory' => __DIR__ . '/..' . '/symplify/easy-parallel/src/CommandLine/WorkerCommandLineFactory.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\Contract\\SerializableInterface' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Contract/SerializableInterface.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\CpuCoreCountProvider' => __DIR__ . '/..' . '/symplify/easy-parallel/src/CpuCoreCountProvider.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\Enum\\Action' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Enum/Action.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\Enum\\Content' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Enum/Content.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\Enum\\ReactCommand' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Enum/ReactCommand.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\Enum\\ReactEvent' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Enum/ReactEvent.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\Exception\\ParallelShouldNotHappenException' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Exception/ParallelShouldNotHappenException.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\Reflection\\CommandFromReflectionFactory' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Reflection/CommandFromReflectionFactory.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\ScheduleFactory' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ScheduleFactory.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\ValueObject\\EasyParallelConfig' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/EasyParallelConfig.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\ValueObject\\ParallelProcess' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ParallelProcess.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\ValueObject\\ProcessPool' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ProcessPool.php',
-        'RectorPrefix202608\\Symplify\\EasyParallel\\ValueObject\\Schedule' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/Schedule.php',
         'RectorPrefix202608\\TomasVotruba\\ClassLeak\\ClassNameResolver' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ClassNameResolver.php',
         'RectorPrefix202608\\TomasVotruba\\ClassLeak\\Commands\\CheckCommand' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Commands/CheckCommand.php',
         'RectorPrefix202608\\TomasVotruba\\ClassLeak\\DependencyInjection\\ContainerFactory' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/DependencyInjection/ContainerFactory.php',
@@ -2184,8 +2165,20 @@ class ComposerStaticInitb2fba6614baf3084a15daa214518a340
         'Rector\\PHPUnit\\ValueObject\\FunctionNameWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/FunctionNameWithAssertMethods.php',
         'Rector\\Parallel\\Application\\ParallelFileProcessor' => __DIR__ . '/../..' . '/src/Parallel/Application/ParallelFileProcessor.php',
         'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => __DIR__ . '/../..' . '/src/Parallel/Command/WorkerCommandLineFactory.php',
+        'Rector\\Parallel\\Contract\\SerializableInterface' => __DIR__ . '/../..' . '/src/Parallel/Contract/SerializableInterface.php',
+        'Rector\\Parallel\\CpuCoreCountProvider' => __DIR__ . '/../..' . '/src/Parallel/CpuCoreCountProvider.php',
+        'Rector\\Parallel\\Enum\\Action' => __DIR__ . '/../..' . '/src/Parallel/Enum/Action.php',
+        'Rector\\Parallel\\Enum\\Content' => __DIR__ . '/../..' . '/src/Parallel/Enum/Content.php',
+        'Rector\\Parallel\\Enum\\ReactCommand' => __DIR__ . '/../..' . '/src/Parallel/Enum/ReactCommand.php',
+        'Rector\\Parallel\\Enum\\ReactEvent' => __DIR__ . '/../..' . '/src/Parallel/Enum/ReactEvent.php',
+        'Rector\\Parallel\\Exception\\ParallelShouldNotHappenException' => __DIR__ . '/../..' . '/src/Parallel/Exception/ParallelShouldNotHappenException.php',
+        'Rector\\Parallel\\Reflection\\CommandFromReflectionFactory' => __DIR__ . '/../..' . '/src/Parallel/Reflection/CommandFromReflectionFactory.php',
+        'Rector\\Parallel\\ScheduleFactory' => __DIR__ . '/../..' . '/src/Parallel/ScheduleFactory.php',
         'Rector\\Parallel\\ValueObject\\Bridge' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/Bridge.php',
         'Rector\\Parallel\\ValueObject\\BridgeItem' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/BridgeItem.php',
+        'Rector\\Parallel\\ValueObject\\ParallelProcess' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/ParallelProcess.php',
+        'Rector\\Parallel\\ValueObject\\ProcessPool' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/ProcessPool.php',
+        'Rector\\Parallel\\ValueObject\\Schedule' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/Schedule.php',
         'Rector\\Php52\\Rector\\Property\\VarToPublicPropertyRector' => __DIR__ . '/../..' . '/rules/Php52/Rector/Property/VarToPublicPropertyRector.php',
         'Rector\\Php52\\Rector\\Switch_\\ContinueToBreakInSwitchRector' => __DIR__ . '/../..' . '/rules/Php52/Rector/Switch_/ContinueToBreakInSwitchRector.php',
         'Rector\\Php53\\Rector\\FuncCall\\DirNameFileConstantToDirConstantRector' => __DIR__ . '/../..' . '/rules/Php53/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php',
@@ -3061,9 +3054,9 @@ class ComposerStaticInitb2fba6614baf3084a15daa214518a340
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb2fba6614baf3084a15daa214518a340::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb2fba6614baf3084a15daa214518a340::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb2fba6614baf3084a15daa214518a340::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9be9f5cf86597e60a41eb4492741190c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9be9f5cf86597e60a41eb4492741190c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9be9f5cf86597e60a41eb4492741190c::$classMap;
 
         }, null, ClassLoader::class);
     }

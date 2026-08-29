@@ -13,19 +13,19 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Command\ProcessCommand;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
+use Rector\Parallel\Enum\Action;
+use Rector\Parallel\Enum\Content;
+use Rector\Parallel\Enum\ReactCommand;
+use Rector\Parallel\Enum\ReactEvent;
 use Rector\Parallel\ValueObject\Bridge;
+use Rector\Parallel\ValueObject\ParallelProcess;
+use Rector\Parallel\ValueObject\ProcessPool;
+use Rector\Parallel\ValueObject\Schedule;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202608\Symfony\Component\Console\Command\Command;
 use RectorPrefix202608\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\Content;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\ReactEvent;
-use RectorPrefix202608\Symplify\EasyParallel\ValueObject\ParallelProcess;
-use RectorPrefix202608\Symplify\EasyParallel\ValueObject\ProcessPool;
-use RectorPrefix202608\Symplify\EasyParallel\ValueObject\Schedule;
 use Throwable;
 /**
  * Inspired from @see
@@ -50,7 +50,7 @@ final class ParallelFileProcessor
      */
     private const MAX_CHUNKS_PER_WORKER = 8;
     /**
-     * @var \Symplify\EasyParallel\ValueObject\ProcessPool|null
+     * @var \Rector\Parallel\ValueObject\ProcessPool|null
      */
     private $processPool = null;
     public function __construct(WorkerCommandLineFactory $workerCommandLineFactory)

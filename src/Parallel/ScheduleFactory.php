@@ -1,14 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Symplify\EasyParallel;
+namespace Rector\Parallel;
 
-use RectorPrefix202608\Symplify\EasyParallel\ValueObject\Schedule;
+use Rector\Parallel\ValueObject\Schedule;
+use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
  * Used from
  * https://github.com/phpstan/phpstan-src/blob/9124c66dcc55a222e21b1717ba5f60771f7dda92/src/Parallel/Scheduler.php
- *
- * @api
  */
 final class ScheduleFactory
 {
@@ -17,6 +16,7 @@ final class ScheduleFactory
      */
     public function create(int $cpuCores, int $jobSize, int $maxNumberOfProcesses, array $files): Schedule
     {
+        Assert::positiveInteger($jobSize);
         $jobs = array_chunk($files, $jobSize);
         $numberOfProcesses = min(count($jobs), $cpuCores);
         $numberOfProcesses = min($maxNumberOfProcesses, $numberOfProcesses);

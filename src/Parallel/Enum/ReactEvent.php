@@ -1,11 +1,8 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Symplify\EasyParallel\Enum;
+namespace Rector\Parallel\Enum;
 
-/**
- * @api
- */
 final class ReactEvent
 {
     /**

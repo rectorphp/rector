@@ -14,6 +14,9 @@ use Rector\Configuration\ConfigurationFactory;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Configuration\Option;
 use Rector\Console\ProcessConfigureDecorator;
+use Rector\Parallel\Enum\Action;
+use Rector\Parallel\Enum\ReactCommand;
+use Rector\Parallel\Enum\ReactEvent;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Util\MemoryLimiter;
@@ -22,9 +25,6 @@ use Rector\ValueObject\Error\SystemError;
 use RectorPrefix202608\Symfony\Component\Console\Command\Command;
 use RectorPrefix202608\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202608\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\ReactEvent;
 use Throwable;
 use RectorPrefix202608\Webmozart\Assert\Assert;
 /**
@@ -128,7 +128,7 @@ final class WorkerCommand extends Command
             Assert::notEmpty($filePaths);
             $processResult = $this->applicationFileProcessor->processFiles($filePaths, $configuration, $preFileCallback);
             /**
-             * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA
+             * this invokes all listeners listening $decoder->on(...) @see \Rector\Parallel\Enum\ReactEvent::DATA
              */
             $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::FILE_DIFFS => $processResult->getFileDiffs($input->getOption(Option::OUTPUT_FORMAT) !== 'json'), Bridge::FILES_COUNT => count($filePaths), Bridge::SYSTEM_ERRORS => $processResult->getSystemErrors(), Bridge::SYSTEM_ERRORS_COUNT => count($processResult->getSystemErrors()), Bridge::TOTAL_CHANGED => $processResult->getTotalChanged(), Bridge::USED_SKIPS => $processResult->getUsedSkips()]]);
         });

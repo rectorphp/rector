@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Symplify\EasyParallel\ValueObject;
+namespace Rector\Parallel\ValueObject;
 
 use RectorPrefix202608\Clue\React\NDJson\Decoder;
 use RectorPrefix202608\Clue\React\NDJson\Encoder;
@@ -9,16 +9,14 @@ use Exception;
 use RectorPrefix202608\React\ChildProcess\Process;
 use RectorPrefix202608\React\EventLoop\LoopInterface;
 use RectorPrefix202608\React\EventLoop\TimerInterface;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\Content;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202608\Symplify\EasyParallel\Enum\ReactEvent;
-use RectorPrefix202608\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use Rector\Parallel\Enum\Action;
+use Rector\Parallel\Enum\Content;
+use Rector\Parallel\Enum\ReactCommand;
+use Rector\Parallel\Enum\ReactEvent;
+use Rector\Parallel\Exception\ParallelShouldNotHappenException;
 use Throwable;
 /**
  * Inspired at @see https://raw.githubusercontent.com/phpstan/phpstan-src/master/src/Parallel/Process.php
- *
- * @api
  */
 final class ParallelProcess
 {
@@ -72,15 +70,16 @@ final class ParallelProcess
         $this->onData = $onData;
         $this->onError = $onError;
         $this->process->on(ReactEvent::EXIT, function ($exitCode) use ($onExit): void {
-            if ($this->stdErr === null) {
+            $stdErr = $this->stdErr;
+            if ($stdErr === null) {
                 throw new ParallelShouldNotHappenException();
             }
             $this->cancelTimer();
-            rewind($this->stdErr);
+            rewind($stdErr);
             /** @var string $streamContents */
-            $streamContents = stream_get_contents($this->stdErr);
+            $streamContents = stream_get_contents($stdErr);
             $onExit($exitCode, $streamContents);
-            fclose($this->stdErr);
+            fclose($stdErr);
         });
     }
     /**

@@ -1,14 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Symplify\EasyParallel\ValueObject;
+namespace Rector\Parallel\ValueObject;
 
 use RectorPrefix202608\React\Socket\TcpServer;
-use RectorPrefix202608\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use Rector\Parallel\Exception\ParallelShouldNotHappenException;
 /**
  * Used from https://github.com/phpstan/phpstan-src/blob/master/src/Parallel/ProcessPool.php
- *
- * @api
  */
 final class ProcessPool
 {
@@ -24,14 +22,14 @@ final class ProcessPool
     {
         $this->tcpServer = $tcpServer;
     }
-    public function getProcess(string $identifier): ParallelProcess
+    public function getProcess(string $identifier): \Rector\Parallel\ValueObject\ParallelProcess
     {
         if (!\array_key_exists($identifier, $this->processes)) {
             throw new ParallelShouldNotHappenException(\sprintf('Process "%s" not found.', $identifier));
         }
         return $this->processes[$identifier];
     }
-    public function attachProcess(string $identifier, ParallelProcess $parallelProcess): void
+    public function attachProcess(string $identifier, \Rector\Parallel\ValueObject\ParallelProcess $parallelProcess): void
     {
         $this->processes[$identifier] = $parallelProcess;
     }

@@ -2530,67 +2530,6 @@
             "install-path": "..\/symfony\/string"
         },
         {
-            "name": "symplify\/easy-parallel",
-            "version": "11.2.2",
-            "version_normalized": "11.2.2.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symplify\/easy-parallel.git",
-                "reference": "8586c18bb8efb31cd192a4e5cc94ae7813f72ed9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-parallel\/zipball\/8586c18bb8efb31cd192a4e5cc94ae7813f72ed9",
-                "reference": "8586c18bb8efb31cd192a4e5cc94ae7813f72ed9",
-                "shasum": ""
-            },
-            "require": {
-                "clue\/ndjson-react": "^1.3",
-                "fidry\/cpu-core-counter": "^0.5.1|^1.1",
-                "nette\/utils": "^3.2|^4.0",
-                "php": ">=8.1",
-                "react\/child-process": "^0.6.5",
-                "react\/event-loop": "^1.5",
-                "react\/socket": "^1.15",
-                "symfony\/console": "^6.2|^7.0"
-            },
-            "require-dev": {
-                "phpunit\/phpunit": "^10.5",
-                "rector\/rector": "^1.0",
-                "symplify\/easy-coding-standard": "^12.1",
-                "tomasvotruba\/class-leak": "^0.2.6"
-            },
-            "time": "2024-02-08T04:56:53+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix202608\\Symplify\\EasyParallel\\": "src"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Helper package for easier CLI project parallelization",
-            "support": {
-                "issues": "https:\/\/github.com\/symplify\/easy-parallel\/issues",
-                "source": "https:\/\/github.com\/symplify\/easy-parallel\/tree\/11.2.2"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/www.paypal.me\/rectorphp",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/tomasvotruba",
-                    "type": "github"
-                }
-            ],
-            "abandoned": "local parallel configuration",
-            "install-path": "..\/symplify\/easy-parallel"
-        },
-        {
             "name": "symplify\/rule-doc-generator-contracts",
             "version": "11.2.0",
             "version_normalized": "11.2.0.0",

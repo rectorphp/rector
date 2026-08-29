@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\ValueObject\Error;
 
 use RectorPrefix202608\Nette\Utils\Strings;
+use Rector\Parallel\Contract\SerializableInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
-use RectorPrefix202608\Symplify\EasyParallel\Contract\SerializableInterface;
 /**
  * @see \Rector\Tests\ValueObject\Error\SystemErrorTest
  */
