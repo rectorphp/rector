@@ -60,8 +60,13 @@ final class ChangedFilesDetector
     }
     public function hasFileChanged(string $filePath): bool
     {
-        $fileInfoCacheKey = $this->getFilePathCacheKey($filePath);
-        $cachedValue = $this->cache->load($fileInfoCacheKey, CacheKey::FILE_HASH_KEY);
+        $cachedValue = $this->cache->load($this->getFilePathCacheKey($filePath), CacheKey::FILE_HASH_KEY);
+        // a scoped (--only) run reuses the full-run cache: a file left clean by all rules stays
+        // clean under a single rule too, and the content is still compared below
+        if ($cachedValue === null && $this->scopeSuffix !== '') {
+            $unscopedCacheKey = $this->fileHasher->hash($this->resolvePath($filePath));
+            $cachedValue = $this->cache->load($unscopedCacheKey, CacheKey::FILE_HASH_KEY);
+        }
         if ($cachedValue !== null) {
             $currentFileHash = $this->hashFile($filePath);
             return $currentFileHash !== $cachedValue;

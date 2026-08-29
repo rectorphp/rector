@@ -176,6 +176,8 @@ final class RectorConfig extends Container
         Assert::isAOf($rectorClass, ConfigurableRectorInterface::class);
         // store configuration to cache
         $this->ruleConfigurations[$rectorClass] = array_merge($this->ruleConfigurations[$rectorClass] ?? [], $configuration);
+        // feed values into the cache hash, so a changed configuration invalidates the cache
+        SimpleParameterProvider::setParameter(Option::RULE_CONFIGURATIONS, $this->ruleConfigurations);
         $this->rule($rectorClass);
         $this->afterResolving($rectorClass, function (ConfigurableRectorInterface $configurableRector) use ($rectorClass): void {
             // the rule may have been re-registered without configuration since this callback was
