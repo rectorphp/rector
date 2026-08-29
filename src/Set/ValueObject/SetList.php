@@ -125,6 +125,7 @@ final class SetList
      */
     public const TYPE_DECLARATION_DOCBLOCKS = __DIR__ . '/../../../config/set/type-declaration-docblocks.php';
     /**
+     * @deprecated Use code-quality set instead, as all early return rules were moved there
      * @var string
      */
     public const EARLY_RETURN = __DIR__ . '/../../../config/set/early-return.php';
