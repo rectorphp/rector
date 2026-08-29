@@ -7,6 +7,7 @@ use Rector\CodeQuality\Rector\Class_\ReturnIteratorInDataProviderRector;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector;
 use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector;
+use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
 use Rector\TypeDeclaration\Rector\Class_\AddTestsVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Class_\ChildDoctrineRepositoryClassTypeRector;
 use Rector\TypeDeclaration\Rector\Class_\MergeDateTimePropertyTypeDeclarationRector;
@@ -77,6 +78,7 @@ use Rector\TypeDeclaration\Rector\FunctionLike\AddReturnTypeDeclarationFromYield
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictSetUpRector;
+use Rector\TypeDeclaration\Rector\While_\WhileNullableToInstanceofRector;
 final class TypeDeclarationLevel
 {
     /**
@@ -116,6 +118,8 @@ final class TypeDeclarationLevel
         ReturnNullableTypeRector::class,
         // php 7.4
         EmptyOnNullableObjectToInstanceOfRector::class,
+        WhileNullableToInstanceofRector::class,
+        BinaryOpNullableToInstanceofRector::class,
         // php 7.4
         TypedPropertyFromStrictConstructorRector::class,
         AddParamTypeSplFixedArrayRector::class,

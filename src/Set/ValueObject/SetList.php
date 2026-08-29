@@ -147,6 +147,7 @@ final class SetList
      */
     public const EARLY_RETURN = __DIR__ . '/../../../config/set/early-return.php';
     /**
+     * @deprecated Use code-quality set instead, as most instanceof rules were moved there
      * @var string
      */
     public const INSTANCEOF = __DIR__ . '/../../../config/set/instanceof.php';
