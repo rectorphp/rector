@@ -14,7 +14,7 @@ final class FileHashComputer
     public function compute(string $filePath): string
     {
         $this->ensureIsPhp($filePath);
-        $parametersHash = SimpleParameterProvider::hash();
+        $parametersHash = SimpleParameterProvider::hashForCacheInvalidation();
         return sha1($filePath . $parametersHash . VersionResolver::PACKAGE_VERSION);
     }
     private function ensureIsPhp(string $filePath): void

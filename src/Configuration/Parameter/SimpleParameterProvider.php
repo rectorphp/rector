@@ -12,6 +12,22 @@ use RectorPrefix202608\Webmozart\Assert\Assert;
 final class SimpleParameterProvider
 {
     /**
+     * Parameters that never change the refactored output - runtime tuning and reporting only.
+     * They are excluded from the cache invalidation hash, so toggling e.g. parallel or memory
+     * limit does not drop the whole cache.
+     *
+     * @var array<Option::*>
+     */
+    private const CACHE_IGNORED_PARAMETER_NAMES = [Option::PARALLEL, Option::PARALLEL_JOB_SIZE, Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS, Option::MEMORY_LIMIT, Option::NO_DIFFS, Option::CACHE_DIR, Option::CONTAINER_CACHE_DIRECTORY, Option::EDITOR_URL, Option::ABSOLUTE_FILE_PATH, Option::REPORT_UNUSED_SKIPS, Option::IS_RECTORCONFIG_BUILDER_RECREATED, Option::IS_RUN_NARROWED, Option::IS_CACHED_RUN, Option::SKIPPED_RECTOR_RULES, Option::SKIPPED_NON_RECTOR_CLASSES, Option::SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES, Option::DEPRECATED_PHP_SETS_METHODS, Option::DEPRECATED_ATTRIBUTES_SETS_ARGS, Option::DEPRECATED_COMPOSER_BASED_ARGS, Option::LEVEL_OVERFLOWS, Option::CACHE_META_EXTENSIONS, Option::COMPOSER_BOUND_RULE_CONFIGURATIONS, Option::ROOT_STANDALONE_REGISTERED_RULES, Option::SET_REGISTERED_RULES];
+    /**
+     * Parameters compared by direction instead of the strict hash: adding a rule/set or removing a
+     * skip means more work and must drop the cache, while removing a rule/set or adding a skip is
+     * safe and keeps it. Handled in ChangedFilesDetector, so they are excluded from the strict hash.
+     *
+     * @var array<Option::*>
+     */
+    private const CACHE_DIRECTIONAL_PARAMETER_NAMES = [Option::REGISTERED_RECTOR_RULES, Option::REGISTERED_RECTOR_SETS, Option::SKIP];
+    /**
      * @var array<string, mixed>
      */
     private static array $parameters = [];
@@ -100,12 +116,25 @@ final class SimpleParameterProvider
     }
     /**
      * @api
-     * For cache invalidation
+     * Strict hash for cache invalidation. Ignored and directionally compared parameters are left
+     * out, so only a real change to an output-affecting parameter drops the cache.
      */
-    public static function hash(): string
+    public static function hashForCacheInvalidation(): string
     {
-        $parameterKeys = self::$parameters;
-        return sha1(serialize($parameterKeys));
+        $strictParameters = self::$parameters;
+        foreach (array_merge(self::CACHE_IGNORED_PARAMETER_NAMES, self::CACHE_DIRECTIONAL_PARAMETER_NAMES) as $ignoredName) {
+            unset($strictParameters[$ignoredName]);
+        }
+        ksort($strictParameters);
+        return sha1(serialize($strictParameters));
+    }
+    /**
+     * @api
+     * @return array{rules: mixed[], sets: mixed[], skip: mixed[]}
+     */
+    public static function provideCacheDirectionalParameters(): array
+    {
+        return ['rules' => self::$parameters[Option::REGISTERED_RECTOR_RULES] ?? [], 'sets' => self::$parameters[Option::REGISTERED_RECTOR_SETS] ?? [], 'skip' => self::$parameters[Option::SKIP] ?? []];
     }
     /**
      * @param Option::* $name
