@@ -6,7 +6,6 @@ namespace Rector\Config;
 use RectorPrefix202608\Composer\Semver\Semver;
 use Deprecated;
 use RectorPrefix202608\Entropy\Container\Container;
-use Override;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Composer\InstalledPackageResolver;
 use Rector\Configuration\Option;
