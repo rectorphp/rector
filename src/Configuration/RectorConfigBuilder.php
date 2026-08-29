@@ -441,6 +441,11 @@ final class RectorConfigBuilder
     }
     // there is no withPhp80Sets() and above,
     // as we already use PHP 8.0 and should go with withPhpSets() instead
+    /**
+     * @param bool $instanceOf @deprecated Use $codeQuality instead, as most instanceof rules were moved there
+     * @param bool $if @deprecated Use $codeQuality and $codingStyle instead, as the if rules were moved there or deprecated
+     * @param bool $earlyReturn @deprecated Use $codeQuality instead, as all early return rules were moved there
+     */
     public function withPreparedSets(bool $deadCode = \false, bool $codeQuality = \false, bool $codingStyle = \false, bool $typeDeclarations = \false, bool $typeDeclarationDocblocks = \false, bool $privatization = \false, bool $naming = \false, bool $namedArgs = \false, bool $instanceOf = \false, bool $if = \false, bool $earlyReturn = \false, bool $carbon = \false, bool $rectorPreset = \false, bool $phpunitCodeQuality = \false, bool $phpunitNarrowAsserts = \false, bool $phpunitMockToStub = \false, bool $doctrineCodeQuality = \false, bool $symfonyCodeQuality = \false, bool $symfonyConfigs = \false): self
     {
         Notifier::notifyNotSuitableMethodForPHP74(__METHOD__);
@@ -517,6 +522,7 @@ final class RectorConfigBuilder
     }
     /**
      * @param class-string $cacheMetaExtensionClass
+     * @deprecated Niche mechanism, no longer applied. Let Rector handle cache on its own.
      */
     public function withCacheMetaExtension(string $cacheMetaExtensionClass): self
     {
