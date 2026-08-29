@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -57,7 +56,6 @@ final class DocblockNameImportingPostRector extends \Rector\PostRector\Rector\Ab
     /**
      * @param Stmt[] $stmts
      */
-    #[Override]
     public function shouldTraverse(array $stmts): bool
     {
         return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());

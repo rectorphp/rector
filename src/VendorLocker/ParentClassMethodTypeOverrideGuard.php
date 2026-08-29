@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\VendorLocker;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -55,7 +54,7 @@ final class ParentClassMethodTypeOverrideGuard
      * final. Adding a return or param type to such a class is a breaking change for its child
      * classes, so type-declaration rules must leave it untouched. Final classes are never guarded,
      * as they cannot be extended.
-     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\ClassMethod $node
      */
     public function isTypeGuardedClass($node): bool
     {
@@ -80,10 +79,7 @@ final class ParentClassMethodTypeOverrideGuard
         }
         return $found;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PHPStan\Reflection\MethodReflection $classMethod
-     */
-    public function hasParentClassMethod($classMethod): bool
+    public function hasParentClassMethod(ClassMethod $classMethod): bool
     {
         try {
             $parentClassMethod = $this->resolveParentClassMethod($classMethod);

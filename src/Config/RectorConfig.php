@@ -12,7 +12,6 @@ use Rector\Composer\InstalledPackageResolver;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\RectorConfigBuilder;
-use Rector\Contract\DependencyInjection\RelatedConfigInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Enum\Config\Defaults;
@@ -227,11 +226,6 @@ final class RectorConfig extends Container
             // for cache invalidation in case of change
             SimpleParameterProvider::addParameter(Option::REGISTERED_RECTOR_RULES, $rectorClass);
         }
-        if (is_a($rectorClass, RelatedConfigInterface::class, \true)) {
-            $configFile = $rectorClass::getConfigFile();
-            Assert::file($configFile, sprintf('The config path "%s" in "%s::getConfigFile()" could not be found', $configFile, $rectorClass));
-            $this->import($configFile);
-        }
     }
     /**
      * @param class-string<Command> $commandClass
@@ -442,7 +436,6 @@ final class RectorConfig extends Container
      *
      * @param class-string $contract
      */
-    #[Override]
     public function forgetByContract(string $contract): void
     {
         parent::forgetByContract($contract);

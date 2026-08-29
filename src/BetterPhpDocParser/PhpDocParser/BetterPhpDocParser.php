@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use RectorPrefix202608\Nette\Utils\Strings;
-use Override;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -95,7 +94,6 @@ final class BetterPhpDocParser extends PhpDocParser
         }
         return $phpDocNode;
     }
-    #[Override]
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
     {
         // replace generic nodes with DoctrineAnnotations
@@ -109,7 +107,6 @@ final class BetterPhpDocParser extends PhpDocParser
     /**
      * @param BetterTokenIterator $tokenIterator
      */
-    #[Override]
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
         $isPrecededByHorizontalWhitespace = $tokenIterator->isPrecededByHorizontalWhitespace();

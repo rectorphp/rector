@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDoc;
 
-use Override;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Stringable;
 /**
@@ -12,7 +11,6 @@ use Stringable;
  */
 final class SpacelessPhpDocTagNode extends PhpDocTagNode
 {
-    #[Override]
     public function __toString(): string
     {
         return $this->name . $this->value;

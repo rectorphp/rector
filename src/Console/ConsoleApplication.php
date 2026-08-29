@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Console;
 
 use RectorPrefix202608\Composer\XdebugHandler\XdebugHandler;
-use Override;
 use Rector\Application\VersionResolver;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
@@ -40,7 +39,6 @@ final class ConsoleApplication extends Application
         // run this command, if no command name is provided
         $this->setDefaultCommand('process');
     }
-    #[Override]
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
         // support "-v" as an alias for "--version", as "verbose" option is removed
@@ -78,7 +76,6 @@ final class ConsoleApplication extends Application
         }
         return parent::doRun($input, $output);
     }
-    #[Override]
     protected function getDefaultInputDefinition(): InputDefinition
     {
         $defaultInputDefinition = parent::getDefaultInputDefinition();

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitor;
@@ -23,7 +22,6 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
     /**
      * @param Stmt[] $stmts
      */
-    #[Override]
     public function shouldTraverse(array $stmts): bool
     {
         $fileNode = $stmts[0] ?? null;

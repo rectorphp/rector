@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -60,7 +59,6 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
     /**
      * @param Stmt[] $stmts
      */
-    #[Override]
     public function shouldTraverse(array $stmts): bool
     {
         return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());

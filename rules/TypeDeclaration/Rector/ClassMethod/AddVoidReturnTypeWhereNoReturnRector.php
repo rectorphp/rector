@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ClassModifierChecker;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
@@ -111,7 +112,12 @@ CODE_SAMPLE
         if ($classMethod->isProtected()) {
             return !$this->classModifierChecker->isInsideFinalClass($classMethod);
         }
-        return $this->classModifierChecker->isInsideAbstractClass($classMethod) && $classMethod->getStmts() === [];
+        $scope = ScopeFetcher::fetch($classMethod);
+        if (!$scope->isInClass()) {
+            return \false;
+        }
+        $classReflection = $scope->getClassReflection();
+        return $classReflection->isAbstract();
     }
     private function isNotFinalAndHasExceptionOnly(ClassMethod $classMethod): bool
     {

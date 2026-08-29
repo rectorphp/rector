@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Use_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
@@ -30,7 +31,7 @@ final class ClassAnnotationMatcher
      */
     private ReflectionProvider $reflectionProvider;
     /**
-     * @var array<non-empty-string, string>
+     * @var array<non-empty-string, non-empty-string>
      */
     private array $fullyQualifiedNameByHash = [];
     public function __construct(UseImportNameMatcher $useImportNameMatcher, UseImportsResolver $useImportsResolver, ReflectionProvider $reflectionProvider)
@@ -49,6 +50,9 @@ final class ClassAnnotationMatcher
             return $this->fullyQualifiedNameByHash[$uniqueId];
         }
         $tag = ltrim($tag, '@');
+        if ($tag === '') {
+            throw new ShouldNotHappenException();
+        }
         $uses = $this->useImportsResolver->resolve();
         $fullyQualifiedClass = $this->resolveFullyQualifiedClass($uses, $node, $tag);
         $fullyQualifiedClass ??= $tag;

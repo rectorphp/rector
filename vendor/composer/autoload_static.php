@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitde06eaa12aa21c2f652809601c70a851
+class ComposerStaticInitb2fba6614baf3084a15daa214518a340
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1464,7 +1464,6 @@ class ComposerStaticInitde06eaa12aa21c2f652809601c70a851
         'Rector\\Console\\ProcessConfigureDecorator' => __DIR__ . '/../..' . '/src/Console/ProcessConfigureDecorator.php',
         'Rector\\Console\\Style\\RectorStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorStyle.php',
         'Rector\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
-        'Rector\\Contract\\DependencyInjection\\RelatedConfigInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/RelatedConfigInterface.php',
         'Rector\\Contract\\DependencyInjection\\ResettableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResettableInterface.php',
         'Rector\\Contract\\PhpParser\\DecoratingNodeVisitorInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/DecoratingNodeVisitorInterface.php',
         'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
@@ -3062,9 +3061,9 @@ class ComposerStaticInitde06eaa12aa21c2f652809601c70a851
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitde06eaa12aa21c2f652809601c70a851::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitde06eaa12aa21c2f652809601c70a851::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitde06eaa12aa21c2f652809601c70a851::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb2fba6614baf3084a15daa214518a340::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb2fba6614baf3084a15daa214518a340::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb2fba6614baf3084a15daa214518a340::$classMap;
 
         }, null, ClassLoader::class);
     }
