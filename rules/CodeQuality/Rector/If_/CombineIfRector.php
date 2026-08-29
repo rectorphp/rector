@@ -4,37 +4,17 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\BetterPhpDocParser\Comment\CommentsMerger;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\If_\CombineIfRector\CombineIfRectorTest
+ * @deprecated This rule is deprecated, as merging nested ifs can create much less readable code and depends on context.
  */
-final class CombineIfRector extends AbstractRector
+final class CombineIfRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private CommentsMerger $commentsMerger;
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    public function __construct(CommentsMerger $commentsMerger, PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->commentsMerger = $commentsMerger;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Merge nested if statements', [new CodeSample(<<<'CODE_SAMPLE'
@@ -75,58 +55,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
-        /** @var If_ $subIf */
-        $subIf = $node->stmts[0];
-        if ($this->hasVarTag($subIf)) {
-            return null;
-        }
-        $node->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $cond = $node->cond;
-        while ($cond instanceof BinaryOp) {
-            if (!$cond->right instanceof BinaryOp) {
-                $cond->right->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            }
-            $cond = $cond->right;
-        }
-        if ($subIf->cond instanceof BinaryOp && !$subIf->cond->left instanceof BinaryOp) {
-            $subIf->cond->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        }
-        if ($node->cond instanceof BooleanNot && $node->cond->expr instanceof BinaryOp) {
-            $node->cond->expr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        }
-        $node->cond = new BooleanAnd($node->cond, $subIf->cond);
-        $node->stmts = $subIf->stmts;
-        $this->commentsMerger->keepComments($node, [$subIf]);
-        return $node;
-    }
-    private function shouldSkip(If_ $if): bool
-    {
-        if ($if->else instanceof Else_) {
-            return \true;
-        }
-        if (count($if->stmts) !== 1) {
-            return \true;
-        }
-        if ($if->elseifs !== []) {
-            return \true;
-        }
-        if (!$if->stmts[0] instanceof If_) {
-            return \true;
-        }
-        if ($if->stmts[0]->else instanceof Else_) {
-            return \true;
-        }
-        return (bool) $if->stmts[0]->elseifs;
-    }
-    private function hasVarTag(If_ $if): bool
-    {
-        $subIfPhpDocInfo = $this->phpDocInfoFactory->createFromNode($if);
-        if (!$subIfPhpDocInfo instanceof PhpDocInfo) {
-            return \false;
-        }
-        return $subIfPhpDocInfo->getVarTagValueNode() instanceof VarTagValueNode;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as merging nested ifs can create much less readable code and depends on context', self::class));
     }
 }
