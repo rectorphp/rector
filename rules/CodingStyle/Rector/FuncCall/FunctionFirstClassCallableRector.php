@@ -84,7 +84,9 @@ CODE_SAMPLE
             if (!$arg->value instanceof String_) {
                 continue;
             }
-            $node->args[$key] = new Arg(new FuncCall(strpos($arg->value->value, '\\') !== \false ? new FullyQualified($arg->value->value) : new Name($arg->value->value), [new VariadicPlaceholder()]), \false, \false, [], $arg->name);
+            $isFullyQualified = strncmp($arg->value->value, '\\', strlen('\\')) === 0;
+            $callableName = ltrim($arg->value->value, '\\');
+            $node->args[$key] = new Arg(new FuncCall($isFullyQualified || strpos($callableName, '\\') !== \false ? new FullyQualified($callableName) : new Name($callableName), [new VariadicPlaceholder()]), \false, \false, [], $arg->name);
             $hasChanged = \true;
         }
         return $hasChanged ? $node : null;
