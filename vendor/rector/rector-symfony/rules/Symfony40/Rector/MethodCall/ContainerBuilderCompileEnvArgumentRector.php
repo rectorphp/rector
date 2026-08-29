@@ -51,10 +51,10 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'compile')) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
+        if (count($node->args) === 1) {
             return null;
         }
-        if (count($node->args) === 1) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\Component\DependencyInjection\ContainerBuilder'))) {
             return null;
         }
         $node->args = $this->nodeFactory->createArgs([$this->nodeFactory->createTrue()]);

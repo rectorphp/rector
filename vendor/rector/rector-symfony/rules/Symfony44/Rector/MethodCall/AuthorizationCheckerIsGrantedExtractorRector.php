@@ -107,15 +107,15 @@ CODE_SAMPLE
             }
             return null;
         }
+        if (!$this->isName($node->name, 'isGranted')) {
+            return null;
+        }
         $objectType = $this->nodeTypeResolver->getType($node->var);
         if (!$objectType instanceof ObjectType) {
             return null;
         }
         $authorizationChecker = new ObjectType(SymfonyClass::AUTHORIZATION_CHECKER);
         if (!$authorizationChecker->isSuperTypeOf($objectType)->yes()) {
-            return null;
-        }
-        if (!$this->isName($node->name, 'isGranted')) {
             return null;
         }
         return $this->handleIsGranted($node);

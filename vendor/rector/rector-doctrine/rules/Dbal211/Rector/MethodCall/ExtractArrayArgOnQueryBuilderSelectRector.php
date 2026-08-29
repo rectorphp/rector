@@ -55,17 +55,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?MethodCall
     {
+        if (!$this->isNames($node->name, ['select', 'addSelect', 'groupBy', 'addGroupBy'])) {
+            return null;
+        }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $varType = $this->nodeTypeResolver->getType($node->var);
         if (!$varType instanceof ObjectType) {
             return null;
         }
         if (!$varType->isInstanceOf(DoctrineClass::DBAL_QUERY_BUILDER)->yes()) {
-            return null;
-        }
-        if (!$this->isNames($node->name, ['select', 'addSelect', 'groupBy', 'addGroupBy'])) {
-            return null;
-        }
-        if ($node->isFirstClassCallable()) {
             return null;
         }
         $args = $node->getArgs();

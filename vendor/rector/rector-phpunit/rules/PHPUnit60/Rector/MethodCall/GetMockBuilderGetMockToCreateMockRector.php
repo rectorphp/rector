@@ -88,11 +88,11 @@ CODE_SAMPLE
         if (!$this->isLocalScopeCaller($currentMethodCall)) {
             return null;
         }
-        // must be be test case class
-        if (!$this->isObjectType($currentMethodCall->var, new ObjectType('PHPUnit\Framework\TestCase'))) {
+        if (!$this->isName($currentMethodCall->name, 'getMockBuilder')) {
             return null;
         }
-        if (!$this->isName($currentMethodCall->name, 'getMockBuilder')) {
+        // must be be test case class
+        if (!$this->isObjectType($currentMethodCall->var, new ObjectType('PHPUnit\Framework\TestCase'))) {
             return null;
         }
         $args = $currentMethodCall->args;

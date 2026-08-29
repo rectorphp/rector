@@ -98,10 +98,10 @@ CODE_SAMPLE
         }
         $possibleTestClassNames = $this->testClassNameResolver->resolve($className);
         $matchingTestClassName = $this->matchExistingClassName($possibleTestClassNames);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($matchingTestClassName === null) {
             return null;
         }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($this->hasAlreadySeeAnnotation($phpDocInfo, $matchingTestClassName)) {
             return null;
         }

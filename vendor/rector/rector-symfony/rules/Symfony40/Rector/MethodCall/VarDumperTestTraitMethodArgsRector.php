@@ -42,10 +42,10 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector implements
         if (!$this->isNames($node->name, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\Component\VarDumper\Test\VarDumperTestTrait'))) {
+        if (count($node->args) <= 2) {
             return null;
         }
-        if (count($node->args) <= 2) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\Component\VarDumper\Test\VarDumperTestTrait'))) {
             return null;
         }
         $secondArg = $node->args[2];

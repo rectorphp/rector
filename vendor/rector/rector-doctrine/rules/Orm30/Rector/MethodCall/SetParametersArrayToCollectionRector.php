@@ -130,17 +130,17 @@ CODE_SAMPLE
     }
     private function refactorMethodCall(MethodCall $methodCall): ?\PhpParser\Node
     {
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
+        if (!$this->isNames($methodCall->name, ['setParameters'])) {
+            return null;
+        }
         $varType = $this->nodeTypeResolver->getType($methodCall->var);
         if (!$varType instanceof ObjectType) {
             return null;
         }
         if (!$varType->isInstanceOf('Doctrine\ORM\QueryBuilder')->yes()) {
-            return null;
-        }
-        if ($methodCall->isFirstClassCallable()) {
-            return null;
-        }
-        if (!$this->isNames($methodCall->name, ['setParameters'])) {
             return null;
         }
         $args = $methodCall->getArgs();

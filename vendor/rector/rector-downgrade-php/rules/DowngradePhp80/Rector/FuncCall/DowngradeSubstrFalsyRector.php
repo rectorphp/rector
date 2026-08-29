@@ -139,6 +139,7 @@ final class DowngradeSubstrFalsyRector extends AbstractRector
                 }
             }
         }
+        // @phpstan-ignore rector.rectorCheaperGuardsFirst (cannot hoist above the CallLike block, which marks IS_FALSY_UNCASTABLE on non-substr nodes)
         if (!$this->isName($node, 'substr')) {
             return null;
         }

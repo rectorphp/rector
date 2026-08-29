@@ -68,10 +68,10 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'addMultiple')) {
             return null;
         }
-        if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType(DoctrineClass::COMPOSITE_EXPRESSION))) {
+        if ($node->isFirstClassCallable()) {
             return null;
         }
-        if ($node->isFirstClassCallable()) {
+        if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType(DoctrineClass::COMPOSITE_EXPRESSION))) {
             return null;
         }
         $node->name = new Identifier('with');

@@ -71,10 +71,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType(DoctrineClass::DBAL_QUERY_BUILDER))) {
+        if (!$this->isName($node->name, 'resetQueryPart')) {
             return null;
         }
-        if (!$this->isName($node->name, 'resetQueryPart')) {
+        if (!$this->isObjectType($node->var, new ObjectType(DoctrineClass::DBAL_QUERY_BUILDER))) {
             return null;
         }
         $args = $node->args;
