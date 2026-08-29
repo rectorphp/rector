@@ -17,11 +17,13 @@ final class SetGroup
      */
     public const PHP = 'php';
     /**
+     * @deprecated Use composer-based.php set instead
      * Version-based set provider
      * @var string
      */
     public const LARAVEL = 'laravel';
     /**
+     * @deprecated Use composer-based.php set instead
      * Version-based set provider
      * @var string
      */
