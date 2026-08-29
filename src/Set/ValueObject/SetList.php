@@ -152,6 +152,7 @@ final class SetList
      */
     public const INSTANCEOF = __DIR__ . '/../../../config/set/instanceof.php';
     /**
+     * @deprecated Use code-quality and coding-style sets instead, as the if rules were moved there or deprecated
      * @var string
      */
     public const IF = __DIR__ . '/../../../config/set/if.php';
