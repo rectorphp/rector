@@ -463,7 +463,16 @@ final class Path
         if ('' === $root && '' !== $baseRoot) {
             // If base path is already in its root
             if ('' === $relativeBasePath) {
-                $relativePath = ltrim($relativePath, './' . \DIRECTORY_SEPARATOR);
+                // The base path is the root directory, so any number of leading
+                // "../" segments resolves to the root itself and "./" prefixes
+                // carry no information. Remove them as segments: a leading dot
+                // that is not one (e.g. ".htaccess") must survive.
+                while (strncmp($relativePath, './', strlen('./')) === 0 || strncmp($relativePath, '../', strlen('../')) === 0) {
+                    $relativePath = (string) substr($relativePath, strncmp($relativePath, '../', strlen('../')) === 0 ? 3 : 2);
+                }
+                if ('..' === $relativePath) {
+                    $relativePath = '';
+                }
             }
             return $relativePath;
         }

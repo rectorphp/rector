@@ -21,4 +21,15 @@ namespace RectorPrefix202608\Symfony\Contracts\Service\Attribute;
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
 final class Required
 {
+    /**
+     * @var int
+     */
+    public int $priority = 0;
+    /**
+     * @param int $priority The priority of the method call when the class declares several required methods; the higher the sooner it's called
+     */
+    public function __construct(int $priority = 0)
+    {
+        $this->priority = $priority;
+    }
 }

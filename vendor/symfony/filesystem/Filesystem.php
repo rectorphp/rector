@@ -540,7 +540,14 @@ class Filesystem
             $tmpFile = $dir . '/' . $prefix . bin2hex(random_bytes(4)) . $suffix;
             // Use fopen instead of file_exists as some streams do not support stat
             // Use mode 'x+' to atomically check existence and create to avoid a TOCTOU vulnerability
-            if (!$handle = self::box('fopen', $tmpFile, 'x+')) {
+            // Force the umask so that the file is created private, as PHP's tempnam() does
+            $umask = umask(077);
+            try {
+                $handle = self::box('fopen', $tmpFile, 'x+');
+            } finally {
+                umask($umask);
+            }
+            if (!$handle) {
                 continue;
             }
             // Close the file if it was successfully opened
