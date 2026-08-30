@@ -5,14 +5,17 @@ namespace Rector\DowngradePhp81\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\String_;
-use PHPStan\Type\IntegerRangeType;
+use PhpParser\Node\Stmt\If_;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,6 +33,10 @@ final class DowngradeHashAlgorithmXxHashRector extends AbstractRector
      */
     private ValueResolver $valueResolver;
     /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    /**
      * Constants are referenced by name, as the MHASH_* constants are deprecated since PHP 8.5
      *
      * @var array<string, string>
@@ -40,10 +47,11 @@ final class DowngradeHashAlgorithmXxHashRector extends AbstractRector
      */
     private const REPLACEMENT_ALGORITHM = 'md5';
     private int $argNamedKey;
-    public function __construct(ArgsAnalyzer $argsAnalyzer, ValueResolver $valueResolver)
+    public function __construct(ArgsAnalyzer $argsAnalyzer, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->argsAnalyzer = $argsAnalyzer;
         $this->valueResolver = $valueResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -72,13 +80,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [Ternary::class, If_::class, FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param Ternary|If_|FuncCall $node
      */
     public function refactor(Node $node): ?FuncCall
     {
+        if ($node instanceof Ternary || $node instanceof If_) {
+            $this->markGuardedHashCalls($node);
+            return null;
+        }
         if ($this->shouldSkip($node)) {
             return null;
         }
@@ -103,15 +115,37 @@ CODE_SAMPLE
         if ($funcCall->isFirstClassCallable()) {
             return \true;
         }
-        if (!$this->isName($funcCall, 'hash')) {
-            return \true;
+        return !$this->isName($funcCall, 'hash');
+    }
+    /**
+     * Mark hash() calls guarded by a PHP_VERSION_ID check as version conditioned,
+     * so they are skipped like version_compare() guarded calls.
+     * @param \PhpParser\Node\Expr\Ternary|\PhpParser\Node\Stmt\If_ $node
+     */
+    private function markGuardedHashCalls($node): void
+    {
+        if (!$this->hasPhpVersionIdCond($node->cond)) {
+            return;
         }
-        $scope = ScopeFetcher::fetch($funcCall);
-        $type = $scope->getPhpVersion()->getType();
-        if (!$type instanceof IntegerRangeType) {
+        /** @var FuncCall[] $funcCalls */
+        $funcCalls = $this->betterNodeFinder->findInstancesOf($node, [FuncCall::class]);
+        foreach ($funcCalls as $funcCall) {
+            if (!$this->isName($funcCall, 'hash')) {
+                continue;
+            }
+            $funcCall->setAttribute(AttributeKey::PHP_VERSION_CONDITIONED, \true);
+        }
+    }
+    private function hasPhpVersionIdCond(Expr $expr): bool
+    {
+        if (!$expr instanceof BinaryOp) {
             return \false;
         }
-        return $type->getMin() === 80100;
+        return $this->isPhpVersionIdConstFetch($expr->left) || $this->isPhpVersionIdConstFetch($expr->right);
+    }
+    private function isPhpVersionIdConstFetch(Expr $expr): bool
+    {
+        return $expr instanceof ConstFetch && $this->isName($expr, 'PHP_VERSION_ID');
     }
     /**
      * @param Arg[] $args
