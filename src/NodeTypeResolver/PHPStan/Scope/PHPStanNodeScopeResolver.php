@@ -83,8 +83,8 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeTraverser;
-use PHPStan\Analyser\Fiber\FiberScope;
 use PHPStan\Analyser\MutatingScope;
+use PHPStan\Analyser\NodeCallbackScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\UndefinedVariableException;
@@ -173,8 +173,8 @@ final class PHPStanNodeScopeResolver
         Assert::allIsInstanceOf($stmts, Stmt::class);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
         $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (&$nodeCallback, $filePath): void {
-            if ($mutatingScope instanceof FiberScope) {
-                $mutatingScope = $mutatingScope->toMutatingScope();
+            if ($mutatingScope instanceof NodeCallbackScope) {
+                $mutatingScope = $mutatingScope->toWalkScope();
             }
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
@@ -214,7 +214,7 @@ final class PHPStanNodeScopeResolver
                 return;
             }
             $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
-            if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast || $node instanceof YieldFrom || $node instanceof UnaryMinus || $node instanceof UnaryPlus || $node instanceof Throw_ || $node instanceof Empty_ || $node instanceof BooleanNot || $node instanceof Clone_ || $node instanceof ErrorSuppress || $node instanceof BitwiseNot || $node instanceof Eval_ || $node instanceof Print_ || $node instanceof Exit_ || $node instanceof ArrowFunction || $node instanceof Include_ || $node instanceof Instanceof_) && $node->expr instanceof Expr) {
+            if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast || $node instanceof YieldFrom || $node instanceof UnaryMinus || $node instanceof UnaryPlus || $node instanceof Throw_ || $node instanceof Empty_ || $node instanceof BooleanNot || $node instanceof Clone_ || $node instanceof ErrorSuppress || $node instanceof BitwiseNot || $node instanceof Eval_ || $node instanceof Print_ || $node instanceof Exit_ || $node instanceof Include_ || $node instanceof Instanceof_) && $node->expr instanceof Expr) {
                 $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 return;
             }
@@ -525,8 +525,12 @@ final class PHPStanNodeScopeResolver
     }
     private function processBinaryOp(BinaryOp $binaryOp, MutatingScope $mutatingScope): void
     {
-        $binaryOp->left->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        $binaryOp->right->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        if (!$binaryOp->left->getAttribute(AttributeKey::SCOPE) instanceof MutatingScope) {
+            $binaryOp->left->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
+        if (!$binaryOp->right->getAttribute(AttributeKey::SCOPE) instanceof MutatingScope) {
+            $binaryOp->right->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
     }
     private function processTernary(Ternary $ternary, MutatingScope $mutatingScope): void
     {

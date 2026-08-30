@@ -9,7 +9,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "phpstan/phpstan": "^2.2.6"
+        "phpstan/phpstan": "^2.2.10"
     },
     "autoload": {
         "files": [

@@ -182,7 +182,7 @@ CODE_SAMPLE
     }
     private function isFoundInAnyPropertyHooks(Class_ $class, string $propertyName): bool
     {
-        $propertyHooks = array_reduce($class->getProperties(), static fn(array $hooks, Property $property): array => array_merge(is_array($hooks) ? $hooks : iterator_to_array(is_array($hooks) ? new \ArrayIterator($hooks) : $hooks), is_array($property->hooks) ? $property->hooks : iterator_to_array(is_array($property->hooks) ? new \ArrayIterator($property->hooks) : $property->hooks)), []);
+        $propertyHooks = array_reduce($class->getProperties(), static fn(array $hooks, Property $property): array => array_merge($hooks, $property->hooks), []);
         return (bool) $this->betterNodeFinder->findFirst($propertyHooks, function (Node $subNode) use ($class, $propertyName): bool {
             if (!$subNode instanceof PropertyFetch) {
                 return \false;

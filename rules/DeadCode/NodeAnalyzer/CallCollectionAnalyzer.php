@@ -11,6 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\TypeCombinator;
 use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -38,6 +39,10 @@ final class CallCollectionAnalyzer
         foreach ($calls as $call) {
             $callerRoot = $call instanceof StaticCall ? $call->class : $call->var;
             $callerType = $this->nodeTypeResolver->getType($callerRoot);
+            // a nullsafe call caller is nullable by design; drop null to resolve the object class
+            if ($call instanceof NullsafeMethodCall) {
+                $callerType = TypeCombinator::removeNull($callerType);
+            }
             $callerTypeClassName = ClassNameFromObjectTypeResolver::resolve($callerType);
             if ($callerTypeClassName === null) {
                 // the caller scope is unreachable, e.g. behind mutual recursion, so the type
