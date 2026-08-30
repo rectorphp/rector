@@ -4,20 +4,16 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\Token;
-use Rector\Contract\Rector\HTMLAverseRectorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\If_\ShortenElseIfRector\ShortenElseIfRectorTest
+ * @deprecated This rule is deprecated, as merging `else`/`if` into `elseif` creates less readable code and breaks the logical reading of the if train.
  */
-final class ShortenElseIfRector extends AbstractRector implements HTMLAverseRectorInterface
+final class ShortenElseIfRector extends AbstractRector implements DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -63,63 +59,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->shortenElseIf($node);
-    }
-    private function shortenElseIf(If_ $node): ?If_
-    {
-        if (!$node->else instanceof Else_) {
-            return null;
-        }
-        $else = $node->else;
-        if (count($else->stmts) !== 1) {
-            return null;
-        }
-        $if = $else->stmts[0];
-        if (!$if instanceof If_) {
-            return null;
-        }
-        // alternative syntax (if/else/endif) cannot be merged to elseif without producing mixed brace/colon syntax
-        if ($this->isAlternativeSyntax($node) || $this->isAlternativeSyntax($if)) {
-            return null;
-        }
-        // Try to shorten the nested if before transforming it to elseif
-        $refactored = $this->shortenElseIf($if);
-        if ($refactored instanceof If_) {
-            $if = $refactored;
-        }
-        if ($if->stmts === []) {
-            $nop = new Nop();
-            $nop->setAttribute(AttributeKey::COMMENTS, $if->getComments());
-            $if->stmts[] = $nop;
-        } else {
-            $currentStmt = current($if->stmts);
-            $mergedComments = array_merge($if->getComments(), $currentStmt->getComments());
-            $currentStmt->setAttribute(AttributeKey::COMMENTS, $mergedComments);
-        }
-        $node->elseifs[] = new ElseIf_($if->cond, $if->stmts);
-        $node->else = $if->else;
-        $node->elseifs = array_merge($node->elseifs, $if->elseifs);
-        return $node;
-    }
-    private function isAlternativeSyntax(If_ $if): bool
-    {
-        $startTokenPos = $if->cond->getEndTokenPos();
-        if ($startTokenPos < 0) {
-            return \false;
-        }
-        $oldTokens = $this->getFile()->getOldTokens();
-        for ($i = $startTokenPos + 1; isset($oldTokens[$i]); ++$i) {
-            $token = $oldTokens[$i];
-            if (!$token instanceof Token) {
-                continue;
-            }
-            if ($token->text === ':') {
-                return \true;
-            }
-            if ($token->text === '{') {
-                return \false;
-            }
-        }
-        return \false;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it creates less readable code and breaks the logical reading of the if train', self::class));
     }
 }
