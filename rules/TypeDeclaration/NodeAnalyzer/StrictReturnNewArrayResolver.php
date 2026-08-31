@@ -19,6 +19,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -210,6 +212,10 @@ final class StrictReturnNewArrayResolver
     }
     private function shouldAddReturnArrayDocType(Type $arrayType): bool
     {
+        // a union of multiple distinct array shapes produces a noisy doc type, skip it
+        if ($this->hasNoisyArrayShapeUnion($arrayType)) {
+            return \false;
+        }
         if ($arrayType instanceof ConstantArrayType) {
             if ($arrayType->getIterableValueType() instanceof NeverType) {
                 return \false;
@@ -220,5 +226,31 @@ final class StrictReturnNewArrayResolver
             }
         }
         return \true;
+    }
+    private function hasNoisyArrayShapeUnion(Type $type): bool
+    {
+        $isNoisy = \false;
+        TypeTraverser::map($type, function (Type $currentType, callable $traverse) use (&$isNoisy): Type {
+            if ($currentType instanceof UnionType && $this->hasMultipleArrayVariants($currentType)) {
+                $isNoisy = \true;
+            }
+            return $traverse($currentType);
+        });
+        return $isNoisy;
+    }
+    private function hasMultipleArrayVariants(UnionType $unionType): bool
+    {
+        $arrayVariantCount = 0;
+        foreach ($unionType->getTypes() as $type) {
+            if (!$type->isArray()->yes()) {
+                continue;
+            }
+            // an empty array [] collapses into the sibling variant, ignore it
+            if ($type->getIterableValueType() instanceof NeverType) {
+                continue;
+            }
+            ++$arrayVariantCount;
+        }
+        return $arrayVariantCount >= 2;
     }
 }
