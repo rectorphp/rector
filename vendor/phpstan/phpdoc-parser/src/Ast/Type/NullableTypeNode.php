@@ -14,6 +14,11 @@ class NullableTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     }
     public function __toString(): string
     {
+        if ($this->type instanceof self) {
+            // "??Foo" is no type at all, so the one written inside keeps the
+            // parentheses it was read with
+            return '?(' . $this->type . ')';
+        }
         return '?' . $this->type;
     }
     /**
