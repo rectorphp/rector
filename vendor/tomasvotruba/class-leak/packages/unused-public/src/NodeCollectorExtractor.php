@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic;
 
 use PHPStan\Node\CollectedDataNode;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\CollectorMapper\MethodCallCollectorMapper;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\Callable_\AttributeCallableCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\Callable_\CallableTypeCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\MethodCall\MethodCallableCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\MethodCall\MethodCallCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\StaticCall\StaticMethodCallableCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\StaticCall\StaticMethodCallCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ValueObject\LocalAndExternalMethodCallReferences;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\CollectorMapper\MethodCallCollectorMapper;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\Callable_\AttributeCallableCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\Callable_\CallableTypeCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\MethodCall\MethodCallableCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\MethodCall\MethodCallCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\StaticCall\StaticMethodCallableCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\StaticCall\StaticMethodCallCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ValueObject\LocalAndExternalMethodCallReferences;
 final class NodeCollectorExtractor
 {
     /**

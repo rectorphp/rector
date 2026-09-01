@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Doctrine\Inflector;
+namespace RectorPrefix202609\Doctrine\Inflector;
 
-use RectorPrefix202608\Doctrine\Inflector\Rules\English;
-use RectorPrefix202608\Doctrine\Inflector\Rules\Esperanto;
-use RectorPrefix202608\Doctrine\Inflector\Rules\French;
-use RectorPrefix202608\Doctrine\Inflector\Rules\Italian;
-use RectorPrefix202608\Doctrine\Inflector\Rules\NorwegianBokmal;
-use RectorPrefix202608\Doctrine\Inflector\Rules\Portuguese;
-use RectorPrefix202608\Doctrine\Inflector\Rules\Spanish;
-use RectorPrefix202608\Doctrine\Inflector\Rules\Turkish;
+use RectorPrefix202609\Doctrine\Inflector\Rules\English;
+use RectorPrefix202609\Doctrine\Inflector\Rules\Esperanto;
+use RectorPrefix202609\Doctrine\Inflector\Rules\French;
+use RectorPrefix202609\Doctrine\Inflector\Rules\Italian;
+use RectorPrefix202609\Doctrine\Inflector\Rules\NorwegianBokmal;
+use RectorPrefix202609\Doctrine\Inflector\Rules\Portuguese;
+use RectorPrefix202609\Doctrine\Inflector\Rules\Spanish;
+use RectorPrefix202609\Doctrine\Inflector\Rules\Turkish;
 use InvalidArgumentException;
 use function sprintf;
 final class InflectorFactory

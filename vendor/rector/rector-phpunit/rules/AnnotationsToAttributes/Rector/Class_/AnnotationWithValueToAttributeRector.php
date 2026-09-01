@@ -23,7 +23,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @see \Rector\PHPUnit\Tests\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector\AnnotationWithValueToAttributeRectorTest
  */

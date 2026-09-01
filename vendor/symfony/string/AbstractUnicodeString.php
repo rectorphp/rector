@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202608\Symfony\Component\String;
+namespace RectorPrefix202609\Symfony\Component\String;
 
-use RectorPrefix202608\Symfony\Component\String\Exception\ExceptionInterface;
-use RectorPrefix202608\Symfony\Component\String\Exception\InvalidArgumentException;
-use RectorPrefix202608\Symfony\Component\String\Exception\RuntimeException;
+use RectorPrefix202609\Symfony\Component\String\Exception\ExceptionInterface;
+use RectorPrefix202609\Symfony\Component\String\Exception\InvalidArgumentException;
+use RectorPrefix202609\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a string of abstract Unicode characters.
  *

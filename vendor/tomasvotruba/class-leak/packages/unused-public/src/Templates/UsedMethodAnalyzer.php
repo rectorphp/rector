@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Templates;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Templates;
 
 final class UsedMethodAnalyzer
 {

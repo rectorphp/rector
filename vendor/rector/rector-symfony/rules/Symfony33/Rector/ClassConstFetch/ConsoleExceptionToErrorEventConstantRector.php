@@ -10,7 +10,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use RectorPrefix202608\Symfony\Component\Console\ConsoleEvents;
+use RectorPrefix202609\Symfony\Component\Console\ConsoleEvents;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

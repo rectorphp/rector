@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Testing\TestingParser;
 
-use RectorPrefix202608\Nette\Utils\FileSystem;
+use RectorPrefix202609\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;

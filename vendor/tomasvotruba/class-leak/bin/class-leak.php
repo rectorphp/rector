@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608;
+namespace RectorPrefix202609;
 
-use RectorPrefix202608\Entropy\Console\ConsoleApplication;
-use RectorPrefix202608\TomasVotruba\ClassLeak\DependencyInjection\ContainerFactory;
+use RectorPrefix202609\Entropy\Console\ConsoleApplication;
+use RectorPrefix202609\TomasVotruba\ClassLeak\DependencyInjection\ContainerFactory;
 if (\file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
     // project's autoload
     require_once __DIR__ . '/../../../../vendor/autoload.php';

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic;
 
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @inspired by https://github.com/phpstan/phpstan-symfony/blob/1.2.x/src/Symfony/Configuration.php
  */

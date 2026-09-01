@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors;
 
-use RectorPrefix202608\Doctrine\Common\EventSubscriber;
-use RectorPrefix202608\Illuminate\Console\Command;
-use RectorPrefix202608\JMS\Serializer\Handler\SubscribingHandlerInterface;
-use RectorPrefix202608\Livewire\Component;
+use RectorPrefix202609\Doctrine\Common\EventSubscriber;
+use RectorPrefix202609\Illuminate\Console\Command;
+use RectorPrefix202609\JMS\Serializer\Handler\SubscribingHandlerInterface;
+use RectorPrefix202609\Livewire\Component;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix202608\Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ApiDocStmtAnalyzer;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\MethodTypeDetector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\PublicClassMethodMatcher;
-use RectorPrefix202608\Twig\Extension\ExtensionInterface;
+use RectorPrefix202609\Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ApiDocStmtAnalyzer;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\MethodTypeDetector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\PublicClassMethodMatcher;
+use RectorPrefix202609\Twig\Extension\ExtensionInterface;
 /**
  * @implements Collector<ClassMethod, array{class-string, string, int}>
  */
@@ -44,7 +44,7 @@ final class PublicClassMethodCollector implements Collector
      */
     private const SKIPPED_TYPES = [
         // symfony
-        'RectorPrefix202608\Symfony\Component\EventDispatcher\EventSubscriberInterface',
+        'RectorPrefix202609\Symfony\Component\EventDispatcher\EventSubscriberInterface',
         // doctrine
         EventSubscriber::class,
         SubscribingHandlerInterface::class,
@@ -53,10 +53,10 @@ final class PublicClassMethodCollector implements Collector
         // laravel
         Command::class,
         Component::class,
-        'RectorPrefix202608\Illuminate\Http\Request',
-        'RectorPrefix202608\Illuminate\Contracts\Mail\Mailable',
-        'RectorPrefix202608\Illuminate\Contracts\Queue\ShouldQueue',
-        'RectorPrefix202608\Illuminate\Support\ServiceProvider',
+        'RectorPrefix202609\Illuminate\Http\Request',
+        'RectorPrefix202609\Illuminate\Contracts\Mail\Mailable',
+        'RectorPrefix202609\Illuminate\Contracts\Queue\ShouldQueue',
+        'RectorPrefix202609\Illuminate\Support\ServiceProvider',
     ];
     public function __construct(ApiDocStmtAnalyzer $apiDocStmtAnalyzer, PublicClassMethodMatcher $publicClassMethodMatcher, MethodTypeDetector $methodTypeDetector, Configuration $configuration)
     {

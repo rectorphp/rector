@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Templates;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Templates;
 
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Finder\TemplateFilesFinder;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Utils\Strings;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Finder\TemplateFilesFinder;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Utils\Strings;
 final class TemplateRegexFinder
 {
     /**

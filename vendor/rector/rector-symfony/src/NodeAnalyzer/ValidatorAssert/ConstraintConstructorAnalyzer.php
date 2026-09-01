@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\NodeAnalyzer\ValidatorAssert;
 
 use PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix202608\Symfony\Component\Validator\Constraint;
+use RectorPrefix202609\Symfony\Component\Validator\Constraint;
 /**
  * A constraint that adds no constructor of its own inherits the one from Symfony\Component\Validator\Constraint,
  * which takes the options array as a whole. Its options are plain properties, so there are no named arguments to

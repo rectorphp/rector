@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Console\Output;
+namespace RectorPrefix202609\Entropy\Console\Output;
 
-use RectorPrefix202608\Entropy\Console\CommandRegistry;
+use RectorPrefix202609\Entropy\Console\CommandRegistry;
 final class HelpPrinter
 {
     /**

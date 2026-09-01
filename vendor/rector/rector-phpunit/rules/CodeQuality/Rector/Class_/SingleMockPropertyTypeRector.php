@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\UnionType;
-use RectorPrefix202608\PHPUnit\Framework\MockObject\MockObject;
+use RectorPrefix202609\PHPUnit\Framework\MockObject\MockObject;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;

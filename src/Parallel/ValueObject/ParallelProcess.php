@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Parallel\ValueObject;
 
-use RectorPrefix202608\Clue\React\NDJson\Decoder;
-use RectorPrefix202608\Clue\React\NDJson\Encoder;
+use RectorPrefix202609\Clue\React\NDJson\Decoder;
+use RectorPrefix202609\Clue\React\NDJson\Encoder;
 use Exception;
-use RectorPrefix202608\React\ChildProcess\Process;
-use RectorPrefix202608\React\EventLoop\LoopInterface;
-use RectorPrefix202608\React\EventLoop\TimerInterface;
+use RectorPrefix202609\React\ChildProcess\Process;
+use RectorPrefix202609\React\EventLoop\LoopInterface;
+use RectorPrefix202609\React\EventLoop\TimerInterface;
 use Rector\Parallel\Enum\Action;
 use Rector\Parallel\Enum\Content;
 use Rector\Parallel\Enum\ReactCommand;

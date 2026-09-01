@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\CollectorMapper;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\CollectorMapper;
 
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Enum\ReferenceMarker;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Utils\Arrays;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ValueObject\LocalAndExternalMethodCallReferences;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Enum\ReferenceMarker;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Utils\Arrays;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ValueObject\LocalAndExternalMethodCallReferences;
 final class MethodCallCollectorMapper
 {
     /**

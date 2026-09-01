@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\ClassLeak\Commands;
+namespace RectorPrefix202609\TomasVotruba\ClassLeak\Commands;
 
 use Closure;
-use RectorPrefix202608\Entropy\Console\Contract\CommandInterface;
-use RectorPrefix202608\Entropy\Console\Output\OutputPrinter;
-use RectorPrefix202608\Entropy\Console\Output\ProgressBar;
-use RectorPrefix202608\TomasVotruba\ClassLeak\Filtering\PossiblyUnusedClassesFilter;
-use RectorPrefix202608\TomasVotruba\ClassLeak\Finder\ClassNamesFinder;
-use RectorPrefix202608\TomasVotruba\ClassLeak\Finder\PhpFilesFinder;
-use RectorPrefix202608\TomasVotruba\ClassLeak\Reporting\UnusedClassesResultFactory;
-use RectorPrefix202608\TomasVotruba\ClassLeak\Reporting\UnusedClassReporter;
-use RectorPrefix202608\TomasVotruba\ClassLeak\UseImportsResolver;
+use RectorPrefix202609\Entropy\Console\Contract\CommandInterface;
+use RectorPrefix202609\Entropy\Console\Output\OutputPrinter;
+use RectorPrefix202609\Entropy\Console\Output\ProgressBar;
+use RectorPrefix202609\TomasVotruba\ClassLeak\Filtering\PossiblyUnusedClassesFilter;
+use RectorPrefix202609\TomasVotruba\ClassLeak\Finder\ClassNamesFinder;
+use RectorPrefix202609\TomasVotruba\ClassLeak\Finder\PhpFilesFinder;
+use RectorPrefix202609\TomasVotruba\ClassLeak\Reporting\UnusedClassesResultFactory;
+use RectorPrefix202609\TomasVotruba\ClassLeak\Reporting\UnusedClassReporter;
+use RectorPrefix202609\TomasVotruba\ClassLeak\UseImportsResolver;
 final class CheckCommand implements CommandInterface
 {
     /**

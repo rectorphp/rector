@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202608\Symfony\Component\Console\Question;
+namespace RectorPrefix202609\Symfony\Component\Console\Question;
 
-use RectorPrefix202608\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202608\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202609\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202609\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a Question.
  *

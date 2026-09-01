@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\PHPUnit\Naming\TestClassNameResolver;
 use Rector\Rector\AbstractRector;
@@ -38,15 +39,20 @@ final class AddSeeTestAnnotationRector extends AbstractRector
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
     /**
+     * @readonly
+     */
+    private ClassAnnotationMatcher $classAnnotationMatcher;
+    /**
      * @var string
      */
     private const SEE = 'see';
-    public function __construct(ReflectionProvider $reflectionProvider, TestClassNameResolver $testClassNameResolver, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(ReflectionProvider $reflectionProvider, TestClassNameResolver $testClassNameResolver, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ClassAnnotationMatcher $classAnnotationMatcher)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->testClassNameResolver = $testClassNameResolver;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->classAnnotationMatcher = $classAnnotationMatcher;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -130,6 +136,11 @@ CODE_SAMPLE
             $genericTagValueNode = $seePhpDocTagNode->value;
             $seeTagClass = ltrim($genericTagValueNode->value, '\\');
             if ($this->reflectionProvider->hasClass($seeTagClass)) {
+                return \true;
+            }
+            // the @see value can be a short name, imported or in the current namespace
+            $resolvedSeeTagClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($seeTagClass, $class);
+            if ($this->reflectionProvider->hasClass($resolvedSeeTagClass)) {
                 return \true;
             }
         }

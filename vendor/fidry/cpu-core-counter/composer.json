@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202608\\Fidry\\CpuCoreCounter\\": "src\/"
+            "RectorPrefix202609\\Fidry\\CpuCoreCounter\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202608\\Fidry\\CpuCoreCounter\\Test\\": "tests\/"
+            "RectorPrefix202609\\Fidry\\CpuCoreCounter\\Test\\": "tests\/"
         }
     },
     "config": {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\ClassLeak\FileSystem;
+namespace RectorPrefix202609\TomasVotruba\ClassLeak\FileSystem;
 
 /**
  * @see \TomasVotruba\ClassLeak\Tests\FileSystem\StaticRelativeFilePathHelperTest

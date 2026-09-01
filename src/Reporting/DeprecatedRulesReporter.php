@@ -9,7 +9,7 @@ use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PhpParser\Node\FileNode;
 use ReflectionMethod;
-use RectorPrefix202608\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202609\Symfony\Component\Console\Style\SymfonyStyle;
 final class DeprecatedRulesReporter
 {
     /**

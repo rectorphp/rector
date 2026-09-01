@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeCombinator;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ValueObject\MethodCallReference;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ValueObject\MethodCallReference;
 final class ClassMethodCallReferenceResolver
 {
     /**

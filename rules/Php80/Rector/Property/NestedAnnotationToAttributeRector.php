@@ -30,7 +30,7 @@ use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Php80\Rector\Property\NestedAnnotationToAttributeRector\NestedAnnotationToAttributeRectorTest
  */

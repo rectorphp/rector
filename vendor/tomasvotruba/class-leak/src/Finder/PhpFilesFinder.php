@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\ClassLeak\Finder;
+namespace RectorPrefix202609\TomasVotruba\ClassLeak\Finder;
 
-use RectorPrefix202608\Symfony\Component\Finder\Finder;
-use RectorPrefix202608\Symfony\Component\Finder\SplFileInfo;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Symfony\Component\Finder\Finder;
+use RectorPrefix202609\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @see \TomasVotruba\ClassLeak\Tests\Finder\PhpFilesFinderTest
  */

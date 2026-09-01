@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Livewire;
+namespace RectorPrefix202609\Livewire;
 
 class Component
 {

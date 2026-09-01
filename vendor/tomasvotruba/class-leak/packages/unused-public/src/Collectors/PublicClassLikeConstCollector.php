@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ApiDocStmtAnalyzer;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ApiDocStmtAnalyzer;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
 /**
  * @implements Collector<ClassConst, non-empty-array<array{class-string, string, int}>|null>
  */

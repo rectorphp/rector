@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Symfony\Component\OptionsResolver;
+namespace RectorPrefix202609\Symfony\Component\OptionsResolver;
 
 class OptionsResolver
 {

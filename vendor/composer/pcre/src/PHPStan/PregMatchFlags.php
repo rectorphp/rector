@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Composer\Pcre\PHPStan;
+namespace RectorPrefix202609\Composer\Pcre\PHPStan;
 
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;

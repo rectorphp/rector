@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Rules;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Rules;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -9,12 +9,12 @@ use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\PublicClassMethodCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\NodeCollectorExtractor;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Templates\TemplateMethodCallsProvider;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Templates\UsedMethodAnalyzer;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Utils\Strings;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\PublicClassMethodCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\NodeCollectorExtractor;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Templates\TemplateMethodCallsProvider;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Templates\UsedMethodAnalyzer;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Utils\Strings;
 /**
  * @see \TomasVotruba\UnusedPublic\Tests\Rules\RelativeUnusedPublicClassMethodRule\RelativeUnusedPublicClassMethodRuleTest
  */

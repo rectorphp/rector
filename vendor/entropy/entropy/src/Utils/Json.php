@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Utils;
+namespace RectorPrefix202609\Entropy\Utils;
 
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @api to be used outside
  */

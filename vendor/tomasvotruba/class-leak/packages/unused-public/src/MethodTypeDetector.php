@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;

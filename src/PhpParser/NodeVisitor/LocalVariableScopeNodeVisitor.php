@@ -16,7 +16,7 @@ use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Enum\NodeGroup;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * Marks variables declared "global $x;" (IS_GLOBAL_VAR) and "static $x;" (IS_STATIC_VAR),
  * then decorates their later uses in the same stmt scope in one shared traversal.

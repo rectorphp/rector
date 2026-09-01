@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202608\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix202609\Symfony\Component\Finder\Iterator;
 
-use RectorPrefix202608\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202609\Symfony\Component\Finder\SplFileInfo;
 /**
  * ExcludeDirectoryFilterIterator filters out directories.
  *

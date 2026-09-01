@@ -5,7 +5,7 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202608\Nette\Utils;
+namespace RectorPrefix202609\Nette\Utils;
 
 use const IMAGETYPE_BMP, IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP;
 /**

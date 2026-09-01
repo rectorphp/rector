@@ -6,7 +6,7 @@ namespace Rector\ChangesReporting\ValueObject;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Parallel\Contract\SerializableInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 final class RectorWithLineChange implements SerializableInterface
 {
     /**

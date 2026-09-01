@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Composer\Pcre\PHPStan;
+namespace RectorPrefix202609\Composer\Pcre\PHPStan;
 
-use RectorPrefix202608\Composer\Pcre\Preg;
-use RectorPrefix202608\Composer\Pcre\Regex;
+use RectorPrefix202609\Composer\Pcre\Preg;
+use RectorPrefix202609\Composer\Pcre\Regex;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;

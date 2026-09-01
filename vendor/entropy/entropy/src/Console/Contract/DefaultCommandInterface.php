@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Console\Contract;
+namespace RectorPrefix202609\Entropy\Console\Contract;
 
 /**
  * Marks the command that runs when no command name is given on the command line.

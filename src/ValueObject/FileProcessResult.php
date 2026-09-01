@@ -5,7 +5,7 @@ namespace Rector\ValueObject;
 
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\Reporting\FileDiff;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 final class FileProcessResult
 {
     /**

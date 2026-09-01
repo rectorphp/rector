@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\CallReferece;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\CallReferece;
 
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Enum\ReferenceMarker;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ValueObject\MethodCallReference;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Enum\ReferenceMarker;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ValueObject\MethodCallReference;
 final class CallReferencesFlatter
 {
     /**

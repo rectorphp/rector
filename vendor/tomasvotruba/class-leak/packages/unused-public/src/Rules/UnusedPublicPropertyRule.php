@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Rules;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Rules;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -9,13 +9,13 @@ use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\PublicPropertyCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\PublicPropertyFetchCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\PublicStaticPropertyFetchCollector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Enum\RuleTips;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Templates\TemplateMethodCallsProvider;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Utils\Arrays;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\PublicPropertyCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\PublicPropertyFetchCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\PublicStaticPropertyFetchCollector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Enum\RuleTips;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Templates\TemplateMethodCallsProvider;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Utils\Arrays;
 /**
  * @see \TomasVotruba\UnusedPublic\Tests\Rules\UnusedPublicPropertyRule\UnusedPublicPropertyRuleTest
  */

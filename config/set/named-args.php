@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608;
+namespace RectorPrefix202609;
 
 use Rector\CodeQuality\Rector\Attribute\ExplicitAttributeNamedArgsRector;
 use Rector\CodeQuality\Rector\Attribute\SortAttributeNamedArgsRector;

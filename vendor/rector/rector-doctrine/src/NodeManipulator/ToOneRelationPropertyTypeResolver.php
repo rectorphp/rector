@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeManipulator;
 
-use RectorPrefix202608\Nette\Utils\Strings;
+use RectorPrefix202609\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;

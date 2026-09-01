@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202608\SebastianBergmann\Diff;
+namespace RectorPrefix202609\SebastianBergmann\Diff;
 
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
@@ -26,7 +26,7 @@ use function prev;
 use function reset;
 use function str_ends_with;
 use function substr;
-use RectorPrefix202608\SebastianBergmann\Diff\Output\DiffOutputBuilderInterface;
+use RectorPrefix202609\SebastianBergmann\Diff\Output\DiffOutputBuilderInterface;
 final class Differ
 {
     /**

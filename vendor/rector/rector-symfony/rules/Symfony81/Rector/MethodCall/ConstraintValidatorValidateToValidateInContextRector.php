@@ -17,11 +17,11 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use RectorPrefix202608\Symfony\Component\Validator\ConstraintValidator;
-use RectorPrefix202608\Symfony\Component\Validator\ConstraintValidatorInterface;
-use RectorPrefix202608\Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
-use RectorPrefix202608\Symfony\Component\Validator\Validator\ContextualValidatorInterface;
-use RectorPrefix202608\Symfony\Component\Validator\Validator\ValidatorInterface;
+use RectorPrefix202609\Symfony\Component\Validator\ConstraintValidator;
+use RectorPrefix202609\Symfony\Component\Validator\ConstraintValidatorInterface;
+use RectorPrefix202609\Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+use RectorPrefix202609\Symfony\Component\Validator\Validator\ContextualValidatorInterface;
+use RectorPrefix202609\Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

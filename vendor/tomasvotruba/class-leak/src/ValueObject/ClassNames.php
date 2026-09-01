@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\ClassLeak\ValueObject;
+namespace RectorPrefix202609\TomasVotruba\ClassLeak\ValueObject;
 
 final class ClassNames
 {

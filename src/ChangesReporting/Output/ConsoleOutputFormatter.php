@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
-use RectorPrefix202608\Nette\Utils\Strings;
+use RectorPrefix202609\Nette\Utils\Strings;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -11,8 +11,8 @@ use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
-use RectorPrefix202608\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202608\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202609\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202609\Symfony\Component\Console\Style\SymfonyStyle;
 final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
     /**

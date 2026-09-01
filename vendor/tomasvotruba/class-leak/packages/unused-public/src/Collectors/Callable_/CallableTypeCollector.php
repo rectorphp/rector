@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\Callable_;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\Callable_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -10,8 +10,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Constant\ConstantArrayType;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ClassTypeDetector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ClassTypeDetector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
 /**
  * @implements Collector<Expr\Array_, non-empty-array<string>|null>
  */

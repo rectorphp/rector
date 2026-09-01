@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Symfony\Component\Routing\Annotation;
+namespace RectorPrefix202609\Symfony\Component\Routing\Annotation;
 
 if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
     return;

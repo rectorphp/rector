@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Templates;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Templates;
 
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Enum\Template\BladeRegex;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Enum\Template\TwigRegex;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Enum\Template\BladeRegex;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Enum\Template\TwigRegex;
 final class TemplateMethodCallsProvider
 {
     /**

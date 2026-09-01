@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Symfony\Bundle\FrameworkBundle\Controller;
+namespace RectorPrefix202609\Symfony\Bundle\FrameworkBundle\Controller;
 
 if (class_exists(Controller::class)) {
     return;

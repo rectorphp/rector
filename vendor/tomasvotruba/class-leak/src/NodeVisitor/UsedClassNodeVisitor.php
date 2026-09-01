@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\ClassLeak\NodeVisitor;
+namespace RectorPrefix202609\TomasVotruba\ClassLeak\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;

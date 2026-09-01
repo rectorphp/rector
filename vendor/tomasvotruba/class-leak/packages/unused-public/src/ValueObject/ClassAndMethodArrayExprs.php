@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\ValueObject;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\ValueObject;
 
 use PhpParser\Node\Expr;
 final class ClassAndMethodArrayExprs

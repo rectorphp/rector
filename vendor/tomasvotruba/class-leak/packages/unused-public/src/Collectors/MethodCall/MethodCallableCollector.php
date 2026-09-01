@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\MethodCall;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -9,10 +9,10 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Node\MethodCallableNode;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\CallReferece\CallReferencesFlatter;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ClassMethodCallReferenceResolver;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ClassTypeDetector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\CallReferece\CallReferencesFlatter;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ClassMethodCallReferenceResolver;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ClassTypeDetector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
 /**
  * @implements Collector<MethodCallableNode, non-empty-array<string>|null>
  */

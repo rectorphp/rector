@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Console\Enum;
+namespace RectorPrefix202609\Entropy\Console\Enum;
 
 final class Color
 {

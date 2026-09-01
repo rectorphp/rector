@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Parallel\ValueObject;
 
-use RectorPrefix202608\React\Socket\TcpServer;
+use RectorPrefix202609\React\Socket\TcpServer;
 use Rector\Parallel\Exception\ParallelShouldNotHappenException;
 /**
  * Used from https://github.com/phpstan/phpstan-src/blob/master/src/Parallel/ProcessPool.php

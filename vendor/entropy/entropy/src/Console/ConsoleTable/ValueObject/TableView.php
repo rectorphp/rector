@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Console\ConsoleTable\ValueObject;
+namespace RectorPrefix202609\Entropy\Console\ConsoleTable\ValueObject;
 
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 final class TableView
 {
     /**

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Parallel;
 
 use Rector\Parallel\ValueObject\Schedule;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * Used from
  * https://github.com/phpstan/phpstan-src/blob/9124c66dcc55a222e21b1717ba5f60771f7dda92/src/Parallel/Scheduler.php

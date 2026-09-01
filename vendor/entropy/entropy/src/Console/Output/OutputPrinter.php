@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Console\Output;
+namespace RectorPrefix202609\Entropy\Console\Output;
 
-use RectorPrefix202608\Entropy\Console\Enum\Color;
-use RectorPrefix202608\Entropy\Console\Terminal\Terminal;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Entropy\Console\Enum\Color;
+use RectorPrefix202609\Entropy\Console\Terminal\Terminal;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @api used in many ways
  */

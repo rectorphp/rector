@@ -18,7 +18,7 @@ use Rector\PhpDocDecorator\PhpDocFromTypeDeclarationDecorator;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/versions/8.2/dnf-types
  *

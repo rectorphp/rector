@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\StaticCall;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
@@ -10,8 +10,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Node\StaticMethodCallableNode;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ClassTypeDetector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ClassTypeDetector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
 /**
  * @implements Collector<StaticMethodCallableNode, non-empty-array<string>|null>
  */

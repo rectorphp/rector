@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Console\Output;
+namespace RectorPrefix202609\Entropy\Console\Output;
 
-use RectorPrefix202608\Entropy\Attributes\RelatedTest;
-use RectorPrefix202608\Entropy\Tests\Console\Output\ProgressBarTest;
+use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\Tests\Console\Output\ProgressBarTest;
 /**
  * Lightweight progress bar rendered on a single, re-written terminal line.
  *

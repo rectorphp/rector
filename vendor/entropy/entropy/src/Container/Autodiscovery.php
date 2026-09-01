@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Container;
+namespace RectorPrefix202609\Entropy\Container;
 
-use RectorPrefix202608\Entropy\Attributes\RelatedTest;
-use RectorPrefix202608\Entropy\FileSystem\FileFinder;
-use RectorPrefix202608\Entropy\Reflection\ClassNameResolver;
-use RectorPrefix202608\Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
+use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\FileSystem\FileFinder;
+use RectorPrefix202609\Entropy\Reflection\ClassNameResolver;
+use RectorPrefix202609\Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
 use ReflectionClass;
 use Throwable;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * Registers project classes to services automatically
  */

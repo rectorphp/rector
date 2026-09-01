@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\ClassLeak;
+namespace RectorPrefix202609\TomasVotruba\ClassLeak;
 
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use RectorPrefix202608\TomasVotruba\ClassLeak\NodeDecorator\FullyQualifiedNameNodeDecorator;
-use RectorPrefix202608\TomasVotruba\ClassLeak\NodeVisitor\ClassNameNodeVisitor;
-use RectorPrefix202608\TomasVotruba\ClassLeak\ValueObject\ClassNames;
+use RectorPrefix202609\TomasVotruba\ClassLeak\NodeDecorator\FullyQualifiedNameNodeDecorator;
+use RectorPrefix202609\TomasVotruba\ClassLeak\NodeVisitor\ClassNameNodeVisitor;
+use RectorPrefix202609\TomasVotruba\ClassLeak\ValueObject\ClassNames;
 /**
  * @see \TomasVotruba\ClassLeak\Tests\ClassNameResolver\ClassNameResolverTest
  */

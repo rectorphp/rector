@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\JMS\Serializer\Handler;
+namespace RectorPrefix202609\JMS\Serializer\Handler;
 
 if (interface_exists(SubscribingHandlerInterface::class)) {
     return;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Utils;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Utils;
 
 final class Strings
 {

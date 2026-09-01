@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202608\React\Dns\Protocol;
+namespace RectorPrefix202609\React\Dns\Protocol;
 
-use RectorPrefix202608\React\Dns\Model\Message;
-use RectorPrefix202608\React\Dns\Model\Record;
-use RectorPrefix202608\React\Dns\Query\Query;
+use RectorPrefix202609\React\Dns\Model\Message;
+use RectorPrefix202609\React\Dns\Model\Record;
+use RectorPrefix202609\React\Dns\Query\Query;
 final class BinaryDumper
 {
     /**

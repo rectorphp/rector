@@ -10,7 +10,7 @@ use Rector\Exception\ShouldNotHappenException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Autoloading\BootstrapFilesIncluderTest
  */

@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Util\Reflection\PrivatesAccessor;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use RectorPrefix202608\Symfony\Component\Console\Input\StringInput;
+use RectorPrefix202609\Symfony\Component\Console\Input\StringInput;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

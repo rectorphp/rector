@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202608\Symfony\Component\Console\DataCollector;
+namespace RectorPrefix202609\Symfony\Component\Console\DataCollector;
 
-use RectorPrefix202608\Symfony\Component\Console\Command\Command;
-use RectorPrefix202608\Symfony\Component\Console\Debug\CliRequest;
-use RectorPrefix202608\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202608\Symfony\Component\Console\SignalRegistry\SignalMap;
-use RectorPrefix202608\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix202608\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix202608\Symfony\Component\HttpKernel\DataCollector\DataCollector;
-use RectorPrefix202608\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix202609\Symfony\Component\Console\Command\Command;
+use RectorPrefix202609\Symfony\Component\Console\Debug\CliRequest;
+use RectorPrefix202609\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202609\Symfony\Component\Console\SignalRegistry\SignalMap;
+use RectorPrefix202609\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix202609\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix202609\Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use RectorPrefix202609\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * @internal
  *

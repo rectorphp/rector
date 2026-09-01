@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -15,7 +15,7 @@ final class PublicClassMethodMatcher
     /**
      * @var string[]
      */
-    private const SKIPPED_TYPES = ['RectorPrefix202608\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator'];
+    private const SKIPPED_TYPES = ['RectorPrefix202609\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator'];
     public function __construct(ClassTypeDetector $classTypeDetector)
     {
         $this->classTypeDetector = $classTypeDetector;

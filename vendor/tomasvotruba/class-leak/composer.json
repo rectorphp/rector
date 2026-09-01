@@ -26,14 +26,14 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202608\\TomasVotruba\\ClassLeak\\": "src",
-            "RectorPrefix202608\\TomasVotruba\\UnusedPublic\\": "packages\/unused-public\/src"
+            "RectorPrefix202609\\TomasVotruba\\ClassLeak\\": "src",
+            "RectorPrefix202609\\TomasVotruba\\UnusedPublic\\": "packages\/unused-public\/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202608\\TomasVotruba\\ClassLeak\\Tests\\": "tests",
-            "RectorPrefix202608\\TomasVotruba\\UnusedPublic\\Tests\\": "packages\/unused-public\/tests"
+            "RectorPrefix202609\\TomasVotruba\\ClassLeak\\Tests\\": "tests",
+            "RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Tests\\": "packages\/unused-public\/tests"
         },
         "classmap": [
             "packages\/unused-public\/stubs"

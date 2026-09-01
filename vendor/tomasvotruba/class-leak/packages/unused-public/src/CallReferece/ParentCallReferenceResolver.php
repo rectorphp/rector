@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\CallReferece;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\CallReferece;
 
 use PHPStan\Reflection\ReflectionProvider;
 final class ParentCallReferenceResolver

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608;
+namespace RectorPrefix202609;
 
 use Rector\Config\RectorConfig;
 // note: all if rules were moved to code quality and coding style sets, or deprecated

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Utils;
 
-use RectorPrefix202608\Nette\Utils\Strings;
+use RectorPrefix202609\Nette\Utils\Strings;
 /**
  * @api used by rector-drupal
  * @see \Rector\Doctrine\Tests\CodeQuality\Utils\CaseStringHelperTest

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Entropy\Console\ConsoleTable\ValueObject;
+namespace RectorPrefix202609\Entropy\Console\ConsoleTable\ValueObject;
 
 final class TableRow
 {

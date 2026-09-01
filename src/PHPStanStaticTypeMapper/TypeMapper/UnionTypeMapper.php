@@ -24,8 +24,8 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\ValueObject\PhpVersionFeature;
-use RectorPrefix202608\Webmozart\Assert\Assert;
-use RectorPrefix202608\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements TypeMapperInterface<UnionType>
  */

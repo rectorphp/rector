@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Doctrine\Inflector\Rules;
+namespace RectorPrefix202609\Doctrine\Inflector\Rules;
 
-use RectorPrefix202608\Doctrine\Inflector\WordInflector;
+use RectorPrefix202609\Doctrine\Inflector\WordInflector;
 class Transformations implements WordInflector
 {
     /** @var Transformation[] */

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
-use RectorPrefix202608\Nette\Utils\Strings;
+use RectorPrefix202609\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;

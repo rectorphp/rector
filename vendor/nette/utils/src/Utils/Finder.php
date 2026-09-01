@@ -5,9 +5,9 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202608\Nette\Utils;
+namespace RectorPrefix202609\Nette\Utils;
 
-use RectorPrefix202608\Nette;
+use RectorPrefix202609\Nette;
 use function array_filter, array_merge, array_values, count, func_get_args, func_num_args, glob, implode, is_array, is_dir, iterator_to_array, preg_match, preg_quote, preg_replace, preg_split, rtrim, spl_object_id, sprintf, str_starts_with, strnatcmp, strpbrk, strrpos, strtolower, strtr, substr, trigger_error, usort;
 use const DIRECTORY_SEPARATOR, E_USER_DEPRECATED, GLOB_NOESCAPE, GLOB_NOSORT, GLOB_ONLYDIR;
 /**

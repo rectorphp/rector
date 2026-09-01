@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Parallel\Application;
 
-use RectorPrefix202608\Clue\React\NDJson\Decoder;
-use RectorPrefix202608\Clue\React\NDJson\Encoder;
-use RectorPrefix202608\Nette\Utils\Random;
-use RectorPrefix202608\React\EventLoop\StreamSelectLoop;
-use RectorPrefix202608\React\Socket\ConnectionInterface;
-use RectorPrefix202608\React\Socket\TcpServer;
+use RectorPrefix202609\Clue\React\NDJson\Decoder;
+use RectorPrefix202609\Clue\React\NDJson\Encoder;
+use RectorPrefix202609\Nette\Utils\Random;
+use RectorPrefix202609\React\EventLoop\StreamSelectLoop;
+use RectorPrefix202609\React\Socket\ConnectionInterface;
+use RectorPrefix202609\React\Socket\TcpServer;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Command\ProcessCommand;
@@ -24,8 +24,8 @@ use Rector\Parallel\ValueObject\Schedule;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
-use RectorPrefix202608\Symfony\Component\Console\Command\Command;
-use RectorPrefix202608\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202609\Symfony\Component\Console\Command\Command;
+use RectorPrefix202609\Symfony\Component\Console\Input\InputInterface;
 use Throwable;
 /**
  * Inspired from @see

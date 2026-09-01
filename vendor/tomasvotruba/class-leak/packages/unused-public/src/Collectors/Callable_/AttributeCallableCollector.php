@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors\Callable_;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors\Callable_;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
@@ -11,8 +11,8 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Type\Constant\ConstantStringType;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ValueObject\ClassAndMethodArrayExprs;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ValueObject\ClassAndMethodArrayExprs;
 /**
  * @implements Collector<AttributeGroup, non-empty-array<string>|null>
  */

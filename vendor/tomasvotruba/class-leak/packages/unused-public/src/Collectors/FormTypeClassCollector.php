@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors;
 
 use PhpParser\Node;
 use PhpParser\Node\ArrayItem;
@@ -9,7 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Type\Constant\ConstantStringType;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
 /**
  * Match Symfony data_class element in forms types, as those use magic setters/getters
  * @implements Collector<ArrayItem, non-empty-array<string>|null>

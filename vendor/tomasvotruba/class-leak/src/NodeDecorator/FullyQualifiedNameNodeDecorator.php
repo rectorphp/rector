@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\ClassLeak\NodeDecorator;
+namespace RectorPrefix202609\TomasVotruba\ClassLeak\NodeDecorator;
 
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;

@@ -5,9 +5,9 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202608\Nette\Utils;
+namespace RectorPrefix202609\Nette\Utils;
 
-use RectorPrefix202608\Nette;
+use RectorPrefix202609\Nette;
 use function count, is_array, is_scalar, sprintf;
 /**
  * Array-like object with property access.

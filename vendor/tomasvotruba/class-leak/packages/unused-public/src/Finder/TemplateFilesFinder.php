@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Finder;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Finder;
 
 /**
  * @see \TomasVotruba\UnusedPublic\Tests\Templates\TemplateFilesFinder\TemplateFilesFinderTest

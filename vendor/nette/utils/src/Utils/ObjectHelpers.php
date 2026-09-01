@@ -5,10 +5,10 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202608\Nette\Utils;
+namespace RectorPrefix202609\Nette\Utils;
 
-use RectorPrefix202608\Nette;
-use RectorPrefix202608\Nette\MemberAccessException;
+use RectorPrefix202609\Nette;
+use RectorPrefix202609\Nette\MemberAccessException;
 use function array_filter, array_merge, array_pop, array_unique, get_class_methods, get_parent_class, implode, is_a, levenshtein, method_exists, preg_match_all, preg_replace, strlen, ucfirst;
 use const PREG_SET_ORDER, SORT_REGULAR;
 /**

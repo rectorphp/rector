@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Parallel;
 
-use RectorPrefix202608\Fidry\CpuCoreCounter\CpuCoreCounter;
-use RectorPrefix202608\Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
+use RectorPrefix202609\Fidry\CpuCoreCounter\CpuCoreCounter;
+use RectorPrefix202609\Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
 final class CpuCoreCountProvider
 {
     /**

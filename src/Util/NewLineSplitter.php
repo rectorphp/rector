@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Util;
 
-use RectorPrefix202608\Nette\Utils\Strings;
+use RectorPrefix202609\Nette\Utils\Strings;
 final class NewLineSplitter
 {
     /**

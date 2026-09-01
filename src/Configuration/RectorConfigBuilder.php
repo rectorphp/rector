@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use Deprecated;
-use RectorPrefix202608\DrupalRector\Set\DrupalSetList;
-use RectorPrefix202608\Nette\Utils\Strings;
+use RectorPrefix202609\DrupalRector\Set\DrupalSetList;
+use RectorPrefix202609\Nette\Utils\Strings;
 use PhpParser\NodeVisitor;
 use Rector\Bridge\SetRectorsResolver;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
@@ -33,8 +33,8 @@ use Rector\Symfony\Set\TwigSetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
 use RectorLaravel\Set\LaravelSetList;
-use RectorPrefix202608\Symfony\Component\Finder\Finder;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Symfony\Component\Finder\Finder;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @api
  */

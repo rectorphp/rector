@@ -33,7 +33,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202608\Webmozart\Assert\Assert;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @see https://symfony.com/doc/current/console.html#registering-the-command
  *

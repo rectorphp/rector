@@ -6,7 +6,6 @@ namespace PHPStan\PhpDocParser\Lexer;
 use PHPStan\PhpDocParser\ParserConfig;
 use function implode;
 use function preg_match_all;
-use const PREG_SET_ORDER;
 /**
  * Implementation based on Nette Tokenizer (New BSD License; https://github.com/nette/tokenizer)
  */
@@ -69,12 +68,21 @@ class Lexer
         if ($this->regexp === null) {
             $this->regexp = $this->generateRegexp();
         }
-        preg_match_all($this->regexp, $s, $matches, PREG_SET_ORDER);
+        // PREG_PATTERN_ORDER, not PREG_SET_ORDER: it collects the whole PHPDoc
+        // into two arrays instead of allocating one array per token. This only
+        // pays off while the token patterns have no capturing groups, because
+        // every group would get an array of its own, one entry per token.
+        preg_match_all($this->regexp, $s, $matches);
+        $values = $matches[0];
+        if ($values === []) {
+            return [['', self::TOKEN_END, 1]];
+        }
+        $marks = $matches['MARK'];
         $tokens = [];
         $line = 1;
-        foreach ($matches as $match) {
-            $type = (int) $match['MARK'];
-            $tokens[] = [$match[0], $type, $line];
+        foreach ($values as $i => $value) {
+            $type = (int) $marks[$i];
+            $tokens[] = [$value, $type, $line];
             if ($type !== self::TOKEN_PHPDOC_EOL) {
                 continue;
             }
@@ -85,6 +93,7 @@ class Lexer
     }
     private function generateRegexp(): string
     {
+        // every group in here must be non-capturing, see tokenize()
         $patterns = [
             self::TOKEN_HORIZONTAL_WS => '[\x09\x20]++',
             self::TOKEN_IDENTIFIER => '(?:[\\\\]?+[a-z_\x80-\xFF][0-9a-z_\x80-\xFF-]*+)++',
@@ -117,8 +126,8 @@ class Lexer
             self::TOKEN_PHPDOC_TAG => '@(?:[a-z][a-z0-9-\\\\]+:)?[a-z][a-z0-9-\\\\]*+',
             self::TOKEN_DOCTRINE_TAG => '@[a-z_\\\\][a-z0-9_\:\\\\]*[a-z_][a-z0-9_]*',
             self::TOKEN_PHPDOC_EOL => '\r?+\n[\x09\x20]*+(?:\*(?!/)\x20?+)?',
-            self::TOKEN_FLOAT => '[+\-]?(?:(?:[0-9]++(_[0-9]++)*\.[0-9]*+(_[0-9]++)*(?:e[+\-]?[0-9]++(_[0-9]++)*)?)|(?:[0-9]*+(_[0-9]++)*\.[0-9]++(_[0-9]++)*(?:e[+\-]?[0-9]++(_[0-9]++)*)?)|(?:[0-9]++(_[0-9]++)*e[+\-]?[0-9]++(_[0-9]++)*))',
-            self::TOKEN_INTEGER => '[+\-]?(?:(?:0b[0-1]++(_[0-1]++)*)|(?:0o[0-7]++(_[0-7]++)*)|(?:0x[0-9a-f]++(_[0-9a-f]++)*)|(?:[0-9]++(_[0-9]++)*))',
+            self::TOKEN_FLOAT => '[+\-]?(?:(?:[0-9]++(?:_[0-9]++)*\.[0-9]*+(?:_[0-9]++)*(?:e[+\-]?[0-9]++(?:_[0-9]++)*)?)|(?:[0-9]*+(?:_[0-9]++)*\.[0-9]++(?:_[0-9]++)*(?:e[+\-]?[0-9]++(?:_[0-9]++)*)?)|(?:[0-9]++(?:_[0-9]++)*e[+\-]?[0-9]++(?:_[0-9]++)*))',
+            self::TOKEN_INTEGER => '[+\-]?(?:(?:0b[0-1]++(?:_[0-1]++)*)|(?:0o[0-7]++(?:_[0-7]++)*)|(?:0x[0-9a-f]++(?:_[0-9a-f]++)*)|(?:[0-9]++(?:_[0-9]++)*))',
             self::TOKEN_SINGLE_QUOTED_STRING => '\'(?:\\\\[^\r\n]|[^\'\r\n\\\\])*+\'',
             self::TOKEN_DOUBLE_QUOTED_STRING => '"(?:\\\\[^\r\n]|[^"\r\n\\\\])*+"',
             self::TOKEN_DOCTRINE_ANNOTATION_STRING => '"(?:""|[^"])*+"',

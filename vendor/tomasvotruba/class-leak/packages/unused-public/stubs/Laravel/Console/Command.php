@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\Illuminate\Console;
+namespace RectorPrefix202609\Illuminate\Console;
 
 class Command
 {

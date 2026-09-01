@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608\TomasVotruba\UnusedPublic\Collectors;
+namespace RectorPrefix202609\TomasVotruba\UnusedPublic\Collectors;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -10,8 +10,8 @@ use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\ClassTypeDetector;
-use RectorPrefix202608\TomasVotruba\UnusedPublic\Configuration;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\ClassTypeDetector;
+use RectorPrefix202609\TomasVotruba\UnusedPublic\Configuration;
 /**
  * @implements Collector<StaticPropertyFetch, non-empty-array<string>|null>
  */

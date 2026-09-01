@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202608\SebastianBergmann\Diff\Output;
+namespace RectorPrefix202609\SebastianBergmann\Diff\Output;
 
 use function array_merge;
 use function array_splice;
@@ -28,8 +28,8 @@ use function sprintf;
 use function str_ends_with;
 use function stream_get_contents;
 use function substr;
-use RectorPrefix202608\SebastianBergmann\Diff\ConfigurationException;
-use RectorPrefix202608\SebastianBergmann\Diff\Differ;
+use RectorPrefix202609\SebastianBergmann\Diff\ConfigurationException;
+use RectorPrefix202609\SebastianBergmann\Diff\Differ;
 /**
  * Strict Unified diff output builder.
  *

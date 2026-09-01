@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202608;
+namespace RectorPrefix202609;
 
 use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
 use Rector\DowngradePhp81\Rector\FuncCall\DowngradeHashAlgorithmXxHashRector;
