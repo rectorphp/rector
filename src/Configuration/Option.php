@@ -336,6 +336,11 @@ final class Option
      */
     public const ONLY_SUFFIX = 'only-suffix';
     /**
+     * @internal To keep only files matching all given patterns
+     * @var string
+     */
+    public const FILTER = 'filter';
+    /**
      * @internal To report overflow levels in ->with*Level() methods
      * @var string
      */

@@ -1598,6 +1598,7 @@ return array(
     'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => $baseDir . '/src/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
     'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => $baseDir . '/src/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
     'Rector\\FileSystem\\FileAndDirectoryFilter' => $baseDir . '/src/FileSystem/FileAndDirectoryFilter.php',
+    'Rector\\FileSystem\\FilePathFilter' => $baseDir . '/src/FileSystem/FilePathFilter.php',
     'Rector\\FileSystem\\FilePathHelper' => $baseDir . '/src/FileSystem/FilePathHelper.php',
     'Rector\\FileSystem\\FilesFinder' => $baseDir . '/src/FileSystem/FilesFinder.php',
     'Rector\\FileSystem\\FilesystemTweaker' => $baseDir . '/src/FileSystem/FilesystemTweaker.php',

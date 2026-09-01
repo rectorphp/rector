@@ -40,7 +40,11 @@ final class FilesFinder
      * @readonly
      */
     private ChangedFilesDetector $changedFilesDetector;
-    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper, \Rector\FileSystem\FilePathHelper $filePathHelper, ChangedFilesDetector $changedFilesDetector)
+    /**
+     * @readonly
+     */
+    private \Rector\FileSystem\FilePathFilter $filePathFilter;
+    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper, \Rector\FileSystem\FilePathHelper $filePathHelper, ChangedFilesDetector $changedFilesDetector, \Rector\FileSystem\FilePathFilter $filePathFilter)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
@@ -48,13 +52,15 @@ final class FilesFinder
         $this->pathSkipper = $pathSkipper;
         $this->filePathHelper = $filePathHelper;
         $this->changedFilesDetector = $changedFilesDetector;
+        $this->filePathFilter = $filePathFilter;
     }
     /**
      * @param string[] $source
      * @param string[] $suffixes
+     * @param string[] $filters
      * @return string[]
      */
-    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true, ?string $onlySuffix = null): array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true, ?string $onlySuffix = null, array $filters = []): array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         // filtering files in files collection
@@ -91,6 +97,8 @@ final class FilesFinder
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $filteredFilePathsInDirectories = $this->findInDirectories($directories, $suffixes, $hasOnlySuffix, $onlySuffix, $sortByName);
         $filePaths = array_merge($filteredFilePaths, $filteredFilePathsInDirectories);
+        // keep only files matching all --filter patterns
+        $filePaths = $this->filePathFilter->filter($filePaths, $filters);
         return $this->unchangedFilesFilter->filterFilePaths($filePaths);
     }
     /**
@@ -102,7 +110,7 @@ final class FilesFinder
         if ($configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
         }
-        return $this->findInDirectoriesAndFiles($paths, $configuration->getFileExtensions(), \true, $configuration->getOnlySuffix());
+        return $this->findInDirectoriesAndFiles($paths, $configuration->getFileExtensions(), \true, $configuration->getOnlySuffix(), $configuration->getFilters());
     }
     /**
      * Exclude short "<?=" tags as lead to invalid changes

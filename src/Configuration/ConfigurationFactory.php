@@ -5,6 +5,7 @@ namespace Rector\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\FileSystem\FilePathFilter;
 use Rector\ValueObject\Configuration;
 use RectorPrefix202609\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202609\Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,10 +22,15 @@ final class ConfigurationFactory
      * @readonly
      */
     private \Rector\Configuration\OnlyRuleResolver $onlyRuleResolver;
-    public function __construct(SymfonyStyle $symfonyStyle, \Rector\Configuration\OnlyRuleResolver $onlyRuleResolver)
+    /**
+     * @readonly
+     */
+    private FilePathFilter $filePathFilter;
+    public function __construct(SymfonyStyle $symfonyStyle, \Rector\Configuration\OnlyRuleResolver $onlyRuleResolver, FilePathFilter $filePathFilter)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->onlyRuleResolver = $onlyRuleResolver;
+        $this->filePathFilter = $filePathFilter;
     }
     /**
      * @api used in tests
@@ -53,9 +59,14 @@ final class ConfigurationFactory
             $onlyRule = $this->onlyRuleResolver->resolve($onlyRule);
         }
         $onlySuffix = $input->getOption(\Rector\Configuration\Option::ONLY_SUFFIX);
-        // "--only"/"--only-suffix" narrow the run, so skips outside the scope look falsely unused;
+        if ($onlySuffix !== null) {
+            $this->symfonyStyle->warning('The "--only-suffix" option is deprecated and will be removed. Use "--filter" instead, e.g. --filter="*Controller.php"');
+        }
+        $rawFilter = $input->getOption(\Rector\Configuration\Option::FILTER);
+        $filters = $rawFilter !== null ? $this->filePathFilter->parsePatterns((string) $rawFilter) : [];
+        // "--only"/"--only-suffix"/"--filter" narrow the run, so skips outside the scope look falsely unused;
         // mark the run as narrowed to disable unused skip reporting and avoid false positives
-        if ($onlyRule !== null || $onlySuffix !== null) {
+        if ($onlyRule !== null || $onlySuffix !== null || $filters !== []) {
             SimpleParameterProvider::setParameter(\Rector\Configuration\Option::IS_RUN_NARROWED, \true);
         }
         $isParallel = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::PARALLEL);
@@ -80,7 +91,7 @@ final class ConfigurationFactory
         if ($isPhpOnly) {
             SimpleParameterProvider::setParameter(\Rector\Configuration\Option::IS_RUN_NARROWED, \true);
         }
-        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $showRulesSummary, $isComposerBased, $isPhpOnly);
+        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $showRulesSummary, $isComposerBased, $isPhpOnly, $filters);
     }
     private function shouldShowProgressBar(InputInterface $input, string $outputFormat): bool
     {
