@@ -7,11 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\NodeManipulator\ClassMethodManipulator;
 use Rector\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
@@ -44,18 +42,13 @@ final class ClassMethodArrayDocblockParamFromLocalCallsRector extends AbstractRe
      * @readonly
      */
     private NodeDocblockTypeDecorator $nodeDocblockTypeDecorator;
-    /**
-     * @readonly
-     */
-    private ClassMethodManipulator $classMethodManipulator;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, CallTypesResolver $callTypesResolver, LocalMethodCallFinder $localMethodCallFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator, ClassMethodManipulator $classMethodManipulator)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, CallTypesResolver $callTypesResolver, LocalMethodCallFinder $localMethodCallFinder, UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->callTypesResolver = $callTypesResolver;
         $this->localMethodCallFinder = $localMethodCallFinder;
         $this->usefulArrayTagNodeAnalyzer = $usefulArrayTagNodeAnalyzer;
         $this->nodeDocblockTypeDecorator = $nodeDocblockTypeDecorator;
-        $this->classMethodManipulator = $classMethodManipulator;
     }
     public function getNodeTypes(): array
     {
@@ -104,8 +97,8 @@ CODE_SAMPLE
             if ($classMethod->getParams() === []) {
                 continue;
             }
-            // parent/interface method may declare a wider @param contract; local calls are narrower, so skip to keep LSP
-            if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($node, $this->getName($classMethod))) {
+            // only private methods have a closed set of local callers; public/protected can be called from outside
+            if (!$classMethod->isPrivate()) {
                 continue;
             }
             $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
@@ -119,10 +112,6 @@ CODE_SAMPLE
                 $parameterTagValueNode = $classMethodPhpDocInfo->getParamTagValueByName($parameterName);
                 // already known, skip
                 if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($parameterTagValueNode)) {
-                    continue;
-                }
-                if ($parameterTagValueNode instanceof ParamTagValueNode && $classMethod->isPublic() && $this->usefulArrayTagNodeAnalyzer->isMixedArray($parameterTagValueNode->type)) {
-                    // on public method, skip if there is mixed[], as caller can be anything
                     continue;
                 }
                 $resolvedParameterType = $classMethodParameterTypes[$parameterPosition] ?? $classMethodParameterTypes[$parameterName] ?? null;
