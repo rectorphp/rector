@@ -10,10 +10,12 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
@@ -118,6 +120,11 @@ CODE_SAMPLE
         if ($this->shouldSkipReturnMixedAndEmptyArray($phpDocInfo, $soleReturn->expr)) {
             return null;
         }
+        // bare "@return array" with "return []" -> "mixed[]", better than "array{}"
+        if ($soleReturn->expr->items === [] && $this->hasBareArrayReturnTag($phpDocInfo)) {
+            $this->phpDocTypeChanger->changeReturnTypeNode($node, $phpDocInfo, new SpacingAwareArrayTypeNode(new IdentifierTypeNode('mixed')));
+            return $node;
+        }
         // resolve simple type
         $returnedType = $this->getType($soleReturn->expr);
         if (!$returnedType instanceof ConstantArrayType) {
@@ -142,5 +149,13 @@ CODE_SAMPLE
         }
         // better than array{}
         return $returnTagValueNode->type instanceof ArrayTypeNode;
+    }
+    private function hasBareArrayReturnTag(PhpDocInfo $phpDocInfo): bool
+    {
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
+            return \false;
+        }
+        return $returnTagValueNode->type instanceof IdentifierTypeNode && $returnTagValueNode->type->name === 'array';
     }
 }
