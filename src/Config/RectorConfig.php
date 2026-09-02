@@ -478,6 +478,17 @@ final class RectorConfig extends Container
         SimpleParameterProvider::setParameter(Option::EDITOR_URL, $editorUrl);
     }
     /**
+     * Backward-compatibility no-op. The former illuminate/container exposed tag()/tagged();
+     * the entropy container discovers services by contract, so tagging is not needed.
+     *
+     * @deprecated Tagging is no longer used, services are discovered by contract. The call is ignored.
+     * @param string|string[] $abstracts
+     * @param string|string[] $tags
+     */
+    public function tag($abstracts, $tags): void
+    {
+    }
+    /**
      * @internal Used only for bridge
      * @return array<class-string<ConfigurableRectorInterface>, mixed>
      */
