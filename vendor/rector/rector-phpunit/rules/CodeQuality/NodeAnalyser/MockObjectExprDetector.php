@@ -48,6 +48,10 @@ final class MockObjectExprDetector
         /** @var array<Expr\MethodCall> $methodCalls */
         $methodCalls = $this->betterNodeFinder->findInstancesOfScoped((array) $classMethod->stmts, [MethodCall::class]);
         foreach ($methodCalls as $methodCall) {
+            // dynamic method call, e.g. $sut->$method(), is not a literal ->method() call
+            if (!$methodCall->name instanceof Identifier) {
+                continue;
+            }
             if (!$this->nodeNameResolver->isName($methodCall->name, 'method')) {
                 continue;
             }
