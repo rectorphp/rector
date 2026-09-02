@@ -161,6 +161,9 @@ final class ComposerBasedCommand extends Command
             $printedPropertyValues = [];
             $reflectionObject = new ReflectionObject($value);
             foreach ($reflectionObject->getProperties() as $reflectionProperty) {
+                if (\PHP_VERSION_ID < 80100) {
+                    $reflectionProperty->setAccessible(\true);
+                }
                 // lazy-initialized property, e.g. PHPStan UnionType::$normalized
                 if (!$reflectionProperty->isInitialized($value)) {
                     continue;

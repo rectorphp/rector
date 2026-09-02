@@ -15,8 +15,10 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PHPStan\ScopeFetcher;
@@ -65,6 +67,33 @@ class SomeClass
     }
 }
 CODE_SAMPLE
+), new CodeSample(<<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run($object)
+    {
+        $reflectionObject = new ReflectionObject($object);
+        foreach ($reflectionObject->getProperties() as $reflectionProperty) {
+            echo $reflectionProperty->getValue($object);
+        }
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run($object)
+    {
+        $reflectionObject = new ReflectionObject($object);
+        foreach ($reflectionObject->getProperties() as $reflectionProperty) {
+            if (PHP_VERSION_ID < 80100) {
+                $reflectionProperty->setAccessible(true);
+            }
+            echo $reflectionProperty->getValue($object);
+        }
+    }
+}
+CODE_SAMPLE
 )]);
     }
     /**
@@ -84,6 +113,12 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         foreach ($node->stmts as $key => $stmt) {
+            if ($stmt instanceof Foreach_) {
+                if ($this->refactorForeach($stmt)) {
+                    $hasChanged = \true;
+                }
+                continue;
+            }
             if (!$stmt instanceof Expression && !$stmt instanceof Return_) {
                 continue;
             }
@@ -129,6 +164,35 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    private function refactorForeach(Foreach_ $foreach): bool
+    {
+        if (!$foreach->valueVar instanceof Variable) {
+            return \false;
+        }
+        if (!$this->isReflectionMembersCall($foreach->expr)) {
+            return \false;
+        }
+        $firstStmt = $foreach->stmts[0] ?? null;
+        if ($this->isSetAccessibleMethodCall($firstStmt) || $this->isSetAccessibleIfMethodCall($firstStmt)) {
+            return \false;
+        }
+        array_unshift($foreach->stmts, $this->createSetAccessibleExpression($foreach->valueVar));
+        return \true;
+    }
+    private function isReflectionMembersCall(Expr $expr): bool
+    {
+        if (!$expr instanceof MethodCall) {
+            return \false;
+        }
+        if (!$this->isNames($expr->name, ['getProperties', 'getMethods'])) {
+            return \false;
+        }
+        $callerType = $this->nodeTypeResolver->getType($expr->var);
+        if (!$callerType instanceof ObjectType) {
+            return \false;
+        }
+        return $callerType->isInstanceOf('ReflectionClass')->yes();
     }
     private function createSetAccessibleExpression(Expr $expr): If_
     {

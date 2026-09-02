@@ -33,6 +33,9 @@ trait ServiceSubscriberTrait
     {
         $services = method_exists(get_parent_class(self::class) ?: '', __FUNCTION__) ? parent::getSubscribedServices() : [];
         foreach ((new \ReflectionClass(self::class))->getMethods() as $method) {
+            if (\PHP_VERSION_ID < 80100) {
+                $method->setAccessible(\true);
+            }
             if (self::class !== $method->class) {
                 continue;
             }
