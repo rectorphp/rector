@@ -165,8 +165,11 @@ final class TypeNormalizer
         if (count($unionType->getArrays()) !== count($unionType->getTypes())) {
             return null;
         }
-        $arrayUniqueKeyType = $this->arrayTypeLeastCommonDenominatorResolver->sharedArrayStructure(...$unionType->getTypes());
-        return new ArrayType($arrayUniqueKeyType, new MixedType());
+        $sharedArrayStructure = $this->arrayTypeLeastCommonDenominatorResolver->sharedArrayStructure(...$unionType->getTypes());
+        if (!$sharedArrayStructure instanceof ArrayType) {
+            return null;
+        }
+        return $sharedArrayStructure;
     }
     /**
      * Is object only? avoid trimming, as auto import handles it better
