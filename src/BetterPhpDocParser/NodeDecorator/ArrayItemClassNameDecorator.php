@@ -40,17 +40,31 @@ final class ArrayItemClassNameDecorator implements PhpDocNodeDecoratorInterface
             if (!$node instanceof ArrayItemNode) {
                 return null;
             }
-            if (!is_string($node->value)) {
-                return null;
+            $valueClassName = $this->resolveClassFromScopeResolution($node->value, $phpNode);
+            if ($valueClassName !== null) {
+                $node->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $valueClassName);
             }
-            $splitScopeResolution = explode('::', $node->value);
-            if (count($splitScopeResolution) !== 2) {
-                return null;
+            // e.g. @ORM\DiscriminatorMap({ SomeEnum::TOTP = "..." }), the class is in the key
+            $keyClassName = $this->resolveClassFromScopeResolution($node->key, $phpNode);
+            if ($keyClassName !== null) {
+                $node->setAttribute(PhpDocAttributeKey::RESOLVED_KEY_CLASS, $keyClassName);
             }
-            $className = $this->resolveFullyQualifiedClass($splitScopeResolution[0], $phpNode);
-            $node->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $className);
             return $node;
         });
+    }
+    /**
+     * @param mixed $value
+     */
+    private function resolveClassFromScopeResolution($value, PhpNode $phpNode): ?string
+    {
+        if (!is_string($value)) {
+            return null;
+        }
+        $splitScopeResolution = explode('::', $value);
+        if (count($splitScopeResolution) !== 2) {
+            return null;
+        }
+        return $this->resolveFullyQualifiedClass($splitScopeResolution[0], $phpNode);
     }
     private function resolveFullyQualifiedClass(string $className, PhpNode $phpNode): string
     {
