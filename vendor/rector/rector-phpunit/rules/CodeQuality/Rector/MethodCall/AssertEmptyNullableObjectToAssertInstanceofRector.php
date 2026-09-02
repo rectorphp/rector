@@ -74,7 +74,7 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        if (!$this->isNames($node->name, ['assertNotEmpty', 'assertEmpty', 'assertNull', 'assertNotNull'])) {
+        if (!$this->isNames($node->name, ['assertNotEmpty', 'assertNotNull'])) {
             return null;
         }
         if ($node->isFirstClassCallable()) {
@@ -92,8 +92,7 @@ CODE_SAMPLE
         if (!$pureType instanceof ObjectType) {
             return null;
         }
-        $methodName = $this->isNames($node->name, ['assertEmpty', 'assertNull']) ? 'assertNotInstanceOf' : 'assertInstanceOf';
-        $node->name = new Identifier($methodName);
+        $node->name = new Identifier('assertInstanceOf');
         $fullyQualified = new FullyQualified($pureType->getClassName());
         $customMessageArg = $node->getArgs()[1] ?? null;
         $node->args[0] = new Arg(new ClassConstFetch($fullyQualified, 'class'));
