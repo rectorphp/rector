@@ -15,6 +15,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
@@ -100,6 +101,13 @@ final class NodeDocblockTypeDecorator
     private function createTypeNode(Type $type): TypeNode
     {
         $generalizedType = $this->typeNormalizer->generalizeConstantTypes($type);
+        // empty array default "[]" resolves to "never[]"; widen to "mixed[]" to keep the docblock useful
+        $generalizedType = TypeTraverser::map($generalizedType, static function (Type $type, callable $traverse): Type {
+            if ($type instanceof NeverType) {
+                return new MixedType();
+            }
+            return $traverse($type);
+        });
         // turn into rather generic short return typeOrTypeNode, to keep it open to extension later and readable to human
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedType);
         if ($typeNode instanceof IdentifierTypeNode && $typeNode->name === 'mixed') {
