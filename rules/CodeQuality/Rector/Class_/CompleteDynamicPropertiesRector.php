@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -14,6 +13,7 @@ use Rector\CodeQuality\NodeFactory\MissingPropertiesFactory;
 use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ClassReflectionAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -45,7 +45,11 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
      * @readonly
      */
     private MissingPropertiesResolver $missingPropertiesResolver;
-    public function __construct(MissingPropertiesFactory $missingPropertiesFactory, LocalPropertyAnalyzer $localPropertyAnalyzer, ReflectionProvider $reflectionProvider, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, MissingPropertiesResolver $missingPropertiesResolver)
+    /**
+     * @readonly
+     */
+    private ClassReflectionAnalyzer $classReflectionAnalyzer;
+    public function __construct(MissingPropertiesFactory $missingPropertiesFactory, LocalPropertyAnalyzer $localPropertyAnalyzer, ReflectionProvider $reflectionProvider, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, MissingPropertiesResolver $missingPropertiesResolver, ClassReflectionAnalyzer $classReflectionAnalyzer)
     {
         $this->missingPropertiesFactory = $missingPropertiesFactory;
         $this->localPropertyAnalyzer = $localPropertyAnalyzer;
@@ -53,6 +57,7 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
         $this->classAnalyzer = $classAnalyzer;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->missingPropertiesResolver = $missingPropertiesResolver;
+        $this->classReflectionAnalyzer = $classReflectionAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -135,7 +140,20 @@ CODE_SAMPLE
         if ($classReflection->hasMethod('__get')) {
             return \true;
         }
-        return $class->extends instanceof FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString());
+        // any not autoloaded ancestor may already declare the property, so we cannot safely add it
+        return $this->hasNotAutoloadedAncestor($classReflection);
+    }
+    private function hasNotAutoloadedAncestor(ClassReflection $classReflection): bool
+    {
+        $currentClassReflection = $classReflection;
+        while ($currentClassReflection instanceof ClassReflection) {
+            $parentClassName = $this->classReflectionAnalyzer->resolveParentClassName($currentClassReflection);
+            if ($parentClassName !== null && !$this->reflectionProvider->hasClass($parentClassName)) {
+                return \true;
+            }
+            $currentClassReflection = $currentClassReflection->getParentClass();
+        }
+        return \false;
     }
     private function matchClassReflection(Class_ $class): ?ClassReflection
     {
