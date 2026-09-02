@@ -105,6 +105,7 @@ Among there projects belong:
 * [ibexa/rector](https://github.com/ibexa/rector)
 * [guanguans/rector-rules](https://github.com/guanguans/rector-rules)
 * [wernerkrauss/silverstripe-rector](https://github.com/wernerkrauss/silverstripe-rector)
+* [mspirkov/yii2-rector](https://github.com/mspirkov/yii2-rector)
 
 <br>
 
