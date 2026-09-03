@@ -117,6 +117,11 @@ CODE_SAMPLE
         // When the if body is blank but it has an elseif,
         // merge the negated if condition with the elseif condition
         if ($node->elseifs !== []) {
+            // A trailing else would run when the negated if condition is true,
+            // which the original empty if body never did, so keep the code as is.
+            if ($node->else instanceof Else_) {
+                return null;
+            }
             $firstElseIf = $node->elseifs[0];
             $cond = new BooleanAnd($this->conditionInverter->createInvertedCondition($node->cond), $firstElseIf->cond);
             $if = new If_($cond, ['stmts' => $firstElseIf->stmts]);
