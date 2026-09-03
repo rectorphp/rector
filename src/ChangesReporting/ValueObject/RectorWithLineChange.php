@@ -41,6 +41,10 @@ final class RectorWithLineChange implements SerializableInterface
     {
         return $this->rectorClass;
     }
+    public function getLine(): int
+    {
+        return $this->line;
+    }
     /**
      * @param array<string, mixed> $json
      */
