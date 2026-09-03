@@ -33,9 +33,9 @@ final class ConfigurationRuleFilter
         if (!$this->configuration instanceof Configuration) {
             return $rectors;
         }
-        $onlyRule = $this->configuration->getOnlyRule();
-        if ($onlyRule !== null) {
-            return $this->filterOnlyRule($rectors, $onlyRule);
+        $onlyRules = $this->configuration->getOnlyRules();
+        if ($onlyRules !== []) {
+            return $this->filterOnlyRules($rectors, $onlyRules);
         }
         if ($this->configuration->isComposerBased()) {
             return $this->filterComposerBased($rectors);
@@ -47,14 +47,18 @@ final class ConfigurationRuleFilter
     }
     /**
      * @param list<RectorInterface> $rectors
+     * @param string[] $onlyRules
      * @return list<RectorInterface>
      */
-    public function filterOnlyRule(array $rectors, string $onlyRule): array
+    public function filterOnlyRules(array $rectors, array $onlyRules): array
     {
         $activeRectors = [];
         foreach ($rectors as $rector) {
-            if ($rector instanceof $onlyRule) {
-                $activeRectors[] = $rector;
+            foreach ($onlyRules as $onlyRule) {
+                if ($rector instanceof $onlyRule) {
+                    $activeRectors[] = $rector;
+                    break;
+                }
             }
         }
         return $activeRectors;

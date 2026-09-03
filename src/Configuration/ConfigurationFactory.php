@@ -55,10 +55,9 @@ final class ConfigurationFactory
         $paths = $this->resolvePaths($input);
         $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
         // filter rule and path
-        $onlyRule = $input->getOption(\Rector\Configuration\Option::ONLY);
-        if ($onlyRule !== null) {
-            $onlyRule = $this->onlyRuleResolver->resolve($onlyRule);
-        }
+        /** @var string[] $onlyRuleInputs */
+        $onlyRuleInputs = (array) $input->getOption(\Rector\Configuration\Option::ONLY);
+        $onlyRules = array_map(\Closure::fromCallable([$this->onlyRuleResolver, 'resolve']), $onlyRuleInputs);
         $onlySuffix = $input->getOption(\Rector\Configuration\Option::ONLY_SUFFIX);
         if ($onlySuffix !== null) {
             $this->symfonyStyle->warning('The "--only-suffix" option is deprecated and will be removed. Use "--filter" instead, e.g. --filter="*Controller.php"');
@@ -67,7 +66,7 @@ final class ConfigurationFactory
         $filters = $rawFilter !== null ? $this->filePathFilter->parsePatterns((string) $rawFilter) : [];
         // "--only"/"--only-suffix"/"--filter" narrow the run, so skips outside the scope look falsely unused;
         // mark the run as narrowed to disable unused skip reporting and avoid false positives
-        if ($onlyRule !== null || $onlySuffix !== null || $filters !== []) {
+        if ($onlyRules !== [] || $onlySuffix !== null || $filters !== []) {
             SimpleParameterProvider::setParameter(\Rector\Configuration\Option::IS_RUN_NARROWED, \true);
         }
         $isParallel = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::PARALLEL);
@@ -97,7 +96,7 @@ final class ConfigurationFactory
         if ($isPhpOnly) {
             SimpleParameterProvider::setParameter(\Rector\Configuration\Option::IS_RUN_NARROWED, \true);
         }
-        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $showRulesSummary, $isComposerBased, $isPhpOnly, $filters, $maxChanges);
+        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRules, $onlySuffix, $levelOverflows, $showRulesSummary, $isComposerBased, $isPhpOnly, $filters, $maxChanges);
     }
     private function resolveMaxChanges(InputInterface $input): ?int
     {

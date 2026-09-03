@@ -109,10 +109,6 @@ final class WorkerCommandLineFactory
         if ((bool) $input->getOption(Option::COMPOSER_BASED)) {
             $workerCommandArray[] = self::OPTION_DASHES . Option::COMPOSER_BASED;
         }
-        if ($input->getOption(Option::ONLY) !== null) {
-            $workerCommandArray[] = self::OPTION_DASHES . Option::ONLY;
-            $workerCommandArray[] = escapeshellarg((string) $input->getOption(Option::ONLY));
-        }
         return implode(' ', $workerCommandArray);
     }
     private function shouldSkipOption(InputInterface $input, string $optionName): bool
@@ -148,7 +144,7 @@ final class WorkerCommandLineFactory
             if ($this->shouldSkipOption($input, $mainCommandOptionName)) {
                 continue;
             }
-            /** @var bool|string|null $optionValue */
+            /** @var bool|string|string[]|null $optionValue */
             $optionValue = $input->getOption($mainCommandOptionName);
             // skip clutter
             if ($optionValue === null) {
@@ -157,6 +153,14 @@ final class WorkerCommandLineFactory
             if (is_bool($optionValue)) {
                 if ($optionValue) {
                     $workerCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
+                }
+                continue;
+            }
+            // array options (e.g. repeated --only) are mirrored one flag per value
+            if (is_array($optionValue)) {
+                foreach ($optionValue as $singleOptionValue) {
+                    $workerCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
+                    $workerCommandOptions[] = \escapeshellarg($singleOptionValue);
                 }
                 continue;
             }

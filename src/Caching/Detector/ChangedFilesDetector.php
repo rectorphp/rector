@@ -40,12 +40,13 @@ final class ChangedFilesDetector
         $this->fileHasher = $fileHasher;
     }
     /**
+     * @param string[] $onlyRules
      * @param string[] $filters
      */
-    public function setActiveScope(?string $onlyRule, ?string $onlySuffix, array $filters = []): void
+    public function setActiveScope(array $onlyRules, ?string $onlySuffix, array $filters = []): void
     {
         // each selection gets its own cache key, so --only and full runs coexist without clearing or poisoning
-        $this->scopeSuffix = $onlyRule === null && $onlySuffix === null && $filters === [] ? '' : '|only:' . ($onlyRule ?? '') . '|suffix:' . ($onlySuffix ?? '') . '|filter:' . implode(',', $filters);
+        $this->scopeSuffix = $onlyRules === [] && $onlySuffix === null && $filters === [] ? '' : '|only:' . implode(',', $onlyRules) . '|suffix:' . ($onlySuffix ?? '') . '|filter:' . implode(',', $filters);
     }
     public function cacheFile(string $filePath): void
     {

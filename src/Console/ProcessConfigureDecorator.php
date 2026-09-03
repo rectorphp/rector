@@ -19,7 +19,7 @@ final class ProcessConfigureDecorator
         $command->addOption(Option::NO_DIFFS, null, InputOption::VALUE_NONE, 'Hide diffs of changed files. Useful e.g. for nicer CI output.');
         $command->addOption(Option::OUTPUT_FORMAT, null, InputOption::VALUE_REQUIRED, 'Select output format', ConsoleOutputFormatter::NAME);
         // filter by rule and path
-        $command->addOption(Option::ONLY, null, InputOption::VALUE_REQUIRED, 'Fully qualified rule class name');
+        $command->addOption(Option::ONLY, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Fully qualified rule class name; repeat to run several rules, e.g. --only=A --only=B');
         $command->addOption(Option::COMPOSER_BASED, null, InputOption::VALUE_NONE, 'Run only rules bound to an installed composer package version');
         $command->addOption(Option::PHP, null, InputOption::VALUE_NONE, 'Run only PHP rules, e.g. rules bound to a minimal PHP version');
         $command->addOption(Option::ONLY_SUFFIX, null, InputOption::VALUE_REQUIRED, 'Deprecated, use "--filter" instead. Filter only files with specific suffix in name, e.g. "Controller"');

@@ -99,7 +99,7 @@ final class ApplicationFileProcessor
     public function run(Configuration $configuration, InputInterface $input): ProcessResult
     {
         // scope the cache to this run's --only / --only-suffix selection before any cache read/write
-        $this->changedFilesDetector->setActiveScope($configuration->getOnlyRule(), $configuration->getOnlySuffix(), $configuration->getFilters());
+        $this->changedFilesDetector->setActiveScope($configuration->getOnlyRules(), $configuration->getOnlySuffix(), $configuration->getFilters());
         $filePaths = $this->filesFinder->findFilesInPaths($configuration->getPaths(), $configuration);
         // no files found
         if ($filePaths === []) {
@@ -150,7 +150,7 @@ final class ApplicationFileProcessor
     public function processFiles(array $filePaths, Configuration $configuration, ?callable $preFileCallback = null, ?callable $postFileCallback = null): ProcessResult
     {
         // also set here: parallel workers reach processFiles() via WorkerCommand, bypassing run()
-        $this->changedFilesDetector->setActiveScope($configuration->getOnlyRule(), $configuration->getOnlySuffix(), $configuration->getFilters());
+        $this->changedFilesDetector->setActiveScope($configuration->getOnlyRules(), $configuration->getOnlySuffix(), $configuration->getFilters());
         /** @var SystemError[] $systemErrors */
         $systemErrors = [];
         /** @var FileDiff[] $fileDiffs */
