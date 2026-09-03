@@ -99,10 +99,18 @@ final class ConfigurationFactory
         if ($noProgressBar) {
             return \false;
         }
+        // no interactive terminal, e.g. piped output, CI or an agent - the redraws are just noise
+        if (!$this->isTtyOutput()) {
+            return \false;
+        }
         if ($this->symfonyStyle->isVerbose()) {
             return \false;
         }
         return $outputFormat === ConsoleOutputFormatter::NAME;
+    }
+    private function isTtyOutput(): bool
+    {
+        return defined('STDOUT') && stream_isatty(\STDOUT);
     }
     private function shouldShowDiffs(InputInterface $input): bool
     {
