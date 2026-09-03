@@ -98,12 +98,16 @@ final class Configuration
      */
     private array $filters = [];
     /**
+     * @readonly
+     */
+    private ?int $maxChanges = null;
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      * @param LevelOverflow[] $levelOverflows
      * @param string[] $filters
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [], bool $showRulesSummary = \false, bool $isComposerBased = \false, bool $isPhpOnly = \false, array $filters = [])
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [], bool $showRulesSummary = \false, bool $isComposerBased = \false, bool $isPhpOnly = \false, array $filters = [], ?int $maxChanges = null)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -125,6 +129,11 @@ final class Configuration
         $this->isComposerBased = $isComposerBased;
         $this->isPhpOnly = $isPhpOnly;
         $this->filters = $filters;
+        $this->maxChanges = $maxChanges;
+    }
+    public function getMaxChanges(): ?int
+    {
+        return $this->maxChanges;
     }
     public function isComposerBased(): bool
     {

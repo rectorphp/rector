@@ -9,6 +9,7 @@ use Rector\FileSystem\FilePathFilter;
 use Rector\ValueObject\Configuration;
 use RectorPrefix202609\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202609\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Configuration\ConfigurationFactoryTest
  */
@@ -77,6 +78,11 @@ final class ConfigurationFactory
         if ($isDebug) {
             $isParallel = \false;
         }
+        $maxChanges = $this->resolveMaxChanges($input);
+        // a global change counter cannot be shared across parallel workers, so enforce the limit in a single process
+        if ($maxChanges !== null) {
+            $isParallel = \false;
+        }
         $memoryLimit = $this->resolveMemoryLimit($input);
         $isReportingWithRealPath = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::ABSOLUTE_FILE_PATH);
         $levelOverflows = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::LEVEL_OVERFLOWS);
@@ -91,7 +97,17 @@ final class ConfigurationFactory
         if ($isPhpOnly) {
             SimpleParameterProvider::setParameter(\Rector\Configuration\Option::IS_RUN_NARROWED, \true);
         }
-        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $showRulesSummary, $isComposerBased, $isPhpOnly, $filters);
+        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows, $showRulesSummary, $isComposerBased, $isPhpOnly, $filters, $maxChanges);
+    }
+    private function resolveMaxChanges(InputInterface $input): ?int
+    {
+        $maxChanges = $input->getOption(\Rector\Configuration\Option::MAX_CHANGES);
+        if ($maxChanges === null) {
+            return null;
+        }
+        $maxChanges = (int) $maxChanges;
+        Assert::positiveInteger($maxChanges);
+        return $maxChanges;
     }
     private function shouldShowProgressBar(InputInterface $input, string $outputFormat): bool
     {

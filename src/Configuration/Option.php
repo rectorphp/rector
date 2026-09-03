@@ -172,6 +172,10 @@ final class Option
     /**
      * @var string
      */
+    public const MAX_CHANGES = 'max-changes';
+    /**
+     * @var string
+     */
     public const CONFIG = 'config';
     /**
      * @internal Use

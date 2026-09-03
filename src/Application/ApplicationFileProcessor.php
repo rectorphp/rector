@@ -156,6 +156,7 @@ final class ApplicationFileProcessor
         /** @var FileDiff[] $fileDiffs */
         $fileDiffs = [];
         $totalChanged = 0;
+        $totalChangeCount = 0;
         foreach ($filePaths as $filePath) {
             if ($preFileCallback !== null) {
                 $preFileCallback($filePath);
@@ -167,6 +168,7 @@ final class ApplicationFileProcessor
                 $currentFileDiff = $fileProcessResult->getFileDiff();
                 if ($currentFileDiff instanceof FileDiff) {
                     $fileDiffs[] = $currentFileDiff;
+                    $totalChangeCount += count($currentFileDiff->getRectorChanges());
                 }
                 // progress bar on parallel handled on runParallel()
                 if (is_callable($postFileCallback)) {
@@ -174,6 +176,11 @@ final class ApplicationFileProcessor
                 }
                 if ($fileProcessResult->hasChanged()) {
                     ++$totalChanged;
+                }
+                // stop once the requested number of changes is reached, leaving the rest untouched
+                $maxChanges = $configuration->getMaxChanges();
+                if ($maxChanges !== null && $totalChangeCount >= $maxChanges) {
+                    break;
                 }
             } catch (Throwable $throwable) {
                 $this->changedFilesDetector->invalidateFile($filePath);

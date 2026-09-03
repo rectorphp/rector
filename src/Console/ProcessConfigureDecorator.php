@@ -31,5 +31,6 @@ final class ProcessConfigureDecorator
         $command->addOption(Option::PARALLEL_IDENTIFIER, null, InputOption::VALUE_REQUIRED);
         $command->addOption(Option::XDEBUG, null, InputOption::VALUE_NONE, 'Display xdebug output.');
         $command->addOption(Option::RULES_SUMMARY, null, InputOption::VALUE_NONE, 'Show summary of rules applied during the run.');
+        $command->addOption(Option::MAX_CHANGES, null, InputOption::VALUE_REQUIRED, 'Stop after this many changes are made, leaving the rest untouched. Forces non-parallel run.');
     }
 }
