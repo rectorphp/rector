@@ -31,7 +31,7 @@ final class ParameterTypesResolver
                 continue;
             } else {
                 // try resolving array of class types via docblock
-                if ($parameterType instanceof ReflectionNamedType && (string) $reflectionParameter->getType() === 'array') {
+                if ($parameterType instanceof ReflectionNamedType && $parameterType->getName() === 'array') {
                     $docComment = $reflectionMethod->getDocComment();
                     if ($docComment !== \false) {
                         $pattern = sprintf('/@param\s+%s\[\]\s+\$%s/', '([\\\\\\w]+)', $reflectionParameter->getName());

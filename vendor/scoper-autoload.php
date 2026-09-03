@@ -14,7 +14,7 @@ $loader = (static function () {
     // Restore the backup and ensure the excluded files are properly marked as loaded
     $GLOBALS['__composer_autoload_files'] = \array_merge(
         $existingComposerAutoloadFiles,
-        \array_fill_keys(['80dfc307f8b4b13bcd033cef5c977d19', '8825ede83f2f289127722d4e842cf7e8', 'acbe0d033c55cd0a032b415e08d14f4c'], true)
+        \array_fill_keys(['acbe0d033c55cd0a032b415e08d14f4c', '8825ede83f2f289127722d4e842cf7e8', '80dfc307f8b4b13bcd033cef5c977d19'], true)
     );
 
     return $loader;
@@ -31,7 +31,7 @@ if (!function_exists('humbug_phpscoper_expose_class')) {
 }
 humbug_phpscoper_expose_class('AutoloadIncluder', 'RectorPrefix202609\AutoloadIncluder');
 humbug_phpscoper_expose_class('SomeClass', 'RectorPrefix202609\SomeClass');
-humbug_phpscoper_expose_class('ComposerAutoloaderInitd4ba754b7676472e6838a1b07b862c91', 'RectorPrefix202609\ComposerAutoloaderInitd4ba754b7676472e6838a1b07b862c91');
+humbug_phpscoper_expose_class('ComposerAutoloaderInit1574d9721774d0e974b8eb7abd23a277', 'RectorPrefix202609\ComposerAutoloaderInit1574d9721774d0e974b8eb7abd23a277');
 humbug_phpscoper_expose_class('Product', 'RectorPrefix202609\Product');
 humbug_phpscoper_expose_class('SomeTest', 'RectorPrefix202609\SomeTest');
 humbug_phpscoper_expose_class('ValueError', 'RectorPrefix202609\ValueError');
