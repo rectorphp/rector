@@ -1456,6 +1456,7 @@ class ComposerStaticInit1574d9721774d0e974b8eb7abd23a277
         'Rector\\Console\\Command\\ListRulesCommand' => __DIR__ . '/../..' . '/src/Console/Command/ListRulesCommand.php',
         'Rector\\Console\\Command\\ProcessCommand' => __DIR__ . '/../..' . '/src/Console/Command/ProcessCommand.php',
         'Rector\\Console\\Command\\SetupCICommand' => __DIR__ . '/../..' . '/src/Console/Command/SetupCICommand.php',
+        'Rector\\Console\\Command\\ValidateConfigCommand' => __DIR__ . '/../..' . '/src/Console/Command/ValidateConfigCommand.php',
         'Rector\\Console\\Command\\WorkerCommand' => __DIR__ . '/../..' . '/src/Console/Command/WorkerCommand.php',
         'Rector\\Console\\ConsoleApplication' => __DIR__ . '/../..' . '/src/Console/ConsoleApplication.php',
         'Rector\\Console\\ExitCode' => __DIR__ . '/../..' . '/src/Console/ExitCode.php',

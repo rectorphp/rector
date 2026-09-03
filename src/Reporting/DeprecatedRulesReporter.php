@@ -29,66 +29,85 @@ final class DeprecatedRulesReporter
         $this->symfonyStyle = $symfonyStyle;
         $this->rectors = $rectors;
     }
-    public function reportDeprecatedRules(): void
+    public function reportDeprecatedRules(): int
     {
         /** @var string[] $registeredRectorRules */
         $registeredRectorRules = SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES);
+        $reportedCount = 0;
         foreach ($registeredRectorRules as $registeredRectorRule) {
             if (!is_a($registeredRectorRule, DeprecatedInterface::class, \true)) {
                 continue;
             }
             $this->symfonyStyle->warning(sprintf('Registered rule "%s" is deprecated and will be removed. Upgrade your config to use another rule or remove it', $registeredRectorRule));
+            ++$reportedCount;
         }
+        return $reportedCount;
     }
-    public function reportDeprecatedSkippedRules(): void
+    public function reportDeprecatedSkippedRules(): int
     {
         /** @var string[] $skippedRectorRules */
         $skippedRectorRules = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_RECTOR_RULES);
+        $reportedCount = 0;
         foreach ($skippedRectorRules as $skippedRectorRule) {
             if (!is_a($skippedRectorRule, DeprecatedInterface::class, \true)) {
                 continue;
             }
             $this->symfonyStyle->warning(sprintf('Skipped rule "%s" is deprecated', $skippedRectorRule));
+            ++$reportedCount;
         }
+        return $reportedCount;
     }
-    public function reportDeprecatedCacheMetaExtensions(): void
+    public function reportDeprecatedCacheMetaExtensions(): int
     {
         /** @var string[] $cacheMetaExtensions */
         $cacheMetaExtensions = SimpleParameterProvider::provideArrayParameter(Option::CACHE_META_EXTENSIONS);
+        $reportedCount = 0;
         foreach ($cacheMetaExtensions as $cacheMetumExtension) {
             $this->symfonyStyle->warning(sprintf('Cache meta extension "%s" is deprecated and no longer applied. It is a niche mechanism, let Rector handle cache on its own. If custom invalidation is needed, handle it in CI in a more generic way, e.g. by clearing the cache directory.', $cacheMetumExtension));
+            ++$reportedCount;
         }
+        return $reportedCount;
     }
-    public function reportDeprecatedPhpSetsMethods(): void
+    public function reportDeprecatedPhpSetsMethods(): int
     {
         /** @var string[] $deprecatedPhpSetsMethods */
         $deprecatedPhpSetsMethods = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_PHP_SETS_METHODS);
+        $reportedCount = 0;
         foreach (array_unique($deprecatedPhpSetsMethods) as $deprecatedPhpSetsMethod) {
             $this->symfonyStyle->warning(sprintf('The "->%s()" method is deprecated and no longer applied. Use "->withPhpLevel()" instead, to raise PHP level one rule at a time.', $deprecatedPhpSetsMethod));
+            ++$reportedCount;
         }
+        return $reportedCount;
     }
-    public function reportDeprecatedAttributesSetsArgs(): void
+    public function reportDeprecatedAttributesSetsArgs(): int
     {
         /** @var string[] $deprecatedAttributesSetsArgs */
         $deprecatedAttributesSetsArgs = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_ATTRIBUTES_SETS_ARGS);
+        $reportedCount = 0;
         foreach (array_unique($deprecatedAttributesSetsArgs) as $deprecatedAttributesSetsArg) {
             $this->symfonyStyle->warning(sprintf('The "->withAttributesSets(%s: true)" argument is deprecated and no longer applied. It is already included in the "symfony: true" argument, use it instead.', $deprecatedAttributesSetsArg));
+            ++$reportedCount;
         }
+        return $reportedCount;
     }
-    public function reportDeprecatedComposerBasedArgs(): void
+    public function reportDeprecatedComposerBasedArgs(): int
     {
         /** @var string[] $deprecatedComposerBasedArgs */
         $deprecatedComposerBasedArgs = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_COMPOSER_BASED_ARGS);
+        $reportedCount = 0;
         foreach (array_unique($deprecatedComposerBasedArgs) as $deprecatedComposerBasedArg) {
             $this->symfonyStyle->warning(sprintf('The "->withComposerBased(%s: true)" argument is deprecated and no longer applied. It only added named args to 2 methods of a single package, register the rule directly if needed.', $deprecatedComposerBasedArg));
+            ++$reportedCount;
         }
+        return $reportedCount;
     }
-    public function reportDeprecatedRectorUnsupportedMethods(): void
+    public function reportDeprecatedRectorUnsupportedMethods(): int
     {
         // to be added in related PR
         if (!class_exists(FileNode::class)) {
-            return;
+            return 0;
         }
+        $reportedCount = 0;
         foreach ($this->rectors as $rector) {
             $beforeTraverseMethodReflection = new ReflectionMethod($rector, 'beforeTraverse');
             if (\PHP_VERSION_ID < 80100) {
@@ -96,7 +115,9 @@ final class DeprecatedRulesReporter
             }
             if ($beforeTraverseMethodReflection->getDeclaringClass()->getName() === get_class($rector)) {
                 $this->symfonyStyle->warning(sprintf('Rector rule "%s" uses deprecated "beforeTraverse" method. It should not be used, as will be marked as final. Not part of RectorInterface contract. Use "%s" to hook into file-level changes instead.', get_class($rector), FileNode::class));
+                ++$reportedCount;
             }
         }
+        return $reportedCount;
     }
 }

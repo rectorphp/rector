@@ -1236,6 +1236,7 @@ return array(
     'Rector\\Console\\Command\\ListRulesCommand' => $baseDir . '/src/Console/Command/ListRulesCommand.php',
     'Rector\\Console\\Command\\ProcessCommand' => $baseDir . '/src/Console/Command/ProcessCommand.php',
     'Rector\\Console\\Command\\SetupCICommand' => $baseDir . '/src/Console/Command/SetupCICommand.php',
+    'Rector\\Console\\Command\\ValidateConfigCommand' => $baseDir . '/src/Console/Command/ValidateConfigCommand.php',
     'Rector\\Console\\Command\\WorkerCommand' => $baseDir . '/src/Console/Command/WorkerCommand.php',
     'Rector\\Console\\ConsoleApplication' => $baseDir . '/src/Console/ConsoleApplication.php',
     'Rector\\Console\\ExitCode' => $baseDir . '/src/Console/ExitCode.php',
