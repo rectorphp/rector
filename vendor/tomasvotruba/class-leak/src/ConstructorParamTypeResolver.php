@@ -6,12 +6,11 @@ namespace RectorPrefix202609\TomasVotruba\ClassLeak;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use RectorPrefix202609\TomasVotruba\ClassLeak\NodeDecorator\FullyQualifiedNameNodeDecorator;
-use RectorPrefix202609\TomasVotruba\ClassLeak\NodeVisitor\ClassNameNodeVisitor;
-use RectorPrefix202609\TomasVotruba\ClassLeak\ValueObject\ClassNames;
+use RectorPrefix202609\TomasVotruba\ClassLeak\NodeVisitor\ConstructorParamTypeNodeVisitor;
 /**
- * @see \TomasVotruba\ClassLeak\Tests\ClassNameResolver\ClassNameResolverTest
+ * @see \TomasVotruba\ClassLeak\Tests\ConstructorParamTypeResolver\ConstructorParamTypeResolverTest
  */
-final class ClassNameResolver
+final class ConstructorParamTypeResolver
 {
     /**
      * @readonly
@@ -26,23 +25,22 @@ final class ClassNameResolver
         $this->parser = $parser;
         $this->fullyQualifiedNameNodeDecorator = $fullyQualifiedNameNodeDecorator;
     }
-    public function resolveFromFilePath(string $filePath): ?ClassNames
+    /**
+     * @return string[]
+     */
+    public function resolve(string $filePath): array
     {
         /** @var string $fileContents */
         $fileContents = file_get_contents($filePath);
         $stmts = $this->parser->parse($fileContents);
         if ($stmts === null) {
-            return null;
+            return [];
         }
         $this->fullyQualifiedNameNodeDecorator->decorate($stmts);
-        $classNameNodeVisitor = new ClassNameNodeVisitor();
+        $constructorParamTypeNodeVisitor = new ConstructorParamTypeNodeVisitor();
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($classNameNodeVisitor);
+        $nodeTraverser->addVisitor($constructorParamTypeNodeVisitor);
         $nodeTraverser->traverse($stmts);
-        $className = $classNameNodeVisitor->getClassName();
-        if (!is_string($className)) {
-            return null;
-        }
-        return new ClassNames($className, $classNameNodeVisitor->hasParentClassOrInterface(), $classNameNodeVisitor->getAttributes(), $classNameNodeVisitor->getInterfaceNames());
+        return $constructorParamTypeNodeVisitor->getParamTypeNames();
     }
 }

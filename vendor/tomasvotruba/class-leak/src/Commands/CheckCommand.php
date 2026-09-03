@@ -7,6 +7,7 @@ use Closure;
 use RectorPrefix202609\Entropy\Console\Contract\CommandInterface;
 use RectorPrefix202609\Entropy\Console\Output\OutputPrinter;
 use RectorPrefix202609\Entropy\Console\Output\ProgressBar;
+use RectorPrefix202609\TomasVotruba\ClassLeak\ConstructorParamTypeResolver;
 use RectorPrefix202609\TomasVotruba\ClassLeak\Filtering\PossiblyUnusedClassesFilter;
 use RectorPrefix202609\TomasVotruba\ClassLeak\Finder\ClassNamesFinder;
 use RectorPrefix202609\TomasVotruba\ClassLeak\Finder\PhpFilesFinder;
@@ -23,6 +24,10 @@ final class CheckCommand implements CommandInterface
      * @readonly
      */
     private UseImportsResolver $useImportsResolver;
+    /**
+     * @readonly
+     */
+    private ConstructorParamTypeResolver $constructorParamTypeResolver;
     /**
      * @readonly
      */
@@ -47,10 +52,11 @@ final class CheckCommand implements CommandInterface
      * @readonly
      */
     private ProgressBar $progressBar;
-    public function __construct(ClassNamesFinder $classNamesFinder, UseImportsResolver $useImportsResolver, PossiblyUnusedClassesFilter $possiblyUnusedClassesFilter, UnusedClassReporter $unusedClassReporter, OutputPrinter $outputPrinter, PhpFilesFinder $phpFilesFinder, UnusedClassesResultFactory $unusedClassesResultFactory, ProgressBar $progressBar)
+    public function __construct(ClassNamesFinder $classNamesFinder, UseImportsResolver $useImportsResolver, ConstructorParamTypeResolver $constructorParamTypeResolver, PossiblyUnusedClassesFilter $possiblyUnusedClassesFilter, UnusedClassReporter $unusedClassReporter, OutputPrinter $outputPrinter, PhpFilesFinder $phpFilesFinder, UnusedClassesResultFactory $unusedClassesResultFactory, ProgressBar $progressBar)
     {
         $this->classNamesFinder = $classNamesFinder;
         $this->useImportsResolver = $useImportsResolver;
+        $this->constructorParamTypeResolver = $constructorParamTypeResolver;
         $this->possiblyUnusedClassesFilter = $possiblyUnusedClassesFilter;
         $this->unusedClassReporter = $unusedClassReporter;
         $this->outputPrinter = $outputPrinter;
@@ -97,6 +103,7 @@ final class CheckCommand implements CommandInterface
             $progressCallback = $this->createProgressCallback(count($allFilePaths));
         }
         $usedNames = $this->resolveUsedClassNames($allFilePaths, $progressCallback);
+        $constructorInjectedNames = $this->resolveConstructorInjectedNames($allFilePaths);
         if (!$json) {
             $this->progressBar->finish();
         }
@@ -111,7 +118,7 @@ final class CheckCommand implements CommandInterface
             $this->progressBar->finish();
         }
         $this->outputPrinter->newline();
-        $possiblyUnusedFilesWithClasses = $this->possiblyUnusedClassesFilter->filter($existingFilesWithClasses, $usedNames, $skipType, $skipSuffix, $skipAttribute, $includeEntities);
+        $possiblyUnusedFilesWithClasses = $this->possiblyUnusedClassesFilter->filter($existingFilesWithClasses, $usedNames, $skipType, $skipSuffix, $skipAttribute, $includeEntities, $constructorInjectedNames);
         $unusedClassesResult = $this->unusedClassesResultFactory->create($possiblyUnusedFilesWithClasses);
         $this->outputPrinter->newline();
         return $this->unusedClassReporter->reportResult($unusedClassesResult, $json);
@@ -131,6 +138,19 @@ final class CheckCommand implements CommandInterface
         $usedNames = array_unique($usedNames);
         sort($usedNames);
         return $usedNames;
+    }
+    /**
+     * @param string[] $phpFilePaths
+     * @return string[] types injected as constructor parameters, used to keep classes wired by their interface
+     */
+    private function resolveConstructorInjectedNames(array $phpFilePaths): array
+    {
+        $constructorInjectedNames = [];
+        foreach ($phpFilePaths as $phpFilePath) {
+            $currentNames = $this->constructorParamTypeResolver->resolve($phpFilePath);
+            $constructorInjectedNames = array_merge($constructorInjectedNames, $currentNames);
+        }
+        return array_unique($constructorInjectedNames);
     }
     private function createProgressCallback(int $max): Closure
     {

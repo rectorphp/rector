@@ -30,7 +30,7 @@ final class ClassNamesFinder
             if (!$classNames instanceof ClassNames) {
                 continue;
             }
-            $filesWithClasses[] = new FileWithClass($filePath, $classNames->getClassName(), $classNames->hasParentClassOrInterface(), $classNames->getAttributes());
+            $filesWithClasses[] = new FileWithClass($filePath, $classNames->getClassName(), $classNames->hasParentClassOrInterface(), $classNames->getAttributes(), $classNames->getInterfaceNames());
         }
         return $filesWithClasses;
     }

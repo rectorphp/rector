@@ -26,14 +26,21 @@ final class FileWithClass implements JsonSerializable
      */
     private array $attributes;
     /**
-     * @param string[] $attributes
+     * @var string[]
+     * @readonly
      */
-    public function __construct(string $filePath, string $className, bool $hasParentClassOrInterface, array $attributes)
+    private array $interfaceNames = [];
+    /**
+     * @param string[] $attributes
+     * @param string[] $interfaceNames
+     */
+    public function __construct(string $filePath, string $className, bool $hasParentClassOrInterface, array $attributes, array $interfaceNames = [])
     {
         $this->filePath = $filePath;
         $this->className = $className;
         $this->hasParentClassOrInterface = $hasParentClassOrInterface;
         $this->attributes = $attributes;
+        $this->interfaceNames = $interfaceNames;
     }
     public function getClassName(): string
     {
@@ -53,6 +60,13 @@ final class FileWithClass implements JsonSerializable
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+    /**
+     * @return string[]
+     */
+    public function getInterfaceNames(): array
+    {
+        return $this->interfaceNames;
     }
     /**
      * @return array{file_path: string, class: string, attributes: string[]}

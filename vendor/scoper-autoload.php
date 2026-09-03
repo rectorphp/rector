@@ -14,7 +14,7 @@ $loader = (static function () {
     // Restore the backup and ensure the excluded files are properly marked as loaded
     $GLOBALS['__composer_autoload_files'] = \array_merge(
         $existingComposerAutoloadFiles,
-        \array_fill_keys(['acbe0d033c55cd0a032b415e08d14f4c', '8825ede83f2f289127722d4e842cf7e8', '80dfc307f8b4b13bcd033cef5c977d19'], true)
+        \array_fill_keys(['80dfc307f8b4b13bcd033cef5c977d19', '8825ede83f2f289127722d4e842cf7e8', 'acbe0d033c55cd0a032b415e08d14f4c'], true)
     );
 
     return $loader;

@@ -17,6 +17,7 @@ final class PossiblyUnusedClassesFilter
         // http-kernel
         'RectorPrefix202609\Symfony\Component\Console\Application',
         'RectorPrefix202609\Symfony\Component\HttpKernel\DependencyInjection\Extension',
+        'RectorPrefix202609\Symfony\Component\DependencyInjection\Extension\Extension',
         'RectorPrefix202609\Symfony\Bundle\FrameworkBundle\Controller\Controller',
         'RectorPrefix202609\Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
         'RectorPrefix202609\Livewire\Component',
@@ -47,6 +48,7 @@ final class PossiblyUnusedClassesFilter
         // kernel
         'RectorPrefix202609\Symfony\Component\HttpKernel\Bundle\BundleInterface',
         'RectorPrefix202609\Symfony\Component\HttpKernel\KernelInterface',
+        'RectorPrefix202609\Symfony\Component\HttpKernel\HttpKernelInterface',
         'RectorPrefix202609\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
         // console
         'RectorPrefix202609\Symfony\Component\Console\Command\Command',
@@ -60,6 +62,7 @@ final class PossiblyUnusedClassesFilter
         'RectorPrefix202609\Behat\Behat\Context\Context',
         // jms
         'RectorPrefix202609\JMS\Serializer\Handler\SubscribingHandlerInterface',
+        'RectorPrefix202609\JMS\Serializer\EventDispatcher\EventSubscriberInterface',
         // laravel
         'RectorPrefix202609\Illuminate\Support\ServiceProvider',
         'RectorPrefix202609\Illuminate\Foundation\Http\Kernel',
@@ -75,7 +78,15 @@ final class PossiblyUnusedClassesFilter
         // Symfony
         'RectorPrefix202609\Symfony\Component\Console\Attribute\AsCommand',
         'RectorPrefix202609\Symfony\Component\HttpKernel\Attribute\AsController',
+        'RectorPrefix202609\Symfony\Component\Routing\Attribute\Route',
         'RectorPrefix202609\Symfony\Component\EventDispatcher\Attribute\AsEventListener',
+        'RectorPrefix202609\Symfony\Component\Messenger\Attribute\AsMessageHandler',
+        // Doctrine
+        'RectorPrefix202609\Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener',
+        // Twig
+        'RectorPrefix202609\Twig\Attribute\AsTwigFunction',
+        'RectorPrefix202609\Twig\Attribute\AsTwigFilter',
+        'RectorPrefix202609\Twig\Attribute\AsTwigTest',
     ];
     /**
      * @param FileWithClass[] $filesWithClasses
@@ -83,10 +94,11 @@ final class PossiblyUnusedClassesFilter
      * @param string[] $typesToSkip
      * @param string[] $suffixesToSkip
      * @param string[] $attributesToSkip
+     * @param string[] $constructorInjectedNames types injected as constructor parameters somewhere
      *
      * @return FileWithClass[]
      */
-    public function filter(array $filesWithClasses, array $usedClassNames, array $typesToSkip, array $suffixesToSkip, array $attributesToSkip, bool $shouldIncludeEntities): array
+    public function filter(array $filesWithClasses, array $usedClassNames, array $typesToSkip, array $suffixesToSkip, array $attributesToSkip, bool $shouldIncludeEntities, array $constructorInjectedNames = []): array
     {
         Assert::allString($usedClassNames);
         Assert::allString($typesToSkip);
@@ -108,6 +120,10 @@ final class PossiblyUnusedClassesFilter
             if ($fileWithClass->isSerialized()) {
                 continue;
             }
+            // implemented interface is injected via constructor, class is resolved through it
+            if ($this->isImplementedInterfaceConstructorInjected($fileWithClass, $constructorInjectedNames)) {
+                continue;
+            }
             // is excluded suffix?
             foreach ($suffixesToSkip as $suffixToSkip) {
                 if (substr_compare($fileWithClass->getClassName(), $suffixToSkip, -strlen($suffixToSkip)) === 0) {
@@ -123,6 +139,22 @@ final class PossiblyUnusedClassesFilter
             $possiblyUnusedFilesWithClasses[] = $fileWithClass;
         }
         return $possiblyUnusedFilesWithClasses;
+    }
+    /**
+     * A class whose interface is type-hinted in some constructor is wired by the container through it.
+     *
+     * @param string[] $constructorInjectedNames
+     */
+    private function isImplementedInterfaceConstructorInjected(FileWithClass $fileWithClass, array $constructorInjectedNames): bool
+    {
+        $found = \false;
+        foreach ($fileWithClass->getInterfaceNames() as $interfaceName) {
+            if (in_array($interfaceName, $constructorInjectedNames, \true)) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
     /**
      * @param string[] $skips

@@ -29,6 +29,10 @@ final class ClassNameNodeVisitor extends NodeVisitorAbstract
      */
     private array $attributes = [];
     /**
+     * @var string[]
+     */
+    private array $interfaceNames = [];
+    /**
      * @param Node\Stmt[] $nodes
      * @return Node\Stmt[]
      */
@@ -37,6 +41,7 @@ final class ClassNameNodeVisitor extends NodeVisitorAbstract
         $this->className = null;
         $this->hasParentClassOrInterface = \false;
         $this->attributes = [];
+        $this->interfaceNames = [];
         return $nodes;
     }
     public function enterNode(Node $node): ?int
@@ -60,6 +65,9 @@ final class ClassNameNodeVisitor extends NodeVisitorAbstract
             }
             if ($node->implements !== []) {
                 $this->hasParentClassOrInterface = \true;
+                foreach ($node->implements as $implement) {
+                    $this->interfaceNames[] = $implement->toString();
+                }
             }
         }
         if ($node instanceof Interface_ && $node->extends !== []) {
@@ -93,6 +101,13 @@ final class ClassNameNodeVisitor extends NodeVisitorAbstract
     public function getAttributes(): array
     {
         return array_unique($this->attributes);
+    }
+    /**
+     * @return string[]
+     */
+    public function getInterfaceNames(): array
+    {
+        return $this->interfaceNames;
     }
     private function hasApiTag(ClassLike $classLike): bool
     {
