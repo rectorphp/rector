@@ -7,8 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Rector\AbstractRector;
@@ -98,6 +100,7 @@ CODE_SAMPLE
                 continue;
             }
             // only private methods have a closed set of local callers; public/protected can be called from outside
+            // with a wider type we cannot see here
             if (!$classMethod->isPrivate()) {
                 continue;
             }
@@ -120,6 +123,11 @@ CODE_SAMPLE
                 }
                 // in case of array type declaration, null cannot be passed or is already casted
                 $resolvedParameterType = TypeCombinator::removeNull($resolvedParameterType);
+                // the generalization of a nested array (an array of arrays) is imprecise and can diverge from the type
+                // PHPStan itself infers at the call site, producing a @param that rejects the very call it was built from
+                if ($this->hasNestedArray($resolvedParameterType)) {
+                    continue;
+                }
                 // the param default value must always be accepted; a locally inferred, flow-narrowed type such as
                 // "non-empty-array" would otherwise contradict an "= []" default - unite with the default type so
                 // the resulting @param never conflicts with the method signature
@@ -137,6 +145,34 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    private function hasNestedArray(Type $type): bool
+    {
+        if ($type instanceof UnionType) {
+            $found = \false;
+            foreach ($type->getTypes() as $unionedType) {
+                if ($this->hasNestedArray($unionedType)) {
+                    $found = \true;
+                    break;
+                }
+            }
+            return $found;
+        }
+        if (!$type instanceof ArrayType) {
+            return \false;
+        }
+        $itemType = $type->getItemType();
+        if ($itemType instanceof UnionType) {
+            $found = \false;
+            foreach ($itemType->getTypes() as $unionedItemType) {
+                if ($unionedItemType instanceof ArrayType) {
+                    $found = \true;
+                    break;
+                }
+            }
+            return $found;
+        }
+        return $itemType instanceof ArrayType;
     }
     private function hasParamArrayType(Param $param): bool
     {
