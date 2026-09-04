@@ -48,7 +48,7 @@ final class AddParamArrayDocblockFromAssignsParamToParamReferenceRector extends 
         return new RuleDefinition('Add @param docblock array type, based on type to assigned parameter reference', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run(array &$names): void
+    private function run(array &$names): void
     {
         $names[] = 'John';
     }
@@ -60,7 +60,7 @@ final class SomeClass
     /**
      * @param string[] $names
      */
-    public function run(array &$names): void
+    private function run(array &$names): void
     {
         $names[] = 'John';
     }
@@ -82,6 +82,10 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         if ($node->getParams() === []) {
+            return null;
+        }
+        // a by-ref param type is invariant in PHPStan; narrowing it below array breaks callers passing a plain array, which are invisible for a non-private method
+        if (!$node->isPrivate()) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
