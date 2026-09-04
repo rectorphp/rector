@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TryCatch;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -20,6 +21,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDeadCatchRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove dead catches', [new CodeSample(<<<'CODE_SAMPLE'
@@ -126,7 +135,12 @@ CODE_SAMPLE
             if (!$nextCatchType instanceof FullyQualified) {
                 return \true;
             }
-            if (!$this->isObjectType($fullyQualified, new ObjectType($nextCatchType->toString()))) {
+            // Throwable/Exception catch anything, so the current catch is never dead against them,
+            // even when the current type cannot be resolved to prove the parent relation
+            $catchesAnything = in_array(ltrim($nextCatchType->toString(), '\\'), ['Throwable', 'Exception'], \true);
+            // only skip when the next catch is provably unrelated; an unresolvable next type
+            // might be a parent of the current one, so removing the catch would change behavior
+            if (!$catchesAnything && $this->isProvablyUnrelated($fullyQualified, $nextCatchType)) {
                 continue;
             }
             if (!$this->isJustThrownSameVariable($nextCatch)) {
@@ -134,6 +148,16 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function isProvablyUnrelated(FullyQualified $current, FullyQualified $next): bool
+    {
+        if (!$this->reflectionProvider->hasClass($current->toString())) {
+            return \false;
+        }
+        if (!$this->reflectionProvider->hasClass($next->toString())) {
+            return \false;
+        }
+        return !$this->isObjectType($current, new ObjectType($next->toString()));
     }
     /**
      * @param Stmt[] $stmts
