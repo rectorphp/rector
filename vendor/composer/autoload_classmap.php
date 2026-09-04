@@ -936,6 +936,7 @@ return array(
     'RectorPrefix202609\\Webmozart\\Assert\\InvalidArgumentException' => $vendorDir . '/webmozart/assert/src/InvalidArgumentException.php',
     'RectorPrefix202609\\Webmozart\\Assert\\Mixin' => $vendorDir . '/webmozart/assert/src/Mixin.php',
     'RectorPrefix202609\\Webmozart\\Assert\\PsalmPlugin' => $vendorDir . '/webmozart/assert/src/PsalmPlugin.php',
+    'Rector\\Agentic\\TerminalDetector' => $baseDir . '/src/Agentic/TerminalDetector.php',
     'Rector\\Application\\ApplicationFileProcessor' => $baseDir . '/src/Application/ApplicationFileProcessor.php',
     'Rector\\Application\\ChangedNodeScopeRefresher' => $baseDir . '/src/Application/ChangedNodeScopeRefresher.php',
     'Rector\\Application\\FileProcessor' => $baseDir . '/src/Application/FileProcessor.php',

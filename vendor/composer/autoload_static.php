@@ -1156,6 +1156,7 @@ class ComposerStaticInit1574d9721774d0e974b8eb7abd23a277
         'RectorPrefix202609\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix202609\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
         'RectorPrefix202609\\Webmozart\\Assert\\PsalmPlugin' => __DIR__ . '/..' . '/webmozart/assert/src/PsalmPlugin.php',
+        'Rector\\Agentic\\TerminalDetector' => __DIR__ . '/../..' . '/src/Agentic/TerminalDetector.php',
         'Rector\\Application\\ApplicationFileProcessor' => __DIR__ . '/../..' . '/src/Application/ApplicationFileProcessor.php',
         'Rector\\Application\\ChangedNodeScopeRefresher' => __DIR__ . '/../..' . '/src/Application/ChangedNodeScopeRefresher.php',
         'Rector\\Application\\FileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor.php',
