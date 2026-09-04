@@ -36,6 +36,10 @@ final class SymfonyStyleFactory
         if ($this->isPHPUnitRun()) {
             $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
+        // no interactive terminal, e.g. piped output, CI or an agent - never emit ANSI, even if forced via --ansi
+        if (!defined('STDOUT') || !stream_isatty(\STDOUT)) {
+            $consoleOutput->setDecorated(\false);
+        }
         return new \Rector\Console\Style\RectorStyle($argvInput, $consoleOutput);
     }
     /**
