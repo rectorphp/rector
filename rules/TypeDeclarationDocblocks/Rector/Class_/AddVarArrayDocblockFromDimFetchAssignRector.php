@@ -106,6 +106,10 @@ CODE_SAMPLE
                 continue;
             }
             $propertyName = $this->getName($property);
+            // a keyed dim assign ($this->prop['x'] = ...) or a direct assign carries a value type this rule does not read from bare appends; skip to avoid a too-narrow @var
+            if ($this->arrayDimFetchFinder->hasNonAppendAssignToPropertyName($node, $propertyName)) {
+                continue;
+            }
             $assignedExprs = $this->arrayDimFetchFinder->findDimFetchAssignToPropertyName($node, $propertyName);
             $assignedExprTypes = [];
             foreach ($assignedExprs as $assignedExpr) {

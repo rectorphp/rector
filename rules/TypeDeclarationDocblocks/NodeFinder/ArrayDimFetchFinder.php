@@ -81,6 +81,30 @@ final class ArrayDimFetchFinder
         return $exprs;
     }
     /**
+     * Any write to the property other than a bare append $this->someProperty[] = ...,
+     * i.e. a keyed dim assign $this->someProperty['key'] = ... or a direct $this->someProperty = ...
+     */
+    public function hasNonAppendAssignToPropertyName(Class_ $class, string $variableName): bool
+    {
+        $assigns = $this->betterNodeFinder->findInstancesOfScoped($class->getMethods(), Assign::class);
+        foreach ($assigns as $assign) {
+            if ($assign->var instanceof PropertyFetch && $this->isThisPropertyNamed($assign->var, $variableName)) {
+                return \true;
+            }
+            if (!$assign->var instanceof ArrayDimFetch) {
+                continue;
+            }
+            // bare append, already covered by findDimFetchAssignToPropertyName()
+            if (!$assign->var->dim instanceof Expr) {
+                continue;
+            }
+            if ($assign->var->var instanceof PropertyFetch && $this->isThisPropertyNamed($assign->var->var, $variableName)) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    /**
      * @return ArrayDimFetch[]
      */
     public function findByVariableName(Node $node, string $variableName): array
@@ -92,6 +116,13 @@ final class ArrayDimFetchFinder
             }
             return $this->nodeNameResolver->isName($arrayDimFetch->var, $variableName);
         });
+    }
+    private function isThisPropertyNamed(PropertyFetch $propertyFetch, string $propertyName): bool
+    {
+        if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+            return \false;
+        }
+        return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
     }
     /**
      * @return ArrayDimFetch[]
