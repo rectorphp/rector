@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvi
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocatorFactory;
-use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocatorFactory;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocatorRepository;
 use Rector\Contract\DependencyInjection\ResettableInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -24,10 +23,6 @@ final class DynamicSourceLocatorProvider implements ResettableInterface
      */
     private OptimizedSingleFileSourceLocatorRepository $optimizedSingleFileSourceLocatorRepository;
     /**
-     * @readonly
-     */
-    private OptimizedSingleFileSourceLocatorFactory $optimizedSingleFileSourceLocatorFactory;
-    /**
      * @var string[]
      */
     private array $filePaths = [];
@@ -36,11 +31,10 @@ final class DynamicSourceLocatorProvider implements ResettableInterface
      */
     private array $directories = [];
     private ?AggregateSourceLocator $aggregateSourceLocator = null;
-    public function __construct(OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory, OptimizedSingleFileSourceLocatorRepository $optimizedSingleFileSourceLocatorRepository, OptimizedSingleFileSourceLocatorFactory $optimizedSingleFileSourceLocatorFactory)
+    public function __construct(OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory, OptimizedSingleFileSourceLocatorRepository $optimizedSingleFileSourceLocatorRepository)
     {
         $this->optimizedDirectorySourceLocatorFactory = $optimizedDirectorySourceLocatorFactory;
         $this->optimizedSingleFileSourceLocatorRepository = $optimizedSingleFileSourceLocatorRepository;
-        $this->optimizedSingleFileSourceLocatorFactory = $optimizedSingleFileSourceLocatorFactory;
     }
     public function setFilePath(string $filePath): void
     {
@@ -69,10 +63,7 @@ final class DynamicSourceLocatorProvider implements ResettableInterface
         }
         $sourceLocators = [];
         foreach ($this->filePaths as $file) {
-            // under PHPUnit each fixture is a throwaway temp file that is deleted after the test;
-            // the shared repository caches locators by path forever, so a stale locator for a since-deleted
-            // file can leak into a later test. build a fresh locator per run there, keep caching in production
-            $sourceLocators[] = $isPHPUnitRun ? $this->optimizedSingleFileSourceLocatorFactory->create($file) : $this->optimizedSingleFileSourceLocatorRepository->getOrCreate($file);
+            $sourceLocators[] = $this->optimizedSingleFileSourceLocatorRepository->getOrCreate($file);
         }
         foreach ($this->directories as $directory) {
             $sourceLocators[] = $this->optimizedDirectorySourceLocatorFactory->createByDirectory($directory);
