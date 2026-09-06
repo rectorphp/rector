@@ -6,32 +6,24 @@ namespace Rector\CodeQuality\Rector\FunctionLike;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\NodeAnalyzer\VariableAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Enum\NodeGroup;
-use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector\SimplifyUselessVariableRectorTest
  */
-final class SimplifyUselessVariableRector extends AbstractRector implements ConfigurableRectorInterface
+final class SimplifyUselessVariableRector extends AbstractRector
 {
-    /**
-     * @readonly
-     */
-    private AssignAndBinaryMap $assignAndBinaryMap;
     /**
      * @readonly
      */
@@ -44,60 +36,26 @@ final class SimplifyUselessVariableRector extends AbstractRector implements Conf
      * @readonly
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
-     * @api
-     * @var string
-     */
-    public const ONLY_DIRECT_ASSIGN = 'only_direct_assign';
-    private bool $onlyDirectAssign = \false;
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, VariableAnalyzer $variableAnalyzer, CallAnalyzer $callAnalyzer, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(VariableAnalyzer $variableAnalyzer, CallAnalyzer $callAnalyzer, PhpDocInfoFactory $phpDocInfoFactory)
     {
-        $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->variableAnalyzer = $variableAnalyzer;
         $this->callAnalyzer = $callAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    /**
-     * @param array<string, mixed> $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        $this->onlyDirectAssign = $configuration[self::ONLY_DIRECT_ASSIGN] ?? \false;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove useless variable assigns', [new ConfiguredCodeSample(
-            <<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove useless variable assigns', [new CodeSample(<<<'CODE_SAMPLE'
 function () {
     $a = true;
     return $a;
 };
 CODE_SAMPLE
-,
-            <<<'CODE_SAMPLE'
+, <<<'CODE_SAMPLE'
 function () {
     return true;
 };
 CODE_SAMPLE
-,
-            // default
-            [self::ONLY_DIRECT_ASSIGN => \true]
-        ), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
-function () {
-    $a = 'Hello, ';
-    $a .= 'World!';
-
-    return $a;
-};
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-function () {
-    $a = 'Hello, ';
-
-    return $a . 'World!';
-};
-CODE_SAMPLE
-, [self::ONLY_DIRECT_ASSIGN => \false])]);
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -130,33 +88,25 @@ CODE_SAMPLE
             if ($this->hasSomeComment($previousStmt)) {
                 return null;
             }
+            // the variable might be used in commented-out code between assign and return
+            if ($this->isVariableMentionedInComment($stmt)) {
+                return null;
+            }
             if ($this->isReturnWithVarAnnotation($stmt)) {
                 return null;
             }
-            /** @var Expression<Assign|AssignOp> $previousStmt */
-            $assign = $previousStmt->expr;
-            return $this->processSimplifyUselessVariable($node, $stmt, $assign, $key);
-        }
-        return null;
-    }
-    /**
-     * @param StmtsAware $stmtsAware
-     * @return StmtsAware|null
-     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
-     */
-    private function processSimplifyUselessVariable(Node $stmtsAware, Return_ $return, $assign, int $key): ?Node
-    {
-        if (!$assign instanceof Assign) {
-            $binaryClass = $this->assignAndBinaryMap->getAlternative($assign);
-            if ($binaryClass === null) {
+            if (!$previousStmt instanceof Expression) {
                 return null;
             }
-            $return->expr = new $binaryClass($assign->var, $assign->expr);
-        } else {
-            $return->expr = $assign->expr;
+            $assign = $previousStmt->expr;
+            if (!$assign instanceof Assign) {
+                return null;
+            }
+            $stmt->expr = $assign->expr;
+            unset($node->stmts[$key - 1]);
+            return $node;
         }
-        unset($stmtsAware->stmts[$key - 1]);
-        return $stmtsAware;
+        return null;
     }
     private function shouldSkipStmt(Return_ $return, Stmt $previousStmt): bool
     {
@@ -171,13 +121,7 @@ CODE_SAMPLE
         }
         // is variable part of single assign
         $previousNode = $previousStmt->expr;
-        if (!$previousNode instanceof AssignOp && !$previousNode instanceof Assign) {
-            return \true;
-        }
-        if ($this->onlyDirectAssign && $previousNode instanceof AssignOp) {
-            return \true;
-        }
-        if ($previousNode instanceof AssignOp && $previousNode->expr instanceof Ternary) {
+        if (!$previousNode instanceof Assign) {
             return \true;
         }
         $variable = $return->expr;
@@ -194,6 +138,28 @@ CODE_SAMPLE
             return \true;
         }
         return $this->variableAnalyzer->isUsedByReference($variable);
+    }
+    private function isVariableMentionedInComment(Return_ $return): bool
+    {
+        $comments = $return->getComments();
+        if ($comments === []) {
+            return \false;
+        }
+        if (!$return->expr instanceof Variable) {
+            return \false;
+        }
+        $variableName = $return->expr->name;
+        if (!is_string($variableName)) {
+            return \false;
+        }
+        $found = \false;
+        foreach ($comments as $comment) {
+            if (strpos($comment->getText(), '$' . $variableName) !== \false) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
     private function hasSomeComment(Stmt $stmt): bool
     {
