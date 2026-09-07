@@ -104,7 +104,11 @@ final class ParallelProcess
         foreach ($this->process->pipes as $pipe) {
             $pipe->close();
         }
-        $this->encoder->end();
+        // the process can be quit before its connection is bound, e.g. on quitAll() after an error;
+        // in that case the encoder was never set
+        if (isset($this->encoder)) {
+            $this->encoder->end();
+        }
     }
     public function bindConnection(Decoder $decoder, Encoder $encoder): void
     {
