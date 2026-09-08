@@ -1049,7 +1049,6 @@ return array(
     'Rector\\CodeQuality\\NodeAnalyzer\\VariableDimFetchAssignResolver' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/VariableDimFetchAssignResolver.php',
     'Rector\\CodeQuality\\NodeFactory\\MissingPropertiesFactory' => $baseDir . '/rules/CodeQuality/NodeFactory/MissingPropertiesFactory.php',
     'Rector\\CodeQuality\\NodeFactory\\PropertyTypeDecorator' => $baseDir . '/rules/CodeQuality/NodeFactory/PropertyTypeDecorator.php',
-    'Rector\\CodeQuality\\NodeFactory\\TypedPropertyFactory' => $baseDir . '/rules/CodeQuality/NodeFactory/TypedPropertyFactory.php',
     'Rector\\CodeQuality\\NodeManipulator\\ExprBoolCaster' => $baseDir . '/rules/CodeQuality/NodeManipulator/ExprBoolCaster.php',
     'Rector\\CodeQuality\\NodeManipulator\\NamedArgsSorter' => $baseDir . '/rules/CodeQuality/NodeManipulator/NamedArgsSorter.php',
     'Rector\\CodeQuality\\Rector\\AssignOp\\NewArrayItemConcatAssignToAssignRector' => $baseDir . '/rules/CodeQuality/Rector/AssignOp/NewArrayItemConcatAssignToAssignRector.php',

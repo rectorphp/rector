@@ -1269,7 +1269,6 @@ class ComposerStaticInit1574d9721774d0e974b8eb7abd23a277
         'Rector\\CodeQuality\\NodeAnalyzer\\VariableDimFetchAssignResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/VariableDimFetchAssignResolver.php',
         'Rector\\CodeQuality\\NodeFactory\\MissingPropertiesFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/MissingPropertiesFactory.php',
         'Rector\\CodeQuality\\NodeFactory\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/PropertyTypeDecorator.php',
-        'Rector\\CodeQuality\\NodeFactory\\TypedPropertyFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/TypedPropertyFactory.php',
         'Rector\\CodeQuality\\NodeManipulator\\ExprBoolCaster' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/ExprBoolCaster.php',
         'Rector\\CodeQuality\\NodeManipulator\\NamedArgsSorter' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/NamedArgsSorter.php',
         'Rector\\CodeQuality\\Rector\\AssignOp\\NewArrayItemConcatAssignToAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/AssignOp/NewArrayItemConcatAssignToAssignRector.php',
