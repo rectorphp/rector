@@ -17,6 +17,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver;
 use Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -55,7 +56,11 @@ final class TypedPropertyFromColumnTypeRector extends AbstractRector implements 
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    public function __construct(PropertyTypeDecorator $propertyTypeDecorator, ColumnPropertyTypeResolver $columnPropertyTypeResolver, NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    public function __construct(PropertyTypeDecorator $propertyTypeDecorator, ColumnPropertyTypeResolver $columnPropertyTypeResolver, NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, ReflectionResolver $reflectionResolver, ValueResolver $valueResolver)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->columnPropertyTypeResolver = $columnPropertyTypeResolver;
@@ -63,6 +68,7 @@ final class TypedPropertyFromColumnTypeRector extends AbstractRector implements 
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->reflectionResolver = $reflectionResolver;
+        $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -115,8 +121,8 @@ CODE_SAMPLE
         if (!$propertyType instanceof Type || $propertyType instanceof MixedType) {
             return null;
         }
-        // add default null if missing
-        if ($isNullable && !TypeCombinator::containsNull($propertyType)) {
+        // a null default forces a nullable type, regardless of the column nullability
+        if (($isNullable || $this->hasNullDefault($node)) && !TypeCombinator::containsNull($propertyType)) {
             $propertyType = TypeCombinator::addNull($propertyType);
         }
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
@@ -145,6 +151,14 @@ CODE_SAMPLE
             return;
         }
         $propertyItem->default = new String_((string) $default->value);
+    }
+    private function hasNullDefault(Property $property): bool
+    {
+        $default = $property->props[0]->default;
+        if ($default === null) {
+            return \false;
+        }
+        return $this->valueResolver->isNull($default);
     }
     private function hasUntypedParentProperty(ClassReflection $classReflection, Property $property): bool
     {
