@@ -5,7 +5,6 @@ namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\PropertyItem;
@@ -92,10 +91,6 @@ CODE_SAMPLE
             if (!$soleProperty->default instanceof Array_) {
                 continue;
             }
-            // an empty nested array default generalizes to never[], which then rejects every real value assigned later
-            if ($this->hasEmptyNestedArray($soleProperty->default)) {
-                continue;
-            }
             $propertyDefaultType = $this->getType($soleProperty->default);
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             // type is already known
@@ -113,24 +108,6 @@ CODE_SAMPLE
             return null;
         }
         return $node;
-    }
-    private function hasEmptyNestedArray(Array_ $array): bool
-    {
-        foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof ArrayItem) {
-                continue;
-            }
-            if (!$arrayItem->value instanceof Array_) {
-                continue;
-            }
-            if ($arrayItem->value->items === []) {
-                return \true;
-            }
-            if ($this->hasEmptyNestedArray($arrayItem->value)) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function hasUsefulParentPropertyVarTag(Class_ $class, Property $property, Type $propertyDefaultType): bool
     {
