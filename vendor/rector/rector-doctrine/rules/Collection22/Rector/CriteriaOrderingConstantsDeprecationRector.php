@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Collection22\Rector;
 
+use PHPStan\Type\IsSuperTypeOfResult;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
@@ -133,7 +134,7 @@ CODE_SAMPLE
             if ($item->value instanceof String_ && in_array($v = strtoupper($item->value->value), ['ASC', 'DESC'], \true)) {
                 $newItems[] = $this->buildArrayItem($v, $item->key);
                 $nodeHasChange = \true;
-            } elseif ($item->value instanceof ClassConstFetch && $item->value->class instanceof Name && $this->criteriaObjectType->isSuperTypeOf(new ObjectType($item->value->class->toString())) && $item->value->name instanceof Identifier && in_array($v = strtoupper((string) $item->value->name), ['ASC', 'DESC'], \true)) {
+            } elseif ($item->value instanceof ClassConstFetch && $item->value->class instanceof Name && $this->criteriaObjectType->isSuperTypeOf(new ObjectType($item->value->class->toString())) instanceof IsSuperTypeOfResult && $item->value->name instanceof Identifier && in_array($v = strtoupper((string) $item->value->name), ['ASC', 'DESC'], \true)) {
                 $newItems[] = $this->buildArrayItem($v, $item->key);
                 $nodeHasChange = \true;
             } else {
