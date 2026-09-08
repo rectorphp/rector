@@ -76,7 +76,7 @@ CODE_SAMPLE
                 continue;
             }
             $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($currentNode, $replaceArgumentDefaultValue);
-            if ($replacedNode !== null && $replacedNode !== $currentNode) {
+            if ($replacedNode !== null) {
                 $currentNode = $replacedNode;
                 $hasChanged = \true;
             }
@@ -103,7 +103,7 @@ CODE_SAMPLE
                 continue;
             }
             $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($currentNode, $replaceArgumentDefaultValue);
-            if ($replacedNode !== null && $replacedNode !== $currentNode) {
+            if ($replacedNode !== null) {
                 $currentNode = $replacedNode;
                 $hasChanged = \true;
             }

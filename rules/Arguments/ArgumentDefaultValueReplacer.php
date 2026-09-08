@@ -149,7 +149,7 @@ final class ArgumentDefaultValueReplacer
         $argValue = $this->valueResolver->getValue($particularArg->value);
         if (is_scalar($replaceArgumentDefaultValue->getValueBefore()) && $argValue === $replaceArgumentDefaultValue->getValueBefore()) {
             $normalizedValueAfter = $this->normalizeValue($replaceArgumentDefaultValue->getValueAfter());
-            if ($particularArg->value instanceof ClassConstFetch && $particularArg->value->class instanceof Name && $particularArg->value->class->isSpecialClassName() && $normalizedValueAfter instanceof ClassConstFetch && is_string($replaceArgumentDefaultValue->getValueAfter()) && strpos($replaceArgumentDefaultValue->getValueAfter(), '::') !== \false) {
+            if ($particularArg->value instanceof ClassConstFetch && $particularArg->value->class instanceof Name && $normalizedValueAfter instanceof ClassConstFetch && is_string($replaceArgumentDefaultValue->getValueAfter()) && strpos($replaceArgumentDefaultValue->getValueAfter(), '::') !== \false) {
                 [$targetClass, $targetConstant] = explode('::', $replaceArgumentDefaultValue->getValueAfter());
                 $type = $this->nodeTypeResolver->getType($particularArg->value->class);
                 if ($type instanceof FullyQualifiedObjectType && $type->getClassName() === $targetClass && $particularArg->value->name instanceof Identifier && $particularArg->value->name->toString() === $targetConstant) {
