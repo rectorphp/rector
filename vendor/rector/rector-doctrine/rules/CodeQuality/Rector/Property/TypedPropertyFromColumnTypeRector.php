@@ -4,9 +4,13 @@ declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Scalar\Float_;
+use PhpParser\Node\Scalar\Int_;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
@@ -120,12 +124,27 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        // Doctrine "decimal"/"bigint" map to string; keep a numeric default valid as string, eg: 0 to '0'
+        $this->refactorNumericDefaultToString($node, $propertyType);
         if ($propertyType instanceof UnionType) {
             $this->propertyTypeDecorator->decoratePropertyUnionType($propertyType, $typeNode, $node, $phpDocInfo);
             return $node;
         }
         $node->type = $typeNode;
         return $node;
+    }
+    private function refactorNumericDefaultToString(Property $property, Type $propertyType): void
+    {
+        $bareType = TypeCombinator::removeNull($propertyType);
+        if (!$bareType instanceof StringType) {
+            return;
+        }
+        $propertyItem = $property->props[0];
+        $default = $propertyItem->default;
+        if (!$default instanceof Int_ && !$default instanceof Float_) {
+            return;
+        }
+        $propertyItem->default = new String_((string) $default->value);
     }
     private function hasUntypedParentProperty(ClassReflection $classReflection, Property $property): bool
     {
