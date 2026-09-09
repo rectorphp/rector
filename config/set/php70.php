@@ -5,7 +5,6 @@ namespace RectorPrefix202609;
 
 use Rector\Config\RectorConfig;
 use Rector\Php70\Rector\Assign\ListSplitStringRector;
-use Rector\Php70\Rector\Assign\ListSwapArrayOrderRector;
 use Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
 use Rector\Php70\Rector\ClassMethod\Php4ConstructorRector;
 use Rector\Php70\Rector\FuncCall\CallUserMethodRector;
@@ -23,5 +22,5 @@ use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 use Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector;
 use Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([Php4ConstructorRector::class, TernaryToNullCoalescingRector::class, RandomFunctionRector::class, ExceptionHandlerTypehintRector::class, MultiDirnameRector::class, ListSplitStringRector::class, EmptyListRector::class, ListSwapArrayOrderRector::class, CallUserMethodRector::class, EregToPregMatchRector::class, ReduceMultipleDefaultSwitchRector::class, TernaryToSpaceshipRector::class, WrapVariableVariableNameInCurlyBracesRector::class, IfToSpaceshipRector::class, ThisCallOnStaticMethodToStaticCallRector::class, BreakNotInLoopOrSwitchToReturnRector::class, RenameMktimeWithoutArgsToTimeRector::class, IfIssetToCoalescingRector::class]);
+    $rectorConfig->rules([Php4ConstructorRector::class, TernaryToNullCoalescingRector::class, RandomFunctionRector::class, ExceptionHandlerTypehintRector::class, MultiDirnameRector::class, ListSplitStringRector::class, EmptyListRector::class, CallUserMethodRector::class, EregToPregMatchRector::class, ReduceMultipleDefaultSwitchRector::class, TernaryToSpaceshipRector::class, WrapVariableVariableNameInCurlyBracesRector::class, IfToSpaceshipRector::class, ThisCallOnStaticMethodToStaticCallRector::class, BreakNotInLoopOrSwitchToReturnRector::class, RenameMktimeWithoutArgsToTimeRector::class, IfIssetToCoalescingRector::class]);
 };

@@ -437,7 +437,7 @@ final class BetterStandardPrinter extends Standard
         return $stmts;
     }
     /**
-     * @param Node[] $nodes
+     * @param array<Node|null> $nodes Null in case of array destructuring
      */
     private function containsNop(array $nodes): bool
     {

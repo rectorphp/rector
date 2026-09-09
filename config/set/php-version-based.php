@@ -35,7 +35,6 @@ use Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php56\Rector\FuncCall\PowToExpRector;
 use Rector\Php70\Rector\Assign\ListSplitStringRector;
-use Rector\Php70\Rector\Assign\ListSwapArrayOrderRector;
 use Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
 use Rector\Php70\Rector\ClassMethod\Php4ConstructorRector;
 use Rector\Php70\Rector\FuncCall\CallUserMethodRector;
@@ -190,7 +189,6 @@ return static function (RectorConfig $rectorConfig): void {
         MultiDirnameRector::class,
         ListSplitStringRector::class,
         EmptyListRector::class,
-        ListSwapArrayOrderRector::class,
         CallUserMethodRector::class,
         EregToPregMatchRector::class,
         ReduceMultipleDefaultSwitchRector::class,
