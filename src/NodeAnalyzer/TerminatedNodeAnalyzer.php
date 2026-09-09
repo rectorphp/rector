@@ -228,11 +228,21 @@ final class TerminatedNodeAnalyzer
      */
     private function isTerminatedInLastStmts(array $stmts): bool
     {
+        // a trailing comment is parsed as a Nop, which executes nothing and so
+        // must not hide the terminating stmt in front of it
+        while ($stmts !== [] && end($stmts) instanceof Nop) {
+            array_pop($stmts);
+        }
         if ($stmts === []) {
             return \false;
         }
         $lastKey = array_key_last($stmts);
         $lastNode = $stmts[$lastKey];
+        // an infinite loop with no break terminates its block as surely as a
+        // return does, the same way isAlwaysTerminated() reads it one level up
+        if ($lastNode instanceof While_ || $lastNode instanceof Do_ || $lastNode instanceof For_) {
+            return $this->isTerminatedInfiniteLoop($lastNode);
+        }
         if ($lastNode instanceof Expression) {
             return $lastNode->expr instanceof Exit_ || $lastNode->expr instanceof Throw_;
         }
