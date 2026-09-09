@@ -41,7 +41,7 @@ CODE_SAMPLE
     /**
      * @param List_ $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?List_
     {
         foreach ($node->items as $item) {
             if ($item instanceof ArrayItem) {

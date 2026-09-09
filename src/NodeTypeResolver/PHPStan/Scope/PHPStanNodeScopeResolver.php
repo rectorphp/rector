@@ -396,6 +396,7 @@ final class PHPStanNodeScopeResolver
      */
     private function nodeScopeResolverProcessNodes(array $stmts, MutatingScope $mutatingScope, callable $nodeCallback): void
     {
+        Assert::allIsInstanceOf($stmts, Stmt::class);
         try {
             $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
         } catch (ParserErrorsException|ParserException|ShouldNotHappenException|UndefinedVariableException $exception) {
@@ -519,7 +520,7 @@ final class PHPStanNodeScopeResolver
                 continue;
             }
             /** @var Stmt[] $stmts */
-            $stmts = $hook->body instanceof Expr ? [new Expression($hook->body)] : [$hook->body];
+            $stmts = $hook->body instanceof Expr ? [new Expression($hook->body)] : $hook->body;
             $this->nodeScopeResolverProcessNodes($stmts, $mutatingScope, $nodeCallback);
         }
     }

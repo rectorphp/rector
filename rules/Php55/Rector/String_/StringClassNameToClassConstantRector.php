@@ -91,7 +91,7 @@ CODE_SAMPLE
         return new ClassConstFetch($fullyQualified, 'class');
     }
     /**
-     * @param array<string, mixed> $configuration
+     * @param string[] $configuration
      */
     public function configure(array $configuration): void
     {

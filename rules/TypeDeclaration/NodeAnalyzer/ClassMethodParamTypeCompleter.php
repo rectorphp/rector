@@ -30,7 +30,7 @@ final class ClassMethodParamTypeCompleter
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
     }
     /**
-     * @param array<int, Type> $classParameterTypes
+     * @param array<int|string, Type> $classParameterTypes
      */
     public function complete(ClassMethod $classMethod, array $classParameterTypes, int $maxUnionTypes): ?ClassMethod
     {
@@ -62,7 +62,10 @@ final class ClassMethodParamTypeCompleter
         }
         return null;
     }
-    private function shouldSkipArgumentStaticType(ClassMethod $classMethod, Type $argumentStaticType, int $position, int $maxUnionTypes): bool
+    /**
+     * @param int|string $position
+     */
+    private function shouldSkipArgumentStaticType(ClassMethod $classMethod, Type $argumentStaticType, $position, int $maxUnionTypes): bool
     {
         if ($argumentStaticType instanceof MixedType) {
             return \true;

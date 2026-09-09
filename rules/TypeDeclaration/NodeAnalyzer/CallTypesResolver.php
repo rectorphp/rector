@@ -44,7 +44,7 @@ final class CallTypesResolver
     }
     /**
      * @param MethodCall[]|StaticCall[] $calls
-     * @return array<int, Type>
+     * @return array<int|string, Type>
      */
     public function resolveStrictTypesFromCalls(array $calls): array
     {
@@ -53,6 +53,10 @@ final class CallTypesResolver
             foreach ($call->args as $position => $arg) {
                 if ($this->shouldSkipArg($arg)) {
                     return [];
+                }
+                // must be int
+                if (!is_int($position)) {
+                    continue;
                 }
                 /** @var Arg $arg */
                 $staticTypesByArgumentPosition[$position][] = $this->resolveStrictArgValueType($arg);
@@ -103,8 +107,8 @@ final class CallTypesResolver
         return $argValueType;
     }
     /**
-     * @param array<int, Type[]> $staticTypesByArgumentPosition
-     * @return array<int, Type>
+     * @param array<int|string, Type[]> $staticTypesByArgumentPosition
+     * @return array<int|string, Type>
      */
     private function unionToSingleType(array $staticTypesByArgumentPosition, bool $removeMixedArray = \false): array
     {
