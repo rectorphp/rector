@@ -1558,6 +1558,7 @@ return array(
     'Rector\\DowngradePhp82\\Rector\\Class_\\DowngradeUnionIntersectionRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/Class_/DowngradeUnionIntersectionRector.php',
     'Rector\\DowngradePhp82\\Rector\\FuncCall\\DowngradeIteratorCountToArrayRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/FuncCall/DowngradeIteratorCountToArrayRector.php',
     'Rector\\DowngradePhp82\\Rector\\FunctionLike\\DowngradeStandaloneNullTrueFalseReturnTypeRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/FunctionLike/DowngradeStandaloneNullTrueFalseReturnTypeRector.php',
+    'Rector\\DowngradePhp82\\Rector\\MethodCall\\DowngradeReflectionMethodHasPrototypeRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/MethodCall/DowngradeReflectionMethodHasPrototypeRector.php',
     'Rector\\DowngradePhp83\\Rector\\ClassConstFetch\\DowngradeDynamicClassConstFetchRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/ClassConstFetch/DowngradeDynamicClassConstFetchRector.php',
     'Rector\\DowngradePhp83\\Rector\\ClassConst\\DowngradeTypedClassConstRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/ClassConst/DowngradeTypedClassConstRector.php',
     'Rector\\DowngradePhp83\\Rector\\Class_\\DowngradeReadonlyAnonymousClassRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/Class_/DowngradeReadonlyAnonymousClassRector.php',
