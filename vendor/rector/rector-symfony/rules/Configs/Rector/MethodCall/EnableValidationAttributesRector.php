@@ -12,12 +12,14 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Configs\Rector\MethodCall\EnableValidationAttributesRector\EnableValidationAttributesRectorTest
  */
-final class EnableValidationAttributesRector extends AbstractRector
+final class EnableValidationAttributesRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
     /**
      * @readonly
@@ -26,6 +28,11 @@ final class EnableValidationAttributesRector extends AbstractRector
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        // "enable_attributes" config key added in framework-bundle 6.4, replacing "enable_annotations"
+        return new ComposerPackageConstraint('symfony/framework-bundle', '>=6.4');
     }
     public function getRuleDefinition(): RuleDefinition
     {

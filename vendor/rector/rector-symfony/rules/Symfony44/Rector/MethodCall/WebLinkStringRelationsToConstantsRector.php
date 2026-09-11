@@ -79,7 +79,7 @@ CODE_SAMPLE
             return null;
         }
         $constFetch = $this->createConstantFetch($valueNode->value);
-        if (!$constFetch) {
+        if (!$constFetch instanceof Node) {
             return null;
         }
         $args[0]->value = $constFetch;
