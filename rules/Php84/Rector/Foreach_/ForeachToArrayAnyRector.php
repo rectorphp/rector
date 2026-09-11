@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
@@ -210,6 +211,9 @@ CODE_SAMPLE
         if (!$firstStmt instanceof If_ || count($firstStmt->stmts) !== 2) {
             return \false;
         }
+        if ($firstStmt->elseifs !== [] || $firstStmt->else instanceof Else_) {
+            return \false;
+        }
         $assignmentStmt = $firstStmt->stmts[0];
         $breakStmt = $firstStmt->stmts[1];
         if (!$assignmentStmt instanceof Expression || !$assignmentStmt->expr instanceof Assign || !$breakStmt instanceof Break_) {
@@ -234,6 +238,9 @@ CODE_SAMPLE
             return \false;
         }
         $ifStmt = $foreach->stmts[0];
+        if ($ifStmt->elseifs !== [] || $ifStmt->else instanceof Else_) {
+            return \false;
+        }
         if (count($ifStmt->stmts) !== 1) {
             return \false;
         }
