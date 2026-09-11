@@ -6,6 +6,7 @@ namespace Rector\Config\Level;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamArrayDocblockBasedOnCallableNativeFuncCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnDocblockForScalarArrayFromAssignsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\NarrowBoolDocblockReturnTypeRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\AddVarArrayDocblockFromDimFetchAssignRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\ClassMethodArrayDocblockParamFromLocalCallsRector;
 use Rector\TypeDeclarationDocblocks\Rector\Class_\DocblockVarArrayFromGetterReturnRector;
@@ -47,5 +48,6 @@ final class TypeDeclarationDocblocksLevel
         // return
         DocblockGetterReturnArrayFromPropertyDocblockVarRector::class,
         NarrowArrayCollectionUnionReturnDocblockRector::class,
+        NarrowBoolDocblockReturnTypeRector::class,
     ];
 }
