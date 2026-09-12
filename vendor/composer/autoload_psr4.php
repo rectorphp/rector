@@ -9,6 +9,7 @@ return array(
     'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
     'Symfony\\Polyfill\\Intl\\Grapheme\\' => array($vendorDir . '/symfony/polyfill-intl-grapheme'),
     'Rector\\Utils\\PHPStan\\' => array($baseDir . '/utils/phpstan/src'),
+    'Rector\\Utils\\Duplicates\\' => array($baseDir . '/utils/duplicates/src'),
     'Rector\\Utils\\' => array($baseDir . '/utils'),
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src', $vendorDir . '/rector/rector-symfony/rules'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),

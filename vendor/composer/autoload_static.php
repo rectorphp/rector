@@ -23,6 +23,7 @@ class ComposerStaticInit1574d9721774d0e974b8eb7abd23a277
         'R' =>
         array (
             'Rector\\Utils\\PHPStan\\' => 21,
+            'Rector\\Utils\\Duplicates\\' => 24,
             'Rector\\Utils\\' => 13,
             'Rector\\Symfony\\' => 15,
             'Rector\\RectorInstaller\\' => 23,
@@ -76,6 +77,10 @@ class ComposerStaticInit1574d9721774d0e974b8eb7abd23a277
         'Rector\\Utils\\PHPStan\\' =>
         array (
             0 => __DIR__ . '/../..' . '/utils/phpstan/src',
+        ),
+        'Rector\\Utils\\Duplicates\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/utils/duplicates/src',
         ),
         'Rector\\Utils\\' =>
         array (
