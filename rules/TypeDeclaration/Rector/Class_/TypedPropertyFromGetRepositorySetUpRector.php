@@ -5,25 +5,10 @@ namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\ValueObject\MethodName;
+use Rector\TypeDeclaration\NodeAnalyzer\SetUpAssignedPropertyTyper;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -36,35 +21,10 @@ final class TypedPropertyFromGetRepositorySetUpRector extends AbstractRector imp
     /**
      * @readonly
      */
-    private TestsNodeAnalyzer $testsNodeAnalyzer;
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
-     * @readonly
-     */
-    private StaticTypeMapper $staticTypeMapper;
-    /**
-     * @readonly
-     */
-    private DocBlockUpdater $docBlockUpdater;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    /**
-     * @readonly
-     */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, DocBlockUpdater $docBlockUpdater, BetterNodeFinder $betterNodeFinder, ReflectionProvider $reflectionProvider)
+    private SetUpAssignedPropertyTyper $setUpAssignedPropertyTyper;
+    public function __construct(SetUpAssignedPropertyTyper $setUpAssignedPropertyTyper)
     {
-        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->docBlockUpdater = $docBlockUpdater;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->reflectionProvider = $reflectionProvider;
+        $this->setUpAssignedPropertyTyper = $setUpAssignedPropertyTyper;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -111,82 +71,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
-            return null;
-        }
-        $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
-        if (!$setUpClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        $hasChanged = \false;
-        foreach ($node->getProperties() as $property) {
-            // type is already set
-            if ($property->type instanceof Node) {
-                continue;
-            }
-            if (!$property->isPrivate()) {
-                continue;
-            }
-            if ($property->isStatic()) {
-                continue;
-            }
-            // exactly one property
-            if (count($property->props) !== 1) {
-                continue;
-            }
-            $propertyName = $this->getName($property->props[0]);
-            if (!$this->isAssignedViaGetRepositoryInSetUp($setUpClassMethod, $propertyName)) {
-                continue;
-            }
-            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-            if (!$propertyPhpDocInfo instanceof PhpDocInfo) {
-                continue;
-            }
-            $varType = $propertyPhpDocInfo->getVarType();
-            if (!$varType instanceof ObjectType) {
-                continue;
-            }
-            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY);
-            if (!$propertyTypeNode instanceof Name) {
-                continue;
-            }
-            // must be an existing object type
-            if (!$this->reflectionProvider->hasClass($propertyTypeNode->toString())) {
-                continue;
-            }
-            $property->type = $propertyTypeNode;
-            $this->removeVarTag($propertyPhpDocInfo, $property);
-            $hasChanged = \true;
-        }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
+        return $this->setUpAssignedPropertyTyper->refactorClass($node, fn(Expr $expr): bool => $this->isGetRepositoryCall($expr));
     }
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
-    }
-    private function isAssignedViaGetRepositoryInSetUp(ClassMethod $setUpClassMethod, string $propertyName): bool
-    {
-        /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf($setUpClassMethod, Assign::class);
-        foreach ($assigns as $assign) {
-            if (!$assign->var instanceof PropertyFetch) {
-                continue;
-            }
-            $propertyFetch = $assign->var;
-            if (!$this->isName($propertyFetch->var, 'this')) {
-                continue;
-            }
-            if (!$this->isName($propertyFetch, $propertyName)) {
-                continue;
-            }
-            if ($this->isGetRepositoryCall($assign->expr)) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function isGetRepositoryCall(Expr $expr): bool
     {
@@ -194,14 +83,5 @@ CODE_SAMPLE
             return \false;
         }
         return $this->isName($expr->name, 'getRepository');
-    }
-    private function removeVarTag(PhpDocInfo $propertyPhpDocInfo, Property $property): void
-    {
-        $varTagValueNode = $propertyPhpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof VarTagValueNode) {
-            return;
-        }
-        $propertyPhpDocInfo->removeByType(VarTagValueNode::class);
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
     }
 }
