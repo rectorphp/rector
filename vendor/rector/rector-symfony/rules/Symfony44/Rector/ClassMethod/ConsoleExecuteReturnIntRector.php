@@ -129,7 +129,9 @@ CODE_SAMPLE
             if ($node->expr instanceof Ternary && $this->isIntegerTernaryIfElse($node->expr)) {
                 return null;
             }
-            $this->setReturnTo0InsteadOfNull($node);
+            if ($this->isSuccessfulRefactorReturn($node)) {
+                $this->hasChanged = \true;
+            }
             return null;
         });
         $this->processReturn0ToMethod($classMethod);
@@ -171,36 +173,36 @@ CODE_SAMPLE
             return;
         }
         $classMethod->stmts[] = $return;
+        $this->hasChanged = \true;
     }
-    private function setReturnTo0InsteadOfNull(Return_ $return): void
+    private function isSuccessfulRefactorReturn(Return_ $return): bool
     {
         if (!$return->expr instanceof Expr) {
             $return->expr = new \PhpParser\Node\Scalar\Int_(0);
-            return;
+            return \true;
         }
         if ($this->valueResolver->isNull($return->expr)) {
             $return->expr = new \PhpParser\Node\Scalar\Int_(0);
-            return;
+            return \true;
         }
         // false means the command failed, that is the 1 exit code
         if ($this->valueResolver->isFalse($return->expr)) {
             $return->expr = new \PhpParser\Node\Scalar\Int_(1);
-            return;
+            return \true;
         }
         if ($return->expr instanceof Coalesce && $this->valueResolver->isNull($return->expr->right)) {
             $return->expr->right = new \PhpParser\Node\Scalar\Int_(0);
-            return;
+            return \true;
         }
-        if ($return->expr instanceof Ternary) {
-            $hasChanged = $this->isSuccessfulRefactorTernaryReturn($return->expr);
-            if ($hasChanged) {
-                return;
-            }
+        if ($return->expr instanceof Ternary && $this->isSuccessfulRefactorTernaryReturn($return->expr)) {
+            return \true;
         }
         $staticType = $this->getType($return->expr);
         if (!$staticType->isInteger()->yes()) {
             $return->expr = new Int_($return->expr);
+            return \true;
         }
+        return \false;
     }
     private function isSuccessfulRefactorTernaryReturn(Ternary $ternary): bool
     {
