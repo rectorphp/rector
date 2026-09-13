@@ -28,6 +28,10 @@ class Standard extends PrettyPrinterAbstract
     {
         return '...';
     }
+    protected function pArgPlaceholder(Node\ArgPlaceholder $node): string
+    {
+        return ($node->name ? $node->name->toString() . ': ' : '') . '?';
+    }
     protected function pConst(Node\Const_ $node): string
     {
         return $node->name . ' = ' . $this->p($node->value);

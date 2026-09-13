@@ -93,7 +93,8 @@ class String_ extends Scalar
                 return chr(hexdec((string) substr($str, 1)));
             }
             if ('u' === $str[0]) {
-                $dec = hexdec($matches[2]);
+                // PHP 8.6 warns when hexdec() produces a float.
+                $dec = @hexdec($matches[2]);
                 // If it overflowed to float, treat as INT_MAX, it will throw an error anyway.
                 return self::codePointToUtf8(\is_int($dec) ? $dec : \PHP_INT_MAX);
             } else {
@@ -119,7 +120,7 @@ class String_ extends Scalar
         if ($num <= 0xffff) {
             return chr(($num >> 12) + 0xe0) . chr(($num >> 6 & 0x3f) + 0x80) . chr(($num & 0x3f) + 0x80);
         }
-        if ($num <= 0x1fffff) {
+        if ($num <= 0x10ffff) {
             return chr(($num >> 18) + 0xf0) . chr(($num >> 12 & 0x3f) + 0x80) . chr(($num >> 6 & 0x3f) + 0x80) . chr(($num & 0x3f) + 0x80);
         }
         throw new Error('Invalid UTF-8 codepoint escape sequence: Codepoint too large');

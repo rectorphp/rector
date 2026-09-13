@@ -99,6 +99,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Lexer/TokenEmulat
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Modifiers.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NameContext.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Arg.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/ArgPlaceholder.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/ArrayItem.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/Attribute.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/AttributeGroup.php';

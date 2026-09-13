@@ -166,6 +166,7 @@ return array(
     'PhpParser\\NodeVisitor\\NodeConnectingVisitor' => $vendorDir . '/nikic/php-parser/lib/PhpParser/NodeVisitor/NodeConnectingVisitor.php',
     'PhpParser\\NodeVisitor\\ParentConnectingVisitor' => $vendorDir . '/nikic/php-parser/lib/PhpParser/NodeVisitor/ParentConnectingVisitor.php',
     'PhpParser\\Node\\Arg' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Node/Arg.php',
+    'PhpParser\\Node\\ArgPlaceholder' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Node/ArgPlaceholder.php',
     'PhpParser\\Node\\ArrayItem' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Node/ArrayItem.php',
     'PhpParser\\Node\\Attribute' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Node/Attribute.php',
     'PhpParser\\Node\\AttributeGroup' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Node/AttributeGroup.php',

@@ -1051,7 +1051,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             $hook->setAttribute('propertyName', $name);
         }
     }
-    /** @param array<Node\Arg|Node\VariadicPlaceholder> $args */
+    /** @param array<Node\Arg|Node\VariadicPlaceholder|Node\ArgPlaceholder> $args */
     private function isSimpleExit(array $args): bool
     {
         if (\count($args) === 0) {
@@ -1064,7 +1064,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
         return \false;
     }
     /**
-     * @param array<Node\Arg|Node\VariadicPlaceholder> $args
+     * @param array<Node\Arg|Node\VariadicPlaceholder|Node\ArgPlaceholder> $args
      * @param array<string, mixed> $attrs
      */
     protected function createExitExpr(string $name, int $namePos, array $args, array $attrs): Expr

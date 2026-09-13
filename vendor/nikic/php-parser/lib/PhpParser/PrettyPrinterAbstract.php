@@ -1072,16 +1072,20 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
      */
     protected function newOperandRequiresParens(\PhpParser\Node $node): bool
     {
-        if ($node instanceof \PhpParser\Node\Name || $node instanceof Expr\Variable) {
-            return \false;
+        while (\true) {
+            if ($node instanceof \PhpParser\Node\Name || $node instanceof Expr\Variable) {
+                return \false;
+            }
+            if ($node instanceof Expr\ArrayDimFetch || $node instanceof Expr\PropertyFetch || $node instanceof Expr\NullsafePropertyFetch) {
+                $node = $node->var;
+                continue;
+            }
+            if ($node instanceof Expr\StaticPropertyFetch) {
+                $node = $node->class;
+                continue;
+            }
+            return \true;
         }
-        if ($node instanceof Expr\ArrayDimFetch || $node instanceof Expr\PropertyFetch || $node instanceof Expr\NullsafePropertyFetch) {
-            return $this->newOperandRequiresParens($node->var);
-        }
-        if ($node instanceof Expr\StaticPropertyFetch) {
-            return $this->newOperandRequiresParens($node->class);
-        }
-        return \true;
     }
     /**
      * Print modifiers, including trailing whitespace.
@@ -1350,7 +1354,7 @@ abstract class PrettyPrinterAbstract implements \PhpParser\PrettyPrinter
         }
         // TODO Insertion into empty statement lists.
         // [$find, $extraLeft, $extraRight]
-        $this->emptyListInsertionMap = [Expr\ArrowFunction::class . '->params' => ['(', '', ''], Expr\Closure::class . '->uses' => [')', ' use (', ')'], Expr\Closure::class . '->params' => ['(', '', ''], Expr\FuncCall::class . '->args' => ['(', '', ''], Expr\MethodCall::class . '->args' => ['(', '', ''], Expr\NullsafeMethodCall::class . '->args' => ['(', '', ''], Expr\New_::class . '->args' => ['(', '', ''], PrintableNewAnonClassNode::class . '->args' => ['(', '', ''], PrintableNewAnonClassNode::class . '->implements' => [null, ' implements ', ''], Expr\StaticCall::class . '->args' => ['(', '', ''], Stmt\Class_::class . '->implements' => [null, ' implements ', ''], Stmt\Enum_::class . '->implements' => [null, ' implements ', ''], Stmt\ClassMethod::class . '->params' => ['(', '', ''], Stmt\Interface_::class . '->extends' => [null, ' extends ', ''], Stmt\Function_::class . '->params' => ['(', '', ''], Stmt\Interface_::class . '->attrGroups' => [null, '', "\n"], Stmt\Class_::class . '->attrGroups' => [null, '', "\n"], Stmt\ClassConst::class . '->attrGroups' => [null, '', "\n"], Stmt\ClassMethod::class . '->attrGroups' => [null, '', "\n"], Stmt\Function_::class . '->attrGroups' => [null, '', "\n"], Stmt\Property::class . '->attrGroups' => [null, '', "\n"], Stmt\Trait_::class . '->attrGroups' => [null, '', "\n"], Expr\ArrowFunction::class . '->attrGroups' => [null, '', ' '], Expr\Closure::class . '->attrGroups' => [null, '', ' '], Stmt\Const_::class . '->attrGroups' => [null, '', "\n"], PrintableNewAnonClassNode::class . '->attrGroups' => [\T_NEW, ' ', '']];
+        $this->emptyListInsertionMap = [Expr\ArrowFunction::class . '->params' => ['(', '', ''], Expr\Closure::class . '->uses' => [')', ' use (', ')'], Expr\Closure::class . '->params' => ['(', '', ''], Expr\FuncCall::class . '->args' => ['(', '', ''], Expr\MethodCall::class . '->args' => ['(', '', ''], Expr\NullsafeMethodCall::class . '->args' => ['(', '', ''], Expr\New_::class . '->args' => ['(', '', ''], PrintableNewAnonClassNode::class . '->args' => ['(', '', ''], PrintableNewAnonClassNode::class . '->implements' => [null, ' implements ', ''], Expr\StaticCall::class . '->args' => ['(', '', ''], Stmt\Class_::class . '->implements' => [null, ' implements ', ''], Stmt\Enum_::class . '->implements' => [null, ' implements ', ''], Stmt\ClassMethod::class . '->params' => ['(', '', ''], Stmt\Interface_::class . '->extends' => [null, ' extends ', ''], Stmt\Function_::class . '->params' => ['(', '', ''], Stmt\Interface_::class . '->attrGroups' => [null, '', "\n"], Stmt\Class_::class . '->attrGroups' => [null, '', "\n"], Stmt\Enum_::class . '->attrGroups' => [null, '', "\n"], Stmt\EnumCase::class . '->attrGroups' => [null, '', "\n"], Stmt\ClassConst::class . '->attrGroups' => [null, '', "\n"], Stmt\ClassMethod::class . '->attrGroups' => [null, '', "\n"], Stmt\Function_::class . '->attrGroups' => [null, '', "\n"], Stmt\Property::class . '->attrGroups' => [null, '', "\n"], Stmt\Trait_::class . '->attrGroups' => [null, '', "\n"], Expr\ArrowFunction::class . '->attrGroups' => [null, '', ' '], Expr\Closure::class . '->attrGroups' => [null, '', ' '], Stmt\Const_::class . '->attrGroups' => [null, '', "\n"], PrintableNewAnonClassNode::class . '->attrGroups' => [\T_NEW, ' ', '']];
     }
     protected function initializeModifierChangeMap(): void
     {

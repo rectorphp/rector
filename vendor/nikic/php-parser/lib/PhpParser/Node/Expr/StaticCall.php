@@ -5,6 +5,7 @@ namespace PhpParser\Node\Expr;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArgPlaceholder;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\VariadicPlaceholder;
@@ -14,14 +15,14 @@ class StaticCall extends \PhpParser\Node\Expr\CallLike
     public Node $class;
     /** @var Identifier|Expr Method name */
     public Node $name;
-    /** @var array<Arg|VariadicPlaceholder> Arguments */
+    /** @var array<Arg|VariadicPlaceholder|ArgPlaceholder> Arguments */
     public array $args;
     /**
      * Constructs a static method call node.
      *
      * @param Node\Name|Expr $class Class name
      * @param string|Identifier|Expr $name Method name
-     * @param array<Arg|VariadicPlaceholder> $args Arguments
+     * @param array<Arg|VariadicPlaceholder|ArgPlaceholder> $args Arguments
      * @param array<string, mixed> $attributes Additional attributes
      */
     public function __construct(Node $class, $name, array $args = [], array $attributes = [])

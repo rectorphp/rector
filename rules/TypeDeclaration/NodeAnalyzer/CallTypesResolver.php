@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArgPlaceholder;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
@@ -179,11 +180,11 @@ final class CallTypesResolver
     /**
      * There is first class callable usage, or argument unpack, or named expr
      * simply returns array marks as unknown as can be anything and in any position
-     * @param \PhpParser\Node\Arg|\PhpParser\Node\VariadicPlaceholder $arg
+     * @param \PhpParser\Node\Arg|\PhpParser\Node\ArgPlaceholder|\PhpParser\Node\VariadicPlaceholder $arg
      */
     private function shouldSkipArg($arg): bool
     {
-        if ($arg instanceof VariadicPlaceholder) {
+        if (!$arg instanceof Arg) {
             return \true;
         }
         return $arg->unpack;

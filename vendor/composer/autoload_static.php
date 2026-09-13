@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1574d9721774d0e974b8eb7abd23a277
+class ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -391,6 +391,7 @@ class ComposerStaticInit1574d9721774d0e974b8eb7abd23a277
         'PhpParser\\NodeVisitor\\NodeConnectingVisitor' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NodeVisitor/NodeConnectingVisitor.php',
         'PhpParser\\NodeVisitor\\ParentConnectingVisitor' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/NodeVisitor/ParentConnectingVisitor.php',
         'PhpParser\\Node\\Arg' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Arg.php',
+        'PhpParser\\Node\\ArgPlaceholder' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/ArgPlaceholder.php',
         'PhpParser\\Node\\ArrayItem' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/ArrayItem.php',
         'PhpParser\\Node\\Attribute' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/Attribute.php',
         'PhpParser\\Node\\AttributeGroup' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Node/AttributeGroup.php',
@@ -3084,9 +3085,9 @@ class ComposerStaticInit1574d9721774d0e974b8eb7abd23a277
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1574d9721774d0e974b8eb7abd23a277::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1574d9721774d0e974b8eb7abd23a277::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1574d9721774d0e974b8eb7abd23a277::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a::$classMap;
 
         }, null, ClassLoader::class);
     }
