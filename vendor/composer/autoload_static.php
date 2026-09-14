@@ -2201,6 +2201,7 @@ class ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a
         'Rector\\Parallel\\Enum\\Content' => __DIR__ . '/../..' . '/src/Parallel/Enum/Content.php',
         'Rector\\Parallel\\Enum\\ReactCommand' => __DIR__ . '/../..' . '/src/Parallel/Enum/ReactCommand.php',
         'Rector\\Parallel\\Enum\\ReactEvent' => __DIR__ . '/../..' . '/src/Parallel/Enum/ReactEvent.php',
+        'Rector\\Parallel\\Enum\\StreamFormat' => __DIR__ . '/../..' . '/src/Parallel/Enum/StreamFormat.php',
         'Rector\\Parallel\\Exception\\ParallelShouldNotHappenException' => __DIR__ . '/../..' . '/src/Parallel/Exception/ParallelShouldNotHappenException.php',
         'Rector\\Parallel\\Reflection\\CommandFromReflectionFactory' => __DIR__ . '/../..' . '/src/Parallel/Reflection/CommandFromReflectionFactory.php',
         'Rector\\Parallel\\ScheduleFactory' => __DIR__ . '/../..' . '/src/Parallel/ScheduleFactory.php',

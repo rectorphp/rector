@@ -17,6 +17,7 @@ use Rector\Parallel\Enum\Action;
 use Rector\Parallel\Enum\Content;
 use Rector\Parallel\Enum\ReactCommand;
 use Rector\Parallel\Enum\ReactEvent;
+use Rector\Parallel\Enum\StreamFormat;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\Parallel\ValueObject\ParallelProcess;
 use Rector\Parallel\ValueObject\ProcessPool;
@@ -76,7 +77,7 @@ final class ParallelFileProcessor
         $tcpServer = new TcpServer('127.0.0.1:0', $streamSelectLoop);
         $this->processPool = new ProcessPool($tcpServer);
         $tcpServer->on(ReactEvent::CONNECTION, function (ConnectionInterface $connection) use (&$jobs): void {
-            $inDecoder = new Decoder($connection, \true, 512, 0, 4 * 1024 * 1024);
+            $inDecoder = new Decoder($connection, \true, StreamFormat::DEPTH, 0, StreamFormat::MAX_LENGTH);
             $outEncoder = new Encoder($connection);
             $inDecoder->on(ReactEvent::DATA, function (array $data) use (&$jobs, $inDecoder, $outEncoder): void {
                 $action = $data[ReactCommand::ACTION];

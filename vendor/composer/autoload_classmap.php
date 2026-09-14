@@ -1976,6 +1976,7 @@ return array(
     'Rector\\Parallel\\Enum\\Content' => $baseDir . '/src/Parallel/Enum/Content.php',
     'Rector\\Parallel\\Enum\\ReactCommand' => $baseDir . '/src/Parallel/Enum/ReactCommand.php',
     'Rector\\Parallel\\Enum\\ReactEvent' => $baseDir . '/src/Parallel/Enum/ReactEvent.php',
+    'Rector\\Parallel\\Enum\\StreamFormat' => $baseDir . '/src/Parallel/Enum/StreamFormat.php',
     'Rector\\Parallel\\Exception\\ParallelShouldNotHappenException' => $baseDir . '/src/Parallel/Exception/ParallelShouldNotHappenException.php',
     'Rector\\Parallel\\Reflection\\CommandFromReflectionFactory' => $baseDir . '/src/Parallel/Reflection/CommandFromReflectionFactory.php',
     'Rector\\Parallel\\ScheduleFactory' => $baseDir . '/src/Parallel/ScheduleFactory.php',
