@@ -1410,6 +1410,7 @@ return array(
     'Rector\\Doctrine\\Orm28\\Rector\\MethodCall\\IterateToToIterableRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm28/Rector/MethodCall/IterateToToIterableRector.php',
     'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\CastDoctrineExprToStringRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/CastDoctrineExprToStringRector.php',
     'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\SetParametersArrayToCollectionRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/SetParametersArrayToCollectionRector.php',
+    'Rector\\Doctrine\\Orm32\\Rector\\MethodCall\\DoctrineQueryBuilderSortDirectionRector' => $vendorDir . '/rector/rector-doctrine/rules/Orm32/Rector/MethodCall/DoctrineQueryBuilderSortDirectionRector.php',
     'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => $vendorDir . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
     'Rector\\Doctrine\\Set\\DoctrineSetList' => $vendorDir . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
     'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeFactory' => $vendorDir . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeFactory.php',

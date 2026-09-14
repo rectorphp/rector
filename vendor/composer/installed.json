@@ -1556,12 +1556,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "bacd0fd462cd1e346d33548bdef9a2d0cccc3aa6"
+                "reference": "a8213129094225145eefa17dda6669f0517a6edb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/bacd0fd462cd1e346d33548bdef9a2d0cccc3aa6",
-                "reference": "bacd0fd462cd1e346d33548bdef9a2d0cccc3aa6",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/a8213129094225145eefa17dda6669f0517a6edb",
+                "reference": "a8213129094225145eefa17dda6669f0517a6edb",
                 "shasum": ""
             },
             "require": {
@@ -1569,7 +1569,7 @@
             },
             "require-dev": {
                 "doctrine\/doctrine-bundle": "^3.0",
-                "doctrine\/orm": "^3.0",
+                "doctrine\/orm": "^3.2",
                 "phpstan\/extension-installer": "^1.4",
                 "phpstan\/phpstan": "^2.2",
                 "phpstan\/phpstan-deprecation-rules": "^2.0",
@@ -1584,7 +1584,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-09-08T19:21:34+00:00",
+            "time": "2026-09-14T16:14:14+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
