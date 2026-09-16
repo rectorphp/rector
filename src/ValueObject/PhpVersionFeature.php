@@ -700,6 +700,11 @@ final class PhpVersionFeature
      */
     public const CLAMP = \Rector\ValueObject\PhpVersion::PHP_86;
     /**
+     * @see https://wiki.php.net/rfc/readonly_property_defaults
+     * @var int
+     */
+    public const READONLY_PROPERTY_DEFAULT_VALUE = \Rector\ValueObject\PhpVersion::PHP_86;
+    /**
      * @see https://php.watch/versions/8.0/named-parameters
      * @var int
      */

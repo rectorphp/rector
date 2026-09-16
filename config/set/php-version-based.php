@@ -140,6 +140,7 @@ use Rector\Php85\Rector\FuncCall\RemoveFinfoBufferContextArgRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
 use Rector\Php85\Rector\ShellExec\ShellExecFunctionCallOverBackticksRector;
 use Rector\Php85\Rector\Switch_\ColonAfterSwitchCaseRector;
+use Rector\Php86\Rector\Class_\ConstructorReadonlyAssignToDefaultRector;
 use Rector\Php86\Rector\FuncCall\MinMaxToClampRector;
 use Rector\Removing\Rector\FuncCall\RemoveFuncCallArgRector;
 use Rector\Removing\Rector\FuncCall\RemoveFuncCallRector;
@@ -309,6 +310,7 @@ return static function (RectorConfig $rectorConfig): void {
         AddOverrideAttributeToOverriddenPropertiesRector::class,
         // PHP 8.6
         MinMaxToClampRector::class,
+        ConstructorReadonlyAssignToDefaultRector::class,
     ]);
     // configured rules, each bound to the PHP version its configuration targets
     // PHP 5.2
