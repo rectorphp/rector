@@ -2115,6 +2115,7 @@ return array(
     'Rector\\Php80\\Rector\\Property\\NestedAnnotationToAttributeRector' => $baseDir . '/rules/Php80/Rector/Property/NestedAnnotationToAttributeRector.php',
     'Rector\\Php80\\Rector\\Switch_\\ChangeSwitchToMatchRector' => $baseDir . '/rules/Php80/Rector/Switch_/ChangeSwitchToMatchRector.php',
     'Rector\\Php80\\Rector\\Ternary\\GetDebugTypeRector' => $baseDir . '/rules/Php80/Rector/Ternary/GetDebugTypeRector.php',
+    'Rector\\Php80\\Rector\\Ternary\\TernaryToNullsafeCoalesceRector' => $baseDir . '/rules/Php80/Rector/Ternary/TernaryToNullsafeCoalesceRector.php',
     'Rector\\Php80\\ValueObjectFactory\\StrStartsWithFactory' => $baseDir . '/rules/Php80/ValueObjectFactory/StrStartsWithFactory.php',
     'Rector\\Php80\\ValueObject\\AnnotationPropertyToAttributeClass' => $baseDir . '/rules/Php80/ValueObject/AnnotationPropertyToAttributeClass.php',
     'Rector\\Php80\\ValueObject\\AnnotationToAttribute' => $baseDir . '/rules/Php80/ValueObject/AnnotationToAttribute.php',

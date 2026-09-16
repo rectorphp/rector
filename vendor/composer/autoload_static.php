@@ -2340,6 +2340,7 @@ class ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a
         'Rector\\Php80\\Rector\\Property\\NestedAnnotationToAttributeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Property/NestedAnnotationToAttributeRector.php',
         'Rector\\Php80\\Rector\\Switch_\\ChangeSwitchToMatchRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Switch_/ChangeSwitchToMatchRector.php',
         'Rector\\Php80\\Rector\\Ternary\\GetDebugTypeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Ternary/GetDebugTypeRector.php',
+        'Rector\\Php80\\Rector\\Ternary\\TernaryToNullsafeCoalesceRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Ternary/TernaryToNullsafeCoalesceRector.php',
         'Rector\\Php80\\ValueObjectFactory\\StrStartsWithFactory' => __DIR__ . '/../..' . '/rules/Php80/ValueObjectFactory/StrStartsWithFactory.php',
         'Rector\\Php80\\ValueObject\\AnnotationPropertyToAttributeClass' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/AnnotationPropertyToAttributeClass.php',
         'Rector\\Php80\\ValueObject\\AnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/AnnotationToAttribute.php',
