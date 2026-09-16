@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeVisitor;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\IntersectionType;
 use Rector\DeadCode\NodeAnalyzer\SafeLeftTypeBooleanAndOrAnalyzer;
@@ -117,14 +118,14 @@ CODE_SAMPLE
         if ($this->shouldSkipExpr($node->cond)) {
             return null;
         }
-        if ($this->shouldSkipFromVariable($node->cond)) {
+        $scope = ScopeFetcher::fetch($node);
+        if ($this->shouldSkipFromVariable($node->cond, $scope)) {
             return null;
         }
         $hasAssign = (bool) $this->betterNodeFinder->findFirstInstanceOf($node->cond, Assign::class);
         if ($hasAssign) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
         $type = $scope->getNativeType($node->cond);
         if (!$type->isTrue()->yes()) {
             return null;
@@ -142,11 +143,16 @@ CODE_SAMPLE
         }
         return $node->stmts;
     }
-    private function shouldSkipFromVariable(Expr $expr): bool
+    private function shouldSkipFromVariable(Expr $expr, Scope $scope): bool
     {
         /** @var Variable[] $variables */
         $variables = $this->betterNodeFinder->findInstancesOf($expr, [Variable::class]);
         foreach ($variables as $variable) {
+            // maybe undefined variable is treated as null on some code paths, so the condition is not always true
+            $variableName = $this->getName($variable);
+            if (is_string($variableName) && !$scope->hasVariableType($variableName)->yes()) {
+                return \true;
+            }
             if ($this->exprAnalyzer->isNonTypedFromParam($variable)) {
                 return \true;
             }
