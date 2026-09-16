@@ -103,6 +103,21 @@ CODE_SAMPLE
         }
         return null;
     }
+    private function resolveExistingUntypedRequestParam(ClassMethod $classMethod): ?Param
+    {
+        foreach ($classMethod->params as $param) {
+            if ($param->type !== null) {
+                continue;
+            }
+            if (!$param->var instanceof Variable) {
+                continue;
+            }
+            if ($this->isName($param->var, 'request')) {
+                return $param;
+            }
+        }
+        return null;
+    }
     private function resolveUniqueName(ClassMethod $classMethod, string $name): string
     {
         $candidateNames = [];
@@ -202,12 +217,19 @@ CODE_SAMPLE
     }
     private function refactorClassMethod(ClassMethod $classMethod): ?\PhpParser\Node\Stmt\ClassMethod
     {
-        $this->requestVariableAndParamName = $this->resolveUniqueName($classMethod, 'request');
         if (!$this->isActionWithGetRequestInBody($classMethod)) {
             return null;
         }
-        $fullyQualified = new FullyQualified(SymfonyClass::REQUEST);
-        $classMethod->params[] = new Param(new Variable($this->getRequestVariableAndParamName()), null, $fullyQualified);
+        $existingUntypedRequestParam = $this->resolveExistingUntypedRequestParam($classMethod);
+        if ($existingUntypedRequestParam instanceof Param) {
+            // reuse an already present, untyped $request param instead of adding a duplicate
+            $existingUntypedRequestParam->type = new FullyQualified(SymfonyClass::REQUEST);
+            $this->requestVariableAndParamName = $this->getName($existingUntypedRequestParam);
+        } else {
+            $this->requestVariableAndParamName = $this->resolveUniqueName($classMethod, 'request');
+            $fullyQualified = new FullyQualified(SymfonyClass::REQUEST);
+            $classMethod->params[] = new Param(new Variable($this->getRequestVariableAndParamName()), null, $fullyQualified);
+        }
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use ($classMethod): ?Variable {
             if (!$node instanceof MethodCall) {
                 return null;
