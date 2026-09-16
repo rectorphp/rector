@@ -2710,6 +2710,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeFromTryCatchTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeFromTryCatchTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ArrayParamTypeByMethodCallTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ArrayParamTypeByMethodCallTypeRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanConstAndStrictReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanConstAndStrictReturnsRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanConstReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanConstReturnsRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanStrictReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanStrictReturnsRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\KnownMagicClassMethodTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/KnownMagicClassMethodTypeRector.php',

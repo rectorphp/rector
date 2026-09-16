@@ -29,6 +29,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnPar
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeFromTryCatchTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ArrayParamTypeByMethodCallTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanConstAndStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanConstReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\KnownMagicClassMethodTypeRector;
@@ -105,6 +106,7 @@ final class TypeDeclarationLevel
         StringReturnTypeFromStrictScalarReturnsRector::class,
         NumericReturnTypeFromStrictScalarReturnsRector::class,
         BoolReturnTypeFromBooleanStrictReturnsRector::class,
+        BoolReturnTypeFromBooleanConstAndStrictReturnsRector::class,
         StringReturnTypeFromStrictStringReturnsRector::class,
         NumericReturnTypeFromStrictReturnsRector::class,
         ReturnTypeFromStrictTernaryRector::class,
