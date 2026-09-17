@@ -120,7 +120,7 @@ CODE_SAMPLE
             return null;
         }
         $defaultExpr = $propertyItem->default;
-        if ($defaultExpr instanceof String_) {
+        if ($defaultExpr instanceof String_ || $defaultExpr instanceof Int_) {
             $propertyItem->default = (bool) $defaultExpr->value ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
             return $property;
         }
