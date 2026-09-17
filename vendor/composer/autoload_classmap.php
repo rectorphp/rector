@@ -1888,6 +1888,7 @@ return array(
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\StringCastAssertStringContainsStringRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/StringCastAssertStringContainsStringRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWithMethodRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWithMethodRector.php',
+    'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\WillReturnCallbackFallbackToReturnFalseRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/WillReturnCallbackFallbackToReturnFalseRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\WillReturnCallbackFallbackToThrowRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/WillReturnCallbackFallbackToThrowRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\WithCallbackIdenticalToStandaloneAssertsRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/WithCallbackIdenticalToStandaloneAssertsRector.php',
     'Rector\\PHPUnit\\CodeQuality\\Rector\\StmtsAwareInterface\\DeclareStrictTypesTestsRector' => $vendorDir . '/rector/rector-phpunit/rules/CodeQuality/Rector/StmtsAwareInterface/DeclareStrictTypesTestsRector.php',
