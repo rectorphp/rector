@@ -14,7 +14,7 @@
         "phpunit\/phpunit": "^13.2",
         "rector\/jack": "^1.0",
         "rector\/rector-src": "dev-main",
-        "rector\/swiss-knife": "^2.4",
+        "rector\/swiss-knife": "^2.6",
         "symplify\/easy-coding-standard": "^13.2",
         "symplify\/phpstan-extensions": "^12.0",
         "symplify\/phpstan-rules": "^14.13.1",
@@ -52,6 +52,7 @@
             "phpunit"
         ],
         "phpstan": "vendor\/bin\/phpstan analyse --ansi",
+        "duplicated-code": "vendor\/bin\/swiss-knife duplicated-code src rules --min-tokens 150 --min-lines 5",
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "class-leak": "vendor\/bin\/class-leak check config src rules --skip-suffix \"Rector\"",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",

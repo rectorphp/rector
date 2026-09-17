@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Orm32\Rector\MethodCall;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -102,7 +103,7 @@ CODE_SAMPLE
     /**
      * Extracts a normalized 'asc' or 'desc' string from Strings, Constants
      */
-    private function resolveSortDirectionValue(Node\Expr $expr): ?string
+    private function resolveSortDirectionValue(Expr $expr): ?string
     {
         if ($expr instanceof ClassConstFetch) {
             $constName = $this->getName($expr->name);

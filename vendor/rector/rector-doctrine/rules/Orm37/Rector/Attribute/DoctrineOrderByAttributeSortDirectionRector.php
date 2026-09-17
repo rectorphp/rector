@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Orm37\Rector\Attribute;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
@@ -86,7 +87,7 @@ CODE_SAMPLE
         }
         return $hasChanged ? $node : null;
     }
-    private function resolveSortDirectionValue(Node\Expr $expr): ?string
+    private function resolveSortDirectionValue(Expr $expr): ?string
     {
         if ($expr instanceof ClassConstFetch) {
             $constName = $this->getName($expr->name);
