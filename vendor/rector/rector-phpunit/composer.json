@@ -52,7 +52,7 @@
             "phpunit"
         ],
         "phpstan": "vendor\/bin\/phpstan analyse --ansi",
-        "duplicated-code": "vendor\/bin\/swiss-knife duplicated-code src rules --min-tokens 150 --min-lines 5",
+        "duplicated-code": "vendor\/bin\/swiss-knife duplicated-code src rules --min-tokens 100 --min-lines 5",
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "class-leak": "vendor\/bin\/class-leak check config src rules --skip-suffix \"Rector\"",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",

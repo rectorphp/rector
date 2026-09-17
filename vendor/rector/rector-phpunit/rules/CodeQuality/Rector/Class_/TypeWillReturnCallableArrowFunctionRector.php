@@ -4,28 +4,21 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Enum\ClassName;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockedMethodTypeResolver;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\SetUpAssignedMockTypesResolver;
 use Rector\PHPUnit\CodeQuality\Reflection\MethodParametersAndReturnTypesResolver;
+use Rector\PHPUnit\CodeQuality\ValueObject\MockedMethod;
 use Rector\PHPUnit\CodeQuality\ValueObject\ParamTypesAndReturnType;
-use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -58,16 +51,21 @@ final class TypeWillReturnCallableArrowFunctionRector extends AbstractRector
      */
     private ReflectionResolver $reflectionResolver;
     /**
+     * @readonly
+     */
+    private MockedMethodTypeResolver $mockedMethodTypeResolver;
+    /**
      * @var string
      */
     private const WILL_RETURN_CALLBACK = 'willReturnCallback';
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, StaticTypeMapper $staticTypeMapper, SetUpAssignedMockTypesResolver $setUpAssignedMockTypesResolver, MethodParametersAndReturnTypesResolver $methodParametersAndReturnTypesResolver, ReflectionResolver $reflectionResolver)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, StaticTypeMapper $staticTypeMapper, SetUpAssignedMockTypesResolver $setUpAssignedMockTypesResolver, MethodParametersAndReturnTypesResolver $methodParametersAndReturnTypesResolver, ReflectionResolver $reflectionResolver, MockedMethodTypeResolver $mockedMethodTypeResolver)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->setUpAssignedMockTypesResolver = $setUpAssignedMockTypesResolver;
         $this->methodParametersAndReturnTypesResolver = $methodParametersAndReturnTypesResolver;
         $this->reflectionResolver = $reflectionResolver;
+        $this->mockedMethodTypeResolver = $mockedMethodTypeResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -157,25 +155,14 @@ CODE_SAMPLE
             if (!$this->isName($parentMethodCall->name, 'method')) {
                 return null;
             }
-            $methodNameExpr = $parentMethodCall->getArgs()[0]->value;
-            if (!$methodNameExpr instanceof String_) {
+            $mockedMethod = $this->mockedMethodTypeResolver->resolve($parentMethodCall, $propertyNameToMockedTypes);
+            if (!$mockedMethod instanceof MockedMethod) {
                 return null;
             }
-            $methodName = $methodNameExpr->value;
-            $callerType = $this->getType($parentMethodCall->var);
-            if ($callerType instanceof ObjectType && in_array($callerType->getClassName(), [PHPUnitClassName::INVOCATION_MOCKER, PHPUnitClassName::INVOCATION_MOCKER_INTERFACE, PHPUnitClassName::INVOCATION_STUBBER], \true)) {
-                $parentMethodCall = $parentMethodCall->var;
-                if ($parentMethodCall instanceof MethodCall) {
-                    $callerType = $this->getType($parentMethodCall->var);
-                }
-            }
-            $callerType = $this->fallbackMockedObjectInSetUp($callerType, $parentMethodCall, $propertyNameToMockedTypes);
-            // we need mocks
-            if (!$callerType instanceof IntersectionType) {
-                return null;
-            }
+            $methodName = $mockedMethod->getMethodName();
+            $intersectionType = $mockedMethod->getCallerType();
             $hasChanged = \false;
-            $parameterTypesAndReturnType = $this->methodParametersAndReturnTypesResolver->resolveFromReflection($callerType, $methodName, $currentClassReflection);
+            $parameterTypesAndReturnType = $this->methodParametersAndReturnTypesResolver->resolveFromReflection($intersectionType, $methodName, $currentClassReflection);
             if (!$parameterTypesAndReturnType instanceof ParamTypesAndReturnType) {
                 return null;
             }
@@ -248,37 +235,6 @@ CODE_SAMPLE
             }
         }
         return null;
-    }
-    /**
-     * @param array<string, string> $propertyNameToMockedTypes
-     * @return mixed
-     */
-    private function fallbackMockedObjectInSetUp(Type $callerType, Expr $expr, array $propertyNameToMockedTypes)
-    {
-        if (!$callerType instanceof ObjectType && !$callerType instanceof NeverType) {
-            return $callerType;
-        }
-        if (!$expr instanceof MethodCall) {
-            return $callerType;
-        }
-        if ($callerType instanceof ObjectType && $callerType->getClassName() !== ClassName::MOCK_OBJECT) {
-            return $callerType;
-        }
-        // type is missing, because of "final" keyword on mocked class
-        // resolve from constructor instead
-        if (!$expr->var instanceof PropertyFetch && !$expr->var instanceof Variable) {
-            return $callerType;
-        }
-        if ($expr->var instanceof Variable) {
-            $propertyOrVariableName = $this->getName($expr->var);
-        } else {
-            $propertyOrVariableName = $this->getName($expr->var->name);
-        }
-        if (isset($propertyNameToMockedTypes[$propertyOrVariableName])) {
-            $mockedType = $propertyNameToMockedTypes[$propertyOrVariableName];
-            return new IntersectionType([$callerType, new ObjectType($mockedType)]);
-        }
-        return $callerType;
     }
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
