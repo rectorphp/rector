@@ -54,6 +54,7 @@ use Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadIfBlockRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
+use Rector\DeadCode\Rector\If_\RemoveOverriddenAssignBeforeIfElseRector;
 use Rector\DeadCode\Rector\If_\RemoveTypedPropertyDeadInstanceOfRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
@@ -106,6 +107,7 @@ final class DeadCodeLevel
         SimplifyMirrorAssignRector::class,
         RemoveDeadContinueRector::class,
         RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
+        RemoveOverriddenAssignBeforeIfElseRector::class,
         RemoveNullPropertyInitializationRector::class,
         RemoveDefaultValueFromAssignedPropertyRector::class,
         RemoveUselessReturnExprInConstructRector::class,
