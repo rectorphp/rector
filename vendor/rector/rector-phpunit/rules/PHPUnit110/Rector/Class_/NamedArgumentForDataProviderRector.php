@@ -205,6 +205,10 @@ CODE_SAMPLE
         if (array_intersect($dataProviderNameMapping, $allArrayKeyNames) === $dataProviderNameMapping) {
             return \false;
         }
+        // Skip already named arguments - optional parameters can be left out
+        if ($allArrayKeyNames !== [] && array_diff($allArrayKeyNames, $dataProviderNameMapping) === []) {
+            return \false;
+        }
         foreach ($array->items as $arrayIndex => $arrayItem) {
             if (!isset($dataProviderNameMapping[$arrayIndex])) {
                 continue;
