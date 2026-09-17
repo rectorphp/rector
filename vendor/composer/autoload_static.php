@@ -1636,6 +1636,7 @@ class ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a
         'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\CastDoctrineExprToStringRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/CastDoctrineExprToStringRector.php',
         'Rector\\Doctrine\\Orm30\\Rector\\MethodCall\\SetParametersArrayToCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm30/Rector/MethodCall/SetParametersArrayToCollectionRector.php',
         'Rector\\Doctrine\\Orm32\\Rector\\MethodCall\\DoctrineQueryBuilderSortDirectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm32/Rector/MethodCall/DoctrineQueryBuilderSortDirectionRector.php',
+        'Rector\\Doctrine\\Orm37\\Rector\\Attribute\\DoctrineOrderByAttributeSortDirectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm37/Rector/Attribute/DoctrineOrderByAttributeSortDirectionRector.php',
         'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
         'Rector\\Doctrine\\Set\\DoctrineSetList' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeFactory.php',

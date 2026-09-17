@@ -8,7 +8,7 @@
     },
     "require-dev": {
         "doctrine\/doctrine-bundle": "^3.0",
-        "doctrine\/orm": "^3.2",
+        "doctrine\/orm": "^3.7",
         "symplify\/easy-coding-standard": "^13.2",
         "phpstan\/extension-installer": "^1.4",
         "phpstan\/phpstan": "^2.2",
