@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a
+class ComposerStaticInit24b35260b75c0a1604caf1aca9943962
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -23,7 +23,6 @@ class ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a
         'R' =>
         array (
             'Rector\\Utils\\PHPStan\\' => 21,
-            'Rector\\Utils\\Duplicates\\' => 24,
             'Rector\\Utils\\' => 13,
             'Rector\\Symfony\\' => 15,
             'Rector\\RectorInstaller\\' => 23,
@@ -77,10 +76,6 @@ class ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a
         'Rector\\Utils\\PHPStan\\' =>
         array (
             0 => __DIR__ . '/../..' . '/utils/phpstan/src',
-        ),
-        'Rector\\Utils\\Duplicates\\' =>
-        array (
-            0 => __DIR__ . '/../..' . '/utils/duplicates/src',
         ),
         'Rector\\Utils\\' =>
         array (
@@ -3094,9 +3089,9 @@ class ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit45619ed68c5a66bf26cf1b24fc24f27a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit24b35260b75c0a1604caf1aca9943962::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit24b35260b75c0a1604caf1aca9943962::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit24b35260b75c0a1604caf1aca9943962::$classMap;
 
         }, null, ClassLoader::class);
     }
