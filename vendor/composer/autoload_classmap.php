@@ -1402,6 +1402,7 @@ return array(
     'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',
     'Rector\\Doctrine\\NodeAnalyzer\\DoctrineEntityDetector' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/DoctrineEntityDetector.php',
     'Rector\\Doctrine\\NodeAnalyzer\\MethodUniqueReturnedPropertyResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/MethodUniqueReturnedPropertyResolver.php',
+    'Rector\\Doctrine\\NodeAnalyzer\\SortDirectionResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/SortDirectionResolver.php',
     'Rector\\Doctrine\\NodeAnalyzer\\TargetEntityResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/TargetEntityResolver.php',
     'Rector\\Doctrine\\NodeFactory\\ArrayCollectionAssignFactory' => $vendorDir . '/rector/rector-doctrine/src/NodeFactory/ArrayCollectionAssignFactory.php',
     'Rector\\Doctrine\\NodeManipulator\\ColumnPropertyTypeResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeManipulator/ColumnPropertyTypeResolver.php',

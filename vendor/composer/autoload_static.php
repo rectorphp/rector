@@ -1622,6 +1622,7 @@ class ComposerStaticInit24b35260b75c0a1604caf1aca9943962
         'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',
         'Rector\\Doctrine\\NodeAnalyzer\\DoctrineEntityDetector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/DoctrineEntityDetector.php',
         'Rector\\Doctrine\\NodeAnalyzer\\MethodUniqueReturnedPropertyResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/MethodUniqueReturnedPropertyResolver.php',
+        'Rector\\Doctrine\\NodeAnalyzer\\SortDirectionResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/SortDirectionResolver.php',
         'Rector\\Doctrine\\NodeAnalyzer\\TargetEntityResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/TargetEntityResolver.php',
         'Rector\\Doctrine\\NodeFactory\\ArrayCollectionAssignFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/ArrayCollectionAssignFactory.php',
         'Rector\\Doctrine\\NodeManipulator\\ColumnPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ColumnPropertyTypeResolver.php',

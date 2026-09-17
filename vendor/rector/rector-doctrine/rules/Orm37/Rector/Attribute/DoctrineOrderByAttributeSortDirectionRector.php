@@ -3,12 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Orm37\Rector\Attribute;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ClassConstFetch;
-use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Doctrine\NodeAnalyzer\SortDirectionResolver;
 use Rector\Rector\AbstractRector;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
@@ -23,10 +21,10 @@ final class DoctrineOrderByAttributeSortDirectionRector extends AbstractRector i
     /**
      * @readonly
      */
-    private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    private SortDirectionResolver $sortDirectionResolver;
+    public function __construct(SortDirectionResolver $sortDirectionResolver)
     {
-        $this->valueResolver = $valueResolver;
+        $this->sortDirectionResolver = $sortDirectionResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -76,7 +74,7 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         foreach ($firstArgValue->items as $arrayItem) {
-            $direction = $this->resolveSortDirectionValue($arrayItem->value);
+            $direction = $this->sortDirectionResolver->resolve($arrayItem->value);
             if ($direction === 'asc') {
                 $arrayItem->value = $this->nodeFactory->createClassConstFetch('SortDirection', 'Ascending');
                 $hasChanged = \true;
@@ -86,28 +84,5 @@ CODE_SAMPLE
             }
         }
         return $hasChanged ? $node : null;
-    }
-    private function resolveSortDirectionValue(Expr $expr): ?string
-    {
-        if ($expr instanceof ClassConstFetch) {
-            $constName = $this->getName($expr->name);
-            if (is_string($constName)) {
-                $normalized = strtolower($constName);
-                if (in_array($normalized, ['asc', 'ascending'], \true)) {
-                    return 'asc';
-                }
-                if (in_array($normalized, ['desc', 'descending'], \true)) {
-                    return 'desc';
-                }
-            }
-        }
-        $value = $this->valueResolver->getValue($expr);
-        if (is_string($value)) {
-            $normalized = strtolower($value);
-            if ($normalized === 'asc' || $normalized === 'desc') {
-                return $normalized;
-            }
-        }
-        return null;
     }
 }
