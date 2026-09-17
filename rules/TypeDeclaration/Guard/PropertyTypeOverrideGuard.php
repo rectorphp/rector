@@ -24,7 +24,10 @@ final class PropertyTypeOverrideGuard
     }
     public function isLegal(Property $property, ClassReflection $classReflection): bool
     {
-        if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection)) {
+        // protected property on a non-final class may be redeclared untyped in a child class,
+        // which would cause a covariance fatal error once only the parent is typed
+        $inlinePublic = !$property->isProtected();
+        if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection, $inlinePublic)) {
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
