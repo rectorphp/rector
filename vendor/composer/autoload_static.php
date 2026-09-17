@@ -2640,6 +2640,7 @@ class ComposerStaticInit24b35260b75c0a1604caf1aca9943962
         'Rector\\Symfony\\Contract\\Tag\\TagInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',
         'Rector\\Symfony\\DataProvider\\ServiceMapProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/ServiceMapProvider.php',
         'Rector\\Symfony\\DataProvider\\ServiceNameToTypeUniqueProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/ServiceNameToTypeUniqueProvider.php',
+        'Rector\\Symfony\\DependencyInjection\\ContainerGetToConstructorInjectionReplacer' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DependencyInjection/ContainerGetToConstructorInjectionReplacer.php',
         'Rector\\Symfony\\DependencyInjection\\NodeDecorator\\CommandConstructorDecorator' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DependencyInjection/NodeDecorator/CommandConstructorDecorator.php',
         'Rector\\Symfony\\DependencyInjection\\Rector\\Class_\\CommandGetByTypeToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DependencyInjection/Rector/Class_/CommandGetByTypeToConstructorInjectionRector.php',
         'Rector\\Symfony\\DependencyInjection\\Rector\\Class_\\ControllerGetByTypeToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DependencyInjection/Rector/Class_/ControllerGetByTypeToConstructorInjectionRector.php',

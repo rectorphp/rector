@@ -4,17 +4,12 @@ declare (strict_types=1);
 namespace Rector\Symfony\DependencyInjection\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PHPStan\ScopeFetcher;
-use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\Symfony\DependencyInjection\ContainerGetToConstructorInjectionReplacer;
 use Rector\Symfony\DependencyInjection\NodeDecorator\CommandConstructorDecorator;
-use Rector\Symfony\DependencyInjection\ThisGetTypeMatcher;
 use Rector\Symfony\Enum\SymfonyClass;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,25 +21,15 @@ final class CommandGetByTypeToConstructorInjectionRector extends AbstractRector
     /**
      * @readonly
      */
-    private ClassDependencyManipulator $classDependencyManipulator;
-    /**
-     * @readonly
-     */
-    private PropertyNaming $propertyNaming;
-    /**
-     * @readonly
-     */
     private CommandConstructorDecorator $commandConstructorDecorator;
     /**
      * @readonly
      */
-    private ThisGetTypeMatcher $thisGetTypeMatcher;
-    public function __construct(ClassDependencyManipulator $classDependencyManipulator, PropertyNaming $propertyNaming, CommandConstructorDecorator $commandConstructorDecorator, ThisGetTypeMatcher $thisGetTypeMatcher)
+    private ContainerGetToConstructorInjectionReplacer $containerGetToConstructorInjectionReplacer;
+    public function __construct(CommandConstructorDecorator $commandConstructorDecorator, ContainerGetToConstructorInjectionReplacer $containerGetToConstructorInjectionReplacer)
     {
-        $this->classDependencyManipulator = $classDependencyManipulator;
-        $this->propertyNaming = $propertyNaming;
         $this->commandConstructorDecorator = $commandConstructorDecorator;
-        $this->thisGetTypeMatcher = $thisGetTypeMatcher;
+        $this->containerGetToConstructorInjectionReplacer = $containerGetToConstructorInjectionReplacer;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -91,25 +76,8 @@ CODE_SAMPLE
         if ($this->shouldSkipClass($node)) {
             return null;
         }
-        $propertyMetadatas = [];
-        $this->traverseNodesWithCallable($node, function (Node $node) use (&$propertyMetadatas): ?Node {
-            if (!$node instanceof MethodCall) {
-                return null;
-            }
-            $className = $this->thisGetTypeMatcher->match($node);
-            if (!is_string($className)) {
-                return null;
-            }
-            $propertyName = $this->propertyNaming->fqnToVariableName($className);
-            $propertyMetadata = new PropertyMetadata($propertyName, new FullyQualifiedObjectType($className));
-            $propertyMetadatas[] = $propertyMetadata;
-            return $this->nodeFactory->createPropertyFetch('this', $propertyMetadata->getName());
-        });
-        if ($propertyMetadatas === []) {
+        if (!$this->containerGetToConstructorInjectionReplacer->replace($node)) {
             return null;
-        }
-        foreach ($propertyMetadatas as $propertyMetadata) {
-            $this->classDependencyManipulator->addConstructorDependency($node, $propertyMetadata);
         }
         $this->commandConstructorDecorator->decorate($node);
         return $node;

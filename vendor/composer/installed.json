@@ -1731,12 +1731,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "01d10ed432f17fa3d30a7a73a9d3655606907c03"
+                "reference": "6eeb36dbd429aa505cf9554b78983e8b1e70749e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/01d10ed432f17fa3d30a7a73a9d3655606907c03",
-                "reference": "01d10ed432f17fa3d30a7a73a9d3655606907c03",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/6eeb36dbd429aa505cf9554b78983e8b1e70749e",
+                "reference": "6eeb36dbd429aa505cf9554b78983e8b1e70749e",
                 "shasum": ""
             },
             "require": {
@@ -1751,7 +1751,7 @@
                 "phpunit\/phpunit": "^13.2",
                 "rector\/jack": "^1.0",
                 "rector\/rector-src": "dev-main",
-                "rector\/swiss-knife": "^2.4",
+                "rector\/swiss-knife": "^2.6",
                 "symfony\/config": "^8.1",
                 "symfony\/dependency-injection": "^6.4",
                 "symfony\/http-kernel": "^7.4",
@@ -1768,7 +1768,7 @@
                 "tracy\/tracy": "^2.12",
                 "twig\/twig": "^3.21"
             },
-            "time": "2026-09-16T14:46:52+00:00",
+            "time": "2026-09-17T22:50:44+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
