@@ -8,13 +8,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\MixedType;
+use Rector\CodeQuality\NodeAnalyzer\ExplicitBoolConditionResolver;
+use Rector\CodeQuality\ValueObject\ExplicitBoolCondition;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -28,9 +27,14 @@ final class ArrayExplicitBoolCompareRector extends AbstractRector
      * @readonly
      */
     private ArrayTypeAnalyzer $arrayTypeAnalyzer;
-    public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer)
+    /**
+     * @readonly
+     */
+    private ExplicitBoolConditionResolver $explicitBoolConditionResolver;
+    public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer, ExplicitBoolConditionResolver $explicitBoolConditionResolver)
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+        $this->explicitBoolConditionResolver = $explicitBoolConditionResolver;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -70,28 +74,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // skip short ternary
-        if ($node instanceof Ternary && !$node->if instanceof Expr) {
+        $explicitBoolCondition = $this->explicitBoolConditionResolver->resolve($node);
+        if (!$explicitBoolCondition instanceof ExplicitBoolCondition) {
             return null;
         }
-        if ($node->cond instanceof BooleanNot) {
-            $conditionNode = $node->cond->expr;
-            $isNegated = \true;
-        } else {
-            $conditionNode = $node->cond;
-            $isNegated = \false;
-        }
-        if ($conditionNode instanceof Bool_) {
+        $expr = $explicitBoolCondition->getConditionNode();
+        if (!$this->arrayTypeAnalyzer->isArrayType($expr)) {
             return null;
         }
-        $conditionStaticType = $this->nodeTypeResolver->getNativeType($conditionNode);
-        if ($conditionStaticType instanceof MixedType || $conditionStaticType->isBoolean()->yes()) {
-            return null;
-        }
-        if (!$this->arrayTypeAnalyzer->isArrayType($conditionNode)) {
-            return null;
-        }
-        $binaryOp = $this->resolveArray($isNegated, $conditionNode);
+        $binaryOp = $this->resolveArray($explicitBoolCondition->isNegated(), $expr);
         if (!$binaryOp instanceof Expr) {
             return null;
         }

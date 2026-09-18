@@ -6,14 +6,14 @@ namespace Rector\CodeQuality\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use Rector\CodeQuality\NodeAnalyzer\ExplicitBoolConditionResolver;
+use Rector\CodeQuality\ValueObject\ExplicitBoolCondition;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,6 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ObjectExplicitBoolCompareRector extends AbstractRector
 {
+    /**
+     * @readonly
+     */
+    private ExplicitBoolConditionResolver $explicitBoolConditionResolver;
+    public function __construct(ExplicitBoolConditionResolver $explicitBoolConditionResolver)
+    {
+        $this->explicitBoolConditionResolver = $explicitBoolConditionResolver;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make nullable object if conditions more explicit', [new CodeSample(<<<'CODE_SAMPLE'
@@ -60,29 +68,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // skip short ternary
-        if ($node instanceof Ternary && !$node->if instanceof Expr) {
+        $explicitBoolCondition = $this->explicitBoolConditionResolver->resolve($node);
+        if (!$explicitBoolCondition instanceof ExplicitBoolCondition) {
             return null;
         }
-        if ($node->cond instanceof BooleanNot) {
-            $conditionNode = $node->cond->expr;
-            $isNegated = \true;
-        } else {
-            $conditionNode = $node->cond;
-            $isNegated = \false;
-        }
-        if ($conditionNode instanceof Bool_) {
-            return null;
-        }
-        $conditionStaticType = $this->nodeTypeResolver->getNativeType($conditionNode);
-        if ($conditionStaticType instanceof MixedType || $conditionStaticType->isBoolean()->yes()) {
-            return null;
-        }
-        $objectType = $this->nodeTypeResolver->matchNullableTypeOfSpecificType($conditionNode, ObjectType::class);
+        $expr = $explicitBoolCondition->getConditionNode();
+        $objectType = $this->nodeTypeResolver->matchNullableTypeOfSpecificType($expr, ObjectType::class);
         if (!$objectType instanceof ObjectType) {
             return null;
         }
-        $node->cond = $this->resolveNullable($isNegated, $conditionNode, $objectType);
+        $node->cond = $this->resolveNullable($explicitBoolCondition->isNegated(), $expr, $objectType);
         return $node;
     }
     /**

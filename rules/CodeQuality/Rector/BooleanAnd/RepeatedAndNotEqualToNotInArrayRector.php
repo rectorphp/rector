@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use Rector\CodeQuality\NodeFactory\InArrayFromRepeatedCompareFactory;
 use Rector\CodeQuality\ValueObject\ComparedExprAndValueExpr;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -27,9 +28,14 @@ final class RepeatedAndNotEqualToNotInArrayRector extends AbstractRector
      * @readonly
      */
     private BetterNodeFinder $betterNodeFinder;
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     */
+    private InArrayFromRepeatedCompareFactory $inArrayFromRepeatedCompareFactory;
+    public function __construct(BetterNodeFinder $betterNodeFinder, InArrayFromRepeatedCompareFactory $inArrayFromRepeatedCompareFactory)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->inArrayFromRepeatedCompareFactory = $inArrayFromRepeatedCompareFactory;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -69,21 +75,10 @@ CODE_SAMPLE
         if ($comparedExprAndValueExprs === null) {
             return null;
         }
-        if (count($comparedExprAndValueExprs) < 3) {
+        $args = $this->inArrayFromRepeatedCompareFactory->createInArrayArgs($comparedExprAndValueExprs);
+        if ($args === null) {
             return null;
         }
-        // ensure all compared expr are the same
-        $valueExprs = $this->resolveValueExprs($comparedExprAndValueExprs);
-        /** @var ComparedExprAndValueExpr $firstComparedExprAndValue */
-        $firstComparedExprAndValue = array_pop($comparedExprAndValueExprs);
-        // all compared expr must be equal
-        foreach ($comparedExprAndValueExprs as $comparedExprAndValueExpr) {
-            if (!$this->nodeComparator->areNodesEqual($firstComparedExprAndValue->getComparedExpr(), $comparedExprAndValueExpr->getComparedExpr())) {
-                return null;
-            }
-        }
-        $array = $this->nodeFactory->createArray($valueExprs);
-        $args = $this->nodeFactory->createArgs([$firstComparedExprAndValue->getComparedExpr(), $array]);
         if ($this->isStrictComparison($node)) {
             $args[] = new Arg(new ConstFetch(new Name('true')));
         }
@@ -103,18 +98,6 @@ CODE_SAMPLE
     private function matchComparedExprAndValueExpr($expr): ComparedExprAndValueExpr
     {
         return new ComparedExprAndValueExpr($expr->left, $expr->right);
-    }
-    /**
-     * @param ComparedExprAndValueExpr[] $comparedExprAndValueExprs
-     * @return Expr[]
-     */
-    private function resolveValueExprs(array $comparedExprAndValueExprs): array
-    {
-        $valueExprs = [];
-        foreach ($comparedExprAndValueExprs as $comparedExprAndValueExpr) {
-            $valueExprs[] = $comparedExprAndValueExpr->getValueExpr();
-        }
-        return $valueExprs;
     }
     /**
      * @return null|ComparedExprAndValueExpr[]
