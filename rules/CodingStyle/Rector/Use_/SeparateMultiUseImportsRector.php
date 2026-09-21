@@ -8,7 +8,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
-use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
 use PhpParser\Node\Stmt\Use_;
 use Rector\PhpParser\Node\FileNode;
 use Rector\Rector\AbstractRector;
@@ -105,11 +104,23 @@ CODE_SAMPLE
         if (count($traitUse->traits) < 2) {
             return null;
         }
+        $traitNames = array_map(static fn(Name $trait): string => $trait->toString(), $traitUse->traits);
+        foreach ($traitUse->adaptations as $traitAdaptation) {
+            // an adaptation that names no trait applies to all of them, and one that
+            // names a trait used elsewhere belongs to no statement here; either way it
+            // cannot follow a single trait, so the statement is left alone
+            if (!$traitAdaptation->trait instanceof Name) {
+                return null;
+            }
+            if (!in_array($traitAdaptation->trait->toString(), $traitNames, \true)) {
+                return null;
+            }
+        }
         $traitUses = [];
         foreach ($traitUse->traits as $singleTraitUse) {
             $adaptation = [];
             foreach ($traitUse->adaptations as $traitAdaptation) {
-                if ($traitAdaptation instanceof Alias && $traitAdaptation->trait instanceof Name && $traitAdaptation->trait->toString() === $singleTraitUse->toString()) {
+                if ($traitAdaptation->trait instanceof Name && $traitAdaptation->trait->toString() === $singleTraitUse->toString()) {
                     $adaptation[] = $traitAdaptation;
                 }
             }
