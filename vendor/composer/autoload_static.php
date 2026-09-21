@@ -1793,6 +1793,7 @@ class ComposerStaticInit24b35260b75c0a1604caf1aca9943962
         'Rector\\DowngradePhp83\\Rector\\Class_\\DowngradeReadonlyAnonymousClassRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/Class_/DowngradeReadonlyAnonymousClassRector.php',
         'Rector\\DowngradePhp83\\Rector\\FuncCall\\DowngradeJsonValidateRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp83/Rector/FuncCall/DowngradeJsonValidateRector.php',
         'Rector\\DowngradePhp84\\Rector\\ClassMethod\\DowngradeDeprecatedAttributeRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/ClassMethod/DowngradeDeprecatedAttributeRector.php',
+        'Rector\\DowngradePhp84\\Rector\\Class_\\DowngradeFinalPropertyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Class_/DowngradeFinalPropertyRector.php',
         'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayAllRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayAllRector.php',
         'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayAnyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayAnyRector.php',
         'Rector\\DowngradePhp84\\Rector\\Expression\\DowngradeArrayFindKeyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp84/Rector/Expression/DowngradeArrayFindKeyRector.php',
