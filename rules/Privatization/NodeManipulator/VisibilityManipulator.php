@@ -9,6 +9,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\ValueObject\MethodName;
 use Rector\ValueObject\Visibility;
 use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
@@ -16,6 +18,14 @@ use RectorPrefix202609\Webmozart\Assert\Assert;
  */
 final class VisibilityManipulator
 {
+    /**
+     * @readonly
+     */
+    private NodeNameResolver $nodeNameResolver;
+    public function __construct(NodeNameResolver $nodeNameResolver)
+    {
+        $this->nodeNameResolver = $nodeNameResolver;
+    }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Param $node
      */
@@ -101,6 +111,11 @@ final class VisibilityManipulator
     public function makePrivate($node): void
     {
         $this->replaceVisibilityFlag($node, Visibility::PRIVATE);
+        // only constructor can be both private and final
+        if ($node instanceof ClassMethod && $this->nodeNameResolver->isName($node, MethodName::CONSTRUCT)) {
+            return;
+        }
+        $node->flags &= ~Modifiers::FINAL;
     }
     /**
      * @api

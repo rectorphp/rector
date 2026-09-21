@@ -104,7 +104,7 @@ CODE_SAMPLE
         if (count($traitUse->traits) < 2) {
             return null;
         }
-        $traitNames = array_map(static fn(Name $trait): string => $trait->toString(), $traitUse->traits);
+        $traitNames = array_map(static fn(Name $name): string => $name->toString(), $traitUse->traits);
         foreach ($traitUse->adaptations as $traitAdaptation) {
             // an adaptation that names no trait applies to all of them, and one that
             // names a trait used elsewhere belongs to no statement here; either way it
