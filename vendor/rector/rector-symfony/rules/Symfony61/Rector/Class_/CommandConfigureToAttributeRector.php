@@ -140,11 +140,13 @@ CODE_SAMPLE
             Assert::isInstanceOf($arg->name, Identifier::class);
             return $arg->name->toString();
         }, $attributeArgs);
+        $hasChanged = \false;
         foreach (self::METHODS_TO_ATTRIBUTE_NAMES as $methodName => $attributeName) {
             $resolvedExpr = $this->findAndRemoveMethodExpr($configureClassMethod, $methodName);
             if (!$resolvedExpr instanceof Expr) {
                 continue;
             }
+            $hasChanged = \true;
             if (in_array($attributeName, $existingAttributeNames, \true)) {
                 continue;
             }
@@ -160,7 +162,6 @@ CODE_SAMPLE
             }
             $asCommandAttribute->args = $attributeArgs;
         }
-        $hasChanged = $attributeArgs !== [];
         // remove left overs
         foreach ((array) $configureClassMethod->stmts as $key => $stmt) {
             if ($this->isExpressionVariableThis($stmt)) {
