@@ -106,6 +106,8 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
         if (is_string($this->inputFilePath)) {
             FileSystem::delete($this->inputFilePath);
         }
+        // a next test that does not set its own paths would still locate the deleted file
+        $this->dynamicSourceLocatorProvider->reset();
     }
     protected static function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
