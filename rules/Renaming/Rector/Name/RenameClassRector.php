@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
@@ -110,6 +111,11 @@ CODE_SAMPLE
     {
         Assert::allString($configuration);
         Assert::allString(array_keys($configuration));
+        foreach ($configuration as $oldClass => $newClass) {
+            if ($oldClass === $newClass) {
+                throw new InvalidConfigurationException(sprintf('Rename "%s" class to a different one, as the old and new class name are the same', $oldClass));
+            }
+        }
         $this->renamedClassesDataCollector->addOldToNewClasses($configuration);
     }
     /**
