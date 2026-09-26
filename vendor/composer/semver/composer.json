@@ -1,6 +1,6 @@
 {
     "name": "composer\/semver",
-    "description": "Semver library that offers utilities, version constraint parsing and validation.",
+    "description": "Version comparison library that offers utilities, version constraint parsing and validation.",
     "type": "library",
     "license": "MIT",
     "keywords": [

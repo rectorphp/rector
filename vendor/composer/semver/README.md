@@ -1,7 +1,10 @@
 composer/semver
 ===============
 
-Semver (Semantic Versioning) library that offers utilities, version constraint parsing and validation.
+Version comparison library that offers utilities, version constraint parsing and validation.
+
+It follows semver (semantic versioning) where possible but is also constrained by
+`version_compare` and backwards compatibility and as such cannot implement semver strictly.
 
 Originally written as part of [composer/composer](https://github.com/composer/composer),
 now extracted and made available as a stand-alone library.
@@ -36,7 +39,32 @@ article in the documentation section of the [getcomposer.org](https://getcompose
 Basic usage
 -----------
 
-### Comparator
+### Validation / Normalization
+
+The [`Composer\Semver\VersionParser`](https://github.com/composer/semver/blob/main/src/VersionParser.php)
+class provides the following methods for parsing, normalizing and validating versions and constraints.
+
+Numeric versions are normalized to a 4 component versions (e.g. `1.2.3` is normalized to `1.2.3.0`)
+for internal consistency and compatibility with `version_compare`. Normalized versions are used for
+constraints internally but should not be shown to end users.
+
+For versions:
+
+* isValid($version)
+* normalize($version, $fullVersion = null)
+* normalizeBranch($name)
+* normalizeDefaultBranch($name)
+
+For constraints:
+
+* parseConstraints($constraints)
+
+For stabilities:
+
+* parseStability($version)
+* normalizeStability($stability)
+
+### Comparison
 
 The [`Composer\Semver\Comparator`](https://github.com/composer/semver/blob/main/src/Comparator.php) class provides the following methods for comparing versions:
 
