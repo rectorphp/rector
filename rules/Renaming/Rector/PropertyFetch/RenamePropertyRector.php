@@ -10,9 +10,11 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,10 +25,18 @@ use RectorPrefix202609\Webmozart\Assert\Assert;
 final class RenamePropertyRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
+     */
+    private ReflectionResolver $reflectionResolver;
+    /**
      * @var RenameProperty[]
      */
     private array $renamedProperties = [];
     private bool $hasChanged = \false;
+    public function __construct(ReflectionResolver $reflectionResolver)
+    {
+        $this->reflectionResolver = $reflectionResolver;
+    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace defined old properties by new ones', [new ConfiguredCodeSample('$someObject->someOldProperty;', '$someObject->someNewProperty;', [new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')])]);
@@ -65,17 +75,17 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     }
     private function renameProperty(ClassLike $classLike, RenameProperty $renameProperty): void
     {
+        $property = $classLike->getProperty($renameProperty->getOldProperty());
+        if (!$property instanceof Property) {
+            return;
+        }
         $classLikeName = (string) $this->getName($classLike);
         $renamePropertyObjectType = $renameProperty->getObjectType();
         $className = $renamePropertyObjectType->getClassName();
         $classLikeNameObjectType = new ObjectType($classLikeName);
         $classNameObjectType = new ObjectType($className);
         $isSuperType = $classNameObjectType->isSuperTypeOf($classLikeNameObjectType)->yes();
-        if ($classLikeName !== $className && !$isSuperType) {
-            return;
-        }
-        $property = $classLike->getProperty($renameProperty->getOldProperty());
-        if (!$property instanceof Property) {
+        if ($classLikeName !== $className && !$isSuperType && !$this->isUsingTrait($classLike, $className)) {
             return;
         }
         $newProperty = $renameProperty->getNewProperty();
@@ -85,6 +95,14 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
         }
         $this->hasChanged = \true;
         $property->props[0]->name = new VarLikeIdentifier($newProperty);
+    }
+    private function isUsingTrait(ClassLike $classLike, string $traitName): bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classLike);
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        return $classReflection->hasTraitUse($traitName);
     }
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
