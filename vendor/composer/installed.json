@@ -493,24 +493,24 @@
         },
         {
             "name": "fidry\/cpu-core-counter",
-            "version": "1.3.0",
-            "version_normalized": "1.3.0.0",
+            "version": "1.4.0",
+            "version_normalized": "1.4.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/theofidry\/cpu-core-counter.git",
-                "reference": "db9508f7b1474469d9d3c53b86f817e344732678"
+                "reference": "7cbeb03e286fa81b2bbe0e6bd6b8a27c71a3144d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/theofidry\/cpu-core-counter\/zipball\/db9508f7b1474469d9d3c53b86f817e344732678",
-                "reference": "db9508f7b1474469d9d3c53b86f817e344732678",
+                "url": "https:\/\/api.github.com\/repos\/theofidry\/cpu-core-counter\/zipball\/7cbeb03e286fa81b2bbe0e6bd6b8a27c71a3144d",
+                "reference": "7cbeb03e286fa81b2bbe0e6bd6b8a27c71a3144d",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "fidry\/makefile": "^0.2.0",
+                "fidry\/makefile": "^0.2.0 || ^1.1.2",
                 "fidry\/php-cs-fixer-config": "^1.1.2",
                 "phpstan\/extension-installer": "^1.2.0",
                 "phpstan\/phpstan": "^2.0",
@@ -518,9 +518,10 @@
                 "phpstan\/phpstan-phpunit": "^2.0",
                 "phpstan\/phpstan-strict-rules": "^2.0",
                 "phpunit\/phpunit": "^8.5.31 || ^9.5.26",
+                "symfony\/polyfill-mbstring": "^1.33",
                 "webmozarts\/strict-phpunit": "^7.5"
             },
-            "time": "2025-08-14T07:29:31+00:00",
+            "time": "2026-09-27T17:40:20+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -545,7 +546,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/theofidry\/cpu-core-counter\/issues",
-                "source": "https:\/\/github.com\/theofidry\/cpu-core-counter\/tree\/1.3.0"
+                "source": "https:\/\/github.com\/theofidry\/cpu-core-counter\/tree\/1.4.0"
             },
             "funding": [
                 {
@@ -792,17 +793,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "2.3.5",
-            "version_normalized": "2.3.5.0",
+            "version": "2.3.6",
+            "version_normalized": "2.3.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "148cefffaf0233e4c08cc13db8a195a56dd6dfe9"
+                "reference": "1427af4647235b4a73b13940b1f1258d3584f36e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/148cefffaf0233e4c08cc13db8a195a56dd6dfe9",
-                "reference": "148cefffaf0233e4c08cc13db8a195a56dd6dfe9",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/1427af4647235b4a73b13940b1f1258d3584f36e",
+                "reference": "1427af4647235b4a73b13940b1f1258d3584f36e",
                 "shasum": ""
             },
             "require": {
@@ -819,7 +820,7 @@
                 "phpunit\/phpunit": "^9.6",
                 "symfony\/process": "^5.2"
             },
-            "time": "2026-08-31T16:05:28+00:00",
+            "time": "2026-09-27T20:07:45+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -836,7 +837,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/2.3.5"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/2.3.6"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
@@ -1671,12 +1672,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "e6e9184a939708ef598719fce2f8473581467f09"
+                "reference": "f847ef0cbdf906dcecce9e45ba662f892b541649"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/e6e9184a939708ef598719fce2f8473581467f09",
-                "reference": "e6e9184a939708ef598719fce2f8473581467f09",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/f847ef0cbdf906dcecce9e45ba662f892b541649",
+                "reference": "f847ef0cbdf906dcecce9e45ba662f892b541649",
                 "shasum": ""
             },
             "require": {
@@ -1702,7 +1703,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-09-26T18:40:52+00:00",
+            "time": "2026-09-29T08:51:52+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -2521,6 +2522,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "install-path": "..\/symplify\/rule-doc-generator-contracts"
         },
         {

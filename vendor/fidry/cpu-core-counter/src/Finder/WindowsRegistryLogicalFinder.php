@@ -14,6 +14,7 @@ namespace RectorPrefix202609\Fidry\CpuCoreCounter\Finder;
 use function array_filter;
 use function count;
 use function explode;
+use function trim;
 use const PHP_EOL;
 /**
  * Find the number of logical CPU cores for Windows.

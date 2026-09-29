@@ -14,6 +14,7 @@ namespace RectorPrefix202609\Fidry\CpuCoreCounter\Finder;
 use function implode;
 use function in_array;
 use function sprintf;
+use const PHP_OS_FAMILY;
 final class SkipOnOSFamilyFinder implements CpuCoreFinder
 {
     /**
@@ -54,7 +55,7 @@ final class SkipOnOSFamilyFinder implements CpuCoreFinder
     }
     public function diagnose(): string
     {
-        return $this->skip() ? sprintf('Skipped platform detected ("%s").', \PHP_OS_FAMILY) : $this->decoratedFinder->diagnose();
+        return $this->skip() ? sprintf('Skipped platform detected ("%s").', PHP_OS_FAMILY) : $this->decoratedFinder->diagnose();
     }
     public function find(): ?int
     {
@@ -66,6 +67,6 @@ final class SkipOnOSFamilyFinder implements CpuCoreFinder
     }
     private function skip(): bool
     {
-        return in_array(\PHP_OS_FAMILY, $this->skippedOSFamilies, \true);
+        return in_array(PHP_OS_FAMILY, $this->skippedOSFamilies, \true);
     }
 }

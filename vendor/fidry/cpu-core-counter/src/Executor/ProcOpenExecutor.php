@@ -16,12 +16,32 @@ use function function_exists;
 use function is_resource;
 use function proc_close;
 use function proc_open;
+use function rewind;
+use function sprintf;
 use function stream_get_contents;
+use function tmpfile;
 final class ProcOpenExecutor implements ProcessExecutor
 {
+    private const REQUIRED_FUNCTIONS = ['proc_open', 'proc_close', 'tmpfile', 'fclose', 'rewind', 'stream_get_contents'];
+    public function getUnavailabilityReason(): ?string
+    {
+        // Any of them may be disabled, e.g. with disable_functions.
+        foreach (self::REQUIRED_FUNCTIONS as $function) {
+            if (!function_exists($function)) {
+                return sprintf('The function "%s" is not available.', $function);
+            }
+        }
+        return null;
+    }
     public function execute(string $command): ?array
     {
-        if (!function_exists('proc_open')) {
+        if (!$this->isAvailable()) {
+            return null;
+        }
+        // Do not use a pipe for the STDERR: reading the STDOUT to the end
+        // first would block forever if the command fills the STDERR pipe.
+        $stderrFile = @tmpfile();
+        if (\false === $stderrFile) {
             return null;
         }
         $pipes = [];
@@ -29,17 +49,27 @@ final class ProcOpenExecutor implements ProcessExecutor
             ['pipe', 'rb'],
             ['pipe', 'wb'],
             // stdout
-            ['pipe', 'wb'],
+            $stderrFile,
         ], $pipes);
         // https://github.com/phpstan/phpstan/issues/13197
-        /** @var array{resource, resource, resource} $pipes */
+        /** @var array{resource, resource} $pipes */
         if (!is_resource($process)) {
+            fclose($stderrFile);
             return null;
         }
         fclose($pipes[0]);
         $stdout = stream_get_contents($pipes[1]);
-        $stderr = stream_get_contents($pipes[2]);
         proc_close($process);
+        rewind($stderrFile);
+        $stderr = stream_get_contents($stderrFile);
+        fclose($stderrFile);
+        if (\false === $stdout || \false === $stderr) {
+            return null;
+        }
         return [$stdout, $stderr];
+    }
+    private function isAvailable(): bool
+    {
+        return null === $this->getUnavailabilityReason();
     }
 }

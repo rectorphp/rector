@@ -136,8 +136,6 @@ return static function (RectorConfig $rectorConfig): void {
         MockObjectVarToStubRector::class,
         AddStubIntersectionVarToStubPropertyRector::class,
         InlineStubPropertyToCreateStubMethodCallRector::class,
-        // @test first, enable later
-        // \Rector\PHPUnit\CodeQuality\Rector\Expression\ConfiguredMockEntityToSetterObjectRector::class,
         FinalizeTestCaseClassRector::class,
         DeclareStrictTypesTestsRector::class,
         WithCallbackIdenticalToStandaloneAssertsRector::class,

@@ -11,6 +11,9 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Fidry\CpuCoreCounter\Executor;
 
+/**
+ * @method string|null getUnavailabilityReason() The reason why the executor cannot be used, or null if it can. Not implementing it is deprecated: it will be added to this interface in the next major version.
+ */
 interface ProcessExecutor
 {
     /**

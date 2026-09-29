@@ -11,10 +11,10 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Fidry\CpuCoreCounter\Finder;
 
-use function file_get_contents;
-use function is_file;
+use RectorPrefix202609\Fidry\CpuCoreCounter\FileReader\FileReader;
+use RectorPrefix202609\Fidry\CpuCoreCounter\FileReader\NativeFileReader;
+use function preg_match_all;
 use function sprintf;
-use function substr_count;
 use const PHP_EOL;
 /**
  * Find the number of CPU cores looking up at the cpuinfo file which is available
@@ -26,36 +26,35 @@ use const PHP_EOL;
 final class CpuInfoFinder implements CpuCoreFinder
 {
     private const CPU_INFO_PATH = '/proc/cpuinfo';
+    // Matches "processor : 0" and the s390x form "processor 0: ...".
+    private const PROCESSOR_LINE_REGEX = '/^processor\s*\d*\s*:/m';
+    /**
+     * @var FileReader
+     */
+    private $fileReader;
+    public function __construct(?FileReader $fileReader = null)
+    {
+        $this->fileReader = $fileReader ?? new NativeFileReader();
+    }
     public function diagnose(): string
     {
-        if (!is_file(self::CPU_INFO_PATH)) {
-            return sprintf('The file "%s" could not be found.', self::CPU_INFO_PATH);
+        $cpuInfo = $this->fileReader->read(self::CPU_INFO_PATH);
+        if (null === $cpuInfo) {
+            return sprintf('Could not read the file "%s".', self::CPU_INFO_PATH);
         }
-        $cpuInfo = file_get_contents(self::CPU_INFO_PATH);
-        if (\false === $cpuInfo) {
-            return sprintf('Could not get the content of the file "%s".', self::CPU_INFO_PATH);
-        }
-        return sprintf('Found the file "%s" with the content:%s%s%sWill return "%s".', self::CPU_INFO_PATH, PHP_EOL, $cpuInfo, PHP_EOL, self::countCpuCores($cpuInfo));
+        return sprintf('Found the file "%s" with the content:%s%s%sWill return "%s".', self::CPU_INFO_PATH, PHP_EOL, $cpuInfo, PHP_EOL, self::countCpuCores($cpuInfo) ?? 'null');
     }
     /**
      * @return positive-int|null
      */
     public function find(): ?int
     {
-        $cpuInfo = self::getCpuInfo();
+        $cpuInfo = $this->fileReader->read(self::CPU_INFO_PATH);
         return null === $cpuInfo ? null : self::countCpuCores($cpuInfo);
     }
     public function toString(): string
     {
         return 'CpuInfoFinder';
-    }
-    private static function getCpuInfo(): ?string
-    {
-        if (!@is_file(self::CPU_INFO_PATH)) {
-            return null;
-        }
-        $cpuInfo = @file_get_contents(self::CPU_INFO_PATH);
-        return \false === $cpuInfo ? null : $cpuInfo;
     }
     /**
      * @internal
@@ -64,7 +63,7 @@ final class CpuInfoFinder implements CpuCoreFinder
      */
     public static function countCpuCores(string $cpuInfo): ?int
     {
-        $processorCount = substr_count($cpuInfo, 'processor');
-        return $processorCount > 0 ? $processorCount : null;
+        $processorCount = preg_match_all(self::PROCESSOR_LINE_REGEX, $cpuInfo);
+        return \false !== $processorCount && $processorCount > 0 ? $processorCount : null;
     }
 }

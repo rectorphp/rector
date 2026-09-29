@@ -11,29 +11,20 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Fidry\CpuCoreCounter\Finder;
 
-use function preg_match;
 /**
  * Find the number of logical CPU cores for Windows leveraging the Get-CimInstance
  * cmdlet, which is a newer version that is recommended over Get-WmiObject.
  */
 final class CmiCmdletLogicalFinder extends ProcOpenBasedFinder
 {
-    private const CPU_CORE_COUNT_REGEX = '/NumberOfLogicalProcessors[\s\n]-+[\s\n]+(?<count>\d+)/';
     protected function getCommand(): string
     {
-        return 'Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -Property NumberOfLogicalProcessors';
+        // proc_open() runs commands through cmd.exe on Windows, so PowerShell
+        // must be called explicitly.
+        return 'powershell -NoProfile -NonInteractive -Command "(Get-CimInstance -ClassName Win32_ComputerSystem).NumberOfLogicalProcessors"';
     }
     public function toString(): string
     {
         return 'CmiCmdletLogicalFinder';
-    }
-    protected function countCpuCores(string $process): ?int
-    {
-        if (0 === preg_match(self::CPU_CORE_COUNT_REGEX, $process, $matches)) {
-            return parent::countCpuCores($process);
-        }
-        /** @phpstan-ignore offsetAccess.notFound */
-        $count = $matches['count'];
-        return parent::countCpuCores($count);
     }
 }

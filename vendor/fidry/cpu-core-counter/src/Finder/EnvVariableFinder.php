@@ -11,7 +11,10 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Fidry\CpuCoreCounter\Finder;
 
-use function getenv;
+use RectorPrefix202609\Fidry\CpuCoreCounter\Env;
+use function floor;
+use function is_string;
+use function max;
 use function preg_match;
 use function sprintf;
 use function var_export;
@@ -25,17 +28,12 @@ final class EnvVariableFinder implements CpuCoreFinder
     }
     public function diagnose(): string
     {
-        $value = getenv($this->environmentVariableName);
-        return sprintf('parse(getenv(%s)=%s)=%s', $this->environmentVariableName, var_export($value, \true), self::isPositiveInteger($value) ? $value : 'null');
+        $value = Env::get($this->environmentVariableName);
+        return sprintf('parse(getenv(%s)=%s)=%s', $this->environmentVariableName, var_export($value, \true), self::parse($value) ?? 'null');
     }
     public function find(): ?int
     {
-        $value = getenv($this->environmentVariableName);
-        if (is_string($value) && 1 === preg_match('/^(\d+)m$/', $value, $matches)) {
-            $millicores = $matches[1];
-            $value = (string) floor($millicores / 1000);
-        }
-        return self::isPositiveInteger($value) ? (int) $value : null;
+        return self::parse(Env::get($this->environmentVariableName));
     }
     public function toString(): string
     {
@@ -44,8 +42,23 @@ final class EnvVariableFinder implements CpuCoreFinder
     /**
      * @param string|false $value
      */
-    private static function isPositiveInteger($value): bool
+    private static function parse($value): ?int
     {
-        return \false !== $value && 1 === preg_match('/^\d+$/', $value) && (int) $value > 0;
+        if (!is_string($value)) {
+            return null;
+        }
+        if (1 === preg_match('/^\d+$/', $value)) {
+            $cores = (int) $value;
+            return $cores > 0 ? $cores : null;
+        }
+        if (1 === preg_match('/^(\d+)m$/', $value, $matches)) {
+            $cpus = $matches[1] / 1000;
+        } elseif (1 === preg_match('/^\d+\.\d+$/', $value)) {
+            $cpus = (float) $value;
+        } else {
+            return null;
+        }
+        // A fractional limit below one core, e.g. 500m, still allows one core.
+        return $cpus > 0 ? max(1, (int) floor($cpus)) : null;
     }
 }
