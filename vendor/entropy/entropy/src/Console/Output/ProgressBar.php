@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Console\Output;
 
-use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\Attribute\RelatedTest;
 use RectorPrefix202609\Entropy\Tests\Console\Output\ProgressBarTest;
 /**
  * Lightweight progress bar rendered on a single, re-written terminal line.
@@ -12,6 +12,7 @@ use RectorPrefix202609\Entropy\Tests\Console\Output\ProgressBarTest;
  * tested without writing to the terminal.
  *
  * @api used by console applications to report progress
+ * @see \Entropy\Tests\Console\Output\ProgressBarTest
  */
 final class ProgressBar
 {

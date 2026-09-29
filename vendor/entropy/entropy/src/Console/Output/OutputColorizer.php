@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Console\Output;
 
-use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\Attribute\RelatedTest;
 use RectorPrefix202609\Entropy\Console\Enum\Color;
 use RectorPrefix202609\Entropy\Tests\Console\Output\OutputColozierTest;
 final class OutputColorizer
@@ -52,15 +52,15 @@ final class OutputColorizer
         }
         switch ($color) {
             case Color::GREEN:
-                return "\x1b[32m{$text}\x1b[0m";
+                return "\x1b[32m" . $text . "\x1b[0m";
             case Color::YELLOW:
-                return "\x1b[33m{$text}\x1b[0m";
+                return "\x1b[33m" . $text . "\x1b[0m";
             case Color::RED:
-                return "\x1b[31m{$text}\x1b[0m";
+                return "\x1b[31m" . $text . "\x1b[0m";
             case Color::CYAN:
-                return "\x1b[36m{$text}\x1b[0m";
+                return "\x1b[36m" . $text . "\x1b[0m";
             case Color::GREY:
-                return "\x1b[37m{$text}\x1b[0m";
+                return "\x1b[37m" . $text . "\x1b[0m";
         }
     }
     /**
@@ -74,14 +74,14 @@ final class OutputColorizer
         }
         switch ($color) {
             case Color::GREEN:
-                return "\x1b[42;30m{$text}\x1b[0m";
+                return "\x1b[42;30m" . $text . "\x1b[0m";
             case Color::YELLOW:
             case 'orange':
-                return "\x1b[43;30m{$text}\x1b[0m";
+                return "\x1b[43;30m" . $text . "\x1b[0m";
             case Color::RED:
-                return "\x1b[41;30m{$text}\x1b[0m";
+                return "\x1b[41;30m" . $text . "\x1b[0m";
             case Color::CYAN:
-                return "\x1b[46;30m{$text}\x1b[0m";
+                return "\x1b[46;30m" . $text . "\x1b[0m";
         }
     }
     private function padding(string $text): string
@@ -90,8 +90,8 @@ final class OutputColorizer
     }
     private function isTty(): bool
     {
-        if (function_exists('stream_isatty')) {
-            return @stream_isatty(\STDOUT);
+        if (function_exists('stream_isatty') && defined('STDOUT')) {
+            return stream_isatty(\STDOUT);
         }
         // Fallback: respect NO_COLOR if present
         return getenv('NO_COLOR') === \false;

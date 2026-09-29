@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Console\Output;
 
-use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\Attribute\RelatedTest;
 use RectorPrefix202609\Entropy\Console\Contract\CommandInterface;
 use RectorPrefix202609\Entropy\Console\Mapper\CommandRunParametersMapper;
 use RectorPrefix202609\Entropy\Console\Terminal\Terminal;

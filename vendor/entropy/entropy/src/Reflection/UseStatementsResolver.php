@@ -11,6 +11,9 @@ final class UseStatementsResolver
     public static function resolve(string $filePath): array
     {
         $useStatements = [];
+        if (!is_file($filePath)) {
+            return $useStatements;
+        }
         $fileContent = file_get_contents($filePath);
         if ($fileContent === \false) {
             return $useStatements;

@@ -3,9 +3,12 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Console\ConsoleTable;
 
-use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\Attribute\RelatedTest;
 use RectorPrefix202609\Entropy\Console\Output\OutputPrinter;
 use RectorPrefix202609\Entropy\Tests\Console\ConsoleTable\ConsoleTableTest;
+/**
+ * @see \Entropy\Tests\Console\ConsoleTable\ConsoleTableTest
+ */
 final class ConsoleTable
 {
     /**

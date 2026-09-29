@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Container;
 
-use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\Attribute\RelatedTest;
 use RectorPrefix202609\Entropy\Console\CommandRegistry;
 use RectorPrefix202609\Entropy\Console\Contract\CommandInterface;
 use RectorPrefix202609\Entropy\Container\Exception\CreateServiceException;

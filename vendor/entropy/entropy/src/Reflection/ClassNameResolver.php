@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Reflection;
 
-use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\Attribute\RelatedTest;
 use RectorPrefix202609\Entropy\Tests\Reflection\ClassNameResolver\ClassNameResolverTest;
 final class ClassNameResolver
 {
@@ -17,7 +17,10 @@ final class ClassNameResolver
      */
     public static function resolveFromFilePath(string $filePath): ?string
     {
-        $code = @file_get_contents($filePath);
+        if (!is_file($filePath)) {
+            return null;
+        }
+        $code = file_get_contents($filePath);
         if ($code === \false) {
             return null;
         }

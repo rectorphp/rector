@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Reflection;
 
-use RectorPrefix202609\Entropy\Attributes\RelatedTest;
+use RectorPrefix202609\Entropy\Attribute\RelatedTest;
 use RectorPrefix202609\Entropy\Tests\Reflection\ParameterDescriptionResolver\ParameterDescriptionResolverTest;
 use ReflectionMethod;
 final class ParameterDescriptionResolver

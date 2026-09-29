@@ -100,7 +100,7 @@ final class CommandRegistry
         if ($command->getDescription() === '') {
             throw new InvalidCommandException('Command description cannot be empty');
         }
-        if (!method_exists($command, 'run')) {
+        if (!is_callable([$command, 'run'])) {
             throw new InvalidCommandException(sprintf('Command "%s" must have a public "run()" method', $name));
         }
     }
