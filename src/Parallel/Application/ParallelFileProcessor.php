@@ -102,6 +102,8 @@ final class ParallelFileProcessor
         $systemErrorsCount = 0;
         $reachedSystemErrorsCountLimit = \false;
         $totalChanged = 0;
+        $scheduledFilesCount = array_sum(array_map(\Closure::fromCallable('count'), $jobs));
+        $processedFilesCount = 0;
         $handleErrorCallable = function (Throwable $throwable) use (&$systemErrors, &$systemErrorsCount, &$reachedSystemErrorsCountLimit): void {
             $systemErrors[] = new SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine());
             ++$systemErrorsCount;
@@ -114,14 +116,14 @@ final class ParallelFileProcessor
         };
         $timeoutInSeconds = SimpleParameterProvider::provideIntParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS);
         $fileChunksBudgetPerProcess = [];
-        $processSpawner = function () use (&$systemErrors, &$fileDiffs, &$usedSkips, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $mainScript, $input, $serverPort, $streamSelectLoop, $timeoutInSeconds, $handleErrorCallable, &$fileChunksBudgetPerProcess, &$processSpawner, &$totalChanged): void {
+        $processSpawner = function () use (&$systemErrors, &$fileDiffs, &$usedSkips, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedSystemErrorsCountLimit, $mainScript, $input, $serverPort, $streamSelectLoop, $timeoutInSeconds, $handleErrorCallable, &$fileChunksBudgetPerProcess, &$processSpawner, &$totalChanged, &$processedFilesCount): void {
             $processIdentifier = Random::generate();
             $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, ProcessCommand::class, 'worker', $input, $processIdentifier, $serverPort);
             $fileChunksBudgetPerProcess[$processIdentifier] = self::MAX_CHUNKS_PER_WORKER;
             $parallelProcess = new ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
             $parallelProcess->start(
                 // 1. callable on data
-                function (array $json) use ($parallelProcess, &$systemErrors, &$fileDiffs, &$usedSkips, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $processIdentifier, &$fileChunksBudgetPerProcess, &$processSpawner, &$totalChanged): void {
+                function (array $json) use ($parallelProcess, &$systemErrors, &$fileDiffs, &$usedSkips, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedSystemErrorsCountLimit, $processIdentifier, &$fileChunksBudgetPerProcess, &$processSpawner, &$totalChanged, &$processedFilesCount): void {
                     /** @var array{
                      *      total_changed: int,
                      *      system_errors: mixed[],
@@ -149,18 +151,21 @@ final class ParallelFileProcessor
                         $fileDiffs[] = FileDiff::decode($jsonFileDiff);
                     }
                     $postFileCallback($json[Bridge::FILES_COUNT]);
+                    $processedFilesCount += $json[Bridge::FILES_COUNT];
                     $systemErrorsCount += $json[Bridge::SYSTEM_ERRORS_COUNT];
                     if ($systemErrorsCount >= self::SYSTEM_ERROR_LIMIT) {
-                        $reachedInternalErrorsCountLimit = \true;
+                        $reachedSystemErrorsCountLimit = \true;
                         $this->processPool->quitAll();
-                    }
-                    if ($fileChunksBudgetPerProcess[$processIdentifier] <= 0) {
-                        // kill the current worker, and spawn a fresh one to free memory
-                        $this->processPool->quitProcess($processIdentifier);
-                        $processSpawner();
                         return;
                     }
                     if ($jobs === []) {
+                        $this->processPool->quitProcess($processIdentifier);
+                        return;
+                    }
+                    if ($fileChunksBudgetPerProcess[$processIdentifier] <= 0) {
+                        // replace the current worker with a fresh one to free memory; spawn the replacement first,
+                        // as quitting the last worker in the pool closes the server the replacement connects to
+                        $processSpawner();
                         $this->processPool->quitProcess($processIdentifier);
                         return;
                     }
@@ -194,6 +199,10 @@ final class ParallelFileProcessor
         $streamSelectLoop->run();
         if ($reachedSystemErrorsCountLimit) {
             $systemErrors[] = new SystemError(sprintf('Reached system errors count limit of %d, exiting...', self::SYSTEM_ERROR_LIMIT));
+        }
+        // a worker can end without reporting its files, e.g. when killed by the OS, so missing results must always be reported
+        if ($processedFilesCount < $scheduledFilesCount) {
+            $systemErrors[] = new SystemError(sprintf('Some parallel jobs have not finished, results for %d of %d files are missing', $scheduledFilesCount - $processedFilesCount, $scheduledFilesCount));
         }
         $mergedUsedSkips = [];
         foreach ($usedSkips as $skip => $paths) {

@@ -37,7 +37,39 @@ final class OutputColorizer
                 $text = str_replace($match[0], $this->background($content, $color), $text);
             }
         }
+        // underscore: <options=underscore>text</>
+        if (preg_match_all('#<options=underscore>(.*?)</>#su', $text, $matches, \PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $text = str_replace($match[0], $this->underscore($match[1]), $text);
+            }
+        }
+        // bold: <options=bold>text</>
+        if (preg_match_all('#<options=bold>(.*?)</>#su', $text, $matches, \PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $text = str_replace($match[0], $this->bold($match[1]), $text);
+            }
+        }
         return $text;
+    }
+    /**
+     * @api used in tests
+     */
+    public function underscore(string $text): string
+    {
+        if (!$this->useColors) {
+            return $text;
+        }
+        return "\x1b[4m" . $text . "\x1b[0m";
+    }
+    /**
+     * @api used in tests
+     */
+    public function bold(string $text): string
+    {
+        if (!$this->useColors) {
+            return $text;
+        }
+        return "\x1b[1m" . $text . "\x1b[0m";
     }
     /**
      * @param Color::* $color
