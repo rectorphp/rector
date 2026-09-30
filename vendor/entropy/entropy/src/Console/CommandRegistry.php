@@ -8,12 +8,11 @@ use RectorPrefix202609\Entropy\Console\Contract\DefaultCommandInterface;
 use RectorPrefix202609\Entropy\Console\Contract\HiddenCommandInterface;
 use RectorPrefix202609\Entropy\Console\Exception\InvalidCommandException;
 use RectorPrefix202609\Entropy\Utils\FuzzyMatcher;
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202609\Entropy\Validation\Assert;
 final class CommandRegistry
 {
     /**
      * @var CommandInterface[]
-     * @readonly
      */
     private array $commands;
     /**

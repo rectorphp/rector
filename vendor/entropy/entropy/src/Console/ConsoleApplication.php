@@ -15,29 +15,11 @@ use RectorPrefix202609\Entropy\Tests\Console\ConsoleApplication\ConsoleApplicati
 use Throwable;
 final class ConsoleApplication
 {
-    /**
-     * @readonly
-     */
     private HelpPrinter $helpPrinter;
-    /**
-     * @readonly
-     */
     private OutputPrinter $outputPrinter;
-    /**
-     * @readonly
-     */
     private CommandHelpFactory $commandHelpFactory;
-    /**
-     * @readonly
-     */
     private InputParser $inputParser;
-    /**
-     * @readonly
-     */
     private CommandRegistry $commandRegistry;
-    /**
-     * @readonly
-     */
     private CLIRequestMapper $cliRequestMapper;
     public function __construct(HelpPrinter $helpPrinter, OutputPrinter $outputPrinter, CommandHelpFactory $commandHelpFactory, InputParser $inputParser, CommandRegistry $commandRegistry, CLIRequestMapper $cliRequestMapper)
     {

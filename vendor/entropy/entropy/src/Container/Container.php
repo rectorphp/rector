@@ -10,10 +10,10 @@ use RectorPrefix202609\Entropy\Container\Exception\CreateServiceException;
 use RectorPrefix202609\Entropy\Container\Exception\RegisterServiceException;
 use RectorPrefix202609\Entropy\Reflection\ParameterTypesResolver;
 use RectorPrefix202609\Entropy\Tests\Container\Container\ContainerTest;
+use RectorPrefix202609\Entropy\Validation\Assert;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
-use RectorPrefix202609\Webmozart\Assert\Assert;
 /**
  * Designed to be extended by applications that need to customise resolution
  * (e.g. add their own service kinds), so this class is intentionally not final.

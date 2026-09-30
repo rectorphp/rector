@@ -9,7 +9,11 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
     );
@@ -18,7 +22,11 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'S' =>
         array (
             'Symplify\\RuleDocGenerator\\' => 26,
+            'Symfony\\Polyfill\\Php80\\' => 23,
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
+            'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
         'R' =>
         array (
@@ -30,8 +38,6 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
             'Rector\\Doctrine\\' => 16,
             'Rector\\' => 7,
             'RectorPrefix202609\\Webmozart\\Assert\\' => 36,
-            'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\' => 45,
-            'RectorPrefix202609\\TomasVotruba\\ClassLeak\\' => 42,
             'RectorPrefix202609\\Symfony\\Contracts\\Service\\' => 45,
             'RectorPrefix202609\\Symfony\\Component\\String\\' => 44,
             'RectorPrefix202609\\Symfony\\Component\\Finder\\' => 44,
@@ -69,9 +75,25 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         array (
             0 => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src',
         ),
+        'Symfony\\Polyfill\\Php80\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
+        ),
         'Symfony\\Polyfill\\Intl\\Grapheme\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
+        ),
+        'Symfony\\Polyfill\\Ctype\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
         'Rector\\Utils\\PHPStan\\' =>
         array (
@@ -110,14 +132,6 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'RectorPrefix202609\\Webmozart\\Assert\\' =>
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
-        ),
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src',
-        ),
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/tomasvotruba/class-leak/src',
         ),
         'RectorPrefix202609\\Symfony\\Contracts\\Service\\' =>
         array (
@@ -588,6 +602,7 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'PhpParser\\PrettyPrinterAbstract' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/PrettyPrinterAbstract.php',
         'PhpParser\\PrettyPrinter\\Standard' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/PrettyPrinter/Standard.php',
         'PhpParser\\Token' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Token.php',
+        'RectorPrefix202609\\Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'RectorPrefix202609\\Clue\\React\\NDJson\\Decoder' => __DIR__ . '/..' . '/clue/ndjson-react/src/Decoder.php',
         'RectorPrefix202609\\Clue\\React\\NDJson\\Encoder' => __DIR__ . '/..' . '/clue/ndjson-react/src/Encoder.php',
         'RectorPrefix202609\\Composer\\Pcre\\MatchAllResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchAllResult.php',
@@ -717,6 +732,7 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'RectorPrefix202609\\Entropy\\Utils\\Json' => __DIR__ . '/..' . '/entropy/entropy/src/Utils/Json.php',
         'RectorPrefix202609\\Entropy\\Utils\\Regex' => __DIR__ . '/..' . '/entropy/entropy/src/Utils/Regex.php',
         'RectorPrefix202609\\Entropy\\Utils\\Strings' => __DIR__ . '/..' . '/entropy/entropy/src/Utils/Strings.php',
+        'RectorPrefix202609\\Entropy\\Validation\\Assert' => __DIR__ . '/..' . '/entropy/entropy/src/Validation/Assert.php',
         'RectorPrefix202609\\Evenement\\EventEmitter' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitter.php',
         'RectorPrefix202609\\Evenement\\EventEmitterInterface' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitterInterface.php',
         'RectorPrefix202609\\Evenement\\EventEmitterTrait' => __DIR__ . '/..' . '/evenement/evenement/src/EventEmitterTrait.php',
@@ -812,6 +828,7 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'RectorPrefix202609\\Nette\\Utils\\Type' => __DIR__ . '/..' . '/nette/utils/src/Utils/Type.php',
         'RectorPrefix202609\\Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix202609\\Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
+        'RectorPrefix202609\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'RectorPrefix202609\\OndraM\\CiDetector\\CiDetector' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetector.php',
         'RectorPrefix202609\\OndraM\\CiDetector\\CiDetectorInterface' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetectorInterface.php',
         'RectorPrefix202609\\OndraM\\CiDetector\\Ci\\AbstractCi' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/AbstractCi.php',
@@ -836,6 +853,7 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'RectorPrefix202609\\OndraM\\CiDetector\\Env' => __DIR__ . '/..' . '/ondram/ci-detector/src/Env.php',
         'RectorPrefix202609\\OndraM\\CiDetector\\Exception\\CiNotDetectedException' => __DIR__ . '/..' . '/ondram/ci-detector/src/Exception/CiNotDetectedException.php',
         'RectorPrefix202609\\OndraM\\CiDetector\\TrinaryLogic' => __DIR__ . '/..' . '/ondram/ci-detector/src/TrinaryLogic.php',
+        'RectorPrefix202609\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'RectorPrefix202609\\Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerExceptionInterface.php',
         'RectorPrefix202609\\Psr\\Container\\ContainerInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerInterface.php',
         'RectorPrefix202609\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/NotFoundExceptionInterface.php',
@@ -938,6 +956,7 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'RectorPrefix202609\\SebastianBergmann\\Diff\\Output\\DiffOutputBuilderInterface' => __DIR__ . '/..' . '/sebastian/diff/src/Output/DiffOutputBuilderInterface.php',
         'RectorPrefix202609\\SebastianBergmann\\Diff\\Output\\StrictUnifiedDiffOutputBuilder' => __DIR__ . '/..' . '/sebastian/diff/src/Output/StrictUnifiedDiffOutputBuilder.php',
         'RectorPrefix202609\\SebastianBergmann\\Diff\\Parser' => __DIR__ . '/..' . '/sebastian/diff/src/Parser.php',
+        'RectorPrefix202609\\Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'RectorPrefix202609\\Symfony\\Component\\Console\\Application' => __DIR__ . '/..' . '/symfony/console/Application.php',
         'RectorPrefix202609\\Symfony\\Component\\Console\\Attribute\\AsCommand' => __DIR__ . '/..' . '/symfony/console/Attribute/AsCommand.php',
         'RectorPrefix202609\\Symfony\\Component\\Console\\CI\\GithubActionReporter' => __DIR__ . '/..' . '/symfony/console/CI/GithubActionReporter.php',
@@ -1104,66 +1123,8 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'RectorPrefix202609\\Symfony\\Contracts\\Service\\ServiceProviderInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceProviderInterface.php',
         'RectorPrefix202609\\Symfony\\Contracts\\Service\\ServiceSubscriberInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberInterface.php',
         'RectorPrefix202609\\Symfony\\Contracts\\Service\\ServiceSubscriberTrait' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberTrait.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\ClassNameResolver' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ClassNameResolver.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\Commands\\CheckCommand' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Commands/CheckCommand.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\ConstructorParamTypeResolver' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ConstructorParamTypeResolver.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\DependencyInjection\\ContainerFactory' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/DependencyInjection/ContainerFactory.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\FileSystem\\StaticRelativeFilePathHelper' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/FileSystem/StaticRelativeFilePathHelper.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\Filtering\\PossiblyUnusedClassesFilter' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Filtering/PossiblyUnusedClassesFilter.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\Finder\\ClassNamesFinder' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Finder/ClassNamesFinder.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\Finder\\PhpFilesFinder' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Finder/PhpFilesFinder.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\NodeDecorator\\FullyQualifiedNameNodeDecorator' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/NodeDecorator/FullyQualifiedNameNodeDecorator.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\NodeVisitor\\ClassNameNodeVisitor' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/NodeVisitor/ClassNameNodeVisitor.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\NodeVisitor\\ConstructorParamTypeNodeVisitor' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/NodeVisitor/ConstructorParamTypeNodeVisitor.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\NodeVisitor\\UsedClassNodeVisitor' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/NodeVisitor/UsedClassNodeVisitor.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\Reporting\\UnusedClassReporter' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Reporting/UnusedClassReporter.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\Reporting\\UnusedClassesResultFactory' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/Reporting/UnusedClassesResultFactory.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\UseImportsResolver' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/UseImportsResolver.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\ValueObject\\ClassNames' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ValueObject/ClassNames.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\ValueObject\\FileWithClass' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ValueObject/FileWithClass.php',
-        'RectorPrefix202609\\TomasVotruba\\ClassLeak\\ValueObject\\UnusedClassesResult' => __DIR__ . '/..' . '/tomasvotruba/class-leak/src/ValueObject/UnusedClassesResult.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\ApiDocStmtAnalyzer' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/ApiDocStmtAnalyzer.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\CallReferece\\CallReferencesFlatter' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/CallReferece/CallReferencesFlatter.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\CallReferece\\ParentCallReferenceResolver' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/CallReferece/ParentCallReferenceResolver.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\ClassMethodCallReferenceResolver' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/ClassMethodCallReferenceResolver.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\ClassTypeDetector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/ClassTypeDetector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\CollectorMapper\\MethodCallCollectorMapper' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/CollectorMapper/MethodCallCollectorMapper.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\Callable_\\AttributeCallableCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/Callable_/AttributeCallableCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\Callable_\\CallableTypeCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/Callable_/CallableTypeCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\ClassConstFetchCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/ClassConstFetchCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\FormTypeClassCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/FormTypeClassCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\MethodCall\\MethodCallCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/MethodCall/MethodCallCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\MethodCall\\MethodCallableCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/MethodCall/MethodCallableCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\PublicClassLikeConstCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/PublicClassLikeConstCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\PublicClassMethodCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/PublicClassMethodCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\PublicPropertyCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/PublicPropertyCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\PublicPropertyFetchCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/PublicPropertyFetchCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\PublicStaticPropertyFetchCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/PublicStaticPropertyFetchCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\StaticCall\\StaticMethodCallCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/StaticCall/StaticMethodCallCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Collectors\\StaticCall\\StaticMethodCallableCollector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Collectors/StaticCall/StaticMethodCallableCollector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Configuration' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Configuration.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Enum\\ReferenceMarker' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Enum/ReferenceMarker.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Enum\\RuleIdentifier' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Enum/RuleIdentifier.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Enum\\RuleTips' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Enum/RuleTips.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Enum\\Template\\BladeRegex' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Enum/Template/BladeRegex.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Enum\\Template\\TwigRegex' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Enum/Template/TwigRegex.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Finder\\TemplateFilesFinder' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Finder/TemplateFilesFinder.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\MethodTypeDetector' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/MethodTypeDetector.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\NodeCollectorExtractor' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/NodeCollectorExtractor.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\PublicClassMethodMatcher' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/PublicClassMethodMatcher.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Rules\\LocalOnlyPublicClassMethodRule' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Rules/LocalOnlyPublicClassMethodRule.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Rules\\RelativeUnusedPublicClassMethodRule' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Rules/RelativeUnusedPublicClassMethodRule.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Rules\\UnusedPublicClassConstRule' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Rules/UnusedPublicClassConstRule.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Rules\\UnusedPublicClassMethodRule' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Rules/UnusedPublicClassMethodRule.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Rules\\UnusedPublicPropertyRule' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Rules/UnusedPublicPropertyRule.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Templates\\TemplateMethodCallsProvider' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Templates/TemplateMethodCallsProvider.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Templates\\TemplateRegexFinder' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Templates/TemplateRegexFinder.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Templates\\UsedMethodAnalyzer' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Templates/UsedMethodAnalyzer.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Utils\\Arrays' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Utils/Arrays.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\Utils\\Strings' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/Utils/Strings.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\ValueObject\\ClassAndMethodArrayExprs' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/ValueObject/ClassAndMethodArrayExprs.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\ValueObject\\LocalAndExternalMethodCallReferences' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/ValueObject/LocalAndExternalMethodCallReferences.php',
-        'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\ValueObject\\MethodCallReference' => __DIR__ . '/..' . '/tomasvotruba/class-leak/packages/unused-public/src/ValueObject/MethodCallReference.php',
+        'RectorPrefix202609\\UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'RectorPrefix202609\\ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'RectorPrefix202609\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix202609\\Webmozart\\Assert\\HasAssert' => __DIR__ . '/..' . '/webmozart/assert/src/HasAssert.php',
         'RectorPrefix202609\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
@@ -3090,7 +3051,12 @@ class ComposerStaticInitbe25d0b1f9207c246d01e1f76cfd3295
         'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
         'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
+        'Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',
         'Symfony\\Polyfill\\Intl\\Grapheme\\Grapheme' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/Grapheme.php',
+        'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
+        'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
+        'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
+        'Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
         'Symplify\\RuleDocGenerator\\Contract\\Category\\CategoryInfererInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/Category/CategoryInfererInterface.php',
         'Symplify\\RuleDocGenerator\\Contract\\CodeSampleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/CodeSampleInterface.php',
         'Symplify\\RuleDocGenerator\\Contract\\ConfigurableRuleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/ConfigurableRuleInterface.php',

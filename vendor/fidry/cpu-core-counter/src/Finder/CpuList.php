@@ -12,6 +12,8 @@ declare (strict_types=1);
 namespace RectorPrefix202609\Fidry\CpuCoreCounter\Finder;
 
 use function explode;
+use function max;
+use function min;
 use function preg_match;
 /**
  * @internal
@@ -20,7 +22,7 @@ use function preg_match;
  */
 final class CpuList
 {
-    private const CPU_RANGE_REGEX = '/^(?<first>\d+)(?:-(?<last>\d+))?$/';
+    private const CPU_RANGE_REGEX = '/^(?<first>\d+)(?:-(?<last>\d+))?$/D';
     /**
      * @param string $cpuList E.g. "0-1,4" for the CPUs 0, 1 and 4.
      *
@@ -28,7 +30,44 @@ final class CpuList
      */
     public static function count(string $cpuList): ?int
     {
+        $ranges = self::parse($cpuList);
+        if (null === $ranges) {
+            return null;
+        }
         $count = 0;
+        foreach ($ranges as [$first, $last]) {
+            $count += $last - $first + 1;
+        }
+        return $count > 0 ? $count : null;
+    }
+    /**
+     * Counts the CPUs present in both lists.
+     *
+     * @return positive-int|null
+     */
+    public static function countIntersection(string $cpuList, string $otherCpuList): ?int
+    {
+        $ranges = self::parse($cpuList);
+        $otherRanges = self::parse($otherCpuList);
+        if (null === $ranges || null === $otherRanges) {
+            return null;
+        }
+        $count = 0;
+        foreach ($ranges as [$first, $last]) {
+            foreach ($otherRanges as [$otherFirst, $otherLast]) {
+                $lastMin = min($last, $otherLast);
+                $maxFirst = max($first, $otherFirst);
+                $count += max(0, $lastMin - $maxFirst + 1);
+            }
+        }
+        return $count > 0 ? $count : null;
+    }
+    /**
+     * @return list<array{int, int}>|null The first and last CPU of each range.
+     */
+    private static function parse(string $cpuList): ?array
+    {
+        $ranges = [];
         foreach (explode(',', $cpuList) as $item) {
             if (1 !== preg_match(self::CPU_RANGE_REGEX, $item, $range)) {
                 return null;
@@ -38,9 +77,9 @@ final class CpuList
             if ($last < $first) {
                 return null;
             }
-            $count += $last - $first + 1;
+            $ranges[] = [$first, $last];
         }
-        return $count > 0 ? $count : null;
+        return $ranges;
     }
     private function __construct()
     {

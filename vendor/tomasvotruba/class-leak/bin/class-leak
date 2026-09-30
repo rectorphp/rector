@@ -1,5 +1,0 @@
-#!/usr/bin/env php
-<?php 
-namespace RectorPrefix202609;
-
-require __DIR__ . '/class-leak.php';

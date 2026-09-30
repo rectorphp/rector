@@ -5,20 +5,14 @@ namespace RectorPrefix202609\Entropy\Console\Output;
 
 use RectorPrefix202609\Entropy\Console\Enum\Color;
 use RectorPrefix202609\Entropy\Console\Terminal\Terminal;
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202609\Entropy\Validation\Assert;
 /**
  * @api used in many ways
  */
 final class OutputPrinter
 {
-    /**
-     * @readonly
-     */
-    private OutputColorizer $outputColorizer;
-    /**
-     * @readonly
-     */
     private bool $isSilent;
+    private OutputColorizer $outputColorizer;
     public function __construct(OutputColorizer $outputColorizer)
     {
         $this->outputColorizer = $outputColorizer;

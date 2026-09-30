@@ -33,7 +33,7 @@ final class VcsIgnoredFilterIterator extends \FilterIterator
         // paths are compared to the real path of each file, so the base directory needs the same treatment
         $this->baseDir = $this->normalizePath(realpath($baseDir) ?: $baseDir);
         foreach (array_merge([$this->baseDir], $this->parentDirectoriesUpwards($this->baseDir)) as $directory) {
-            if (@is_dir("{$directory}/.git")) {
+            if (@file_exists("{$directory}/.git")) {
                 $this->baseDir = $directory;
                 break;
             }

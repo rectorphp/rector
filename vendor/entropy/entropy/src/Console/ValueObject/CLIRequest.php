@@ -3,25 +3,21 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Console\ValueObject;
 
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202609\Entropy\Validation\Assert;
 /**
  * @see \Entropy\Tests\Console\ValueObject\CLIRequestTest
  */
 final class CLIRequest
 {
-    /**
-     * @readonly
-     */
     private ?string $commandName;
     /**
      * @var mixed[]
-     * @readonly
      */
-    private array $arguments = [];
+    private array $arguments;
     /**
      * @var array<string, mixed>
      */
-    private array $options = [];
+    private array $options;
     /**
      * @param mixed[] $arguments
      * @param array<string, mixed> $options

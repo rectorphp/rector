@@ -7,19 +7,13 @@ use RectorPrefix202609\Entropy\Utils\FileSystem;
 use SplFileInfo;
 final class FileInfo extends SplFileInfo
 {
-    /**
-     * @readonly
-     */
-    private string $relativePath = '';
-    /**
-     * @readonly
-     */
-    private string $relativePathname = '';
+    private string $relativePath;
+    private string $relativePathname;
     public function __construct(string $filePath, string $relativePath = '', string $relativePathname = '')
     {
+        parent::__construct($filePath);
         $this->relativePath = $relativePath;
         $this->relativePathname = $relativePathname;
-        parent::__construct($filePath);
     }
     /**
      * @api

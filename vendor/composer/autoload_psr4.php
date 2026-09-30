@@ -7,7 +7,11 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
+    'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'Symfony\\Polyfill\\Intl\\Grapheme\\' => array($vendorDir . '/symfony/polyfill-intl-grapheme'),
+    'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Rector\\Utils\\PHPStan\\' => array($baseDir . '/utils/phpstan/src'),
     'Rector\\Utils\\' => array($baseDir . '/utils'),
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src', $vendorDir . '/rector/rector-symfony/rules'),
@@ -16,8 +20,6 @@ return array(
     'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src', $vendorDir . '/rector/rector-doctrine/rules'),
     'Rector\\' => array($baseDir . '/rules', $baseDir . '/src', $vendorDir . '/rector/rector-downgrade-php/src', $vendorDir . '/rector/rector-downgrade-php/rules'),
     'RectorPrefix202609\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
-    'RectorPrefix202609\\TomasVotruba\\UnusedPublic\\' => array($vendorDir . '/tomasvotruba/class-leak/packages/unused-public/src'),
-    'RectorPrefix202609\\TomasVotruba\\ClassLeak\\' => array($vendorDir . '/tomasvotruba/class-leak/src'),
     'RectorPrefix202609\\Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
     'RectorPrefix202609\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix202609\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),

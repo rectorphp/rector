@@ -8,9 +8,6 @@ use RectorPrefix202609\Entropy\Console\Enum\Color;
 use RectorPrefix202609\Entropy\Tests\Console\Output\OutputColozierTest;
 final class OutputColorizer
 {
-    /**
-     * @readonly
-     */
     private bool $useColors;
     public function __construct()
     {
@@ -50,18 +47,23 @@ final class OutputColorizer
         if (!$this->useColors) {
             return $text;
         }
-        switch ($color) {
-            case Color::GREEN:
-                return "\x1b[32m" . $text . "\x1b[0m";
-            case Color::YELLOW:
-                return "\x1b[33m" . $text . "\x1b[0m";
-            case Color::RED:
-                return "\x1b[31m" . $text . "\x1b[0m";
-            case Color::CYAN:
-                return "\x1b[36m" . $text . "\x1b[0m";
-            case Color::GREY:
-                return "\x1b[37m" . $text . "\x1b[0m";
+        if ($color === Color::GREEN) {
+            return "\x1b[32m" . $text . "\x1b[0m";
         }
+        if ($color === Color::YELLOW) {
+            return "\x1b[33m" . $text . "\x1b[0m";
+        }
+        if ($color === Color::RED) {
+            return "\x1b[31m" . $text . "\x1b[0m";
+        }
+        if ($color === Color::CYAN) {
+            return "\x1b[36m" . $text . "\x1b[0m";
+        }
+        if ($color === Color::GREY) {
+            // use light grey
+            return "\x1b[37m" . $text . "\x1b[0m";
+        }
+        throw new \RuntimeException('Unhandled color value');
     }
     /**
      * @param Color::* $color
@@ -72,17 +74,21 @@ final class OutputColorizer
         if (!$this->useColors) {
             return $text;
         }
-        switch ($color) {
-            case Color::GREEN:
-                return "\x1b[42;30m" . $text . "\x1b[0m";
-            case Color::YELLOW:
-            case 'orange':
-                return "\x1b[43;30m" . $text . "\x1b[0m";
-            case Color::RED:
-                return "\x1b[41;30m" . $text . "\x1b[0m";
-            case Color::CYAN:
-                return "\x1b[46;30m" . $text . "\x1b[0m";
+        if ($color === Color::GREEN) {
+            // background ; foreground
+            return "\x1b[42;30m" . $text . "\x1b[0m";
         }
+        if ($color === Color::YELLOW || $color === 'orange') {
+            return "\x1b[43;30m" . $text . "\x1b[0m";
+        }
+        if ($color === Color::RED) {
+            // WHITE on red (important)
+            return "\x1b[41;30m" . $text . "\x1b[0m";
+        }
+        if ($color === Color::CYAN) {
+            return "\x1b[46;30m" . $text . "\x1b[0m";
+        }
+        throw new \RuntimeException('Unhandled color value');
     }
     private function padding(string $text): string
     {

@@ -14,17 +14,11 @@ use RectorPrefix202609\Entropy\Tests\Console\ConsoleTable\ViewRendererTest;
 final class ViewRenderer
 {
     /**
-     * @readonly
-     */
-    private OutputPrinter $outputPrinter;
-    /**
-     * @readonly
-     */
-    private ConsoleTable $consoleTable;
-    /**
      * @var int Tables span at least this many characters wide
      */
     private const MIN_WIDTH = 60;
+    private OutputPrinter $outputPrinter;
+    private ConsoleTable $consoleTable;
     public function __construct(OutputPrinter $outputPrinter, ConsoleTable $consoleTable)
     {
         $this->outputPrinter = $outputPrinter;

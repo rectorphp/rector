@@ -16,23 +16,11 @@ use RectorPrefix202609\Entropy\Tests\Console\Output\ProgressBarTest;
  */
 final class ProgressBar
 {
-    /**
-     * @var int
-     */
     private const BAR_WIDTH = 28;
-    /**
-     * @var string
-     */
     private const COMPLETE_CHAR = '▓';
-    /**
-     * @var string
-     */
     private const REMAINING_CHAR = '░';
     private int $current = 0;
     private int $maxSteps = 0;
-    /**
-     * @readonly
-     */
     private bool $isSilent;
     public function __construct()
     {

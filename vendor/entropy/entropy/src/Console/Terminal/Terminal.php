@@ -10,7 +10,6 @@ final class Terminal
 {
     /**
      * @see SymfonyStyle::MAX_LINE_LENGTH
-     * @var int
      */
     private const MAX_LINE_LENGTH = 120;
     /**
@@ -21,6 +20,9 @@ final class Terminal
         $columns = getenv('COLUMNS');
         if ($columns !== \false && is_numeric($columns)) {
             return min((int) $columns, self::MAX_LINE_LENGTH);
+        }
+        if (\PHP_OS_FAMILY === 'Windows') {
+            return self::MAX_LINE_LENGTH;
         }
         if (function_exists('exec')) {
             $sttySize = exec('stty size 2>/dev/null');

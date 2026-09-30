@@ -6,18 +6,9 @@ namespace RectorPrefix202609\Entropy\Console\Output;
 use RectorPrefix202609\Entropy\Console\CommandRegistry;
 final class HelpPrinter
 {
-    /**
-     * @readonly
-     */
-    private CommandRegistry $commandRegistry;
-    /**
-     * @readonly
-     */
-    private OutputPrinter $outputPrinter;
-    /**
-     * @var int
-     */
     private const MIN_WIDTH = 10;
+    private CommandRegistry $commandRegistry;
+    private OutputPrinter $outputPrinter;
     public function __construct(CommandRegistry $commandRegistry, OutputPrinter $outputPrinter)
     {
         $this->commandRegistry = $commandRegistry;

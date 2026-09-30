@@ -70,7 +70,10 @@ class Glob
             if ($delimiter === $car || '.' === $car || '(' === $car || ')' === $car || '|' === $car || '+' === $car || '^' === $car || '$' === $car) {
                 $regex .= "\\{$car}";
             } elseif ('*' === $car) {
-                $regex .= $escaping ? '\*' : ($strictWildcardSlash ? '[^/]*' : '.*');
+                if ($escaping || $strictWildcardSlash || substr_compare($regex, '.*', -strlen('.*')) !== 0) {
+                    // ".*.*" matches the same as ".*" but backtracks quadratically
+                    $regex .= $escaping ? '\*' : ($strictWildcardSlash ? '[^/]*' : '.*');
+                }
             } elseif ('?' === $car) {
                 $regex .= $escaping ? '\?' : ($strictWildcardSlash ? '[^/]' : '.');
             } elseif ('{' === $car) {

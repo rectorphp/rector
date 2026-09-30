@@ -15,9 +15,6 @@ use ReflectionMethod;
  */
 final class InputParser
 {
-    /**
-     * @readonly
-     */
     private CommandRegistry $commandRegistry;
     public function __construct(CommandRegistry $commandRegistry)
     {

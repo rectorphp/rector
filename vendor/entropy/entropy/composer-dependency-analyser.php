@@ -6,4 +6,4 @@ namespace RectorPrefix202609;
 
 use RectorPrefix202609\ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
 use RectorPrefix202609\ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
-return (new Configuration())->ignoreErrorsOnExtension('ext-filter', [ErrorType::SHADOW_DEPENDENCY]);
+return (new Configuration())->ignoreErrorsOnExtension('ext-filter', [ErrorType::SHADOW_DEPENDENCY])->ignoreErrorsOnPackage('symfony/polyfill-php80', [ErrorType::UNUSED_DEPENDENCY]);

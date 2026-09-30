@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Utils;
 
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202609\Entropy\Validation\Assert;
 /**
  * @api to be used outside
  */

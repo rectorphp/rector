@@ -5,27 +5,14 @@ namespace RectorPrefix202609\Entropy\Console\ValueObject;
 
 final class Option
 {
-    /**
-     * @readonly
-     */
+    private string $name;
     private string $type;
+    private ?string $description;
+    private bool $acceptsMultipleValues;
     /**
-     * @readonly
-     */
-    private ?string $description = null;
-    /**
-     * @readonly
-     */
-    private bool $acceptsMultipleValues = \false;
-    /**
-     * @readonly
      * @var string|bool|int|null
      */
-    private $defaultValue = null;
-    /**
-     * @readonly
-     */
-    private string $name;
+    private $defaultValue;
     /**
      * @param string|bool|int|null $defaultValue
      */

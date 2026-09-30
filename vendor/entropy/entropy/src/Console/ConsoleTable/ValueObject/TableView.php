@@ -3,36 +3,26 @@
 declare (strict_types=1);
 namespace RectorPrefix202609\Entropy\Console\ConsoleTable\ValueObject;
 
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202609\Entropy\Validation\Assert;
 final class TableView
 {
-    /**
-     * @readonly
-     */
     private string $title;
-    /**
-     * @readonly
-     */
     private string $label;
     /**
      * @var TableRow[]
-     * @readonly
      */
     private array $tableRows;
-    /**
-     * @readonly
-     */
-    private bool $shouldIncludeRelative = \false;
+    private bool $shouldIncludeRelative;
     /**
      * @param TableRow[] $tableRows
      */
     public function __construct(string $title, string $label, array $tableRows, bool $shouldIncludeRelative = \false)
     {
+        Assert::allIsInstanceOf($tableRows, TableRow::class);
         $this->title = $title;
         $this->label = $label;
         $this->tableRows = $tableRows;
         $this->shouldIncludeRelative = $shouldIncludeRelative;
-        Assert::allIsInstanceOf($tableRows, TableRow::class);
     }
     public function getTitle(): string
     {

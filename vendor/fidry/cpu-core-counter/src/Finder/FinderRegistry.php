@@ -39,9 +39,10 @@ final class FinderRegistry
             new HwLogicalFinder(),
             new _NProcessorFinder(),
             new NProcessorFinder(),
+            // Keep before the lscpu finders: it counts the same CPUs without proc_open.
+            new CpuInfoFinder(),
             new LscpuLogicalFinder(),
             new LscpuRawLogicalFinder(),
-            new CpuInfoFinder(),
         ];
     }
     /**
@@ -56,7 +57,18 @@ final class FinderRegistry
      */
     public static function getDefaultPhysicalFinders(): array
     {
-        return [OnlyOnOSFamilyFinder::forWindows(new CmiCmdletPhysicalFinder()), OnlyOnOSFamilyFinder::forWindows(new WmicPhysicalFinder()), new HwPhysicalFinder(), new LscpuPhysicalFinder(), new LscpuRawPhysicalFinder(), new CpuInfoPhysicalFinder()];
+        return [
+            OnlyOnOSFamilyFinder::forWindows(new CmiCmdletPhysicalFinder()),
+            OnlyOnOSFamilyFinder::forWindows(new WmicPhysicalFinder()),
+            // Keep before the lscpu finders: it does not need proc_open, and on
+            // CPUs other than x86 it finds no count rather than a wrong one.
+            new CpuInfoPhysicalFinder(),
+            new HwPhysicalFinder(),
+            // Keep before LscpuPhysicalFinder, which undercounts the CPUs that
+            // mix several core types.
+            new LscpuRawPhysicalFinder(),
+            new LscpuPhysicalFinder(),
+        ];
     }
     /**
      * @return CpuCoreFinder Finds the maximum number of cores to use, rather than the

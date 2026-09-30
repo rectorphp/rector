@@ -13,6 +13,7 @@ namespace RectorPrefix202609\Fidry\CpuCoreCounter\Finder;
 
 use RectorPrefix202609\Fidry\CpuCoreCounter\FileReader\FileReader;
 use RectorPrefix202609\Fidry\CpuCoreCounter\FileReader\NativeFileReader;
+use function implode;
 use function preg_match;
 use function sprintf;
 use function trim;
@@ -29,13 +30,21 @@ use const PHP_EOL;
  * ignore it and count every CPU of the host. This is the count `nproc`
  * reports, but it does not need `proc_open`.
  *
+ * The kernel fills the CPU affinity from the possible CPUs, which include the
+ * offline ones. A hypervisor that leaves room to hot-add CPUs, e.g. Hyper-V,
+ * may make it far larger than the CPUs the VM has. Like sched_getaffinity(2),
+ * the finder therefore only counts the allowed CPUs that are also listed in
+ * /sys/devices/system/cpu/online.
+ *
  * @see https://man7.org/linux/man-pages/man2/sched_setaffinity.2.html
+ * @see https://docs.kernel.org/admin-guide/cputopology.html
  * @see https://docs.kernel.org/filesystems/proc.html
  * @see https://man7.org/linux/man-pages/man7/cpuset.7.html (FORMATS)
  */
 final class CpuAffinityFinder implements CpuCoreFinder
 {
     private const STATUS_PATH = '/proc/self/status';
+    private const ONLINE_PATH = '/sys/devices/system/cpu/online';
     // E.g. "Cpus_allowed_list:	0-1,4" for the CPUs 0, 1 and 4.
     private const CPUS_ALLOWED_LIST_REGEX = '/^Cpus_allowed_list:\s*(\S+)\s*$/m';
     /**
@@ -48,11 +57,18 @@ final class CpuAffinityFinder implements CpuCoreFinder
     }
     public function diagnose(): string
     {
-        $status = $this->fileReader->read(self::STATUS_PATH);
-        if (null === $status) {
-            return sprintf('Could not read the file "%s".', self::STATUS_PATH);
+        $lines = [];
+        foreach ([self::STATUS_PATH, self::ONLINE_PATH] as $path) {
+            $content = $this->fileReader->read($path);
+            if (null === $content) {
+                $lines[] = sprintf('Could not read the file "%s".', $path);
+            } else {
+                $lines[] = sprintf('Found the file "%s" with the content:', $path);
+                $lines[] = trim($content);
+            }
         }
-        return sprintf('Found the file "%s" with the content:%s%s%sWill return "%s".', self::STATUS_PATH, PHP_EOL, trim($status), PHP_EOL, self::countCpuCores($status) ?? 'null');
+        $lines[] = sprintf('Will return "%s".', $this->find() ?? 'null');
+        return implode(PHP_EOL, $lines);
     }
     /**
      * @return positive-int|null
@@ -60,20 +76,18 @@ final class CpuAffinityFinder implements CpuCoreFinder
     public function find(): ?int
     {
         $status = $this->fileReader->read(self::STATUS_PATH);
-        return null === $status ? null : self::countCpuCores($status);
+        if (null === $status) {
+            return null;
+        }
+        $online = trim((string) $this->fileReader->read(self::ONLINE_PATH));
+        if ('' === $online || 1 !== preg_match(self::CPUS_ALLOWED_LIST_REGEX, $status, $matches)) {
+            return null;
+        }
+        $cpuAllowedList = $matches[1];
+        return CpuList::countIntersection($cpuAllowedList, $online);
     }
     public function toString(): string
     {
         return 'CpuAffinityFinder';
-    }
-    /**
-     * @return positive-int|null
-     */
-    private static function countCpuCores(string $status): ?int
-    {
-        if (1 !== preg_match(self::CPUS_ALLOWED_LIST_REGEX, $status, $matches)) {
-            return null;
-        }
-        return CpuList::count($matches[1]);
     }
 }

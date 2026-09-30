@@ -7,6 +7,7 @@ use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
 use Rector\Caching\Enum\CacheKey;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\FileSystem\FilePathHelper;
 use Rector\Util\FileHasher;
 /**
  * Inspired by https://github.com/symplify/symplify/pull/90/files#diff-72041b2e1029a08930e13d79d298ef11
@@ -28,16 +29,21 @@ final class ChangedFilesDetector
      */
     private FileHasher $fileHasher;
     /**
+     * @readonly
+     */
+    private FilePathHelper $filePathHelper;
+    /**
      * @var array<string, true>
      */
     private array $cacheableFiles = [];
     // scopes the per-file cache key to the active --only / --only-suffix / --filter selection (empty = full run)
     private string $scopeSuffix = '';
-    public function __construct(FileHashComputer $fileHashComputer, Cache $cache, FileHasher $fileHasher)
+    public function __construct(FileHashComputer $fileHashComputer, Cache $cache, FileHasher $fileHasher, FilePathHelper $filePathHelper)
     {
         $this->fileHashComputer = $fileHashComputer;
         $this->cache = $cache;
         $this->fileHasher = $fileHasher;
+        $this->filePathHelper = $filePathHelper;
     }
     /**
      * @param string[] $onlyRules
@@ -68,7 +74,7 @@ final class ChangedFilesDetector
         // a scoped (--only) run reuses the full-run cache: a file left clean by all rules stays
         // clean under a single rule too, and the content is still compared below
         if ($cachedValue === null && $this->scopeSuffix !== '') {
-            $unscopedCacheKey = $this->fileHasher->hash($this->resolvePath($filePath));
+            $unscopedCacheKey = $this->fileHasher->hash($this->cacheKeyPath($filePath));
             $cachedValue = $this->cache->load($unscopedCacheKey, CacheKey::FILE_HASH_KEY);
         }
         if ($cachedValue !== null) {
@@ -97,21 +103,18 @@ final class ChangedFilesDetector
         $configurationSnapshot = $this->createConfigurationSnapshot($filePath);
         $this->storeConfigurationDataHash($filePath, $configurationSnapshot);
     }
-    private function resolvePath(string $filePath): string
-    {
-        $realPath = realpath($filePath);
-        if ($realPath === \false) {
-            return $filePath;
-        }
-        return $realPath;
-    }
     private function getFilePathCacheKey(string $filePath): string
     {
-        return $this->fileHasher->hash($this->resolvePath($filePath) . $this->scopeSuffix);
+        return $this->fileHasher->hash($this->cacheKeyPath($filePath) . $this->scopeSuffix);
+    }
+    // relative to the project, so a cache built in one checkout is reused in another (worktree, CI, container mount)
+    private function cacheKeyPath(string $filePath): string
+    {
+        return $this->filePathHelper->relativePath($this->filePathHelper->resolveRealPath($filePath));
     }
     private function hashFile(string $filePath): string
     {
-        return $this->fileHasher->hashFiles([$this->resolvePath($filePath)]);
+        return $this->fileHasher->hashFiles([$this->filePathHelper->resolveRealPath($filePath)]);
     }
     /**
      * @return array{hash: string, rules: string[], sets: string[], skip: string[]}
