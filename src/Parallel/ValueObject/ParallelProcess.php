@@ -17,6 +17,7 @@ use Rector\Parallel\Exception\ParallelShouldNotHappenException;
 use Throwable;
 /**
  * Inspired at @see https://raw.githubusercontent.com/phpstan/phpstan-src/master/src/Parallel/Process.php
+ * @see \Rector\Tests\Parallel\ValueObject\ParallelProcessTest
  */
 final class ParallelProcess
 {
@@ -65,7 +66,10 @@ final class ParallelProcess
             throw new ParallelShouldNotHappenException('Failed creating temp file.');
         }
         $this->stdErr = $tmp;
-        $this->process = new Process($this->command, null, null, [2 => $this->stdErr]);
+        // on Unix, the command runs in a wrapping shell; exec replaces the shell with the worker,
+        // so terminating the process stops the worker itself, not only the shell
+        $command = \DIRECTORY_SEPARATOR === '\\' ? $this->command : 'exec ' . $this->command;
+        $this->process = new Process($command, null, null, [2 => $this->stdErr]);
         $this->process->start($this->loop);
         $this->onData = $onData;
         $this->onError = $onError;
@@ -90,6 +94,8 @@ final class ParallelProcess
         $this->cancelTimer();
         $this->encoder->write($data);
         $this->timer = $this->loop->addTimer($this->timetoutInSeconds, function (): void {
+            // a worker that does not answer in time cannot be asked to stop either
+            $this->process->terminate();
             $onError = $this->onError;
             $errorMessage = sprintf('Child process timed out after %d seconds', $this->timetoutInSeconds);
             $onError(new Exception($errorMessage));
@@ -97,7 +103,6 @@ final class ParallelProcess
     }
     public function quit(): void
     {
-        $this->cancelTimer();
         if (!$this->process->isRunning()) {
             return;
         }
@@ -105,10 +110,13 @@ final class ParallelProcess
             $pipe->close();
         }
         // the process can be quit before its connection is bound, e.g. on quitAll() after an error;
-        // in that case the encoder was never set
-        if (isset($this->encoder)) {
-            $this->encoder->end();
+        // such a worker cannot be asked to stop
+        if (!isset($this->encoder)) {
+            $this->process->terminate();
+            return;
         }
+        // a busy worker keeps its timeout, so it is still terminated when it never finishes its job
+        $this->encoder->end();
     }
     public function bindConnection(Decoder $decoder, Encoder $encoder): void
     {
