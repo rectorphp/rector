@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Utils;
+namespace RectorPrefix202610\Entropy\Utils;
 
-use RectorPrefix202609\Entropy\Validation\Assert;
+use RectorPrefix202610\Entropy\Validation\Assert;
 /**
  * @api to be used outside
  */

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202609\Fidry\CpuCoreCounter\FileReader;
+namespace RectorPrefix202610\Fidry\CpuCoreCounter\FileReader;
 
 interface FileReader
 {

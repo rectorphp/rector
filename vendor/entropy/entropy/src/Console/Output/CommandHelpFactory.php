@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Console\Output;
+namespace RectorPrefix202610\Entropy\Console\Output;
 
-use RectorPrefix202609\Entropy\Attribute\RelatedTest;
-use RectorPrefix202609\Entropy\Console\Contract\CommandInterface;
-use RectorPrefix202609\Entropy\Console\Mapper\CommandRunParametersMapper;
-use RectorPrefix202609\Entropy\Console\Terminal\Terminal;
-use RectorPrefix202609\Entropy\Console\ValueObject\Argument;
-use RectorPrefix202609\Entropy\Console\ValueObject\Option;
-use RectorPrefix202609\Entropy\Tests\Console\Output\CommandHelpFactory\CommandHelpFactoryTest;
+use RectorPrefix202610\Entropy\Attribute\RelatedTest;
+use RectorPrefix202610\Entropy\Console\Contract\CommandInterface;
+use RectorPrefix202610\Entropy\Console\Mapper\CommandRunParametersMapper;
+use RectorPrefix202610\Entropy\Console\Terminal\Terminal;
+use RectorPrefix202610\Entropy\Console\ValueObject\Argument;
+use RectorPrefix202610\Entropy\Console\ValueObject\Option;
+use RectorPrefix202610\Entropy\Tests\Console\Output\CommandHelpFactory\CommandHelpFactoryTest;
 final class CommandHelpFactory
 {
     private CommandRunParametersMapper $commandRunParametersMapper;

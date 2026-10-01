@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202609;
+namespace RectorPrefix202610;
 
 /*
  * This file is part of the Symfony package.
@@ -14,5 +14,5 @@ if (\PHP_VERSION_ID < 80000 && \extension_loaded('tokenizer')) {
     class PhpToken extends \Symfony\Polyfill\Php80\PhpToken
     {
     }
-    \class_alias('RectorPrefix202609\PhpToken', 'PhpToken', \false);
+    \class_alias('RectorPrefix202610\PhpToken', 'PhpToken', \false);
 }

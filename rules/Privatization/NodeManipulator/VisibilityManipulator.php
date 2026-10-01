@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\Visibility;
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Privatization\NodeManipulator\VisibilityManipulatorTest
  */

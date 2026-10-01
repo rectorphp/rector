@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Composer;
 
-use RectorPrefix202609\Composer\Semver\VersionParser;
+use RectorPrefix202610\Composer\Semver\VersionParser;
 use Rector\FileSystem\JsonFileSystem;
 use Rector\Skipper\FileSystem\PathNormalizer;
 use UnexpectedValueException;

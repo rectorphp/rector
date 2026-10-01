@@ -8,9 +8,9 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\FileSystem\FilePathFilter;
 use Rector\ValueObject\Configuration;
-use RectorPrefix202609\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202609\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Configuration\ConfigurationFactoryTest
  */

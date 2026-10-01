@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Util;
 
-use RectorPrefix202609\Nette\Utils\Strings;
+use RectorPrefix202610\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\CustomRules\SimpleNodeDumper;
-use RectorPrefix202609\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
 final class NodePrinter
 {
     /**

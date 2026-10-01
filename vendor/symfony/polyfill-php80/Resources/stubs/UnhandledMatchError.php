@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202609;
+namespace RectorPrefix202610;
 
 /*
  * This file is part of the Symfony package.
@@ -14,5 +14,5 @@ if (\PHP_VERSION_ID < 80000) {
     class UnhandledMatchError extends \Error
     {
     }
-    \class_alias('RectorPrefix202609\UnhandledMatchError', 'UnhandledMatchError', \false);
+    \class_alias('RectorPrefix202610\UnhandledMatchError', 'UnhandledMatchError', \false);
 }

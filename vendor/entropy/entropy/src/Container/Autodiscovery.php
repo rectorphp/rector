@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Container;
+namespace RectorPrefix202610\Entropy\Container;
 
-use RectorPrefix202609\Entropy\Attribute\RelatedTest;
-use RectorPrefix202609\Entropy\FileSystem\FileFinder;
-use RectorPrefix202609\Entropy\Reflection\ClassNameResolver;
-use RectorPrefix202609\Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
-use RectorPrefix202609\Entropy\Validation\Assert;
+use RectorPrefix202610\Entropy\Attribute\RelatedTest;
+use RectorPrefix202610\Entropy\FileSystem\FileFinder;
+use RectorPrefix202610\Entropy\Reflection\ClassNameResolver;
+use RectorPrefix202610\Entropy\Tests\Container\Autodiscovery\AutodiscoveryTest;
+use RectorPrefix202610\Entropy\Validation\Assert;
 use ReflectionClass;
 use Throwable;
 /**

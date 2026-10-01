@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Console;
+namespace RectorPrefix202610\Entropy\Console;
 
-use RectorPrefix202609\Entropy\Attribute\RelatedTest;
-use RectorPrefix202609\Entropy\Console\Contract\CommandInterface;
-use RectorPrefix202609\Entropy\Console\Enum\ExitCode;
-use RectorPrefix202609\Entropy\Console\Input\InputParser;
-use RectorPrefix202609\Entropy\Console\Mapper\CLIRequestMapper;
-use RectorPrefix202609\Entropy\Console\Output\CommandHelpFactory;
-use RectorPrefix202609\Entropy\Console\Output\HelpPrinter;
-use RectorPrefix202609\Entropy\Console\Output\OutputPrinter;
-use RectorPrefix202609\Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
+use RectorPrefix202610\Entropy\Attribute\RelatedTest;
+use RectorPrefix202610\Entropy\Console\Contract\CommandInterface;
+use RectorPrefix202610\Entropy\Console\Enum\ExitCode;
+use RectorPrefix202610\Entropy\Console\Input\InputParser;
+use RectorPrefix202610\Entropy\Console\Mapper\CLIRequestMapper;
+use RectorPrefix202610\Entropy\Console\Output\CommandHelpFactory;
+use RectorPrefix202610\Entropy\Console\Output\HelpPrinter;
+use RectorPrefix202610\Entropy\Console\Output\OutputPrinter;
+use RectorPrefix202610\Entropy\Tests\Console\ConsoleApplication\ConsoleApplicationTest;
 use Throwable;
 final class ConsoleApplication
 {

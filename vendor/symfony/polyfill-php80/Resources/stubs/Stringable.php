@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202609;
+namespace RectorPrefix202610;
 
 /*
  * This file is part of the Symfony package.
@@ -18,5 +18,5 @@ if (\PHP_VERSION_ID < 80000) {
          */
         public function __toString();
     }
-    \class_alias('RectorPrefix202609\Stringable', 'Stringable', \false);
+    \class_alias('RectorPrefix202610\Stringable', 'Stringable', \false);
 }

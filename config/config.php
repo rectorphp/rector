@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609;
+namespace RectorPrefix202610;
 
 use Rector\Bootstrap\ExtensionConfigResolver;
 use Rector\Config\RectorConfig;

@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitor;
-use RectorPrefix202609\PHPUnit\Framework\Assert;
+use RectorPrefix202610\PHPUnit\Framework\Assert;
 use Rector\Doctrine\TypedCollections\TypeAnalyzer\CollectionTypeDetector;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\Rector\AbstractRector;

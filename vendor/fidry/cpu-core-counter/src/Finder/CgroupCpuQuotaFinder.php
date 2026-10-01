@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202609\Fidry\CpuCoreCounter\Finder;
+namespace RectorPrefix202610\Fidry\CpuCoreCounter\Finder;
 
-use RectorPrefix202609\Fidry\CpuCoreCounter\FileReader\FileReader;
-use RectorPrefix202609\Fidry\CpuCoreCounter\FileReader\NativeFileReader;
+use RectorPrefix202610\Fidry\CpuCoreCounter\FileReader\FileReader;
+use RectorPrefix202610\Fidry\CpuCoreCounter\FileReader\NativeFileReader;
 use function array_slice;
 use function count;
 use function explode;

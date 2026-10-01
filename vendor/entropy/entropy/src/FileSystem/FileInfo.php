@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\FileSystem;
+namespace RectorPrefix202610\Entropy\FileSystem;
 
-use RectorPrefix202609\Entropy\Utils\FileSystem;
+use RectorPrefix202610\Entropy\Utils\FileSystem;
 use SplFileInfo;
 final class FileInfo extends SplFileInfo
 {

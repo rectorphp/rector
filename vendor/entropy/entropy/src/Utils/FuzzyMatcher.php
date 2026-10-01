@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Utils;
+namespace RectorPrefix202610\Entropy\Utils;
 
-use RectorPrefix202609\Entropy\Attribute\RelatedTest;
-use RectorPrefix202609\Entropy\Tests\Utils\FuzzyMatcherTest;
+use RectorPrefix202610\Entropy\Attribute\RelatedTest;
+use RectorPrefix202610\Entropy\Tests\Utils\FuzzyMatcherTest;
 /**
  * @see \Entropy\Tests\Utils\FuzzyMatcherTest
  */

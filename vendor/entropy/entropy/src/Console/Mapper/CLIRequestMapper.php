@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Console\Mapper;
+namespace RectorPrefix202610\Entropy\Console\Mapper;
 
-use RectorPrefix202609\Entropy\Attribute\RelatedTest;
-use RectorPrefix202609\Entropy\Console\Contract\CommandInterface;
-use RectorPrefix202609\Entropy\Console\Exception\ConsoleInputMappingException;
-use RectorPrefix202609\Entropy\Console\ValueObject\CLIRequest;
-use RectorPrefix202609\Entropy\Reflection\ParameterOptionMarkerResolver;
-use RectorPrefix202609\Entropy\Tests\Console\Mapper\CLIRequestMapperTest;
-use RectorPrefix202609\Entropy\Validation\Assert;
+use RectorPrefix202610\Entropy\Attribute\RelatedTest;
+use RectorPrefix202610\Entropy\Console\Contract\CommandInterface;
+use RectorPrefix202610\Entropy\Console\Exception\ConsoleInputMappingException;
+use RectorPrefix202610\Entropy\Console\ValueObject\CLIRequest;
+use RectorPrefix202610\Entropy\Reflection\ParameterOptionMarkerResolver;
+use RectorPrefix202610\Entropy\Tests\Console\Mapper\CLIRequestMapperTest;
+use RectorPrefix202610\Entropy\Validation\Assert;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;

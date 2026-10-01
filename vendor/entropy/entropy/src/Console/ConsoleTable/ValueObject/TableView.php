@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Console\ConsoleTable\ValueObject;
+namespace RectorPrefix202610\Entropy\Console\ConsoleTable\ValueObject;
 
-use RectorPrefix202609\Entropy\Validation\Assert;
+use RectorPrefix202610\Entropy\Validation\Assert;
 final class TableView
 {
     private string $title;

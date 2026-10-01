@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Console\ConsoleTable;
+namespace RectorPrefix202610\Entropy\Console\ConsoleTable;
 
-use RectorPrefix202609\Entropy\Attribute\RelatedTest;
-use RectorPrefix202609\Entropy\Console\ConsoleTable\ValueObject\TableRow;
-use RectorPrefix202609\Entropy\Console\ConsoleTable\ValueObject\TableView;
-use RectorPrefix202609\Entropy\Console\Output\OutputPrinter;
-use RectorPrefix202609\Entropy\Tests\Console\ConsoleTable\ViewRendererTest;
+use RectorPrefix202610\Entropy\Attribute\RelatedTest;
+use RectorPrefix202610\Entropy\Console\ConsoleTable\ValueObject\TableRow;
+use RectorPrefix202610\Entropy\Console\ConsoleTable\ValueObject\TableView;
+use RectorPrefix202610\Entropy\Console\Output\OutputPrinter;
+use RectorPrefix202610\Entropy\Tests\Console\ConsoleTable\ViewRendererTest;
 /**
  * @see \Entropy\Tests\Console\ConsoleTable\ViewRendererTest
  */

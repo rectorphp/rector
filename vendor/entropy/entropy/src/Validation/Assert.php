@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Validation;
+namespace RectorPrefix202610\Entropy\Validation;
 
 use InvalidArgumentException;
 use ReflectionClass;

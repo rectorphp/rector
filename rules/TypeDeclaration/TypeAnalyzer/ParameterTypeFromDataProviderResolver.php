@@ -18,7 +18,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202610\Webmozart\Assert\Assert;
 final class ParameterTypeFromDataProviderResolver
 {
     /**

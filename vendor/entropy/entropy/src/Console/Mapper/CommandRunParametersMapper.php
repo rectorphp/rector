@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Console\Mapper;
+namespace RectorPrefix202610\Entropy\Console\Mapper;
 
-use RectorPrefix202609\Entropy\Attribute\RelatedTest;
-use RectorPrefix202609\Entropy\Console\Contract\CommandInterface;
-use RectorPrefix202609\Entropy\Console\Exception\InvalidCommandException;
-use RectorPrefix202609\Entropy\Console\ValueObject\Argument;
-use RectorPrefix202609\Entropy\Console\ValueObject\ArgumentsAndOptions;
-use RectorPrefix202609\Entropy\Console\ValueObject\Option;
-use RectorPrefix202609\Entropy\Reflection\ParameterDescriptionResolver;
-use RectorPrefix202609\Entropy\Reflection\ParameterOptionMarkerResolver;
-use RectorPrefix202609\Entropy\Tests\Console\Mapper\CommandRunParametersMapperTest;
+use RectorPrefix202610\Entropy\Attribute\RelatedTest;
+use RectorPrefix202610\Entropy\Console\Contract\CommandInterface;
+use RectorPrefix202610\Entropy\Console\Exception\InvalidCommandException;
+use RectorPrefix202610\Entropy\Console\ValueObject\Argument;
+use RectorPrefix202610\Entropy\Console\ValueObject\ArgumentsAndOptions;
+use RectorPrefix202610\Entropy\Console\ValueObject\Option;
+use RectorPrefix202610\Entropy\Reflection\ParameterDescriptionResolver;
+use RectorPrefix202610\Entropy\Reflection\ParameterOptionMarkerResolver;
+use RectorPrefix202610\Entropy\Tests\Console\Mapper\CommandRunParametersMapperTest;
 use ReflectionMethod;
 use ReflectionNamedType;
 /**

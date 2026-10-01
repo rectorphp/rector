@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Console\Command;
 
-use RectorPrefix202609\Nette\Utils\Json;
+use RectorPrefix202610\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Configuration\Option;
@@ -12,11 +12,11 @@ use Rector\Reporting\DeprecatedRulesReporter;
 use Rector\Reporting\MissConfigurationReporter;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\ValueObject\Configuration;
-use RectorPrefix202609\Symfony\Component\Console\Command\Command;
-use RectorPrefix202609\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202609\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202609\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202609\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202610\Symfony\Component\Console\Command\Command;
+use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202610\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202610\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\Tests\Console\Command\ValidateConfigCommandTest
  */

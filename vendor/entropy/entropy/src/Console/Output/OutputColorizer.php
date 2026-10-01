@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202609\Entropy\Console\Output;
+namespace RectorPrefix202610\Entropy\Console\Output;
 
-use RectorPrefix202609\Entropy\Attribute\RelatedTest;
-use RectorPrefix202609\Entropy\Console\Enum\Color;
-use RectorPrefix202609\Entropy\Tests\Console\Output\OutputColozierTest;
+use RectorPrefix202610\Entropy\Attribute\RelatedTest;
+use RectorPrefix202610\Entropy\Console\Enum\Color;
+use RectorPrefix202610\Entropy\Tests\Console\Output\OutputColozierTest;
 final class OutputColorizer
 {
     private bool $useColors;

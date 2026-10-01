@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection;
 
-use RectorPrefix202609\Doctrine\Inflector\Inflector;
-use RectorPrefix202609\Doctrine\Inflector\Rules\English\InflectorFactory;
+use RectorPrefix202610\Doctrine\Inflector\Inflector;
+use RectorPrefix202610\Doctrine\Inflector\Rules\English\InflectorFactory;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
@@ -71,9 +71,9 @@ use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Rector\AbstractRector;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\Skipper\UsedSkipCollector;
-use RectorPrefix202609\Symfony\Component\Console\Application;
-use RectorPrefix202609\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202609\Webmozart\Assert\Assert;
+use RectorPrefix202610\Symfony\Component\Console\Application;
+use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202610\Webmozart\Assert\Assert;
 final class LazyContainerFactory
 {
     /**
