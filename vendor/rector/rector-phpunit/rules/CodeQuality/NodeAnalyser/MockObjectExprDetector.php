@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPUnit\CodeQuality\NodeFinder\VariableFinder;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
@@ -36,12 +37,17 @@ final class MockObjectExprDetector
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, VariableFinder $variableFinder, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     */
+    private NodeTypeResolver $nodeTypeResolver;
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, VariableFinder $variableFinder, ReflectionResolver $reflectionResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableFinder = $variableFinder;
         $this->reflectionResolver = $reflectionResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     public function hasMethodCallWithoutExpects(ClassMethod $classMethod): bool
     {
@@ -56,6 +62,10 @@ final class MockObjectExprDetector
                 continue;
             }
             if ($methodCall->var instanceof MethodCall) {
+                continue;
+            }
+            // stubs, e.g. from createStub(), do not need expectations
+            if ($this->isStubOnly($methodCall->var)) {
                 continue;
             }
             return \true;
@@ -147,5 +157,15 @@ final class MockObjectExprDetector
             }
         }
         return \false;
+    }
+    private function isStubOnly(Expr $expr): bool
+    {
+        $exprType = $this->nodeTypeResolver->getType($expr);
+        $stubObjectType = new ObjectType(PHPUnitClassName::STUB);
+        if (!$stubObjectType->isSuperTypeOf($exprType)->yes()) {
+            return \false;
+        }
+        $mockObjectType = new ObjectType(PHPUnitClassName::MOCK_OBJECT);
+        return !$mockObjectType->isSuperTypeOf($exprType)->yes();
     }
 }

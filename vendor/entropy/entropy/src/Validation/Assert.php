@@ -55,6 +55,28 @@ final class Assert
         }
     }
     /**
+     * @api
+     * @param mixed $value
+     */
+    public static function notEmpty($value, string $message = ''): void
+    {
+        if (!$value) {
+            self::fail($message !== '' ? $message : 'Expected a non-empty value.');
+        }
+    }
+    /**
+     * @api
+     * @param mixed $value
+     * @param class-string $class
+     * @phpstan-assert object $value
+     */
+    public static function isInstanceOf($value, string $class, string $message = ''): void
+    {
+        if (!$value instanceof $class) {
+            self::fail($message !== '' ? $message : sprintf('Expected an instance of "%s".', $class));
+        }
+    }
+    /**
      * @param object|class-string $classOrObject
      */
     public static function methodExists($classOrObject, string $method, string $message = ''): void
@@ -65,35 +87,45 @@ final class Assert
         }
     }
     /**
-     * @param mixed $values
+     * @param iterable<mixed> $values
+     * @phpstan-assert iterable<string> $values
      */
-    public static function allString($values, string $message = ''): void
+    public static function allString(iterable $values, string $message = ''): void
     {
-        self::isIterable($values);
         foreach ($values as $value) {
             self::string($value, $message);
         }
     }
     /**
-     * @param mixed $values
+     * @api
+     * @param iterable<string> $values
      */
-    public static function allIsInstanceOf($values, string $class, string $message = ''): void
+    public static function allFileExists(iterable $values, string $message = ''): void
     {
-        self::isIterable($values);
+        foreach ($values as $value) {
+            self::fileExists($value, $message);
+        }
+    }
+    /**
+     * @api
+     * @param iterable<string> $values
+     */
+    public static function allDirectory(iterable $values, string $message = ''): void
+    {
+        foreach ($values as $value) {
+            self::directory($value, $message);
+        }
+    }
+    /**
+     * @param iterable<mixed> $values
+     * @param class-string $class
+     */
+    public static function allIsInstanceOf(iterable $values, string $class, string $message = ''): void
+    {
         foreach ($values as $value) {
             if (!$value instanceof $class) {
                 self::fail($message !== '' ? $message : sprintf('Expected an instance of "%s" in every item.', $class));
             }
-        }
-    }
-    /**
-     * @param mixed $values
-     * @phpstan-assert iterable<mixed> $values
-     */
-    private static function isIterable($values): void
-    {
-        if (!is_iterable($values)) {
-            self::fail('Expected an iterable value.');
         }
     }
     private static function fail(string $message): void
