@@ -196,11 +196,66 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         /** @var Identifier[]|Name[] $phpParserUnionedTypes */
         $phpParserUnionedTypes = array_unique($phpParserUnionedTypes, \SORT_REGULAR);
+        $phpParserUnionedTypes = $this->removeRedundantIntersectionTypes($phpParserUnionedTypes);
         $countPhpParserUnionedTypes = count($phpParserUnionedTypes);
         if ($countPhpParserUnionedTypes === 1) {
             return $phpParserUnionedTypes[0];
         }
         return $this->resolveTypeWithNullablePHPParserUnionType(new PhpParserUnionType($phpParserUnionedTypes));
+    }
+    /**
+     * PHP rejects e.g. "A|(A&B)" with "Type A&B is redundant as it is more restrictive than type A",
+     * so drop intersections that contain all parts of another member of the union
+     *
+     * @param array<Identifier|Name|PHPParserNodeIntersectionType> $phpParserUnionedTypes
+     * @return list<Identifier|Name|PHPParserNodeIntersectionType>
+     */
+    private function removeRedundantIntersectionTypes(array $phpParserUnionedTypes): array
+    {
+        $phpParserUnionedTypes = array_values($phpParserUnionedTypes);
+        $typeNames = [];
+        foreach ($phpParserUnionedTypes as $key => $phpParserUnionedType) {
+            $typeNames[$key] = $this->resolveIntersectionPartNames($phpParserUnionedType);
+        }
+        foreach ($phpParserUnionedTypes as $key => $phpParserUnionedType) {
+            if (!$phpParserUnionedType instanceof PHPParserNodeIntersectionType) {
+                continue;
+            }
+            foreach ($typeNames as $otherKey => $otherTypeNames) {
+                if ($otherKey === $key || $otherTypeNames === []) {
+                    continue;
+                }
+                // already removed
+                if (!isset($phpParserUnionedTypes[$otherKey])) {
+                    continue;
+                }
+                if (array_diff($otherTypeNames, $typeNames[$key]) === []) {
+                    unset($phpParserUnionedTypes[$key]);
+                    continue 2;
+                }
+            }
+        }
+        return array_values($phpParserUnionedTypes);
+    }
+    /**
+     * @return string[]
+     */
+    private function resolveIntersectionPartNames(Node $node): array
+    {
+        if ($node instanceof Name) {
+            return [$node->toString()];
+        }
+        if (!$node instanceof PHPParserNodeIntersectionType) {
+            return [];
+        }
+        $names = [];
+        foreach ($node->types as $type) {
+            if (!$type instanceof Name) {
+                return [];
+            }
+            $names[] = $type->toString();
+        }
+        return $names;
     }
     private function resolveUnionTypeNode(PhpParserUnionType $phpParserUnionType): ?PhpParserUnionType
     {
