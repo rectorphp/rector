@@ -23,6 +23,8 @@ use Rector\Doctrine\Orm214\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEven
 use Rector\Doctrine\Orm28\Rector\MethodCall\IterateToToIterableRector;
 use Rector\Doctrine\Orm30\Rector\MethodCall\CastDoctrineExprToStringRector;
 use Rector\Doctrine\Orm30\Rector\MethodCall\SetParametersArrayToCollectionRector;
+use Rector\Doctrine\Orm37\Rector\Attribute\DoctrineOrderByAttributeSortDirectionRector;
+use Rector\Doctrine\Orm37\Rector\MethodCall\DoctrineQueryBuilderSortDirectionRector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Property\NestedAnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationPropertyToAttributeClass;
@@ -77,6 +79,9 @@ return static function (RectorConfig $rectorConfig): void {
         EventSubscriberInterfaceToAttributeRector::class,
         // doctrine/data-fixtures 1.6
         AddGetReferenceTypeRector::class,
+        // doctrine/orm 3.7
+        DoctrineQueryBuilderSortDirectionRector::class,
+        DoctrineOrderByAttributeSortDirectionRector::class,
     ]);
     // doctrine/data-fixtures 1.7
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Doctrine\Common\DataFixtures\OrderedFixtureInterface', 'getOrder', new IntegerType())], 'doctrine/data-fixtures', '>=1.7');

@@ -148,17 +148,17 @@
         },
         {
             "name": "composer\/semver",
-            "version": "3.5.0",
-            "version_normalized": "3.5.0.0",
+            "version": "3.5.1",
+            "version_normalized": "3.5.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/semver.git",
-                "reference": "f7a296f4c4cf8cb8bb83e35d6951a406bb11afa5"
+                "reference": "528948210cc46f967a4b98e83b19e76f2b504993"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/semver\/zipball\/f7a296f4c4cf8cb8bb83e35d6951a406bb11afa5",
-                "reference": "f7a296f4c4cf8cb8bb83e35d6951a406bb11afa5",
+                "url": "https:\/\/api.github.com\/repos\/composer\/semver\/zipball\/528948210cc46f967a4b98e83b19e76f2b504993",
+                "reference": "528948210cc46f967a4b98e83b19e76f2b504993",
                 "shasum": ""
             },
             "require": {
@@ -168,7 +168,7 @@
                 "phpstan\/phpstan": "^1.11",
                 "symfony\/phpunit-bridge": "^3 || ^7"
             },
-            "time": "2026-09-24T14:38:51+00:00",
+            "time": "2026-10-05T13:12:12+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -212,7 +212,7 @@
             "support": {
                 "irc": "ircs:\/\/irc.libera.chat:6697\/composer",
                 "issues": "https:\/\/github.com\/composer\/semver\/issues",
-                "source": "https:\/\/github.com\/composer\/semver\/tree\/3.5.0"
+                "source": "https:\/\/github.com\/composer\/semver\/tree\/3.5.1"
             },
             "funding": [
                 {
@@ -1558,12 +1558,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "91e9c152654a8adf25cab9ef103ba3631659fd08"
+                "reference": "c48eeac1143aaf4591400704a4f37041d89d13a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/91e9c152654a8adf25cab9ef103ba3631659fd08",
-                "reference": "91e9c152654a8adf25cab9ef103ba3631659fd08",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/c48eeac1143aaf4591400704a4f37041d89d13a1",
+                "reference": "c48eeac1143aaf4591400704a4f37041d89d13a1",
                 "shasum": ""
             },
             "require": {
@@ -1586,7 +1586,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-09-26T18:40:48+00:00",
+            "time": "2026-10-05T14:06:12+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
