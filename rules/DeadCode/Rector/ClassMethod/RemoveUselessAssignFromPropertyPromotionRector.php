@@ -92,10 +92,6 @@ CODE_SAMPLE
             // early return, if not all are property fetches from $this and its param
             return null;
         }
-        // empty data? nothing to remove
-        if ($removeStmtKeys === []) {
-            return null;
-        }
         foreach ($removeStmtKeys as $removeStmtKey) {
             unset($node->stmts[$removeStmtKey]);
         }

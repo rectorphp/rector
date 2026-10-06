@@ -601,6 +601,8 @@ final class PHPStanNodeScopeResolver
         // before entering the class/trait again, we have to tell scope no class was set, otherwise it crashes
         $this->privatesAccessor->setPrivateProperty($traitContext, 'classReflection', $traitClassReflection);
         $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
+        // the cloned scope keeps node callback scope cached from former context, reset it to use the trait context
+        $this->privatesAccessor->setPrivateProperty($traitScope, 'nodeCallbackScope', null);
         $trait->setAttribute(AttributeKey::SCOPE, $traitScope);
         $this->nodeScopeResolverProcessNodes($trait->stmts, $traitScope, $nodeCallback);
         $this->decorateNodeAttrGroups($trait, $traitScope, $nodeCallback);

@@ -1,6 +1,16 @@
 Changelog
 =========
 
+## 2.5.0
+
+### Added
+
+- Added `keysExist`, and the `nullOrKeysExist`, `allKeysExist`, and `allNullOrKeysExist` variants.
+
+### Changed
+
+- `propertyExists` now preserves `class-string` and object types through its return value, improving static analysis support.
+
 ## 2.4.1
 
 ### Fixed

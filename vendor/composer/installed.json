@@ -390,17 +390,17 @@
         },
         {
             "name": "entropy\/entropy",
-            "version": "0.4.23",
-            "version_normalized": "0.4.23.0",
+            "version": "0.4.27",
+            "version_normalized": "0.4.27.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/TomasVotruba\/entropy.git",
-                "reference": "6af0525163f3b0c3a473046e5fa151477d7cd1d1"
+                "reference": "57f762f4dc53b27923967acf77b97afdc34def09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/6af0525163f3b0c3a473046e5fa151477d7cd1d1",
-                "reference": "6af0525163f3b0c3a473046e5fa151477d7cd1d1",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/57f762f4dc53b27923967acf77b97afdc34def09",
+                "reference": "57f762f4dc53b27923967acf77b97afdc34def09",
                 "shasum": ""
             },
             "require": {
@@ -423,7 +423,7 @@
                 "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-01T12:27:46+00:00",
+            "time": "2026-10-05T22:23:15+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -438,7 +438,7 @@
             "description": "Entropy framework",
             "support": {
                 "issues": "https:\/\/github.com\/TomasVotruba\/entropy\/issues",
-                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.23"
+                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.27"
             },
             "install-path": "..\/entropy\/entropy"
         },
@@ -2877,17 +2877,17 @@
         },
         {
             "name": "webmozart\/assert",
-            "version": "2.4.1",
-            "version_normalized": "2.4.1.0",
+            "version": "2.5.0",
+            "version_normalized": "2.5.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/webmozarts\/assert.git",
-                "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70"
+                "reference": "8a163706bbcac613733dba03f51e13b5eb1bb819"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/webmozarts\/assert\/zipball\/2ccb7c2e821038c03a3e6e1700c570c158c55f70",
-                "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70",
+                "url": "https:\/\/api.github.com\/repos\/webmozarts\/assert\/zipball\/8a163706bbcac613733dba03f51e13b5eb1bb819",
+                "reference": "8a163706bbcac613733dba03f51e13b5eb1bb819",
                 "shasum": ""
             },
             "require": {
@@ -2901,7 +2901,7 @@
                 "ext-simplexml": "",
                 "ext-spl": ""
             },
-            "time": "2026-06-15T15:31:57+00:00",
+            "time": "2026-10-05T23:14:19+00:00",
             "type": "library",
             "extra": {
                 "psalm": {
@@ -2940,7 +2940,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/webmozarts\/assert\/issues",
-                "source": "https:\/\/github.com\/webmozarts\/assert\/tree\/2.4.1"
+                "source": "https:\/\/github.com\/webmozarts\/assert\/tree\/2.5.0"
             },
             "install-path": "..\/webmozart\/assert"
         }
