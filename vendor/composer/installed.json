@@ -1673,12 +1673,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "722063f5ae2c1f7e01663a7a727f1a8f451a834f"
+                "reference": "eb010a02ef28c2e631dd1703ed0799971de9f64a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/722063f5ae2c1f7e01663a7a727f1a8f451a834f",
-                "reference": "722063f5ae2c1f7e01663a7a727f1a8f451a834f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/eb010a02ef28c2e631dd1703ed0799971de9f64a",
+                "reference": "eb010a02ef28c2e631dd1703ed0799971de9f64a",
                 "shasum": ""
             },
             "require": {
@@ -1696,15 +1696,15 @@
                 "rector\/jack": "^1.0",
                 "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.6",
+                "shipmonk\/dead-code-detector": "^1.4",
                 "symplify\/easy-coding-standard": "^13.2",
                 "symplify\/phpstan-extensions": "^12.0",
                 "symplify\/phpstan-rules": "^14.13.1",
                 "tomasvotruba\/class-leak": "^2.1",
                 "tomasvotruba\/type-coverage": "^2.3",
-                "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-03T07:48:49+00:00",
+            "time": "2026-10-06T09:17:13+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
