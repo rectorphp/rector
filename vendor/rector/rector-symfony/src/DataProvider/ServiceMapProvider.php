@@ -17,10 +17,9 @@ final class ServiceMapProvider
      */
     private ServiceMapFactory $serviceMapFactory;
     private ?ServiceMap $serviceMap = null;
-    public function __construct(ServiceMapFactory $serviceMapFactory, ?ServiceMap $serviceMap = null)
+    public function __construct(ServiceMapFactory $serviceMapFactory)
     {
         $this->serviceMapFactory = $serviceMapFactory;
-        $this->serviceMap = $serviceMap;
     }
     public function provide(): ServiceMap
     {
