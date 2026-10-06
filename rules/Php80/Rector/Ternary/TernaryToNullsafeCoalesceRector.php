@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use PHPStan\Type\TypeCombinator;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
@@ -154,13 +153,14 @@ CODE_SAMPLE
     /**
      * Guards the "?? $fallback" rewrite.
      *
-     * The ternary and the coalesce only agree while the call itself cannot return null:
+     * The ternary and the coalesce only agree while the call itself cannot return null,
+     * so "mixed" and untyped calls are skipped too:
      *
      *     null !== $a ? $a->find() : ''   // $a->find() returning null yields null
      *     $a?->find() ?? ''               // $a->find() returning null yields ''
      */
     private function shouldSkipCoalesceFallback(Expr $callExpr): bool
     {
-        return TypeCombinator::containsNull($this->getType($callExpr));
+        return !$this->getType($callExpr)->isNull()->no();
     }
 }
