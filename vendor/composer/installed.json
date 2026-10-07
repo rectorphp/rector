@@ -390,17 +390,17 @@
         },
         {
             "name": "entropy\/entropy",
-            "version": "0.4.27",
-            "version_normalized": "0.4.27.0",
+            "version": "0.4.28",
+            "version_normalized": "0.4.28.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/TomasVotruba\/entropy.git",
-                "reference": "57f762f4dc53b27923967acf77b97afdc34def09"
+                "reference": "d6f2c8a591133434692e9478a5bba4aebfe820f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/57f762f4dc53b27923967acf77b97afdc34def09",
-                "reference": "57f762f4dc53b27923967acf77b97afdc34def09",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/d6f2c8a591133434692e9478a5bba4aebfe820f1",
+                "reference": "d6f2c8a591133434692e9478a5bba4aebfe820f1",
                 "shasum": ""
             },
             "require": {
@@ -417,13 +417,13 @@
                 "rector\/rector": "^2.4",
                 "rector\/swiss-knife": "^2.4",
                 "shipmonk\/composer-dependency-analyser": "^1.8",
+                "shipmonk\/dead-code-detector": "^1.4",
                 "symplify\/easy-coding-standard": "^13.1",
                 "symplify\/phpstan-rules": "^14.10",
                 "tomasvotruba\/type-coverage": "^2.2",
-                "tomasvotruba\/unused-public": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-05T22:23:15+00:00",
+            "time": "2026-10-07T08:43:40+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -438,7 +438,7 @@
             "description": "Entropy framework",
             "support": {
                 "issues": "https:\/\/github.com\/TomasVotruba\/entropy\/issues",
-                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.27"
+                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.28"
             },
             "install-path": "..\/entropy\/entropy"
         },

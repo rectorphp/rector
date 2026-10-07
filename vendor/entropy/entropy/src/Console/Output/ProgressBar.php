@@ -19,18 +19,25 @@ final class ProgressBar
     private const BAR_WIDTH = 28;
     private const COMPLETE_CHAR = '▓';
     private const REMAINING_CHAR = '░';
+    // in non-interactive output (CI) print a line only every N percent, to avoid spamming the log
+    private const CI_PERCENT_STEP = 20;
     private int $current = 0;
     private int $maxSteps = 0;
     private bool $isSilent;
+    private bool $isDecorated;
+    private int $lastPrintedPercent = -self::CI_PERCENT_STEP;
     public function __construct()
     {
         // avoid printing to stdout during unit tests
         $this->isSilent = defined('PHPUNIT_COMPOSER_INSTALL');
+        // a non-interactive stream (CI, piped output) cannot rewrite a line, so fall back to milestone lines
+        $this->isDecorated = !$this->isSilent && stream_isatty(\STDOUT);
     }
     public function start(int $maxSteps): void
     {
         $this->maxSteps = max(0, $maxSteps);
         $this->current = 0;
+        $this->lastPrintedPercent = -self::CI_PERCENT_STEP;
         $this->display();
     }
     public function advance(int $step = 1): void
@@ -46,7 +53,8 @@ final class ProgressBar
     {
         $this->current = $this->maxSteps;
         $this->display();
-        if (!$this->isSilent) {
+        // only the in-place bar needs a closing newline; milestone lines already end with one
+        if (!$this->isSilent && $this->isDecorated) {
             fwrite(\STDOUT, \PHP_EOL);
         }
     }
@@ -72,7 +80,19 @@ final class ProgressBar
         if ($this->isSilent) {
             return;
         }
-        // \r returns the cursor to the line start, so the bar is re-written in place
-        fwrite(\STDOUT, "\r" . $this->render());
+        if ($this->isDecorated) {
+            // \r returns the cursor to the line start, so the bar is re-written in place
+            fwrite(\STDOUT, "\r" . $this->render());
+            return;
+        }
+        // CI: print a standalone line only when a new percent milestone is reached
+        $percent = (int) round($this->resolvePercent() * 100);
+        $isMilestone = $percent >= $this->lastPrintedPercent + self::CI_PERCENT_STEP;
+        $isFinalStep = $percent === 100 && $this->lastPrintedPercent !== 100;
+        if (!$isMilestone && !$isFinalStep) {
+            return;
+        }
+        $this->lastPrintedPercent = $percent;
+        fwrite(\STDOUT, $this->render() . \PHP_EOL);
     }
 }

@@ -29,6 +29,7 @@ final class ValueOptionNameResolver
             // plural array option mapped to singular --option (mirrors the mapper)
             $isArray = $type instanceof ReflectionNamedType && $type->getName() === 'array' && !$reflectionParameter->isVariadic();
             if ($key !== 0 && $isArray && substr_compare($optionName, 's', -strlen('s')) === 0) {
+                // cast for PHP 7.4, where substr() is typed string|false
                 $optionName = (string) substr($optionName, 0, -1);
             }
             $valueOptionNames[$optionName] = \true;
