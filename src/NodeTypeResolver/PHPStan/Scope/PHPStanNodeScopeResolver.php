@@ -9,7 +9,6 @@ use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
@@ -20,7 +19,6 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Clone_;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\ErrorSuppress;
@@ -55,13 +53,9 @@ use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -71,7 +65,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
@@ -213,7 +206,6 @@ final class PHPStanNodeScopeResolver
                 $this->nodeScopeResolverProcessNodes($node->stmts, $mutatingScope, $nodeCallback);
                 return;
             }
-            $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
             if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast || $node instanceof YieldFrom || $node instanceof UnaryMinus || $node instanceof UnaryPlus || $node instanceof Throw_ || $node instanceof Empty_ || $node instanceof BooleanNot || $node instanceof Clone_ || $node instanceof ErrorSuppress || $node instanceof BitwiseNot || $node instanceof Eval_ || $node instanceof Print_ || $node instanceof Exit_ || $node instanceof Include_ || $node instanceof Instanceof_) && $node->expr instanceof Expr) {
                 $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 return;
@@ -400,8 +392,8 @@ final class PHPStanNodeScopeResolver
         try {
             $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
         } catch (ParserErrorsException|ParserException|ShouldNotHappenException|UndefinedVariableException $exception) {
-            // nothing we can do more precise here as error parsing from deep internal PHPStan service with service injection we cannot reset
-            // in the middle of process
+            // nothing we can do more precise here as error parsing from deep internal PHPStan
+            // service with service injection we cannot reset in the middle of process
             // fallback to fill by found scope
             \Rector\NodeTypeResolver\PHPStan\Scope\RectorNodeScopeResolver::processNodes($stmts, $mutatingScope);
         }
@@ -455,24 +447,6 @@ final class PHPStanNodeScopeResolver
         $arrayItem->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         if ($arrayItem->value instanceof List_) {
             $this->processArray($arrayItem->value, $mutatingScope);
-        }
-    }
-    /**
-     * @param callable(Node $trait, MutatingScope $scope): void $nodeCallback
-     */
-    private function decorateNodeAttrGroups(Node $node, MutatingScope $mutatingScope, callable $nodeCallback): void
-    {
-        // better to have AttrGroupsAwareInterface for all Node definition with attrGroups property
-        // but because may conflict with StmtsAwareInterface patch, this needs to be here
-        if (!$node instanceof Param && !$node instanceof ArrowFunction && !$node instanceof Closure && !$node instanceof ClassConst && !$node instanceof ClassLike && !$node instanceof ClassMethod && !$node instanceof EnumCase && !$node instanceof Function_ && !$node instanceof Property) {
-            return;
-        }
-        foreach ($node->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attr) {
-                foreach ($attr->args as $arg) {
-                    $this->nodeScopeResolverProcessNodes([new Expression($arg->value)], $mutatingScope, $nodeCallback);
-                }
-            }
         }
     }
     private function processSwitch(Switch_ $switch, MutatingScope $mutatingScope): void
@@ -562,10 +536,6 @@ final class PHPStanNodeScopeResolver
         }
         $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
         $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
-        try {
-            return $mutatingScope->enterClass($classReflection);
-        } catch (ShouldNotHappenException $exception) {
-        }
         return $mutatingScope;
     }
     /**
@@ -590,7 +560,6 @@ final class PHPStanNodeScopeResolver
         if (!$this->reflectionProvider->hasClass($traitName)) {
             $trait->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $this->nodeScopeResolverProcessNodes($trait->stmts, $mutatingScope, $nodeCallback);
-            $this->decorateNodeAttrGroups($trait, $mutatingScope, $nodeCallback);
             return;
         }
         $traitClassReflection = $this->reflectionProvider->getClass($traitName);
@@ -605,6 +574,5 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor->setPrivateProperty($traitScope, 'nodeCallbackScope', null);
         $trait->setAttribute(AttributeKey::SCOPE, $traitScope);
         $this->nodeScopeResolverProcessNodes($trait->stmts, $traitScope, $nodeCallback);
-        $this->decorateNodeAttrGroups($trait, $traitScope, $nodeCallback);
     }
 }
