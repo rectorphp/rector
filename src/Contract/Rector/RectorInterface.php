@@ -6,7 +6,7 @@ namespace Rector\Contract\Rector;
 use PhpParser\Node;
 use PhpParser\NodeVisitor;
 
-interface RectorInterface extends NodeVisitor
+interface RectorInterface extends DocumentedRuleInterface
 {
     /**
      * List of nodes this class checks, classes that implements \PhpParser\Node
@@ -15,6 +15,10 @@ interface RectorInterface extends NodeVisitor
      * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array;
+    /**
+     * @return int|Node|Node[]|null
+     */
+    public function enterNode(Node $node);
     /**
      * Process Node of matched type
      * @return Node|Node[]|null|NodeVisitor::REMOVE_NODE

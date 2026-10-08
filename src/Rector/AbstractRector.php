@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Rector;
 
-use Deprecated;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
@@ -16,7 +15,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitor\CloningVisitor;
-use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -38,7 +36,7 @@ use Rector\PhpParser\NodeVisitor\PhpDocInfoRemovingNodeVisitor;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\ValueObject\SkipMatch;
 use Rector\ValueObject\Application\File;
-abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
+abstract class AbstractRector implements RectorInterface
 {
     /**
      * @var string
@@ -80,24 +78,6 @@ CODE_SAMPLE;
         $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
         $this->commentsMerger = $commentsMerger;
-    }
-    /**
-     * @return Node[]|null
-     *
-     * @internal
-     */
-    final public function beforeTraverse(array $nodes): ?array
-    {
-        return null;
-    }
-    /**
-     * @return Node[]|null
-     *
-     * @internal
-     */
-    final public function afterTraverse(array $nodes)
-    {
-        return null;
     }
     /**
      * @return NodeVisitor::REMOVE_NODE|Node|null|Node[]
@@ -149,14 +129,6 @@ CODE_SAMPLE;
             return $refactoredNodeOrState;
         }
         return $this->postRefactorProcess($originalNode, $node, $refactoredNodeOrState, $filePath);
-    }
-    /**
-     * @deprecated no longer used
-     * @return mixed[]|int|\PhpParser\Node|null
-     */
-    final public function leaveNode(Node $node)
-    {
-        return null;
     }
     protected function getFile(): File
     {
