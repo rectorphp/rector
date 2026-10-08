@@ -78,17 +78,16 @@ CODE_SAMPLE
     }
     private function processIdentical(Identical $identical): ?NotIdentical
     {
-        $leftType = $this->getType($identical->left);
-        if (!$leftType->isBoolean()->yes()) {
+        // cheap structural guard first, so getType() runs only on the "!$a === $b" shape
+        if (!$identical->left instanceof BooleanNot) {
             return null;
         }
-        $rightType = $this->getType($identical->right);
-        if (!$rightType->isBoolean()->yes()) {
+        if (!$this->getType($identical->left)->isBoolean()->yes()) {
             return null;
         }
-        if ($identical->left instanceof BooleanNot) {
-            return new NotIdentical($identical->left->expr, $identical->right);
+        if (!$this->getType($identical->right)->isBoolean()->yes()) {
+            return null;
         }
-        return null;
+        return new NotIdentical($identical->left->expr, $identical->right);
     }
 }
