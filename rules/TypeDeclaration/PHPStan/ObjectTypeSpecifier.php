@@ -56,8 +56,8 @@ final class ObjectTypeSpecifier
         if (strncmp($objectType->getClassName(), '\\', strlen('\\')) === 0) {
             return new FullyQualifiedObjectType($className);
         }
-        $uses = $this->useImportsResolver->resolve();
         if (!$withPreslash) {
+            $uses = $this->useImportsResolver->resolve();
             $aliasedObjectType = $this->matchAliasedObjectType($objectType, $uses);
             if ($aliasedObjectType instanceof AliasedObjectType) {
                 return $aliasedObjectType;
