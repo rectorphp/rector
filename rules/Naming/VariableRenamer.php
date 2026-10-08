@@ -74,7 +74,6 @@ final class VariableRenamer
             if (!$node instanceof Variable) {
                 return null;
             }
-            // TODO: Should be implemented in BreakingVariableRenameGuard::shouldSkipParam()
             if ($this->isParamInParentFunction($node, $currentFunctionLike)) {
                 return null;
             }

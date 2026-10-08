@@ -16,10 +16,6 @@ final class ClassName
     /**
      * @var string
      */
-    public const DATE_TIME_INTERFACE = 'DateTimeInterface';
-    /**
-     * @var string
-     */
     public const JMS_TYPE = 'JMS\Serializer\Annotation\Type';
     /**
      * @var string

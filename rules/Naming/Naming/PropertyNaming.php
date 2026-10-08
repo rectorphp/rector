@@ -5,32 +5,15 @@ namespace Rector\Naming\Naming;
 
 use RectorPrefix202610\Nette\Utils\Strings;
 use PhpParser\Node\Name;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
-use Rector\Enum\ClassName;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\Naming\ValueObject\ExpectedName;
-use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\Util\StringUtils;
 /**
  * @see \Rector\Tests\Naming\Naming\PropertyNamingTest
  */
 final class PropertyNaming
 {
-    /**
-     * @var string[]
-     */
-    private const EXCLUDED_CLASSES = ['#Closure#', '#^Spl#', '#FileInfo#', '#^std#', '#Iterator#', '#SimpleXML#'];
-    /**
-     * @var array<string, string>
-     */
-    private const CONTEXT_AWARE_NAMES_BY_TYPE = ['Twig\Environment' => 'twigEnvironment'];
     /**
      * @var string
      */
@@ -40,42 +23,6 @@ final class PropertyNaming
      * @var string
      */
     private const I_PREFIX_REGEX = '#^I[A-Z]#';
-    public function getExpectedNameFromType(FullyQualifiedObjectType $type): ?ExpectedName
-    {
-        $type = TypeCombinator::removeNull($type);
-        // keep collections untouched
-        if ($type instanceof ObjectType) {
-            if ($type->isInstanceOf('Doctrine\Common\Collections\Collection')->yes()) {
-                return null;
-            }
-            if ($type->isInstanceOf('Illuminate\Support\Collection')->yes()) {
-                return null;
-            }
-            if ($type->isInstanceOf(ClassName::DATE_TIME_INTERFACE)->yes()) {
-                return null;
-            }
-        }
-        $className = $this->resolveClassNameFromType($type);
-        if (!is_string($className)) {
-            return null;
-        }
-        foreach (self::EXCLUDED_CLASSES as $excludedClass) {
-            if (StringUtils::isMatch($className, $excludedClass)) {
-                return null;
-            }
-        }
-        // special cases to keep context
-        foreach (self::CONTEXT_AWARE_NAMES_BY_TYPE as $specialType => $contextAwareName) {
-            if ($className === $specialType) {
-                return new ExpectedName($contextAwareName);
-            }
-        }
-        $shortClassName = $this->resolveShortClassName($className);
-        $shortClassName = $this->normalizeShortClassName($shortClassName);
-        // prolong too short generic names with one namespace up
-        $originalName = $this->prolongIfTooShort($shortClassName, $className);
-        return new ExpectedName($originalName);
-    }
     /**
      * @param \PHPStan\Type\ThisType|\PHPStan\Type\ObjectType|\PhpParser\Node\Name|string $objectType
      */
@@ -95,41 +42,6 @@ final class PropertyNaming
         $variableName = str_replace('_', '', $variableName);
         // prolong too short generic names with one namespace up
         return $this->prolongIfTooShort($variableName, $className);
-    }
-    private function resolveShortClassName(string $className): string
-    {
-        if (strpos($className, '\\') !== \false) {
-            return (string) Strings::after($className, '\\', -1);
-        }
-        return $className;
-    }
-    private function removePrefixesAndSuffixes(string $shortClassName): string
-    {
-        // is SomeInterface
-        if (substr_compare($shortClassName, self::INTERFACE, -strlen(self::INTERFACE)) === 0) {
-            $shortClassName = Strings::substring($shortClassName, 0, -strlen(self::INTERFACE));
-        }
-        // is ISomeClass
-        if ($this->isPrefixedInterface($shortClassName)) {
-            $shortClassName = Strings::substring($shortClassName, 1);
-        }
-        // is AbstractClass
-        if (strncmp($shortClassName, 'Abstract', strlen('Abstract')) === 0) {
-            return Strings::substring($shortClassName, strlen('Abstract'));
-        }
-        return $shortClassName;
-    }
-    private function normalizeUpperCase(string $shortClassName): string
-    {
-        // turns $SOMEUppercase => $someUppercase
-        for ($i = 0; $i <= strlen($shortClassName); ++$i) {
-            if (ctype_upper($shortClassName[$i]) && $this->isNumberOrUpper($shortClassName[$i + 1])) {
-                $shortClassName[$i] = strtolower($shortClassName[$i]);
-            } else {
-                break;
-            }
-        }
-        return $shortClassName;
     }
     private function prolongIfTooShort(string $shortClassName, string $className): string
     {
@@ -179,55 +91,6 @@ final class PropertyNaming
         // starts with "I\W+"?
         if (StringUtils::isMatch($className, self::I_PREFIX_REGEX)) {
             return Strings::substring($className, 1);
-        }
-        return $className;
-    }
-    private function isPrefixedInterface(string $shortClassName): bool
-    {
-        if (strlen($shortClassName) <= 3) {
-            return \false;
-        }
-        if (strncmp($shortClassName, 'I', strlen('I')) !== 0) {
-            return \false;
-        }
-        if (!ctype_upper($shortClassName[1])) {
-            return \false;
-        }
-        return ctype_lower($shortClassName[2]);
-    }
-    private function isNumberOrUpper(string $char): bool
-    {
-        if (ctype_upper($char)) {
-            return \true;
-        }
-        return ctype_digit($char);
-    }
-    private function normalizeShortClassName(string $shortClassName): string
-    {
-        $shortClassName = $this->removePrefixesAndSuffixes($shortClassName);
-        // if all is upper-cased, it should be lower-cased
-        if ($shortClassName === strtoupper($shortClassName)) {
-            $shortClassName = strtolower($shortClassName);
-        }
-        // remove "_"
-        $shortClassName = Strings::replace($shortClassName, '#_#');
-        return $this->normalizeUpperCase($shortClassName);
-    }
-    private function resolveClassNameFromType(Type $type): ?string
-    {
-        $className = ClassNameFromObjectTypeResolver::resolve($type);
-        if ($className === null) {
-            return null;
-        }
-        if ($type instanceof SelfObjectType) {
-            return null;
-        }
-        if ($type instanceof StaticType) {
-            return null;
-        }
-        // generic types are usually mix of parent type and specific type - various way to handle it
-        if ($type instanceof GenericObjectType) {
-            return null;
         }
         return $className;
     }

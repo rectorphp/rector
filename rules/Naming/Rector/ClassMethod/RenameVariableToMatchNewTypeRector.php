@@ -4,45 +4,17 @@ declare (strict_types=1);
 namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Naming\Guard\BreakingVariableRenameGuard;
-use Rector\Naming\Naming\ExpectedNameResolver;
-use Rector\Naming\VariableRenamer;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\RenameVariableToMatchNewTypeRectorTest
+ * @deprecated This rule is deprecated, as it belongs to coding standard rather than refactoring. Renaming a variable to match the new type can make code less clear and cause conflicting variable names.
  */
-final class RenameVariableToMatchNewTypeRector extends AbstractRector
+final class RenameVariableToMatchNewTypeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private BreakingVariableRenameGuard $breakingVariableRenameGuard;
-    /**
-     * @readonly
-     */
-    private ExpectedNameResolver $expectedNameResolver;
-    /**
-     * @readonly
-     */
-    private VariableRenamer $variableRenamer;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, VariableRenamer $variableRenamer, BetterNodeFinder $betterNodeFinder)
-    {
-        $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;
-        $this->expectedNameResolver = $expectedNameResolver;
-        $this->variableRenamer = $variableRenamer;
-        $this->betterNodeFinder = $betterNodeFinder;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename variable to match new ClassType', [new CodeSample(<<<'CODE_SAMPLE'
@@ -79,47 +51,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = \false;
-        $assignsOfNew = $this->getAssignsOfNew($node);
-        foreach ($assignsOfNew as $assignOfNew) {
-            $expectedName = $this->expectedNameResolver->resolveForAssignNew($assignOfNew);
-            // skip self name as not useful
-            if ($expectedName === 'self') {
-                continue;
-            }
-            /** @var Variable $variable */
-            $variable = $assignOfNew->var;
-            if ($expectedName === null) {
-                continue;
-            }
-            if ($this->isName($variable, $expectedName)) {
-                continue;
-            }
-            $currentName = $this->getName($variable);
-            if ($currentName === null) {
-                continue;
-            }
-            if ($this->breakingVariableRenameGuard->shouldSkipVariable($currentName, $expectedName, $node, $variable)) {
-                continue;
-            }
-            $hasChanged = \true;
-            // 1. rename assigned variable
-            $assignOfNew->var = new Variable($expectedName);
-            // 2. rename variable in the
-            $this->variableRenamer->renameVariableInFunctionLike($node, $currentName, $expectedName, $assignOfNew);
-        }
-        if (!$hasChanged) {
-            return null;
-        }
-        return $node;
-    }
-    /**
-     * @return Assign[]
-     */
-    private function getAssignsOfNew(ClassMethod $classMethod): array
-    {
-        /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
-        return array_filter($assigns, static fn(Assign $assign): bool => $assign->expr instanceof New_);
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it belongs to coding standard rather than refactoring and can cause conflicting variable names', self::class));
     }
 }

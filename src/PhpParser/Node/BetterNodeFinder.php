@@ -85,15 +85,6 @@ final class BetterNodeFinder
         return $this->nodeFinder->findFirstInstanceOf($nodes, $type);
     }
     /**
-     * @param class-string<Node> $type
-     * @param Node[] $nodes
-     */
-    public function hasInstanceOfName(array $nodes, string $type, string $name): bool
-    {
-        Assert::isAOf($type, Node::class);
-        return (bool) $this->findInstanceOfName($nodes, $type, $name);
-    }
-    /**
      * @api
      * @param Node|Node[] $nodes
      * @return Variable|null
