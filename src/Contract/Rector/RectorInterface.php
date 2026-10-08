@@ -6,7 +6,7 @@ namespace Rector\Contract\Rector;
 use PhpParser\Node;
 use PhpParser\NodeVisitor;
 
-interface RectorInterface extends DocumentedRuleInterface
+interface RectorInterface
 {
     /**
      * List of nodes this class checks, classes that implements \PhpParser\Node
