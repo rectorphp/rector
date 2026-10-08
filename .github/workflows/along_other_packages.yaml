@@ -13,29 +13,31 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php_version: ['7.4', '8.0', '8.1']
                 commands:
                     -
                         name: 'Composer Dependency'
+                        php_version: '7.4'
                         install: composer require symfony/console:2.8 --ansi
                         run: vendor/bin/rector list --debug --ansi
 
                     -
                         name: 'PHP Parser 3.1'
+                        php_version: '8.0'
                         install: composer require nikic/php-parser:^3.1 --ansi
 
                     -
                         name: 'Along PHPStan'
+                        php_version: '8.1'
                         install: composer require phpstan/phpstan:^2.0 --dev --ansi
 
-        name: "PHP ${{ matrix.php_version }}"
+        name: "${{ matrix.commands.name }} (PHP ${{ matrix.commands.php_version }})"
 
         steps:
             -   uses: actions/checkout@v4
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ matrix.php_version }}
+                    php-version: ${{ matrix.commands.php_version }}
                     coverage: none
 
             # wait for deploy to packagist
