@@ -9,20 +9,6 @@ use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 final class TypeUnwrapper
 {
-    public function unwrapFirstObjectTypeFromUnionType(Type $type): Type
-    {
-        if (!$type instanceof UnionType) {
-            return $type;
-        }
-        foreach ($type->getTypes() as $unionedType) {
-            $className = ClassNameFromObjectTypeResolver::resolve($unionedType);
-            if ($className === null) {
-                continue;
-            }
-            return $unionedType;
-        }
-        return $type;
-    }
     public function unwrapFirstCallableTypeFromUnionType(Type $type): Type
     {
         if (!$type instanceof UnionType) {

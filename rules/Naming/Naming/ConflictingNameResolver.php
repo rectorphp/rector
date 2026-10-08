@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeManipulator\FunctionLikeManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -29,43 +28,19 @@ final class ConflictingNameResolver
     /**
      * @readonly
      */
-    private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver;
-    /**
-     * @readonly
-     */
     private FunctionLikeManipulator $functionLikeManipulator;
     /**
      * @var array<int, string[]>
      */
     private array $conflictingVariableNamesByClassMethod = [];
-    public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, FunctionLikeManipulator $functionLikeManipulator)
+    public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, FunctionLikeManipulator $functionLikeManipulator)
     {
         $this->arrayFilter = $arrayFilter;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->expectedNameResolver = $expectedNameResolver;
-        $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
         $this->functionLikeManipulator = $functionLikeManipulator;
     }
-    /**
-     * @return string[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
-     */
-    public function resolveConflictingVariableNamesForParam($classMethod): array
-    {
-        $expectedNames = [];
-        foreach ($classMethod->params as $param) {
-            $expectedName = $this->matchParamTypeExpectedNameResolver->resolve($param);
-            if ($expectedName === null) {
-                continue;
-            }
-            $expectedNames[] = $expectedName;
-        }
-        return $this->arrayFilter->filterWithAtLeastTwoOccurrences($expectedNames);
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
-     */
-    public function hasNameIsInFunctionLike(string $variableName, $functionLike): bool
+    public function hasNameIsInFunctionLike(string $variableName, ClassMethod $functionLike): bool
     {
         $conflictingVariableNames = $this->resolveConflictingVariableNamesForNew($functionLike);
         return in_array($variableName, $conflictingVariableNames, \true);

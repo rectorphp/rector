@@ -15,6 +15,7 @@ use Rector\Enum\ClassName;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\Util\StringUtils;
 /**
@@ -39,7 +40,7 @@ final class PropertyNaming
      * @var string
      */
     private const I_PREFIX_REGEX = '#^I[A-Z]#';
-    public function getExpectedNameFromType(Type $type): ?ExpectedName
+    public function getExpectedNameFromType(FullyQualifiedObjectType $type): ?ExpectedName
     {
         $type = TypeCombinator::removeNull($type);
         // keep collections untouched

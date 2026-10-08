@@ -1579,7 +1579,6 @@ return array(
     'Rector\\FileSystem\\InitFilePathsResolver' => $baseDir . '/src/FileSystem/InitFilePathsResolver.php',
     'Rector\\FileSystem\\JsonFileSystem' => $baseDir . '/src/FileSystem/JsonFileSystem.php',
     'Rector\\Instanceof_\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => $baseDir . '/rules/Instanceof_/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
-    'Rector\\Naming\\ExpectedNameResolver\\MatchParamTypeExpectedNameResolver' => $baseDir . '/rules/Naming/ExpectedNameResolver/MatchParamTypeExpectedNameResolver.php',
     'Rector\\Naming\\Guard\\BreakingVariableRenameGuard' => $baseDir . '/rules/Naming/Guard/BreakingVariableRenameGuard.php',
     'Rector\\Naming\\Naming\\AliasNameResolver' => $baseDir . '/rules/Naming/Naming/AliasNameResolver.php',
     'Rector\\Naming\\Naming\\ConflictingNameResolver' => $baseDir . '/rules/Naming/Naming/ConflictingNameResolver.php',

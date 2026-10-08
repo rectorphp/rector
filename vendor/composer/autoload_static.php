@@ -1813,7 +1813,6 @@ class ComposerStaticInitdf428224e1d19d339f0bb6add8075232
         'Rector\\FileSystem\\InitFilePathsResolver' => __DIR__ . '/../..' . '/src/FileSystem/InitFilePathsResolver.php',
         'Rector\\FileSystem\\JsonFileSystem' => __DIR__ . '/../..' . '/src/FileSystem/JsonFileSystem.php',
         'Rector\\Instanceof_\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => __DIR__ . '/../..' . '/rules/Instanceof_/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
-        'Rector\\Naming\\ExpectedNameResolver\\MatchParamTypeExpectedNameResolver' => __DIR__ . '/../..' . '/rules/Naming/ExpectedNameResolver/MatchParamTypeExpectedNameResolver.php',
         'Rector\\Naming\\Guard\\BreakingVariableRenameGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/BreakingVariableRenameGuard.php',
         'Rector\\Naming\\Naming\\AliasNameResolver' => __DIR__ . '/../..' . '/rules/Naming/Naming/AliasNameResolver.php',
         'Rector\\Naming\\Naming\\ConflictingNameResolver' => __DIR__ . '/../..' . '/rules/Naming/Naming/ConflictingNameResolver.php',
