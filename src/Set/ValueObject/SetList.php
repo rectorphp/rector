@@ -32,6 +32,7 @@ final class SetList
      */
     public const GMAGICK_TO_IMAGICK = __DIR__ . '/../../../config/set/gmagick-to-imagick.php';
     /**
+     * @deprecated Niche set for a rarely used extension, it is empty now and will be removed.
      * @var string
      */
     public const NAMING = __DIR__ . '/../../../config/set/naming.php';
