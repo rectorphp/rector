@@ -145,8 +145,8 @@ CODE_SAMPLE
         if (!$instanceof->class instanceof Name) {
             return null;
         }
-        $classType = $this->nodeTypeResolver->getType($instanceof->class);
-        $exprType = $this->nodeTypeResolver->getType($instanceof->expr);
+        $classType = $this->getType($instanceof->class);
+        $exprType = $this->getType($instanceof->expr);
         $isSameStaticTypeOrSubtype = $classType->equals($exprType) || $classType->isSuperTypeOf($exprType)->yes();
         if (!$isSameStaticTypeOrSubtype) {
             return null;

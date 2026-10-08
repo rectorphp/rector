@@ -117,7 +117,7 @@ CODE_SAMPLE
                 continue;
             }
             $isReturn = $this->matchSwitchAnalyzer->isReturnCondsAndExprs($condAndExprs);
-            if ($this->nodeTypeResolver->getType($stmt->cond) instanceof ObjectType) {
+            if ($this->getType($stmt->cond) instanceof ObjectType) {
                 continue;
             }
             $matchResult = $this->matchFactory->createFromCondAndExprs($stmt->cond, $condAndExprs, $nextStmt);

@@ -259,7 +259,7 @@ CODE_SAMPLE
     private function resolveNativeReturnTypes(Expr $expr): array
     {
         if (!$expr instanceof Ternary || !$this->hasVendorClassConstFetch($expr->cond)) {
-            $type = $this->nodeTypeResolver->getType($expr);
+            $type = $this->getType($expr);
             // native type may be narrowed by assertions even when the resolved scope is unreachable
             if ($type instanceof NeverType) {
                 return [$type];
@@ -273,7 +273,7 @@ CODE_SAMPLE
     {
         $classConstFetches = $this->betterNodeFinder->findInstanceOf($expr, ClassConstFetch::class);
         foreach ($classConstFetches as $classConstFetch) {
-            $classType = $this->nodeTypeResolver->getType($classConstFetch->class);
+            $classType = $this->getType($classConstFetch->class);
             if (!$classType instanceof ObjectType) {
                 continue;
             }

@@ -191,7 +191,7 @@ CODE_SAMPLE
     }
     private function isEntityManagerType(MethodCall $methodCall): bool
     {
-        $callerType = $this->nodeTypeResolver->getType($methodCall->var);
+        $callerType = $this->getType($methodCall->var);
         if (!$callerType instanceof ObjectType) {
             return \false;
         }

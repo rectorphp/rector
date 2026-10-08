@@ -211,7 +211,7 @@ CODE_SAMPLE
      */
     private function refactorSingleReturnType(Return_ $return, $returnedStrictTypeNode, $functionLike)
     {
-        $resolvedType = $this->nodeTypeResolver->getType($return);
+        $resolvedType = $this->getType($return);
         if ($resolvedType instanceof UnionType) {
             if (!$returnedStrictTypeNode instanceof NullableType) {
                 return $functionLike;

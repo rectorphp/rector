@@ -115,8 +115,8 @@ CODE_SAMPLE
         if (!$instanceof->class instanceof Name) {
             return \false;
         }
-        $classType = $this->nodeTypeResolver->getType($instanceof->class);
-        $exprType = $this->nodeTypeResolver->getType($instanceof->expr);
+        $classType = $this->getType($instanceof->class);
+        $exprType = $this->getType($instanceof->expr);
         if ($classType->equals($exprType)) {
             return \true;
         }

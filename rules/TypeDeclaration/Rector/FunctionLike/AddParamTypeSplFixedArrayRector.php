@@ -87,7 +87,7 @@ CODE_SAMPLE
             if ($param->type === null) {
                 continue;
             }
-            $paramType = $this->nodeTypeResolver->getType($param->type);
+            $paramType = $this->getType($param->type);
             if ($paramType->isSuperTypeOf(new ObjectType('SplFixedArray'))->no()) {
                 continue;
             }

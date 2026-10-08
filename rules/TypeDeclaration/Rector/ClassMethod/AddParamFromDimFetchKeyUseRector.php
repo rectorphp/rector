@@ -115,7 +115,7 @@ CODE_SAMPLE
                         continue 2;
                     }
                     if ($dimFetch->dim instanceof Variable) {
-                        $type = $this->nodeTypeResolver->getType($dimFetch->dim);
+                        $type = $this->getType($dimFetch->dim);
                         if ($type instanceof UnionType) {
                             continue 2;
                         }
