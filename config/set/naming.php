@@ -5,10 +5,9 @@ namespace RectorPrefix202610;
 
 use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
-use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector;
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([RenameParamToMatchTypeRector::class, RenamePropertyToMatchTypeRector::class, RenameVariableToMatchNewTypeRector::class, RenameVariableToMatchMethodCallReturnTypeRector::class, RenameForeachValueVariableToMatchExprVariableRector::class]);
+    $rectorConfig->rules([RenameParamToMatchTypeRector::class, RenameVariableToMatchNewTypeRector::class, RenameVariableToMatchMethodCallReturnTypeRector::class, RenameForeachValueVariableToMatchExprVariableRector::class]);
 };
