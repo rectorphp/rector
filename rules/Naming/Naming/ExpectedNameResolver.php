@@ -13,12 +13,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\ValueObject\ExpectedName;
-use Rector\Naming\ValueObject\VariableAndCallForeach;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -126,44 +123,6 @@ final class ExpectedNameResolver
         }
         return null;
     }
-    public function resolveForForeach(VariableAndCallForeach $variableAndCallForeach): ?string
-    {
-        $call = $variableAndCallForeach->getCall();
-        if ($this->isDynamicNameCall($call)) {
-            return null;
-        }
-        $name = $this->nodeNameResolver->getName($call->name);
-        if ($name === null) {
-            return null;
-        }
-        $returnedType = $this->nodeTypeResolver->getType($call);
-        if ($returnedType->isIterable()->no()) {
-            return null;
-        }
-        $innerReturnedType = null;
-        if ($returnedType instanceof ArrayType) {
-            $innerReturnedType = $this->resolveReturnTypeFromArrayType($returnedType);
-            if (!$innerReturnedType instanceof Type) {
-                return null;
-            }
-        }
-        $expectedNameFromType = $this->propertyNaming->getExpectedNameFromType($innerReturnedType ?? $returnedType);
-        if ($this->isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull($returnedType, $expectedNameFromType)) {
-            return ($nullsafeVariable1 = $expectedNameFromType) ? $nullsafeVariable1->getSingularized() : null;
-        }
-        $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
-        if (!$expectedNameFromMethodName instanceof ExpectedName) {
-            return ($nullsafeVariable2 = $expectedNameFromType) ? $nullsafeVariable2->getSingularized() : null;
-        }
-        if ($expectedNameFromMethodName->isSingular()) {
-            return ($nullsafeVariable3 = $expectedNameFromType) ? $nullsafeVariable3->getSingularized() : null;
-        }
-        return $expectedNameFromMethodName->getSingularized();
-    }
-    private function isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull(Type $returnedType, ?ExpectedName $expectedName): bool
-    {
-        return $returnedType instanceof ArrayType && $expectedName instanceof ExpectedName;
-    }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
@@ -176,12 +135,5 @@ final class ExpectedNameResolver
             return \true;
         }
         return $expr->name instanceof FuncCall;
-    }
-    private function resolveReturnTypeFromArrayType(ArrayType $arrayType): ?Type
-    {
-        if (!$arrayType->getIterableValueType() instanceof ObjectType) {
-            return null;
-        }
-        return $arrayType->getIterableValueType();
     }
 }
