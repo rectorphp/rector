@@ -66,29 +66,23 @@ final class BreakingVariableRenameGuard
         $this->typeUnwrapper = $typeUnwrapper;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
-     */
-    public function shouldSkipVariable(string $currentName, string $expectedName, $functionLike, Variable $variable): bool
+    public function shouldSkipVariable(string $currentName, string $expectedName, ClassMethod $classMethod, Variable $variable): bool
     {
         // is the suffix? → also accepted
         $expectedNameCamelCase = ucfirst($expectedName);
         if (substr_compare($currentName, $expectedNameCamelCase, -strlen($expectedNameCamelCase)) === 0) {
             return \true;
         }
-        if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $functionLike)) {
+        if ($this->conflictingNameResolver->hasNameIsInFunctionLike($expectedName, $classMethod)) {
             return \true;
         }
-        if (!$functionLike instanceof ArrowFunction && $this->overriddenExistingNamesResolver->hasNameInClassMethodForNew($currentName, $functionLike)) {
+        if ($this->overriddenExistingNamesResolver->hasNameInClassMethodForNew($currentName, $classMethod)) {
             return \true;
         }
         if ($this->isVariableAlreadyDefined($variable, $currentName)) {
             return \true;
         }
-        if ($this->hasConflictVariable($functionLike, $expectedName)) {
-            return \true;
-        }
-        return $functionLike instanceof Closure && $this->isUsedInClosureUsesName($expectedName, $functionLike);
+        return $this->hasConflictVariable($classMethod, $expectedName);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
@@ -153,16 +147,6 @@ final class BreakingVariableRenameGuard
             return $this->betterNodeFinder->hasInstanceOfName(array_merge([$functionLike->expr], $functionLike->params), Variable::class, $newName);
         }
         return $this->betterNodeFinder->hasInstanceOfName(array_merge((array) $functionLike->stmts, $functionLike->params), Variable::class, $newName);
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
-     */
-    private function isUsedInClosureUsesName(string $expectedName, $functionLike): bool
-    {
-        if (!$functionLike instanceof Closure) {
-            return \false;
-        }
-        return $this->betterNodeFinder->hasVariableOfName($functionLike->uses, $expectedName);
     }
     private function isRamseyUuidInterface(Param $param): bool
     {

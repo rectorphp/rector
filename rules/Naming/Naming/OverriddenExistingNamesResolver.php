@@ -36,12 +36,9 @@ final class OverriddenExistingNamesResolver
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
-     */
-    public function hasNameInClassMethodForNew(string $variableName, $functionLike): bool
+    public function hasNameInClassMethodForNew(string $variableName, ClassMethod $classMethod): bool
     {
-        $overriddenVariableNames = $this->resolveOverriddenNamesForNew($functionLike);
+        $overriddenVariableNames = $this->resolveOverriddenNamesForNew($classMethod);
         return in_array($variableName, $overriddenVariableNames, \true);
     }
     /**

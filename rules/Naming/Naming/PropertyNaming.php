@@ -39,20 +39,6 @@ final class PropertyNaming
      * @var string
      */
     private const I_PREFIX_REGEX = '#^I[A-Z]#';
-    /**
-     * @see https://regex101.com/r/hnU5pm/2/
-     * @var string
-     */
-    private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
-    public function getExpectedNameFromMethodName(string $methodName): ?ExpectedName
-    {
-        $matches = Strings::match($methodName, self::GET_PREFIX_REGEX);
-        if ($matches === null) {
-            return null;
-        }
-        $originalName = lcfirst((string) $matches['root_name']);
-        return new ExpectedName($originalName);
-    }
     public function getExpectedNameFromType(Type $type): ?ExpectedName
     {
         $type = TypeCombinator::removeNull($type);

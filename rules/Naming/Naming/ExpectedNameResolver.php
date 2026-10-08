@@ -5,19 +5,14 @@ namespace Rector\Naming\Naming;
 
 use DateTimeInterface;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\UnionType;
-use PHPStan\Type\ObjectType;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ExpectedNameResolver
 {
@@ -28,19 +23,14 @@ final class ExpectedNameResolver
     /**
      * @readonly
      */
-    private NodeTypeResolver $nodeTypeResolver;
-    /**
-     * @readonly
-     */
     private \Rector\Naming\Naming\PropertyNaming $propertyNaming;
     /**
      * @readonly
      */
     private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, \Rector\Naming\Naming\PropertyNaming $propertyNaming, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyNaming = $propertyNaming;
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
     }
@@ -92,48 +82,5 @@ final class ExpectedNameResolver
             return null;
         }
         return $expectedName->getName();
-    }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
-     */
-    public function resolveForCall($expr): ?string
-    {
-        if ($this->isDynamicNameCall($expr)) {
-            return null;
-        }
-        $name = $this->nodeNameResolver->getName($expr->name);
-        if ($name === null) {
-            return null;
-        }
-        $returnedType = $this->nodeTypeResolver->getType($expr);
-        if (!$returnedType instanceof ObjectType) {
-            return null;
-        }
-        $expectedName = $this->propertyNaming->getExpectedNameFromType($returnedType);
-        if ($expectedName instanceof ExpectedName) {
-            return $expectedName->getName();
-        }
-        // call with args can return different value, so skip there if not sure about the type
-        if ($expr->args !== []) {
-            return null;
-        }
-        $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
-        if ($expectedNameFromMethodName instanceof ExpectedName) {
-            return $expectedNameFromMethodName->getName();
-        }
-        return null;
-    }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
-     */
-    private function isDynamicNameCall($expr): bool
-    {
-        if ($expr->name instanceof StaticCall) {
-            return \true;
-        }
-        if ($expr->name instanceof MethodCall) {
-            return \true;
-        }
-        return $expr->name instanceof FuncCall;
     }
 }
