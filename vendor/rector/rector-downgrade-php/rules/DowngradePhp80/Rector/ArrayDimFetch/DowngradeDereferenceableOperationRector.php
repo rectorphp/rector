@@ -74,7 +74,7 @@ CODE_SAMPLE
         }
         assert($arrayDimFetch->dim instanceof Expr);
         // already checked in shouldSkip()
-        $oldTokens = $this->file->getOldTokens();
+        $oldTokens = $this->getFile()->getOldTokens();
         $varEndTokenPos = $arrayDimFetch->var->getEndTokenPos();
         $dimStartTokenPos = $arrayDimFetch->dim->getStartTokenPos();
         for ($i = $varEndTokenPos + 1; $i < $dimStartTokenPos; ++$i) {

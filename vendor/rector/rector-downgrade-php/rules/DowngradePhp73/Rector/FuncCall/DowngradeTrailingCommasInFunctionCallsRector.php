@@ -81,7 +81,7 @@ CODE_SAMPLE
         foreach ($args as $arg) {
             // reprinted, needs to remove from call like itself
             if ($arg->getEndTokenPos() < 0) {
-                $hasChanged = $this->trailingCommaRemover->removeFromCallLike($this->file, $node);
+                $hasChanged = $this->trailingCommaRemover->removeFromCallLike($this->getFile(), $node);
                 if ($hasChanged) {
                     return $node;
                 }
@@ -90,10 +90,10 @@ CODE_SAMPLE
         }
         $lastArgKey = count($args) - 1;
         $lastArg = $args[$lastArgKey];
-        if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $lastArg)) {
+        if (!$this->followedByCommaAnalyzer->isFollowed($this->getFile(), $lastArg)) {
             return null;
         }
-        $this->trailingCommaRemover->remove($this->file, $lastArg);
+        $this->trailingCommaRemover->remove($this->getFile(), $lastArg);
         return $node;
     }
 }

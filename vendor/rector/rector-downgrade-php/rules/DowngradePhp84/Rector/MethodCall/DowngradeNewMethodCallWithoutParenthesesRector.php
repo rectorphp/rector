@@ -41,7 +41,7 @@ CODE_SAMPLE
         if (!$node->var instanceof New_) {
             return null;
         }
-        $oldTokens = $this->file->getOldTokens();
+        $oldTokens = $this->getFile()->getOldTokens();
         $startTokenPos = $node->getStartTokenPos();
         $endTokenPos = $node->getEndTokenPos();
         if (!isset($oldTokens[$startTokenPos], $oldTokens[$endTokenPos])) {

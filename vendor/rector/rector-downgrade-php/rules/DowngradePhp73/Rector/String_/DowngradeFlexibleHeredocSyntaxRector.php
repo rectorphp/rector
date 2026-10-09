@@ -64,12 +64,12 @@ CODE_SAMPLE
         }
         // skip correctly indented
         $docIndentation = (string) $node->getAttribute(AttributeKey::DOC_INDENTATION);
-        if ($docIndentation === '' && $this->followedByNewlineOnlyMaybeWithSemicolonAnalyzer->isFollowed($this->file, $node)) {
+        if ($docIndentation === '' && $this->followedByNewlineOnlyMaybeWithSemicolonAnalyzer->isFollowed($this->getFile(), $node)) {
             return null;
         }
         $node->setAttribute(AttributeKey::DOC_INDENTATION, '__REMOVED__');
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $tokens = $this->file->getOldTokens();
+        $tokens = $this->getFile()->getOldTokens();
         if (isset($tokens[$node->getEndTokenPos()], $tokens[$node->getEndTokenPos() + 1])) {
             $tokens[$node->getEndTokenPos() + 1]->text = "\n" . $tokens[$node->getEndTokenPos() + 1]->text;
         }

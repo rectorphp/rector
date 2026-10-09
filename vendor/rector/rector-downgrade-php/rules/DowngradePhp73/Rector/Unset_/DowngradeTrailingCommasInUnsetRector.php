@@ -59,10 +59,10 @@ CODE_SAMPLE
         if ($node->vars !== []) {
             $lastArgumentPosition = array_key_last($node->vars);
             $last = $node->vars[$lastArgumentPosition];
-            if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
+            if (!$this->followedByCommaAnalyzer->isFollowed($this->getFile(), $last)) {
                 return null;
             }
-            $this->trailingCommaRemover->remove($this->file, $last);
+            $this->trailingCommaRemover->remove($this->getFile(), $last);
             return $node;
         }
         return null;

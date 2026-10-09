@@ -13,7 +13,7 @@
         "phpstan\/phpstan-webmozart-assert": "^2.0",
         "phpunit\/phpunit": "^13.2",
         "rector\/jack": "^1.0",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-tv-enter-node-to-refactor as dev-main",
         "rector\/swiss-knife": "^2.4",
         "shipmonk\/dead-code-detector": "^1.4",
         "symplify\/easy-coding-standard": "^13.2",

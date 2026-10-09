@@ -45,12 +45,12 @@ CODE_SAMPLE
     public function refactor(Node $node)
     {
         static $currentFile = null;
-        if ($currentFile !== $this->file->getFilePath()) {
+        if ($currentFile !== $this->getFile()->getFilePath()) {
             // the counter need start from 0 when visit new file to avoid random increment
             // across files
             // due to run on parallel
             $this->counter = 0;
-            $currentFile = $this->file->getFilePath();
+            $currentFile = $this->getFile()->getFilePath();
         }
         if ($node instanceof Expression) {
             if ($node->expr instanceof Assign && ($node->expr->expr instanceof NullsafeMethodCall || $node->expr->expr instanceof NullsafePropertyFetch)) {

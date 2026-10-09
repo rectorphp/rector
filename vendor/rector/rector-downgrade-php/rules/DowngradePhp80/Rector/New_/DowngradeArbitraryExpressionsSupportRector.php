@@ -95,7 +95,7 @@ CODE_SAMPLE
     }
     private function isBetweenParentheses(Node $node): bool
     {
-        $oldTokens = $this->file->getOldTokens();
+        $oldTokens = $this->getFile()->getOldTokens();
         $previousTokenPos = $node->getStartTokenPos() - 1;
         while ($previousTokenPos >= 0) {
             $token = $oldTokens[$previousTokenPos] ?? null;
