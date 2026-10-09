@@ -88,7 +88,7 @@ final class TypeNormalizer
                     $keyType = $this->generalizeConstantTypes($type->getKeyType());
                 }
                 // should be string[]
-                $itemType = $traverseCallback($type->getItemType(), $traverseCallback);
+                $itemType = $traverseCallback($type->getItemType());
                 if ($itemType instanceof ConstantStringType) {
                     $itemType = new StringType();
                 }
@@ -136,7 +136,7 @@ final class TypeNormalizer
                 }
                 return $uniqueGeneralizedUnionTypes[0];
             }
-            $convertedType = $traverseCallback($type, $traverseCallback);
+            $convertedType = $traverseCallback($type);
             if ($convertedType instanceof NeverType) {
                 return new MixedType();
             }
@@ -193,7 +193,7 @@ final class TypeNormalizer
                 $shortClassName = (string) substr($type->getClassName(), strrpos($type->getClassName(), '\\') + 1);
                 return new ShortenedObjectType($shortClassName, $type->getClassName());
             }
-            return $traverseCallback($type, $traverseCallback);
+            return $traverseCallback($type);
         });
         return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($objectShortGeneralizedUnionType);
     }

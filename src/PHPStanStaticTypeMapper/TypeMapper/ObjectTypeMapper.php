@@ -53,9 +53,9 @@ final class ObjectTypeMapper implements TypeMapperInterface
                 return new ObjectType('\\' . $type->getClassName());
             }
             if ($type instanceof GenericObjectType) {
-                return $traverse(new GenericObjectType('\\' . $type->getClassName(), $type->getTypes()), $traverse);
+                return $traverse(new GenericObjectType('\\' . $type->getClassName(), $type->getTypes()));
             }
-            return $traverse($type, $traverse);
+            return $traverse($type);
         });
         return $type->toPhpDocNode();
     }
