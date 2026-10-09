@@ -1615,12 +1615,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "8253433b6a3da6c61b4d5780cde440229e70c2a3"
+                "reference": "64015cfdaf971f28e3863d48a49718143b42e9ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/8253433b6a3da6c61b4d5780cde440229e70c2a3",
-                "reference": "8253433b6a3da6c61b4d5780cde440229e70c2a3",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/64015cfdaf971f28e3863d48a49718143b42e9ba",
+                "reference": "64015cfdaf971f28e3863d48a49718143b42e9ba",
                 "shasum": ""
             },
             "require": {
@@ -1633,7 +1633,7 @@
                 "phpstan\/phpstan-webmozart-assert": "^2.0",
                 "phpunit\/phpunit": "^13.2",
                 "rector\/jack": "^1.0",
-                "rector\/rector-src": "dev-tv-enter-node-to-refactor as dev-main",
+                "rector\/rector-src": "dev-main",
                 "rector\/swiss-knife": "^2.4",
                 "shipmonk\/dead-code-detector": "^1.4",
                 "symplify\/easy-coding-standard": "^13.2",
@@ -1644,7 +1644,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-09T07:36:05+00:00",
+            "time": "2026-10-09T14:54:56+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
