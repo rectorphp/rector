@@ -1725,6 +1725,7 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\IterableTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/IterableTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\MixedTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/MixedTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\NeverTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/NeverTypeMapper.php',
+    'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\NonexistentParentClassTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/NonexistentParentClassTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\NullTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/NullTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/ObjectTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper' => $baseDir . '/src/PHPStanStaticTypeMapper/TypeMapper/ObjectWithoutClassTypeMapper.php',

@@ -1959,6 +1959,7 @@ class ComposerStaticInitdf428224e1d19d339f0bb6add8075232
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\IterableTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/IterableTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\MixedTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/MixedTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\NeverTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/NeverTypeMapper.php',
+        'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\NonexistentParentClassTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/NonexistentParentClassTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\NullTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/NullTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/ObjectTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper' => __DIR__ . '/../..' . '/src/PHPStanStaticTypeMapper/TypeMapper/ObjectWithoutClassTypeMapper.php',
