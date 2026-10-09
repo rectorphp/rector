@@ -197,8 +197,4 @@ final class File
         }
         return null;
     }
-    public function hasShebang(): bool
-    {
-        return strncmp($this->fileContent, '#!', strlen('#!')) === 0;
-    }
 }
