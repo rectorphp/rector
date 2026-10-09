@@ -16,10 +16,6 @@ interface RectorInterface
      */
     public function getNodeTypes(): array;
     /**
-     * @return int|Node|Node[]|null
-     */
-    public function enterNode(Node $node);
-    /**
      * Process Node of matched type
      * @return Node|Node[]|null|NodeVisitor::REMOVE_NODE
      */

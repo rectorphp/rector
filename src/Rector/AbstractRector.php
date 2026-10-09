@@ -12,123 +12,36 @@ use PhpParser\Node\Stmt\Const_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitor\CloningVisitor;
-use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Application\ChangedNodeScopeRefresher;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
-use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeDecorator\CreatedByRuleDecorator;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\NodeFactory;
-use Rector\PhpParser\NodeVisitor\PhpDocInfoRemovingNodeVisitor;
-use Rector\Skipper\Skipper\Skipper;
-use Rector\Skipper\ValueObject\SkipMatch;
 use Rector\ValueObject\Application\File;
 abstract class AbstractRector implements RectorInterface
 {
-    /**
-     * @var string
-     */
-    private const EMPTY_NODE_ARRAY_MESSAGE = <<<CODE_SAMPLE
-Array of nodes cannot be empty. Ensure "%s->refactor()" returns non-empty array for Nodes.
-
-A) Direct return null for no change:
-
-    return null;
-
-B) Remove the Node:
-
-    return \\PhpParser\\NodeVisitor::REMOVE_NODE;
-CODE_SAMPLE;
     protected NodeNameResolver $nodeNameResolver;
     protected NodeTypeResolver $nodeTypeResolver;
     protected NodeFactory $nodeFactory;
     protected NodeComparator $nodeComparator;
-    /**
-     * @internal Use getFile() instead.
-     */
-    protected File $file;
-    protected Skipper $skipper;
-    private ChangedNodeScopeRefresher $changedNodeScopeRefresher;
     private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
     private CurrentFileProvider $currentFileProvider;
     private CommentsMerger $commentsMerger;
-    private CreatedByRuleDecorator $createdByRuleDecorator;
-    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, Skipper $skipper, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, CommentsMerger $commentsMerger): void
+    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, CommentsMerger $commentsMerger): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeFactory = $nodeFactory;
-        $this->skipper = $skipper;
         $this->nodeComparator = $nodeComparator;
         $this->currentFileProvider = $currentFileProvider;
-        $this->createdByRuleDecorator = $createdByRuleDecorator;
-        $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
         $this->commentsMerger = $commentsMerger;
-    }
-    /**
-     * @return NodeVisitor::REMOVE_NODE|Node|null|Node[]
-     */
-    final public function enterNode(Node $node)
-    {
-        // keep $this->file populated for BC; refactor() is only ever reached through here
-        $this->file = $this->getFile();
-        if (is_a($this, HTMLAverseRectorInterface::class, \true) && $this->file->containsHTML()) {
-            return null;
-        }
-        $filePath = $this->file->getFilePath();
-        // node already changed by this rule in a previous pass → hard skip
-        if ($this->skipper->shouldSkipCurrentNode(static::class, $node)) {
-            return null;
-        }
-        // class/path skip is configured for this rule and file: run the rule on a deep clone to learn
-        // whether it would actually have changed anything. Only a skip that prevents a real change
-        // counts as used; the original node is left untouched, so the file stays skipped either way.
-        $skipMatch = $this->skipper->matchSkip($this, $filePath);
-        if ($skipMatch instanceof SkipMatch) {
-            if ($this->refactor($this->cloneNode($node)) !== null) {
-                $this->skipper->markSkipUsed($skipMatch);
-            }
-            return null;
-        }
-        // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
-        $refactoredNodeOrState = $this->refactor($node);
-        // nothing to change → continue
-        if ($refactoredNodeOrState === null) {
-            return null;
-        }
-        if ($refactoredNodeOrState === []) {
-            $errorMessage = sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
-            throw new ShouldNotHappenException($errorMessage);
-        }
-        $isState = is_int($refactoredNodeOrState);
-        if ($isState) {
-            $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
-            // only remove node is supported
-            if ($refactoredNodeOrState !== NodeVisitor::REMOVE_NODE) {
-                // @todo warn about unsupported state in the future
-                return null;
-            }
-            // notify this rule changed code
-            $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
-            $this->file->addRectorClassWithLine($rectorWithLineChange);
-            return $refactoredNodeOrState;
-        }
-        return $this->postRefactorProcess($originalNode, $node, $refactoredNodeOrState, $filePath);
     }
     protected function getFile(): File
     {
@@ -197,38 +110,5 @@ CODE_SAMPLE;
     protected function mirrorComments(Node $newNode, Node $oldNode): void
     {
         $this->commentsMerger->mirrorComments($newNode, $oldNode);
-    }
-    /**
-     * Deep clone, so a skipped rule can be probed on the clone without mutating the real node.
-     */
-    private function cloneNode(Node $node): Node
-    {
-        $nodeTraverser = new NodeTraverser(new CloningVisitor(), new PhpDocInfoRemovingNodeVisitor());
-        return $nodeTraverser->traverse([$node])[0];
-    }
-    /**
-     * @param Node|Node[] $refactoredNode
-     * @return Node|Node[]
-     */
-    private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode, string $filePath)
-    {
-        /** @var non-empty-array<Node>|Node $refactoredNode */
-        $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
-        $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getStartLine());
-        $this->file->addRectorClassWithLine($rectorWithLineChange);
-        /** @var MutatingScope|null $currentScope */
-        $currentScope = $node->getAttribute(AttributeKey::SCOPE);
-        $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
-        return $refactoredNode;
-    }
-    /**
-     * @param Node[]|Node $node
-     */
-    private function refreshScopeNodes($node, string $filePath, ?MutatingScope $mutatingScope): void
-    {
-        $nodes = $node instanceof Node ? [$node] : $node;
-        foreach ($nodes as $node) {
-            $this->changedNodeScopeRefresher->refresh($node, $filePath, $mutatingScope);
-        }
     }
 }

@@ -2225,6 +2225,7 @@ return array(
     'Rector\\RectorInstaller\\Plugin' => $vendorDir . '/rector/extension-installer/src/Plugin.php',
     'Rector\\RectorInstaller\\PluginInstaller' => $vendorDir . '/rector/extension-installer/src/PluginInstaller.php',
     'Rector\\Rector\\AbstractRector' => $baseDir . '/src/Rector/AbstractRector.php',
+    'Rector\\Rector\\RectorRunner' => $baseDir . '/src/Rector/RectorRunner.php',
     'Rector\\Reflection\\ClassModifierChecker' => $baseDir . '/src/Reflection/ClassModifierChecker.php',
     'Rector\\Reflection\\ClassReflectionAnalyzer' => $baseDir . '/src/Reflection/ClassReflectionAnalyzer.php',
     'Rector\\Reflection\\MethodReflectionResolver' => $baseDir . '/src/Reflection/MethodReflectionResolver.php',

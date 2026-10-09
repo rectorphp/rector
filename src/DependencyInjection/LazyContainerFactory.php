@@ -13,7 +13,6 @@ use PHPStan\Php\PhpVersionFactory;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Application\ChangedNodeScopeRefresher;
 use Rector\Application\FileProcessor;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
@@ -41,7 +40,6 @@ use Rector\Console\Command\WorkerCommand;
 use Rector\Console\ConsoleApplication;
 use Rector\Console\Style\SymfonyStyleFactory;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\NodeDecorator\CreatedByRuleDecorator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -69,7 +67,6 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\ConditionalTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Rector\AbstractRector;
-use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\Skipper\UsedSkipCollector;
 use RectorPrefix202610\Symfony\Component\Console\Application;
 use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
@@ -179,7 +176,7 @@ final class LazyContainerFactory
     private function registerRectorAutowiring(RectorConfig $rectorConfig): void
     {
         $rectorConfig->afterResolving(AbstractRector::class, static function (AbstractRector $rector) use ($rectorConfig): void {
-            $rector->autowire($rectorConfig->get(NodeNameResolver::class), $rectorConfig->get(NodeTypeResolver::class), $rectorConfig->get(SimpleCallableNodeTraverser::class), $rectorConfig->get(NodeFactory::class), $rectorConfig->get(Skipper::class), $rectorConfig->get(NodeComparator::class), $rectorConfig->get(CurrentFileProvider::class), $rectorConfig->get(CreatedByRuleDecorator::class), $rectorConfig->get(ChangedNodeScopeRefresher::class), $rectorConfig->get(CommentsMerger::class));
+            $rector->autowire($rectorConfig->get(NodeNameResolver::class), $rectorConfig->get(NodeTypeResolver::class), $rectorConfig->get(SimpleCallableNodeTraverser::class), $rectorConfig->get(NodeFactory::class), $rectorConfig->get(NodeComparator::class), $rectorConfig->get(CurrentFileProvider::class), $rectorConfig->get(CommentsMerger::class));
         });
         $rectorConfig->autodiscover(__DIR__ . '/../StaticTypeMapper/PhpParser');
         $this->registerTagged($rectorConfig, self::BASE_PHP_DOC_NODE_VISITORS, BasePhpDocNodeVisitorInterface::class);

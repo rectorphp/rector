@@ -2459,6 +2459,7 @@ class ComposerStaticInitdf428224e1d19d339f0bb6add8075232
         'Rector\\RectorInstaller\\Plugin' => __DIR__ . '/..' . '/rector/extension-installer/src/Plugin.php',
         'Rector\\RectorInstaller\\PluginInstaller' => __DIR__ . '/..' . '/rector/extension-installer/src/PluginInstaller.php',
         'Rector\\Rector\\AbstractRector' => __DIR__ . '/../..' . '/src/Rector/AbstractRector.php',
+        'Rector\\Rector\\RectorRunner' => __DIR__ . '/../..' . '/src/Rector/RectorRunner.php',
         'Rector\\Reflection\\ClassModifierChecker' => __DIR__ . '/../..' . '/src/Reflection/ClassModifierChecker.php',
         'Rector\\Reflection\\ClassReflectionAnalyzer' => __DIR__ . '/../..' . '/src/Reflection/ClassReflectionAnalyzer.php',
         'Rector\\Reflection\\MethodReflectionResolver' => __DIR__ . '/../..' . '/src/Reflection/MethodReflectionResolver.php',
