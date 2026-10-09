@@ -3,20 +3,13 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * Handles the remaining compound param type group: everything that is neither a pure object,
- * a pure scalar, nor a pure array (e.g. cross-group unions like array|string, iterable, callable).
- *
- * @see \Rector\TypeDeclaration\Rector\ClassMethod\ObjectParamTypeByMethodCallTypeRector for object types
- * @see \Rector\TypeDeclaration\Rector\ClassMethod\ScalarParamTypeByMethodCallTypeRector for scalar types
- * @see \Rector\TypeDeclaration\Rector\ClassMethod\ArrayParamTypeByMethodCallTypeRector for array types
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector\ParamTypeByMethodCallTypeRectorTest
+ * @deprecated This rule is deprecated, as it fills invalid types and can cause type errors on controllers and other input calls. Inferring param types from a single caller is unreliable and needs human verification, so this better suits static analysis.
  */
-final class ParamTypeByMethodCallTypeRector extends \Rector\TypeDeclaration\Rector\ClassMethod\AbstractParamTypeByMethodCallTypeRector
+final class ParamTypeByMethodCallTypeRector extends \Rector\TypeDeclaration\Rector\ClassMethod\AbstractParamTypeByMethodCallTypeRector implements DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -63,11 +56,5 @@ final class UseDependency
 }
 CODE_SAMPLE
 )]);
-    }
-    protected function isMatchingParamType(Type $type): bool
-    {
-        $bareType = TypeCombinator::removeNull($type);
-        // remaining compound types: not a pure object, scalar, nor array (iterable, callable, cross-group unions)
-        return !$bareType->isObject()->yes() && !$bareType->isScalar()->yes() && !$bareType->isArray()->yes();
     }
 }

@@ -3,16 +3,13 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * Handles the object param type group.
- *
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ObjectParamTypeByMethodCallTypeRector\ObjectParamTypeByMethodCallTypeRectorTest
+ * @deprecated This rule is deprecated, as it fills invalid types and can cause type errors on controllers and other input calls. Inferring param types from a single caller is unreliable and needs human verification, so this better suits static analysis.
  */
-final class ObjectParamTypeByMethodCallTypeRector extends \Rector\TypeDeclaration\Rector\ClassMethod\AbstractParamTypeByMethodCallTypeRector
+final class ObjectParamTypeByMethodCallTypeRector extends \Rector\TypeDeclaration\Rector\ClassMethod\AbstractParamTypeByMethodCallTypeRector implements DeprecatedInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -59,9 +56,5 @@ final class UseDependency
 }
 CODE_SAMPLE
 )]);
-    }
-    protected function isMatchingParamType(Type $type): bool
-    {
-        return TypeCombinator::removeNull($type)->isObject()->yes();
     }
 }
