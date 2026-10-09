@@ -105,8 +105,7 @@ CODE_SAMPLE
      */
     private function isSameLocalMethodCallChain($booleanExpr): bool
     {
-        $leaves = [];
-        $this->collectOperands($booleanExpr, $leaves);
+        $leaves = $this->collectOperands($booleanExpr);
         $firstMethodCall = null;
         foreach ($leaves as $leaf) {
             if (!$leaf instanceof MethodCall) {
@@ -126,15 +125,13 @@ CODE_SAMPLE
         return $firstMethodCall instanceof MethodCall;
     }
     /**
-     * @param Expr[] $leaves
+     * @return Expr[]
      */
-    private function collectOperands(Expr $expr, array &$leaves): void
+    private function collectOperands(Expr $expr): array
     {
         if ($expr instanceof BooleanAnd || $expr instanceof BooleanOr) {
-            $this->collectOperands($expr->left, $leaves);
-            $this->collectOperands($expr->right, $leaves);
-            return;
+            return array_merge($this->collectOperands($expr->left), $this->collectOperands($expr->right));
         }
-        $leaves[] = $expr;
+        return [$expr];
     }
 }
