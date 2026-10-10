@@ -59,9 +59,6 @@ abstract class AbstractLazyTestCase extends TestCase
                 if (!class_exists(Version::class, \true) || (int) Version::id() < 12) {
                     require_once __DIR__ . '/../../../preload.php';
                 }
-                // test case in rector split package
-            } elseif (file_exists(__DIR__ . '/../../../../../../vendor')) {
-                require_once __DIR__ . '/../../../preload-split-package.php';
             }
         }
         if (\file_exists(__DIR__ . '/../../../vendor/scoper-autoload.php')) {

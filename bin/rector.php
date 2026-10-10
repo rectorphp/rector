@@ -98,10 +98,6 @@ final class AutoloadIncluder
 if (\file_exists(__DIR__ . '/../preload.php') && \is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../preload.php';
 }
-// require rector-src on split packages
-if (\file_exists(__DIR__ . '/../preload-split-package.php') && \is_dir(__DIR__ . '/../../../../vendor')) {
-    require_once __DIR__ . '/../preload-split-package.php';
-}
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadRectorInstalledAsGlobalDependency();
