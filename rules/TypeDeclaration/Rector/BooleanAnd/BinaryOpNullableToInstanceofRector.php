@@ -6,10 +6,13 @@ namespace Rector\TypeDeclaration\Rector\BooleanAnd;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
@@ -80,13 +83,13 @@ CODE_SAMPLE
      */
     private function processNullableInstance($node)
     {
-        $nullableObjectType = $this->nullableTypeAnalyzer->resolveNullableObjectType($node->left);
+        $nullableObjectType = $this->resolveNullableObjectType($node->left);
         $hasChanged = \false;
         if ($nullableObjectType instanceof ObjectType) {
             $node->left = $this->createExprInstanceof($node->left, $nullableObjectType);
             $hasChanged = \true;
         }
-        $nullableObjectType = $this->nullableTypeAnalyzer->resolveNullableObjectType($node->right);
+        $nullableObjectType = $this->resolveNullableObjectType($node->right);
         if ($nullableObjectType instanceof ObjectType) {
             $node->right = $this->createExprInstanceof($node->right, $nullableObjectType);
             $hasChanged = \true;
@@ -100,14 +103,14 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         if ($booleanOr->left instanceof BooleanNot) {
-            $nullableObjectType = $this->nullableTypeAnalyzer->resolveNullableObjectType($booleanOr->left->expr);
+            $nullableObjectType = $this->resolveNullableObjectType($booleanOr->left->expr);
             if ($nullableObjectType instanceof ObjectType) {
                 $booleanOr->left->expr = $this->createExprInstanceof($booleanOr->left->expr, $nullableObjectType);
                 $hasChanged = \true;
             }
         }
         if ($booleanOr->right instanceof BooleanNot) {
-            $nullableObjectType = $this->nullableTypeAnalyzer->resolveNullableObjectType($booleanOr->right->expr);
+            $nullableObjectType = $this->resolveNullableObjectType($booleanOr->right->expr);
             if ($nullableObjectType instanceof ObjectType) {
                 $booleanOr->right->expr = $this->createExprInstanceof($booleanOr->right->expr, $nullableObjectType);
                 $hasChanged = \true;
@@ -117,6 +120,19 @@ CODE_SAMPLE
             return $booleanOr;
         }
         return $this->processNullableInstance($booleanOr);
+    }
+    private function resolveNullableObjectType(Expr $expr): ?ObjectType
+    {
+        // cheap bail - bool/scalar-shaped operands can never be a nullable object,
+        // skip the costly native type resolution for them (e.g. chained "$a && $b && $c")
+        if ($this->isNeverNullableObject($expr)) {
+            return null;
+        }
+        return $this->nullableTypeAnalyzer->resolveNullableObjectType($expr);
+    }
+    private function isNeverNullableObject(Expr $expr): bool
+    {
+        return $expr instanceof BinaryOp || $expr instanceof BooleanNot || $expr instanceof Instanceof_ || $expr instanceof Empty_ || $expr instanceof Isset_;
     }
     private function createExprInstanceof(Expr $expr, ObjectType $objectType): Instanceof_
     {

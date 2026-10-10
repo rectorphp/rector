@@ -64,7 +64,7 @@ final class ExperimentalParallelFileProcessor
     public function process(BucketSchedule $bucketSchedule, string $mainScript, callable $postFileCallback, InputInterface $input): ProcessResult
     {
         // reversed, so that array_pop() hands out the biggest files first
-        $jobsPerWorker = array_map(static fn(array $jobs): array => array_reverse($jobs), $bucketSchedule->getJobsPerWorker());
+        $jobsPerWorker = array_map(\Closure::fromCallable('array_reverse'), $bucketSchedule->getJobsPerWorker());
         /** @var array<string, int> $bucketKeyByIdentifier */
         $bucketKeyByIdentifier = [];
         $streamSelectLoop = new StreamSelectLoop();

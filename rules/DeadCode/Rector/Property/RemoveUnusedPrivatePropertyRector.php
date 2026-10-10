@@ -71,10 +71,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // skip if has no private property
-        $hasAnyPrivateProperty = array_any($node->getProperties(), function (Property $property): bool {
-            return $property->isPrivate();
-        });
+        $hasAnyPrivateProperty = \false;
+        foreach ($node->getProperties() as $property) {
+            if ($property->isPrivate()) {
+                $hasAnyPrivateProperty = \true;
+                break;
+            }
+        }
         if (!$hasAnyPrivateProperty) {
             return null;
         }
