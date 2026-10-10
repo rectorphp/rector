@@ -1004,7 +1004,6 @@ return array(
     'Rector\\CodeQuality\\CompactConverter' => $baseDir . '/rules/CodeQuality/CompactConverter.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\ClassLikeAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ClassLikeAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\ExplicitBoolConditionResolver' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ExplicitBoolConditionResolver.php',
-    'Rector\\CodeQuality\\NodeAnalyzer\\ForeachAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ForeachAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\LocalPropertyAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/LocalPropertyAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\MissingPropertiesResolver' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/MissingPropertiesResolver.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\VariableDimFetchAssignResolver' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/VariableDimFetchAssignResolver.php',

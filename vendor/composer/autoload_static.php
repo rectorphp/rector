@@ -1238,7 +1238,6 @@ class ComposerStaticInita621757dbc0fb4738c6628ab1a181db8
         'Rector\\CodeQuality\\CompactConverter' => __DIR__ . '/../..' . '/rules/CodeQuality/CompactConverter.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ClassLikeAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ClassLikeAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ExplicitBoolConditionResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ExplicitBoolConditionResolver.php',
-        'Rector\\CodeQuality\\NodeAnalyzer\\ForeachAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ForeachAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\LocalPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/LocalPropertyAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\MissingPropertiesResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/MissingPropertiesResolver.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\VariableDimFetchAssignResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/VariableDimFetchAssignResolver.php',
