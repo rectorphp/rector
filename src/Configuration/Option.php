@@ -218,6 +218,12 @@ final class Option
      */
     public const PARALLEL_JOB_TIMEOUT_IN_SECONDS = 'parallel-job-timeout-in-seconds';
     /**
+     * @experimental Opt-in to the LPT bucket scheduler
+     * @see \Rector\Parallel\Experimental\LptScheduleFactory
+     * @var string
+     */
+    public const LPT = 'lpt';
+    /**
      * @var string
      */
     public const MEMORY_LIMIT = 'memory-limit';

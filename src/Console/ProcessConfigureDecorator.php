@@ -29,6 +29,7 @@ final class ProcessConfigureDecorator
         $command->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchanged files cache');
         $command->addOption(Option::PARALLEL_PORT, null, InputOption::VALUE_REQUIRED);
         $command->addOption(Option::PARALLEL_IDENTIFIER, null, InputOption::VALUE_REQUIRED);
+        $command->addOption(Option::LPT, null, InputOption::VALUE_NONE, '[EXPERIMENTAL] Balance files across parallel workers by size up front and keep every worker alive for its whole share.');
         $command->addOption(Option::XDEBUG, null, InputOption::VALUE_NONE, 'Display xdebug output.');
         $command->addOption(Option::RULES_SUMMARY, null, InputOption::VALUE_NONE, 'Show summary of rules applied during the run.');
         $command->addOption(Option::MAX_CHANGES, null, InputOption::VALUE_REQUIRED, 'Stop after this many changes are made, leaving the rest untouched. Forces non-parallel run.');
