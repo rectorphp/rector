@@ -74,8 +74,9 @@ CODE_SAMPLE
         return $this->processNullableInstance($node);
     }
     /**
+     * @template TBinaryOp of BooleanAnd|BooleanOr
      * @param \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr $node
-     * @return null|\PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
+     * @return TBinaryOp|null
      */
     private function processNullableInstance($node)
     {
@@ -115,9 +116,7 @@ CODE_SAMPLE
         if ($hasChanged) {
             return $booleanOr;
         }
-        /** @var BooleanOr|null $result */
-        $result = $this->processNullableInstance($booleanOr);
-        return $result;
+        return $this->processNullableInstance($booleanOr);
     }
     private function createExprInstanceof(Expr $expr, ObjectType $objectType): Instanceof_
     {
