@@ -6,8 +6,8 @@ namespace Rector\Reporting;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\FileSystem\FilePathHelper;
-use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
+use Rector\Skipper\Skipper\Skipper;
 use Rector\ValueObject\ProcessResult;
 /**
  * @see \Rector\Tests\Reporting\UnusedSkipResolverTest
