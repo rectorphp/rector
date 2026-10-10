@@ -50,8 +50,9 @@ final class AddReturnTypeFromParam
         $this->returnTypeInferer = $returnTypeInferer;
     }
     /**
+     * @template TFunctionLike of ClassMethod|Function_
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
+     * @return TFunctionLike|null
      */
     public function add($functionLike, Scope $scope)
     {

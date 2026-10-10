@@ -135,8 +135,9 @@ CODE_SAMPLE
         return $this->classManipulator->hasParentMethodOrInterface($methodCallRename->getObjectType(), $methodCallRename->getOldMethod());
     }
     /**
+     * @template TClassLike of Class_|Trait_|Interface_
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classOrInterface
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|null
+     * @return TClassLike|null
      */
     private function refactorClass($classOrInterface, Scope $scope)
     {

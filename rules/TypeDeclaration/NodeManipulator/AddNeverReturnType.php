@@ -51,8 +51,9 @@ final class AddNeverReturnType
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
+     * @template TFunctionLike of ClassMethod|Function_|Closure
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
+     * @return TFunctionLike|null
      */
     public function add($node, Scope $scope)
     {

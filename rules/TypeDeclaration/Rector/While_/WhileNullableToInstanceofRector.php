@@ -93,8 +93,9 @@ CODE_SAMPLE
         return new Instanceof_($expr, $fullyQualified);
     }
     /**
+     * @template TLoop of While_|Do_
      * @param \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_ $while
-     * @return \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|null
+     * @return TLoop|null
      */
     private function refactorNotIdentical($while, NotIdentical $notIdentical)
     {

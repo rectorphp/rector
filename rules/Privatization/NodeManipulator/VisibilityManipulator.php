@@ -156,8 +156,9 @@ final class VisibilityManipulator
         }
     }
     /**
+     * @template TNode of ClassConst|ClassMethod|Property
      * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
-     * @return \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|null
+     * @return TNode|null
      */
     public function publicize($node)
     {

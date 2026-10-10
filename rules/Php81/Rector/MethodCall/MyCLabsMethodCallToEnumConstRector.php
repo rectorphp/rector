@@ -210,8 +210,9 @@ CODE_SAMPLE
         }
     }
     /**
+     * @template TExpr of PropertyFetch|Variable
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable $expr
-     * @return null|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable
+     * @return TExpr|null
      */
     private function getPropertyFetchOrVariable($expr)
     {

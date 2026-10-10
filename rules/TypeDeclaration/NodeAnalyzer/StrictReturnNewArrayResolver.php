@@ -77,7 +77,11 @@ final class StrictReturnNewArrayResolver
     }
     /**
      * @return ClassMethod|Function_|null the passed node when an array return type was added, null otherwise
+     */
+    /**
+     * @template TFunctionLike of ClassMethod|Function_
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @return TFunctionLike|null
      */
     public function resolve($node)
     {
@@ -113,8 +117,9 @@ final class StrictReturnNewArrayResolver
         return $this->processAddArrayReturnType($node, $returnType);
     }
     /**
+     * @template TFunctionLike of ClassMethod|Function_
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
+     * @return TFunctionLike|null
      */
     private function processAddArrayReturnType($node, Type $returnType)
     {

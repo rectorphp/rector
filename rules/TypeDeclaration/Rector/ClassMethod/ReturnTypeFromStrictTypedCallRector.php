@@ -181,8 +181,9 @@ CODE_SAMPLE
         return \false;
     }
     /**
+     * @template TFunctionLike of ClassMethod|Function_|Closure
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
+     * @return TFunctionLike
      */
     private function processSingleUnionType($node, UnionType $unionType, NullableType $nullableType)
     {
@@ -205,9 +206,10 @@ CODE_SAMPLE
         return $this->isUnionPossibleReturnsVoid($node);
     }
     /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\ComplexType $returnedStrictTypeNode
+     * @template TFunctionLike of ClassMethod|Function_|Closure
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
+     * @return TFunctionLike
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\ComplexType $returnedStrictTypeNode
      */
     private function refactorSingleReturnType(Return_ $return, $returnedStrictTypeNode, $functionLike)
     {
