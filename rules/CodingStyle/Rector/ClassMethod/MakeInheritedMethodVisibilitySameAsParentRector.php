@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
@@ -78,6 +79,13 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node->isAnonymous()) {
+            return null;
+        }
+        // no parent class to align visibility to
+        if (!$node->extends instanceof Name) {
+            return null;
+        }
+        if ($node->getMethods() === []) {
             return null;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
