@@ -3,24 +3,18 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix202610\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\String_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector\SimplifyStrposLowerRectorTest
+ * @deprecated This rule is deprecated, as it handles a niche strpos(strtolower()) case that is not part of the PHP upgrade path.
  */
-final class SimplifyStrposLowerRector extends AbstractRector
+final class SimplifyStrposLowerRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @see https://regex101.com/r/Jokjt8/1
-     * @var string
-     */
-    private const UPPERCASE_REGEX = '#[A-Z]#';
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify strpos(strtolower(), "...") calls', [new CodeSample('strpos(strtolower($var), "...")', 'stripos($var, "...")')]);
@@ -37,34 +31,6 @@ final class SimplifyStrposLowerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isName($node, 'strpos')) {
-            return null;
-        }
-        if ($node->isFirstClassCallable()) {
-            return null;
-        }
-        $args = $node->getArgs();
-        if (!isset($args[0], $args[1])) {
-            return null;
-        }
-        $firstArg = $args[0];
-        if (!$firstArg->value instanceof FuncCall) {
-            return null;
-        }
-        $innerFuncCall = $firstArg->value;
-        if (!$this->isName($innerFuncCall, 'strtolower')) {
-            return null;
-        }
-        $secondArg = $args[1];
-        if (!$secondArg->value instanceof String_) {
-            return null;
-        }
-        if (Strings::match($secondArg->value->value, self::UPPERCASE_REGEX) !== null) {
-            return null;
-        }
-        // pop 1 level up
-        $node->args[0] = $innerFuncCall->getArgs()[0];
-        $node->name = new Name('stripos');
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it handles a niche strpos(strtolower()) case that is not part of the PHP upgrade path', self::class));
     }
 }
