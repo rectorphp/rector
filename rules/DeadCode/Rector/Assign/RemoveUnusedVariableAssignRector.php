@@ -113,11 +113,14 @@ CODE_SAMPLE
         if ($stmts === null || $stmts === []) {
             return null;
         }
-        // we cannot be sure here
+        $assignedVariableNamesByStmtPosition = $this->resolvedAssignedVariablesByStmtPosition($stmts);
+        if ($assignedVariableNamesByStmtPosition === []) {
+            return null;
+        }
+        // we cannot be sure here, deep walk only when there is a candidate to remove
         if ($this->shouldSkip($stmts)) {
             return null;
         }
-        $assignedVariableNamesByStmtPosition = $this->resolvedAssignedVariablesByStmtPosition($stmts);
         $hasChanged = \false;
         foreach ($assignedVariableNamesByStmtPosition as $stmtPosition => $variableName) {
             if ($this->stmtsManipulator->isVariableUsedInNextStmt($node, $stmtPosition + 1, $variableName)) {
