@@ -70,7 +70,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // skip as no comments
-        if ($node->getComments() === []) {
+        if (strpos((string) $node->getDocComment(), '@param') === \false) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);

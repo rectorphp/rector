@@ -139,41 +139,28 @@ final class RectorNodeTraverser implements NodeTraverserInterface
             if (!$subNode instanceof Node) {
                 continue;
             }
-            $traverseChildren = \true;
             $currentNodeVisitors = $this->getVisitorsForNode($subNode);
             foreach ($currentNodeVisitors as $currentNodeVisitor) {
                 $return = $this->rectorRunner->run($currentNodeVisitor, $subNode);
-                if ($return !== null) {
-                    if ($return instanceof Node) {
-                        $originalSubNodeClass = get_class($subNode);
-                        $this->ensureReplacementReasonable($subNode, $return);
-                        $subNode = $return;
-                        $node->{$name} = $return;
-                        if ($originalSubNodeClass !== get_class($subNode)) {
-                            // stop traversing as node type changed and visitors won't work
-                            continue 2;
-                        }
-                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CHILDREN) {
-                        $traverseChildren = \false;
-                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
-                        $traverseChildren = \false;
-                        break;
-                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
-                        $this->stopTraversal = \true;
-                        break 2;
-                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
-                        $node->{$name} = null;
+                if ($return === null) {
+                    continue;
+                }
+                if ($return instanceof Node) {
+                    $originalSubNodeClass = get_class($subNode);
+                    $this->ensureReplacementReasonable($subNode, $return);
+                    $subNode = $return;
+                    $node->{$name} = $return;
+                    if ($originalSubNodeClass !== get_class($subNode)) {
+                        // stop traversing as node type changed and visitors won't work
                         continue 2;
-                    } else {
-                        throw new LogicException('RectorRunner::run() returned invalid value of type ' . gettype($return));
                     }
+                } else {
+                    throw new LogicException('RectorRunner::run() returned invalid value of type ' . gettype($return));
                 }
             }
-            if ($traverseChildren) {
-                $this->traverseNode($subNode);
-                if ($this->stopTraversal) {
-                    break;
-                }
+            $this->traverseNode($subNode);
+            if ($this->stopTraversal) {
+                break;
             }
         }
     }
@@ -210,26 +197,14 @@ final class RectorNodeTraverser implements NodeTraverserInterface
                     } elseif ($return === NodeVisitor::REMOVE_NODE) {
                         $doNodes[] = [$i, []];
                         continue 2;
-                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CHILDREN) {
-                        $traverseChildren = \false;
-                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
-                        $traverseChildren = \false;
-                        break;
-                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
-                        $this->stopTraversal = \true;
-                        break 2;
-                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
-                        throw new LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
                     } else {
                         throw new LogicException('RectorRunner::run() returned invalid value of type ' . gettype($return));
                     }
                 }
             }
-            if ($traverseChildren) {
-                $this->traverseNode($node);
-                if ($this->stopTraversal) {
-                    break;
-                }
+            $this->traverseNode($node);
+            if ($this->stopTraversal) {
+                break;
             }
         }
         if ($doNodes !== []) {

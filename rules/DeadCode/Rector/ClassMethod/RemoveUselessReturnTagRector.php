@@ -74,6 +74,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // early return if no @return tag is present
+        if (strpos((string) $node->getDocComment(), '@return') === \false) {
+            return null;
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $hasChanged = $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
         if (!$hasChanged) {

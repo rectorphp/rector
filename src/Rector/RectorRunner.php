@@ -66,7 +66,7 @@ CODE_SAMPLE;
         $this->currentFileProvider = $currentFileProvider;
     }
     /**
-     * @return int|Node|Node[]|null
+     * @return NodeVisitor::REMOVE_NODE|Node|Node[]|null
      */
     public function run(RectorInterface $rector, Node $node)
     {
@@ -104,8 +104,7 @@ CODE_SAMPLE;
             $this->createdByRuleDecorator->decorate($node, $originalNode, get_class($rector));
             // only remove node is supported
             if ($refactoredNodeOrState !== NodeVisitor::REMOVE_NODE) {
-                // @todo warn about unsupported state in the future
-                return null;
+                throw new ShouldNotHappenException(sprintf('Unsupported state "%d" returned from "%s".', $refactoredNodeOrState, get_class($rector)));
             }
             // notify this rule changed code
             $rectorWithLineChange = new RectorWithLineChange(get_class($rector), $originalNode->getStartLine());
