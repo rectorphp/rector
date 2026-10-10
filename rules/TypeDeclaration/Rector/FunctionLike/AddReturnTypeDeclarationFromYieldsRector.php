@@ -82,7 +82,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         $yieldNodes = $this->yieldNodeFinder->find($node);
         if ($yieldNodes === []) {
             return null;
@@ -91,6 +90,7 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node && $this->isNames($node->returnType, ['Iterator', 'Generator', 'Traversable', 'iterable'])) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }

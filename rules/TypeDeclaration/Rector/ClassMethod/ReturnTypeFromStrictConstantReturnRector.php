@@ -92,10 +92,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         if ($node->returnType instanceof Node) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;

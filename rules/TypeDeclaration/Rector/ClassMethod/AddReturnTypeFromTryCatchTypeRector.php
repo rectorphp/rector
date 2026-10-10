@@ -96,12 +96,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
-            return null;
-        }
         // already known type
         if ($node->returnType instanceof Node) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
         $tryReturnType = null;

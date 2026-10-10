@@ -135,11 +135,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = ScopeFetcher::fetch($node);
         // already filled
         if ($node->returnType instanceof Node) {
             return null;
         }
+        $scope = ScopeFetcher::fetch($node);
         if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }

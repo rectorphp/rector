@@ -91,6 +91,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // already has the type, skip
+        if ($node->returnType instanceof Node) {
+            return null;
+        }
         $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node, $scope)) {
             return null;
@@ -114,10 +118,6 @@ CODE_SAMPLE
      */
     private function shouldSkip(Node $node, Scope $scope): bool
     {
-        // already has the type, skip
-        if ($node->returnType instanceof Node) {
-            return \true;
-        }
         return $node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope);
     }
     /**

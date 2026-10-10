@@ -91,6 +91,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // type is already filled, skip
+        if ($node->returnType instanceof Node) {
+            return null;
+        }
         $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node, $scope)) {
             return null;
@@ -135,10 +139,6 @@ CODE_SAMPLE
      */
     private function shouldSkip($functionLike, Scope $scope): bool
     {
-        // type is already filled, skip
-        if ($functionLike->returnType instanceof Node) {
-            return \true;
-        }
         $returnType = $this->returnTypeInferer->inferFunctionLike($functionLike);
         $returnType = TypeCombinator::removeNull($returnType);
         if ($returnType instanceof UnionType) {
