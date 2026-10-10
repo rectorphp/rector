@@ -4,27 +4,17 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\Php74\NodeAnalyzer\ClosureArrowFunctionAnalyzer;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\FuncCall\CallUserFuncWithArrowFunctionToInlineRector\CallUserFuncWithArrowFunctionToInlineRectorTest
+ * @deprecated This rule is deprecated, as it handles a niche call_user_func() with arrow function case that is not part of the PHP upgrade path.
  */
-final class CallUserFuncWithArrowFunctionToInlineRector extends AbstractRector
+final class CallUserFuncWithArrowFunctionToInlineRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer;
-    public function __construct(ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer)
-    {
-        $this->closureArrowFunctionAnalyzer = $closureArrowFunctionAnalyzer;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Refactor `call_user_func()` with arrow function to direct call', [new CodeSample(<<<'CODE_SAMPLE'
@@ -59,30 +49,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isFirstClassCallable()) {
-            return null;
-        }
-        if (!$this->isName($node, 'call_user_func')) {
-            return null;
-        }
-        if (count($node->args) !== 1) {
-            return null;
-        }
-        // change the node
-        if (!isset($node->getArgs()[0])) {
-            return null;
-        }
-        $firstArg = $node->args[0];
-        if (!$firstArg instanceof Arg) {
-            return null;
-        }
-        $firstArgValue = $firstArg->value;
-        if ($firstArgValue instanceof ArrowFunction) {
-            return $firstArgValue->expr;
-        }
-        if ($firstArgValue instanceof Closure) {
-            return $this->closureArrowFunctionAnalyzer->matchArrowFunctionExpr($firstArgValue);
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it handles a niche call_user_func() with arrow function case that is not part of the PHP upgrade path', self::class));
     }
 }
