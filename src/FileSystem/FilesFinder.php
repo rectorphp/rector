@@ -8,7 +8,7 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Skipper\Skipper\PathSkipper;
+use Rector\Skipper\Skipper\Skipper;
 use Rector\ValueObject\Configuration;
 use RectorPrefix202610\Symfony\Component\Finder\Finder;
 /**
@@ -31,7 +31,7 @@ final class FilesFinder
     /**
      * @readonly
      */
-    private PathSkipper $pathSkipper;
+    private Skipper $skipper;
     /**
      * @readonly
      */
@@ -44,12 +44,12 @@ final class FilesFinder
      * @readonly
      */
     private \Rector\FileSystem\FilePathFilter $filePathFilter;
-    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, PathSkipper $pathSkipper, \Rector\FileSystem\FilePathHelper $filePathHelper, ChangedFilesDetector $changedFilesDetector, \Rector\FileSystem\FilePathFilter $filePathFilter)
+    public function __construct(\Rector\FileSystem\FilesystemTweaker $filesystemTweaker, UnchangedFilesFilter $unchangedFilesFilter, \Rector\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter, Skipper $skipper, \Rector\FileSystem\FilePathHelper $filePathHelper, ChangedFilesDetector $changedFilesDetector, \Rector\FileSystem\FilePathFilter $filePathFilter)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
         $this->fileAndDirectoryFilter = $fileAndDirectoryFilter;
-        $this->pathSkipper = $pathSkipper;
+        $this->skipper = $skipper;
         $this->filePathHelper = $filePathHelper;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->filePathFilter = $filePathFilter;
@@ -65,7 +65,7 @@ final class FilesFinder
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         // filtering files in files collection
         $filteredFilePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
-        $filteredFilePaths = array_filter($filteredFilePaths, fn(string $filePath): bool => !$this->pathSkipper->shouldSkip($filePath));
+        $filteredFilePaths = array_filter($filteredFilePaths, fn(string $filePath): bool => !$this->skipper->shouldSkipFilePath($filePath));
         // fallback append `.php` to be used for both $filteredFilePaths and $filteredFilePathsInDirectories
         $hasOnlySuffix = $onlySuffix !== null && $onlySuffix !== '';
         if ($hasOnlySuffix && substr_compare($onlySuffix, '.php', -strlen('.php')) !== 0) {
@@ -149,7 +149,7 @@ final class FilesFinder
             if ($path === \false) {
                 continue;
             }
-            if ($this->pathSkipper->shouldSkip($path)) {
+            if ($this->skipper->shouldSkipFilePath($path)) {
                 continue;
             }
             if ($this->isStartWithShortPHPTag($fileInfo->getContents())) {

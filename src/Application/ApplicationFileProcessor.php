@@ -16,7 +16,7 @@ use Rector\Parallel\Exception\ParallelShouldNotHappenException;
 use Rector\Parallel\ScheduleFactory;
 use Rector\PhpParser\Parser\ParserErrors;
 use Rector\Reporting\MissConfigurationReporter;
-use Rector\Skipper\Skipper\UsedSkipCollector;
+use Rector\Skipper\Skipper\Skipper;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\ArrayParametersMerger;
 use Rector\ValueObject\Application\File;
@@ -73,7 +73,7 @@ final class ApplicationFileProcessor
     /**
      * @readonly
      */
-    private UsedSkipCollector $usedSkipCollector;
+    private Skipper $skipper;
     /**
      * @var string
      */
@@ -82,7 +82,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private array $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FilesFinder $filesFinder, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter, UsedSkipCollector $usedSkipCollector)
+    public function __construct(SymfonyStyle $symfonyStyle, FilesFinder $filesFinder, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter, Skipper $skipper)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->filesFinder = $filesFinder;
@@ -94,7 +94,7 @@ final class ApplicationFileProcessor
         $this->fileProcessor = $fileProcessor;
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->missConfigurationReporter = $missConfigurationReporter;
-        $this->usedSkipCollector = $usedSkipCollector;
+        $this->skipper = $skipper;
     }
     public function run(Configuration $configuration, InputInterface $input): ProcessResult
     {
@@ -138,7 +138,7 @@ final class ApplicationFileProcessor
         $processResult->addSystemErrors($this->systemErrors);
         // path-only skips are matched in the main process while finding files; in parallel runs the
         // result comes from workers only, so merge those marks back in to avoid false "unused skip"
-        $processResult->addUsedSkips($this->usedSkipCollector->provide());
+        $processResult->addUsedSkips($this->skipper->provideUsedSkips());
         $this->restoreErrorHandler();
         return $processResult;
     }
@@ -190,7 +190,7 @@ final class ApplicationFileProcessor
                 $systemErrors[] = $this->resolveSystemError($throwable, $filePath);
             }
         }
-        return new ProcessResult($systemErrors, $fileDiffs, $totalChanged, $this->usedSkipCollector->provide());
+        return new ProcessResult($systemErrors, $fileDiffs, $totalChanged, $this->skipper->provideUsedSkips());
     }
     private function processFile(File $file, Configuration $configuration): FileProcessResult
     {

@@ -36,24 +36,32 @@ final class Skipper
      */
     private ReflectionProvider $reflectionProvider;
     /**
-     * @readonly
-     */
-    private \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector;
-    /**
      * @var null|array<class-string, string[]|null>
      */
     private $skippedClassesToFiles = null;
-    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, FileInfoMatcher $fileInfoMatcher, ReflectionProvider $reflectionProvider, \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector)
+    /**
+     * Map of skip element (rule class or global path) to the set of paths matched under it.
+     * Rule-scoped skips collect their matched paths; skip-everywhere rules and global path skips
+     * keep an empty path set, the same shape as the "->withSkip()" config.
+     *
+     * @var array<string, array<string, true>>
+     */
+    private array $usedSkips = [];
+    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, FileInfoMatcher $fileInfoMatcher, ReflectionProvider $reflectionProvider)
     {
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->pathSkipper = $pathSkipper;
         $this->fileInfoMatcher = $fileInfoMatcher;
         $this->reflectionProvider = $reflectionProvider;
-        $this->usedSkipCollector = $usedSkipCollector;
     }
     public function shouldSkipFilePath(string $filePath): bool
     {
-        return $this->pathSkipper->shouldSkip($filePath);
+        $matchedPath = $this->pathSkipper->matchSkippedPath($filePath);
+        if ($matchedPath === null) {
+            return \false;
+        }
+        $this->markUsed($matchedPath);
+        return \true;
     }
     public function shouldSkipRectorAndFile(object $rector, string $filePath): bool
     {
@@ -93,7 +101,21 @@ final class Skipper
     }
     public function markSkipUsed(SkipMatch $skipMatch): void
     {
-        $this->usedSkipCollector->markUsed($skipMatch->getSkippedClass(), $skipMatch->getMatchedPath());
+        $this->markUsed($skipMatch->getSkippedClass(), $skipMatch->getMatchedPath());
+    }
+    /**
+     * Skip elements (rule classes and paths) that actually matched during the run,
+     * so unused skips can be reported and removed.
+     *
+     * @return array<string, string[]>
+     */
+    public function provideUsedSkips(): array
+    {
+        $usedSkips = [];
+        foreach ($this->usedSkips as $skip => $paths) {
+            $usedSkips[$skip] = array_keys($paths);
+        }
+        return $usedSkips;
     }
     /**
      * @return array<class-string, string[]|null>
@@ -141,5 +163,12 @@ final class Skipper
     public function shouldSkipCurrentNode(string $rectorClass, Node $node): bool
     {
         return $this->rectifiedAnalyzer->hasRectified($rectorClass, $node);
+    }
+    private function markUsed(string $skip, ?string $path = null): void
+    {
+        $this->usedSkips[$skip] ??= [];
+        if ($path !== null) {
+            $this->usedSkips[$skip][$path] = \true;
+        }
     }
 }

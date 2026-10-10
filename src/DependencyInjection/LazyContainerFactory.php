@@ -68,7 +68,6 @@ use Rector\PHPStanStaticTypeMapper\TypeMapper\ConditionalTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Rector\AbstractRector;
-use Rector\Skipper\Skipper\UsedSkipCollector;
 use RectorPrefix202610\Symfony\Component\Console\Application;
 use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202610\Webmozart\Assert\Assert;
@@ -133,8 +132,6 @@ final class LazyContainerFactory
         $rectorConfig->singleton(FileProcessor::class);
         $rectorConfig->singleton(PostFileProcessor::class);
         $rectorConfig->singleton(RectorRegistry::class);
-        // shared state: collects used skips across the skipper, the path skipper and the file processor
-        $rectorConfig->singleton(UsedSkipCollector::class);
         $rectorConfig->singleton(DynamicSourceLocatorProvider::class, static function (RectorConfig $rectorConfig): DynamicSourceLocatorProvider {
             $phpStanServicesFactory = $rectorConfig->make(PHPStanServicesFactory::class);
             return $phpStanServicesFactory->createDynamicSourceLocatorProvider();

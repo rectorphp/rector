@@ -15,23 +15,13 @@ final class PathSkipper
      * @readonly
      */
     private SkippedPathsResolver $skippedPathsResolver;
-    /**
-     * @readonly
-     */
-    private \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector;
-    public function __construct(FileInfoMatcher $fileInfoMatcher, SkippedPathsResolver $skippedPathsResolver, \Rector\Skipper\Skipper\UsedSkipCollector $usedSkipCollector)
+    public function __construct(FileInfoMatcher $fileInfoMatcher, SkippedPathsResolver $skippedPathsResolver)
     {
         $this->fileInfoMatcher = $fileInfoMatcher;
         $this->skippedPathsResolver = $skippedPathsResolver;
-        $this->usedSkipCollector = $usedSkipCollector;
     }
-    public function shouldSkip(string $filePath): bool
+    public function matchSkippedPath(string $filePath): ?string
     {
-        $matchedPath = $this->fileInfoMatcher->matchPattern($filePath, $this->skippedPathsResolver->resolve());
-        if ($matchedPath === null) {
-            return \false;
-        }
-        $this->usedSkipCollector->markUsed($matchedPath);
-        return \true;
+        return $this->fileInfoMatcher->matchPattern($filePath, $this->skippedPathsResolver->resolve());
     }
 }

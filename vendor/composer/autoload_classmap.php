@@ -2295,7 +2295,6 @@ return array(
     'Rector\\Skipper\\SkipCriteriaResolver\\SkippedPathsResolver' => $baseDir . '/src/Skipper/SkipCriteriaResolver/SkippedPathsResolver.php',
     'Rector\\Skipper\\Skipper\\PathSkipper' => $baseDir . '/src/Skipper/Skipper/PathSkipper.php',
     'Rector\\Skipper\\Skipper\\Skipper' => $baseDir . '/src/Skipper/Skipper/Skipper.php',
-    'Rector\\Skipper\\Skipper\\UsedSkipCollector' => $baseDir . '/src/Skipper/Skipper/UsedSkipCollector.php',
     'Rector\\Skipper\\ValueObject\\SkipMatch' => $baseDir . '/src/Skipper/ValueObject/SkipMatch.php',
     'Rector\\StaticReflection\\DynamicSourceLocatorDecorator' => $baseDir . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
     'Rector\\StaticTypeMapper\\Contract\\PhpDocParser\\PhpDocTypeMapperInterface' => $baseDir . '/src/StaticTypeMapper/Contract/PhpDocParser/PhpDocTypeMapperInterface.php',
