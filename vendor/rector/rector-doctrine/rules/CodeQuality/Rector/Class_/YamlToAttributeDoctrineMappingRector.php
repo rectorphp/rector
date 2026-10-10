@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated as incomplete and prone to create buggy code. Use custom rules tailored to your YAML mapping instead.
  */

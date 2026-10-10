@@ -48,23 +48,13 @@ final class Skipper
         $this->reflectionProvider = $reflectionProvider;
         $this->usedSkipCollector = $usedSkipCollector;
     }
-    /**
-     * @param string|object $element
-     */
-    public function shouldSkipElement($element): bool
-    {
-        return $this->shouldSkipElementAndFilePath($element, __FILE__);
-    }
     public function shouldSkipFilePath(string $filePath): bool
     {
         return $this->pathSkipper->shouldSkip($filePath);
     }
-    /**
-     * @param string|object $element
-     */
-    public function shouldSkipElementAndFilePath($element, string $filePath): bool
+    public function shouldSkipRectorAndFile(object $rector, string $filePath): bool
     {
-        $skipMatch = $this->matchSkip($element, $filePath);
+        $skipMatch = $this->matchSkip($rector, $filePath);
         if (!$skipMatch instanceof SkipMatch) {
             return \false;
         }

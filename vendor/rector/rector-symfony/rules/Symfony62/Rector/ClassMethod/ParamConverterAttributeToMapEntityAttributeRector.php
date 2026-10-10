@@ -16,14 +16,14 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes
  *

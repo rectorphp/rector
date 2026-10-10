@@ -9,8 +9,8 @@ use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as turning "{$string}" interpolation into sprintf() or concat is a matter of personal preference. It can worsen readability and is rather a coding standard change.
  */

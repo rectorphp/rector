@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated The "Action" suffix is a naming preference with no functional value. Worse, controller actions are
  *             referenced from outside PHP - routing configs, templates, tests - and renaming the method silently

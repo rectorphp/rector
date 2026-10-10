@@ -22,8 +22,8 @@ use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\NodeFactory\DoctrineAnnotationFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax

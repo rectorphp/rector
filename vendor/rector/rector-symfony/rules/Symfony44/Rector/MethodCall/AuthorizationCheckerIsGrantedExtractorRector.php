@@ -13,12 +13,12 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
  *

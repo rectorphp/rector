@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\FuncCall\RemoveFilterVarOnExactTypeRector\RemoveFilterVarOnExactTypeRectorTest
  */

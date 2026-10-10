@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated This rule is deprecated as experimental. It can generate broken code - it drops non-"get" config keys silently and assumes a matching setter exists. Handle it in a custom way or keep the code untouched.
  */

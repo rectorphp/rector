@@ -8,8 +8,8 @@ use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/numeric_literal_separator
  *

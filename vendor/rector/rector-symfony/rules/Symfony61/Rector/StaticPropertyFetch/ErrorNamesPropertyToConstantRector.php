@@ -14,11 +14,11 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Covers:
  * - https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.1.md#validator

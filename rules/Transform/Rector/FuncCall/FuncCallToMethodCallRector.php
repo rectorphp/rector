@@ -9,9 +9,9 @@ use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as a function call can be turned to a method call in very few cases without breaking the code. The service has to be available in the class, the method signature has to match and the function must have no side effects. Use a custom rule for the exact project case instead.
  */

@@ -15,6 +15,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Rector\Symfony\Enum\SensioAnnotation;
 use Rector\Symfony\Enum\SymfonyAnnotation;
@@ -22,8 +24,6 @@ use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony30\Rector\ClassMethod\GetRequestRector\GetRequestRectorTest
  */

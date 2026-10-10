@@ -21,8 +21,8 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Parser\InlineCodeParser;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/polyfill/commit/cc2bf55accd32b989348e2039e8c91cde46aebed
  *

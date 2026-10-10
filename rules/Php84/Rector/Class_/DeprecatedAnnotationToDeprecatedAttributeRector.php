@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as the #[Deprecated] attribute triggers a runtime deprecation, while the @deprecated annotation is a static hint only. Those have a different purpose and are not interchangeable. Use "phpstan/phpstan-deprecation-rules" to report the annotation instead.
  */

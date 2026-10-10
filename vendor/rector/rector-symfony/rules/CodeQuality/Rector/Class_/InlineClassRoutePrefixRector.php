@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated This rule is opinionated - inlining the class route prefix into every method route removes a single shared source of truth and, on controllers with many routes, can worsen readability rather than improve it.
  */

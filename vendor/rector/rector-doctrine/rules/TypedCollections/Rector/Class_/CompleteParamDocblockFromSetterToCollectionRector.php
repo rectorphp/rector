@@ -11,8 +11,8 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Doctrine\CodeQuality\SetterCollectionResolver;
 use Rector\Doctrine\TypedCollections\NodeAnalyzer\EntityLikeClassDetector;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\TypedCollections\Rector\Class_\CompleteParamDocblockFromSetterToCollectionRector\CompleteParamDocblockFromSetterToCollectionRectorTest
  */

@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as a docblock "@property" is public by design, while the native property it created was "private" - the access level changed and could break code that relied on the public property.
  */

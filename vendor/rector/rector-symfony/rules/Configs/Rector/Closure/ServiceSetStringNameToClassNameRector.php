@@ -7,10 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\DataProvider\ServiceNameToTypeUniqueProvider;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Configs\Rector\Closure\ServiceSetStringNameToClassNameRector\ServiceSetStringNameToClassNameRectorTest
  */

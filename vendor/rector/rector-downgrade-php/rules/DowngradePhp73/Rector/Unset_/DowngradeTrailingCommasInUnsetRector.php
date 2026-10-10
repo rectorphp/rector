@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer;
 use Rector\DowngradePhp73\Tokenizer\TrailingCommaRemover;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp73\Rector\Unset_\DowngradeTrailingCommasInUnsetRector\DowngradeTrailingCommasInUnsetRectorTest
  */

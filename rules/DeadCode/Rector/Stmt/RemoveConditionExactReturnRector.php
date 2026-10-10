@@ -12,8 +12,8 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Stmt\RemoveConditionExactReturnRector\RemoveConditionExactReturnRectorTest
  */

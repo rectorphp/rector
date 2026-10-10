@@ -18,8 +18,8 @@ use Rector\Doctrine\TypedCollections\DocBlockAnalyzer\CollectionTagValueNodeAnal
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\TypedCollections\Rector\ClassMethod\CollectionSetterParamNativeTypeRector\CollectionSetterParamNativeTypeRectorTest
  */

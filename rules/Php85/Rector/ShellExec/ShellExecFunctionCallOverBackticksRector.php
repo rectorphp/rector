@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\ShellExec;
 use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_backticks_as_an_alias_for_shell_exec
  * @see \Rector\Tests\Php85\Rector\ShellExec\ShellExecFunctionCallOverBackticksRector\ShellExecFunctionCallOverBackticksRectorTest

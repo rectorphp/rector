@@ -8,8 +8,8 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\Instanceof_;
 use Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/migration80.incompatible.php#migration80.incompatible.resource2object
  *

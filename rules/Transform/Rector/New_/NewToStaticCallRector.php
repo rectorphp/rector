@@ -7,9 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\NewToStaticCall;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToStaticCallRector\NewToStaticCallRectorTest

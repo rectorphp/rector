@@ -26,11 +26,11 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/marking_overriden_methods
  *

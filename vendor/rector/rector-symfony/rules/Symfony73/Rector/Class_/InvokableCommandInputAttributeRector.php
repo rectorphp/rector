@@ -16,6 +16,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Enum\CommandMethodName;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
@@ -28,8 +30,6 @@ use Rector\Symfony\Symfony73\NodeTransformer\OutputInputSymfonyStyleReplacer;
 use Rector\ValueObject\MethodName;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://symfony.com/blog/new-in-symfony-7-3-invokable-commands-and-input-attributes
  *

@@ -12,11 +12,11 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\FileNode;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\NodeAnalyzer\DeclareStrictTypeFinder;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\StmtsAwareInterface\DeclareStrictTypesTestsRector\DeclareStrictTypesTestsRectorTest
  */

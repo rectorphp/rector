@@ -1558,12 +1558,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "c48eeac1143aaf4591400704a4f37041d89d13a1"
+                "reference": "cff17dc71171d06aea8e0bc98de5c6810745ed77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/c48eeac1143aaf4591400704a4f37041d89d13a1",
-                "reference": "c48eeac1143aaf4591400704a4f37041d89d13a1",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/cff17dc71171d06aea8e0bc98de5c6810745ed77",
+                "reference": "cff17dc71171d06aea8e0bc98de5c6810745ed77",
                 "shasum": ""
             },
             "require": {
@@ -1586,7 +1586,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-05T14:06:12+00:00",
+            "time": "2026-10-10T13:09:17+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1615,12 +1615,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "64015cfdaf971f28e3863d48a49718143b42e9ba"
+                "reference": "e56a1cdc6135f1b9a0133473962be6ba1969836a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/64015cfdaf971f28e3863d48a49718143b42e9ba",
-                "reference": "64015cfdaf971f28e3863d48a49718143b42e9ba",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/e56a1cdc6135f1b9a0133473962be6ba1969836a",
+                "reference": "e56a1cdc6135f1b9a0133473962be6ba1969836a",
                 "shasum": ""
             },
             "require": {
@@ -1644,7 +1644,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-09T14:54:56+00:00",
+            "time": "2026-10-10T13:09:07+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1673,12 +1673,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "b136cb880fd1f19f70e089b22bf203892602e6f3"
+                "reference": "a680469a7f9b6f5fa0081dacf6895f2a300ae107"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/b136cb880fd1f19f70e089b22bf203892602e6f3",
-                "reference": "b136cb880fd1f19f70e089b22bf203892602e6f3",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/a680469a7f9b6f5fa0081dacf6895f2a300ae107",
+                "reference": "a680469a7f9b6f5fa0081dacf6895f2a300ae107",
                 "shasum": ""
             },
             "require": {
@@ -1704,7 +1704,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-10T08:45:03+00:00",
+            "time": "2026-10-10T13:09:39+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1733,12 +1733,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "533ccbb9ebe5697c99d2f8f2dab031eab0314b2e"
+                "reference": "d06782663fd41039231484185a8a80aff8f7caeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/533ccbb9ebe5697c99d2f8f2dab031eab0314b2e",
-                "reference": "533ccbb9ebe5697c99d2f8f2dab031eab0314b2e",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d06782663fd41039231484185a8a80aff8f7caeb",
+                "reference": "d06782663fd41039231484185a8a80aff8f7caeb",
                 "shasum": ""
             },
             "require": {
@@ -1770,7 +1770,7 @@
                 "tracy\/tracy": "^2.12",
                 "twig\/twig": "^3.21"
             },
-            "time": "2026-10-06T11:37:24+00:00",
+            "time": "2026-10-10T13:09:28+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -2811,69 +2811,6 @@
                 }
             ],
             "install-path": "..\/symfony\/string"
-        },
-        {
-            "name": "symplify\/rule-doc-generator-contracts",
-            "version": "11.2.0",
-            "version_normalized": "11.2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts.git",
-                "reference": "479cfcfd46047f80624aba931d9789e50475b5c6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/rule-doc-generator-contracts\/zipball\/479cfcfd46047f80624aba931d9789e50475b5c6",
-                "reference": "479cfcfd46047f80624aba931d9789e50475b5c6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "require-dev": {
-                "php-parallel-lint\/php-parallel-lint": "^1.3",
-                "phpstan\/extension-installer": "^1.2",
-                "rector\/rector": "^0.15.10",
-                "symplify\/easy-ci": "^11.1",
-                "symplify\/easy-coding-standard": "^11.1",
-                "symplify\/easy-testing": "^11.1",
-                "symplify\/phpstan-extensions": "^11.1",
-                "symplify\/phpstan-rules": "11.2.3.72",
-                "tomasvotruba\/unused-public": "^0.0.34"
-            },
-            "time": "2024-03-18T22:02:54+00:00",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "11.2-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Symplify\\RuleDocGenerator\\": "src"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Contracts for production code of RuleDocGenerator",
-            "support": {
-                "source": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts\/tree\/11.2.0"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/www.paypal.me\/rectorphp",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/tomasvotruba",
-                    "type": "github"
-                }
-            ],
-            "abandoned": true,
-            "install-path": "..\/symplify\/rule-doc-generator-contracts"
         },
         {
             "name": "webmozart\/assert",

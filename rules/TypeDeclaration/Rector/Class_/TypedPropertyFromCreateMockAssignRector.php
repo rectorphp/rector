@@ -13,13 +13,13 @@ use PHPStan\Type\Type;
 use Rector\Enum\ClassName;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector\TypedPropertyFromCreateMockAssignRectorTest
  */

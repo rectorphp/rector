@@ -15,9 +15,9 @@ use Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening

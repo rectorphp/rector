@@ -8,8 +8,8 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated Passing the form instead of `->createView()` is ambiguous and breaks dynamic forms, e.g. AJAX submits of forms modified in event listeners end up with a 422 response. Keep the explicit `->createView()` call.
  * @see https://github.com/symfony/symfony/issues/50542

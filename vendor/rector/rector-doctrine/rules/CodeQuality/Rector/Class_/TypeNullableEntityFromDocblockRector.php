@@ -25,9 +25,9 @@ use Rector\Doctrine\NodeAnalyzer\DoctrineEntityDetector;
 use Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated as too opinionated and narrow use-cased. Blindly forcing all entity properties to nullable native types
  *             from docblocks is a niche stepping-stone that does not fit a general code-quality set.

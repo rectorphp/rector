@@ -16,8 +16,8 @@ use Rector\CodeQuality\NodeAnalyzer\ExplicitBoolConditionResolver;
 use Rector\CodeQuality\ValueObject\ExplicitBoolCondition;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\ArrayExplicitBoolCompareRector\ArrayExplicitBoolCompareRectorTest
  */

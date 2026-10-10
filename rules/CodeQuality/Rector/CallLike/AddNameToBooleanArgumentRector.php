@@ -9,10 +9,10 @@ use PhpParser\Node\Expr\CallLike;
 use Rector\NodeAnalyzer\CallLikeArgumentNameAdder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector\AddNameToBooleanArgumentRectorTest
  */

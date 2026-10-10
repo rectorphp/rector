@@ -8,8 +8,8 @@ use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as risky. The "??" and "?:" operators are not interchangeable: "?:" also falls back on empty string, "0" and empty array. A regression must be fixed manually, so the rule is removed instead.
  *

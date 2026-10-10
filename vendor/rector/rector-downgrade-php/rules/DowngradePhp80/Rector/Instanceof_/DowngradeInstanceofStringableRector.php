@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/stringable
  * @see \Rector\Tests\DowngradePhp80\Rector\Instanceof_\DowngradeInstanceofStringableRector\DowngradeInstanceofStringableRectorTest

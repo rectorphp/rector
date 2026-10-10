@@ -12,12 +12,12 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\Int_;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\CodeQuality\Enum\ResponseClass;
 use Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\Symfony\ValueObject\ConstantMap\SymfonyResponseConstantMap;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector\ResponseStatusCodeRectorTest
  */

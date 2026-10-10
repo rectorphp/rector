@@ -16,8 +16,8 @@ use PhpParser\Node\UnionType;
 use Rector\NodeManipulator\PropertyDecorator;
 use Rector\PhpDocDecorator\PhpDocFromTypeDeclarationDecorator;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/versions/8.2/dnf-types

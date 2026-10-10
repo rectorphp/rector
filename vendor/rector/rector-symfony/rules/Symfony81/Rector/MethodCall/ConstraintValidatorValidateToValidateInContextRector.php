@@ -15,6 +15,8 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 use RectorPrefix202610\Symfony\Component\Validator\ConstraintValidator;
@@ -22,8 +24,6 @@ use RectorPrefix202610\Symfony\Component\Validator\ConstraintValidatorInterface;
 use RectorPrefix202610\Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use RectorPrefix202610\Symfony\Component\Validator\Validator\ContextualValidatorInterface;
 use RectorPrefix202610\Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/blob/8.1/CHANGELOG.md#validator
  * @see https://symfony.com/blog/new-in-symfony-8-1-validator-improvements

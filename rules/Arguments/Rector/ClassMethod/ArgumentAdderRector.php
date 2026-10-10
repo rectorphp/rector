@@ -28,9 +28,9 @@ use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\PhpParser\AstResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\ArgumentAdderRectorTest

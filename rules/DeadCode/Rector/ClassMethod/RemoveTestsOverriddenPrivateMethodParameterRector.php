@@ -9,9 +9,9 @@ use Rector\DeadCode\NodeCollector\OverriddenParameterResolver;
 use Rector\DeadCode\NodeManipulator\PrivateMethodParamRemover;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\MethodName;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveTestsOverriddenPrivateMethodParameterRector\RemoveTestsOverriddenPrivateMethodParameterRectorTest
  */

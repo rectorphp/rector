@@ -21,9 +21,9 @@ use PhpParser\NodeVisitor;
 use Rector\NodeManipulator\IfManipulator;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveTypedPropertyDeadInstanceOfRector\RemoveTypedPropertyDeadInstanceOfRectorTest
  */

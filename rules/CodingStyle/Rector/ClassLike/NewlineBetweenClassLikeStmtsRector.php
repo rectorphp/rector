@@ -10,8 +10,8 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Comments\CommentResolver;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector\NewlineBetweenClassLikeStmtsRectorTest
  */

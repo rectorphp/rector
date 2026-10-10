@@ -19,9 +19,9 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @api used in rector-doctrine

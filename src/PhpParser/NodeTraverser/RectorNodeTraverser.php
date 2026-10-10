@@ -7,11 +7,9 @@ use LogicException;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\RectorRunner;
 use Rector\VersionBonding\ComposerPackageConstraintFilter;
 use Rector\VersionBonding\PhpVersionedFilter;
@@ -27,7 +25,7 @@ use RectorPrefix202610\Webmozart\Assert\Assert;
  * @see \Rector\Tests\PhpParser\NodeTraverser\RectorNodeTraverserTest
  * @internal No BC promise on this class, it might change any time.
  */
-final class RectorNodeTraverser implements NodeTraverserInterface
+final class RectorNodeTraverser
 {
     /**
      * @var RectorInterface[]
@@ -69,14 +67,6 @@ final class RectorNodeTraverser implements NodeTraverserInterface
         $this->composerPackageConstraintFilter = $composerPackageConstraintFilter;
         $this->configurationRuleFilter = $configurationRuleFilter;
         $this->rectorRunner = $rectorRunner;
-    }
-    public function addVisitor(NodeVisitor $visitor): void
-    {
-        throw new ShouldNotHappenException('The immutable node traverser does not support adding visitors.');
-    }
-    public function removeVisitor(NodeVisitor $visitor): void
-    {
-        throw new ShouldNotHappenException('The immutable node traverser does not support removing visitors.');
     }
     /**
      * @param Node[] $nodes

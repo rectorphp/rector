@@ -13,9 +13,9 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector\BinaryOpNullableToInstanceofRectorTest
  */

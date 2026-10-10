@@ -8,8 +8,8 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\StrictInArrayRector\StrictInArrayRectorTest
  */

@@ -19,8 +19,8 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://php.watch/versions/8.4/array_find-array_find_key-array_any-array_all
  *

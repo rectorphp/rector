@@ -29,8 +29,8 @@ use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/array_key_first_last
  *

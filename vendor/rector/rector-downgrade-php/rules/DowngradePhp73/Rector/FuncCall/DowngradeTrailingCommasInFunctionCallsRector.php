@@ -11,8 +11,8 @@ use PhpParser\Node\Expr\StaticCall;
 use Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer;
 use Rector\DowngradePhp73\Tokenizer\TrailingCommaRemover;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector\DowngradeTrailingCommasInFunctionCallsRectorTest
  */

@@ -24,9 +24,9 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveReturnTagIncompatibleWithNativeTypeRector\RemoveReturnTagIncompatibleWithNativeTypeRectorTest
  */

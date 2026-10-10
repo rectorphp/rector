@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeFinder;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstantExpressionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintAttributeTargetAnalyzer;
 use Rector\Symfony\NodeAnalyzer\ValidatorAssert\ConstraintConstructorAnalyzer;
@@ -21,8 +23,6 @@ use Rector\Symfony\ValueObject\ValidatorAssert\ClassMethodAndConstraint;
 use Rector\Symfony\ValueObject\ValidatorAssert\PropertyAndConstraint;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * The validator loads constraints from PHP attributes since Symfony 5.2, and Doctrine annotations are deprecated
  * since Symfony 6.4

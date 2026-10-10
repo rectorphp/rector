@@ -17,8 +17,8 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\NodeFactory\NamedVariableFactory;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp85\Rector\StmtsAwareInterface\DowngradePipeOperatorRector\DowngradePipeOperatorRectorTest
  * @see https://wiki.php.net/rfc/pipe-operator-v3

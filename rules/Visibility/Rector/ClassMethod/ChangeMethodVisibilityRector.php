@@ -10,10 +10,10 @@ use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\Visibility;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest

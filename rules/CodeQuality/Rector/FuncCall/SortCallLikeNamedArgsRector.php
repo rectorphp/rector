@@ -14,8 +14,8 @@ use Rector\CodeQuality\NodeManipulator\NamedArgsSorter;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SortCallLikeNamedArgsRector\SortCallLikeNamedArgsRectorTest
  */

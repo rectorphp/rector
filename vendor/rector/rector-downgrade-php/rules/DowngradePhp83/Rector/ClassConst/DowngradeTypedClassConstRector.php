@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeManipulator\PropertyDecorator;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/typed_class_constants
  *

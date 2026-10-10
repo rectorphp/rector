@@ -15,10 +15,10 @@ use Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver;
 use Rector\Doctrine\TypedCollections\NodeAnalyzer\EntityLikeClassDetector;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  *  @see \Rector\Doctrine\Tests\TypedCollections\Rector\Class_\CompleteReturnDocblockFromToManyRector\CompleteReturnDocblockFromToManyRectorTest
  */

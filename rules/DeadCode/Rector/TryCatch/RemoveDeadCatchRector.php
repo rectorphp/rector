@@ -14,8 +14,8 @@ use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\TryCatch\RemoveDeadCatchRector\RemoveDeadCatchRectorTest
  */

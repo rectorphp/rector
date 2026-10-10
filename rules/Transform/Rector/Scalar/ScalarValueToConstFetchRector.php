@@ -15,9 +15,9 @@ use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\ScalarValueToConstFetch;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as the scalar value target is too wide. The very same value can be used in an unrelated context, e.g. an array key, a version number or a message, and get replaced by a constant that does not belong there. Use a custom rule scoped to the exact context instead.
  */

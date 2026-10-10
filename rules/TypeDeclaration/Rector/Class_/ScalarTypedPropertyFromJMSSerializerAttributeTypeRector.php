@@ -13,12 +13,12 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\NodeAnalyzer\JMSTypeAnalyzer;
 use Rector\TypeDeclaration\NodeFactory\JMSTypePropertyTypeFactory;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\ScalarTypedPropertyFromJMSSerializerAttributeTypeRector\ScalarTypedPropertyFromJMSSerializerAttributeTypeRectorTest
  */

@@ -16,8 +16,8 @@ use Rector\CodeQuality\NodeFactory\InArrayFromRepeatedCompareFactory;
 use Rector\CodeQuality\ValueObject\ComparedExprAndValueExpr;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\BooleanOr\RepeatedOrEqualToInArrayRector\RepeatedOrEqualToInArrayRectorTest
  */

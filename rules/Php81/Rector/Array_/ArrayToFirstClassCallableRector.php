@@ -20,11 +20,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see RFC https://wiki.php.net/rfc/first_class_callable_syntax
  * @see \Rector\Tests\Php81\Rector\Array_\ArrayToFirstClassCallableRector\ArrayToFirstClassCallableRectorTest

@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\Catch_;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/non-capturing_catches
  *

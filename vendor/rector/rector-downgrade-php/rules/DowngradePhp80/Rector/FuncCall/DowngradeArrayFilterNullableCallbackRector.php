@@ -28,8 +28,8 @@ use PHPStan\Type\StringType;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/function.array-filter.php#refsect1-function.array-filter-changelog
  * @see https://3v4l.org/lqHFA

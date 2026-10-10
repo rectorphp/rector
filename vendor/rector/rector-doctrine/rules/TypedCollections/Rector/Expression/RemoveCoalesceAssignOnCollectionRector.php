@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Doctrine\TypedCollections\TypeAnalyzer\CollectionTypeDetector;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\TypedCollections\Rector\Expression\RemoveCoalesceAssignOnCollectionRector\RemoveCoalesceAssignOnCollectionRectorTest
  */

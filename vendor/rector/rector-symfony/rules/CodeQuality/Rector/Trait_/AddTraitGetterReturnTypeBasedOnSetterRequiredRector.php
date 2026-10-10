@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated Matches a very narrow trait shape - exactly one property and one required setter/getter pair - to infer a return type. The match is too fragile and risky for the tiny gain, and PHPStan already reports the missing return type.
  */

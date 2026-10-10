@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use ReflectionFunction;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/function.number-format.php#refsect1-function.number-format-changelog
  *

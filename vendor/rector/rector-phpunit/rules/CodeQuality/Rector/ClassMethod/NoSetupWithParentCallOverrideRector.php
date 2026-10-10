@@ -9,8 +9,8 @@ use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\ParentCallDetector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\ClassMethod\NoSetupWithParentCallOverrideRector\NoSetupWithParentCallOverrideRectorTest
  */

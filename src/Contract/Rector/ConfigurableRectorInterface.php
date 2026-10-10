@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Contract\Rector;
 
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
+use Rector\RuleDoc\Contract\ConfigurableRuleInterface;
 interface ConfigurableRectorInterface extends \Rector\Contract\Rector\RectorInterface, ConfigurableRuleInterface
 {
     /**

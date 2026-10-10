@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a
+class ComposerStaticInit8406819e3f51957d6777587d169859be
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -16,12 +16,12 @@ class ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
+        '98b3f6eb44f3ab83aedfea8f11cd0d6a' => __DIR__ . '/../..' . '/src/functions/rule_doc_generator_class_aliases.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'S' =>
         array (
-            'Symplify\\RuleDocGenerator\\' => 26,
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
@@ -71,10 +71,6 @@ class ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symplify\\RuleDocGenerator\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src',
-        ),
         'Symfony\\Polyfill\\Php80\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
@@ -2411,7 +2407,6 @@ class ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a
         'Rector\\PhpParser\\NodeVisitor\\DefaultValueNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/DefaultValueNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\LocalVariableScopeNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/LocalVariableScopeNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\NameAndArgNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/NameAndArgNodeVisitor.php',
-        'Rector\\PhpParser\\NodeVisitor\\PhpDocInfoRemovingNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/PhpDocInfoRemovingNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\PhpVersionConditionNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/PhpVersionConditionNodeVisitor.php',
         'Rector\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
         'Rector\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',
@@ -2502,6 +2497,19 @@ class ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a
         'Rector\\Reporting\\DeprecatedRulesReporter' => __DIR__ . '/../..' . '/src/Reporting/DeprecatedRulesReporter.php',
         'Rector\\Reporting\\MissConfigurationReporter' => __DIR__ . '/../..' . '/src/Reporting/MissConfigurationReporter.php',
         'Rector\\Reporting\\UnusedSkipResolver' => __DIR__ . '/../..' . '/src/Reporting/UnusedSkipResolver.php',
+        'Rector\\RuleDoc\\AbstractCodeSample' => __DIR__ . '/../..' . '/src/RuleDoc/AbstractCodeSample.php',
+        'Rector\\RuleDoc\\CodeSample\\CodeSample' => __DIR__ . '/../..' . '/src/RuleDoc/CodeSample/CodeSample.php',
+        'Rector\\RuleDoc\\CodeSample\\ComposerJsonAwareCodeSample' => __DIR__ . '/../..' . '/src/RuleDoc/CodeSample/ComposerJsonAwareCodeSample.php',
+        'Rector\\RuleDoc\\CodeSample\\ConfiguredCodeSample' => __DIR__ . '/../..' . '/src/RuleDoc/CodeSample/ConfiguredCodeSample.php',
+        'Rector\\RuleDoc\\CodeSample\\ExtraFileCodeSample' => __DIR__ . '/../..' . '/src/RuleDoc/CodeSample/ExtraFileCodeSample.php',
+        'Rector\\RuleDoc\\Contract\\Category\\CategoryInfererInterface' => __DIR__ . '/../..' . '/src/RuleDoc/Contract/Category/CategoryInfererInterface.php',
+        'Rector\\RuleDoc\\Contract\\CodeSampleInterface' => __DIR__ . '/../..' . '/src/RuleDoc/Contract/CodeSampleInterface.php',
+        'Rector\\RuleDoc\\Contract\\ConfigurableRuleInterface' => __DIR__ . '/../..' . '/src/RuleDoc/Contract/ConfigurableRuleInterface.php',
+        'Rector\\RuleDoc\\Contract\\DocumentedRuleInterface' => __DIR__ . '/../..' . '/src/RuleDoc/Contract/DocumentedRuleInterface.php',
+        'Rector\\RuleDoc\\Contract\\RuleCodeSamplePrinterInterface' => __DIR__ . '/../..' . '/src/RuleDoc/Contract/RuleCodeSamplePrinterInterface.php',
+        'Rector\\RuleDoc\\Exception\\PoorDocumentationException' => __DIR__ . '/../..' . '/src/RuleDoc/Exception/PoorDocumentationException.php',
+        'Rector\\RuleDoc\\Exception\\ShouldNotHappenException' => __DIR__ . '/../..' . '/src/RuleDoc/Exception/ShouldNotHappenException.php',
+        'Rector\\RuleDoc\\RuleDefinition' => __DIR__ . '/../..' . '/src/RuleDoc/RuleDefinition.php',
         'Rector\\Set\\Contract\\SetInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetInterface.php',
         'Rector\\Set\\Contract\\SetProviderInterface' => __DIR__ . '/../..' . '/src/Set/Contract/SetProviderInterface.php',
         'Rector\\Set\\Enum\\SetGroup' => __DIR__ . '/../..' . '/src/Set/Enum/SetGroup.php',
@@ -3035,27 +3043,14 @@ class ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
         'Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
-        'Symplify\\RuleDocGenerator\\Contract\\Category\\CategoryInfererInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/Category/CategoryInfererInterface.php',
-        'Symplify\\RuleDocGenerator\\Contract\\CodeSampleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/CodeSampleInterface.php',
-        'Symplify\\RuleDocGenerator\\Contract\\ConfigurableRuleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/ConfigurableRuleInterface.php',
-        'Symplify\\RuleDocGenerator\\Contract\\DocumentedRuleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/DocumentedRuleInterface.php',
-        'Symplify\\RuleDocGenerator\\Contract\\RuleCodeSamplePrinterInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/RuleCodeSamplePrinterInterface.php',
-        'Symplify\\RuleDocGenerator\\Exception\\PoorDocumentationException' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Exception/PoorDocumentationException.php',
-        'Symplify\\RuleDocGenerator\\Exception\\ShouldNotHappenException' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Exception/ShouldNotHappenException.php',
-        'Symplify\\RuleDocGenerator\\ValueObject\\AbstractCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/AbstractCodeSample.php',
-        'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/CodeSample.php',
-        'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ComposerJsonAwareCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ComposerJsonAwareCodeSample.php',
-        'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ConfiguredCodeSample.php',
-        'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ExtraFileCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ExtraFileCodeSample.php',
-        'Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/RuleDefinition.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit211b754e70d3f5950bbfbbd64eb3e72a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8406819e3f51957d6777587d169859be::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8406819e3f51957d6777587d169859be::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8406819e3f51957d6777587d169859be::$classMap;
 
         }, null, ClassLoader::class);
     }

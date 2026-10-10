@@ -1,9 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\RuleDocGenerator\ValueObject\CodeSample;
+namespace Rector\RuleDoc\CodeSample;
 
-use Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
+use Rector\RuleDoc\AbstractCodeSample;
+/**
+ * @api
+ */
 final class ExtraFileCodeSample extends AbstractCodeSample
 {
     /**

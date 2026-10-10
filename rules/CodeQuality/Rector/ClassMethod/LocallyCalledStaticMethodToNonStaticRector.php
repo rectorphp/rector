@@ -22,8 +22,8 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector\LocallyCalledStaticMethodToNonStaticRectorTest
  */

@@ -13,8 +13,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\TypedCollections\Rector\ClassMethod\ReturnArrayToNewArrayCollectionRector\ReturnArrayToNewArrayCollectionRectorTest
  */

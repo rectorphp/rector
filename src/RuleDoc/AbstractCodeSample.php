@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\RuleDocGenerator\ValueObject;
+namespace Rector\RuleDoc;
 
-use Symplify\RuleDocGenerator\Contract\CodeSampleInterface;
-use Symplify\RuleDocGenerator\Exception\ShouldNotHappenException;
+use Rector\RuleDoc\Contract\CodeSampleInterface;
+use Rector\RuleDoc\Exception\ShouldNotHappenException;
 abstract class AbstractCodeSample implements CodeSampleInterface
 {
     /**

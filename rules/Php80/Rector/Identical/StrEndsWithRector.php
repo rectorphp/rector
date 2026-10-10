@@ -19,13 +19,13 @@ use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\BinaryOpAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\FuncCallAndExpr;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php80\Rector\Identical\StrEndsWithRector\StrEndsWithRectorTest
  */

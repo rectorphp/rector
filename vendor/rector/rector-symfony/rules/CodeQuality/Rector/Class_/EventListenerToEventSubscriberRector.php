@@ -11,6 +11,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
@@ -18,8 +20,6 @@ use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
 use Rector\Symfony\ValueObject\ServiceDefinition;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
  */

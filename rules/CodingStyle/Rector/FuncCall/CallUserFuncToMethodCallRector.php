@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CallUserFuncToMethodCallRector\CallUserFuncToMethodCallRectorTest
  */

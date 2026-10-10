@@ -11,14 +11,14 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/doc/2.8/form/form_collections.html
  * @changelog https://symfony.com/doc/3.0/form/form_collections.html

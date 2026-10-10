@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormInstanceToFormClassConstFetchConverter;
@@ -19,8 +21,6 @@ use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Best resource with clear example:
  *

@@ -1,17 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\RuleDocGenerator\ValueObject\CodeSample;
+namespace Rector\RuleDoc\CodeSample;
 
-use Symplify\RuleDocGenerator\Contract\CodeSampleInterface;
-use Symplify\RuleDocGenerator\Exception\ShouldNotHappenException;
-use Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
+use Rector\RuleDoc\AbstractCodeSample;
+use Rector\RuleDoc\Contract\CodeSampleInterface;
+use Rector\RuleDoc\Exception\ShouldNotHappenException;
+/**
+ * @api
+ */
 final class ConfiguredCodeSample extends AbstractCodeSample implements CodeSampleInterface
 {
     /**
      * @var mixed[]
+     * @readonly
      */
-    private array $configuration = [];
+    private array $configuration;
     /**
      * @param mixed[] $configuration
      */

@@ -14,8 +14,8 @@ use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/add_str_starts_with_and_ends_with_functions
  *

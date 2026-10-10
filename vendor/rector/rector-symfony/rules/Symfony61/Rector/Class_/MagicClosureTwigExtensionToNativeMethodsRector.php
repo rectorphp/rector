@@ -17,13 +17,13 @@ use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Enum\TwigClass;
 use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector\MagicClosureTwigExtensionToNativeMethodsRectorTest
  *

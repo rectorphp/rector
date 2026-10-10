@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitor\CloningVisitor;
+use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use Rector\Application\ChangedNodeScopeRefresher;
 use Rector\Application\Provider\CurrentFileProvider;
@@ -16,7 +17,6 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeDecorator\CreatedByRuleDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\NodeVisitor\PhpDocInfoRemovingNodeVisitor;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\ValueObject\SkipMatch;
 use Rector\ValueObject\Application\File;
@@ -126,7 +126,15 @@ CODE_SAMPLE;
      */
     private function cloneNode(Node $node): Node
     {
-        $nodeTraverser = new NodeTraverser(new CloningVisitor(), new PhpDocInfoRemovingNodeVisitor());
+        $phpDocInfoRemovingNodeVisitor = new class extends NodeVisitorAbstract
+        {
+            public function enterNode(Node $node): Node
+            {
+                $node->setAttribute(AttributeKey::PHP_DOC_INFO, null);
+                return $node;
+            }
+        };
+        $nodeTraverser = new NodeTraverser(new CloningVisitor(), $phpDocInfoRemovingNodeVisitor);
         return $nodeTraverser->traverse([$node])[0];
     }
     /**

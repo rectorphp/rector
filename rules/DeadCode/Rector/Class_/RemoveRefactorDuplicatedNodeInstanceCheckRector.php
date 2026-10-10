@@ -17,9 +17,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Class_\RemoveRefactorDuplicatedNodeInstanceCheckRector\RemoveRefactorDuplicatedNodeInstanceCheckRectorTest

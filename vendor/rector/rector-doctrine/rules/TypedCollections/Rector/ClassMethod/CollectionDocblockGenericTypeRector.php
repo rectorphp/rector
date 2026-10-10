@@ -17,8 +17,8 @@ use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Doctrine\TypedCollections\NodeAnalyzer\FreshArrayCollectionAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\TypedCollections\Rector\ClassMethod\CollectionDocblockGenericTypeRector\CollectionDocblockGenericTypeRectorTest
  */

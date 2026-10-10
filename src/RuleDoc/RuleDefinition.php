@@ -1,12 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\RuleDocGenerator\ValueObject;
+namespace Rector\RuleDoc;
 
-use Symplify\RuleDocGenerator\Contract\CodeSampleInterface;
-use Symplify\RuleDocGenerator\Exception\PoorDocumentationException;
-use Symplify\RuleDocGenerator\Exception\ShouldNotHappenException;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\Contract\CodeSampleInterface;
+use Rector\RuleDoc\Exception\PoorDocumentationException;
+use Rector\RuleDoc\Exception\ShouldNotHappenException;
+/**
+ * @api
+ */
 final class RuleDefinition
 {
     /**
@@ -17,8 +20,9 @@ final class RuleDefinition
     private ?string $ruleFilePath = null;
     /**
      * @var CodeSampleInterface[]
+     * @readonly
      */
-    private array $codeSamples = [];
+    private array $codeSamples;
     /**
      * @param CodeSampleInterface[] $codeSamples
      */
@@ -74,11 +78,13 @@ final class RuleDefinition
     }
     public function isConfigurable(): bool
     {
+        $found = \false;
         foreach ($this->codeSamples as $codeSample) {
             if ($codeSample instanceof ConfiguredCodeSample) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }

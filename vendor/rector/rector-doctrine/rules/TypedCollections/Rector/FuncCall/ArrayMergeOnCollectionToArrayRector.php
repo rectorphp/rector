@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\TypedCollections\Rector\FuncCall\ArrayMergeOnCollectionToArrayRector\ArrayMergeOnCollectionToArrayRectorTest
  */

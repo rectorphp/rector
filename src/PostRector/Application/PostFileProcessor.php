@@ -49,10 +49,14 @@ final class PostFileProcessor implements ResettableInterface
      */
     private RenamedClassesDataCollector $renamedClassesDataCollector;
     /**
+     * @readonly
+     */
+    private RenameClassRector $renameClassRector;
+    /**
      * @var PostRectorInterface[]
      */
     private array $postRectors = [];
-    public function __construct(Skipper $skipper, UseAddingPostRector $useAddingPostRector, NameImportingPostRector $nameImportingPostRector, ClassRenamingPostRector $classRenamingPostRector, DocblockNameImportingPostRector $docblockNameImportingPostRector, UnusedImportRemovingPostRector $unusedImportRemovingPostRector, RenamedClassesDataCollector $renamedClassesDataCollector)
+    public function __construct(Skipper $skipper, UseAddingPostRector $useAddingPostRector, NameImportingPostRector $nameImportingPostRector, ClassRenamingPostRector $classRenamingPostRector, DocblockNameImportingPostRector $docblockNameImportingPostRector, UnusedImportRemovingPostRector $unusedImportRemovingPostRector, RenamedClassesDataCollector $renamedClassesDataCollector, RenameClassRector $renameClassRector)
     {
         $this->skipper = $skipper;
         $this->useAddingPostRector = $useAddingPostRector;
@@ -61,6 +65,7 @@ final class PostFileProcessor implements ResettableInterface
         $this->docblockNameImportingPostRector = $docblockNameImportingPostRector;
         $this->unusedImportRemovingPostRector = $unusedImportRemovingPostRector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
+        $this->renameClassRector = $renameClassRector;
     }
     public function reset(): void
     {
@@ -89,11 +94,11 @@ final class PostFileProcessor implements ResettableInterface
      */
     private function shouldSkipPostRector(PostRectorInterface $postRector, string $filePath, array $stmts): bool
     {
-        if ($this->skipper->shouldSkipElementAndFilePath($postRector, $filePath)) {
+        if ($this->skipper->shouldSkipRectorAndFile($postRector, $filePath)) {
             return \true;
         }
         // skip renaming if rename class rector is skipped
-        if ($postRector instanceof ClassRenamingPostRector && $this->skipper->shouldSkipElementAndFilePath(RenameClassRector::class, $filePath)) {
+        if ($postRector instanceof ClassRenamingPostRector && $this->skipper->shouldSkipRectorAndFile($this->renameClassRector, $filePath)) {
             return \true;
         }
         return !$postRector->shouldTraverse($stmts);

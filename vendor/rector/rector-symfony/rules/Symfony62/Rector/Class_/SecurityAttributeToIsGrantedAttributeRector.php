@@ -15,6 +15,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\CodeQuality\NodeAnalyzer\AttributePresenceDetector;
 use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAttribute;
@@ -22,8 +24,6 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/pull/45415#issuecomment-1077625813
  * @changelog https://github.com/symfony/symfony/pull/46907

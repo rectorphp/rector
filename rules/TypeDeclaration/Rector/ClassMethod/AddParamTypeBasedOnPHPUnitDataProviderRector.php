@@ -10,12 +10,12 @@ use PHPStan\Type\MixedType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeAnalyzer\ParameterTypeFromDataProviderResolver;
 use Rector\TypeDeclaration\ValueObject\DataProviderNodes;
 use Rector\TypeDeclarationDocblocks\NodeFinder\DataProviderMethodsFinder;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector\AddParamTypeBasedOnPHPUnitDataProviderRectorTest
  */

@@ -14,11 +14,11 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/pull/42422
  * @changelog https://github.com/symfony/symfony/pull/1195

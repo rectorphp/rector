@@ -14,12 +14,12 @@ use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\StrposMatchAndRe
 use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\SubstrMatchAndRefactor;
 use Rector\Php80\ValueObject\StrStartsWith;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php80\Rector\Identical\StrStartsWithRector\StrStartsWithRectorTest
  */

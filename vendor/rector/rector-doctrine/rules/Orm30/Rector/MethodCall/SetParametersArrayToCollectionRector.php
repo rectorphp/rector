@@ -20,10 +20,10 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/doctrine/orm/pull/9490
  * @see https://github.com/doctrine/orm/blob/3.0.x/UPGRADE.md#query-querybuilder-and-nativequery-parameters-bc-break

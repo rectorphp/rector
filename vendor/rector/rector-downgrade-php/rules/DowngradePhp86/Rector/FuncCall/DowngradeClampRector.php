@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/clamp_v2
  * @see \Rector\Tests\DowngradePhp86\Rector\FuncCall\DowngradeClampRector\DowngradeClampRectorTest

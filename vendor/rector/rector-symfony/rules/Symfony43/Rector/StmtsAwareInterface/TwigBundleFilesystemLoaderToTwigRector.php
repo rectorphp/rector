@@ -13,10 +13,10 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector\TwigBundleFilesystemLoaderToTwigRectorTest
  */

@@ -11,8 +11,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Carbon\NodeFactory\CarbonCallFactory;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\Carbon\Rector\MethodCall\DateTimeMethodCallToCarbonRector\DateTimeMethodCallToCarbonRectorTest
  */

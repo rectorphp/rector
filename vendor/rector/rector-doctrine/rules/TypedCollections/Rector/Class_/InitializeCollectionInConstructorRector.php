@@ -12,9 +12,9 @@ use Rector\Doctrine\TypedCollections\NodeModifier\PropertyDefaultNullRemover;
 use Rector\NodeManipulator\ClassDependencyManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\TypedCollections\Rector\Class_\InitializeCollectionInConstructorRector\InitializeCollectionInConstructorRectorTest
  *

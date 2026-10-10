@@ -13,12 +13,12 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Configs\Rector\Reflection\ConstructorReflectionTypesResolver;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\Enum\SymfonyFunctionName;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Configs\Rector\Closure\RemoveConstructorAutowireServiceRector\RemoveConstructorAutowireServiceRectorTest
  */

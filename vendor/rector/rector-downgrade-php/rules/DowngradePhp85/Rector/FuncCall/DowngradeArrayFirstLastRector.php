@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see https://php.watch/versions/8.5/array_first-array_last
  * @see \Rector\Tests\DowngradePhp85\Rector\FuncCall\DowngradeArrayFirstLastRector\DowngradeArrayFirstLastRectorTest

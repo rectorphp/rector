@@ -15,13 +15,13 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeAnalyzer\ParamAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\ValueObject\MethodName;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/language.oop5.variance.php#language.oop5.variance.contravariance
  *

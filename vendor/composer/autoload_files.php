@@ -15,4 +15,5 @@ return array(
     'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     'b6b991a57620e2fb6b2f66f03fe9ddc2' => $vendorDir . '/symfony/string/Resources/functions.php',
     '30bca7fff093e8069bed7c55247e2bf8' => $baseDir . '/src/functions/node_helper.php',
+    '98b3f6eb44f3ab83aedfea8f11cd0d6a' => $baseDir . '/src/functions/rule_doc_generator_class_aliases.php',
 );

@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as it fills invalid types and can cause type errors on controllers and other input calls. Inferring param types from a single caller is unreliable and needs human verification, so this better suits static analysis.
  */

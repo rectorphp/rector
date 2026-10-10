@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/marking_return_value_as_important
  * @see \Rector\Tests\DowngradePhp85\Rector\Expression\DowngradeVoidCastRector\DowngradeVoidCastRectorTest

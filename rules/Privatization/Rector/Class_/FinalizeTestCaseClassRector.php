@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\Class_\FinalizeTestCaseClassRector\FinalizeTestCaseClassRectorTest
  */

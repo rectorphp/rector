@@ -12,8 +12,8 @@ use Rector\Rector\AbstractRector;
 use Rector\Renaming\Contract\RenameClassConstFetchInterface;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\RenameClassConstFetchRectorTest

@@ -26,10 +26,10 @@ use Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://phpunit.readthedocs.io/en/9.5/annotations.html#doesnotperformassertions
  * @changelog https://github.com/sebastianbergmann/phpunit/issues/2484

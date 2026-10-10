@@ -8,8 +8,8 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @deprecated The renamed html()/text() methods only exist on Symfony Mailer Email objects, but the rule renames the
  *             call while the object is still a Swift_Message. Migrate to Symfony Mailer manually instead.

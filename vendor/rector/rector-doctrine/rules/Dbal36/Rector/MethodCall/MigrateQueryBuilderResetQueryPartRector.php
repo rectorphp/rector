@@ -11,10 +11,10 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
+use Rector\RuleDoc\CodeSample\CodeSample;
+use Rector\RuleDoc\RuleDefinition;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/doctrine/dbal/blob/4.2.x/UPGRADE.md#deprecated-getting-query-parts-from-querybuilder
  * @see \Rector\Doctrine\Tests\Dbal36\Rector\MethodCall\MigrateQueryBuilderResetQueryPartRector\MigrateQueryBuilderResetQueryPartRectorTest

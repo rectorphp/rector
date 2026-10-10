@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\RuleDocGenerator\Contract;
+namespace Rector\RuleDoc\Contract;
 
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\RuleDefinition;
 /**
  * @api
  */
