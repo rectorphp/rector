@@ -1132,6 +1132,7 @@ class ComposerStaticInit8406819e3f51957d6777587d169859be
         'Rector\\Application\\FileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor.php',
         'Rector\\Application\\NodeAttributeReIndexer' => __DIR__ . '/../..' . '/src/Application/NodeAttributeReIndexer.php',
         'Rector\\Application\\Provider\\CurrentFileProvider' => __DIR__ . '/../..' . '/src/Application/Provider/CurrentFileProvider.php',
+        'Rector\\Application\\RectorRegistry' => __DIR__ . '/../..' . '/src/Application/RectorRegistry.php',
         'Rector\\Application\\VersionResolver' => __DIR__ . '/../..' . '/src/Application/VersionResolver.php',
         'Rector\\Arguments\\ArgumentDefaultValueReplacer' => __DIR__ . '/../..' . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
         'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => __DIR__ . '/../..' . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',

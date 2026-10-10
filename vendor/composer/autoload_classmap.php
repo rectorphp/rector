@@ -902,6 +902,7 @@ return array(
     'Rector\\Application\\FileProcessor' => $baseDir . '/src/Application/FileProcessor.php',
     'Rector\\Application\\NodeAttributeReIndexer' => $baseDir . '/src/Application/NodeAttributeReIndexer.php',
     'Rector\\Application\\Provider\\CurrentFileProvider' => $baseDir . '/src/Application/Provider/CurrentFileProvider.php',
+    'Rector\\Application\\RectorRegistry' => $baseDir . '/src/Application/RectorRegistry.php',
     'Rector\\Application\\VersionResolver' => $baseDir . '/src/Application/VersionResolver.php',
     'Rector\\Arguments\\ArgumentDefaultValueReplacer' => $baseDir . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
     'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => $baseDir . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',

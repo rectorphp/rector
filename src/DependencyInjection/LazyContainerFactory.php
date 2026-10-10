@@ -15,6 +15,7 @@ use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Application\FileProcessor;
 use Rector\Application\Provider\CurrentFileProvider;
+use Rector\Application\RectorRegistry;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ArrayTypePhpDocNodeVisitor;
@@ -131,6 +132,7 @@ final class LazyContainerFactory
     {
         $rectorConfig->singleton(FileProcessor::class);
         $rectorConfig->singleton(PostFileProcessor::class);
+        $rectorConfig->singleton(RectorRegistry::class);
         // shared state: collects used skips across the skipper, the path skipper and the file processor
         $rectorConfig->singleton(UsedSkipCollector::class);
         $rectorConfig->singleton(DynamicSourceLocatorProvider::class, static function (RectorConfig $rectorConfig): DynamicSourceLocatorProvider {
