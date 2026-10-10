@@ -101,6 +101,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?\PhpParser\Node
     {
         if ($node instanceof If_) {
+            // cheap structural bail before pulling the scope
+            if (!$this->ifManipulator->isIfWithOnly($node, Foreach_::class)) {
+                return null;
+            }
             $scope = ScopeFetcher::fetch($node);
             return $this->refactorIf($node, $scope);
         }
