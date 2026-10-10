@@ -63,10 +63,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isBooleanButNotTrueAndFalse($node->left)) {
-            return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
+        // the rule only applies when one side is a true/false constant;
+        // check it first to avoid the expensive native type resolution below
+        if ($this->valueResolver->isTrueOrFalse($node->right)) {
+            if ($this->isBooleanButNotTrueAndFalse($node->left)) {
+                return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
+            }
+            return null;
         }
-        if ($this->isBooleanButNotTrueAndFalse($node->right)) {
+        if ($this->valueResolver->isTrueOrFalse($node->left) && $this->isBooleanButNotTrueAndFalse($node->right)) {
             return $this->processBoolTypeToNotBool($node, $node->right, $node->left);
         }
         return null;
