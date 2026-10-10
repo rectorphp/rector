@@ -15,15 +15,7 @@ use Rector\VersionBonding\ComposerPackageConstraintFilter;
 use Rector\VersionBonding\PhpVersionedFilter;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- *  Based on native NodeTraverser class, but heavily customized for Rector needs.
- *
- *  The main differences are:
- *  - no leaveNode(), the RectorRunner calls each rule's refactor() method on enter
- *  - cached visitors per node class for performance, e.g. when we find rules for Class_ node, they're cached for next time
- *  - immutability features, register Rector rules once, then use; no changes on the fly
- *
  * @see \Rector\Tests\PhpParser\NodeTraverser\RectorNodeTraverserTest
- * @internal No BC promise on this class, it might change any time.
  */
 final class RectorNodeTraverser
 {
