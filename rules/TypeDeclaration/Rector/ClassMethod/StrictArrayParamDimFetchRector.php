@@ -95,6 +95,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $hasUntypedParam = \false;
+        foreach ($node->getParams() as $param) {
+            if (!$param->type instanceof Node && !$param->variadic) {
+                $hasUntypedParam = \true;
+                break;
+            }
+        }
+        if (!$hasUntypedParam) {
+            return null;
+        }
         $hasChanged = \false;
         if ($node instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
             return null;
