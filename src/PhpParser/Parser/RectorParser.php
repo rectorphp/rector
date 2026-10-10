@@ -61,6 +61,7 @@ final class RectorParser
     private function resolveStmtsAndTokens(Parser $parser, string $fileContent): StmtsAndTokens
     {
         $stmts = $parser->parseString($fileContent);
+        /** @var \PhpParser\Parser $innerParser */
         $innerParser = $this->privatesAccessor->getPrivateProperty($parser, 'parser');
         $tokens = $innerParser->getTokens();
         return new StmtsAndTokens($stmts, $tokens);
