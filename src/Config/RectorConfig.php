@@ -16,7 +16,7 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\Enum\Config\Defaults;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
-use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
+use Rector\Skipper\Skipper\Skipper;
 use Rector\Validation\RectorConfigValidator;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
@@ -398,8 +398,7 @@ final class RectorConfig extends Container
      */
     public function boot(): void
     {
-        $skippedClassResolver = new SkippedClassResolver();
-        $skippedElements = $skippedClassResolver->resolve();
+        $skippedElements = $this->make(Skipper::class)->resolveSkippedClasses();
         foreach ($skippedElements as $skippedClass => $path) {
             if ($path !== null) {
                 continue;

@@ -17,7 +17,7 @@ use Rector\Console\ProcessConfigureDecorator;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Reporting\DeprecatedRulesReporter;
 use Rector\Reporting\MissConfigurationReporter;
-use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
+use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Util\MemoryLimiter;
 use Rector\ValueObject\Configuration;
@@ -81,8 +81,8 @@ final class ProcessCommand extends Command
     /**
      * @readonly
      */
-    private SkippedClassResolver $skippedClassResolver;
-    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter, ConfigurationRuleFilter $configurationRuleFilter, SkippedClassResolver $skippedClassResolver)
+    private Skipper $skipper;
+    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter, ConfigurationRuleFilter $configurationRuleFilter, Skipper $skipper)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -96,7 +96,7 @@ final class ProcessCommand extends Command
         $this->deprecatedRulesReporter = $deprecatedRulesReporter;
         $this->missConfigurationReporter = $missConfigurationReporter;
         $this->configurationRuleFilter = $configurationRuleFilter;
-        $this->skippedClassResolver = $skippedClassResolver;
+        $this->skipper = $skipper;
         parent::__construct();
     }
     protected function configure(): void
@@ -150,8 +150,8 @@ EOF
             $this->reportLevelOverflow($levelOverflow);
         }
         // 0. warn about skipped rules that are deprecated
-        if ($this->skippedClassResolver->resolveDeprecatedSkippedClasses() !== []) {
-            $this->symfonyStyle->warning(sprintf('These rules are skipped, but are deprecated. Most likely you do not need to skip them anymore as not part of any set and remove them: %s%s', "\n\n", '* ' . implode("\n* ", $this->skippedClassResolver->resolveDeprecatedSkippedClasses()) . "\n"));
+        if ($this->skipper->resolveDeprecatedSkippedClasses() !== []) {
+            $this->symfonyStyle->warning(sprintf('These rules are skipped, but are deprecated. Most likely you do not need to skip them anymore as not part of any set and remove them: %s%s', "\n\n", '* ' . implode("\n* ", $this->skipper->resolveDeprecatedSkippedClasses()) . "\n"));
         }
         // 1. warn about rules registered in both withRules() and sets to avoid bloated rector.php configs
         $setAndRulesDuplicatedRegistrations = $configuration->getBothSetAndRulesDuplicatedRegistrations();

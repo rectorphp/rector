@@ -8,7 +8,7 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
+use Rector\Skipper\Skipper\Skipper;
 use RectorPrefix202610\Symfony\Component\Console\Command\Command;
 use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202610\Symfony\Component\Console\Input\InputOption;
@@ -23,7 +23,7 @@ final class ListRulesCommand extends Command
     /**
      * @readonly
      */
-    private SkippedClassResolver $skippedClassResolver;
+    private Skipper $skipper;
     /**
      * @var RectorInterface[]
      * @readonly
@@ -32,10 +32,10 @@ final class ListRulesCommand extends Command
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, SkippedClassResolver $skippedClassResolver, array $rectors)
+    public function __construct(SymfonyStyle $symfonyStyle, Skipper $skipper, array $rectors)
     {
         $this->symfonyStyle = $symfonyStyle;
-        $this->skippedClassResolver = $skippedClassResolver;
+        $this->skipper = $skipper;
         $this->rectors = $rectors;
         parent::__construct();
     }
@@ -83,7 +83,7 @@ final class ListRulesCommand extends Command
     private function getSkippedRectorClasses(): array
     {
         $skippedRectorClasses = [];
-        foreach ($this->skippedClassResolver->resolve() as $rectorClass => $fileList) {
+        foreach ($this->skipper->resolveSkippedClasses() as $rectorClass => $fileList) {
             // ignore specific skips
             if ($fileList !== null) {
                 continue;

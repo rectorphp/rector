@@ -6,7 +6,7 @@ namespace Rector\Reporting;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\FileSystem\FilePathHelper;
-use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
+use Rector\Skipper\Skipper\Skipper;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Rector\ValueObject\ProcessResult;
 /**
@@ -17,7 +17,7 @@ final class UnusedSkipResolver
     /**
      * @readonly
      */
-    private SkippedClassResolver $skippedClassResolver;
+    private Skipper $skipper;
     /**
      * @readonly
      */
@@ -26,9 +26,9 @@ final class UnusedSkipResolver
      * @readonly
      */
     private FilePathHelper $filePathHelper;
-    public function __construct(SkippedClassResolver $skippedClassResolver, SkippedPathsResolver $skippedPathsResolver, FilePathHelper $filePathHelper)
+    public function __construct(Skipper $skipper, SkippedPathsResolver $skippedPathsResolver, FilePathHelper $filePathHelper)
     {
-        $this->skippedClassResolver = $skippedClassResolver;
+        $this->skipper = $skipper;
         $this->skippedPathsResolver = $skippedPathsResolver;
         $this->filePathHelper = $filePathHelper;
     }
@@ -73,7 +73,7 @@ final class UnusedSkipResolver
     private function resolveRelativePathsByClass(): array
     {
         $relativePathsByClass = [];
-        foreach ($this->skippedClassResolver->resolve() as $rectorClass => $paths) {
+        foreach ($this->skipper->resolveSkippedClasses() as $rectorClass => $paths) {
             if ($paths === null) {
                 continue;
             }
@@ -111,7 +111,7 @@ final class UnusedSkipResolver
             $unusedRelativePaths = [];
             foreach ($relativePaths as $path => $relativePath) {
                 // used skips are tracked scoped to their rule (class => [path]), so the same path
-                // skipped under another rule does not mark this one used (see SkipSkipper)
+                // skipped under another rule does not mark this one used (see Skipper::matchSkip())
                 if (!in_array($path, $usedSkips[$rectorClass] ?? [], \true)) {
                     $unusedRelativePaths[] = $relativePath;
                 }
