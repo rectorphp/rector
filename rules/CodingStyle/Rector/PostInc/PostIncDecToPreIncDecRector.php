@@ -4,17 +4,19 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\PostInc;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
-use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @deprecated This rule is deprecated, as it is a cosmetic coding-style preference with little value. Use a coding standard tool instead.
+ * @see \Rector\Tests\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector\PostIncDecToPreIncDecRectorTest
  */
-final class PostIncDecToPreIncDecRector extends AbstractRector implements DeprecatedInterface
+final class PostIncDecToPreIncDecRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -52,6 +54,40 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it is a cosmetic coding-style preference better handled by a coding standard tool', self::class));
+        if ($node instanceof Expression) {
+            return $this->refactorExpression($node);
+        }
+        return $this->refactorFor($node);
+    }
+    private function refactorFor(For_ $for): ?\PhpParser\Node\Stmt\For_
+    {
+        if (count($for->loop) !== 1) {
+            return null;
+        }
+        $singleLoopExpr = $for->loop[0];
+        if (!$singleLoopExpr instanceof PostInc && !$singleLoopExpr instanceof PostDec) {
+            return null;
+        }
+        $for->loop = [$this->processPrePost($singleLoopExpr)];
+        return $for;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
+     * @return \PhpParser\Node\Expr\PreInc|\PhpParser\Node\Expr\PreDec
+     */
+    private function processPrePost($node)
+    {
+        if ($node instanceof PostInc) {
+            return new PreInc($node->var);
+        }
+        return new PreDec($node->var);
+    }
+    private function refactorExpression(Expression $expression): ?Expression
+    {
+        if ($expression->expr instanceof PostInc || $expression->expr instanceof PostDec) {
+            $expression->expr = $this->processPrePost($expression->expr);
+            return $expression;
+        }
+        return null;
     }
 }

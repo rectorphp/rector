@@ -111,11 +111,11 @@ CODE_SAMPLE
         if ($node->elseifs !== []) {
             return null;
         }
-        if ($this->shouldSkipExpr($node->cond)) {
-            return null;
-        }
         $conditionStaticType = $this->nodeTypeResolver->getNativeType($node->cond);
         if (!$conditionStaticType->isTrue()->yes()) {
+            return null;
+        }
+        if ($this->shouldSkipExpr($node->cond)) {
             return null;
         }
         $scope = ScopeFetcher::fetch($node);
