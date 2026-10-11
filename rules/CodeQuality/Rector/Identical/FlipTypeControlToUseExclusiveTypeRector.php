@@ -7,16 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
+use Rector\PhpParser\Node\NullableObjectToInstanceofFactory;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
@@ -31,10 +27,15 @@ final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory;
+    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer, ValueResolver $valueResolver, NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory)
     {
         $this->nullableTypeAnalyzer = $nullableTypeAnalyzer;
         $this->valueResolver = $valueResolver;
+        $this->nullableObjectToInstanceofFactory = $nullableObjectToInstanceofFactory;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -76,20 +77,7 @@ CODE_SAMPLE
         if (!$nullableObjectType instanceof ObjectType) {
             return null;
         }
-        return $this->processConvertToExclusiveType($nullableObjectType, $expr, $node);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_
-     */
-    private function processConvertToExclusiveType(ObjectType $objectType, Expr $expr, $binaryOp)
-    {
-        $fullyQualifiedType = $objectType instanceof ShortenedObjectType || $objectType instanceof AliasedObjectType ? $objectType->getFullyQualifiedName() : $objectType->getClassName();
-        $instanceof = new Instanceof_($expr, new FullyQualified($fullyQualifiedType));
-        if ($binaryOp instanceof NotIdentical) {
-            return $instanceof;
-        }
-        return new BooleanNot($instanceof);
+        return $this->nullableObjectToInstanceofFactory->create($expr, $nullableObjectType, $node instanceof Identical);
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp

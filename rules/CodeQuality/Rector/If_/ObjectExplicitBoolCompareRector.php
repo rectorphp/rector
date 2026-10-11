@@ -4,16 +4,13 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
 use Rector\CodeQuality\NodeAnalyzer\ExplicitBoolConditionResolver;
 use Rector\CodeQuality\ValueObject\ExplicitBoolCondition;
+use Rector\PhpParser\Node\NullableObjectToInstanceofFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -26,9 +23,14 @@ final class ObjectExplicitBoolCompareRector extends AbstractRector
      * @readonly
      */
     private ExplicitBoolConditionResolver $explicitBoolConditionResolver;
-    public function __construct(ExplicitBoolConditionResolver $explicitBoolConditionResolver)
+    /**
+     * @readonly
+     */
+    private NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory;
+    public function __construct(ExplicitBoolConditionResolver $explicitBoolConditionResolver, NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory)
     {
         $this->explicitBoolConditionResolver = $explicitBoolConditionResolver;
+        $this->nullableObjectToInstanceofFactory = $nullableObjectToInstanceofFactory;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -77,16 +79,7 @@ CODE_SAMPLE
         if (!$objectType instanceof ObjectType) {
             return null;
         }
-        $node->cond = $this->resolveNullable($explicitBoolCondition->isNegated(), $expr, $objectType);
+        $node->cond = $this->nullableObjectToInstanceofFactory->create($expr, $objectType, $explicitBoolCondition->isNegated());
         return $node;
-    }
-    /**
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_
-     */
-    private function resolveNullable(bool $isNegated, Expr $expr, ObjectType $objectType)
-    {
-        $fullyQualified = new FullyQualified($objectType->getClassName());
-        $instanceof = new Instanceof_($expr, $fullyQualified);
-        return $isNegated ? new BooleanNot($instanceof) : $instanceof;
     }
 }

@@ -4,15 +4,13 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\While_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\PhpParser\Node\NullableObjectToInstanceofFactory;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -31,10 +29,15 @@ final class WhileNullableToInstanceofRector extends AbstractRector
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory;
+    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer, ValueResolver $valueResolver, NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory)
     {
         $this->nullableTypeAnalyzer = $nullableTypeAnalyzer;
         $this->valueResolver = $valueResolver;
+        $this->nullableObjectToInstanceofFactory = $nullableObjectToInstanceofFactory;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -84,13 +87,8 @@ CODE_SAMPLE
         if (!$condNullableObjectType instanceof Type) {
             return null;
         }
-        $node->cond = $this->createInstanceof($node->cond, $condNullableObjectType);
+        $node->cond = $this->nullableObjectToInstanceofFactory->create($node->cond, $condNullableObjectType, \false);
         return $node;
-    }
-    private function createInstanceof(Expr $expr, ObjectType $objectType): Instanceof_
-    {
-        $fullyQualified = new FullyQualified($objectType->getClassName());
-        return new Instanceof_($expr, $fullyQualified);
     }
     /**
      * @template TLoop of While_|Do_
@@ -106,7 +104,7 @@ CODE_SAMPLE
         if (!$condNullableObjectType instanceof ObjectType) {
             return null;
         }
-        $while->cond = $this->createInstanceof($notIdentical->left, $condNullableObjectType);
+        $while->cond = $this->nullableObjectToInstanceofFactory->create($notIdentical->left, $condNullableObjectType, \false);
         return $while;
     }
 }

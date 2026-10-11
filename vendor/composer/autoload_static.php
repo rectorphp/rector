@@ -2416,6 +2416,7 @@ class ComposerStaticInit8406819e3f51957d6777587d169859be
         'Rector\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',
         'Rector\\PhpParser\\Node\\FileNode' => __DIR__ . '/../..' . '/src/PhpParser/Node/FileNode.php',
         'Rector\\PhpParser\\Node\\NodeFactory' => __DIR__ . '/../..' . '/src/PhpParser/Node/NodeFactory.php',
+        'Rector\\PhpParser\\Node\\NullableObjectToInstanceofFactory' => __DIR__ . '/../..' . '/src/PhpParser/Node/NullableObjectToInstanceofFactory.php',
         'Rector\\PhpParser\\Node\\Value\\ValueResolver' => __DIR__ . '/../..' . '/src/PhpParser/Node/Value/ValueResolver.php',
         'Rector\\PhpParser\\Parser\\InlineCodeParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/InlineCodeParser.php',
         'Rector\\PhpParser\\Parser\\ParserErrors' => __DIR__ . '/../..' . '/src/PhpParser/Parser/ParserErrors.php',

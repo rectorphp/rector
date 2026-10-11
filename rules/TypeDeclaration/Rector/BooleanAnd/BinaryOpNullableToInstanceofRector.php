@@ -13,8 +13,8 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
+use Rector\PhpParser\Node\NullableObjectToInstanceofFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -28,9 +28,14 @@ final class BinaryOpNullableToInstanceofRector extends AbstractRector
      * @readonly
      */
     private NullableTypeAnalyzer $nullableTypeAnalyzer;
-    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer)
+    /**
+     * @readonly
+     */
+    private NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory;
+    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer, NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory)
     {
         $this->nullableTypeAnalyzer = $nullableTypeAnalyzer;
+        $this->nullableObjectToInstanceofFactory = $nullableObjectToInstanceofFactory;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -86,12 +91,12 @@ CODE_SAMPLE
         $nullableObjectType = $this->resolveNullableObjectType($node->left);
         $hasChanged = \false;
         if ($nullableObjectType instanceof ObjectType) {
-            $node->left = $this->createExprInstanceof($node->left, $nullableObjectType);
+            $node->left = $this->nullableObjectToInstanceofFactory->create($node->left, $nullableObjectType, \false);
             $hasChanged = \true;
         }
         $nullableObjectType = $this->resolveNullableObjectType($node->right);
         if ($nullableObjectType instanceof ObjectType) {
-            $node->right = $this->createExprInstanceof($node->right, $nullableObjectType);
+            $node->right = $this->nullableObjectToInstanceofFactory->create($node->right, $nullableObjectType, \false);
             $hasChanged = \true;
         }
         if ($hasChanged) {
@@ -105,14 +110,14 @@ CODE_SAMPLE
         if ($booleanOr->left instanceof BooleanNot) {
             $nullableObjectType = $this->resolveNullableObjectType($booleanOr->left->expr);
             if ($nullableObjectType instanceof ObjectType) {
-                $booleanOr->left->expr = $this->createExprInstanceof($booleanOr->left->expr, $nullableObjectType);
+                $booleanOr->left->expr = $this->nullableObjectToInstanceofFactory->create($booleanOr->left->expr, $nullableObjectType, \false);
                 $hasChanged = \true;
             }
         }
         if ($booleanOr->right instanceof BooleanNot) {
             $nullableObjectType = $this->resolveNullableObjectType($booleanOr->right->expr);
             if ($nullableObjectType instanceof ObjectType) {
-                $booleanOr->right->expr = $this->createExprInstanceof($booleanOr->right->expr, $nullableObjectType);
+                $booleanOr->right->expr = $this->nullableObjectToInstanceofFactory->create($booleanOr->right->expr, $nullableObjectType, \false);
                 $hasChanged = \true;
             }
         }
@@ -133,10 +138,5 @@ CODE_SAMPLE
     private function isNeverNullableObject(Expr $expr): bool
     {
         return $expr instanceof BinaryOp || $expr instanceof BooleanNot || $expr instanceof Instanceof_ || $expr instanceof Empty_ || $expr instanceof Isset_;
-    }
-    private function createExprInstanceof(Expr $expr, ObjectType $objectType): Instanceof_
-    {
-        $fullyQualified = new FullyQualified($objectType->getClassName());
-        return new Instanceof_($expr, $fullyQualified);
     }
 }

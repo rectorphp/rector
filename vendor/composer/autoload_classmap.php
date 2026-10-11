@@ -2186,6 +2186,7 @@ return array(
     'Rector\\PhpParser\\Node\\BetterNodeFinder' => $baseDir . '/src/PhpParser/Node/BetterNodeFinder.php',
     'Rector\\PhpParser\\Node\\FileNode' => $baseDir . '/src/PhpParser/Node/FileNode.php',
     'Rector\\PhpParser\\Node\\NodeFactory' => $baseDir . '/src/PhpParser/Node/NodeFactory.php',
+    'Rector\\PhpParser\\Node\\NullableObjectToInstanceofFactory' => $baseDir . '/src/PhpParser/Node/NullableObjectToInstanceofFactory.php',
     'Rector\\PhpParser\\Node\\Value\\ValueResolver' => $baseDir . '/src/PhpParser/Node/Value/ValueResolver.php',
     'Rector\\PhpParser\\Parser\\InlineCodeParser' => $baseDir . '/src/PhpParser/Parser/InlineCodeParser.php',
     'Rector\\PhpParser\\Parser\\ParserErrors' => $baseDir . '/src/PhpParser/Parser/ParserErrors.php',
