@@ -49,7 +49,7 @@ final class ExceptionAnnotationRector extends AbstractRector implements Composer
      */
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('phpunit/phpunit', '>=5.2');
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=5.2 <11.0');
     }
     /**
      * In reversed order, which they should be called in code.

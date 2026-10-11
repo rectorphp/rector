@@ -40,7 +40,7 @@ final class AssertEqualsParameterToSpecificMethodsTypeRector extends AbstractRec
      */
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('phpunit/phpunit', '>=7.5');
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=7.5 <11.0');
     }
     public function __construct(AssertCallFactory $assertCallFactory, TestsNodeAnalyzer $testsNodeAnalyzer, ValueResolver $valueResolver)
     {

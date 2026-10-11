@@ -36,7 +36,7 @@ final class GetMockRector extends AbstractRector implements ComposerPackageConst
      */
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('phpunit/phpunit', '>=5.4');
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=5.4 <8.0');
     }
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ReflectionResolver $reflectionResolver)
     {

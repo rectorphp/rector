@@ -66,7 +66,7 @@ final class WithConsecutiveRector extends AbstractRector implements ComposerPack
      */
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('phpunit/phpunit', '>=10.0');
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=10.0 <12.0');
     }
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, WillReturnCallbackFactory $willReturnCallbackFactory, MethodCallRemover $methodCallRemover, MethodCallNodeFinder $methodCallNodeFinder, \Rector\PHPUnit\PHPUnit100\Rector\StmtsAwareInterface\ExpectsMethodCallDecorator $expectsMethodCallDecorator, WillReturnIfNodeDecorator $willReturnIfNodeDecorator)
     {

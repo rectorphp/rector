@@ -31,7 +31,7 @@ final class SpecificAssertContainsRector extends AbstractRector implements Compo
      */
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('phpunit/phpunit', '>=7.5');
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=7.5 <11.0');
     }
     /**
      * @var array<string, string>
