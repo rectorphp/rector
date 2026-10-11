@@ -3,54 +3,18 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\Generic\GenericStaticType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\StaticType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 /**
- * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDuplicatedReturnSelfDocblockRector\RemoveDuplicatedReturnSelfDocblockRectorTest
+ * @deprecated This rule is deprecated, as removing a duplicated @return self/static docblock is tricky and sometimes intentional. Handle it with static analysis and full context instead.
  */
-final class RemoveDuplicatedReturnSelfDocblockRector extends AbstractRector
+final class RemoveDuplicatedReturnSelfDocblockRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private PhpDocInfoFactory $phpDocInfoFactory;
-    /**
-     * @readonly
-     */
-    private DocBlockUpdater $docBlockUpdater;
-    /**
-     * @readonly
-     */
-    private StaticTypeMapper $staticTypeMapper;
-    /**
-     * @readonly
-     */
-    private ReflectionResolver $reflectionResolver;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, DocBlockUpdater $docBlockUpdater, StaticTypeMapper $staticTypeMapper, ReflectionResolver $reflectionResolver)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->docBlockUpdater = $docBlockUpdater;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->reflectionResolver = $reflectionResolver;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove @return docblock that duplicates the native self/static return type of the current object', [new CodeSample(<<<'CODE_SAMPLE'
@@ -88,54 +52,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$node->returnType instanceof Identifier && !$node->returnType instanceof Name) {
-            return null;
-        }
-        $returnTypeName = $node->returnType->toString();
-        if (!in_array($returnTypeName, ['self', 'static'], \true)) {
-            return null;
-        }
-        // a duplicated @return tag can only live in a docblock; skip before resolving reflection
-        if (!$node->getDocComment() instanceof Doc) {
-            return null;
-        }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof ClassReflection) {
-            return null;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if (!$phpDocInfo instanceof PhpDocInfo) {
-            return null;
-        }
-        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
-            return null;
-        }
-        if ($returnTagValueNode->description !== '') {
-            return null;
-        }
-        if (!$this->isCurrentObjectReturnDocType($returnTagValueNode->type, $node, $classReflection)) {
-            return null;
-        }
-        $phpDocInfo->removeByType(ReturnTagValueNode::class);
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        return $node;
-    }
-    private function isCurrentObjectReturnDocType(TypeNode $typeNode, ClassMethod $classMethod, ClassReflection $classReflection): bool
-    {
-        $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $classMethod);
-        // generic narrowing, e.g. @return self<TValue, never> is not a plain duplicate of the native self type
-        if ($docType instanceof GenericObjectType || $docType instanceof GenericStaticType) {
-            return \false;
-        }
-        // covers @return $this and @return static
-        if ($docType instanceof StaticType) {
-            return $docType->getClassName() === $classReflection->getName();
-        }
-        // covers @return self and @return CurrentObject
-        if ($docType instanceof ObjectType) {
-            return $docType->getClassName() === $classReflection->getName();
-        }
-        return \false;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as removing a duplicated @return self/static docblock is tricky and sometimes intentional', self::class));
     }
 }
