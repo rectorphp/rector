@@ -4,28 +4,17 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\For_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
-use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
-use Rector\PHPStan\ScopeFetcher;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector\ForRepeatedCountToOwnVariableRectorTest
+ * @deprecated This rule is deprecated, as the gain is negligible. On arrays count() is O(1), so hoisting it to a variable saves nothing. On collections a dedicated count() method is more suitable than a for loop.
  */
-final class ForRepeatedCountToOwnVariableRector extends AbstractRector
+final class ForRepeatedCountToOwnVariableRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @var string
-     */
-    private const COUNTER_NAME = 'counter';
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change count() in for function to own variable', [new CodeSample(<<<'CODE_SAMPLE'
@@ -62,37 +51,9 @@ CODE_SAMPLE
     }
     /**
      * @param For_ $node
-     * @return Stmt[]|null
      */
-    public function refactor(Node $node): ?array
+    public function refactor(Node $node): ?Node
     {
-        if ($this->getFile()->containsHTML()) {
-            return null;
-        }
-        $scope = ScopeFetcher::fetch($node);
-        if ($scope->hasVariableType(self::COUNTER_NAME)->yes()) {
-            return null;
-        }
-        $countInCond = null;
-        $counterVariable = new Variable(self::COUNTER_NAME);
-        foreach ($node->cond as $condExpr) {
-            if (!$condExpr instanceof Smaller && !$condExpr instanceof SmallerOrEqual) {
-                continue;
-            }
-            if (!$condExpr->right instanceof FuncCall) {
-                continue;
-            }
-            $funcCall = $condExpr->right;
-            if (!$this->isName($funcCall, 'count')) {
-                continue;
-            }
-            $countInCond = $condExpr->right;
-            $condExpr->right = $counterVariable;
-        }
-        if (!$countInCond instanceof Expr) {
-            return null;
-        }
-        $countAssign = new Assign($counterVariable, $countInCond);
-        return [new Expression($countAssign), $node];
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as the gain is negligible; count() on arrays is O(1)', self::class));
     }
 }
