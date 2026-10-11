@@ -1438,6 +1438,7 @@ class ComposerStaticInit8406819e3f51957d6777587d169859be
         'Rector\\Console\\Notifier' => __DIR__ . '/../..' . '/src/Console/Notifier.php',
         'Rector\\Console\\Output\\OutputFormatterCollector' => __DIR__ . '/../..' . '/src/Console/Output/OutputFormatterCollector.php',
         'Rector\\Console\\ProcessConfigureDecorator' => __DIR__ . '/../..' . '/src/Console/ProcessConfigureDecorator.php',
+        'Rector\\Console\\Rule\\AllRectorRulesProvider' => __DIR__ . '/../..' . '/src/Console/Rule/AllRectorRulesProvider.php',
         'Rector\\Console\\Style\\RectorStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorStyle.php',
         'Rector\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
         'Rector\\Contract\\DependencyInjection\\ResettableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResettableInterface.php',

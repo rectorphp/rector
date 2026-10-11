@@ -6,6 +6,7 @@ namespace Rector\Console\Command;
 use RectorPrefix202610\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
+use Rector\Console\Rule\AllRectorRulesProvider;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\Skipper\Skipper\Skipper;
@@ -25,6 +26,10 @@ final class ListRulesCommand extends Command
      */
     private Skipper $skipper;
     /**
+     * @readonly
+     */
+    private AllRectorRulesProvider $allRectorRulesProvider;
+    /**
      * @var RectorInterface[]
      * @readonly
      */
@@ -32,10 +37,11 @@ final class ListRulesCommand extends Command
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, Skipper $skipper, array $rectors)
+    public function __construct(SymfonyStyle $symfonyStyle, Skipper $skipper, AllRectorRulesProvider $allRectorRulesProvider, array $rectors)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->skipper = $skipper;
+        $this->allRectorRulesProvider = $allRectorRulesProvider;
         $this->rectors = $rectors;
         parent::__construct();
     }
@@ -46,10 +52,11 @@ final class ListRulesCommand extends Command
         $this->setAliases(['show-rules']);
         $this->addOption(Option::OUTPUT_FORMAT, null, InputOption::VALUE_REQUIRED, 'Select output format', ConsoleOutputFormatter::NAME);
         $this->addOption(Option::ONLY, null, InputOption::VALUE_REQUIRED, 'Fully qualified rule class name');
+        $this->addOption('all', null, InputOption::VALUE_NONE, 'List all existing rules in core and rector-* packages, not only the loaded ones');
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rectorClasses = $this->resolveRectorClasses();
+        $rectorClasses = $input->getOption('all') ? $this->allRectorRulesProvider->provide() : $this->resolveRectorClasses();
         $skippedClasses = $this->getSkippedRectorClasses();
         $outputFormat = $input->getOption(Option::OUTPUT_FORMAT);
         if ($outputFormat === 'json') {

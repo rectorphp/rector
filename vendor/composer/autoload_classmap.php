@@ -1208,6 +1208,7 @@ return array(
     'Rector\\Console\\Notifier' => $baseDir . '/src/Console/Notifier.php',
     'Rector\\Console\\Output\\OutputFormatterCollector' => $baseDir . '/src/Console/Output/OutputFormatterCollector.php',
     'Rector\\Console\\ProcessConfigureDecorator' => $baseDir . '/src/Console/ProcessConfigureDecorator.php',
+    'Rector\\Console\\Rule\\AllRectorRulesProvider' => $baseDir . '/src/Console/Rule/AllRectorRulesProvider.php',
     'Rector\\Console\\Style\\RectorStyle' => $baseDir . '/src/Console/Style/RectorStyle.php',
     'Rector\\Console\\Style\\SymfonyStyleFactory' => $baseDir . '/src/Console/Style/SymfonyStyleFactory.php',
     'Rector\\Contract\\DependencyInjection\\ResettableInterface' => $baseDir . '/src/Contract/DependencyInjection/ResettableInterface.php',
