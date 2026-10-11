@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\NodeManipulator;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Name;
@@ -23,7 +24,6 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\Renaming\Collector\RenamedNameCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\Util\FileHasher;
 final class ClassRenamer
 {
     /**
@@ -45,26 +45,25 @@ final class ClassRenamer
     /**
      * @readonly
      */
-    private FileHasher $fileHasher;
-    /**
-     * @readonly
-     */
     private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
      */
     private RenamedNameCollector $renamedNameCollector;
     /**
-     * @var array<string, OldToNewType[]>
+     * @var array<string, string>
      */
-    private array $oldToNewTypesByCacheKey = [];
-    public function __construct(PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, FileHasher $fileHasher, DocBlockUpdater $docBlockUpdater, RenamedNameCollector $renamedNameCollector)
+    private array $oldToNewClasses = [];
+    /**
+     * @var OldToNewType[]
+     */
+    private array $oldToNewTypes = [];
+    public function __construct(PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, DocBlockUpdater $docBlockUpdater, RenamedNameCollector $renamedNameCollector)
     {
         $this->phpDocClassRenamer = $phpDocClassRenamer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->reflectionProvider = $reflectionProvider;
-        $this->fileHasher = $fileHasher;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->renamedNameCollector = $renamedNameCollector;
     }
@@ -86,12 +85,15 @@ final class ClassRenamer
             }
             return null;
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $oldToNewTypes = $this->createOldToNewTypes($oldToNewClasses);
-            $hasPhpDocChanged = $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses, $phpDocInfo);
-            if ($hasPhpDocChanged) {
-                return $node;
+        // only a real docblock can carry a renamable type; plain comments or none never change here
+        if ($node->getDocComment() instanceof Doc) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+            if ($phpDocInfo instanceof PhpDocInfo) {
+                $oldToNewTypes = $this->createOldToNewTypes($oldToNewClasses);
+                $hasPhpDocChanged = $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses, $phpDocInfo);
+                if ($hasPhpDocChanged) {
+                    return $node;
+                }
             }
         }
         if ($node instanceof ClassLike) {
@@ -231,10 +233,9 @@ final class ClassRenamer
      */
     private function createOldToNewTypes(array $oldToNewClasses): array
     {
-        $serialized = \serialize($oldToNewClasses);
-        $cacheKey = $this->fileHasher->hash($serialized);
-        if (isset($this->oldToNewTypesByCacheKey[$cacheKey])) {
-            return $this->oldToNewTypesByCacheKey[$cacheKey];
+        // the rename map is constant during a run, so memoize on the identical array
+        if ($this->oldToNewClasses === $oldToNewClasses) {
+            return $this->oldToNewTypes;
         }
         $oldToNewTypes = [];
         foreach ($oldToNewClasses as $oldClass => $newClass) {
@@ -242,7 +243,8 @@ final class ClassRenamer
             $newObjectType = new FullyQualifiedObjectType($newClass);
             $oldToNewTypes[] = new OldToNewType($oldObjectType, $newObjectType);
         }
-        $this->oldToNewTypesByCacheKey[$cacheKey] = $oldToNewTypes;
+        $this->oldToNewClasses = $oldToNewClasses;
+        $this->oldToNewTypes = $oldToNewTypes;
         return $oldToNewTypes;
     }
 }
