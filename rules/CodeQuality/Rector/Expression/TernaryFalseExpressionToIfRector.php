@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -17,7 +16,7 @@ use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Expression\TernaryFalseExpressionToIfRector\TernaryFalseExpressionToIfRectorTest
  */
-final class TernaryFalseExpressionToIfRector extends AbstractRector implements HTMLAverseRectorInterface
+final class TernaryFalseExpressionToIfRector extends AbstractRector
 {
     /**
      * @readonly
@@ -63,6 +62,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->getFile()->containsHTML()) {
+            return null;
+        }
         if (!$node->expr instanceof Ternary) {
             return null;
         }

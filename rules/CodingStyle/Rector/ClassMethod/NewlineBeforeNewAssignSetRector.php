@@ -15,14 +15,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
-use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector\NewlineBeforeNewAssignSetRectorTest
  */
-final class NewlineBeforeNewAssignSetRector extends AbstractRector implements HTMLAverseRectorInterface
+final class NewlineBeforeNewAssignSetRector extends AbstractRector
 {
     private ?string $previousStmtVariableName = null;
     private ?string $previousPreviousStmtVariableName = null;
@@ -77,6 +76,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->getFile()->containsHTML()) {
+            return null;
+        }
         // skip methods with no bodies (e.g interface methods)
         if ($node->stmts === null) {
             return null;

@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Comments\CommentResolver;
-use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -15,7 +14,7 @@ use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Stmt\NewlineAfterStatementRector\NewlineAfterStatementRectorTest
  */
-final class NewlineAfterStatementRector extends AbstractRector implements HTMLAverseRectorInterface
+final class NewlineAfterStatementRector extends AbstractRector
 {
     /**
      * @readonly
@@ -66,6 +65,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?\PhpParser\Node
     {
+        if ($this->getFile()->containsHTML()) {
+            return null;
+        }
         return $this->processAddNewLine($node, \false);
     }
     /**

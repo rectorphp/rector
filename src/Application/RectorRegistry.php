@@ -3,9 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Application;
 
-use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
-use Rector\ValueObject\Application\File;
 /**
  * @see \Rector\Tests\Application\RectorRegistryTest
  */
@@ -35,15 +33,8 @@ final class RectorRegistry
     /**
      * @return array<RectorInterface>
      */
-    public function forFile(File $file): array
+    public function getRectors(): array
     {
-        $rectorsForPath = [];
-        foreach ($this->rectors as $rector) {
-            if ($rector instanceof HTMLAverseRectorInterface && $file->containsHTML()) {
-                continue;
-            }
-            $rectorsForPath[] = $rector;
-        }
-        return $rectorsForPath;
+        return $this->rectors;
     }
 }

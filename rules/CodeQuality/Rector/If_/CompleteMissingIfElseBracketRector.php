@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Token;
-use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -17,7 +16,7 @@ use Rector\RuleDoc\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector\CompleteMissingIfElseBracketRectorTest
  */
-final class CompleteMissingIfElseBracketRector extends AbstractRector implements HTMLAverseRectorInterface
+final class CompleteMissingIfElseBracketRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -56,6 +55,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->getFile()->containsHTML()) {
+            return null;
+        }
         if ($this->isBareNewNode($node)) {
             return null;
         }
