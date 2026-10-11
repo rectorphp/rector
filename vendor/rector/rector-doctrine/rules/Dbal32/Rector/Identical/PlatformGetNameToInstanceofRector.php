@@ -34,7 +34,7 @@ final class PlatformGetNameToInstanceofRector extends AbstractRector implements 
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('doctrine/dbal', '>= 3.2');
+        return new ComposerPackageConstraint('doctrine/dbal', '>=3.2 <6.0');
     }
     public function getNodeTypes(): array
     {

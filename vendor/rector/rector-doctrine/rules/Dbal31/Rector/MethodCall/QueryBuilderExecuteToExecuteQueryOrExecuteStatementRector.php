@@ -34,7 +34,7 @@ final class QueryBuilderExecuteToExecuteQueryOrExecuteStatementRector extends Ab
     private const STATEMENT_METHODS = ['insert', 'update', 'delete'];
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('doctrine/dbal', '>=3.1');
+        return new ComposerPackageConstraint('doctrine/dbal', '>=3.1 <6.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

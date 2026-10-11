@@ -27,7 +27,7 @@ final class AddArrayResultColumnNamesRector extends AbstractRector implements Co
 {
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('doctrine/dbal', '>=4.2');
+        return new ComposerPackageConstraint('doctrine/dbal', '>=4.2 <6.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

@@ -31,7 +31,7 @@ final class CastDoctrineExprToStringRector extends AbstractRector implements Com
     private array $exprFuncMethods = ['lower', 'upper', 'length', 'trim', 'avg', 'max', 'min', 'count', 'countDistinct', 'exists', 'all', 'some', 'any', 'not', 'abs', 'sqrt'];
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('doctrine/orm', '>=3.0');
+        return new ComposerPackageConstraint('doctrine/orm', '>=3.0 <5.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

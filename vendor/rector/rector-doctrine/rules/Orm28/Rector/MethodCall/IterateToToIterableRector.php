@@ -35,7 +35,7 @@ final class IterateToToIterableRector extends AbstractRector implements Composer
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('doctrine/orm', '>=2.8');
+        return new ComposerPackageConstraint('doctrine/orm', '>=2.8 <5.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

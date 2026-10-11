@@ -28,7 +28,7 @@ final class ChangeCompositeExpressionAddMultipleWithWithRector extends AbstractR
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('doctrine/dbal', '>=4.0');
+        return new ComposerPackageConstraint('doctrine/dbal', '>=4.0 <6.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

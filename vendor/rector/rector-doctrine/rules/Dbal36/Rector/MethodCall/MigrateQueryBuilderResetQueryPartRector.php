@@ -34,7 +34,7 @@ final class MigrateQueryBuilderResetQueryPartRector extends AbstractRector imple
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('doctrine/dbal', '>=3.8');
+        return new ComposerPackageConstraint('doctrine/dbal', '>=3.8 <6.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

@@ -32,7 +32,7 @@ final class ExtractArrayArgOnQueryBuilderSelectRector extends AbstractRector imp
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('doctrine/dbal', '>=2.11');
+        return new ComposerPackageConstraint('doctrine/dbal', '>=2.11 <6.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {
