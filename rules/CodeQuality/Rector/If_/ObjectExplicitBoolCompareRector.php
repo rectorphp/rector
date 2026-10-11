@@ -7,31 +7,16 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\ObjectType;
-use Rector\CodeQuality\NodeAnalyzer\ExplicitBoolConditionResolver;
-use Rector\CodeQuality\ValueObject\ExplicitBoolCondition;
-use Rector\PhpParser\Node\NullableObjectToInstanceofFactory;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\If_\ObjectExplicitBoolCompareRector\ObjectExplicitBoolCompareRectorTest
+ * @deprecated This rule is deprecated. Use ExplicitNullableObjectInstanceRector instead, which handles nullable object checks across all condition idioms.
  */
-final class ObjectExplicitBoolCompareRector extends AbstractRector
+final class ObjectExplicitBoolCompareRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ExplicitBoolConditionResolver $explicitBoolConditionResolver;
-    /**
-     * @readonly
-     */
-    private NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory;
-    public function __construct(ExplicitBoolConditionResolver $explicitBoolConditionResolver, NullableObjectToInstanceofFactory $nullableObjectToInstanceofFactory)
-    {
-        $this->explicitBoolConditionResolver = $explicitBoolConditionResolver;
-        $this->nullableObjectToInstanceofFactory = $nullableObjectToInstanceofFactory;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make nullable object if conditions more explicit', [new CodeSample(<<<'CODE_SAMPLE'
@@ -70,16 +55,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $explicitBoolCondition = $this->explicitBoolConditionResolver->resolve($node);
-        if (!$explicitBoolCondition instanceof ExplicitBoolCondition) {
-            return null;
-        }
-        $expr = $explicitBoolCondition->getConditionNode();
-        $objectType = $this->nodeTypeResolver->matchNullableTypeOfSpecificType($expr, ObjectType::class);
-        if (!$objectType instanceof ObjectType) {
-            return null;
-        }
-        $node->cond = $this->nullableObjectToInstanceofFactory->create($expr, $objectType, $explicitBoolCondition->isNegated());
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, use ExplicitNullableObjectInstanceRector instead', self::class));
     }
 }

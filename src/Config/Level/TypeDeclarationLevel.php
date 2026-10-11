@@ -60,7 +60,6 @@ use Rector\TypeDeclaration\Rector\Closure\AddClosureNeverReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeFromAssertInstanceOfRector;
 use Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeRector;
-use Rector\TypeDeclaration\Rector\Empty_\EmptyOnNullableObjectToInstanceOfRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrayAnyAllClosureParamTypeRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrayFunctionClosureParamTypeRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrowFunctionParamArrayWhereDimFetchRector;
@@ -75,7 +74,6 @@ use Rector\TypeDeclaration\Rector\FunctionLike\AddReturnTypeDeclarationFromYield
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictSetUpRector;
-use Rector\TypeDeclaration\Rector\While_\WhileNullableToInstanceofRector;
 final class TypeDeclarationLevel
 {
     /**
@@ -115,8 +113,6 @@ final class TypeDeclarationLevel
         ReturnTypeFromStrictTypedPropertyRector::class,
         ReturnNullableTypeRector::class,
         // php 7.4
-        EmptyOnNullableObjectToInstanceOfRector::class,
-        WhileNullableToInstanceofRector::class,
         BinaryOpNullableToInstanceofRector::class,
         // php 7.4
         TypedPropertyFromStrictConstructorRector::class,
