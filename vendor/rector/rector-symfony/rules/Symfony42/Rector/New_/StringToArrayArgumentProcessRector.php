@@ -43,7 +43,7 @@ final class StringToArrayArgumentProcessRector extends AbstractRector implements
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/process', '>=4.2');
+        return new ComposerPackageConstraint('symfony/process', '>=4.2 <7.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {
