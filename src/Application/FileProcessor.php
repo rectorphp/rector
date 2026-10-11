@@ -74,11 +74,7 @@ final class FileProcessor
      * @readonly
      */
     private UsedImportsResolver $usedImportsResolver;
-    /**
-     * @readonly
-     */
-    private \Rector\Application\RectorRegistry $rectorRegistry;
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, UsedImportsResolver $usedImportsResolver, \Rector\Application\RectorRegistry $rectorRegistry)
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, UsedImportsResolver $usedImportsResolver)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
@@ -91,7 +87,6 @@ final class FileProcessor
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->usedImportsResolver = $usedImportsResolver;
-        $this->rectorRegistry = $rectorRegistry;
     }
     public function processFile(File $file, Configuration $configuration): FileProcessResult
     {
@@ -103,8 +98,6 @@ final class FileProcessor
         }
         $fileHasChanged = \false;
         $filePath = $file->getFilePath();
-        $currentRectors = $this->rectorRegistry->getRectors();
-        $this->rectorNodeTraverser->refreshPhpRectors($currentRectors);
         do {
             $file->changeHasChanged(\false);
             // 1. change nodes with Rector Rules

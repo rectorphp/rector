@@ -11,6 +11,8 @@ use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\ValueObject\ComposerBoundRuleConfiguration;
 /**
+ * @todo merge to RectorRegistry, as it is only used there
+ *
  * Modify available rector rules based on the configuration options
  * @see \Rector\Tests\Configuration\ConfigurationRuleFilterTest
  */

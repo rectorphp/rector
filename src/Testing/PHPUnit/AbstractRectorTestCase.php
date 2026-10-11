@@ -20,7 +20,6 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\Fixture\FixtureFileFinder;
 use Rector\Testing\Fixture\FixtureFileUpdater;
@@ -86,9 +85,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
             $this->bootFromConfigFiles([$configFile]);
             // no rules at all, e.g. in case of only post rector run, yields an empty array
             $rectors = $rectorConfig->findByContract(RectorInterface::class);
-            /** @var RectorNodeTraverser $rectorNodeTraverser */
-            $rectorNodeTraverser = $rectorConfig->make(RectorNodeTraverser::class);
-            $rectorNodeTraverser->refreshPhpRectors($rectors);
             // keep the shared registry in sync with the current test's rules
             /** @var RectorRegistry $rectorRegistry */
             $rectorRegistry = $rectorConfig->make(RectorRegistry::class);
