@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Nop;
-use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\FileNode;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -20,7 +19,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\StmtsAwareInterface\DeclareStrictTypesTestsRector\DeclareStrictTypesTestsRectorTest
  */
-final class DeclareStrictTypesTestsRector extends AbstractRector implements HTMLAverseRectorInterface, MinPhpVersionInterface
+final class DeclareStrictTypesTestsRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
