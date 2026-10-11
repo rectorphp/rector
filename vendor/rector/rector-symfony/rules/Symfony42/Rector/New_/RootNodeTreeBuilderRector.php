@@ -35,7 +35,7 @@ final class RootNodeTreeBuilderRector extends AbstractRector implements Composer
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/config', '>=4.2');
+        return new ComposerPackageConstraint('symfony/config', '>=4.2 <7.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

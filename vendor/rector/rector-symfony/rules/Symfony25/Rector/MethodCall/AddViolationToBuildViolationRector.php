@@ -25,7 +25,7 @@ final class AddViolationToBuildViolationRector extends AbstractRector implements
 {
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/validator', '>=2.5');
+        return new ComposerPackageConstraint('symfony/validator', '>=2.5 <5.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

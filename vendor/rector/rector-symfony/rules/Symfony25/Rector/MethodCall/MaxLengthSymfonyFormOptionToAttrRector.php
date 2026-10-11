@@ -36,7 +36,7 @@ final class MaxLengthSymfonyFormOptionToAttrRector extends AbstractRector implem
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/form', '>=2.5');
+        return new ComposerPackageConstraint('symfony/form', '>=2.5 <5.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

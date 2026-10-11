@@ -32,7 +32,7 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector im
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/console', '>=3.3');
+        return new ComposerPackageConstraint('symfony/console', '>=3.3 <6.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

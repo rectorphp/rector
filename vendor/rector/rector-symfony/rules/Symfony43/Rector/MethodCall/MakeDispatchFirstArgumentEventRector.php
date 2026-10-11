@@ -39,7 +39,7 @@ final class MakeDispatchFirstArgumentEventRector extends AbstractRector implemen
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/event-dispatcher', '>=4.3');
+        return new ComposerPackageConstraint('symfony/event-dispatcher', '>=4.3 <7.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

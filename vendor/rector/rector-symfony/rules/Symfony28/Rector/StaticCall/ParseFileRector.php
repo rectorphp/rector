@@ -48,7 +48,7 @@ final class ParseFileRector extends AbstractRector implements ComposerPackageCon
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/yaml', '>=2.8');
+        return new ComposerPackageConstraint('symfony/yaml', '>=2.8 <5.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

@@ -34,7 +34,7 @@ final class GetCurrencyBundleMethodCallsToIntlRector extends AbstractRector impl
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/intl', '>=4.3');
+        return new ComposerPackageConstraint('symfony/intl', '>=4.3 <7.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

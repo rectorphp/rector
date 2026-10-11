@@ -41,7 +41,7 @@ final class ReadOnlyOptionToAttributeRector extends AbstractRector implements Co
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/form', '>=3.0');
+        return new ComposerPackageConstraint('symfony/form', '>=3.0 <5.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {

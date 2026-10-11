@@ -69,7 +69,7 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector implements
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
-        return new ComposerPackageConstraint('symfony/framework-bundle', '>=3.0');
+        return new ComposerPackageConstraint('symfony/framework-bundle', '>=3.0 <5.0');
     }
     public function getRuleDefinition(): RuleDefinition
     {
