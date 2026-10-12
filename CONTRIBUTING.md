@@ -26,7 +26,15 @@ Then you can start working with the code :+1:
 
 <br>
 
-Do you want to **contribute a failing test**? [This tutorial will show you how](https://getrector.com/documentation/reporting-issue-with-rector)
+Do you want to **contribute a failing test**? The fastest way to report a bug is a reproducible example:
+
+1. Open the [online demo](https://getrector.com/demo).
+2. Paste the PHP code that triggers the wrong result.
+3. Pick the rule or set that misbehaves.
+4. Run it and copy the generated share link.
+5. Paste that link into your issue, together with the expected vs. actual output.
+
+This gives us a one-click reproduction and turns straight into a failing test case.
 
 ## Preparing Pull Request
 
