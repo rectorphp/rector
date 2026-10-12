@@ -119,8 +119,9 @@ CODE_SAMPLE
         return $this->processAssertEqualsWithDelta($node);
     }
     /**
+     * @template TCall of MethodCall|StaticCall
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
+     * @return ($call is MethodCall ? MethodCall : StaticCall)|null
      */
     private function processAssertEqualsIgnoringCase($call)
     {
@@ -141,8 +142,9 @@ CODE_SAMPLE
         return $newMethodCall;
     }
     /**
+     * @template TCall of MethodCall|StaticCall
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     * @return ($call is MethodCall ? MethodCall : StaticCall)|null
      */
     private function processAssertEqualsCanonicalizing($call)
     {
@@ -165,8 +167,9 @@ CODE_SAMPLE
         return $newMethodCall;
     }
     /**
+     * @template TCall of MethodCall|StaticCall
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     * @return ($call is MethodCall ? MethodCall : StaticCall)|null
      */
     private function processAssertEqualsWithDelta($call)
     {

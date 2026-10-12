@@ -79,9 +79,10 @@ final class MessengerHelper
         return $this->handlersFromServices;
     }
     /**
-     * @param array<string, mixed> $options
+     * @template TNode of Class_|ClassMethod
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod $node
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod
+     * @param array<string, mixed> $options
+     * @return TNode
      */
     public function addAttribute($node, array $options = [])
     {

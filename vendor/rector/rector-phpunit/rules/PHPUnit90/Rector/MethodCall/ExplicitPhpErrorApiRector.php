@@ -100,8 +100,9 @@ CODE_SAMPLE
         return null;
     }
     /**
+     * @template TCall of MethodCall|StaticCall
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
-     * @return null|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
+     * @return ($node is MethodCall ? MethodCall : StaticCall)|null
      */
     private function replaceExceptionWith($node, string $exceptionClass, string $explicitMethod)
     {

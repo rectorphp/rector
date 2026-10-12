@@ -8,8 +8,9 @@ use PhpParser\Node\Expr\StaticCall;
 final class AssertCallFactory
 {
     /**
+     * @template TCall of StaticCall|MethodCall
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
+     * @return ($node is MethodCall ? MethodCall : StaticCall)
      */
     public function createCallWithName($node, string $name)
     {
