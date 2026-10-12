@@ -4,8 +4,9 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\NodeVisitor;
+use PhpParser\Node\Stmt\Enum_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeManipulator\ClassConstManipulator;
 use Rector\PHPStan\ScopeFetcher;
@@ -58,24 +59,38 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassConst::class];
+        return [Class_::class, Enum_::class];
     }
     /**
-     * @param ClassConst $node
+     * @param Class_|Enum_ $node
      */
-    public function refactor(Node $node): ?int
+    public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipClassConst($node)) {
+        $unusedClassConstKeys = [];
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof ClassConst) {
+                continue;
+            }
+            if ($this->shouldSkipClassConst($stmt)) {
+                continue;
+            }
+            $classReflection = $this->reflectionResolver->resolveClassReflection($stmt);
+            if (!$classReflection instanceof ClassReflection) {
+                continue;
+            }
+            if ($this->classConstManipulator->hasClassConstFetch($stmt, $classReflection, $node)) {
+                continue;
+            }
+            $unusedClassConstKeys[] = $key;
+        }
+        if ($unusedClassConstKeys === []) {
             return null;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof ClassReflection) {
-            return null;
+        // remove only after all constants are checked, so a constant used by another removed one is kept
+        foreach ($unusedClassConstKeys as $unusedClassConstKey) {
+            unset($node->stmts[$unusedClassConstKey]);
         }
-        if ($this->classConstManipulator->hasClassConstFetch($node, $classReflection)) {
-            return null;
-        }
-        return NodeVisitor::REMOVE_NODE;
+        return $node;
     }
     private function shouldSkipClassConst(ClassConst $classConst): bool
     {
