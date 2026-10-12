@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\NotIdentical;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
@@ -13,8 +11,8 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\Int_;
 use Rector\Php80\NodeResolver\StrFalseComparisonResolver;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -32,12 +30,17 @@ final class MbStrContainsRector extends AbstractRector implements MinPhpVersionI
      */
     private StrFalseComparisonResolver $strFalseComparisonResolver;
     /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    /**
      * @var string[]
      */
     private const OLD_STR_NAMES = ['mb_strpos', 'mb_strstr'];
-    public function __construct(StrFalseComparisonResolver $strFalseComparisonResolver)
+    public function __construct(StrFalseComparisonResolver $strFalseComparisonResolver, ValueResolver $valueResolver)
     {
         $this->strFalseComparisonResolver = $strFalseComparisonResolver;
+        $this->valueResolver = $valueResolver;
     }
     public function provideMinPhpVersion(): int
     {
@@ -84,10 +87,11 @@ CODE_SAMPLE
         if ($funcCall->isFirstClassCallable()) {
             return null;
         }
-        if (isset($funcCall->getArgs()[2])) {
-            $secondArg = $funcCall->getArgs()[2];
-            if ($this->isName($funcCall->name, 'mb_strpos') && !$this->isIntegerZero($secondArg->value)) {
-                $funcCall->args[0] = new Arg($this->nodeFactory->createFuncCall('mb_substr', [$funcCall->args[0], $secondArg]));
+        $args = $funcCall->getArgs();
+        if (isset($args[2])) {
+            // str_contains() has no offset, and mb_substr() would copy the haystack on every call
+            if ($this->isName($funcCall->name, 'mb_strpos') && !$this->valueResolver->isValue($args[2]->value, 0)) {
+                return null;
             }
             unset($funcCall->args[2]);
         }
@@ -100,12 +104,5 @@ CODE_SAMPLE
     public function providePolyfillPackage(): string
     {
         return PolyfillPackage::PHP_80;
-    }
-    private function isIntegerZero(Expr $expr): bool
-    {
-        if (!$expr instanceof Int_) {
-            return \false;
-        }
-        return $expr->value === 0;
     }
 }
