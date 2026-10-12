@@ -137,9 +137,11 @@ CODE_SAMPLE
         });
     }
     /**
+     * @template TNode of Expression|Property
      * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property $node
+     * @return TNode|null
      */
-    private function processVarTagNull($node): ?Node
+    private function processVarTagNull($node)
     {
         $phpdocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $varTagValueNode = $phpdocInfo->getVarTagValueNode();

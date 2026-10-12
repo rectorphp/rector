@@ -105,7 +105,7 @@ final class ArgumentDefaultValueReplacer
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\New_ $expr
      * @return TCall|null
      */
-    private function processArgs($expr, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue): ?Expr
+    private function processArgs($expr, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue)
     {
         if ($expr->isFirstClassCallable()) {
             return null;

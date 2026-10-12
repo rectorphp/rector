@@ -99,9 +99,11 @@ CODE_SAMPLE
         return null;
     }
     /**
+     * @template TNode of Break_|Continue_
      * @param \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_ $stmt
+     * @return TNode|null
      */
-    private function processVariableNum($stmt, Variable $numVariable): ?Node
+    private function processVariableNum($stmt, Variable $numVariable)
     {
         $staticType = $this->getType($numVariable);
         if ($staticType->isConstantValue()->yes()) {
