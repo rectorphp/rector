@@ -196,8 +196,9 @@ CODE_SAMPLE
         return $matchScope->getParentScope() === $containerScope->getParentScope();
     }
     /**
+     * @template TNode of Arg|FuncCall|Assign|Expression|Return_
      * @param \PhpParser\Node\Arg|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $containerArrowFunction
-     * @return \PhpParser\Node\Arg|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|null
+     * @return TNode|null
      */
     private function refactorInArrowFunction($containerArrowFunction, ArrowFunction $arrowFunction, Match_ $match)
     {

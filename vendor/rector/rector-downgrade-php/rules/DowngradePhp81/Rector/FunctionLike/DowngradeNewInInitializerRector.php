@@ -128,8 +128,9 @@ CODE_SAMPLE
         return $param->type instanceof IntersectionType;
     }
     /**
+     * @template TFunctionLike of ClassMethod|Closure|Function_
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_
+     * @return TFunctionLike
      */
     private function replaceNewInParams($functionLike)
     {
