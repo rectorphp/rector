@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\NotIdentical;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -13,9 +12,9 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use Rector\Php80\NodeResolver\StrFalseComparisonResolver;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -33,12 +32,17 @@ final class StrContainsRector extends AbstractRector implements MinPhpVersionInt
      */
     private StrFalseComparisonResolver $strFalseComparisonResolver;
     /**
+     * @readonly
+     */
+    private ValueResolver $valueResolver;
+    /**
      * @var string[]
      */
     private const OLD_STR_NAMES = ['strpos', 'strstr'];
-    public function __construct(StrFalseComparisonResolver $strFalseComparisonResolver)
+    public function __construct(StrFalseComparisonResolver $strFalseComparisonResolver, ValueResolver $valueResolver)
     {
         $this->strFalseComparisonResolver = $strFalseComparisonResolver;
+        $this->valueResolver = $valueResolver;
     }
     public function provideMinPhpVersion(): int
     {
@@ -89,10 +93,10 @@ CODE_SAMPLE
         if (isset($args[1]) && $this->isEmptyStringNeedle($args[1]->value)) {
             return null;
         }
-        if (isset($funcCall->getArgs()[2])) {
-            $secondArg = $funcCall->getArgs()[2];
-            if ($this->isName($funcCall->name, 'strpos') && !$this->isIntegerZero($secondArg->value)) {
-                $funcCall->args[0] = new Arg($this->nodeFactory->createFuncCall('substr', [$funcCall->args[0], $secondArg]));
+        if (isset($args[2])) {
+            // str_contains() has no offset, and substr() would copy the haystack on every call
+            if ($this->isName($funcCall->name, 'strpos') && !$this->valueResolver->isValue($args[2]->value, 0)) {
+                return null;
             }
             unset($funcCall->args[2]);
         }
@@ -105,13 +109,6 @@ CODE_SAMPLE
     public function providePolyfillPackage(): string
     {
         return PolyfillPackage::PHP_80;
-    }
-    private function isIntegerZero(Expr $expr): bool
-    {
-        if (!$expr instanceof Int_) {
-            return \false;
-        }
-        return $expr->value === 0;
     }
     private function isEmptyStringNeedle(Expr $expr): bool
     {
