@@ -6,6 +6,7 @@ namespace RectorPrefix202610\Entropy\Console;
 use RectorPrefix202610\Entropy\Attribute\RelatedTest;
 use RectorPrefix202610\Entropy\Console\Contract\CommandInterface;
 use RectorPrefix202610\Entropy\Console\Enum\ExitCode;
+use RectorPrefix202610\Entropy\Console\Exception\ConsoleInputMappingException;
 use RectorPrefix202610\Entropy\Console\Input\InputParser;
 use RectorPrefix202610\Entropy\Console\Mapper\CLIRequestMapper;
 use RectorPrefix202610\Entropy\Console\Output\CommandHelpFactory;
@@ -69,6 +70,10 @@ final class ConsoleApplication
             }
             $runArguments = $this->cliRequestMapper->resolveArguments($command, $cliRequest);
             return $command->run(...$runArguments);
+        } catch (ConsoleInputMappingException $consoleInputMappingException) {
+            // user input error - show a clean message without a stack trace
+            $this->outputPrinter->redBackground('Run failed: ' . $consoleInputMappingException->getMessage());
+            return ExitCode::ERROR;
         } catch (Throwable $throwable) {
             $this->outputPrinter->redBackground('Run failed: ' . $throwable->getMessage());
             $this->outputPrinter->newline();
