@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -112,8 +113,10 @@ CODE_SAMPLE
         if ($closure->stmts === []) {
             return null;
         }
-        // already ends with an explicit return, no fallback needed
-        $lastStmt = $closure->stmts[count($closure->stmts) - 1];
+        // already ends with an explicit return, no fallback needed;
+        // skip trailing comment-only Nop statements added by a trailing comment
+        $stmts = array_filter($closure->stmts, static fn(Node $stmt): bool => !$stmt instanceof Nop);
+        $lastStmt = end($stmts);
         if ($lastStmt instanceof Return_) {
             return null;
         }
