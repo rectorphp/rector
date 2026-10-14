@@ -102,14 +102,19 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasUntypedParam = \false;
+        // cheap bail - collect untyped params, skip costly parent reflection guards below
+        $untypedParamNames = [];
         foreach ($node->getParams() as $param) {
-            if (!$param->type instanceof Node && !$param->variadic) {
-                $hasUntypedParam = \true;
-                break;
+            if ($param->type instanceof Node || $param->variadic) {
+                continue;
             }
+            $untypedParamNames[] = $this->getName($param);
         }
-        if (!$hasUntypedParam) {
+        if ($untypedParamNames === []) {
+            return null;
+        }
+        // cheap syntactic bail - no param is dim-fetched at all, skip reflection and type resolution
+        if (!$this->hasArrayDimFetchOnParamNames($node, $untypedParamNames)) {
             return null;
         }
         $hasChanged = \false;
@@ -144,6 +149,34 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    /**
+     * @param string[] $paramNames
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     */
+    private function hasArrayDimFetchOnParamNames($functionLike, array $paramNames): bool
+    {
+        if ($functionLike->stmts === null) {
+            return \false;
+        }
+        $hasArrayDimFetch = \false;
+        $this->traverseNodesWithCallable($functionLike->stmts, function (Node $node) use ($paramNames, &$hasArrayDimFetch): ?int {
+            if ($node instanceof Class_ || $node instanceof FunctionLike) {
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if (!$node instanceof ArrayDimFetch) {
+                return null;
+            }
+            if (!$node->var instanceof Variable) {
+                return null;
+            }
+            if (!in_array($this->getName($node->var), $paramNames, \true)) {
+                return null;
+            }
+            $hasArrayDimFetch = \true;
+            return NodeVisitor::STOP_TRAVERSAL;
+        });
+        return $hasArrayDimFetch;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
