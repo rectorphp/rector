@@ -169,18 +169,12 @@ CODE_SAMPLE
     }
     private function shouldSkipExpr(Expr $expr): bool
     {
-        $hasNonStaticNode = (bool) $this->betterNodeFinder->findInstancesOf($expr, [PropertyFetch::class, StaticPropertyFetch::class, ArrayDimFetch::class, MethodCall::class, StaticCall::class]);
-        if ($hasNonStaticNode) {
-            return \true;
-        }
-        /** @var FuncCall[] $funcCalls */
-        $funcCalls = $this->betterNodeFinder->findInstancesOf($expr, [FuncCall::class]);
-        foreach ($funcCalls as $funcCall) {
-            if ($this->isNames($funcCall, self::RUNTIME_STATE_FUNCTIONS)) {
+        return $this->betterNodeFinder->findFirst($expr, function (Node $node): bool {
+            if ($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch || $node instanceof ArrayDimFetch || $node instanceof MethodCall || $node instanceof StaticCall) {
                 return \true;
             }
-        }
-        return \false;
+            return $node instanceof FuncCall && $this->isNames($node, self::RUNTIME_STATE_FUNCTIONS);
+        }) instanceof Node;
     }
     private function refactorIfWithBooleanAnd(If_ $if): ?If_
     {
