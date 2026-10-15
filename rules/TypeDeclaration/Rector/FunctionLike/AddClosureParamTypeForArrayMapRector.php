@@ -65,12 +65,12 @@ CODE_SAMPLE
         if (!$this->isName($node, 'array_map')) {
             return null;
         }
-        $funcReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
-        if (!$funcReflection instanceof NativeFunctionReflection) {
-            return null;
-        }
         $args = $node->getArgs();
         if (!isset($args[0]) || !$args[0]->value instanceof Closure) {
+            return null;
+        }
+        $funcReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
+        if (!$funcReflection instanceof NativeFunctionReflection) {
             return null;
         }
         // array_map passes the value of each array positionally to the closure:
