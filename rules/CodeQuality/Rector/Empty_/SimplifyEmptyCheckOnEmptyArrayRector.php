@@ -110,14 +110,14 @@ CODE_SAMPLE
     }
     private function isAllowedExpr(Expr $expr, Scope $scope): bool
     {
+        if (!$expr instanceof Variable && !$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
+            return \false;
+        }
         if (!$scope->getType($expr)->isArray()->yes()) {
             return \false;
         }
         if ($expr instanceof Variable) {
             return $this->isAllowedVariable($expr);
-        }
-        if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
-            return \false;
         }
         if (!$expr->name instanceof Identifier) {
             return \false;

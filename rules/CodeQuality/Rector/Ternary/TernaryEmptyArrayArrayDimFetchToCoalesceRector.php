@@ -65,12 +65,12 @@ CODE_SAMPLE
         if (!$node->if instanceof ArrayDimFetch) {
             return null;
         }
-        $emptyExprType = $this->getType($negagedExpr->expr);
-        if (!$emptyExprType->isArray()->yes()) {
-            return null;
-        }
         $dimFetchVar = $node->if->var;
         if (!$this->nodeComparator->areNodesEqual($negagedExpr->expr, $dimFetchVar)) {
+            return null;
+        }
+        $emptyExprType = $this->getType($negagedExpr->expr);
+        if (!$emptyExprType->isArray()->yes()) {
             return null;
         }
         return new Coalesce($node->if, $node->else);

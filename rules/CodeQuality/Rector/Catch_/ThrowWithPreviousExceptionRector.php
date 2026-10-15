@@ -113,11 +113,11 @@ CODE_SAMPLE
         if (!$new->class instanceof Name) {
             return null;
         }
-        $exceptionArgumentPosition = $this->resolveExceptionArgumentPosition($new->class);
-        if ($exceptionArgumentPosition === null) {
+        if ($new->isFirstClassCallable()) {
             return null;
         }
-        if ($new->isFirstClassCallable()) {
+        $exceptionArgumentPosition = $this->resolveExceptionArgumentPosition($new->class);
+        if ($exceptionArgumentPosition === null) {
             return null;
         }
         // exception is bundled

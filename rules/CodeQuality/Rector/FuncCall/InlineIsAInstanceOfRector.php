@@ -63,6 +63,10 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
+        $secondArgValue = $args[1]->value;
+        if (!$secondArgValue instanceof Variable && !$secondArgValue instanceof ClassConstFetch) {
+            return null;
+        }
         $firstArgValue = $args[0]->value;
         if (!$this->isFirstObjectType($firstArgValue)) {
             return null;
@@ -70,10 +74,10 @@ CODE_SAMPLE
         /**
          * instanceof with Variable is ok, while on FuncCal with instanceof cause fatal error, see https://3v4l.org/IHb30
          */
-        if ($args[1]->value instanceof Variable) {
-            return new Instanceof_($firstArgValue, $args[1]->value);
+        if ($secondArgValue instanceof Variable) {
+            return new Instanceof_($firstArgValue, $secondArgValue);
         }
-        $className = $this->resolveClassName($args[1]->value);
+        $className = $this->resolveClassName($secondArgValue);
         if ($className === null) {
             return null;
         }
