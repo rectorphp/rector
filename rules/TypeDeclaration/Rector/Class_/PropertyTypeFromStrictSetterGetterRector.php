@@ -130,12 +130,12 @@ CODE_SAMPLE
             if (!$property->isPrivate()) {
                 continue;
             }
-            // constructor assignment can set a different type than the setter/getter → skip
-            if ($this->isAssignedInConstructor($node, $property)) {
-                continue;
-            }
             $getterSetterPropertyType = $this->matchGetterSetterIdenticalType($property, $node);
             if (!$getterSetterPropertyType instanceof Type) {
+                continue;
+            }
+            // constructor assignment can set a different type than the setter/getter → skip
+            if ($this->isAssignedInConstructor($node, $property)) {
                 continue;
             }
             $hasPropertyDefaultNull = $this->hasPropertyDefaultNull($property);

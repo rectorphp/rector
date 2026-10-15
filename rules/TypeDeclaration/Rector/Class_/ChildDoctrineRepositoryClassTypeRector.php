@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Class_;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -93,6 +94,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // entity type is resolved from the @extends docblock, bail early when absent
+        if (!$node->getDocComment() instanceof Doc) {
+            return null;
+        }
         if (!$this->isObjectType($node, new ObjectType('Doctrine\ORM\EntityRepository'))) {
             return null;
         }

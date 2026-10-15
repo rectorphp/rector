@@ -133,6 +133,9 @@ CODE_SAMPLE
     private function resolveReturnPropertyType(ClassMethod $classMethod): array
     {
         $returns = $this->betterNodeFinder->findReturnsScoped($classMethod);
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($classMethod, $returns)) {
+            return [];
+        }
         $propertyTypes = [];
         foreach ($returns as $return) {
             if (!$return->expr instanceof Expr) {
@@ -150,9 +153,6 @@ CODE_SAMPLE
                 return [];
             }
             $propertyTypes[] = $this->nodeTypeResolver->getNativeType($return->expr);
-        }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($classMethod, $returns)) {
-            return [];
         }
         return $propertyTypes;
     }

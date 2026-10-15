@@ -94,11 +94,14 @@ CODE_SAMPLE
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
+        $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+        if (!$returnType instanceof StaticType && !$returnType instanceof ObjectType) {
+            return null;
+        }
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $returnType = $this->returnTypeInferer->inferFunctionLike($node);
         if ($returnType instanceof StaticType && $returnType->getStaticObjectType()->getClassName() === $classReflection->getName()) {
             return $this->processAddReturnSelfOrStatic($node, $classReflection);
         }
