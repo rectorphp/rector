@@ -79,6 +79,10 @@ CODE_SAMPLE
         if (!$this->isNames($node, [MethodName::CONSTRUCT, MethodName::DESTRUCT, MethodName::CLONE])) {
             return null;
         }
+        // early return if no @return tag is present
+        if (strpos((string) $node->getDocComment(), '@return') === \false) {
+            return null;
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
         if (!$returnTagValueNode instanceof ReturnTagValueNode) {

@@ -100,6 +100,10 @@ CODE_SAMPLE
             }
             $stmt->keyVar = null;
             $hasChanged = \true;
+            // no @var tag to clean up
+            if (strpos((string) $stmt->getDocComment(), '@var') === \false) {
+                continue;
+            }
             $phpDocInfo = $this->phpDocInfoFactory->createFromNode($stmt);
             if (!$phpDocInfo instanceof PhpDocInfo) {
                 continue;
