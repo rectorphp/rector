@@ -95,7 +95,15 @@ CODE_SAMPLE
         if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($node)) {
             return null;
         }
+        $classMethodNames = [];
+        foreach ($node->getMethods() as $classMethod) {
+            $classMethodNames[strtolower((string) $this->getName($classMethod))] = \true;
+        }
         foreach ($this->methodReturnTypes as $methodReturnType) {
+            // cheap name check before the expensive type resolution below
+            if (!isset($classMethodNames[strtolower($methodReturnType->getMethod())])) {
+                continue;
+            }
             $objectType = $methodReturnType->getObjectType();
             if (!$this->isObjectType($node, $objectType)) {
                 continue;
