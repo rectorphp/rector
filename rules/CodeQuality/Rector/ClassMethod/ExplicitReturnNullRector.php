@@ -19,7 +19,6 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -51,18 +50,13 @@ final class ExplicitReturnNullRector extends AbstractRector
      * @readonly
      */
     private ReturnTypeInferer $returnTypeInferer;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
-    public function __construct(SilentVoidResolver $silentVoidResolver, PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, PhpDocTypeChanger $phpDocTypeChanger, ReturnTypeInferer $returnTypeInferer, BetterNodeFinder $betterNodeFinder)
+    public function __construct(SilentVoidResolver $silentVoidResolver, PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, PhpDocTypeChanger $phpDocTypeChanger, ReturnTypeInferer $returnTypeInferer)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeFactory = $typeFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -114,29 +108,50 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
+        // bodyless method (abstract/interface), nothing to improve
+        if ($node->stmts === null) {
+            return null;
+        }
         if ($node instanceof ClassMethod && $this->isName($node, MethodName::CONSTRUCT)) {
+            return null;
+        }
+        $hasGoto = \false;
+        $hasValueReturn = \false;
+        $bareReturns = [];
+        $this->traverseNodesWithCallable($node->stmts, static function (Node $subNode) use (&$hasGoto, &$hasValueReturn, &$bareReturns): ?int {
+            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
+                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($subNode instanceof Goto_) {
+                $hasGoto = \true;
+                return null;
+            }
+            if ($subNode instanceof Return_) {
+                if ($subNode->expr instanceof Expr) {
+                    $hasValueReturn = \true;
+                } else {
+                    $bareReturns[] = $subNode;
+                }
+            }
+            return null;
+        });
+        // goto makes control flow analysis unreliable
+        if ($hasGoto) {
+            return null;
+        }
+        // no returned value means the inferred type can never be a value|void union
+        if (!$hasValueReturn) {
             return null;
         }
         $returnType = $this->returnTypeInferer->inferFunctionLike($node);
         if (!$returnType instanceof UnionType) {
             return null;
         }
-        $hasGoto = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, fn(Node $node): bool => $node instanceof Goto_);
-        if ($hasGoto) {
-            return null;
-        }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable((array) $node->stmts, static function (Node $node) use (&$hasChanged) {
-            if ($node instanceof Class_ || $node instanceof Function_ || $node instanceof Closure) {
-                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-            if ($node instanceof Return_ && !$node->expr instanceof Expr) {
-                $hasChanged = \true;
-                $node->expr = new ConstFetch(new Name('null'));
-                return $node;
-            }
-            return null;
-        });
+        foreach ($bareReturns as $bareReturn) {
+            $bareReturn->expr = new ConstFetch(new Name('null'));
+            $hasChanged = \true;
+        }
         // allow non native @return never type use
         // to avoid noise for addition returns
         if (!$this->silentVoidResolver->hasSilentVoid($node, \false)) {
