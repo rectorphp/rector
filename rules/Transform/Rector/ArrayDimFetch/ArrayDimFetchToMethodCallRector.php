@@ -151,9 +151,6 @@ CODE_SAMPLE
             return null;
         }
         foreach ($this->arrayDimFetchToMethodCalls as $arrayDimFetchToMethodCall) {
-            if (!$this->isObjectType($arrayDimFetch->var, $arrayDimFetchToMethodCall->getObjectType())) {
-                continue;
-            }
             switch ($magicPropertyHandler) {
                 case MagicPropertyHandler::GET:
                     $method = $arrayDimFetchToMethodCall->getMethod();
@@ -169,6 +166,9 @@ CODE_SAMPLE
                     break;
             }
             if ($method === null) {
+                continue;
+            }
+            if (!$this->isObjectType($arrayDimFetch->var, $arrayDimFetchToMethodCall->getObjectType())) {
                 continue;
             }
             $args = [new Arg($arrayDimFetch->dim)];

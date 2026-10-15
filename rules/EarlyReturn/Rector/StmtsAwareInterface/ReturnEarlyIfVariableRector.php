@@ -111,10 +111,6 @@ CODE_SAMPLE
         if (!$onlyIfStmt->expr instanceof Assign) {
             return null;
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($onlyIfStmt);
-        if ($phpDocInfo->getVarTagValueNode() instanceof VarTagValueNode) {
-            return null;
-        }
         $assign = $onlyIfStmt->expr;
         // assign to same variable that is returned
         if (!$assign->var instanceof Variable) {
@@ -127,6 +123,10 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($assign->var, $returnVariable)) {
+            return null;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($onlyIfStmt);
+        if ($phpDocInfo->getVarTagValueNode() instanceof VarTagValueNode) {
             return null;
         }
         // return directly

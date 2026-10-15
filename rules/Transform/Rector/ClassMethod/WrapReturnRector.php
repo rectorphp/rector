@@ -61,14 +61,14 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         foreach ($this->typeMethodWraps as $typeMethodWrap) {
-            if (!$this->isObjectType($node, $typeMethodWrap->getObjectType())) {
-                continue;
-            }
             foreach ($node->getMethods() as $classMethod) {
                 if (!$this->isName($classMethod, $typeMethodWrap->getMethod())) {
                     continue;
                 }
                 if ($node->stmts === null) {
+                    continue;
+                }
+                if (!$this->isObjectType($node, $typeMethodWrap->getObjectType())) {
                     continue;
                 }
                 if ($typeMethodWrap->isArrayWrap() && $this->wrap($classMethod)) {
