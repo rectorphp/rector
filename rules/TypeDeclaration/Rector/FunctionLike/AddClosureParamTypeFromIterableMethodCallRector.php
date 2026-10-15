@@ -99,6 +99,9 @@ CODE_SAMPLE
         if (!$node->name instanceof Identifier) {
             return null;
         }
+        if (!$this->callUsesClosures($node->getArgs())) {
+            return null;
+        }
         $varType = $this->getType($node->var);
         if (!$varType instanceof IntersectionType || !$varType->isIterable()->yes()) {
             return null;
@@ -113,9 +116,6 @@ CODE_SAMPLE
         }
         $parameters = $methodReflection->getVariants()[0]->getParameters();
         if (!$this->methodSignatureUsesCallableWithIteratorTypes($className, $parameters)) {
-            return null;
-        }
-        if (!$this->callUsesClosures($node->getArgs())) {
             return null;
         }
         $nameIndex = [];
