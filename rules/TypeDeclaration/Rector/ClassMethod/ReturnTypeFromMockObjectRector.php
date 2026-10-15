@@ -82,19 +82,19 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if (!$this->isInsideTestCaseClass($scope)) {
-            return null;
-        }
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
-            return null;
-        }
         // we need exactly 1 return
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
         if (count($returns) !== 1) {
             return null;
         }
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        if (!$this->isInsideTestCaseClass($scope)) {
+            return null;
+        }
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
         /** @var Expr $expr */

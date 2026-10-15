@@ -95,12 +95,12 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if ($this->shouldSkip($node, $scope)) {
-            return null;
-        }
         $returns = $this->betterNodeFinder->findReturnsScoped($node);
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        if ($this->shouldSkip($node, $scope)) {
             return null;
         }
         if (!$this->hasOnlyBooleanConstExprs($returns)) {

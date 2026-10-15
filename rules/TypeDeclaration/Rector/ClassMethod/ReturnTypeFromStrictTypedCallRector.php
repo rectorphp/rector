@@ -135,16 +135,16 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
+        $currentScopeReturns = $this->betterNodeFinder->findReturnsScoped($node);
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $currentScopeReturns)) {
+            return null;
+        }
         $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkip($node, $scope)) {
             return null;
         }
-        $currentScopeReturns = $this->betterNodeFinder->findReturnsScoped($node);
         $returnedStrictTypes = $this->returnStrictTypeAnalyzer->collectStrictReturnTypes($currentScopeReturns, $scope);
         if ($returnedStrictTypes === []) {
-            return null;
-        }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $currentScopeReturns)) {
             return null;
         }
         if (count($returnedStrictTypes) === 1) {
