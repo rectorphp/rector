@@ -87,9 +87,9 @@ CODE_SAMPLE
         if (!$callLike->isPublic()) {
             return \false;
         }
-        if (!$this->testsNodeAnalyzer->isInTestClass($callLike)) {
+        if (!$callLike->returnType instanceof Node) {
             return \false;
         }
-        return $callLike->returnType instanceof Node;
+        return $this->testsNodeAnalyzer->isInTestClass($callLike);
     }
 }

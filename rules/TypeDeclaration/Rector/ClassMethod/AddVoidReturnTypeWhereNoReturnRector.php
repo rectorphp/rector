@@ -121,20 +121,20 @@ CODE_SAMPLE
     }
     private function isNotFinalAndHasExceptionOnly(ClassMethod $classMethod): bool
     {
-        if ($this->classModifierChecker->isInsideFinalClass($classMethod)) {
-            return \false;
-        }
         if (count((array) $classMethod->stmts) !== 1) {
             return \false;
         }
         $onlyStmt = $classMethod->stmts[0] ?? null;
-        return $onlyStmt instanceof Expression && $onlyStmt->expr instanceof Throw_;
+        if (!$onlyStmt instanceof Expression || !$onlyStmt->expr instanceof Throw_) {
+            return \false;
+        }
+        return !$this->classModifierChecker->isInsideFinalClass($classMethod);
     }
     private function isNotFinalAndEmpty(ClassMethod $classMethod): bool
     {
-        if ($this->classModifierChecker->isInsideFinalClass($classMethod)) {
+        if ($classMethod->stmts !== []) {
             return \false;
         }
-        return $classMethod->stmts === [];
+        return !$this->classModifierChecker->isInsideFinalClass($classMethod);
     }
 }

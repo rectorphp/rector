@@ -72,6 +72,9 @@ CODE_SAMPLE
             if (!$classMethod->isMagic()) {
                 continue;
             }
+            if (!$this->isNames($classMethod, [MethodName::CALL, MethodName::CALL_STATIC, MethodName::__SET, MethodName::__GET, MethodName::ISSET, MethodName::UNSET])) {
+                continue;
+            }
             if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod)) {
                 continue;
             }
@@ -82,13 +85,11 @@ CODE_SAMPLE
                     $hasChanged = \true;
                 }
             }
-            // first arg string
-            if ($this->isNames($classMethod, [MethodName::CALL, MethodName::CALL_STATIC, MethodName::__SET, MethodName::__GET, MethodName::ISSET, MethodName::UNSET])) {
-                $firstParam = $classMethod->getParams()[0];
-                if (!$firstParam->type instanceof Node) {
-                    $firstParam->type = new Identifier('string');
-                    $hasChanged = \true;
-                }
+            // first arg string, shared by all handled magic methods
+            $firstParam = $classMethod->getParams()[0];
+            if (!$firstParam->type instanceof Node) {
+                $firstParam->type = new Identifier('string');
+                $hasChanged = \true;
             }
             if ($this->isName($classMethod, MethodName::__GET) && $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::MIXED_TYPE) && !$classMethod->returnType instanceof Node) {
                 $classMethod->returnType = new Identifier('mixed');

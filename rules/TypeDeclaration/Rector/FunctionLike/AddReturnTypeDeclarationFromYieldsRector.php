@@ -82,12 +82,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $yieldNodes = $this->yieldNodeFinder->find($node);
-        if ($yieldNodes === []) {
-            return null;
-        }
         // skip already filled type
         if ($node->returnType instanceof Node && $this->isNames($node->returnType, ['Iterator', 'Generator', 'Traversable', 'iterable'])) {
+            return null;
+        }
+        $yieldNodes = $this->yieldNodeFinder->find($node);
+        if ($yieldNodes === []) {
             return null;
         }
         $scope = ScopeFetcher::fetch($node);
