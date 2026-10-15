@@ -70,11 +70,15 @@ CODE_SAMPLE
     public function refactor(Node $node): ?String_
     {
         $this->hasChanged = \false;
+        $doubleQuoteCount = substr_count($node->value, '"');
+        $singleQuoteCount = substr_count($node->value, "'");
+        // no quotes to simplify
+        if ($doubleQuoteCount === 0 && $singleQuoteCount === 0) {
+            return null;
+        }
         if ($this->hasNonPrintableChars($node->value)) {
             return null;
         }
-        $doubleQuoteCount = substr_count($node->value, '"');
-        $singleQuoteCount = substr_count($node->value, "'");
         $kind = $node->getAttribute(AttributeKey::KIND);
         if ($kind === String_::KIND_SINGLE_QUOTED) {
             $this->processSingleQuoted($node, $doubleQuoteCount, $singleQuoteCount);

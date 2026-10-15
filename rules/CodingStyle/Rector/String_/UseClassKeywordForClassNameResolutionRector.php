@@ -58,7 +58,6 @@ CODE_SAMPLE
             return null;
         }
         $classNames = $this->getExistingClasses($node);
-        $classNames = $this->filterOurShortClasses($classNames);
         if ($classNames === []) {
             return null;
         }
@@ -92,6 +91,10 @@ CODE_SAMPLE
         }
         $classNames = [];
         foreach ($matches['class_name'] as $matchedClassName) {
+            // short, non-namespaced names are not resolved to a ::class constant
+            if (strpos($matchedClassName, '\\') === \false) {
+                continue;
+            }
             if (!$this->reflectionProvider->hasClass($matchedClassName)) {
                 continue;
             }
@@ -114,13 +117,5 @@ CODE_SAMPLE
             }
         }
         return $exprsToConcat;
-    }
-    /**
-     * @param string[] $classNames
-     * @return string[]
-     */
-    private function filterOurShortClasses(array $classNames): array
-    {
-        return array_filter($classNames, static fn(string $className): bool => strpos($className, '\\') !== \false);
     }
 }
