@@ -122,6 +122,9 @@ CODE_SAMPLE
      */
     private function processBinaryPlusAndMinus($binaryOp): ?Expr
     {
+        if (!$this->isLiteralZero($binaryOp->left) && !$this->isLiteralZero($binaryOp->right)) {
+            return null;
+        }
         if (!$this->areNumberType($binaryOp)) {
             return null;
         }
@@ -176,6 +179,9 @@ CODE_SAMPLE
     private function processBinaryMulAndDiv($binaryOp): ?Expr
     {
         if ($binaryOp->left instanceof ClassConstFetch || $binaryOp->right instanceof ClassConstFetch) {
+            return null;
+        }
+        if (!$this->isLiteralOne($binaryOp->left) && !$this->isLiteralOne($binaryOp->right)) {
             return null;
         }
         if (!$this->areNumberType($binaryOp)) {
