@@ -130,7 +130,7 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($constructClassMethod);
+        $phpDocInfo = null;
         foreach ($constructClassMethod->params as $key => $param) {
             // only private local scope; removing public property might be dangerous
             if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
@@ -152,6 +152,7 @@ CODE_SAMPLE
                 $param->flags = 0;
                 continue;
             }
+            $phpDocInfo ??= $this->phpDocInfoFactory->createFromNode($constructClassMethod);
             if ($phpDocInfo instanceof PhpDocInfo) {
                 $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
                 if ($paramTagValueNode instanceof ParamTagValueNode) {

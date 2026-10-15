@@ -99,11 +99,11 @@ CODE_SAMPLE
         if (!$nullComparedExpr instanceof Variable) {
             return null;
         }
-        // the docblock type can be wider than the real value
-        if ($this->exprAnalyzer->isNonTypedFromParam($nullComparedExpr)) {
+        if (!$booleanOr->right instanceof BooleanNot) {
             return null;
         }
-        if (!$booleanOr->right instanceof BooleanNot) {
+        // the docblock type can be wider than the real value
+        if ($this->exprAnalyzer->isNonTypedFromParam($nullComparedExpr)) {
             return null;
         }
         $funcCall = $this->matchTypeCheckFuncCall($booleanOr->right->expr, $nullComparedExpr);
@@ -129,6 +129,9 @@ CODE_SAMPLE
     private function refactorBooleanAnd(BooleanAnd $booleanAnd): ?Expr
     {
         if (!$booleanAnd->left instanceof Variable) {
+            return null;
+        }
+        if (!$booleanAnd->right instanceof FuncCall) {
             return null;
         }
         // the docblock type can be wider than the real value
