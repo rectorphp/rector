@@ -94,12 +94,12 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if (!$this->isInsideTestCaseClass($scope)) {
-            return null;
-        }
         // only handle closures narrowed by assertInstanceOf(); plain returns are handled by ClosureReturnTypeRector
         if (!$this->hasAssertInstanceOf($node)) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        if (!$this->isInsideTestCaseClass($scope)) {
             return null;
         }
         $closureReturnType = $this->returnTypeInferer->inferFunctionLike($node);

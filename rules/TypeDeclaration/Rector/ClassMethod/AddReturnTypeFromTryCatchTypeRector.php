@@ -100,16 +100,16 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
+        $returns = $this->betterNodeFinder->findReturnsScoped($node);
+        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
+            return null;
+        }
         $scope = ScopeFetcher::fetch($node);
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
         $tryReturnType = null;
         $catchReturnTypes = [];
-        $returns = $this->betterNodeFinder->findReturnsScoped($node);
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
-            return null;
-        }
         foreach ((array) $node->stmts as $classMethodStmt) {
             if (!$classMethodStmt instanceof TryCatch) {
                 continue;

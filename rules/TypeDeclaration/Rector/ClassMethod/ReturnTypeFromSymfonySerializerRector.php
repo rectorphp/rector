@@ -89,10 +89,6 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
-            return null;
-        }
         if (count($node->stmts) !== 1) {
             return null;
         }
@@ -104,6 +100,10 @@ CODE_SAMPLE
             return null;
         }
         if ($returnExpr->isFirstClassCallable()) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
         if (!$this->isObjectType($returnExpr->var, new ObjectType('Symfony\Component\Serializer\Serializer'))) {

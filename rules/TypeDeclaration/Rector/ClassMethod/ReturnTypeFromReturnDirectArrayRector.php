@@ -73,11 +73,11 @@ CODE_SAMPLE
         if ($node->returnType instanceof Node) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
+        if (!$this->hasReturnArray($node)) {
             return null;
         }
-        if (!$this->hasReturnArray($node)) {
+        $scope = ScopeFetcher::fetch($node);
+        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
         $type = $this->returnTypeInferer->inferFunctionLike($node);
