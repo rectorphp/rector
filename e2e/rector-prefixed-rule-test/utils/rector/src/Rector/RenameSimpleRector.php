@@ -7,7 +7,7 @@ namespace Utils\Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\RuleDoc\RuleDefinition;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\RenameSimpleRectorTest
