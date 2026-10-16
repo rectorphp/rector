@@ -64,9 +64,9 @@ final class IsIterableRector extends AbstractRector implements MinPhpVersionInte
     }
     private function shouldSkip(): bool
     {
-        if ($this->reflectionProvider->hasFunction(new Name('is_iterable'), null)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE)) {
             return \false;
         }
-        return !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE);
+        return !$this->reflectionProvider->hasFunction(new Name('is_iterable'), null);
     }
 }

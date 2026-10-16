@@ -70,15 +70,15 @@ CODE_SAMPLE
         if (in_array($uppercasedConstantName, self::PHP_RESERVED_CONSTANTS, \true)) {
             return null;
         }
-        // constant is defined in current lower/upper case
-        if ($this->reflectionProvider->hasConstant(new Name($constantName), null)) {
-            return null;
-        }
         // is uppercase, all good
         if ($constantName === $uppercasedConstantName) {
             return null;
         }
         if (strpos($uppercasedConstantName, '\\') !== \false || strpos($uppercasedConstantName, '(') !== \false || strpos($uppercasedConstantName, "'") !== \false) {
+            return null;
+        }
+        // constant is defined in current lower/upper case
+        if ($this->reflectionProvider->hasConstant(new Name($constantName), null)) {
             return null;
         }
         $node->name = new FullyQualified($uppercasedConstantName);

@@ -66,12 +66,12 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        $callerType = $this->getType($node->class);
-        if (!$callerType->isSuperTypeOf(new ObjectType('ReflectionFunction'))->yes()) {
-            return null;
-        }
         $firstArg = $node->getArgs()[0] ?? null;
         if (!$firstArg instanceof Arg) {
+            return null;
+        }
+        $callerType = $this->getType($node->class);
+        if (!$callerType->isSuperTypeOf(new ObjectType('ReflectionFunction'))->yes()) {
             return null;
         }
         $new = new New_($node->class, [new Arg($firstArg->value)]);

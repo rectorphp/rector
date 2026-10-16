@@ -62,6 +62,9 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
         if ($this->shouldSkip($node)) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         // unreliable count of arguments
         $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         if ($functionLikeReflection instanceof UnionTypeMethodReflection) {
@@ -84,9 +87,6 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
             }
         }
         $maximumAllowedParameterCount = $this->resolveMaximumAllowedParameterCount($functionLikeReflection);
-        if ($node->isFirstClassCallable()) {
-            return null;
-        }
         if ($this->shouldSkipFunctionReflection($functionLikeReflection)) {
             return null;
         }

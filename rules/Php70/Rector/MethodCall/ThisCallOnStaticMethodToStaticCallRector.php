@@ -125,11 +125,11 @@ CODE_SAMPLE
             if ($methodName === null) {
                 return null;
             }
-            $isStaticMethod = $this->staticAnalyzer->isStaticMethod($classReflection, $methodName, $class);
-            if (!$isStaticMethod) {
+            if ($subNode->isFirstClassCallable()) {
                 return null;
             }
-            if ($subNode->isFirstClassCallable()) {
+            $isStaticMethod = $this->staticAnalyzer->isStaticMethod($classReflection, $methodName, $class);
+            if (!$isStaticMethod) {
                 return null;
             }
             $this->hasChanged = \true;
