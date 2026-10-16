@@ -92,7 +92,7 @@ CODE_SAMPLE
         if ($classConsts === []) {
             return null;
         }
-        $parentClassReflections = $this->getParentReflections($className);
+        $parentClassReflections = null;
         $hasChanged = \false;
         foreach ($classConsts as $classConst) {
             $valueTypes = [];
@@ -104,10 +104,11 @@ CODE_SAMPLE
                 if ($node->isAbstract() && !$classConst->isPrivate()) {
                     continue;
                 }
-                if ($this->isConstGuardedByParents($constNode, $parentClassReflections)) {
+                if ($this->canBeInherited($classConst, $node)) {
                     continue;
                 }
-                if ($this->canBeInherited($classConst, $node)) {
+                $parentClassReflections ??= $this->getParentReflections($className);
+                if ($this->isConstGuardedByParents($constNode, $parentClassReflections)) {
                     continue;
                 }
                 $valueTypes[] = $this->findValueType($constNode->value);

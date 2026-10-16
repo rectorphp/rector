@@ -130,10 +130,9 @@ CODE_SAMPLE
             }
             $scope = ScopeFetcher::fetch($node);
             $currentClassReflection = $scope->getClassReflection();
-            $isPDO = $currentClassReflection instanceof ClassReflection && $currentClassReflection->is('PDO');
             // It relies on phpstorm stubs that define 2 kind of query method for both php 7.4 and php 8.0
             // @see https://github.com/JetBrains/phpstorm-stubs/blob/e2e898a29929d2f520fe95bdb2109d8fa895ba4a/PDO/PDO.php#L1096-L1126
-            if ($isPDO && $parentMethodReflection->getName() === 'query') {
+            if ($parentMethodReflection->getName() === 'query' && $currentClassReflection instanceof ClassReflection && $currentClassReflection->is('PDO')) {
                 continue;
             }
             $parentClassReflection = $parentMethodReflection->getDeclaringClass();

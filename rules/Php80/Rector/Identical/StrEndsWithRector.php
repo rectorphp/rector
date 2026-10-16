@@ -154,13 +154,13 @@ CODE_SAMPLE
         if (!$funcCallAndExpr instanceof FuncCallAndExpr) {
             return null;
         }
-        $expr = $funcCallAndExpr->getExpr();
-        if (!$this->valueResolver->isValue($expr, 0)) {
-            return null;
-        }
         $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
         $args = $substrCompareFuncCall->getArgs();
         if (count($args) < 2) {
+            return null;
+        }
+        $expr = $funcCallAndExpr->getExpr();
+        if (!$this->valueResolver->isValue($expr, 0)) {
             return null;
         }
         $haystack = $args[0]->value;
