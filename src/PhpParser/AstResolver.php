@@ -148,13 +148,13 @@ final class AstResolver
             }
             return $this->resolveClassMethod($className, MethodName::CONSTRUCT);
         }
+        $methodName = $this->nodeNameResolver->getName($call->name);
+        if ($methodName === null) {
+            return null;
+        }
         $callerStaticType = $call instanceof MethodCall || $call instanceof NullsafeMethodCall ? $this->nodeTypeResolver->getType($call->var) : $this->nodeTypeResolver->getType($call->class);
         $className = ClassNameFromObjectTypeResolver::resolve($callerStaticType);
         if ($className === null) {
-            return null;
-        }
-        $methodName = $this->nodeNameResolver->getName($call->name);
-        if ($methodName === null) {
             return null;
         }
         return $this->resolveClassMethod($className, $methodName);

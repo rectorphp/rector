@@ -137,6 +137,10 @@ final class ReflectionResolver
     }
     public function resolveMethodReflectionFromStaticCall(StaticCall $staticCall): ?MethodReflection
     {
+        $methodName = $this->nodeNameResolver->getName($staticCall->name);
+        if ($methodName === null) {
+            return null;
+        }
         $objectType = $this->nodeTypeResolver->getType($staticCall->class);
         if ($objectType instanceof ShortenedObjectType || $objectType instanceof AliasedObjectType) {
             /** @var array<class-string> $classNames */
@@ -144,10 +148,6 @@ final class ReflectionResolver
         } else {
             /** @var array<class-string> $classNames */
             $classNames = $objectType->getObjectClassNames();
-        }
-        $methodName = $this->nodeNameResolver->getName($staticCall->name);
-        if ($methodName === null) {
-            return null;
         }
         $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
         foreach ($classNames as $className) {
@@ -160,16 +160,16 @@ final class ReflectionResolver
     }
     public function resolveMethodReflectionFromMethodCall(MethodCall $methodCall): ?MethodReflection
     {
+        $methodName = $this->nodeNameResolver->getName($methodCall->name);
+        if ($methodName === null) {
+            return null;
+        }
         $callerType = $this->nodeTypeResolver->getType($methodCall->var);
         if ($callerType instanceof BenevolentUnionType) {
             $callerType = TypeCombinator::removeFalsey($callerType);
         }
         $className = ClassNameFromObjectTypeResolver::resolve($callerType);
         if ($className === null) {
-            return null;
-        }
-        $methodName = $this->nodeNameResolver->getName($methodCall->name);
-        if ($methodName === null) {
             return null;
         }
         $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
