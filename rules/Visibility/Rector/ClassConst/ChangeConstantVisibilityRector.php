@@ -70,7 +70,18 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
+        $constantNames = [];
+        foreach ($node->getConstants() as $classConst) {
+            if ($classConst->consts === []) {
+                continue;
+            }
+            $constantNames[strtolower($classConst->consts[0]->name->toString())] = \true;
+        }
         foreach ($this->classConstantVisibilityChanges as $classConstantVisibilityChange) {
+            // cheap name check before the expensive type resolution below
+            if (!isset($constantNames[strtolower($classConstantVisibilityChange->getConstant())])) {
+                continue;
+            }
             if (!$this->isObjectType($node, $classConstantVisibilityChange->getObjectType())) {
                 continue;
             }
