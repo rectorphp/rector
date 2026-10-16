@@ -90,10 +90,12 @@ CODE_SAMPLE
         return $this->removeNamedArguments($node, $args);
     }
     /**
-     * @param Arg[] $args
+     * @template TNode of MethodCall|StaticCall|New_|FuncCall
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $node
+     * @param Arg[] $args
+     * @return TNode|null
      */
-    private function removeNamedArguments($node, array $args): ?Node
+    private function removeNamedArguments($node, array $args)
     {
         if ($node instanceof New_) {
             $functionLikeReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($node);

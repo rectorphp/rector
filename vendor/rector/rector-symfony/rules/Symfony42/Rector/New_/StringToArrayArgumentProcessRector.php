@@ -79,9 +79,11 @@ CODE_SAMPLE
         return null;
     }
     /**
+     * @template TNode of New_|MethodCall
      * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $node
+     * @return TNode|null
      */
-    private function processArgumentPosition($node, int $argumentPosition): ?Node
+    private function processArgumentPosition($node, int $argumentPosition)
     {
         if (!isset($node->args[$argumentPosition])) {
             return null;

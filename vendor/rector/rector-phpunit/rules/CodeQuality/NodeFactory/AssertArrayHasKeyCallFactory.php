@@ -37,7 +37,7 @@ final class AssertArrayHasKeyCallFactory
         return $classReflection->is(PHPUnitClassName::TEST_CASE);
     }
     /**
-     * @return Arg[]
+     * @return array{Arg, Arg, Arg}
      */
     private function createArgs(Variable $dimFetchVariable, Expr $dimExpr): array
     {

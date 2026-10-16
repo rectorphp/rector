@@ -78,9 +78,11 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
         return $this->processCallWithBinaryOp($node, $firstArgumentValue);
     }
     /**
+     * @template TNode of MethodCall|StaticCall
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @return TNode|null
      */
-    private function processCallWithBinaryOp($node, BinaryOp $binaryOp): ?Node
+    private function processCallWithBinaryOp($node, BinaryOp $binaryOp)
     {
         $binaryOpClass = get_class($binaryOp);
         foreach ($this->binaryOpWithAssertMethods as $binaryOpWithAssertMethod) {

@@ -105,10 +105,12 @@ CODE_SAMPLE
         return $this->cleanTrailingComma($node, $node->params);
     }
     /**
-     * @param ClosureUse[]|Param[] $array
+     * @template TNode of Closure|ClassMethod|Function_
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param ClosureUse[]|Param[] $array
+     * @return TNode|null
      */
-    private function cleanTrailingComma($node, array $array): ?Node
+    private function cleanTrailingComma($node, array $array)
     {
         $lastPosition = array_key_last($array);
         if ($lastPosition === null) {

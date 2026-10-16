@@ -194,7 +194,7 @@ CODE_SAMPLE
         return $this->refactorToWillReturnCallback($withConsecutiveMethodCall, $returnStmt, $referenceVariable, $expectsCall, $node, $willReturnOnConsecutiveMethodCall);
     }
     /**
-     * @return Stmt[]
+     * @return array{Expression, Expression}
      * @param \PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|null $returnStmt
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expectsCall

@@ -29,7 +29,7 @@ final class GetFiltersAndFunctionsToAsTwigAttributeRector extends AbstractRector
         $this->getMethodsToAsTwigAttributeTransformer = $getMethodsToAsTwigAttributeTransformer;
     }
     /**
-     * @return ComposerPackageConstraint[]
+     * @return array{ComposerPackageConstraint, ComposerPackageConstraint}
      */
     public function provideComposerPackageConstraint(): array
     {
