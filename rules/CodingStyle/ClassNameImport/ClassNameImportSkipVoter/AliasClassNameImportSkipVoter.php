@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
 use PhpParser\Node;
-use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
+use Rector\CodingStyle\ClassNameImport\ClassNameImportContext;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\Application\File;
@@ -22,14 +22,14 @@ final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInt
     /**
      * @readonly
      */
-    private AliasUsesResolver $aliasUsesResolver;
-    public function __construct(AliasUsesResolver $aliasUsesResolver)
+    private ClassNameImportContext $classNameImportContext;
+    public function __construct(ClassNameImportContext $classNameImportContext)
     {
-        $this->aliasUsesResolver = $aliasUsesResolver;
+        $this->classNameImportContext = $classNameImportContext;
     }
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
-        $aliasedUses = $this->aliasUsesResolver->resolveFromNode($node, $file->getNewStmts());
+        $aliasedUses = $this->classNameImportContext->resolveAliasedUses($file);
         $longNameLowered = strtolower($fullyQualifiedObjectType->getClassName());
         $shortNameLowered = $fullyQualifiedObjectType->getShortNameLowered();
         foreach ($aliasedUses as $aliasedUse) {

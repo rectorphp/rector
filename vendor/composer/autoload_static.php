@@ -1341,6 +1341,7 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\CodeQuality\\ValueObject\\DefinedPropertyWithType' => __DIR__ . '/../..' . '/rules/CodeQuality/ValueObject/DefinedPropertyWithType.php',
         'Rector\\CodeQuality\\ValueObject\\ExplicitBoolCondition' => __DIR__ . '/../..' . '/rules/CodeQuality/ValueObject/ExplicitBoolCondition.php',
         'Rector\\CodingStyle\\ClassNameImport\\AliasUsesResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/AliasUsesResolver.php',
+        'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportContext' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportContext.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\AliasClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/AliasClassNameImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ClassLikeNameClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ClassLikeNameClassNameImportSkipVoter.php',
         'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\FullyQualifiedNameClassNameImportSkipVoter' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/FullyQualifiedNameClassNameImportSkipVoter.php',

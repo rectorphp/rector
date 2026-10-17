@@ -1111,6 +1111,7 @@ return array(
     'Rector\\CodeQuality\\ValueObject\\DefinedPropertyWithType' => $baseDir . '/rules/CodeQuality/ValueObject/DefinedPropertyWithType.php',
     'Rector\\CodeQuality\\ValueObject\\ExplicitBoolCondition' => $baseDir . '/rules/CodeQuality/ValueObject/ExplicitBoolCondition.php',
     'Rector\\CodingStyle\\ClassNameImport\\AliasUsesResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/AliasUsesResolver.php',
+    'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportContext' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportContext.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\AliasClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/AliasClassNameImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\ClassLikeNameClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/ClassLikeNameClassNameImportSkipVoter.php',
     'Rector\\CodingStyle\\ClassNameImport\\ClassNameImportSkipVoter\\FullyQualifiedNameClassNameImportSkipVoter' => $baseDir . '/rules/CodingStyle/ClassNameImport/ClassNameImportSkipVoter/FullyQualifiedNameClassNameImportSkipVoter.php',

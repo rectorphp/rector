@@ -116,11 +116,13 @@ CODE_SAMPLE
     }
     private function hasMatchingMethodName(ClassMethod $classMethod): bool
     {
+        $found = \false;
         foreach ($this->methodVisibilities as $methodVisibility) {
             if ($this->isName($classMethod, $methodVisibility->getMethod())) {
-                return \true;
+                $found = \true;
+                break;
             }
         }
-        return \false;
+        return $found;
     }
 }
