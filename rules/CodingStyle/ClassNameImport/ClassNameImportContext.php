@@ -19,6 +19,10 @@ final class ClassNameImportContext
      * @readonly
      */
     private \Rector\CodingStyle\ClassNameImport\AliasUsesResolver $aliasUsesResolver;
+    /**
+     * @readonly
+     */
+    private \Rector\CodingStyle\ClassNameImport\ShortNameResolver $shortNameResolver;
     private ?File $cachedFile = null;
     private int $cachedVersion = -1;
     /**
@@ -29,9 +33,19 @@ final class ClassNameImportContext
      * @var array<AliasedObjectType|FullyQualifiedObjectType>
      */
     private array $usedImportTypes = [];
-    public function __construct(\Rector\CodingStyle\ClassNameImport\AliasUsesResolver $aliasUsesResolver)
+    public function __construct(\Rector\CodingStyle\ClassNameImport\AliasUsesResolver $aliasUsesResolver, \Rector\CodingStyle\ClassNameImport\ShortNameResolver $shortNameResolver)
     {
         $this->aliasUsesResolver = $aliasUsesResolver;
+        $this->shortNameResolver = $shortNameResolver;
+    }
+    /**
+     * Short names actually used in the file (class-likes, names, docblock types) mapped to their FQN
+     *
+     * @return array<string, string>
+     */
+    public function resolveShortNamesToFullyQualifiedNames(File $file): array
+    {
+        return $this->shortNameResolver->resolveFromFile($file);
     }
     /**
      * @return string[]
