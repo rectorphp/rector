@@ -17,7 +17,6 @@ use Rector\Doctrine\Dbal32\Rector\Identical\PlatformGetNameToInstanceofRector;
 use Rector\Doctrine\Dbal36\Rector\MethodCall\MigrateQueryBuilderResetQueryPartRector;
 use Rector\Doctrine\Dbal40\Rector\MethodCall\ChangeCompositeExpressionAddMultipleWithWithRector;
 use Rector\Doctrine\Dbal40\Rector\StmtsAwareInterface\ExecuteQueryParamsToBindValueRector;
-use Rector\Doctrine\Dbal42\Rector\New_\AddArrayResultColumnNamesRector;
 use Rector\Doctrine\DoctrineFixture\Rector\MethodCall\AddGetReferenceTypeRector;
 use Rector\Doctrine\Orm214\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEventArgsRector;
 use Rector\Doctrine\Orm28\Rector\MethodCall\IterateToToIterableRector;
@@ -70,10 +69,9 @@ return static function (RectorConfig $rectorConfig): void {
         QueryBuilderExecuteToExecuteQueryOrExecuteStatementRector::class,
         // doctrine/dbal 3.2
         PlatformGetNameToInstanceofRector::class,
-        // doctrine/dbal 4.0 and 4.2
+        // doctrine/dbal 4.0
         ChangeCompositeExpressionAddMultipleWithWithRector::class,
         ExecuteQueryParamsToBindValueRector::class,
-        AddArrayResultColumnNamesRector::class,
         // doctrine/doctrine-bundle 2.3 and 2.8
         AddAnnotationToRepositoryRector::class,
         EventSubscriberInterfaceToAttributeRector::class,

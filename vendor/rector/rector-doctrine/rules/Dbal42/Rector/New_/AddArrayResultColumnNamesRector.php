@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Int_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Doctrine\Enum\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -21,9 +22,9 @@ use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 /**
  * @see https://github.com/doctrine/dbal/pull/6504/files
  *
- * @see \Rector\Doctrine\Tests\Dbal42\Rector\New_\AddArrayResultColumnNamesRector\AddArrayResultColumnNamesRectorTest
+ * @deprecated This rule is deprecated, as ArrayResult is rarely used and the guessed column keys need manual correction anyway.
  */
-final class AddArrayResultColumnNamesRector extends AbstractRector implements ComposerPackageConstraintInterface
+final class AddArrayResultColumnNamesRector extends AbstractRector implements ComposerPackageConstraintInterface, DeprecatedInterface
 {
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
