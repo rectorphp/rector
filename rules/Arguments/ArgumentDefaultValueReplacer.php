@@ -25,6 +25,9 @@ use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+/**
+ * @api
+ */
 final class ArgumentDefaultValueReplacer
 {
     /**

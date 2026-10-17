@@ -2062,6 +2062,8 @@ return array(
     'Rector\\Php80\\Rector\\Class_\\ClassPropertyAssignToConstructorPromotionRector' => $baseDir . '/rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php',
     'Rector\\Php80\\Rector\\Class_\\StringableForToStringRector' => $baseDir . '/rules/Php80/Rector/Class_/StringableForToStringRector.php',
     'Rector\\Php80\\Rector\\FuncCall\\ClassOnObjectRector' => $baseDir . '/rules/Php80/Rector/FuncCall/ClassOnObjectRector.php',
+    'Rector\\Php80\\Rector\\FuncCall\\GetHeadersArgumentFormatRector' => $baseDir . '/rules/Php80/Rector/FuncCall/GetHeadersArgumentFormatRector.php',
+    'Rector\\Php80\\Rector\\FuncCall\\VersionCompareFuncCallArgumentRector' => $baseDir . '/rules/Php80/Rector/FuncCall/VersionCompareFuncCallArgumentRector.php',
     'Rector\\Php80\\Rector\\Identical\\StrEndsWithRector' => $baseDir . '/rules/Php80/Rector/Identical/StrEndsWithRector.php',
     'Rector\\Php80\\Rector\\Identical\\StrStartsWithRector' => $baseDir . '/rules/Php80/Rector/Identical/StrStartsWithRector.php',
     'Rector\\Php80\\Rector\\NotIdentical\\MbStrContainsRector' => $baseDir . '/rules/Php80/Rector/NotIdentical/MbStrContainsRector.php',

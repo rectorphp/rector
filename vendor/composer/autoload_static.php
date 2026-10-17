@@ -2292,6 +2292,8 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\Php80\\Rector\\Class_\\ClassPropertyAssignToConstructorPromotionRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php',
         'Rector\\Php80\\Rector\\Class_\\StringableForToStringRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/StringableForToStringRector.php',
         'Rector\\Php80\\Rector\\FuncCall\\ClassOnObjectRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/ClassOnObjectRector.php',
+        'Rector\\Php80\\Rector\\FuncCall\\GetHeadersArgumentFormatRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/GetHeadersArgumentFormatRector.php',
+        'Rector\\Php80\\Rector\\FuncCall\\VersionCompareFuncCallArgumentRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/VersionCompareFuncCallArgumentRector.php',
         'Rector\\Php80\\Rector\\Identical\\StrEndsWithRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Identical/StrEndsWithRector.php',
         'Rector\\Php80\\Rector\\Identical\\StrStartsWithRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Identical/StrStartsWithRector.php',
         'Rector\\Php80\\Rector\\NotIdentical\\MbStrContainsRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/NotIdentical/MbStrContainsRector.php',
