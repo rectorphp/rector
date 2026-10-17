@@ -92,6 +92,10 @@ final class NullToStrictStringIntConverter
             $args[$position]->value = $argValue;
             return $funcCall;
         }
+        // already cast to the target type on a previous run, re-casting would nest a redundant cast
+        if ($this->isAlreadyCastToTargetType($argValue, $targetType)) {
+            return null;
+        }
         $wrapInParentheses = \false;
         if ($argValue instanceof Ternary && $argValue->cond instanceof CastString_) {
             $wrapInParentheses = \true;
@@ -106,6 +110,22 @@ final class NullToStrictStringIntConverter
         }
         $args[$position]->value = $castedType;
         return $funcCall;
+    }
+    /**
+     * Structural check (immune to stale resolved types on re-printed nodes): the value is already a
+     * cast/literal of the target type, or a ternary whose both branches are.
+     */
+    private function isAlreadyCastToTargetType(Expr $expr, string $targetType): bool
+    {
+        if ($expr instanceof Ternary) {
+            // short ternary "A ?: B" keeps the left value in cond; full ternary uses if
+            $left = $expr->if ?? $expr->cond;
+            return $this->isAlreadyCastToTargetType($left, $targetType) && $this->isAlreadyCastToTargetType($expr->else, $targetType);
+        }
+        if ($targetType === 'string') {
+            return $expr instanceof CastString_ || $expr instanceof String_ || $expr instanceof InterpolatedString;
+        }
+        return $expr instanceof CastInt_ || $expr instanceof Int_;
     }
     private function shouldSkipValue(Expr $expr, Scope $scope, bool $isTrait, string $targetType): bool
     {
