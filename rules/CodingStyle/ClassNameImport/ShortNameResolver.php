@@ -44,10 +44,12 @@ final class ShortNameResolver
      * @readonly
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
+    private ?File $shortNamesFile = null;
+    private int $shortNamesVersion = 0;
     /**
-     * @var array<string, string[]>
+     * @var array<string, string>
      */
-    private array $shortNamesByFilePath = [];
+    private array $shortNamesToFullyQualifiedNames = [];
     private ?File $shortClassLikeNamesFile = null;
     private int $shortClassLikeNamesVersion = 0;
     /**
@@ -67,13 +69,14 @@ final class ShortNameResolver
      */
     public function resolveFromFile(File $file): array
     {
-        $filePath = $file->getFilePath();
-        if (isset($this->shortNamesByFilePath[$filePath])) {
-            return $this->shortNamesByFilePath[$filePath];
+        // re-resolve when the file stmts change, so later iterations don't read a stale map
+        if ($file === $this->shortNamesFile && $file->getNewStmtsVersion() === $this->shortNamesVersion) {
+            return $this->shortNamesToFullyQualifiedNames;
         }
-        $shortNamesToFullyQualifiedNames = $this->resolveForStmts($file->getNewStmts());
-        $this->shortNamesByFilePath[$filePath] = $shortNamesToFullyQualifiedNames;
-        return $shortNamesToFullyQualifiedNames;
+        $this->shortNamesFile = $file;
+        $this->shortNamesVersion = $file->getNewStmtsVersion();
+        $this->shortNamesToFullyQualifiedNames = $this->resolveForStmts($file->getNewStmts());
+        return $this->shortNamesToFullyQualifiedNames;
     }
     /**
      * Collects all "class <SomeClass>", "trait <SomeTrait>" and "interface <SomeInterface>"
