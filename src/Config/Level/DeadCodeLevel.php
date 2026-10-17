@@ -48,7 +48,6 @@ use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\FuncCall\RemoveFilterVarOnExactTypeRector;
 use Rector\DeadCode\Rector\FunctionLike\NarrowWideUnionReturnTypeRector;
-use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadIfBlockRector;
@@ -172,7 +171,6 @@ final class DeadCodeLevel
         // this could break framework magic autowiring in some cases
         RemoveUnusedConstructorParamRector::class,
         RemoveEmptyClassMethodRector::class,
-        RemoveDeadReturnRector::class,
         RemoveArgumentFromDefaultParentCallRector::class,
         RemoveNullArgOnNullDefaultParamRector::class,
         RemoveNullNamedArgOnNullDefaultParamRector::class,
