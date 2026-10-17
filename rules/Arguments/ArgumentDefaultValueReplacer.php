@@ -19,7 +19,6 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
-use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\NodeFactory;
@@ -78,7 +77,7 @@ final class ArgumentDefaultValueReplacer
     private function isDefaultValueMatched(?Expr $expr, $value): bool
     {
         // allow any values before, also allow param without default value
-        if ($value === ReplaceArgumentDefaultValue::ANY_VALUE_BEFORE) {
+        if ($value === ReplaceArgumentDefaultValueInterface::ANY_VALUE_BEFORE) {
             return \true;
         }
         if (!$expr instanceof Expr) {

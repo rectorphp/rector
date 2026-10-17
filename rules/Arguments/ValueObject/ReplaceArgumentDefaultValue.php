@@ -7,7 +7,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 use Rector\Validation\RectorAssert;
 /**
- * @api used in rector-symfony
+ * @deprecated Use custom rule instead, see ReplaceArgumentDefaultValueRector deprecation.
  */
 final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
@@ -34,10 +34,6 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
      * @var mixed
      */
     private $valueAfter;
-    /**
-     * @var string
-     */
-    public const ANY_VALUE_BEFORE = '*ANY_VALUE_BEFORE*';
     /**
      * @param int<0, max> $position
      * @param mixed $valueBefore
