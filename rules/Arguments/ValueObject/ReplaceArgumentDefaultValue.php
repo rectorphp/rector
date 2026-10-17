@@ -6,6 +6,9 @@ namespace Rector\Arguments\ValueObject;
 use PHPStan\Type\ObjectType;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 use Rector\Validation\RectorAssert;
+/**
+ * @api used in rector-symfony
+ */
 final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
     /**

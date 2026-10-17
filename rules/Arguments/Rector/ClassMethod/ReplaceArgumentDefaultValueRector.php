@@ -8,32 +8,17 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Arguments\ArgumentDefaultValueReplacer;
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
-use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\MethodName;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @api used in rector-symfony
- * @see \Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\ReplaceArgumentDefaultValueRectorTest
+ * @deprecated This rule is deprecated. Its configuration is weak and relies on magic strings to reference constants. Write a dedicated custom Rector rule instead for type-safe argument replacement.
  */
-final class ReplaceArgumentDefaultValueRector extends AbstractRector implements ConfigurableRectorInterface
+final class ReplaceArgumentDefaultValueRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ArgumentDefaultValueReplacer $argumentDefaultValueReplacer;
-    /**
-     * @var ReplaceArgumentDefaultValue[]
-     */
-    private array $replaceArgumentDefaultValues = [];
-    public function __construct(ArgumentDefaultValueReplacer $argumentDefaultValueReplacer)
-    {
-        $this->argumentDefaultValueReplacer = $argumentDefaultValueReplacer;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Replace defined map of arguments in defined methods and their calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -55,59 +40,9 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|StaticCall|ClassMethod|New_ $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\New_|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?Node
     {
-        if ($node instanceof New_) {
-            return $this->refactorNew($node);
-        }
-        $nodeName = $this->getName($node->name);
-        if ($nodeName === null) {
-            return null;
-        }
-        $hasChanged = \false;
-        $currentNode = $node;
-        foreach ($this->replaceArgumentDefaultValues as $replaceArgumentDefaultValue) {
-            if (!$this->nodeNameResolver->isStringName($nodeName, $replaceArgumentDefaultValue->getMethod())) {
-                continue;
-            }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($currentNode, $replaceArgumentDefaultValue->getObjectType())) {
-                continue;
-            }
-            $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($currentNode, $replaceArgumentDefaultValue);
-            if ($replacedNode !== null) {
-                $currentNode = $replacedNode;
-                $hasChanged = \true;
-            }
-        }
-        return $hasChanged ? $currentNode : null;
-    }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        Assert::allIsAOf($configuration, ReplaceArgumentDefaultValue::class);
-        $this->replaceArgumentDefaultValues = $configuration;
-    }
-    private function refactorNew(New_ $new): ?New_
-    {
-        $hasChanged = \false;
-        $currentNode = $new;
-        foreach ($this->replaceArgumentDefaultValues as $replaceArgumentDefaultValue) {
-            if ($replaceArgumentDefaultValue->getMethod() !== MethodName::CONSTRUCT) {
-                continue;
-            }
-            if (!$this->isObjectType($currentNode, $replaceArgumentDefaultValue->getObjectType())) {
-                continue;
-            }
-            $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($currentNode, $replaceArgumentDefaultValue);
-            if ($replacedNode !== null) {
-                $currentNode = $replacedNode;
-                $hasChanged = \true;
-            }
-        }
-        return $hasChanged ? $currentNode : null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, write a dedicated custom Rector rule instead', self::class));
     }
 }
