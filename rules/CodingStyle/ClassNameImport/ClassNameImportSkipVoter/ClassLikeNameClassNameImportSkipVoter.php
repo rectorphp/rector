@@ -5,8 +5,8 @@ namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use Rector\CodingStyle\ClassNameImport\ClassNameImportContext;
 use Rector\CodingStyle\ClassNameImport\NamespaceBeforeClassNameResolver;
-use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -25,19 +25,19 @@ final class ClassLikeNameClassNameImportSkipVoter implements ClassNameImportSkip
     /**
      * @readonly
      */
-    private ShortNameResolver $shortNameResolver;
+    private ClassNameImportContext $classNameImportContext;
     /**
      * @readonly
      */
     private NamespaceBeforeClassNameResolver $namespaceBeforeClassNameResolver;
-    public function __construct(ShortNameResolver $shortNameResolver, NamespaceBeforeClassNameResolver $namespaceBeforeClassNameResolver)
+    public function __construct(ClassNameImportContext $classNameImportContext, NamespaceBeforeClassNameResolver $namespaceBeforeClassNameResolver)
     {
-        $this->shortNameResolver = $shortNameResolver;
+        $this->classNameImportContext = $classNameImportContext;
         $this->namespaceBeforeClassNameResolver = $namespaceBeforeClassNameResolver;
     }
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
-        $classLikeNames = $this->shortNameResolver->resolveShortClassLikeNames($file);
+        $classLikeNames = $this->classNameImportContext->resolveShortClassLikeNames($file);
         if ($classLikeNames === []) {
             return \false;
         }
