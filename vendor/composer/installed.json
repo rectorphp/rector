@@ -1733,12 +1733,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "7a0224744f348b1c2e0ba3fc8b58e407a54429b5"
+                "reference": "f7aaaf7fdf30d9f385c835bae956404780bbc0eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/7a0224744f348b1c2e0ba3fc8b58e407a54429b5",
-                "reference": "7a0224744f348b1c2e0ba3fc8b58e407a54429b5",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/f7aaaf7fdf30d9f385c835bae956404780bbc0eb",
+                "reference": "f7aaaf7fdf30d9f385c835bae956404780bbc0eb",
                 "shasum": ""
             },
             "require": {
@@ -1757,12 +1757,14 @@
                 "shipmonk\/dead-code-detector": "^1.4",
                 "symfony\/config": "^8.1",
                 "symfony\/dependency-injection": "^6.4",
+                "symfony\/http-foundation": "^6.4 || ^7.0",
                 "symfony\/http-kernel": "^7.4",
                 "symfony\/routing": "^6.4",
                 "symfony\/security-core": "^6.4",
                 "symfony\/security-http": "^6.4",
                 "symfony\/validator": "^6.4",
                 "symfony\/web-link": "^6.4",
+                "symfony\/yaml": "^6.4 || ^7.0",
                 "symplify\/easy-coding-standard": "^13.2",
                 "symplify\/phpstan-rules": "^14.12",
                 "tomasvotruba\/class-leak": "^2.1",
@@ -1770,7 +1772,7 @@
                 "tracy\/tracy": "^2.12",
                 "twig\/twig": "^3.21"
             },
-            "time": "2026-10-16T19:19:20+00:00",
+            "time": "2026-10-17T15:22:12+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",

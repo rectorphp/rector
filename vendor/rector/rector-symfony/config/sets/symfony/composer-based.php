@@ -18,9 +18,7 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
-use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
@@ -46,8 +44,11 @@ use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAttributeRec
 use Rector\Symfony\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector;
 use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallRector;
 use Rector\Symfony\Configs\Rector\MethodCall\EnableValidationAttributesRector;
+use Rector\Symfony\HttpFoundation\Rector\New_\CookieConstructorDefaultsRector;
+use Rector\Symfony\HttpFoundation\Rector\New_\CookieSameSiteConstantRector;
 use Rector\Symfony\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector;
 use Rector\Symfony\JMS\Rector\Property\AccessorAnnotationToAttributeRector;
+use Rector\Symfony\Routing\Rector\MethodCall\UrlGeneratorReferenceTypeRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector;
 use Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector;
@@ -118,6 +119,7 @@ use Rector\Symfony\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToVali
 use Rector\Symfony\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector;
 use Rector\Symfony\Symfony81\Rector\New_\RemoveEraseCredentialsFromAuthenticatorManagerRector;
 use Rector\Symfony\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector;
+use Rector\Symfony\Yaml\Rector\StaticCall\YamlFlagsToConstantRector;
 use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
@@ -156,6 +158,8 @@ return static function (RectorConfig $rectorConfig): void {
         ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class,
         // symfony/framework-bundle 2.8
         GetToConstructorInjectionRector::class,
+        // symfony/routing 2.8
+        UrlGeneratorReferenceTypeRector::class,
         // symfony/yaml 2.8
         ParseFileRector::class,
         // symfony/form 3.0
@@ -166,6 +170,8 @@ return static function (RectorConfig $rectorConfig): void {
         StringFormTypeToClassRector::class,
         // symfony/framework-bundle 3.0
         FormTypeInstanceToClassConstRector::class,
+        // symfony/yaml 3.1
+        YamlFlagsToConstantRector::class,
         // symfony/console 3.3
         ConsoleExceptionToErrorEventConstantRector::class,
         // symfony/dependency-injection 3.4
@@ -186,6 +192,9 @@ return static function (RectorConfig $rectorConfig): void {
         RootNodeTreeBuilderRector::class,
         // symfony/process 4.2
         StringToArrayArgumentProcessRector::class,
+        // symfony/http-foundation 4.2
+        CookieConstructorDefaultsRector::class,
+        CookieSameSiteConstantRector::class,
         // symfony/event-dispatcher 4.3
         EventDispatcherParentConstructRector::class,
         MakeDispatchFirstArgumentEventRector::class,
@@ -313,14 +322,6 @@ return static function (RectorConfig $rectorConfig): void {
     ], 'symfony/form', '>=2.7');
     // symfony/options-resolver 2.7
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, ['Symfony\Component\OptionsResolver\OptionsResolverInterface' => 'Symfony\Component\OptionsResolver\OptionsResolver'], 'symfony/options-resolver', '>=2.7');
-    // symfony/routing 2.8
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ReplaceArgumentDefaultValueRector::class, [
-        // @see https://github.com/symfony/symfony/commit/912fc4de8fd6de1e5397be4a94d39091423e5188
-        new ReplaceArgumentDefaultValue('Symfony\Component\Routing\Generator\UrlGeneratorInterface', 'generate', 2, \true, 'Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL'),
-        new ReplaceArgumentDefaultValue('Symfony\Component\Routing\Generator\UrlGeneratorInterface', 'generate', 2, \false, 'Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH'),
-        new ReplaceArgumentDefaultValue('Symfony\Component\Routing\Generator\UrlGeneratorInterface', 'generate', 2, 'relative', 'Symfony\Component\Routing\Generator\UrlGeneratorInterface::RELATIVE_PATH'),
-        new ReplaceArgumentDefaultValue('Symfony\Component\Routing\Generator\UrlGeneratorInterface', 'generate', 2, 'network', 'Symfony\Component\Routing\Generator\UrlGeneratorInterface::NETWORK_PATH'),
-    ], 'symfony/routing', '>=2.8');
     // symfony/symfony 2.8
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#security
@@ -363,12 +364,8 @@ return static function (RectorConfig $rectorConfig): void {
     // symfony/validator 3.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, ['Symfony\Component\Validator\Constraints\Collection\Optional' => 'Symfony\Component\Validator\Constraints\Optional', 'Symfony\Component\Validator\Constraints\Collection\Required' => 'Symfony\Component\Validator\Constraints\Required', 'Symfony\Component\Validator\MetadataInterface' => 'Symfony\Component\Validator\Mapping\MetadataInterface', 'Symfony\Component\Validator\PropertyMetadataInterface' => 'Symfony\Component\Validator\Mapping\PropertyMetadataInterface', 'Symfony\Component\Validator\PropertyMetadataContainerInterface' => 'Symfony\Component\Validator\Mapping\ClassMetadataInterface', 'Symfony\Component\Validator\ClassBasedInterface' => 'Symfony\Component\Validator\Mapping\ClassMetadataInterface', 'Symfony\Component\Validator\Mapping\ElementMetadata' => 'Symfony\Component\Validator\Mapping\GenericMetadata', 'Symfony\Component\Validator\ExecutionContextInterface' => 'Symfony\Component\Validator\Context\ExecutionContextInterface', 'Symfony\Component\Validator\Mapping\ClassMetadataFactory' => 'Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory', 'Symfony\Component\Validator\Mapping\MetadataFactoryInterface' => 'Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface'], 'symfony/validator', '>=3.0');
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameMethodRector::class, [new MethodCallRename('Symfony\Component\Validator\ConstraintViolationInterface', 'getMessageParameters', 'getParameters'), new MethodCallRename('Symfony\Component\Validator\ConstraintViolationInterface', 'getMessagePluralization', 'getPlural'), new MethodCallRename('Symfony\Component\Validator\ConstraintViolation', 'getMessageParameters', 'getParameters'), new MethodCallRename('Symfony\Component\Validator\ConstraintViolation', 'getMessagePluralization', 'getPlural')], 'symfony/validator', '>=3.0');
-    // symfony/yaml 3.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ReplaceArgumentDefaultValueRector::class, [new ReplaceArgumentDefaultValue('Symfony\Component\Yaml\Yaml', 'parse', 1, [\false, \false, \true], 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP'), new ReplaceArgumentDefaultValue('Symfony\Component\Yaml\Yaml', 'parse', 1, [\false, \true], 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT'), new ReplaceArgumentDefaultValue('Symfony\Component\Yaml\Yaml', 'parse', 1, \true, 'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE'), new ReplaceArgumentDefaultValue('Symfony\Component\Yaml\Yaml', 'parse', 1, \false, 0), new ReplaceArgumentDefaultValue('Symfony\Component\Yaml\Yaml', 'dump', 3, [\false, \true], 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT'), new ReplaceArgumentDefaultValue('Symfony\Component\Yaml\Yaml', 'dump', 3, \true, 'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE')], 'symfony/yaml', '>=3.1');
     // symfony/dependency-injection 3.2
     $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentAdderRector::class, [new ArgumentAdder('Symfony\Component\DependencyInjection\ContainerBuilder', 'addCompilerPass', 2, 'priority', 0)], 'symfony/dependency-injection', '>=3.2');
-    // symfony/http-foundation 3.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ReplaceArgumentDefaultValueRector::class, [new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', '__construct', 8, 'lax', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_LAX'), new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', '__construct', 8, 'strict', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_STRICT')], 'symfony/http-foundation', '>=3.2');
     // symfony/console 3.3
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
         // console
@@ -445,8 +442,6 @@ return static function (RectorConfig $rectorConfig): void {
         # https://github.com/symfony/symfony/commit/a7e319d9e1316e2e18843f8ce15b67a8693e5bf9
         'Symfony\Bundle\FrameworkBundle\Controller\Controller' => 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController',
     ], 'symfony/framework-bundle', '>=4.2');
-    // symfony/http-foundation 4.2
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ReplaceArgumentDefaultValueRector::class, [new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', MethodName::CONSTRUCT, 5, \false, null), new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', MethodName::CONSTRUCT, 8, null, 'lax'), new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', '__construct', 8, 'none', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_NONE'), new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', 'create', 8, 'none', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_NONE'), new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', 'create', 8, 'lax', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_LAX'), new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', 'create', 8, 'strict', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_STRICT')], 'symfony/http-foundation', '>=4.2');
     // symfony/http-kernel 4.2
     $rectorConfig->ruleWithConfigurationComposerVersionBound(ArgumentRemoverRector::class, [new ArgumentRemover('Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector', MethodName::CONSTRUCT, 0, null), new ArgumentRemover('Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector', MethodName::CONSTRUCT, 1, null)], 'symfony/http-kernel', '>=4.2');
     // symfony/monolog-bridge 4.2
@@ -573,7 +568,6 @@ return static function (RectorConfig $rectorConfig): void {
     // symfony/framework-bundle 5.1
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [new AddParamTypeDeclaration('Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait', 'configureRoutes', 0, new ObjectType('Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator'))], 'symfony/framework-bundle', '>=5.1');
     // symfony/http-foundation 5.1
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(ReplaceArgumentDefaultValueRector::class, [new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', 'withSameSite', 0, 'none', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_NONE'), new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', 'withSameSite', 0, 'lax', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_LAX'), new ReplaceArgumentDefaultValue('Symfony\Component\HttpFoundation\Cookie', 'withSameSite', 0, 'strict', 'Symfony\Component\HttpFoundation\Cookie::SAMESITE_STRICT')], 'symfony/http-foundation', '>=5.1');
     $rectorConfig->ruleWithConfigurationComposerVersionBound(StaticCallToNewRector::class, [new StaticCallToNew('Symfony\Component\HttpFoundation\Response', 'create'), new StaticCallToNew('Symfony\Component\HttpFoundation\JsonResponse', 'create'), new StaticCallToNew('Symfony\Component\HttpFoundation\RedirectResponse', 'create'), new StaticCallToNew('Symfony\Component\HttpFoundation\StreamedResponse', 'create')], 'symfony/http-foundation', '>=5.1');
     // symfony/inflector 5.1
     $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [

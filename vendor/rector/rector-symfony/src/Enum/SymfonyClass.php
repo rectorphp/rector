@@ -16,6 +16,18 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const COOKIE = 'Symfony\Component\HttpFoundation\Cookie';
+    /**
+     * @var string
+     */
+    public const URL_GENERATOR_INTERFACE = 'Symfony\Component\Routing\Generator\UrlGeneratorInterface';
+    /**
+     * @var string
+     */
+    public const YAML = 'Symfony\Component\Yaml\Yaml';
+    /**
+     * @var string
+     */
     public const COMMAND = 'Symfony\Component\Console\Command\Command';
     /**
      * @var string
