@@ -904,8 +904,6 @@ return array(
     'Rector\\Application\\Provider\\CurrentFileProvider' => $baseDir . '/src/Application/Provider/CurrentFileProvider.php',
     'Rector\\Application\\RectorRegistry' => $baseDir . '/src/Application/RectorRegistry.php',
     'Rector\\Application\\VersionResolver' => $baseDir . '/src/Application/VersionResolver.php',
-    'Rector\\Arguments\\ArgumentDefaultValueReplacer' => $baseDir . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
-    'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => $baseDir . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',
     'Rector\\Arguments\\NodeAnalyzer\\ArgumentAddingScope' => $baseDir . '/rules/Arguments/NodeAnalyzer/ArgumentAddingScope.php',
     'Rector\\Arguments\\NodeAnalyzer\\ChangedArgumentsDetector' => $baseDir . '/rules/Arguments/NodeAnalyzer/ChangedArgumentsDetector.php',
     'Rector\\Arguments\\Rector\\ClassMethod\\ArgumentAdderRector' => $baseDir . '/rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php',

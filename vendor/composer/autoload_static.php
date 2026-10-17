@@ -1134,8 +1134,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\Application\\Provider\\CurrentFileProvider' => __DIR__ . '/../..' . '/src/Application/Provider/CurrentFileProvider.php',
         'Rector\\Application\\RectorRegistry' => __DIR__ . '/../..' . '/src/Application/RectorRegistry.php',
         'Rector\\Application\\VersionResolver' => __DIR__ . '/../..' . '/src/Application/VersionResolver.php',
-        'Rector\\Arguments\\ArgumentDefaultValueReplacer' => __DIR__ . '/../..' . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
-        'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => __DIR__ . '/../..' . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',
         'Rector\\Arguments\\NodeAnalyzer\\ArgumentAddingScope' => __DIR__ . '/../..' . '/rules/Arguments/NodeAnalyzer/ArgumentAddingScope.php',
         'Rector\\Arguments\\NodeAnalyzer\\ChangedArgumentsDetector' => __DIR__ . '/../..' . '/rules/Arguments/NodeAnalyzer/ChangedArgumentsDetector.php',
         'Rector\\Arguments\\Rector\\ClassMethod\\ArgumentAdderRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php',
