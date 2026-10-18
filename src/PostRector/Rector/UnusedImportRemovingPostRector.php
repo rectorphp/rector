@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\FileNode;
+use Rector\ValueObject\Application\File;
 final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
@@ -30,6 +31,11 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
      * @readonly
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
+    private ?File $usedNamesFile = null;
+    /**
+     * @var array<int, array{version: int, names: string[]}>
+     */
+    private array $usedNamesCache = [];
     public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -171,10 +177,24 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
      */
     private function resolveUsedPhpAndDocNames($rootNode): array
     {
+        // the referenced names only change with a new stmts version, while the post-rector chain
+        // re-runs this node across convergence iterations, so cache per (file, version)
+        $file = $this->getFile();
+        if ($file !== $this->usedNamesFile) {
+            $this->usedNamesFile = $file;
+            $this->usedNamesCache = [];
+        }
+        $version = $file->getNewStmtsVersion();
+        $objectId = spl_object_id($rootNode);
+        $cached = $this->usedNamesCache[$objectId] ?? null;
+        if ($cached !== null && $cached['version'] === $version) {
+            return $cached['names'];
+        }
         $phpNames = $this->findNonUseImportNames($rootNode);
         $docBlockNames = $this->findNamesInDocBlocks($rootNode);
-        $names = array_merge($phpNames, $docBlockNames);
-        return array_unique($names);
+        $names = array_unique(array_merge($phpNames, $docBlockNames));
+        $this->usedNamesCache[$objectId] = ['version' => $version, 'names' => $names];
+        return $names;
     }
     /**
      * @param string[] $names
