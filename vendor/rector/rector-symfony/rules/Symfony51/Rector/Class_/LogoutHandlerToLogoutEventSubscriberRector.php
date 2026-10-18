@@ -102,6 +102,13 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, $this->logoutHandlerObjectType)) {
             return null;
         }
+        // already converted on a previous pass; the class type can still resolve to the handler
+        // interface from stale reflection, so check the implements list structurally
+        foreach ($node->implements as $implement) {
+            if ($this->isName($implement, SymfonyClass::EVENT_SUBSCRIBER_INTERFACE)) {
+                return null;
+            }
+        }
         // 1. replace LogoutHandlerInterface with EventSubscriberInterface
         foreach ($node->implements as $key => $implement) {
             if ($this->isName($implement, $this->logoutHandlerObjectType->getClassName())) {
