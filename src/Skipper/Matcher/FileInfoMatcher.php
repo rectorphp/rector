@@ -10,6 +10,12 @@ use Rector\Skipper\FileSystem\PathNormalizer;
 final class FileInfoMatcher
 {
     /**
+     * PHP does not cache a failed realpath() lookup, and a wildcard pattern fails it for every file
+     *
+     * @var array<string, string|false>
+     */
+    private array $realpathByPattern = [];
+    /**
      * Returns the original (un-normalized) pattern that matched, so callers can report the exact
      * configured path. Returns null when no pattern matches.
      *
@@ -74,7 +80,7 @@ final class FileInfoMatcher
     }
     private function matchRealpath(string $matchingPath, string $filePath): bool
     {
-        $realPathMatchingPath = realpath($matchingPath);
+        $realPathMatchingPath = $this->realpathByPattern[$matchingPath] ??= realpath($matchingPath);
         if ($realPathMatchingPath === \false) {
             return \false;
         }
