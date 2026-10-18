@@ -3,14 +3,12 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp72\NodeManipulator;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\Int_;
 use Rector\Enum\JsonConstant;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class JsonConstCleaner
 {
     /**
@@ -44,31 +42,47 @@ final class JsonConstCleaner
     }
     /**
      * @param array<JsonConstant::*> $constants
-     * @return null|\PhpParser\Node\Expr|\PhpParser\Node\Scalar\Int_
      */
-    private function cleanByBitwiseOr(BitwiseOr $bitwiseOr, array $constants)
+    private function cleanByBitwiseOr(BitwiseOr $bitwiseOr, array $constants): ?Expr
     {
-        $isLeftTransformed = $this->isTransformed($bitwiseOr->left, $constants);
-        $isRightTransformed = $this->isTransformed($bitwiseOr->right, $constants);
-        if (!$isLeftTransformed && !$isRightTransformed) {
+        $keptOperands = [];
+        $hasChanged = \false;
+        foreach ($this->flattenOperands($bitwiseOr) as $operand) {
+            if ($operand instanceof ConstFetch && $this->nodeNameResolver->isNames($operand, $constants)) {
+                $hasChanged = \true;
+                continue;
+            }
+            $keptOperands[] = $operand;
+        }
+        if (!$hasChanged) {
             return null;
         }
-        if (!$isLeftTransformed) {
-            return $bitwiseOr->left;
+        if ($keptOperands === []) {
+            return new Int_(0);
         }
-        if (!$isRightTransformed) {
-            return $bitwiseOr->right;
+        $result = array_shift($keptOperands);
+        foreach ($keptOperands as $keptOperand) {
+            $result = new BitwiseOr($result, $keptOperand);
         }
-        return new Int_(0);
+        return $result;
     }
     /**
-     * @param string[] $constants
+     * Flatten a left-associative bitwise-or chain into its operands. Structural, so dropping a
+     * target constant does not depend on the ORIGINAL_NODE attribute, which is not reliable on
+     * re-decorated nodes.
+     *
+     * @return Expr[]
      */
-    private function isTransformed(Expr $expr, array $constants): bool
+    private function flattenOperands(BitwiseOr $bitwiseOr): array
     {
-        if ($expr instanceof ConstFetch && $this->nodeNameResolver->isNames($expr, $constants)) {
-            return \true;
+        $operands = [];
+        foreach ([$bitwiseOr->left, $bitwiseOr->right] as $operand) {
+            if ($operand instanceof BitwiseOr) {
+                $operands = array_merge($operands, $this->flattenOperands($operand));
+                continue;
+            }
+            $operands[] = $operand;
         }
-        return !$expr->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node;
+        return $operands;
     }
 }
