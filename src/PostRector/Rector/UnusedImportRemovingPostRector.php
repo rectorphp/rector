@@ -40,6 +40,10 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         if (!$node instanceof Namespace_ && !$node instanceof FileNode) {
             return null;
         }
+        // no use import at this level → nothing to remove, skip the full name resolution walks
+        if (!$this->hasUseStmt($node->stmts)) {
+            return null;
+        }
         $hasChanged = \false;
         $namespaceOriginalCase = $node instanceof Namespace_ && $node->name instanceof Name ? $node->name->toString() : null;
         $namesInOriginalCase = $this->resolveUsedPhpAndDocNames($node);
@@ -83,6 +87,20 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         $this->addRectorClassWithLine($node);
         $node->stmts = array_values($node->stmts);
         return $node;
+    }
+    /**
+     * @param Node[] $stmts
+     */
+    private function hasUseStmt(array $stmts): bool
+    {
+        $found = \false;
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof Use_) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
     /**
      * @return string[]
