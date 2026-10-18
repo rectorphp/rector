@@ -151,6 +151,18 @@ CODE_SAMPLE
         if (!$this->hasConstFetchInArgs($funcCall->getArgs(), 'JSON_THROW_ON_ERROR')) {
             return null;
         }
+        // clean the flag from the call args here; returning an array replaces the Expression,
+        // so the traverser never descends into the ConstFetch to clean it, and the expression
+        // would match again every pass and keep appending the error check
+        foreach ($funcCall->getArgs() as $arg) {
+            if (!$arg->value instanceof ConstFetch && !$arg->value instanceof BitwiseOr) {
+                continue;
+            }
+            $cleanedValue = $this->jsonConstCleaner->clean($arg->value, [JsonConstant::THROW_ON_ERROR]);
+            if ($cleanedValue instanceof Expr) {
+                $arg->value = $cleanedValue;
+            }
+        }
         $nodes = [$expression];
         $nodes[] = new If_(new NotIdentical(new FuncCall(new Name('json_last_error')), new ConstFetch(new Name('JSON_ERROR_NONE'))), ['stmts' => [new Expression(new Throw_(new New_(new NameFullyQualified('Exception'), [new Arg(new FuncCall(new Name('json_last_error_msg')))])))]]);
         return $nodes;

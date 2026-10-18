@@ -24,6 +24,11 @@ final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
      * @var int[]
      */
     private const HERENOW_DOC_KINDS = [String_::KIND_HEREDOC, String_::KIND_NOWDOC];
+    /**
+     * Marker left on the doc indentation attribute once flattened, so a later pass skips the node
+     * @var string
+     */
+    private const REMOVED_DOC_INDENTATION = '__REMOVED__';
     public function __construct(FollowedByNewlineOnlyMaybeWithSemicolonAnalyzer $followedByNewlineOnlyMaybeWithSemicolonAnalyzer)
     {
         $this->followedByNewlineOnlyMaybeWithSemicolonAnalyzer = $followedByNewlineOnlyMaybeWithSemicolonAnalyzer;
@@ -67,7 +72,11 @@ CODE_SAMPLE
         if ($docIndentation === '' && $this->followedByNewlineOnlyMaybeWithSemicolonAnalyzer->isFollowed($this->getFile(), $node)) {
             return null;
         }
-        $node->setAttribute(AttributeKey::DOC_INDENTATION, '__REMOVED__');
+        // already flattened on a previous pass, re-running would keep appending newlines
+        if ($docIndentation === self::REMOVED_DOC_INDENTATION) {
+            return null;
+        }
+        $node->setAttribute(AttributeKey::DOC_INDENTATION, self::REMOVED_DOC_INDENTATION);
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         $tokens = $this->getFile()->getOldTokens();
         if (isset($tokens[$node->getEndTokenPos()], $tokens[$node->getEndTokenPos() + 1])) {

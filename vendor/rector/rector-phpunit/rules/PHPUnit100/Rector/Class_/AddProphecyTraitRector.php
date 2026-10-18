@@ -108,6 +108,15 @@ CODE_SAMPLE
         if (!$hasProphesizeMethodCall) {
             return \true;
         }
+        // structural check first, so the rule stays idempotent even when the class reflection is
+        // not yet aware of a trait added on a previous pass
+        foreach ($class->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $trait) {
+                if ($this->isName($trait, ProphecyClassName::PROPHECY_TRAIT)) {
+                    return \true;
+                }
+            }
+        }
         $classReflection = $this->reflectionResolver->resolveClassReflection($class);
         if (!$classReflection instanceof ClassReflection) {
             return \false;

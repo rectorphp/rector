@@ -47,7 +47,13 @@ CODE_SAMPLE
         if (!isset($oldTokens[$startTokenPos], $oldTokens[$endTokenPos])) {
             return null;
         }
-        if ((string) $oldTokens[$node->getStartTokenPos()] === '(') {
+        // source already wraps the new in parentheses
+        if ((string) $oldTokens[$startTokenPos] === '(') {
+            return null;
+        }
+        // idempotency: on a previous pass the opening paren was prepended to the New_ var token,
+        // so check that token too, otherwise the rule keeps wrapping the same call every pass
+        if (strncmp((string) $oldTokens[$node->var->getStartTokenPos()], '(', strlen('(')) === 0) {
             return null;
         }
         $oldTokens[$node->var->getStartTokenPos()]->text = '(' . $oldTokens[$node->var->getStartTokenPos()];

@@ -225,6 +225,11 @@ CODE_SAMPLE
             if ($this->isNullable($parentReturnType, $returnType)) {
                 continue;
             }
+            // only downgrade to a wider ancestor type; skipping a narrower one keeps the rule
+            // idempotent, otherwise a multi-level hierarchy flips the type back and forth
+            if (!$parentReturnType->accepts($returnType, \true)->yes()) {
+                continue;
+            }
             // This is an ancestor class with a different return type
             return $parentReturnType;
         }
