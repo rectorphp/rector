@@ -6,6 +6,7 @@ namespace Rector\Doctrine\TypedCollections\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -62,7 +63,7 @@ use Doctrine\Common\Collections\Collection;
 
 final class SomeClass
 {
-    private $items;
+    private ?Collection $items = null;
 
     public function setItems(?Collection $items): void
     {
@@ -75,7 +76,7 @@ use Doctrine\Common\Collections\Collection;
 
 final class SomeClass
 {
-    private $items;
+    private Collection $items;
 
     public function setItems(Collection $items): void
     {
@@ -87,26 +88,36 @@ CODE_SAMPLE
     }
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class, Property::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod|Property $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|null
+     * @param Class_ $node
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?Class_
     {
-        if ($node instanceof Property) {
-            return $this->refactorProperty($node);
+        // nullable might be on purpose, e.g. via data provider
+        if ($this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
         }
-        return $this->refactorClassMethod($node);
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->refactorClassMethod($classMethod) instanceof ClassMethod) {
+                $hasChanged = \true;
+            }
+        }
+        foreach ($node->getProperties() as $property) {
+            if ($this->refactorProperty($property) instanceof Property) {
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     private function refactorClassMethod(ClassMethod $classMethod): ?\PhpParser\Node\Stmt\ClassMethod
     {
         if (count($classMethod->params) !== 1) {
-            return null;
-        }
-        // nullable might be on purpose, e.g. via data provider
-        if ($this->testsNodeAnalyzer->isInTestClass($classMethod)) {
             return null;
         }
         $hasChanged = \false;
