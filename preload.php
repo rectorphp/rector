@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
 use PHPStan\Testing\PHPStanTestCase;
 
 if (defined('__PHPSTAN_RUNNING__')) {
@@ -274,7 +275,10 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/VarLikeIdent
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Node/VariadicPlaceholder.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeDumper.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeFinder.php';
-require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeTraverser.php';
+if (! class_exists(NodeTraverser::class, false)) {
+    require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeTraverser.php';
+}
+
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeVisitor/CloningVisitor.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeVisitor/CommentAnnotatingVisitor.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/NodeVisitor/FindingVisitor.php';
