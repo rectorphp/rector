@@ -89,10 +89,6 @@ CODE_SAMPLE
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if ($this->shouldSkip($node, $scope)) {
-            return null;
-        }
         $isAlwaysInt = \true;
         $isAlwaysFloat = \true;
         foreach ($returns as $return) {
@@ -106,6 +102,14 @@ CODE_SAMPLE
             if (!$expr instanceof Int_) {
                 $isAlwaysInt = \false;
             }
+        }
+        // no int/float scalar returns? skip before the costly override lookup
+        if (!$isAlwaysFloat && !$isAlwaysInt) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        if ($this->shouldSkip($node, $scope)) {
+            return null;
         }
         if ($isAlwaysFloat) {
             $node->returnType = new Identifier('float');

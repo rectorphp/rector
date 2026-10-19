@@ -99,11 +99,11 @@ CODE_SAMPLE
         if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if ($this->shouldSkip($node, $scope)) {
+        if (!$this->hasOnlyBooleanConstExprs($returns)) {
             return null;
         }
-        if (!$this->hasOnlyBooleanConstExprs($returns)) {
+        $scope = ScopeFetcher::fetch($node);
+        if ($this->shouldSkip($node, $scope)) {
             return null;
         }
         $node->returnType = new Identifier('bool');
