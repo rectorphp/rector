@@ -9,7 +9,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
-use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Configuration\Parameter\FeatureFlags;
@@ -158,11 +157,7 @@ CODE_SAMPLE
         if ($this->isName($classMethod, MethodName::INVOKE)) {
             return \true;
         }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            return \false;
-        }
-        return $this->isAttributeMarkerConstructor($classMethod, $classReflection);
+        return $this->isAttributeMarkerConstructor($classMethod, $class);
     }
     private function hasDeprecatedAnnotation(ClassMethod $classMethod): bool
     {
@@ -175,14 +170,25 @@ CODE_SAMPLE
     /**
      * Skip constructor in attributes as might be a marker parameter
      */
-    private function isAttributeMarkerConstructor(ClassMethod $classMethod, ClassReflection $classReflection): bool
+    private function isAttributeMarkerConstructor(ClassMethod $classMethod, Class_ $class): bool
     {
         if (!$this->isName($classMethod, MethodName::CONSTRUCT)) {
             return \false;
         }
-        if (!$classReflection->isAttributeClass()) {
+        if (!$this->isAttributeClass($class)) {
             return \false;
         }
         return $classMethod->getDocComment() instanceof Doc;
+    }
+    private function isAttributeClass(Class_ $class): bool
+    {
+        foreach ($class->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attr) {
+                if ($this->isName($attr->name, 'Attribute')) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
 }
