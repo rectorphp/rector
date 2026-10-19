@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202610;
 
+use RectorPrefix202610\Composer\XdebugHandler\XdebugHandler;
 use RectorPrefix202610\Nette\Utils\Json;
 use Rector\Bootstrap\AutoloadFileParameterResolver;
 use Rector\Bootstrap\RectorConfigsResolver;
@@ -102,6 +103,13 @@ $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-auto
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadRectorInstalledAsGlobalDependency();
 $autoloadIncluder->autoloadFromCommandLine();
+// restart without Xdebug before the container is built, so the restarted process does not repeat that work
+if (!(new ArgvInput())->hasParameterOption('--xdebug')) {
+    $xdebugHandler = new XdebugHandler('rector');
+    $xdebugHandler->setPersistent();
+    $xdebugHandler->check();
+    unset($xdebugHandler);
+}
 AutoloadFileParameterResolver::resolveFromArgv($_SERVER['argv']);
 $rectorConfigsResolver = new RectorConfigsResolver();
 try {

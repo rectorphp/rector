@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Console;
 
-use RectorPrefix202610\Composer\XdebugHandler\XdebugHandler;
 use Rector\Application\VersionResolver;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
@@ -46,7 +45,6 @@ final class ConsoleApplication extends Application
             $output->writeln($this->getLongVersion());
             return \Rector\Console\ExitCode::SUCCESS;
         }
-        $this->enableXdebug($input);
         $shouldFollowByNewline = \false;
         // skip in this case, since generate content must be clear from meta-info
         if ($this->shouldPrintMetaInformation($input)) {
@@ -108,15 +106,5 @@ final class ConsoleApplication extends Application
         $inputDefinition->addOption(new InputOption(Option::DEBUG, null, InputOption::VALUE_NONE, 'Enable debug verbosity'));
         $inputDefinition->addOption(new InputOption(Option::XDEBUG, null, InputOption::VALUE_NONE, 'Allow running xdebug'));
         $inputDefinition->addOption(new InputOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear cache before starting the execution of the command'));
-    }
-    private function enableXdebug(InputInterface $input): void
-    {
-        $isXdebugAllowed = $input->hasParameterOption('--xdebug');
-        if (!$isXdebugAllowed) {
-            $xdebugHandler = new XdebugHandler('rector');
-            $xdebugHandler->setPersistent();
-            $xdebugHandler->check();
-            unset($xdebugHandler);
-        }
     }
 }
