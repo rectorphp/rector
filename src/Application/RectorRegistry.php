@@ -6,6 +6,8 @@ namespace Rector\Application;
 use PhpParser\Node;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Skipper\Skipper\Skipper;
+use Rector\ValueObject\Application\File;
 use Rector\VersionBonding\ComposerPackageConstraintFilter;
 use Rector\VersionBonding\PhpVersionedFilter;
 /**
@@ -26,6 +28,10 @@ final class RectorRegistry
      */
     private ConfigurationRuleFilter $configurationRuleFilter;
     /**
+     * @readonly
+     */
+    private Skipper $skipper;
+    /**
      * @var RectorInterface[]
      */
     private array $rectors;
@@ -41,11 +47,12 @@ final class RectorRegistry
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(PhpVersionedFilter $phpVersionedFilter, ComposerPackageConstraintFilter $composerPackageConstraintFilter, ConfigurationRuleFilter $configurationRuleFilter, array $rectors)
+    public function __construct(PhpVersionedFilter $phpVersionedFilter, ComposerPackageConstraintFilter $composerPackageConstraintFilter, ConfigurationRuleFilter $configurationRuleFilter, Skipper $skipper, array $rectors)
     {
         $this->phpVersionedFilter = $phpVersionedFilter;
         $this->composerPackageConstraintFilter = $composerPackageConstraintFilter;
         $this->configurationRuleFilter = $configurationRuleFilter;
+        $this->skipper = $skipper;
         $this->rectors = $rectors;
     }
     /**
@@ -78,6 +85,22 @@ final class RectorRegistry
             }
         }
         return $this->cache[$nodeClass];
+    }
+    /**
+     * Filters out rectors skipped for this file before they ever run, so the skip no longer needs a
+     * second refactor() probe on a clone to learn whether it mattered.
+     *
+     * Known limit: a configured skip is marked used as soon as its path matches the file, even if the
+     * rule would not have changed it. This drops precise unused-skip reporting in exchange for not
+     * running the rule twice per skipped node.
+     *
+     * @return RectorInterface[]
+     */
+    public function forNodeAndFile(Node $node, File $file): array
+    {
+        $rectors = $this->forNode($node);
+        $filePath = $file->getFilePath();
+        return array_filter($rectors, fn(RectorInterface $rector): bool => !$this->skipper->shouldSkipRectorAndFile($rector, $filePath));
     }
     /**
      * Filtering must happen lazily, after the configuration is set in ProcessCommand::execute(),

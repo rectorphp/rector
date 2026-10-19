@@ -101,7 +101,7 @@ final class FileProcessor
         do {
             $file->changeHasChanged(\false);
             // 1. change nodes with Rector Rules
-            $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
+            $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts(), $file);
             // 2. apply post rectors
             $postNewStmts = $this->postFileProcessor->traverse($newStmts, $file);
             // 3. this is needed for new tokens added in "afterTraverse()"
