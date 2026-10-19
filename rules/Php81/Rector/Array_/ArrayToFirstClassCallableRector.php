@@ -101,15 +101,6 @@ CODE_SAMPLE
         if ($node->getAttribute(AttributeKey::IS_ARRAY_IN_ATTRIBUTE) === \true) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        $arrayCallable = $this->arrayCallableMethodMatcher->match($node, $scope);
-        if (!$arrayCallable instanceof ArrayCallable) {
-            return null;
-        }
-        $callerExpr = $arrayCallable->getCallerExpr();
-        if (!$callerExpr instanceof Variable && !$callerExpr instanceof PropertyFetch && !$callerExpr instanceof ClassConstFetch) {
-            return null;
-        }
         if ($node->getAttribute(AttributeKey::IS_CLASS_CONST_VALUE)) {
             return null;
         }
@@ -120,6 +111,15 @@ CODE_SAMPLE
             return null;
         }
         if ($node->getAttribute(AttributeKey::IS_UNPACKED_ARG_VALUE)) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        $arrayCallable = $this->arrayCallableMethodMatcher->match($node, $scope);
+        if (!$arrayCallable instanceof ArrayCallable) {
+            return null;
+        }
+        $callerExpr = $arrayCallable->getCallerExpr();
+        if (!$callerExpr instanceof Variable && !$callerExpr instanceof PropertyFetch && !$callerExpr instanceof ClassConstFetch) {
             return null;
         }
         $args = [new VariadicPlaceholder()];
