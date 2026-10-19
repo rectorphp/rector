@@ -51,10 +51,28 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
         if ($args === []) {
             return null;
         }
+        // only closure/arrow-fn or array args are decorated below; skip the reflection otherwise
+        if (!$this->hasClosureArrowOrArrayArg($args)) {
+            return null;
+        }
         $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         $this->decorateClosureWithVariadicArgs($args, $functionLikeReflection);
         $this->decorateArgNotAcceptingClosure($node, $args, $functionLikeReflection);
         return null;
+    }
+    /**
+     * @param Arg[] $args
+     */
+    private function hasClosureArrowOrArrayArg(array $args): bool
+    {
+        $found = \false;
+        foreach ($args as $arg) {
+            if ($arg->value instanceof Closure || $arg->value instanceof ArrowFunction || $arg->value instanceof Array_) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
     /**
      * @param Arg[] $args
