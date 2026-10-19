@@ -70,6 +70,14 @@ CODE_SAMPLE
         if ($node->getAttribute(AttributeKey::IS_CLOSURE_IN_ATTRIBUTE) === \true) {
             return null;
         }
+        // convert a directly nested closure in the same pass, so each closure node is handled once
+        // instead of leaving the inner one for another traverse pass
+        if ($returnExpr instanceof Closure) {
+            $nestedArrowFunction = $this->refactor($returnExpr);
+            if ($nestedArrowFunction instanceof Expr) {
+                $returnExpr = $nestedArrowFunction;
+            }
+        }
         $attributes = $node->getAttributes();
         unset($attributes[AttributeKey::ORIGINAL_NODE]);
         $arrowFunction = new ArrowFunction(['params' => $node->params, 'returnType' => $node->returnType, 'byRef' => $node->byRef, 'expr' => $returnExpr], $attributes);
