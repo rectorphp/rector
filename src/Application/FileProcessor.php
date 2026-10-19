@@ -21,6 +21,7 @@ use Rector\PhpParser\Parser\ParserErrors;
 use Rector\PhpParser\Parser\RectorParser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\PostRector\Application\PostFileProcessor;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\ValueObject\Application\File;
 use Rector\ValueObject\Configuration;
@@ -98,7 +99,9 @@ final class FileProcessor
         }
         $fileHasChanged = \false;
         $filePath = $file->getFilePath();
+        $previousPassRectorClasses = [];
         do {
+            $ruleChangesBefore = count($file->getRectorWithLineChanges());
             $file->changeHasChanged(\false);
             // 1. change nodes with Rector Rules
             $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts(), $file);
@@ -109,6 +112,12 @@ final class FileProcessor
             // 4. print to file or string
             // important to detect if file has changed
             $this->printFile($file, $configuration, $filePath);
+            // in rector-src tests, fail a rule that re-applies to its own previous-pass output;
+            // such a rule is not finished in a single pass and must handle the nested/chained case itself.
+            // gated by env so sibling packages pulling rector-src as dev-main are not affected
+            if (StaticPHPUnitEnvironment::isPHPUnitRun() && getenv('RECTOR_ENFORCE_SINGLE_PASS') === '1') {
+                $previousPassRectorClasses = $this->ensureRectorsAreIdempotent($file, $ruleChangesBefore, $previousPassRectorClasses);
+            }
             // no change in current iteration, stop
             if (!$file->hasChanged()) {
                 break;
@@ -129,6 +138,30 @@ final class FileProcessor
             $file->setFileDiff($currentFileDiff);
         }
         return new FileProcessResult([], $file->getFileDiff(), $file->hasChanged());
+    }
+    /**
+     * @param array<string, true> $previousPassRectorClasses rule classes that changed the file in the previous pass
+     * @return array<string, true> rule classes that changed the file in the current pass
+     */
+    private function ensureRectorsAreIdempotent(File $file, int $ruleChangesBefore, array $previousPassRectorClasses): array
+    {
+        $currentPassRectorClasses = [];
+        $rectorWithLineChanges = $file->getRectorWithLineChanges();
+        foreach ($rectorWithLineChanges as $key => $rectorWithLineChange) {
+            if ($key < $ruleChangesBefore) {
+                continue;
+            }
+            $rectorClass = $rectorWithLineChange->getRectorClass();
+            // post rectors (imports) legitimately converge over several passes
+            if (is_a($rectorClass, PostRectorInterface::class, \true)) {
+                continue;
+            }
+            $currentPassRectorClasses[$rectorClass] = \true;
+            if (isset($previousPassRectorClasses[$rectorClass])) {
+                throw new ShouldNotHappenException(sprintf('The "%s" rule changed "%s" again after it already changed it in the previous pass. ' . 'A rule must reach its final result in a single pass; handle the nested or chained case inside refactor() instead of relying on the file being re-run.', $rectorClass, $file->getFilePath()));
+            }
+        }
+        return $currentPassRectorClasses;
     }
     private function parseFileAndDecorateNodes(File $file): ?SystemError
     {

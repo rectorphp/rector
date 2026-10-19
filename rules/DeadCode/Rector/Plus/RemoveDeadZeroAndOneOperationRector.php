@@ -68,7 +68,21 @@ CODE_SAMPLE
             return $this->processAssignOp($node);
         }
         // -, +
-        return $this->processBinaryOp($node);
+        $result = $this->processBinaryOp($node);
+        if (!$result instanceof Expr) {
+            return null;
+        }
+        // the chosen operand can be a same-class operation that still carries a dead 0/1 at its own
+        // top level (e.g. 0 + 5 + 0 returns 0 + 5); such a returned node is skip-marked for this rule,
+        // so reduce its chain here to finish in a single pass
+        while ($result instanceof Plus || $result instanceof Minus || $result instanceof Mul || $result instanceof Div) {
+            $reduced = $this->processBinaryOp($result);
+            if (!$reduced instanceof Expr || $reduced === $result) {
+                break;
+            }
+            $result = $reduced;
+        }
+        return $result;
     }
     private function processAssignOp(AssignOp $assignOp): ?Expr
     {

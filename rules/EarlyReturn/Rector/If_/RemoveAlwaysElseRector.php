@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\EarlyReturn\Rector\If_;
 
+use PhpParser\Node\Stmt;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\Throw_;
@@ -63,6 +64,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?array
     {
+        $nodesToReturn = $this->splitAlwaysElse($node);
+        if ($nodesToReturn === null) {
+            return null;
+        }
+        // the returned stmts are not re-traversed in this pass, so split nested always-else here too
+        return $this->splitNestedAlwaysElse($nodesToReturn);
+    }
+    /**
+     * @return Node[]|null
+     */
+    private function splitAlwaysElse(If_ $node): ?array
+    {
         if ($this->doesNotLastStatementBreakFlow($node)) {
             return null;
         }
@@ -75,6 +88,42 @@ CODE_SAMPLE
             return array_merge([$node], $stmts);
         }
         return null;
+    }
+    /**
+     * @param Node[] $stmts
+     * @return Node[]
+     */
+    private function splitNestedAlwaysElse(array $stmts): array
+    {
+        $splitStmts = [];
+        foreach ($stmts as $stmt) {
+            $this->splitAlwaysElseInSubStmts($stmt);
+            if ($stmt instanceof If_) {
+                $nestedNodesToReturn = $this->splitAlwaysElse($stmt);
+                if ($nestedNodesToReturn !== null) {
+                    $splitStmts = array_merge($splitStmts, $this->splitNestedAlwaysElse($nestedNodesToReturn));
+                    continue;
+                }
+            }
+            $splitStmts[] = $stmt;
+        }
+        return $splitStmts;
+    }
+    private function splitAlwaysElseInSubStmts(Node $node): void
+    {
+        foreach ($node->getSubNodeNames() as $subNodeName) {
+            $subNode = $node->{$subNodeName};
+            if (!is_array($subNode) || $subNode === []) {
+                continue;
+            }
+            // only statement lists are split; expression/argument lists are left untouched
+            foreach ($subNode as $subNodeItem) {
+                if (!$subNodeItem instanceof Stmt) {
+                    continue 2;
+                }
+            }
+            $node->{$subNodeName} = $this->splitNestedAlwaysElse($subNode);
+        }
     }
     /**
      * @return Node[]

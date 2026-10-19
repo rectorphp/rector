@@ -135,6 +135,13 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         if (!$this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
             return null;
         }
+        // a nested coalescable ternary fallback is converted in the same pass; chained ?? needs no parentheses
+        if ($ternary->else instanceof Ternary) {
+            $convertedElse = $this->refactor($ternary->else);
+            if ($convertedElse instanceof Expr) {
+                return $this->createCoalesce($ternary->if, $convertedElse);
+            }
+        }
         if (($ternary->else instanceof Ternary || $ternary->else instanceof BinaryOp) && $this->isTernaryParenthesized($this->getFile(), $ternary->cond, $ternary)) {
             $ternary->else->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         }

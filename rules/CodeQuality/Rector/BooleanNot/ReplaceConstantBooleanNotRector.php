@@ -60,12 +60,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->valueResolver->isFalse($node->expr)) {
-            return new ConstFetch(new Name('true'));
+        // unwrap the whole negation chain at once, so nested cases like !!false resolve in a single pass
+        $negationCount = 0;
+        $innerExpr = $node;
+        while ($innerExpr instanceof BooleanNot) {
+            ++$negationCount;
+            $innerExpr = $innerExpr->expr;
         }
-        if ($this->valueResolver->isTrue($node->expr)) {
-            return new ConstFetch(new Name('false'));
+        if ($this->valueResolver->isTrue($innerExpr)) {
+            $value = \true;
+        } elseif ($this->valueResolver->isFalse($innerExpr)) {
+            $value = \false;
+        } else {
+            return null;
         }
-        return null;
+        // every negation flips the literal value
+        if ($negationCount % 2 === 1) {
+            $value = !$value;
+        }
+        return new ConstFetch(new Name($value ? 'true' : 'false'));
     }
 }

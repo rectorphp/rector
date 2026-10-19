@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php56\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Pow;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\NodeAnalyzer\PowOperandAnalyzer;
@@ -48,8 +49,21 @@ final class PowToExpRector extends AbstractRector implements MinPhpVersionInterf
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        $firstExpr = $node->getArgs()[0]->value;
-        $secondExpr = $node->getArgs()[1]->value;
+        return $this->createPow($node);
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::EXP_OPERATOR;
+    }
+    private function createPow(FuncCall $funcCall): ?Pow
+    {
+        $args = $funcCall->getArgs();
+        if (count($args) < 2) {
+            return null;
+        }
+        // convert nested pow() calls first, so pow(pow(...), ...) resolves in a single pass
+        $firstExpr = $this->createPowFromNested($args[0]->value);
+        $secondExpr = $this->createPowFromNested($args[1]->value);
         // ** binds tighter than most operators, so operands with lower precedence must be
         // wrapped in parentheses to keep the original semantics, e.g. pow(~3, 4) => (~3) ** 4
         if ($this->powOperandAnalyzer->isLowerPrecedenceAsLeftOperand($firstExpr)) {
@@ -60,8 +74,14 @@ final class PowToExpRector extends AbstractRector implements MinPhpVersionInterf
         }
         return new Pow($firstExpr, $secondExpr);
     }
-    public function provideMinPhpVersion(): int
+    private function createPowFromNested(Expr $expr): Expr
     {
-        return PhpVersionFeature::EXP_OPERATOR;
+        if ($expr instanceof FuncCall && !$expr->isFirstClassCallable() && $this->isName($expr, 'pow')) {
+            $pow = $this->createPow($expr);
+            if ($pow instanceof Pow) {
+                return $pow;
+            }
+        }
+        return $expr;
     }
 }
