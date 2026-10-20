@@ -18,6 +18,7 @@ use RectorPrefix202610\Webmozart\Assert\Assert;
 final class RenameFunctionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * keyed by lowercased old function name, as function names are case-insensitive
      * @var array<string, string>
      */
     private array $oldFunctionToNewFunction = [];
@@ -41,14 +42,12 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
         if ($nodeName === null) {
             return null;
         }
-        foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
-            if (!$this->nodeNameResolver->isStringName($nodeName, $oldFunction)) {
-                continue;
-            }
-            $node->name = $this->createName($newFunction);
-            return $node;
+        $newFunction = $this->oldFunctionToNewFunction[strtolower($nodeName)] ?? null;
+        if ($newFunction === null) {
+            return null;
         }
-        return null;
+        $node->name = $this->createName($newFunction);
+        return $node;
     }
     /**
      * @param mixed[] $configuration
@@ -57,7 +56,10 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     {
         Assert::allString(array_values($configuration));
         Assert::allString($configuration);
-        $this->oldFunctionToNewFunction = $configuration;
+        $this->oldFunctionToNewFunction = [];
+        foreach ($configuration as $oldFunction => $newFunction) {
+            $this->oldFunctionToNewFunction[strtolower($oldFunction)] = $newFunction;
+        }
     }
     private function createName(string $newFunction): Name
     {

@@ -62,13 +62,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->stringChanges as $oldValue => $newValue) {
-            if (!$this->valueResolver->isValue($node, $oldValue)) {
-                continue;
-            }
-            return new String_($newValue);
+        $value = $this->valueResolver->getValue($node);
+        if (!is_string($value)) {
+            return null;
         }
-        return null;
+        $newValue = $this->stringChanges[$value] ?? null;
+        if ($newValue === null) {
+            return null;
+        }
+        return new String_($newValue);
     }
     /**
      * @param mixed[] $configuration
