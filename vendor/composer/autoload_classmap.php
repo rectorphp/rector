@@ -1670,6 +1670,7 @@ return array(
     'Rector\\NodeTypeResolver\\Node\\AttributeKey' => $baseDir . '/src/NodeTypeResolver/Node/AttributeKey.php',
     'Rector\\NodeTypeResolver\\PHPStan\\ObjectWithoutClassTypeWithParentTypes' => $baseDir . '/src/NodeTypeResolver/PHPStan/ObjectWithoutClassTypeWithParentTypes.php',
     'Rector\\NodeTypeResolver\\PHPStan\\ParametersAcceptorSelectorVariantsWrapper' => $baseDir . '/src/NodeTypeResolver/PHPStan/ParametersAcceptorSelectorVariantsWrapper.php',
+    'Rector\\NodeTypeResolver\\PHPStan\\Scope\\AstClassReflectionFactory' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/AstClassReflectionFactory.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\RectorNodeScopeResolver' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/RectorNodeScopeResolver.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => $baseDir . '/src/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',

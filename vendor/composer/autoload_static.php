@@ -1900,6 +1900,7 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\NodeTypeResolver\\Node\\AttributeKey' => __DIR__ . '/../..' . '/src/NodeTypeResolver/Node/AttributeKey.php',
         'Rector\\NodeTypeResolver\\PHPStan\\ObjectWithoutClassTypeWithParentTypes' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/ObjectWithoutClassTypeWithParentTypes.php',
         'Rector\\NodeTypeResolver\\PHPStan\\ParametersAcceptorSelectorVariantsWrapper' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/ParametersAcceptorSelectorVariantsWrapper.php',
+        'Rector\\NodeTypeResolver\\PHPStan\\Scope\\AstClassReflectionFactory' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/AstClassReflectionFactory.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\RectorNodeScopeResolver' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/RectorNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
