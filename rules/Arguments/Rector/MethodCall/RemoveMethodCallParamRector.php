@@ -32,9 +32,9 @@ final class RemoveMethodCallParamRector extends AbstractRector implements Config
      */
     private ArgsAnalyzer $argsAnalyzer;
     /**
-     * @var RemoveMethodCallParam[]
+     * @var array<string, RemoveMethodCallParam[]>
      */
-    private array $removeMethodCallParams = [];
+    private array $removeMethodCallParamsByMethod = [];
     public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
@@ -78,10 +78,11 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        foreach ($this->removeMethodCallParams as $removeMethodCallParam) {
-            if (!$this->isName($node->name, $removeMethodCallParam->getMethodName())) {
-                continue;
-            }
+        $methodName = $this->getName($node->name);
+        if ($methodName === null) {
+            return null;
+        }
+        foreach ($this->removeMethodCallParamsByMethod[strtolower($methodName)] ?? [] as $removeMethodCallParam) {
             if (!$this->isCallerObjectType($node, $removeMethodCallParam)) {
                 continue;
             }
@@ -125,7 +126,10 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allIsInstanceOf($configuration, RemoveMethodCallParam::class);
-        $this->removeMethodCallParams = $configuration;
+        $this->removeMethodCallParamsByMethod = [];
+        foreach ($configuration as $removeMethodCallParam) {
+            $this->removeMethodCallParamsByMethod[strtolower($removeMethodCallParam->getMethodName())][] = $removeMethodCallParam;
+        }
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call

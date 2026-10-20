@@ -18,9 +18,10 @@ use RectorPrefix202610\Webmozart\Assert\Assert;
 final class RemoveFuncCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var string[]
+     * keyed by lowercased function name (function names are case-insensitive)
+     * @var array<string, true>
      */
-    private array $removedFunctions = [];
+    private array $removedFunctionNames = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove defined function calls', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -48,13 +49,14 @@ CODE_SAMPLE
         if (!$expr instanceof FuncCall) {
             return null;
         }
-        foreach ($this->removedFunctions as $removedFunction) {
-            if (!$this->isName($expr->name, $removedFunction)) {
-                continue;
-            }
-            return NodeVisitor::REMOVE_NODE;
+        $funcName = $this->getName($expr->name);
+        if ($funcName === null) {
+            return null;
         }
-        return null;
+        if (!isset($this->removedFunctionNames[strtolower($funcName)])) {
+            return null;
+        }
+        return NodeVisitor::REMOVE_NODE;
     }
     /**
      * @param mixed[] $configuration
@@ -62,6 +64,9 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allString($configuration);
-        $this->removedFunctions = $configuration;
+        $this->removedFunctionNames = [];
+        foreach ($configuration as $removedFunction) {
+            $this->removedFunctionNames[strtolower($removedFunction)] = \true;
+        }
     }
 }

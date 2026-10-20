@@ -58,9 +58,9 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      */
     private ArgsAnalyzer $argsAnalyzer;
     /**
-     * @var ArgumentAdder[]|ArgumentAdderWithoutDefaultValue[]
+     * @var array<string, array<ArgumentAdder|ArgumentAdderWithoutDefaultValue>>
      */
-    private array $addedArguments = [];
+    private array $addedArgumentsByMethod = [];
     private bool $hasChanged = \false;
     public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, StaticTypeMapper $staticTypeMapper, ArgsAnalyzer $argsAnalyzer)
     {
@@ -128,7 +128,10 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allIsAnyOf($configuration, [ArgumentAdder::class, ArgumentAdderWithoutDefaultValue::class]);
-        $this->addedArguments = $configuration;
+        $this->addedArgumentsByMethod = [];
+        foreach ($configuration as $addedArgument) {
+            $this->addedArgumentsByMethod[strtolower($addedArgument->getMethod())][] = $addedArgument;
+        }
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
@@ -336,10 +339,7 @@ CODE_SAMPLE
         if ($callName === null) {
             return;
         }
-        foreach ($this->addedArguments as $addedArgument) {
-            if (!$this->nodeNameResolver->isStringName($callName, $addedArgument->getMethod())) {
-                continue;
-            }
+        foreach ($this->addedArgumentsByMethod[strtolower($callName)] ?? [] as $addedArgument) {
             if (!$this->isObjectTypeMatch($call, $addedArgument->getObjectType())) {
                 continue;
             }
@@ -348,10 +348,11 @@ CODE_SAMPLE
     }
     private function refactorClassMethod(Class_ $class, ClassMethod $classMethod): void
     {
-        foreach ($this->addedArguments as $addedArgument) {
-            if (!$this->isName($classMethod, $addedArgument->getMethod())) {
-                continue;
-            }
+        $methodName = $this->getName($classMethod);
+        if ($methodName === null) {
+            return;
+        }
+        foreach ($this->addedArgumentsByMethod[strtolower($methodName)] ?? [] as $addedArgument) {
             if (!$this->isObjectType($class, $addedArgument->getObjectType())) {
                 continue;
             }

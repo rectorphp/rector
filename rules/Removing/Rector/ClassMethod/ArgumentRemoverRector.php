@@ -27,9 +27,9 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
      */
     private ValueResolver $valueResolver;
     /**
-     * @var ArgumentRemover[]
+     * @var array<string, ArgumentRemover[]>
      */
-    private array $removedArguments = [];
+    private array $removedArgumentsByMethod = [];
     private bool $hasChanged = \false;
     public function __construct(ValueResolver $valueResolver)
     {
@@ -61,10 +61,11 @@ CODE_SAMPLE
     public function refactor(Node $node)
     {
         $this->hasChanged = \false;
-        foreach ($this->removedArguments as $removedArgument) {
-            if (!$this->isName($node->name, $removedArgument->getMethod())) {
-                continue;
-            }
+        $methodName = $this->getName($node->name);
+        if ($methodName === null) {
+            return null;
+        }
+        foreach ($this->removedArgumentsByMethod[strtolower($methodName)] ?? [] as $removedArgument) {
             if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $removedArgument->getObjectType())) {
                 continue;
             }
@@ -81,7 +82,10 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, ArgumentRemover::class);
-        $this->removedArguments = $configuration;
+        $this->removedArgumentsByMethod = [];
+        foreach ($configuration as $removedArgument) {
+            $this->removedArgumentsByMethod[strtolower($removedArgument->getMethod())][] = $removedArgument;
+        }
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
