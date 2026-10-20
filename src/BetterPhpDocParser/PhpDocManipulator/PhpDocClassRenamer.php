@@ -24,6 +24,10 @@ final class PhpDocClassRenamer
      * @readonly
      */
     private RenamedNameCollector $renamedNameCollector;
+    /**
+     * @var array<string, string>
+     */
+    private array $wordBoundaryPatternByOldClass = [];
     public function __construct(ClassAnnotationMatcher $classAnnotationMatcher, RenamedNameCollector $renamedNameCollector)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;
@@ -99,6 +103,9 @@ final class PhpDocClassRenamer
             return;
         }
         $classNameArrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
+        // loop-invariant, resolve once instead of per configured class
+        $currentTypeArrayItemNode = $doctrineAnnotationTagValueNode->getValue('type');
+        $currentTypeStringNode = $currentTypeArrayItemNode instanceof ArrayItemNode ? $currentTypeArrayItemNode->value : null;
         foreach ($oldToNewClasses as $oldClass => $newClass) {
             if ($classNameArrayItemNode instanceof ArrayItemNode && $classNameArrayItemNode->value instanceof StringNode) {
                 $classNameStringNode = $classNameArrayItemNode->value;
@@ -107,19 +114,11 @@ final class PhpDocClassRenamer
                     continue;
                 }
                 $this->renamedNameCollector->add($oldClass);
-                $classNameStringNode->value = Strings::replace($classNameStringNode->value, '#\b' . preg_quote($oldClass, '#') . 'b#', $newClass);
+                $classNameStringNode->value = Strings::replace($classNameStringNode->value, $this->wordBoundaryPatternByOldClass[$oldClass] ??= '#\b' . preg_quote($oldClass, '#') . 'b#', $newClass);
                 $classNameArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
                 $hasChanged = \true;
             }
-            $currentTypeArrayItemNode = $doctrineAnnotationTagValueNode->getValue('type');
-            if (!$currentTypeArrayItemNode instanceof ArrayItemNode) {
-                continue;
-            }
-            $currentTypeStringNode = $currentTypeArrayItemNode->value;
-            if (!$currentTypeStringNode instanceof StringNode) {
-                continue;
-            }
-            if ($currentTypeStringNode->value === $oldClass) {
+            if ($currentTypeStringNode instanceof StringNode && $currentTypeStringNode->value === $oldClass) {
                 $currentTypeStringNode->value = $newClass;
                 $hasChanged = \true;
             }

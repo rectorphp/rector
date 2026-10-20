@@ -14,9 +14,16 @@ final class DocBlockClassRenamer
      * @readonly
      */
     private ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor;
+    /**
+     * @readonly
+     */
+    private PhpDocNodeTraverser $phpDocNodeTraverser;
     public function __construct(ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)
     {
         $this->classRenamePhpDocNodeVisitor = $classRenamePhpDocNodeVisitor;
+        // the traverser + visitor are reusable across calls, so build them once
+        $this->phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $this->phpDocNodeTraverser->addPhpDocNodeVisitor($this->classRenamePhpDocNodeVisitor);
     }
     /**
      * @param OldToNewType[] $oldToNewTypes
@@ -26,11 +33,9 @@ final class DocBlockClassRenamer
         if ($oldToNewTypes === []) {
             return \false;
         }
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->classRenamePhpDocNodeVisitor);
         $this->classRenamePhpDocNodeVisitor->setCurrentPhpNode($currentPhpNode);
         $this->classRenamePhpDocNodeVisitor->setOldToNewTypes($oldToNewTypes);
-        $phpDocNodeTraverser->traverse($phpDocInfo->getPhpDocNode());
+        $this->phpDocNodeTraverser->traverse($phpDocInfo->getPhpDocNode());
         return $this->classRenamePhpDocNodeVisitor->hasChanged();
     }
 }
