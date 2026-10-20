@@ -119,6 +119,7 @@ use Rector\Symfony\Symfony81\Rector\MethodCall\ConstraintValidatorValidateToVali
 use Rector\Symfony\Symfony81\Rector\MethodCall\RenameCopyOnWindowsOptionToFollowSymlinksRector;
 use Rector\Symfony\Symfony81\Rector\New_\RemoveEraseCredentialsFromAuthenticatorManagerRector;
 use Rector\Symfony\Symfony81\Rector\StaticCall\AddFormatArgumentToIsValidRector;
+use Rector\Symfony\Symfony82\Rector\MethodCall\ScheduleWithToAddRector;
 use Rector\Symfony\Yaml\Rector\StaticCall\YamlFlagsToConstantRector;
 use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\Rector\ClassMethod\WrapReturnRector;
@@ -287,6 +288,8 @@ return static function (RectorConfig $rectorConfig): void {
         AddFormatArgumentToIsValidRector::class,
         // symfony/validator 8.1
         ConstraintValidatorValidateToValidateInContextRector::class,
+        // symfony/scheduler 8.2
+        ScheduleWithToAddRector::class,
         // twig/twig 3.21 + symfony/twig-bridge 7.3
         GetFiltersAndFunctionsToAsTwigAttributeRector::class,
         // jms/serializer 3.14
@@ -940,4 +943,10 @@ return static function (RectorConfig $rectorConfig): void {
         // @see https://github.com/symfony/symfony/blob/8.1/UPGRADE-8.1.md#serializer
         new MethodCallRename('Symfony\Component\Serializer\Exception\PartialDenormalizationException', 'getErrors', 'getNotNormalizableValueErrors'),
     ], 'symfony/serializer', '>=8.1');
+    // symfony/doctrine-bridge 8.2
+    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameClassRector::class, [
+        // @see https://github.com/symfony/symfony/blob/8.2/UPGRADE-8.2.md#doctrinebridge
+        'Symfony\Bridge\Doctrine\Messenger\DoctrineCloseConnectionMiddleware' => 'Symfony\Bridge\Doctrine\Messenger\DoctrineDbalCloseConnectionMiddleware',
+        'Symfony\Bridge\Doctrine\Messenger\DoctrinePingConnectionMiddleware' => 'Symfony\Bridge\Doctrine\Messenger\DoctrineDbalPingConnectionMiddleware',
+    ], 'symfony/doctrine-bridge', '>=8.2');
 };

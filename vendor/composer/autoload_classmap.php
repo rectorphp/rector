@@ -2516,6 +2516,7 @@ return array(
     'Rector\\Symfony\\Symfony81\\Rector\\MethodCall\\RenameCopyOnWindowsOptionToFollowSymlinksRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony81/Rector/MethodCall/RenameCopyOnWindowsOptionToFollowSymlinksRector.php',
     'Rector\\Symfony\\Symfony81\\Rector\\New_\\RemoveEraseCredentialsFromAuthenticatorManagerRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony81/Rector/New_/RemoveEraseCredentialsFromAuthenticatorManagerRector.php',
     'Rector\\Symfony\\Symfony81\\Rector\\StaticCall\\AddFormatArgumentToIsValidRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony81/Rector/StaticCall/AddFormatArgumentToIsValidRector.php',
+    'Rector\\Symfony\\Symfony82\\Rector\\MethodCall\\ScheduleWithToAddRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony82/Rector/MethodCall/ScheduleWithToAddRector.php',
     'Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector' => $vendorDir . '/rector/rector-symfony/rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php',
     'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',
     'Rector\\Symfony\\TypeAnalyzer\\ControllerAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ControllerAnalyzer.php',

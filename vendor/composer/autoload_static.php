@@ -2746,6 +2746,7 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\Symfony\\Symfony81\\Rector\\MethodCall\\RenameCopyOnWindowsOptionToFollowSymlinksRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/MethodCall/RenameCopyOnWindowsOptionToFollowSymlinksRector.php',
         'Rector\\Symfony\\Symfony81\\Rector\\New_\\RemoveEraseCredentialsFromAuthenticatorManagerRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/New_/RemoveEraseCredentialsFromAuthenticatorManagerRector.php',
         'Rector\\Symfony\\Symfony81\\Rector\\StaticCall\\AddFormatArgumentToIsValidRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony81/Rector/StaticCall/AddFormatArgumentToIsValidRector.php',
+        'Rector\\Symfony\\Symfony82\\Rector\\MethodCall\\ScheduleWithToAddRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony82/Rector/MethodCall/ScheduleWithToAddRector.php',
         'Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php',
         'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',
         'Rector\\Symfony\\TypeAnalyzer\\ControllerAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ControllerAnalyzer.php',
