@@ -4,42 +4,20 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\TypeDeclaration\Guard\ParamTypeAddGuard;
-use Rector\TypeDeclaration\NodeAnalyzer\VariableInSprintfMaskMatcher;
-use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamStringTypeFromSprintfUseRector\AddParamStringTypeFromSprintfUseRectorTest
+ * @deprecated This rule is deprecated, as sprintf masks do not guarantee a string parameter - int/float arguments are silently converted, so forcing a string type can add an invalid type.
  */
-final class AddParamStringTypeFromSprintfUseRector extends AbstractRector
+final class AddParamStringTypeFromSprintfUseRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private VariableInSprintfMaskMatcher $variableInSprintfMaskMatcher;
-    /**
-     * @readonly
-     */
-    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
-    /**
-     * @readonly
-     */
-    private ParamTypeAddGuard $paramTypeAddGuard;
-    public function __construct(VariableInSprintfMaskMatcher $variableInSprintfMaskMatcher, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ParamTypeAddGuard $paramTypeAddGuard)
-    {
-        $this->variableInSprintfMaskMatcher = $variableInSprintfMaskMatcher;
-        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
-        $this->paramTypeAddGuard = $paramTypeAddGuard;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add string type to parameters used in sprintf calls', [new CodeSample(<<<'CODE_SAMPLE'
@@ -71,41 +49,9 @@ CODE_SAMPLE
     }
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?Node
     {
-        if ($node instanceof ClassMethod && $node->stmts === null) {
-            return null;
-        }
-        if ($node->getParams() === []) {
-            return null;
-        }
-        if ($node instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($node)) {
-            return null;
-        }
-        $hasChanged = \false;
-        foreach ($node->getParams() as $param) {
-            if ($param->type instanceof Node) {
-                continue;
-            }
-            // skip non string default value
-            if ($param->default instanceof Expr && !$param->default instanceof String_) {
-                continue;
-            }
-            if (!$this->paramTypeAddGuard->isLegal($param, $node)) {
-                continue;
-            }
-            $variableName = $this->getName($param);
-            if (!$this->variableInSprintfMaskMatcher->matchMask($node, $variableName, '%s')) {
-                continue;
-            }
-            $param->type = new Identifier('string');
-            $hasChanged = \true;
-        }
-        if (!$hasChanged) {
-            return null;
-        }
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as sprintf masks convert int/float arguments to string and would add an invalid param type', self::class));
     }
 }

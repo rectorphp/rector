@@ -22,7 +22,6 @@ use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromGetRepositorySetUpRect
 use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddParamStringTypeFromSprintfUseRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromPropertyTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
@@ -156,7 +155,6 @@ final class TypeDeclarationLevel
         AddClosureParamTypeFromVariableCallRector::class,
         StrictArrayParamDimFetchRector::class,
         AddParamFromDimFetchKeyUseRector::class,
-        AddParamStringTypeFromSprintfUseRector::class,
         // possibly based on docblocks, but also helpful, intentionally last
         AddArrayFunctionClosureParamTypeRector::class,
         TypedPropertyFromDocblockSetUpDefinedRector::class,

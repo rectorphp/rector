@@ -2641,7 +2641,6 @@ return array(
     'Rector\\TypeDeclaration\\NodeAnalyzer\\StrictReturnNewArrayResolver' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/StrictReturnNewArrayResolver.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\StrictTypeSafetyChecker' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/StrictTypeSafetyChecker.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\TypeNodeUnwrapper' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/TypeNodeUnwrapper.php',
-    'Rector\\TypeDeclaration\\NodeAnalyzer\\VariableInSprintfMaskMatcher' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/VariableInSprintfMaskMatcher.php',
     'Rector\\TypeDeclaration\\NodeFactory\\JMSTypePropertyTypeFactory' => $baseDir . '/rules/TypeDeclaration/NodeFactory/JMSTypePropertyTypeFactory.php',
     'Rector\\TypeDeclaration\\NodeManipulator\\AddNeverReturnType' => $baseDir . '/rules/TypeDeclaration/NodeManipulator/AddNeverReturnType.php',
     'Rector\\TypeDeclaration\\NodeManipulator\\AddReturnTypeFromCast' => $baseDir . '/rules/TypeDeclaration/NodeManipulator/AddReturnTypeFromCast.php',

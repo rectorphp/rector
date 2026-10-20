@@ -2871,7 +2871,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\TypeDeclaration\\NodeAnalyzer\\StrictReturnNewArrayResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/StrictReturnNewArrayResolver.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\StrictTypeSafetyChecker' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/StrictTypeSafetyChecker.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\TypeNodeUnwrapper' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/TypeNodeUnwrapper.php',
-        'Rector\\TypeDeclaration\\NodeAnalyzer\\VariableInSprintfMaskMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/VariableInSprintfMaskMatcher.php',
         'Rector\\TypeDeclaration\\NodeFactory\\JMSTypePropertyTypeFactory' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeFactory/JMSTypePropertyTypeFactory.php',
         'Rector\\TypeDeclaration\\NodeManipulator\\AddNeverReturnType' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeManipulator/AddNeverReturnType.php',
         'Rector\\TypeDeclaration\\NodeManipulator\\AddReturnTypeFromCast' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeManipulator/AddReturnTypeFromCast.php',
