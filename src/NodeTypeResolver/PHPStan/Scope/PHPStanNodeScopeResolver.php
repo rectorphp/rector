@@ -166,7 +166,20 @@ final class PHPStanNodeScopeResolver
          */
         Assert::allIsInstanceOf($stmts, Stmt::class);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
-        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (&$nodeCallback, $filePath): void {
+        $this->fillScope($stmts, $filePath, $scope);
+        // use after scope filling so DecoratingNodeVisitorInterface instance can fetch the scope of target node
+        // @see https://github.com/rectorphp/rector-src/pull/7721#discussion_r2595932460
+        $this->nodeTraverser->traverse($stmts);
+        return $stmts;
+    }
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function fillScope(array $stmts, string $filePath, MutatingScope $scope): void
+    {
+        /** @var array<array{Catch_, MutatingScope}> $catches */
+        $catches = [];
+        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (&$nodeCallback, &$catches): void {
             if ($mutatingScope instanceof NodeCallbackScope) {
                 $mutatingScope = $mutatingScope->toWalkScope();
             }
@@ -274,7 +287,12 @@ final class PHPStanNodeScopeResolver
                 return;
             }
             if ($node instanceof Catch_) {
-                $this->processCatch($node, $filePath, $mutatingScope);
+                // PHPStan fills the catch stmts itself right after this callback, unless no throw point matches;
+                // reset the first stmt scope, so the skipped ones can be detected after processing
+                if ($node->stmts !== []) {
+                    $node->stmts[0]->setAttribute(AttributeKey::SCOPE, null);
+                    $catches[] = [$node, $mutatingScope];
+                }
                 return;
             }
             if ($node instanceof NullableType) {
@@ -342,10 +360,9 @@ final class PHPStanNodeScopeResolver
             // fallback to fill by found scope
             \Rector\NodeTypeResolver\PHPStan\Scope\RectorNodeScopeResolver::processNodes($stmts, $scope);
         }
-        // use after scope filling so DecoratingNodeVisitorInterface instance can fetch the scope of target node
-        // @see https://github.com/rectorphp/rector-src/pull/7721#discussion_r2595932460
-        $this->nodeTraverser->traverse($stmts);
-        return $stmts;
+        foreach ($catches as [$catch, $catchScope]) {
+            $this->processCatch($catch, $filePath, $catchScope);
+        }
     }
     private function processYield(Yield_ $yield, MutatingScope $mutatingScope): void
     {
@@ -460,10 +477,13 @@ final class PHPStanNodeScopeResolver
     }
     private function processCatch(Catch_ $catch, string $filePath, MutatingScope $mutatingScope): void
     {
+        if ($catch->stmts[0]->getAttribute(AttributeKey::SCOPE) instanceof MutatingScope) {
+            return;
+        }
         $varName = $catch->var instanceof Variable ? $this->nodeNameResolver->getName($catch->var) : null;
         $type = TypeCombinator::union(...array_map(static fn(Name $name): ObjectType => new ObjectType((string) $name), $catch->types));
         $catchMutatingScope = $mutatingScope->enterCatchType($type, $varName);
-        $this->processNodes($catch->stmts, $filePath, $catchMutatingScope);
+        $this->fillScope($catch->stmts, $filePath, $catchMutatingScope);
     }
     private function processTryCatch(TryCatch $tryCatch, MutatingScope $mutatingScope): void
     {
