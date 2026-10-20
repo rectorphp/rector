@@ -100,6 +100,10 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
      * @var AnnotationToAttribute[]
      */
     private array $annotationsToAttributes = [];
+    /**
+     * @var array<string, AnnotationToAttribute[]>
+     */
+    private array $annotationsToAttributesByTag = [];
     public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, UseImportsResolver $useImportsResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, \Rector\Php80\Rector\Class_\AttributeValueResolver $attributeValueResolver)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
@@ -186,6 +190,11 @@ CODE_SAMPLE
     {
         Assert::allIsAOf($configuration, AnnotationToAttribute::class);
         $this->annotationsToAttributes = $this->resolveWithChangedAttributesClass($configuration);
+        // bucket by lowercased tag for the generic-tag path
+        $this->annotationsToAttributesByTag = [];
+        foreach ($this->annotationsToAttributes as $annotationToAttribute) {
+            $this->annotationsToAttributesByTag[strtolower($annotationToAttribute->getTag())][] = $annotationToAttribute;
+        }
     }
     public function provideMinPhpVersion(): int
     {
@@ -225,11 +234,7 @@ CODE_SAMPLE
             if (strpos($tag, '\\') !== \false) {
                 return null;
             }
-            foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-                $desiredTag = $annotationToAttribute->getTag();
-                if (strtolower($desiredTag) !== strtolower($tag)) {
-                    continue;
-                }
+            foreach ($this->annotationsToAttributesByTag[strtolower($tag)] ?? [] as $annotationToAttribute) {
                 // make sure the attribute class really exists to avoid error on early upgrade
                 if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
                     continue;
