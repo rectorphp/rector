@@ -113,7 +113,7 @@ CODE_SAMPLE
             $stmt->expr = $assign->expr;
             $lastStmt = array_pop($node->stmts);
             $elseStmtsExceptLast = array_slice($elseStmts, 0, -1);
-            $node->stmts = array_merge($node->stmts, $elseStmtsExceptLast, [$lastStmt]);
+            $node->stmts = array_merge(is_array($node->stmts) ? $node->stmts : iterator_to_array(is_array($node->stmts) ? new \ArrayIterator($node->stmts) : $node->stmts), is_array($elseStmtsExceptLast) ? $elseStmtsExceptLast : iterator_to_array(is_array($elseStmtsExceptLast) ? new \ArrayIterator($elseStmtsExceptLast) : $elseStmtsExceptLast), [$lastStmt]);
             return $node;
         }
         return null;

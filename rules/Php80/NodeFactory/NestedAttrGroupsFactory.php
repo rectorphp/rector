@@ -34,7 +34,7 @@ final class NestedAttrGroupsFactory
                 $attributeGroups[] = $this->phpNestedAttributeGroupFactory->create($doctrineAnnotationTagValueNode, $nestedDoctrineTagAndAnnotationToAttribute->getNestedAnnotationToAttribute(), $uses);
             }
             $nestedAttributeGroups = $this->phpNestedAttributeGroupFactory->createNested($doctrineAnnotationTagValueNode, $nestedDoctrineTagAndAnnotationToAttribute->getNestedAnnotationToAttribute());
-            $attributeGroups = array_merge($attributeGroups, $nestedAttributeGroups);
+            $attributeGroups = array_merge(is_array($attributeGroups) ? $attributeGroups : iterator_to_array(is_array($attributeGroups) ? new \ArrayIterator($attributeGroups) : $attributeGroups), is_array($nestedAttributeGroups) ? $nestedAttributeGroups : iterator_to_array(is_array($nestedAttributeGroups) ? new \ArrayIterator($nestedAttributeGroups) : $nestedAttributeGroups));
         }
         return array_unique($attributeGroups, \SORT_REGULAR);
     }

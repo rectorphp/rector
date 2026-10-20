@@ -1611,7 +1611,6 @@ return array(
     'Rector\\NodeCollector\\StaticAnalyzer' => $baseDir . '/src/NodeCollector/StaticAnalyzer.php',
     'Rector\\NodeCollector\\ValueObject\\ArrayCallable' => $baseDir . '/src/NodeCollector/ValueObject/ArrayCallable.php',
     'Rector\\NodeCollector\\ValueObject\\ArrayCallableDynamicMethod' => $baseDir . '/src/NodeCollector/ValueObject/ArrayCallableDynamicMethod.php',
-    'Rector\\NodeDecorator\\CreatedByRuleDecorator' => $baseDir . '/src/NodeDecorator/CreatedByRuleDecorator.php',
     'Rector\\NodeDecorator\\PropertyTypeDecorator' => $baseDir . '/src/NodeDecorator/PropertyTypeDecorator.php',
     'Rector\\NodeDecorator\\StatementDepthAttributeDecorator' => $baseDir . '/src/NodeDecorator/StatementDepthAttributeDecorator.php',
     'Rector\\NodeFactory\\ClassFromEnumFactory' => $vendorDir . '/rector/rector-downgrade-php/src/NodeFactory/ClassFromEnumFactory.php',

@@ -49,7 +49,7 @@ final class ClassConstManipulator
         // private constant can be fetched only in the class itself, or in a trait it uses
         $classLikes = [$classLike];
         if ($classLike->getTraitUses() !== []) {
-            $classLikes = array_merge($classLikes, $this->astResolver->parseClassReflectionTraits($classReflection));
+            $classLikes = array_merge(is_array($classLikes) ? $classLikes : iterator_to_array(is_array($classLikes) ? new \ArrayIterator($classLikes) : $classLikes), $this->astResolver->parseClassReflectionTraits($classReflection));
         }
         foreach ($classLikes as $currentClassLike) {
             $isClassConstFetchFound = (bool) $this->betterNodeFinder->findFirst($currentClassLike, function (Node $node) use ($classConst, $className, $objectType): bool {

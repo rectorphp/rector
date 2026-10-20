@@ -11,9 +11,7 @@ use Rector\Application\Provider\CurrentFileProvider;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeDecorator\CreatedByRuleDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Skipper\Skipper\Skipper;
 use Rector\ValueObject\Application\File;
 /**
  * Runs a single Rector rule against a node, with the skip/decorate/scope-refresh bookkeeping
@@ -23,14 +21,6 @@ use Rector\ValueObject\Application\File;
  */
 final class RectorRunner
 {
-    /**
-     * @readonly
-     */
-    private Skipper $skipper;
-    /**
-     * @readonly
-     */
-    private CreatedByRuleDecorator $createdByRuleDecorator;
     /**
      * @readonly
      */
@@ -53,10 +43,8 @@ B) Remove the Node:
 
     return \\PhpParser\\NodeVisitor::REMOVE_NODE;
 CODE_SAMPLE;
-    public function __construct(Skipper $skipper, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, CurrentFileProvider $currentFileProvider)
+    public function __construct(ChangedNodeScopeRefresher $changedNodeScopeRefresher, CurrentFileProvider $currentFileProvider)
     {
-        $this->skipper = $skipper;
-        $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
         $this->currentFileProvider = $currentFileProvider;
     }
@@ -67,10 +55,6 @@ CODE_SAMPLE;
     {
         $file = $this->getFile();
         $filePath = $file->getFilePath();
-        // node already changed by this rule in a previous pass → hard skip
-        if ($this->skipper->shouldSkipCurrentNode(get_class($rector), $node)) {
-            return null;
-        }
         // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
         $refactoredNodeOrState = $rector->refactor($node);
@@ -83,7 +67,6 @@ CODE_SAMPLE;
             throw new ShouldNotHappenException($errorMessage);
         }
         if (is_int($refactoredNodeOrState)) {
-            $this->createdByRuleDecorator->decorate($node, $originalNode, get_class($rector));
             // only remove node is supported
             if ($refactoredNodeOrState !== NodeVisitor::REMOVE_NODE) {
                 throw new ShouldNotHappenException(sprintf('Unsupported state "%d" returned from "%s".', $refactoredNodeOrState, get_class($rector)));
@@ -110,7 +93,6 @@ CODE_SAMPLE;
     private function postRefactorProcess(RectorInterface $rector, File $file, Node $originalNode, Node $node, $refactoredNode, string $filePath)
     {
         /** @var non-empty-array<Node>|Node $refactoredNode */
-        $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, get_class($rector));
         $rectorWithLineChange = new RectorWithLineChange(get_class($rector), $originalNode->getStartLine());
         $file->addRectorClassWithLine($rectorWithLineChange);
         /** @var MutatingScope|null $currentScope */

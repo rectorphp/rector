@@ -62,7 +62,7 @@ final class PropertyPromotionDocBlockMerger
                 $propertyDocInfo->removeByType(VarTagValueNode::class);
                 $propertyComments = $this->phpDocInfoPrinter->printToComments($propertyDocInfo);
                 /** @var Comment[] $mergedComments */
-                $mergedComments = array_merge($paramComments, $propertyComments);
+                $mergedComments = array_merge(is_array($paramComments) ? $paramComments : iterator_to_array(is_array($paramComments) ? new \ArrayIterator($paramComments) : $paramComments), is_array($propertyComments) ? $propertyComments : iterator_to_array(is_array($propertyComments) ? new \ArrayIterator($propertyComments) : $propertyComments));
                 $mergedComments = $this->removeEmptyComments($mergedComments);
                 $param->setAttribute(AttributeKey::COMMENTS, $mergedComments);
             }

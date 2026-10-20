@@ -149,7 +149,7 @@ final class ShortNameResolver
         });
         $docBlockShortNamesToFullyQualifiedNames = $this->fqnizeShortNames($docBlockShortNames, $stmts);
         /** @var array<string, string> $result */
-        $result = array_merge($shortNamesToFullyQualifiedNames, $docBlockShortNamesToFullyQualifiedNames);
+        $result = array_merge(is_array($shortNamesToFullyQualifiedNames) ? $shortNamesToFullyQualifiedNames : iterator_to_array(is_array($shortNamesToFullyQualifiedNames) ? new \ArrayIterator($shortNamesToFullyQualifiedNames) : $shortNamesToFullyQualifiedNames), is_array($docBlockShortNamesToFullyQualifiedNames) ? $docBlockShortNamesToFullyQualifiedNames : iterator_to_array(is_array($docBlockShortNamesToFullyQualifiedNames) ? new \ArrayIterator($docBlockShortNamesToFullyQualifiedNames) : $docBlockShortNamesToFullyQualifiedNames));
         return $result;
     }
     /**

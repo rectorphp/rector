@@ -162,15 +162,15 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
                 $nodeToCheck->setDocComment($doc);
             }
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($nodeToCheck);
-            $names = array_merge($names, $phpDocInfo->getAnnotationClassNames());
+            $names = array_merge(is_array($names) ? $names : iterator_to_array(is_array($names) ? new \ArrayIterator($names) : $names), is_array($phpDocInfo->getAnnotationClassNames()) ? $phpDocInfo->getAnnotationClassNames() : iterator_to_array(is_array($phpDocInfo->getAnnotationClassNames()) ? new \ArrayIterator($phpDocInfo->getAnnotationClassNames()) : $phpDocInfo->getAnnotationClassNames()));
             $constFetchNodeNames = $phpDocInfo->getConstFetchNodeClassNames();
-            $names = array_merge($names, $constFetchNodeNames);
+            $names = array_merge(is_array($names) ? $names : iterator_to_array(is_array($names) ? new \ArrayIterator($names) : $names), is_array($constFetchNodeNames) ? $constFetchNodeNames : iterator_to_array(is_array($constFetchNodeNames) ? new \ArrayIterator($constFetchNodeNames) : $constFetchNodeNames));
             $genericTagClassNames = $phpDocInfo->getGenericTagClassNames();
-            $names = array_merge($names, $genericTagClassNames);
+            $names = array_merge(is_array($names) ? $names : iterator_to_array(is_array($names) ? new \ArrayIterator($names) : $names), is_array($genericTagClassNames) ? $genericTagClassNames : iterator_to_array(is_array($genericTagClassNames) ? new \ArrayIterator($genericTagClassNames) : $genericTagClassNames));
             $inlineGenericUsesTagClassNames = $phpDocInfo->getInlineGenericUsesTagClassNames();
-            $names = array_merge($names, $inlineGenericUsesTagClassNames);
+            $names = array_merge(is_array($names) ? $names : iterator_to_array(is_array($names) ? new \ArrayIterator($names) : $names), is_array($inlineGenericUsesTagClassNames) ? $inlineGenericUsesTagClassNames : iterator_to_array(is_array($inlineGenericUsesTagClassNames) ? new \ArrayIterator($inlineGenericUsesTagClassNames) : $inlineGenericUsesTagClassNames));
             $arrayItemTagClassNames = $phpDocInfo->getArrayItemNodeClassNames();
-            $names = array_merge($names, $arrayItemTagClassNames);
+            $names = array_merge(is_array($names) ? $names : iterator_to_array(is_array($names) ? new \ArrayIterator($names) : $names), is_array($arrayItemTagClassNames) ? $arrayItemTagClassNames : iterator_to_array(is_array($arrayItemTagClassNames) ? new \ArrayIterator($arrayItemTagClassNames) : $arrayItemTagClassNames));
         }
         return $names;
     }

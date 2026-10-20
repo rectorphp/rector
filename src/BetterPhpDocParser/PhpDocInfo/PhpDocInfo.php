@@ -440,7 +440,7 @@ final class PhpDocInfo
             if ($resolvedClassNames === []) {
                 continue;
             }
-            $classNames = array_merge($classNames, $resolvedClassNames);
+            $classNames = array_merge(is_array($classNames) ? $classNames : iterator_to_array(is_array($classNames) ? new \ArrayIterator($classNames) : $classNames), is_array($resolvedClassNames) ? $resolvedClassNames : iterator_to_array(is_array($resolvedClassNames) ? new \ArrayIterator($resolvedClassNames) : $resolvedClassNames));
         }
         return array_unique($classNames);
     }

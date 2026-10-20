@@ -46,11 +46,11 @@ final class DataProviderClassMethodFinder
     public function find(Class_ $class): array
     {
         $parentAbstractClasses = $this->resolveParentAbstractClasses($class);
-        $targetClasses = array_merge([$class], $parentAbstractClasses);
+        $targetClasses = array_merge([$class], is_array($parentAbstractClasses) ? $parentAbstractClasses : iterator_to_array(is_array($parentAbstractClasses) ? new \ArrayIterator($parentAbstractClasses) : $parentAbstractClasses));
         // foreach to find method names
         $dataProviderMethodNames = [];
         foreach ($targetClasses as $targetClass) {
-            $dataProviderMethodNames = array_merge($dataProviderMethodNames, $this->resolverDataProviderClassMethodNames($targetClass));
+            $dataProviderMethodNames = array_merge(is_array($dataProviderMethodNames) ? $dataProviderMethodNames : iterator_to_array(is_array($dataProviderMethodNames) ? new \ArrayIterator($dataProviderMethodNames) : $dataProviderMethodNames), $this->resolverDataProviderClassMethodNames($targetClass));
         }
         $dataProviderClassMethods = [];
         foreach ($dataProviderMethodNames as $dataProviderMethodName) {
@@ -114,7 +114,7 @@ final class DataProviderClassMethodFinder
         $dataProviderMethodNames = [];
         foreach ($class->getMethods() as $classMethod) {
             $currentDataProviderMethodNames = $this->findDataProviderNamesForClassMethod($classMethod);
-            $dataProviderMethodNames = array_merge($dataProviderMethodNames, $currentDataProviderMethodNames);
+            $dataProviderMethodNames = array_merge(is_array($dataProviderMethodNames) ? $dataProviderMethodNames : iterator_to_array(is_array($dataProviderMethodNames) ? new \ArrayIterator($dataProviderMethodNames) : $dataProviderMethodNames), is_array($currentDataProviderMethodNames) ? $currentDataProviderMethodNames : iterator_to_array(is_array($currentDataProviderMethodNames) ? new \ArrayIterator($currentDataProviderMethodNames) : $currentDataProviderMethodNames));
         }
         return $dataProviderMethodNames;
     }

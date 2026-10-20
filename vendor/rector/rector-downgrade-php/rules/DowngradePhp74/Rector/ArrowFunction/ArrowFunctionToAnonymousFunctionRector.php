@@ -79,6 +79,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): Closure
     {
+        // convert a directly nested arrow function in the same pass, so a deep chain
+        // downgrades in one traverse instead of one level per pass
+        if ($node->expr instanceof ArrowFunction) {
+            $node->expr = $this->refactor($node->expr);
+        }
         $stmts = [new Return_($node->expr)];
         $anonymousFunctionFactory = $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType, $node->static);
         if ($node->expr instanceof Assign && $node->expr->expr instanceof Variable) {

@@ -57,7 +57,7 @@ final class OnSuccessLogoutClassMethodFactory
         $this->replaceReturnResponseWithSetResponse($onLogoutSuccessClassMethod);
         $this->replaceRequestWithGetRequest($onLogoutSuccessClassMethod);
         $oldClassStmts = (array) $onLogoutSuccessClassMethod->stmts;
-        $classMethod->stmts = array_merge([$if], $oldClassStmts);
+        $classMethod->stmts = array_merge([$if], is_array($oldClassStmts) ? $oldClassStmts : iterator_to_array(is_array($oldClassStmts) ? new \ArrayIterator($oldClassStmts) : $oldClassStmts));
         return $classMethod;
     }
     private function replaceReturnResponseWithSetResponse(ClassMethod $classMethod): void

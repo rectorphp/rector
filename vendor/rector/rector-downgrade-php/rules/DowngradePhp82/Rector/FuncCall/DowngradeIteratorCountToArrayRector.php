@@ -5,6 +5,7 @@ namespace Rector\DowngradePhp82\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Ternary;
@@ -70,6 +71,11 @@ CODE_SAMPLE
         if (!$arg instanceof Arg) {
             return null;
         }
+        // already wrapped in a previous pass; the wrap type stays not-yes-object (e.g. ArrayIterator|mixed),
+        // so without this check it would be wrapped again on every pass
+        if ($this->isArrayIteratorWrapped($arg->value)) {
+            return null;
+        }
         $type = $this->nodeTypeResolver->getType($arg->value);
         if ($this->shouldSkip($type)) {
             return null;
@@ -79,6 +85,19 @@ CODE_SAMPLE
         $firstValue = $node->args[$position]->value;
         $node->args[$position]->value = new Ternary($this->nodeFactory->createFuncCall('is_array', [new Arg($firstValue)]), new New_(new FullyQualified('ArrayIterator'), [new Arg($firstValue)]), $firstValue);
         return $node;
+    }
+    private function isArrayIteratorWrapped(Expr $expr): bool
+    {
+        if (!$expr instanceof Ternary) {
+            return \false;
+        }
+        if (!$expr->cond instanceof FuncCall || !$this->isName($expr->cond, 'is_array')) {
+            return \false;
+        }
+        if (!$expr->if instanceof New_) {
+            return \false;
+        }
+        return $this->isName($expr->if->class, 'ArrayIterator');
     }
     private function shouldSkip(Type $type): bool
     {

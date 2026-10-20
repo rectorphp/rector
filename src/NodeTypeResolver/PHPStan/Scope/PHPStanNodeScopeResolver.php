@@ -90,6 +90,7 @@ use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Parser\ParserErrorsException;
 use PHPStan\PhpDocParser\Parser\ParserException;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ObjectType;
@@ -533,6 +534,12 @@ final class PHPStanNodeScopeResolver
         try {
             return $mutatingScope->enterClass($classReflection);
         } catch (ShouldNotHappenException $exception) {
+        }
+        // enterClass() throws when the scope is already inside a class, which happens when a changed
+        // class node is re-processed on a later pass; keep the in-class scope instead of dropping it
+        $currentClassReflection = $mutatingScope->getClassReflection();
+        if ($currentClassReflection instanceof ClassReflection && $currentClassReflection->getName() === $classReflection->getName()) {
+            return $mutatingScope;
         }
         $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
         $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);

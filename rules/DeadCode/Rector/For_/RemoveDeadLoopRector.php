@@ -67,7 +67,7 @@ CODE_SAMPLE
         if ($node instanceof Do_ || $node instanceof While_) {
             $exprs = [$node->cond];
         } elseif ($node instanceof For_) {
-            $exprs = array_merge($node->init, $node->cond, $node->loop);
+            $exprs = array_merge(is_array($node->init) ? $node->init : iterator_to_array(is_array($node->init) ? new \ArrayIterator($node->init) : $node->init), is_array($node->cond) ? $node->cond : iterator_to_array(is_array($node->cond) ? new \ArrayIterator($node->cond) : $node->cond), is_array($node->loop) ? $node->loop : iterator_to_array(is_array($node->loop) ? new \ArrayIterator($node->loop) : $node->loop));
         } else {
             $exprs = [$node->expr, $node->valueVar];
         }

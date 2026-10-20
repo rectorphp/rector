@@ -262,7 +262,7 @@ CODE_SAMPLE
     private function createAttributeGroups(ReflectionParameter $reflectionParameter): array
     {
         $attributeGroups = [];
-        foreach (method_exists($reflectionParameter, 'getAttributes') ? $reflectionParameter->getAttributes() : [] as $reflectionAttribute) {
+        foreach ($reflectionParameter->getAttributes() as $reflectionAttribute) {
             $args = [];
             foreach ($reflectionAttribute->getArgumentsExpressions() as $name => $argumentExpression) {
                 $args[] = new Arg($this->nodeFactory->createReprintedNode($argumentExpression), \false, \false, [], is_string($name) ? new Identifier($name) : null);

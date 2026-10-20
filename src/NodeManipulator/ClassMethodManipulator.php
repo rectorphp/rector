@@ -29,17 +29,18 @@ final class ClassMethodManipulator
         if (!$this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
             return \false;
         }
+        // visibility is local to the node; only the protected case needs the class final keyword
+        if ($classMethod->isPrivate()) {
+            return \true;
+        }
+        if (!$classMethod->isProtected()) {
+            return \false;
+        }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        if ($classMethod->isPrivate()) {
-            return \true;
-        }
-        if ($classReflection->isFinalByKeyword()) {
-            return \false;
-        }
-        return $classMethod->isProtected();
+        return !$classReflection->isFinalByKeyword();
     }
     public function hasParentMethodOrInterfaceMethod(Class_ $class, string $methodName): bool
     {

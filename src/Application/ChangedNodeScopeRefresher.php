@@ -14,14 +14,19 @@ use PhpParser\Node\DeclareItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\PropertyItem;
 use PhpParser\Node\StaticVar;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\Use_;
@@ -81,6 +86,14 @@ final class ChangedNodeScopeRefresher
      */
     private function resolveStmts(Node $node): array
     {
+        // Else_/ElseIf_ are not processed standalone by PHPStan, only as part of an If_, so their body
+        // stays unscoped; wrap into an If_ so processNodes() scopes the real statements they hold
+        if ($node instanceof Else_) {
+            return [new If_(new ConstFetch(new Name('true')), ['stmts' => $node->stmts])];
+        }
+        if ($node instanceof ElseIf_) {
+            return [new If_($node->cond, ['stmts' => $node->stmts])];
+        }
         if ($node instanceof Stmt) {
             return [$node];
         }

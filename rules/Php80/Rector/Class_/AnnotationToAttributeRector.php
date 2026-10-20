@@ -169,7 +169,7 @@ CODE_SAMPLE
         $annotationAttributeGroups = $this->processDoctrineAnnotationClasses($phpDocInfo, $uses);
         // 2. bare tags without annotation class, e.g. "@require"
         $genericAttributeGroups = $this->processGenericTags($phpDocInfo);
-        $attributeGroups = array_merge($annotationAttributeGroups, $genericAttributeGroups);
+        $attributeGroups = array_merge(is_array($annotationAttributeGroups) ? $annotationAttributeGroups : iterator_to_array(is_array($annotationAttributeGroups) ? new \ArrayIterator($annotationAttributeGroups) : $annotationAttributeGroups), is_array($genericAttributeGroups) ? $genericAttributeGroups : iterator_to_array(is_array($genericAttributeGroups) ? new \ArrayIterator($genericAttributeGroups) : $genericAttributeGroups));
         if ($attributeGroups === []) {
             return null;
         }

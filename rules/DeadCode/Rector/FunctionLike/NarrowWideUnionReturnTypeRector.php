@@ -249,7 +249,7 @@ CODE_SAMPLE
             if ($returnStatement->expr === null) {
                 continue;
             }
-            $returnTypes = array_merge($returnTypes, $this->resolveNativeReturnTypes($returnStatement->expr));
+            $returnTypes = array_merge(is_array($returnTypes) ? $returnTypes : iterator_to_array(is_array($returnTypes) ? new \ArrayIterator($returnTypes) : $returnTypes), $this->resolveNativeReturnTypes($returnStatement->expr));
         }
         return $returnTypes;
     }

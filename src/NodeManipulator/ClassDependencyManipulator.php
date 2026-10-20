@@ -151,7 +151,7 @@ final class ClassDependencyManipulator
             if ($this->hasClassParentClassMethod($class, MethodName::CONSTRUCT)) {
                 $classMethod->stmts[] = $this->createParentClassMethodCall(MethodName::CONSTRUCT);
             }
-            $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);
+            $classMethod->stmts = array_merge((array) $classMethod->stmts, is_array($stmts) ? $stmts : iterator_to_array(is_array($stmts) ? new \ArrayIterator($stmts) : $stmts));
             $class->stmts = array_merge($class->stmts, [$classMethod]);
             return;
         }

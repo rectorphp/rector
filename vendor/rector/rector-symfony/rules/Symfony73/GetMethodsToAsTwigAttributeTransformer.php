@@ -166,7 +166,7 @@ final class GetMethodsToAsTwigAttributeTransformer
         foreach ($getMethodConversions->getAsTwigAttributeConversions() as $asTwigAttributeConversion) {
             $nameArg = $asTwigAttributeConversion->getNameArg();
             $nameArg->name = new Identifier('name');
-            $this->decorateMethodWithAttribute($asTwigAttributeConversion->getClassMethod(), $getMethodConversions->getAttributeClass(), array_merge([$nameArg], $asTwigAttributeConversion->getOptionArgs()));
+            $this->decorateMethodWithAttribute($asTwigAttributeConversion->getClassMethod(), $getMethodConversions->getAttributeClass(), array_merge([$nameArg], is_array($asTwigAttributeConversion->getOptionArgs()) ? $asTwigAttributeConversion->getOptionArgs() : iterator_to_array(is_array($asTwigAttributeConversion->getOptionArgs()) ? new \ArrayIterator($asTwigAttributeConversion->getOptionArgs()) : $asTwigAttributeConversion->getOptionArgs())));
             $this->visibilityManipulator->makePublic($asTwigAttributeConversion->getClassMethod());
             // remove old new filter/function/test instance
             unset($returnArray->items[$asTwigAttributeConversion->getItemKey()]);

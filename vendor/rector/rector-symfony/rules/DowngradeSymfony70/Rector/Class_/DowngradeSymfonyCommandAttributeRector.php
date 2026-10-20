@@ -87,7 +87,7 @@ CODE_SAMPLE
             $stmts[] = new Expression(new MethodCall(new Variable('this'), 'setDescription', [new Arg($description)]));
         }
         if ($configureClassMethod instanceof ClassMethod) {
-            $configureClassMethod->stmts = array_merge((array) $configureClassMethod->stmts, $stmts);
+            $configureClassMethod->stmts = array_merge((array) $configureClassMethod->stmts, is_array($stmts) ? $stmts : iterator_to_array(is_array($stmts) ? new \ArrayIterator($stmts) : $stmts));
         } else {
             $classMethod = new ClassMethod('configure');
             $classMethod->flags = Visibility::PROTECTED;

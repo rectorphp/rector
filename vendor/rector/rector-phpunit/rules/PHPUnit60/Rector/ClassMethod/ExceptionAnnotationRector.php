@@ -112,7 +112,7 @@ CODE_SAMPLE
                 continue;
             }
             $methodCallExpressions = $this->expectExceptionMethodCallFactory->createFromTagValueNodes($phpDocInfo->getTagsByName($annotationName), $methodName);
-            $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
+            $node->stmts = array_merge(is_array($methodCallExpressions) ? $methodCallExpressions : iterator_to_array(is_array($methodCallExpressions) ? new \ArrayIterator($methodCallExpressions) : $methodCallExpressions), (array) $node->stmts);
             $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationName);
             $hasChanged = \true;
         }
