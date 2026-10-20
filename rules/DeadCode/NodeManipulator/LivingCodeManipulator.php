@@ -136,7 +136,7 @@ final class LivingCodeManipulator
     {
         $livingExprs = [];
         foreach ($isset->vars as $expr) {
-            $livingExprs = array_merge(is_array($livingExprs) ? $livingExprs : iterator_to_array($livingExprs), $this->keepLivingCodeFromExpr($expr));
+            $livingExprs = array_merge($livingExprs, $this->keepLivingCodeFromExpr($expr));
         }
         return $livingExprs;
     }

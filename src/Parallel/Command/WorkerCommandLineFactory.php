@@ -43,7 +43,7 @@ final class WorkerCommandLineFactory
         if ($commandArguments !== [] && ($commandArguments[0] !== 'process' && $commandArguments[0] !== 'p') && !defined('PHPUNIT_COMPOSER_INSTALL')) {
             $commandArguments = array_merge(['process'], $commandArguments);
         }
-        $args = array_merge([\PHP_BINARY, $mainScript], is_array($commandArguments) ? $commandArguments : iterator_to_array($commandArguments));
+        $args = array_merge([\PHP_BINARY, $mainScript], $commandArguments);
         $workerCommandArray = [];
         $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
         if ($mainCommand->getName() === null) {

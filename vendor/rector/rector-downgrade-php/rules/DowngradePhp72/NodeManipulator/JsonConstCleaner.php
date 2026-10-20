@@ -78,7 +78,7 @@ final class JsonConstCleaner
         $operands = [];
         foreach ([$bitwiseOr->left, $bitwiseOr->right] as $operand) {
             if ($operand instanceof BitwiseOr) {
-                $operands = array_merge(is_array($operands) ? $operands : iterator_to_array($operands), $this->flattenOperands($operand));
+                $operands = array_merge($operands, $this->flattenOperands($operand));
                 continue;
             }
             $operands[] = $operand;

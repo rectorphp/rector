@@ -67,7 +67,7 @@ final class ProcessResult
     public function addSystemErrors(array $systemErrors): void
     {
         Assert::allIsInstanceOf($systemErrors, SystemError::class);
-        $this->systemErrors = array_merge($this->systemErrors, is_array($systemErrors) ? $systemErrors : iterator_to_array($systemErrors));
+        $this->systemErrors = array_merge($this->systemErrors, $systemErrors);
     }
     /**
      * Path-only skips are matched while finding files in the main process, but parallel runs build
@@ -81,7 +81,7 @@ final class ProcessResult
         foreach ($usedSkips as $skip => $paths) {
             Assert::allString($paths);
             $existingPaths = $this->usedSkips[$skip] ?? [];
-            $this->usedSkips[$skip] = array_values(array_unique(array_merge(is_array($existingPaths) ? $existingPaths : iterator_to_array($existingPaths), is_array($paths) ? $paths : iterator_to_array($paths))));
+            $this->usedSkips[$skip] = array_values(array_unique(array_merge($existingPaths, $paths)));
         }
     }
     public function getTotalChanged(): int

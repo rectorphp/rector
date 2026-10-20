@@ -192,7 +192,7 @@ CODE_SAMPLE
         } else {
             $setterBasedStrictTypes = [$setterBasedStrictType];
         }
-        return new UnionType(array_merge(is_array($setterBasedStrictTypes) ? $setterBasedStrictTypes : iterator_to_array($setterBasedStrictTypes), is_array($getterBasedStrictTypes) ? $getterBasedStrictTypes : iterator_to_array($getterBasedStrictTypes)));
+        return new UnionType(array_merge($setterBasedStrictTypes, $getterBasedStrictTypes));
     }
     private function isDefaultExprTypeCompatible(Property $property, Type $getterSetterPropertyType): bool
     {

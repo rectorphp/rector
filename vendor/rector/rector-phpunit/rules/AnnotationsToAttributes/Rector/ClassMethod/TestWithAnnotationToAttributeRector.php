@@ -121,7 +121,7 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
-        $testWithPhpDocTagNodes = array_merge(is_array($phpDocInfo->getTagsByName('testWith')) ? $phpDocInfo->getTagsByName('testWith') : iterator_to_array($phpDocInfo->getTagsByName('testWith')), is_array($phpDocInfo->getTagsByName('testwith')) ? $phpDocInfo->getTagsByName('testwith') : iterator_to_array($phpDocInfo->getTagsByName('testwith')));
+        $testWithPhpDocTagNodes = array_merge($phpDocInfo->getTagsByName('testWith'), $phpDocInfo->getTagsByName('testwith'));
         if ($testWithPhpDocTagNodes === []) {
             return null;
         }

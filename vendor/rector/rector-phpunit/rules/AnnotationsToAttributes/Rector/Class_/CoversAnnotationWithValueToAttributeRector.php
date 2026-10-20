@@ -196,9 +196,9 @@ CODE_SAMPLE
             $coversGroups = $this->handleCovers($phpDocInfo, $hasCoversDefault);
         }
         foreach ($class->getMethods() as $classMethod) {
-            $methodGroups = array_merge(is_array($methodGroups) ? $methodGroups : iterator_to_array($methodGroups), $this->resolveMethodAttributes($classMethod, $coversDefaultClass));
+            $methodGroups = array_merge($methodGroups, $this->resolveMethodAttributes($classMethod, $coversDefaultClass));
         }
-        return array_merge(is_array($coversDefaultGroups) ? $coversDefaultGroups : iterator_to_array($coversDefaultGroups), is_array($coversGroups) ? $coversGroups : iterator_to_array($coversGroups), is_array($methodGroups) ? $methodGroups : iterator_to_array($methodGroups));
+        return array_merge($coversDefaultGroups, $coversGroups, $methodGroups);
     }
     /**
      * @return AttributeGroup[]

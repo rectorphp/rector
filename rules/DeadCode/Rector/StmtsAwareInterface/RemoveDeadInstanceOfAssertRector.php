@@ -13,6 +13,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\Enum\ObjectReference;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -115,11 +118,25 @@ CODE_SAMPLE
         if (!$instanceof->class instanceof Name) {
             return \false;
         }
-        $classType = $this->getType($instanceof->class);
+        $classType = $this->resolveClassNameType($instanceof->class);
         $exprType = $this->getType($instanceof->expr);
         if ($classType->equals($exprType)) {
             return \true;
         }
         return $classType->isSuperTypeOf($exprType)->yes();
+    }
+    private function resolveClassNameType(Name $name): Type
+    {
+        // a concrete class name is resolvable straight from the node, no type inference needed;
+        // self/static/parent depend on the enclosing class, so fall back to scope-based type
+        $className = $this->getName($name);
+        if ($className === null) {
+            return $this->getType($name);
+        }
+        $loweredClassName = strtolower($className);
+        if (in_array($loweredClassName, [ObjectReference::SELF, ObjectReference::STATIC, ObjectReference::PARENT], \true)) {
+            return $this->getType($name);
+        }
+        return new ObjectType($className);
     }
 }

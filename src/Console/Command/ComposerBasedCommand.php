@@ -76,7 +76,7 @@ final class ComposerBasedCommand extends Command
             }
             $table->render();
         }
-        $allTableRows = array_merge(is_array($tableRows) ? $tableRows : iterator_to_array($tableRows), is_array($configurationTableRows) ? $configurationTableRows : iterator_to_array($configurationTableRows));
+        $allTableRows = array_merge($tableRows, $configurationTableRows);
         $activeCount = count(array_filter($allTableRows, static fn(array $tableRow): bool => $tableRow[4] === 'yes'));
         $this->symfonyStyle->note(sprintf('%d of %d composer package bound items are active', $activeCount, count($allTableRows)));
         return Command::SUCCESS;

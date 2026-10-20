@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\EarlyReturn\Rector\If_;
 
-use PhpParser\Node\Stmt;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;

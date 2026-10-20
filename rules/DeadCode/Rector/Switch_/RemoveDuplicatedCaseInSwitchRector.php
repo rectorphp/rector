@@ -133,7 +133,7 @@ CODE_SAMPLE
             $this->hasChanged = \true;
             $equalCases[array_key_last($equalCases)]->stmts = $outerCase->stmts;
             $outerCase->stmts = [];
-            $result = array_merge($result, array_merge([$outerCase], is_array($equalCases) ? $equalCases : iterator_to_array($equalCases)));
+            $result = array_merge($result, array_merge([$outerCase], $equalCases));
         }
         $switch->cases = $result;
     }

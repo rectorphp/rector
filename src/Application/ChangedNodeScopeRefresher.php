@@ -22,6 +22,7 @@ use PhpParser\Node\PropertyItem;
 use PhpParser\Node\StaticVar;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -34,6 +35,7 @@ use PhpParser\Node\UseItem;
 use PHPStan\Analyser\MutatingScope;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeAnalyzer\ScopeAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 /**
@@ -78,6 +80,14 @@ final class ChangedNodeScopeRefresher
          *              - second rule: - ClassMethod → here fetch the index 0 that no longer exists
          */
         SimpleCallableNodeTraverser::traverse($node, fn(Node $subNode): ?Node => \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($subNode));
+        // a class-like scope is already inside the class, so PHPStan cannot enter it again and would fail
+        // on the class node, leaving its methods with the class scope; process the class stmts directly instead
+        if ($node instanceof ClassLike && $mutatingScope->isInClass()) {
+            // the class node itself is not part of its stmts, e.g. an Enum_ replaced by a new Class_ has no scope yet
+            $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $this->phpStanNodeScopeResolver->processNodes($node->stmts, $filePath, $mutatingScope);
+            return;
+        }
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
     }

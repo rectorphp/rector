@@ -180,7 +180,7 @@ CODE_SAMPLE
         $new = $arrayItem->value;
         if ($oldArguments[0]->value instanceof Array_) {
             // already array, just shift it
-            $new->args = array_merge([new Arg(new String_($filterName))], is_array($oldArguments) ? $oldArguments : iterator_to_array($oldArguments));
+            $new->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
             return;
         }
         // not array yet, wrap to one

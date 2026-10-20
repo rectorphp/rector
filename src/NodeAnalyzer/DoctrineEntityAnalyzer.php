@@ -38,12 +38,12 @@ final class DoctrineEntityAnalyzer
         /** @var ReflectionClass $nativeReflectionClass */
         $nativeReflectionClass = $classReflection->getNativeReflection();
         // skip early in case of no attributes at all
-        if ($nativeReflectionClass->getAttributes() === []) {
+        if ((method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes() : []) === []) {
             return \false;
         }
         $found = \false;
         foreach (self::DOCTRINE_MAPPING_CLASSES as $doctrineMappingClass) {
-            if ($nativeReflectionClass->getAttributes($doctrineMappingClass) !== []) {
+            if ((method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes($doctrineMappingClass) : []) !== []) {
                 $found = \true;
                 break;
             }
