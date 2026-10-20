@@ -40,7 +40,7 @@ final class OnLogoutClassMethodFactory
     {
         $classMethod = $this->bareLogoutClassMethodFactory->create();
         $assignStmts = $this->createAssignStmtFromOldClassMethod($logoutClassMethod);
-        $classMethod->stmts = array_merge(is_array($assignStmts) ? $assignStmts : iterator_to_array(is_array($assignStmts) ? new \ArrayIterator($assignStmts) : $assignStmts), (array) $logoutClassMethod->stmts);
+        $classMethod->stmts = array_merge(is_array($assignStmts) ? $assignStmts : iterator_to_array($assignStmts), (array) $logoutClassMethod->stmts);
         return $classMethod;
     }
     /**

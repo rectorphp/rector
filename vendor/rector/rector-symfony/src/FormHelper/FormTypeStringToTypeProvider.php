@@ -38,7 +38,7 @@ final class FormTypeStringToTypeProvider
     private function getNameToTypeMap(): array
     {
         $customServiceFormTypeByAlias = $this->provideCustomServiceFormTypeByAliasFromContainerXml();
-        return array_merge(self::SYMFONY_CORE_NAME_TO_TYPE_MAP, is_array($customServiceFormTypeByAlias) ? $customServiceFormTypeByAlias : iterator_to_array(is_array($customServiceFormTypeByAlias) ? new \ArrayIterator($customServiceFormTypeByAlias) : $customServiceFormTypeByAlias));
+        return array_merge(self::SYMFONY_CORE_NAME_TO_TYPE_MAP, is_array($customServiceFormTypeByAlias) ? $customServiceFormTypeByAlias : iterator_to_array($customServiceFormTypeByAlias));
     }
     /**
      * @return array<string, string>

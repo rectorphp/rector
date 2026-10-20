@@ -196,9 +196,9 @@ CODE_SAMPLE
             $coversGroups = $this->handleCovers($phpDocInfo, $hasCoversDefault);
         }
         foreach ($class->getMethods() as $classMethod) {
-            $methodGroups = array_merge(is_array($methodGroups) ? $methodGroups : iterator_to_array(is_array($methodGroups) ? new \ArrayIterator($methodGroups) : $methodGroups), $this->resolveMethodAttributes($classMethod, $coversDefaultClass));
+            $methodGroups = array_merge(is_array($methodGroups) ? $methodGroups : iterator_to_array($methodGroups), $this->resolveMethodAttributes($classMethod, $coversDefaultClass));
         }
-        return array_merge(is_array($coversDefaultGroups) ? $coversDefaultGroups : iterator_to_array(is_array($coversDefaultGroups) ? new \ArrayIterator($coversDefaultGroups) : $coversDefaultGroups), is_array($coversGroups) ? $coversGroups : iterator_to_array(is_array($coversGroups) ? new \ArrayIterator($coversGroups) : $coversGroups), is_array($methodGroups) ? $methodGroups : iterator_to_array(is_array($methodGroups) ? new \ArrayIterator($methodGroups) : $methodGroups));
+        return array_merge(is_array($coversDefaultGroups) ? $coversDefaultGroups : iterator_to_array($coversDefaultGroups), is_array($coversGroups) ? $coversGroups : iterator_to_array($coversGroups), is_array($methodGroups) ? $methodGroups : iterator_to_array($methodGroups));
     }
     /**
      * @return AttributeGroup[]

@@ -114,7 +114,7 @@ final class TypeFactory
             $flattenTypes = TypeUtils::flattenTypes($type);
             foreach ($flattenTypes as $flattenType) {
                 if ($flattenType instanceof ConstantArrayType) {
-                    $unwrappedTypes = array_merge(is_array($unwrappedTypes) ? $unwrappedTypes : iterator_to_array(is_array($unwrappedTypes) ? new \ArrayIterator($unwrappedTypes) : $unwrappedTypes), $this->unwrapConstantArrayTypes($flattenType));
+                    $unwrappedTypes = array_merge(is_array($unwrappedTypes) ? $unwrappedTypes : iterator_to_array($unwrappedTypes), $this->unwrapConstantArrayTypes($flattenType));
                 } else {
                     $unwrappedTypes = $this->resolveNonConstantArrayType($flattenType, $unwrappedTypes);
                 }

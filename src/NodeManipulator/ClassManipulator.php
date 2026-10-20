@@ -28,7 +28,7 @@ final class ClassManipulator
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
-        $ancestorClassReflections = array_merge(is_array($classReflection->getParents()) ? $classReflection->getParents() : iterator_to_array(is_array($classReflection->getParents()) ? new \ArrayIterator($classReflection->getParents()) : $classReflection->getParents()), is_array($classReflection->getInterfaces()) ? $classReflection->getInterfaces() : iterator_to_array(is_array($classReflection->getInterfaces()) ? new \ArrayIterator($classReflection->getInterfaces()) : $classReflection->getInterfaces()));
+        $ancestorClassReflections = array_merge(is_array($classReflection->getParents()) ? $classReflection->getParents() : iterator_to_array($classReflection->getParents()), is_array($classReflection->getInterfaces()) ? $classReflection->getInterfaces() : iterator_to_array($classReflection->getInterfaces()));
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             if (!$ancestorClassReflection->hasMethod($oldMethod)) {
                 continue;

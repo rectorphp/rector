@@ -187,7 +187,7 @@ CODE_SAMPLE
         if (isset($yields[0])) {
             $yields[0]->setAttribute(AttributeKey::COMMENTS, array_merge($commentReturn, $yields[0]->getAttribute(AttributeKey::COMMENTS) ?? []));
         }
-        $classMethod->stmts = array_merge((array) $classMethod->stmts, is_array($yields) ? $yields : iterator_to_array(is_array($yields) ? new \ArrayIterator($yields) : $yields));
+        $classMethod->stmts = array_merge((array) $classMethod->stmts, is_array($yields) ? $yields : iterator_to_array($yields));
     }
     private function removeReturnTag(ClassMethod $classMethod): void
     {

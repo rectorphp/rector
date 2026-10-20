@@ -204,13 +204,13 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
     {
         if (in_array($funcCallOrEmptyNodeName, ['in_array', 'array_search'], \true) && count($funcCallOrEmptyNodeArgs) === 3) {
             unset($funcCallOrEmptyNodeArgs[2]);
-            return array_merge(is_array($funcCallOrEmptyNodeArgs) ? $funcCallOrEmptyNodeArgs : iterator_to_array(is_array($funcCallOrEmptyNodeArgs) ? new \ArrayIterator($funcCallOrEmptyNodeArgs) : $funcCallOrEmptyNodeArgs), is_array($oldArguments) ? $oldArguments : iterator_to_array(is_array($oldArguments) ? new \ArrayIterator($oldArguments) : $oldArguments));
+            return array_merge(is_array($funcCallOrEmptyNodeArgs) ? $funcCallOrEmptyNodeArgs : iterator_to_array($funcCallOrEmptyNodeArgs), is_array($oldArguments) ? $oldArguments : iterator_to_array($oldArguments));
         }
         if (in_array($funcCallOrEmptyNodeName, ['is_a', 'str_contains'], \true)) {
             // flip arguments
             $newArgs = [$funcCallOrEmptyNodeArgs[1], $funcCallOrEmptyNodeArgs[0]];
-            return array_merge(is_array($newArgs) ? $newArgs : iterator_to_array(is_array($newArgs) ? new \ArrayIterator($newArgs) : $newArgs), is_array($oldArguments) ? $oldArguments : iterator_to_array(is_array($oldArguments) ? new \ArrayIterator($oldArguments) : $oldArguments));
+            return array_merge(is_array($newArgs) ? $newArgs : iterator_to_array($newArgs), is_array($oldArguments) ? $oldArguments : iterator_to_array($oldArguments));
         }
-        return array_merge(is_array($funcCallOrEmptyNodeArgs) ? $funcCallOrEmptyNodeArgs : iterator_to_array(is_array($funcCallOrEmptyNodeArgs) ? new \ArrayIterator($funcCallOrEmptyNodeArgs) : $funcCallOrEmptyNodeArgs), is_array($oldArguments) ? $oldArguments : iterator_to_array(is_array($oldArguments) ? new \ArrayIterator($oldArguments) : $oldArguments));
+        return array_merge(is_array($funcCallOrEmptyNodeArgs) ? $funcCallOrEmptyNodeArgs : iterator_to_array($funcCallOrEmptyNodeArgs), is_array($oldArguments) ? $oldArguments : iterator_to_array($oldArguments));
     }
 }

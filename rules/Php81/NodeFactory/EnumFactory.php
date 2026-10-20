@@ -80,7 +80,7 @@ final class EnumFactory
                 $enum->stmts[] = $this->createEnumCaseFromConst($constant);
             }
         }
-        $enum->stmts = array_merge(is_array($enum->stmts) ? $enum->stmts : iterator_to_array(is_array($enum->stmts) ? new \ArrayIterator($enum->stmts) : $enum->stmts), is_array($class->getMethods()) ? $class->getMethods() : iterator_to_array(is_array($class->getMethods()) ? new \ArrayIterator($class->getMethods()) : $class->getMethods()));
+        $enum->stmts = array_merge(is_array($enum->stmts) ? $enum->stmts : iterator_to_array($enum->stmts), is_array($class->getMethods()) ? $class->getMethods() : iterator_to_array($class->getMethods()));
         return $enum;
     }
     public function createFromSpatieClass(Class_ $class, bool $enumNameInSnakeCase = \false): Enum_

@@ -117,7 +117,7 @@ CODE_SAMPLE
                     // nothing can do as value is dynamic
                     break;
                 }
-                $extractValues = array_merge(is_array($extractValues) ? $extractValues : iterator_to_array(is_array($extractValues) ? new \ArrayIterator($extractValues) : $extractValues), array_keys($appendExtractValues));
+                $extractValues = array_merge(is_array($extractValues) ? $extractValues : iterator_to_array($extractValues), array_keys($appendExtractValues));
                 continue;
             }
             if ($stmt instanceof Static_) {

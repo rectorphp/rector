@@ -403,7 +403,7 @@ abstract class AbstractUnicodeString extends AbstractString
         }
         $str = clone $this;
         if ($prefix instanceof \Traversable) {
-            $prefix = iterator_to_array(is_array($prefix) ? new \ArrayIterator($prefix) : $prefix, \false);
+            $prefix = iterator_to_array($prefix, \false);
         } elseif ($prefix instanceof parent) {
             $prefix = $prefix->string;
         }
@@ -434,7 +434,7 @@ abstract class AbstractUnicodeString extends AbstractString
         }
         $str = clone $this;
         if ($suffix instanceof \Traversable) {
-            $suffix = iterator_to_array(is_array($suffix) ? new \ArrayIterator($suffix) : $suffix, \false);
+            $suffix = iterator_to_array($suffix, \false);
         } elseif ($suffix instanceof parent) {
             $suffix = $suffix->string;
         }

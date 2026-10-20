@@ -84,7 +84,7 @@ final class StaticDoctrineAnnotationParser
         $values = [];
         $resolvedValue = $this->resolveAnnotationValue($tokenIterator, $currentPhpNode);
         if (is_array($resolvedValue)) {
-            $values = array_merge(is_array($values) ? $values : iterator_to_array(is_array($values) ? new \ArrayIterator($values) : $values), is_array($resolvedValue) ? $resolvedValue : iterator_to_array(is_array($resolvedValue) ? new \ArrayIterator($resolvedValue) : $resolvedValue));
+            $values = array_merge(is_array($values) ? $values : iterator_to_array($values), is_array($resolvedValue) ? $resolvedValue : iterator_to_array($resolvedValue));
         } else {
             $values[] = $resolvedValue;
         }
@@ -96,7 +96,7 @@ final class StaticDoctrineAnnotationParser
             }
             $nestedValues = $this->resolveAnnotationValue($tokenIterator, $currentPhpNode);
             if (is_array($nestedValues)) {
-                $values = array_merge(is_array($values) ? $values : iterator_to_array(is_array($values) ? new \ArrayIterator($values) : $values), is_array($nestedValues) ? $nestedValues : iterator_to_array(is_array($nestedValues) ? new \ArrayIterator($nestedValues) : $nestedValues));
+                $values = array_merge(is_array($values) ? $values : iterator_to_array($values), is_array($nestedValues) ? $nestedValues : iterator_to_array($nestedValues));
             } else {
                 if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_END)) {
                     break;

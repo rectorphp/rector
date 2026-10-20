@@ -75,7 +75,7 @@ CODE_SAMPLE
                 $isCleaned = \true;
                 continue;
             }
-            $collectInterfaces = array_merge(is_array($collectInterfaces) ? $collectInterfaces : iterator_to_array(is_array($collectInterfaces) ? new \ArrayIterator($collectInterfaces) : $collectInterfaces), $this->familyRelationsAnalyzer->getClassLikeAncestorNames($extend));
+            $collectInterfaces = array_merge(is_array($collectInterfaces) ? $collectInterfaces : iterator_to_array($collectInterfaces), $this->familyRelationsAnalyzer->getClassLikeAncestorNames($extend));
         }
         if (!$isCleaned) {
             return null;

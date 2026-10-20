@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp82\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Ternary;
@@ -29,6 +30,10 @@ final class DowngradeIteratorCountToArrayRector extends AbstractRector
      * @readonly
      */
     private ArgsAnalyzer $argsAnalyzer;
+    /**
+     * @var string
+     */
+    private const SKIP_NODE = 'skip_node';
     public function __construct(ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
@@ -57,10 +62,17 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param FuncCall $node
+     * @param Ternary|FuncCall $node
      */
     public function refactor(Node $node): ?\PhpParser\Node\Expr\FuncCall
     {
+        if ($node instanceof Ternary) {
+            $this->markIsArrayGuardedCall($node);
+            return null;
+        }
+        if ($node->getAttribute(self::SKIP_NODE) === \true) {
+            return null;
+        }
         if (!$this->isNames($node, ['iterator_count', 'iterator_to_array'])) {
             return null;
         }
@@ -86,6 +98,36 @@ CODE_SAMPLE
         $node->args[$position]->value = new Ternary($this->nodeFactory->createFuncCall('is_array', [new Arg($firstValue)]), new New_(new FullyQualified('ArrayIterator'), [new Arg($firstValue)]), $firstValue);
         return $node;
     }
+    /**
+     * Skip the not-array branch of an is_array() check on the same expr, e.g.
+     * is_array($data) ? $data : iterator_to_array($data)
+     */
+    private function markIsArrayGuardedCall(Ternary $ternary): void
+    {
+        $cond = $ternary->cond;
+        $notArrayBranch = $ternary->else;
+        if ($cond instanceof BooleanNot) {
+            $cond = $cond->expr;
+            $notArrayBranch = $ternary->if;
+        }
+        if (!$cond instanceof FuncCall || !$this->isName($cond, 'is_array') || $cond->isFirstClassCallable()) {
+            return;
+        }
+        if (!$notArrayBranch instanceof FuncCall || $notArrayBranch->isFirstClassCallable()) {
+            return;
+        }
+        if (!$this->isNames($notArrayBranch, ['iterator_count', 'iterator_to_array'])) {
+            return;
+        }
+        $checkedArg = $cond->getArg('value', 0);
+        $iteratorArg = $notArrayBranch->getArg('iterator', 0);
+        if (!$checkedArg instanceof Arg || !$iteratorArg instanceof Arg) {
+            return;
+        }
+        if ($this->nodeComparator->areNodesEqual($checkedArg->value, $iteratorArg->value)) {
+            $notArrayBranch->setAttribute(self::SKIP_NODE, \true);
+        }
+    }
     private function isArrayIteratorWrapped(Expr $expr): bool
     {
         if (!$expr instanceof Ternary) {
@@ -103,6 +145,11 @@ CODE_SAMPLE
     {
         if ($type->isArray()->yes()) {
             return \false;
+        }
+        // never an array, e.g. narrowed by is_array($data) ? $data : iterator_to_array($data),
+        // so the is_array() check would always be false
+        if ($type->isArray()->no()) {
+            return \true;
         }
         $type = TypeCombinator::removeNull($type);
         return $type->isObject()->yes();
