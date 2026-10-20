@@ -7,7 +7,7 @@ declare (strict_types=1);
  */
 namespace RectorPrefix202610\Nette\Utils;
 
-use function array_merge, checkdate, implode, is_int, is_string, preg_match, preg_replace_callback, sprintf, trim;
+use function is_int, is_string;
 /**
  * Extends PHP's DateTimeImmutable with strict validation and additional factory methods.
  * Invalid dates and times are rejected with an exception instead of being silently adjusted.
@@ -107,7 +107,7 @@ class DateTimeImmutable extends \DateTimeImmutable implements \JsonSerializable
             return '';
         }, $input);
         if ($base === null) {
-            $result = new \DateTimeImmutable($absPart, $timezone);
+            $result = new \DateTimeImmutable(trim($absPart), $timezone);
             self::handleErrors($input);
         } else {
             $result = \DateTimeImmutable::createFromInterface($base);

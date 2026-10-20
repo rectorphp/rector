@@ -8,8 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202610\Nette\Utils;
 
 use RectorPrefix202610\Nette;
-use function constant, current, defined, end, explode, file_get_contents, implode, ltrim, next, ord, strrchr, strtolower, substr;
-use const T_AS, T_CLASS, T_COMMENT, T_CURLY_OPEN, T_DOC_COMMENT, T_DOLLAR_OPEN_CURLY_BRACES, T_ENUM, T_INTERFACE, T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED, T_NAMESPACE, T_NS_SEPARATOR, T_STRING, T_TRAIT, T_USE, T_WHITESPACE, TOKEN_PARSE;
+use function ord;
 /**
  * PHP reflection helpers.
  */
@@ -183,7 +182,7 @@ final class Reflection
     private static function parseUseStatements(string $code, ?string $forClass = null): array
     {
         try {
-            $tokens = token_get_all($code, TOKEN_PARSE);
+            $tokens = token_get_all($code, \TOKEN_PARSE);
         } catch (\ParseError $e) {
             trigger_error($e->getMessage());
             $tokens = [];
@@ -191,19 +190,19 @@ final class Reflection
         $namespace = $class = null;
         $classLevel = $level = 0;
         $res = $uses = [];
-        $nameTokens = [T_STRING, T_NS_SEPARATOR, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED];
+        $nameTokens = [\T_STRING, \T_NS_SEPARATOR, \T_NAME_QUALIFIED, \T_NAME_FULLY_QUALIFIED];
         while ($token = current($tokens)) {
             next($tokens);
             switch (is_array($token) ? $token[0] : $token) {
-                case T_NAMESPACE:
+                case \T_NAMESPACE:
                     $namespace = ltrim(self::fetch($tokens, $nameTokens) . '\\', '\\');
                     $uses = [];
                     break;
-                case T_CLASS:
-                case T_INTERFACE:
-                case T_TRAIT:
-                case T_ENUM:
-                    if ($name = self::fetch($tokens, T_STRING)) {
+                case \T_CLASS:
+                case \T_INTERFACE:
+                case \T_TRAIT:
+                case \T_ENUM:
+                    if ($name = self::fetch($tokens, \T_STRING)) {
                         $class = $namespace . $name;
                         $classLevel = $level + 1;
                         $res[$class] = $uses;
@@ -212,12 +211,12 @@ final class Reflection
                         }
                     }
                     break;
-                case T_USE:
+                case \T_USE:
                     while (!$class && $name = self::fetch($tokens, $nameTokens)) {
                         $name = ltrim($name, '\\');
                         if (self::fetch($tokens, '{')) {
                             while ($suffix = self::fetch($tokens, $nameTokens)) {
-                                if (self::fetch($tokens, T_AS) && $alias = self::fetch($tokens, T_STRING)) {
+                                if (self::fetch($tokens, \T_AS) && $alias = self::fetch($tokens, \T_STRING)) {
                                     $uses[$alias] = $name . $suffix;
                                 } else {
                                     $tmp = explode('\\', $suffix);
@@ -227,7 +226,7 @@ final class Reflection
                                     break;
                                 }
                             }
-                        } elseif (self::fetch($tokens, T_AS) && $alias = self::fetch($tokens, T_STRING)) {
+                        } elseif (self::fetch($tokens, \T_AS) && $alias = self::fetch($tokens, \T_STRING)) {
                             $uses[$alias] = $name;
                         } else {
                             $tmp = explode('\\', $name);
@@ -238,8 +237,8 @@ final class Reflection
                         }
                     }
                     break;
-                case T_CURLY_OPEN:
-                case T_DOLLAR_OPEN_CURLY_BRACES:
+                case \T_CURLY_OPEN:
+                case \T_DOLLAR_OPEN_CURLY_BRACES:
                 case ord('{'):
                     $level++;
                     break;
@@ -262,7 +261,7 @@ final class Reflection
         while ($token = current($tokens)) {
             if ($token->is($take)) {
                 $res .= is_array($token) ? $token[1] : $token;
-            } elseif (!$token->is([T_DOC_COMMENT, T_WHITESPACE, T_COMMENT])) {
+            } elseif (!$token->is([\T_DOC_COMMENT, \T_WHITESPACE, \T_COMMENT])) {
                 break;
             }
             next($tokens);

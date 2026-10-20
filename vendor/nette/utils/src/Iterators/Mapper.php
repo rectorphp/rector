@@ -12,6 +12,9 @@ namespace RectorPrefix202610\Nette\Iterators;
  */
 class Mapper extends \IteratorIterator
 {
+    /**
+     * @readonly
+     */
     private \Closure $callback;
     public function __construct(\Traversable $iterator, callable $callback)
     {

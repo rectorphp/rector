@@ -8,8 +8,8 @@ declare (strict_types=1);
 namespace RectorPrefix202610\Nette\Utils;
 
 use RectorPrefix202610\Nette\HtmlStringable;
-use function array_merge, array_splice, count, explode, func_num_args, html_entity_decode, htmlspecialchars, http_build_query, implode, is_array, is_bool, is_float, is_object, is_string, json_encode, max, number_format, rtrim, str_contains, str_repeat, str_replace, strip_tags, strncmp, strpbrk, substr, trigger_error, ucfirst;
-use const E_USER_DEPRECATED, ENT_HTML5, ENT_NOQUOTES, ENT_QUOTES;
+use function count, func_num_args, is_array, is_bool, is_float, is_object, is_string;
+use const ENT_HTML5, ENT_QUOTES;
 /**
  * Generates HTML elements with automatic attribute escaping.
  *
@@ -448,7 +448,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     final public function __call(string $m, array $args)
     {
         if ($m === 'text' || $m === 'html') {
-            trigger_error("Method \$el->{$m}() is deprecated, use set" . ucfirst($m) . "() for content or setAttribute() for the '{$m}' attribute; Html::{$m}() is a static factory.", E_USER_DEPRECATED);
+            trigger_error("Method \$el->{$m}() is deprecated, use set" . ucfirst($m) . "() for content or setAttribute() for the '{$m}' attribute; Html::{$m}() is a static factory.", \E_USER_DEPRECATED);
         }
         $p = substr($m, 0, 3);
         if ($p === 'get' || $p === 'set' || $p === 'add') {
@@ -542,7 +542,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     final public function setText($text)
     {
         if (!$text instanceof HtmlStringable) {
-            $text = htmlspecialchars((string) $text, ENT_NOQUOTES, 'UTF-8');
+            $text = htmlspecialchars((string) $text, \ENT_NOQUOTES, 'UTF-8');
         }
         $this->children = [(string) $text];
         return $this;
@@ -585,7 +585,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, HtmlStringab
     public function addText($text)
     {
         if (!$text instanceof HtmlStringable) {
-            $text = htmlspecialchars((string) $text, ENT_NOQUOTES, 'UTF-8');
+            $text = htmlspecialchars((string) $text, \ENT_NOQUOTES, 'UTF-8');
         }
         return $this->insert(null, $text);
     }

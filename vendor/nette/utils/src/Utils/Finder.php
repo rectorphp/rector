@@ -8,8 +8,8 @@ declare (strict_types=1);
 namespace RectorPrefix202610\Nette\Utils;
 
 use RectorPrefix202610\Nette;
-use function array_filter, array_merge, array_values, count, func_get_args, func_num_args, glob, implode, is_array, is_dir, iterator_to_array, preg_match, preg_quote, preg_replace, preg_split, rtrim, spl_object_id, sprintf, str_starts_with, strnatcmp, strpbrk, strrpos, strtolower, strtr, substr, trigger_error, usort;
-use const DIRECTORY_SEPARATOR, E_USER_DEPRECATED, GLOB_NOESCAPE, GLOB_NOSORT, GLOB_ONLYDIR;
+use function count, func_get_args, func_num_args, is_array, sprintf;
+use const DIRECTORY_SEPARATOR, GLOB_NOESCAPE, GLOB_NOSORT, GLOB_ONLYDIR;
 /**
  * Searches for files and directories in directory trees.
  *
@@ -38,7 +38,8 @@ class Finder implements \IteratorAggregate
     private int $maxDepth = -1;
     private bool $ignoreUnreadableDirs = \true;
     /**
-     * Begins search for files and directories matching mask. The ** wildcard searches recursively; a trailing slash limits the mask to directories.
+     * Begins search for files and directories matching mask. The ** wildcard searches recursively;
+     * a trailing slash limits the mask to directories.
      * @param  string|list<string>  $masks
      * @return static
      */
@@ -215,7 +216,7 @@ class Finder implements \IteratorAggregate
             $orig = $mask;
             $mask = FileSystem::unixSlashes($mask);
             if (FileSystem::isAbsolute($mask) || $mask === '..' || strncmp($mask, '../', strlen('../')) === 0) {
-                trigger_error("Absolute or ../ mask '{$orig}' in exclude() is deprecated and will change meaning, use a mask relative to the searched directory.", E_USER_DEPRECATED);
+                trigger_error("Absolute or ../ mask '{$orig}' in exclude() is deprecated and will change meaning, use a mask relative to the searched directory.", \E_USER_DEPRECATED);
             }
             if (!preg_match('~^/?(\*\*/)?(.+?)(/\*\*|/\*|/|)$~D', $mask, $m)) {
                 throw new Nette\InvalidArgumentException("Invalid mask '{$orig}'");

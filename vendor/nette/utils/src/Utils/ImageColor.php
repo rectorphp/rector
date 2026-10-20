@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202610\Nette\Utils;
 
 use RectorPrefix202610\Nette;
-use function hexdec, ltrim, max, min, round, strlen;
+use function strlen;
 /**
  * Represent RGB color (0..255) with opacity (0..1).
  */

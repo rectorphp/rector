@@ -9,8 +9,7 @@ namespace RectorPrefix202610\Nette\Utils;
 
 use RectorPrefix202610\Nette;
 use RectorPrefix202610\Nette\MemberAccessException;
-use function array_filter, array_merge, array_pop, array_unique, get_class_methods, get_parent_class, implode, is_a, levenshtein, method_exists, preg_match_all, preg_replace, strlen, ucfirst;
-use const PREG_SET_ORDER, SORT_REGULAR;
+use function strlen;
 /**
  * Nette\SmartObject helpers.
  * @internal
@@ -103,7 +102,7 @@ final class ObjectHelpers
             return $props;
         }
         $rc = new \ReflectionClass($class);
-        preg_match_all('~^  [ \t*]*  @property(|-read|-write|-deprecated)  [ \t]+  [^\s$]+  [ \t]+  \$  (\w+)  ()~mx', (string) $rc->getDocComment(), $matches, PREG_SET_ORDER);
+        preg_match_all('~^  [ \t*]*  @property(|-read|-write|-deprecated)  [ \t]+  [^\s$]+  [ \t]+  \$  (\w+)  ()~mx', (string) $rc->getDocComment(), $matches, \PREG_SET_ORDER);
         $props = [];
         foreach ($matches as [, $type, $name]) {
             $uname = ucfirst($name);
@@ -131,7 +130,7 @@ final class ObjectHelpers
         $norm = preg_replace($re = '#^(get|set|has|is|add)(?=[A-Z])#', '+', $value);
         $best = null;
         $min = (strlen($value) / 4 + 1) * 10 + 0.1;
-        foreach (array_unique($possibilities, SORT_REGULAR) as $item) {
+        foreach (array_unique($possibilities, \SORT_REGULAR) as $item) {
             $item = $item instanceof \Reflector ? $item->name : $item;
             if ($item !== $value && (($len = levenshtein($item, $value, 10, 11, 10)) < $min || ($len = levenshtein(preg_replace($re, '*', $item), $norm, 10, 11, 10)) < $min)) {
                 $min = $len;

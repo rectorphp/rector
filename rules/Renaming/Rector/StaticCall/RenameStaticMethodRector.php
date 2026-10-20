@@ -19,9 +19,9 @@ use RectorPrefix202610\Webmozart\Assert\Assert;
 final class RenameStaticMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var RenameStaticMethod[]
+     * @var array<string, RenameStaticMethod[]>
      */
-    private array $staticMethodRenames = [];
+    private array $staticMethodRenamesByOldMethod = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn method names to new ones', [new ConfiguredCodeSample('SomeClass::oldStaticMethod();', 'AnotherExampleClass::newStaticMethod();', [new RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod')])]);
@@ -38,10 +38,11 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->staticMethodRenames as $staticMethodRename) {
-            if (!$this->isName($node->name, $staticMethodRename->getOldMethod())) {
-                continue;
-            }
+        $methodName = $this->getName($node->name);
+        if ($methodName === null) {
+            return null;
+        }
+        foreach ($this->staticMethodRenamesByOldMethod[strtolower($methodName)] ?? [] as $staticMethodRename) {
             if (!$this->isObjectType($node->class, $staticMethodRename->getOldObjectType())) {
                 continue;
             }
@@ -55,7 +56,11 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
     public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, RenameStaticMethod::class);
-        $this->staticMethodRenames = $configuration;
+        // bucket by lowercased old method name (method names are case-insensitive)
+        $this->staticMethodRenamesByOldMethod = [];
+        foreach ($configuration as $staticMethodRename) {
+            $this->staticMethodRenamesByOldMethod[strtolower($staticMethodRename->getOldMethod())][] = $staticMethodRename;
+        }
     }
     private function rename(StaticCall $staticCall, RenameStaticMethod $renameStaticMethod): StaticCall
     {

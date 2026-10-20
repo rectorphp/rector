@@ -7,7 +7,7 @@ declare (strict_types=1);
  */
 namespace RectorPrefix202610\Nette\Utils;
 
-use function explode, is_string, str_contains;
+use function is_string;
 /**
  * ReflectionMethod preserving the original class name.
  * @internal

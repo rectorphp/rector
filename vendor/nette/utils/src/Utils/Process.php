@@ -48,9 +48,11 @@ final class Process
      * @param  string         $executable Path to the executable binary.
      * @param  list<string>   $arguments  Arguments passed to the executable.
      * @param  string[]|null  $env        Environment variables or null to use the same environment as the current process.
-     * @param  array<string, mixed>  $options  Additional options for proc_open(). On Windows the executable is launched directly, without cmd.exe.
-     * @param  mixed          $stdin      Input: string, a readable resource (its content is copied to STDIN), a Process (its STDOUT is piped in), or null (STDIN stays open for writeStdInput()).
-     * @param  mixed          $stdout     Output target: string filename, a writable resource backed by a real OS file descriptor (not php://memory etc.), false to discard, or null to capture into memory.
+     * @param  array<string, mixed>  $options  Options for proc_open(); on Windows the executable is launched directly, without cmd.exe.
+     * @param  mixed          $stdin      Input: string, a readable resource (its content is copied to STDIN),
+     *                                    a Process (its STDOUT is piped in), or null (STDIN stays open for writeStdInput()).
+     * @param  mixed          $stdout     Output target: string filename, a writable resource backed by a real OS file descriptor
+     *                                    (not php://memory etc.), false to discard, or null to capture into memory.
      * @param  mixed          $stderr     Error output target (same options as $stdout).
      * @param  string|null    $directory  Working directory.
      * @param  float|null     $timeout    Time limit in seconds, checked while waiting for or reading the process; null disables it.
@@ -65,8 +67,10 @@ final class Process
      * @param  string         $command    Shell command to run.
      * @param  string[]|null  $env        Environment variables or null to use the same environment as the current process.
      * @param  array<string, mixed>  $options  Options for proc_open(), e.g. ['bypass_shell' => true] on Windows to skip cmd.exe.
-     * @param  mixed          $stdin      Input: string, a readable resource (its content is copied to STDIN), a Process (its STDOUT is piped in), or null (STDIN stays open for writeStdInput()).
-     * @param  mixed          $stdout     Output target: string filename, a writable resource backed by a real OS file descriptor (not php://memory etc.), false to discard, or null to capture into memory.
+     * @param  mixed          $stdin      Input: string, a readable resource (its content is copied to STDIN),
+     *                                    a Process (its STDOUT is piped in), or null (STDIN stays open for writeStdInput()).
+     * @param  mixed          $stdout     Output target: string filename, a writable resource backed by a real OS file descriptor
+     *                                    (not php://memory etc.), false to discard, or null to capture into memory.
      * @param  mixed          $stderr     Error output target (same options as $stdout).
      * @param  string|null    $directory  Working directory.
      * @param  float|null     $timeout    Time limit in seconds, checked while waiting for or reading the process; null disables it.
@@ -88,6 +92,7 @@ final class Process
         $this->timeout = $timeout;
         $descriptors = [self::StdIn => $this->createInputDescriptor($stdin), self::StdOut => $this->createOutputDescriptor(self::StdOut, $stdout), self::StdErr => $this->createOutputDescriptor(self::StdErr, $stderr)];
         $process = @proc_open($command, $descriptors, $pipes, $directory, $env, $options);
+        // @ is escalated to exception
         if (!is_resource($process)) {
             throw new ProcessFailedException('Failed to start process: ' . Helpers::getLastError());
         }
@@ -359,6 +364,7 @@ final class Process
             $read = [$pipe];
             $write = $except = [];
             while (@stream_select($read, $write, $except, 0, 0) > 0) {
+                // @ an interrupting signal triggers a warning
                 $chunk = fread($pipe, 8192);
                 if ($chunk === \false || $chunk === '') {
                     break;

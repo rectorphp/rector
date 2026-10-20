@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix202610\Nette\Utils;
 
 use RectorPrefix202610\Nette;
-use function array_unique, ini_get, levenshtein, max, min, ob_end_clean, ob_get_clean, ob_start, preg_replace, strlen;
+use function ini_get, strlen;
 use const PHP_OS_FAMILY;
 /**
  * Miscellaneous utilities.

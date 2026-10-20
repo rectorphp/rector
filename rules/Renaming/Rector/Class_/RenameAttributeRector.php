@@ -24,9 +24,9 @@ use RectorPrefix202610\Webmozart\Assert\Assert;
 final class RenameAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @var RenameAttribute[]
+     * @var array<string, RenameAttribute[]>
      */
-    private array $renameAttributes = [];
+    private array $renameAttributesByOldAttribute = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Rename attribute class names', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -77,7 +77,11 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, RenameAttribute::class);
-        $this->renameAttributes = $configuration;
+        // bucket by lowercased old attribute name (class names are case-insensitive)
+        $this->renameAttributesByOldAttribute = [];
+        foreach ($configuration as $renameAttribute) {
+            $this->renameAttributesByOldAttribute[strtolower($renameAttribute->getOldAttribute())][] = $renameAttribute;
+        }
     }
     public function provideMinPhpVersion(): int
     {
@@ -85,7 +89,11 @@ CODE_SAMPLE
     }
     private function matchNewAttributeName(Attribute $attribute): ?string
     {
-        foreach ($this->renameAttributes as $renameAttribute) {
+        $attributeName = $this->getName($attribute->name);
+        if ($attributeName === null) {
+            return null;
+        }
+        foreach ($this->renameAttributesByOldAttribute[strtolower($attributeName)] ?? [] as $renameAttribute) {
             if ($this->isName($attribute->name, $renameAttribute->getOldAttribute())) {
                 return $renameAttribute->getNewAttribute();
             }
