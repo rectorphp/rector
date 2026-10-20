@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\Enum\ObjectReference;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -70,7 +72,7 @@ CODE_SAMPLE
         if (!$firstArg instanceof Arg) {
             return null;
         }
-        $callerType = $this->getType($node->class);
+        $callerType = $this->resolveCallerType($node->class);
         if (!$callerType->isSuperTypeOf(new ObjectType('ReflectionFunction'))->yes()) {
             return null;
         }
@@ -83,5 +85,19 @@ CODE_SAMPLE
             return new String_($new);
         }
         return $new;
+    }
+    private function resolveCallerType(Name $name): Type
+    {
+        // a concrete class name is resolvable straight from the node, no type inference needed;
+        // self/static/parent depend on the enclosing class, so fall back to scope-based type
+        $className = $this->getName($name);
+        if ($className === null) {
+            return $this->getType($name);
+        }
+        $loweredClassName = strtolower($className);
+        if (in_array($loweredClassName, [ObjectReference::SELF, ObjectReference::STATIC, ObjectReference::PARENT], \true)) {
+            return $this->getType($name);
+        }
+        return new ObjectType($className);
     }
 }
