@@ -20,43 +20,59 @@ use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
-use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
 final class ContextNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**
-     * @readonly
+     * Context is tracked by depth during the main traversal, instead of traversing
+     * the loop, try and attribute children again on every enter
      */
-    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    private int $loopDepth = 0;
+    private int $tryDepth = 0;
+    private int $attributeDepth = 0;
+    /**
+     * @var array<array{int, int}>
+     */
+    private array $outerLoopAndTryDepths = [];
+    /**
+     * @param Node[] $nodes
+     * @return null
+     */
+    public function beforeTraverse(array $nodes)
     {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->loopDepth = 0;
+        $this->tryDepth = 0;
+        $this->attributeDepth = 0;
+        $this->outerLoopAndTryDepths = [];
+        return null;
     }
     public function enterNode(Node $node): ?Node
     {
+        $this->decorateEnclosingContext($node);
         if ($node instanceof For_ || $node instanceof Foreach_ || $node instanceof While_ || $node instanceof Do_ || $node instanceof Switch_) {
             $this->processContextInLoop($node);
+            ++$this->loopDepth;
             return null;
         }
         if ($node instanceof ArrayDimFetch) {
@@ -70,7 +86,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             return null;
         }
         if ($node instanceof TryCatch) {
-            SimpleNodeTraverser::decorateWithAttributeValue($node->stmts, AttributeKey::IS_IN_TRY_BLOCK, \true);
+            ++$this->tryDepth;
             return null;
         }
         if ($node instanceof Isset_) {
@@ -80,7 +96,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             return null;
         }
         if ($node instanceof Attribute) {
-            $this->processContextInAttribute($node);
+            ++$this->attributeDepth;
             return null;
         }
         if ($node instanceof Array_) {
@@ -116,6 +132,59 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
         }
         $this->processContextInClass($node);
         return null;
+    }
+    /**
+     * @return null
+     */
+    public function leaveNode(Node $node)
+    {
+        if ($node instanceof For_ || $node instanceof Foreach_ || $node instanceof While_ || $node instanceof Do_ || $node instanceof Switch_) {
+            --$this->loopDepth;
+            return null;
+        }
+        if ($node instanceof TryCatch) {
+            --$this->tryDepth;
+            return null;
+        }
+        // back to the try stmts of the parent TryCatch, see decorateEnclosingContext()
+        if ($node instanceof Catch_ || $node instanceof Finally_) {
+            ++$this->tryDepth;
+            return null;
+        }
+        if ($node instanceof Attribute) {
+            --$this->attributeDepth;
+            return null;
+        }
+        if ($node instanceof Class_ || $node instanceof FunctionLike) {
+            [$this->loopDepth, $this->tryDepth] = array_pop($this->outerLoopAndTryDepths) ?? [0, 0];
+        }
+        return null;
+    }
+    private function decorateEnclosingContext(Node $node): void
+    {
+        // catch and finally are not part of the try block of their parent TryCatch
+        if ($node instanceof Catch_ || $node instanceof Finally_) {
+            --$this->tryDepth;
+        }
+        // nested class or function-like does not belong to outer loop or try block
+        if ($node instanceof Class_ || $node instanceof FunctionLike) {
+            $this->outerLoopAndTryDepths[] = [$this->loopDepth, $this->tryDepth];
+            $this->loopDepth = 0;
+            $this->tryDepth = 0;
+        } elseif ($this->tryDepth > 0) {
+            $node->setAttribute(AttributeKey::IS_IN_TRY_BLOCK, \true);
+        }
+        if ($this->loopDepth > 0 && ($node instanceof If_ || $node instanceof Break_)) {
+            $node->setAttribute(AttributeKey::IS_IN_LOOP_OR_SWITCH, \true);
+        }
+        if ($this->attributeDepth > 0) {
+            if ($node instanceof Array_) {
+                $node->setAttribute(AttributeKey::IS_ARRAY_IN_ATTRIBUTE, \true);
+            }
+            if ($node instanceof Closure) {
+                $node->setAttribute(AttributeKey::IS_CLOSURE_IN_ATTRIBUTE, \true);
+            }
+        }
     }
     private function processInsideArrayDimFetch(ArrayDimFetch $arrayDimFetch): void
     {
@@ -175,18 +244,6 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             $firstArg->value->setAttribute(AttributeKey::IS_ARRAY_AS_STRING_CALLABLE, \true);
         }
     }
-    private function processContextInAttribute(Attribute $attribute): void
-    {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($attribute->args, static function (Node $subNode) {
-            if ($subNode instanceof Array_) {
-                $subNode->setAttribute(AttributeKey::IS_ARRAY_IN_ATTRIBUTE, \true);
-            }
-            if ($subNode instanceof Closure) {
-                $subNode->setAttribute(AttributeKey::IS_CLOSURE_IN_ATTRIBUTE, \true);
-            }
-            return null;
-        });
-    }
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_ $node
      */
@@ -209,15 +266,5 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
             }
             $node->valueVar->setAttribute(AttributeKey::IS_VARIABLE_LOOP, \true);
         }
-        $stmts = $node instanceof Switch_ ? $node->cases : $node->stmts;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $subNode): ?int {
-            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
-                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-            if ($subNode instanceof If_ || $subNode instanceof Break_) {
-                $subNode->setAttribute(AttributeKey::IS_IN_LOOP_OR_SWITCH, \true);
-            }
-            return null;
-        });
     }
 }
