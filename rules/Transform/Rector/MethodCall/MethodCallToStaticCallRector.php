@@ -17,9 +17,9 @@ use RectorPrefix202610\Webmozart\Assert\Assert;
 final class MethodCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var MethodCallToStaticCall[]
+     * @var array<string, MethodCallToStaticCall[]>
      */
-    private array $methodCallsToStaticCalls = [];
+    private array $methodCallsToStaticCallsByOldMethod = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change method call to desired static call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -68,10 +68,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->methodCallsToStaticCalls as $methodCallToStaticCall) {
-            if (!$this->isName($node->name, $methodCallToStaticCall->getOldMethod())) {
-                continue;
-            }
+        $methodName = $this->getName($node->name);
+        if ($methodName === null) {
+            return null;
+        }
+        foreach ($this->methodCallsToStaticCallsByOldMethod[strtolower($methodName)] ?? [] as $methodCallToStaticCall) {
             if (!$this->isObjectType($node->var, $methodCallToStaticCall->getOldObjectType())) {
                 continue;
             }
@@ -85,6 +86,9 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, MethodCallToStaticCall::class);
-        $this->methodCallsToStaticCalls = $configuration;
+        $this->methodCallsToStaticCallsByOldMethod = [];
+        foreach ($configuration as $methodCallToStaticCall) {
+            $this->methodCallsToStaticCallsByOldMethod[strtolower($methodCallToStaticCall->getOldMethod())][] = $methodCallToStaticCall;
+        }
     }
 }

@@ -18,9 +18,9 @@ use RectorPrefix202610\Webmozart\Assert\Assert;
 final class ConstFetchToClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var ConstFetchToClassConstFetch[]
+     * @var array<string, ConstFetchToClassConstFetch[]>
      */
-    private array $constFetchToClassConsts = [];
+    private array $constFetchToClassConstsByOldName = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change const fetch to class const fetch', [new ConfiguredCodeSample('$x = CONTEXT_COURSE', '$x = course::LEVEL', [new ConstFetchToClassConstFetch('CONTEXT_COURSE', 'course', 'LEVEL')])]);
@@ -34,10 +34,11 @@ final class ConstFetchToClassConstFetchRector extends AbstractRector implements 
      */
     public function refactor(Node $node): ?ClassConstFetch
     {
-        foreach ($this->constFetchToClassConsts as $constFetchToClassConst) {
-            if (!$this->isName($node, $constFetchToClassConst->getOldConstName())) {
-                continue;
-            }
+        $constName = $this->getName($node);
+        if ($constName === null) {
+            return null;
+        }
+        foreach ($this->constFetchToClassConstsByOldName[strtolower($constName)] ?? [] as $constFetchToClassConst) {
             return $this->nodeFactory->createClassConstFetch($constFetchToClassConst->getNewClassName(), $constFetchToClassConst->getNewConstName());
         }
         return null;
@@ -45,6 +46,9 @@ final class ConstFetchToClassConstFetchRector extends AbstractRector implements 
     public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, ConstFetchToClassConstFetch::class);
-        $this->constFetchToClassConsts = $configuration;
+        $this->constFetchToClassConstsByOldName = [];
+        foreach ($configuration as $constFetchToClassConst) {
+            $this->constFetchToClassConstsByOldName[strtolower($constFetchToClassConst->getOldConstName())][] = $constFetchToClassConst;
+        }
     }
 }

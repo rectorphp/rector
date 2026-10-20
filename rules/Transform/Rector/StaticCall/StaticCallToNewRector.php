@@ -19,9 +19,9 @@ use RectorPrefix202610\Webmozart\Assert\Assert;
 final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var StaticCallToNew[]
+     * @var array<string, StaticCallToNew[]>
      */
-    private array $staticCallsToNews = [];
+    private array $staticCallsToNewsByMethod = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change static call to new instance', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -56,11 +56,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->staticCallsToNews as $staticCallToNew) {
+        $methodName = $this->getName($node->name);
+        if ($methodName === null) {
+            return null;
+        }
+        foreach ($this->staticCallsToNewsByMethod[strtolower($methodName)] ?? [] as $staticCallToNew) {
             if (!$this->isName($node->class, $staticCallToNew->getClass())) {
-                continue;
-            }
-            if (!$this->isName($node->name, $staticCallToNew->getMethod())) {
                 continue;
             }
             $class = $this->getName($node->class);
@@ -77,6 +78,9 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, StaticCallToNew::class);
-        $this->staticCallsToNews = $configuration;
+        $this->staticCallsToNewsByMethod = [];
+        foreach ($configuration as $staticCallToNew) {
+            $this->staticCallsToNewsByMethod[strtolower($staticCallToNew->getMethod())][] = $staticCallToNew;
+        }
     }
 }
