@@ -154,8 +154,11 @@ CODE_SAMPLE
         if ($node->getMethod('loadMetadata') instanceof ClassMethod) {
             return null;
         }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
         $hasChanged = \false;
-        $classReflection = null;
         foreach ($node->getProperties() as $property) {
             // non-private property can be anything with not inline public configured
             if (!$property->isPrivate() && !$this->inlinePublic) {
@@ -163,12 +166,6 @@ CODE_SAMPLE
             }
             if ($this->isDoctrineMappedProperty($property)) {
                 continue;
-            }
-            if (!$classReflection instanceof ClassReflection) {
-                $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-            }
-            if (!$classReflection instanceof ClassReflection) {
-                return null;
             }
             if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection, $this->inlinePublic)) {
                 continue;

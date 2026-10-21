@@ -66,16 +66,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
         $unusedClassConstKeys = [];
         foreach ($node->stmts as $key => $stmt) {
             if (!$stmt instanceof ClassConst) {
                 continue;
             }
             if ($this->shouldSkipClassConst($stmt)) {
-                continue;
-            }
-            $classReflection = $this->reflectionResolver->resolveClassReflection($stmt);
-            if (!$classReflection instanceof ClassReflection) {
                 continue;
             }
             if ($this->classConstManipulator->hasClassConstFetch($stmt, $classReflection, $node)) {
