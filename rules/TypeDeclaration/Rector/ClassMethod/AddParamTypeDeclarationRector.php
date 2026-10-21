@@ -45,9 +45,9 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
      */
     private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
     /**
-     * @var AddParamTypeDeclaration[]
+     * @var array<string, AddParamTypeDeclaration[]>
      */
-    private array $addParamTypeDeclarations = [];
+    private array $addParamTypeDeclarationsByMethod = [];
     private bool $hasChanged = \false;
     public function __construct(TypeComparator $typeComparator, PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
@@ -102,10 +102,10 @@ CODE_SAMPLE
                 continue;
             }
             $methodName = $this->getName($classMethod);
-            foreach ($this->addParamTypeDeclarations as $addParamTypeDeclaration) {
-                if (!$this->nodeNameResolver->isStringName($methodName, $addParamTypeDeclaration->getMethodName())) {
-                    continue;
-                }
+            if ($methodName === null) {
+                continue;
+            }
+            foreach ($this->addParamTypeDeclarationsByMethod[strtolower($methodName)] ?? [] as $addParamTypeDeclaration) {
                 if (!$this->isObjectType($node, $addParamTypeDeclaration->getObjectType())) {
                     continue;
                 }
@@ -123,7 +123,10 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AddParamTypeDeclaration::class);
-        $this->addParamTypeDeclarations = $configuration;
+        $this->addParamTypeDeclarationsByMethod = [];
+        foreach ($configuration as $addParamTypeDeclaration) {
+            $this->addParamTypeDeclarationsByMethod[strtolower($addParamTypeDeclaration->getMethodName())][] = $addParamTypeDeclaration;
+        }
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike

@@ -47,9 +47,9 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
      */
     private ReflectionResolver $reflectionResolver;
     /**
-     * @var AddReturnTypeDeclaration[]
+     * @var array<string, AddReturnTypeDeclaration[]>
      */
-    private array $methodReturnTypes = [];
+    private array $methodReturnTypesByMethod = [];
     private bool $hasChanged = \false;
     public function __construct(PhpVersionProvider $phpVersionProvider, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, StaticTypeMapper $staticTypeMapper, ReflectionResolver $reflectionResolver)
     {
@@ -95,21 +95,14 @@ CODE_SAMPLE
         if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($node)) {
             return null;
         }
-        $classMethodNames = [];
         foreach ($node->getMethods() as $classMethod) {
-            $classMethodNames[strtolower((string) $this->getName($classMethod))] = \true;
-        }
-        foreach ($this->methodReturnTypes as $methodReturnType) {
-            // cheap name check before the expensive type resolution below
-            if (!isset($classMethodNames[strtolower($methodReturnType->getMethod())])) {
+            $methodName = $this->getName($classMethod);
+            if ($methodName === null) {
                 continue;
             }
-            $objectType = $methodReturnType->getObjectType();
-            if (!$this->isObjectType($node, $objectType)) {
-                continue;
-            }
-            foreach ($node->getMethods() as $classMethod) {
-                if (!$this->isName($classMethod, $methodReturnType->getMethod())) {
+            foreach ($this->methodReturnTypesByMethod[strtolower($methodName)] ?? [] as $methodReturnType) {
+                $objectType = $methodReturnType->getObjectType();
+                if (!$this->isObjectType($node, $objectType)) {
                     continue;
                 }
                 $this->processClassMethodNodeWithTypehints($classMethod, $node, $methodReturnType->getReturnType(), $objectType);
@@ -126,7 +119,10 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         Assert::allIsAOf($configuration, AddReturnTypeDeclaration::class);
-        $this->methodReturnTypes = $configuration;
+        $this->methodReturnTypesByMethod = [];
+        foreach ($configuration as $methodReturnType) {
+            $this->methodReturnTypesByMethod[strtolower($methodReturnType->getMethod())][] = $methodReturnType;
+        }
     }
     private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, Class_ $class, Type $newType, ObjectType $objectType): void
     {
