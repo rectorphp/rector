@@ -160,11 +160,6 @@ final class PHPStanNodeScopeResolver
      */
     public function processNodes(array $stmts, string $filePath, ?MutatingScope $formerMutatingScope = null): array
     {
-        /**
-         * The stmts must be array of Stmt, or it will be silently skipped by PHPStan
-         * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
-         */
-        Assert::allIsInstanceOf($stmts, Stmt::class);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
         $this->fillScope($stmts, $filePath, $scope);
         // use after scope filling so DecoratingNodeVisitorInterface instance can fetch the scope of target node

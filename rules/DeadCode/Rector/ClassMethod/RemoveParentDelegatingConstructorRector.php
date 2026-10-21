@@ -9,9 +9,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeVisitor;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionParameter;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ExtendedMethodReflection;
@@ -85,32 +85,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
-    public function refactor(Node $node): ?int
+    public function refactor(Node $node): ?Class_
     {
-        if (!$this->isName($node, MethodName::CONSTRUCT)) {
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return null;
         }
-        if ($node->stmts === null || count($node->stmts) !== 1) {
+        if ($constructClassMethod->stmts === null || count($constructClassMethod->stmts) !== 1) {
             return null;
         }
-        if ($node->isFinal()) {
+        if ($constructClassMethod->isFinal()) {
             return null;
         }
-        if (!$node->isPublic()) {
+        if (!$constructClassMethod->isPublic()) {
             return null;
         }
-        $soleStmt = $node->stmts[0];
+        $soleStmt = $constructClassMethod->stmts[0];
         $parentCallArgs = $this->matchParentConstructorCallArgs($soleStmt);
         if ($parentCallArgs === null) {
             return null;
         }
         // match count and order
-        if (!$this->isParameterAndArgCountAndOrderIdentical($node)) {
+        if (!$this->isParameterAndArgCountAndOrderIdentical($constructClassMethod)) {
             return null;
         }
         $parentMethodReflection = $this->matchParentConstructorReflection($node);
@@ -122,28 +123,35 @@ CODE_SAMPLE
             return null;
         }
         // match parameter types and parent constructor types
-        if (!$this->areConstructorAndParentParameterTypesMatching($node, $parentMethodReflection)) {
+        if (!$this->areConstructorAndParentParameterTypesMatching($constructClassMethod, $parentMethodReflection)) {
             return null;
         }
-        if ($this->doAttributeDecoratedParametersExist($node)) {
+        if ($this->doAttributeDecoratedParametersExist($constructClassMethod)) {
             return null;
         }
         // keep when the docblock refines parameter types beyond the native signature,
         // e.g. @param array<string, mixed> or @phpstan-param SomeShape $config — removing
         // the constructor would drop that type information
-        if ($this->hasParamRefiningDocblock($node)) {
+        if ($this->hasParamRefiningDocblock($constructClassMethod)) {
             return null;
         }
-        return NodeVisitor::REMOVE_NODE;
+        foreach ($node->stmts as $key => $stmt) {
+            if ($stmt === $constructClassMethod) {
+                unset($node->stmts[$key]);
+                $node->stmts = array_values($node->stmts);
+                return $node;
+            }
+        }
+        return null;
     }
     private function hasParamRefiningDocblock(ClassMethod $classMethod): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasByNames(['@param', '@phpstan-param', '@psalm-param']);
     }
-    private function matchParentConstructorReflection(ClassMethod $classMethod): ?ExtendedMethodReflection
+    private function matchParentConstructorReflection(Class_ $class): ?ExtendedMethodReflection
     {
-        $scope = ScopeFetcher::fetch($classMethod);
+        $scope = ScopeFetcher::fetch($class);
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return null;
