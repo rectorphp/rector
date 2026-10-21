@@ -19,6 +19,13 @@ final class CallLikeArgumentNameAdder
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
+    /**
+     * Internal functions that reflection reports as named-argument capable,
+     * but reject named arguments at runtime due to alternate signatures.
+     *
+     * @var string[]
+     */
+    private const NO_NAMED_ARGUMENTS_FUNCTION_NAMES = ['session_set_save_handler'];
     public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
@@ -40,6 +47,9 @@ final class CallLikeArgumentNameAdder
             return null;
         }
         if (!$reflection->acceptsNamedArguments()->yes()) {
+            return null;
+        }
+        if ($reflection instanceof FunctionReflection && in_array($reflection->getName(), self::NO_NAMED_ARGUMENTS_FUNCTION_NAMES, \true)) {
             return null;
         }
         $scope = ScopeFetcher::fetch($callLike);
