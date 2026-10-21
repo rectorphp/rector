@@ -74,6 +74,13 @@ CODE_SAMPLE
             unset($node->stmts[$key]);
             $hasChanged = \true;
             if ($classMethodStmts !== []) {
+                // prefer __serialize(), as that is what PHP actually uses during serialization
+                $magicSerializeClassMethod = $node->getMethod('__serialize');
+                if ($magicSerializeClassMethod instanceof ClassMethod) {
+                    // prepend before the "(array) $this" cast, so cleared properties are excluded
+                    $magicSerializeClassMethod->stmts = array_merge($classMethodStmts, $magicSerializeClassMethod->stmts ?? []);
+                    continue;
+                }
                 // make part of serialize method if it exists
                 $serializeClassMethod = $node->getMethod('serialize');
                 if ($serializeClassMethod instanceof ClassMethod) {
