@@ -62,10 +62,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType(DoctrineClass::QUERY_EXPR))) {
+        // cheap name check first - a non-matching call bails before any type inference
+        if (!in_array($this->getName($node->name), $this->targetMethods, \true)) {
             return null;
         }
-        if (!in_array($this->getName($node->name), $this->targetMethods, \true)) {
+        if (!$this->isObjectType($node->var, new ObjectType(DoctrineClass::QUERY_EXPR))) {
             return null;
         }
         // Iterate through method arguments and cast `Expr\Func` calls to string

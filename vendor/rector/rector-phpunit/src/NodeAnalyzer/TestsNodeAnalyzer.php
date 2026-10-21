@@ -134,11 +134,14 @@ final class TestsNodeAnalyzer
      */
     public function isPHPUnitMethodCallNames(Node $node, array $names): bool
     {
-        if (!$this->isPHPUnitTestCaseCall($node)) {
+        if (!$node instanceof MethodCall && !$node instanceof StaticCall) {
             return \false;
         }
-        /** @var MethodCall|StaticCall $node */
-        return $this->nodeNameResolver->isNames($node->name, $names);
+        // cheap name check first - a non-matching call bails before any type inference
+        if (!$this->nodeNameResolver->isNames($node->name, $names)) {
+            return \false;
+        }
+        return $this->isPHPUnitTestCaseCall($node);
     }
     public function isPHPUnitTestCaseCall(Node $node): bool
     {

@@ -59,10 +59,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof MethodCall) {
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\Component\WebLink\Link'))) {
+            // cheap name check first - a non-matching call bails before any type inference
+            if (!$this->isNames($node->name, ['withRel', 'withoutRel'])) {
                 return null;
             }
-            if (!$this->isNames($node->name, ['withRel', 'withoutRel'])) {
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\Component\WebLink\Link'))) {
                 return null;
             }
         } elseif ($node instanceof New_) {
