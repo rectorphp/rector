@@ -4,38 +4,19 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\StaticCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @note used in Laravel Rector https://github.com/driftingly/rector-laravel/blob/f46812350e0b4ef535c82d3759e86bb5c6abb651/config/sets/laravel-static-to-injection.php#L23
- *
- * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector\StaticCallToMethodCallRectorTest
+ * @deprecated This rule is deprecated, as passing a service through the constructor to replace a static call is risky and this generic rule is legacy. Write a custom rule for the exact project case instead.
  */
-final class StaticCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class StaticCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer;
-    /**
-     * @var StaticCallToMethodCall[]
-     */
-    private array $staticCallsToMethodCalls = [];
-    public function __construct(FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer)
-    {
-        $this->funcCallStaticCallToMethodCallAnalyzer = $funcCallStaticCallToMethodCallAnalyzer;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change static call to service method via constructor injection', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -84,60 +65,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node;
-        $hasChanged = \false;
-        foreach ($node->getMethods() as $classMethod) {
-            $this->traverseNodesWithCallable($classMethod, function (Node $node) use ($class, $classMethod, &$hasChanged) {
-                if (!$node instanceof StaticCall) {
-                    return null;
-                }
-                foreach ($this->staticCallsToMethodCalls as $staticCallToMethodCall) {
-                    if (!$staticCallToMethodCall->isStaticCallMatch($node)) {
-                        continue;
-                    }
-                    if ($classMethod->isStatic()) {
-                        return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
-                    }
-                    $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($class, $classMethod, $staticCallToMethodCall->getClassObjectType());
-                    if ($expr === null) {
-                        return null;
-                    }
-                    $methodName = $this->getMethodName($node, $staticCallToMethodCall);
-                    $hasChanged = \true;
-                    return new MethodCall($expr, $methodName, $node->args);
-                }
-                return $node;
-            });
-        }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as passing a service through the constructor to replace a static call is risky; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, StaticCallToMethodCall::class);
-        $this->staticCallsToMethodCalls = $configuration;
-    }
-    private function getMethodName(StaticCall $staticCall, StaticCallToMethodCall $staticCallToMethodCall): string
-    {
-        if ($staticCallToMethodCall->getMethodName() === '*') {
-            $methodName = $this->getName($staticCall->name);
-        } else {
-            $methodName = $staticCallToMethodCall->getMethodName();
-        }
-        if (!is_string($methodName)) {
-            throw new ShouldNotHappenException();
-        }
-        return $methodName;
-    }
-    private function refactorToInstanceCall(StaticCall $staticCall, StaticCallToMethodCall $staticCallToMethodCall): MethodCall
-    {
-        $new = new New_(new FullyQualified($staticCallToMethodCall->getClassType()));
-        $methodName = $this->getMethodName($staticCall, $staticCallToMethodCall);
-        return new MethodCall($new, $methodName, $staticCall->args);
     }
 }
