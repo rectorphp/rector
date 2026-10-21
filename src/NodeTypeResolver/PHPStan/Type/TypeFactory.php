@@ -15,7 +15,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\ObjectWithoutClassTypeWithParentTypes;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
@@ -111,7 +110,7 @@ final class TypeFactory
         // unwrap union types
         $unwrappedTypes = [];
         foreach ($types as $type) {
-            $flattenTypes = TypeUtils::flattenTypes($type);
+            $flattenTypes = \Rector\NodeTypeResolver\PHPStan\Type\TypeFlattener::flatten($type);
             foreach ($flattenTypes as $flattenType) {
                 if ($flattenType instanceof ConstantArrayType) {
                     $unwrappedTypes = array_merge($unwrappedTypes, $this->unwrapConstantArrayTypes($flattenType));
@@ -172,8 +171,8 @@ final class TypeFactory
     private function unwrapConstantArrayTypes(ConstantArrayType $constantArrayType): array
     {
         $unwrappedTypes = [];
-        $flattenKeyTypes = TypeUtils::flattenTypes($constantArrayType->getIterableKeyType());
-        $flattenItemTypes = TypeUtils::flattenTypes($constantArrayType->getIterableValueType());
+        $flattenKeyTypes = \Rector\NodeTypeResolver\PHPStan\Type\TypeFlattener::flatten($constantArrayType->getIterableKeyType());
+        $flattenItemTypes = \Rector\NodeTypeResolver\PHPStan\Type\TypeFlattener::flatten($constantArrayType->getIterableValueType());
         foreach ($flattenItemTypes as $position => $nestedFlattenItemType) {
             $nestedFlattenKeyType = $flattenKeyTypes[$position] ?? null;
             if (!$nestedFlattenKeyType instanceof Type) {

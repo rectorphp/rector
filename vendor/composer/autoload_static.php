@@ -1907,6 +1907,7 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\NodeTypeResolver\\PHPStan\\TypeHasher' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/TypeHasher.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Type\\StaticTypeAnalyzer' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Type/StaticTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Type/TypeFactory.php',
+        'Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFlattener' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PHPStan/Type/TypeFlattener.php',
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\ClassRenamePhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PhpDocNodeVisitor/ClassRenamePhpDocNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\NameImportingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PhpDocNodeVisitor/NameImportingPhpDocNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockClassRenamer' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockClassRenamer.php',

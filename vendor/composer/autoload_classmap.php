@@ -1677,6 +1677,7 @@ return array(
     'Rector\\NodeTypeResolver\\PHPStan\\TypeHasher' => $baseDir . '/src/NodeTypeResolver/PHPStan/TypeHasher.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Type\\StaticTypeAnalyzer' => $baseDir . '/src/NodeTypeResolver/PHPStan/Type/StaticTypeAnalyzer.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory' => $baseDir . '/src/NodeTypeResolver/PHPStan/Type/TypeFactory.php',
+    'Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFlattener' => $baseDir . '/src/NodeTypeResolver/PHPStan/Type/TypeFlattener.php',
     'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\ClassRenamePhpDocNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PhpDocNodeVisitor/ClassRenamePhpDocNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\NameImportingPhpDocNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PhpDocNodeVisitor/NameImportingPhpDocNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockClassRenamer' => $baseDir . '/src/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockClassRenamer.php',
