@@ -112,6 +112,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        // nothing to convert without attributes - bail before the reflection lookup in detect()
+        if ($node->attrGroups === []) {
+            return null;
+        }
         if (!$this->attributePresenceDetector->detect(SensioAttribute::SECURITY)) {
             return null;
         }
