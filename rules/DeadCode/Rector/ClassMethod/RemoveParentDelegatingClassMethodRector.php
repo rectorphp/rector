@@ -73,7 +73,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?int
     {
-        // constructors are handled by RemoveParentDelegatingConstructorRector
+        // skip constructors, as removing a delegating constructor is risky and usually intentional
         if ($this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
