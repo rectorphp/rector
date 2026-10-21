@@ -87,23 +87,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?array
     {
-        $exprArrayKeyFirst = $this->exprInTopStmtMatcher->match($node, function (Node $subNode): bool {
+        // single subtree traversal matching either name, instead of one full traversal per name
+        $funcCall = $this->exprInTopStmtMatcher->match($node, function (Node $subNode): bool {
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
-            return $this->isName($subNode, 'array_key_first');
+            return $this->isName($subNode, 'array_key_first') || $this->isName($subNode, 'array_key_last');
         });
-        if ($exprArrayKeyFirst instanceof FuncCall) {
-            return $this->refactorArrayKeyFirst($exprArrayKeyFirst, $node);
-        }
-        $exprArrayKeyLast = $this->exprInTopStmtMatcher->match($node, function (Node $subNode): bool {
-            if (!$subNode instanceof FuncCall) {
-                return \false;
+        if ($funcCall instanceof FuncCall) {
+            if ($this->isName($funcCall, 'array_key_first')) {
+                return $this->refactorArrayKeyFirst($funcCall, $node);
             }
-            return $this->isName($subNode, 'array_key_last');
-        });
-        if ($exprArrayKeyLast instanceof FuncCall) {
-            return $this->refactorArrayKeyLast($exprArrayKeyLast, $node);
+            return $this->refactorArrayKeyLast($funcCall, $node);
         }
         return null;
     }
