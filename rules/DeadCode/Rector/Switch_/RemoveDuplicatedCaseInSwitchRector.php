@@ -146,8 +146,13 @@ CODE_SAMPLE
         if ($currentCase->stmts[0] instanceof Break_ && $nextCase->stmts[0] instanceof Break_) {
             return $this->areSwitchStmtsEqualsConsideringComments($currentCase, $nextCase);
         }
-        if (!$this->nodeComparator->areNodesEqual($currentCase->stmts, $nextCase->stmts)) {
+        if (count($currentCase->stmts) !== count($nextCase->stmts)) {
             return \false;
+        }
+        foreach ($currentCase->stmts as $key => $currentStmt) {
+            if (!$this->nodeComparator->areNodesEqual($currentStmt, $nextCase->stmts[$key])) {
+                return \false;
+            }
         }
         $found = \false;
         foreach ($currentCase->stmts as $stmt) {
