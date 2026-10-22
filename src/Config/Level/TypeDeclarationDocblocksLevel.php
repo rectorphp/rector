@@ -20,6 +20,7 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForJsonA
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockGetterReturnArrayFromPropertyDocblockVarRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\NarrowArrayCollectionUnionReturnDocblockRector;
+use Rector\TypeDeclarationDocblocks\Rector\Property\MergePhpstanDocTagIntoNativeRector;
 final class TypeDeclarationDocblocksLevel
 {
     /**
@@ -42,6 +43,7 @@ final class TypeDeclarationDocblocksLevel
         AddReturnDocblockForJsonArrayRector::class,
         // move to rules based on existing docblocks, as more risky
         // property var
+        MergePhpstanDocTagIntoNativeRector::class,
         DocblockVarFromParamDocblockInConstructorRector::class,
         DocblockVarArrayFromGetterReturnRector::class,
         AddVarArrayDocblockFromDimFetchAssignRector::class,
