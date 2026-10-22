@@ -1881,6 +1881,7 @@ return array(
     'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\ExceptionAnnotationRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/ExceptionAnnotationRector.php',
     'Rector\\PHPUnit\\PHPUnit60\\Rector\\MethodCall\\DelegateExceptionArgumentsRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit60/Rector/MethodCall/DelegateExceptionArgumentsRector.php',
     'Rector\\PHPUnit\\PHPUnit60\\Rector\\MethodCall\\GetMockBuilderGetMockToCreateMockRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit60/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php',
+    'Rector\\PHPUnit\\PHPUnit70\\Rector\\ClassMethod\\ScenarioToTestAnnotationRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit70/Rector/ClassMethod/ScenarioToTestAnnotationRector.php',
     'Rector\\PHPUnit\\PHPUnit70\\Rector\\Class_\\RemoveDataProviderTestPrefixRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit70/Rector/Class_/RemoveDataProviderTestPrefixRector.php',
     'Rector\\PHPUnit\\PHPUnit80\\Rector\\MethodCall\\AssertEqualsParameterToSpecificMethodsTypeRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit80/Rector/MethodCall/AssertEqualsParameterToSpecificMethodsTypeRector.php',
     'Rector\\PHPUnit\\PHPUnit80\\Rector\\MethodCall\\SpecificAssertContainsRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit80/Rector/MethodCall/SpecificAssertContainsRector.php',

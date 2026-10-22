@@ -2111,6 +2111,7 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\ExceptionAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/ExceptionAnnotationRector.php',
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\MethodCall\\DelegateExceptionArgumentsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/MethodCall/DelegateExceptionArgumentsRector.php',
         'Rector\\PHPUnit\\PHPUnit60\\Rector\\MethodCall\\GetMockBuilderGetMockToCreateMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php',
+        'Rector\\PHPUnit\\PHPUnit70\\Rector\\ClassMethod\\ScenarioToTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit70/Rector/ClassMethod/ScenarioToTestAnnotationRector.php',
         'Rector\\PHPUnit\\PHPUnit70\\Rector\\Class_\\RemoveDataProviderTestPrefixRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit70/Rector/Class_/RemoveDataProviderTestPrefixRector.php',
         'Rector\\PHPUnit\\PHPUnit80\\Rector\\MethodCall\\AssertEqualsParameterToSpecificMethodsTypeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit80/Rector/MethodCall/AssertEqualsParameterToSpecificMethodsTypeRector.php',
         'Rector\\PHPUnit\\PHPUnit80\\Rector\\MethodCall\\SpecificAssertContainsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit80/Rector/MethodCall/SpecificAssertContainsRector.php',

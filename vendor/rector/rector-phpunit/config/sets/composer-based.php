@@ -47,6 +47,7 @@ use Rector\PHPUnit\PHPUnit60\Rector\ClassMethod\ExceptionAnnotationRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\DelegateExceptionArgumentsRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\PHPUnit\PHPUnit70\Rector\Class_\RemoveDataProviderTestPrefixRector;
+use Rector\PHPUnit\PHPUnit70\Rector\ClassMethod\ScenarioToTestAnnotationRector;
 use Rector\PHPUnit\PHPUnit80\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\PHPUnit\PHPUnit80\Rector\MethodCall\SpecificAssertContainsRector;
 use Rector\PHPUnit\PHPUnit80\Rector\MethodCall\SpecificAssertInternalTypeRector;
@@ -55,11 +56,9 @@ use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\AssertRegExpRector;
 use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\ExplicitPhpErrorApiRector;
 use Rector\PHPUnit\PHPUnit90\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector;
 use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
-use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\RenameAnnotationByType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -118,6 +117,8 @@ return static function (RectorConfig $rectorConfig): void {
         AddDoesNotPerformAssertionToNonAssertingTestRector::class,
         // PHPUnit 7.0
         RemoveDataProviderTestPrefixRector::class,
+        // the "@scenario" annotation was dropped in PHPUnit 7.0
+        ScenarioToTestAnnotationRector::class,
         // the assertIsArray(), assertStringContainsString() and assertEqualsWithDelta() families, PHPUnit 7.5
         SpecificAssertInternalTypeRector::class,
         SpecificAssertContainsRector::class,
@@ -301,8 +302,6 @@ return static function (RectorConfig $rectorConfig): void {
         'PHPUnit_Util_Type' => 'PHPUnit\Util\Type',
         'PHPUnit_Util_Test' => 'PHPUnit\Util\Test',
     ], 'phpunit/phpunit', '>=6.0');
-    // the "scenario" annotation was dropped in PHPUnit 7.0
-    $rectorConfig->ruleWithConfigurationComposerVersionBound(RenameAnnotationRector::class, [new RenameAnnotationByType('PHPUnit\Framework\TestCase', 'scenario', 'test')], 'phpunit/phpunit', '>=7.0');
     // the TestCase methods were given native types in PHPUnit 8.0
     $rectorConfig->ruleWithConfigurationComposerVersionBound(AddParamTypeDeclarationRector::class, [
         // @see https://github.com/rectorphp/rector/issues/1024 - no type, $dataName
