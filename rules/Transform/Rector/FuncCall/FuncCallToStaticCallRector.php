@@ -5,21 +5,18 @@ namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToStaticCallRector\FuncCallToStaticCallRectorTest
+ * @deprecated This rule is deprecated, as too niche, never used and needs project context. Write a custom rule for the exact project case instead.
  */
-final class FuncCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var array<string, FuncCallToStaticCall[]>
-     */
-    private array $funcCallsToStaticCallsByOldFunc = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Turn defined function call to static method call', [new ConfiguredCodeSample('view("...", []);', 'SomeClass::render("...", []);', [new FuncCallToStaticCall('view', 'SomeStaticClass', 'render')])]);
@@ -36,25 +33,12 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
      */
     public function refactor(Node $node): ?Node
     {
-        $funcName = $this->getName($node);
-        if ($funcName === null) {
-            return null;
-        }
-        foreach ($this->funcCallsToStaticCallsByOldFunc[strtolower($funcName)] ?? [] as $funcCallToStaticCall) {
-            return $this->nodeFactory->createStaticCall($funcCallToStaticCall->getNewClassName(), $funcCallToStaticCall->getNewMethodName(), $node->args);
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as too niche and part of no set; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, FuncCallToStaticCall::class);
-        // bucket by lowercased old function name (function names are case-insensitive)
-        $this->funcCallsToStaticCallsByOldFunc = [];
-        foreach ($configuration as $funcCallToStaticCall) {
-            $this->funcCallsToStaticCallsByOldFunc[strtolower($funcCallToStaticCall->getOldFuncName())][] = $funcCallToStaticCall;
-        }
     }
 }
