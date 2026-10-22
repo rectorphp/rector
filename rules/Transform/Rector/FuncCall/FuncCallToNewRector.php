@@ -5,22 +5,17 @@ namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name\FullyQualified;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToNewRector\FuncCallToNewRectorTest
+ * @deprecated This rule is deprecated, as too niche, never used and needs project context. Write a custom rule for the exact project case instead.
  */
-final class FuncCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToNewRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var string[]
-     */
-    private array $functionToNew = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change configured function calls to new Instance', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -55,26 +50,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $funcName = $this->getName($node);
-        if ($funcName === null) {
-            return null;
-        }
-        $new = $this->functionToNew[strtolower($funcName)] ?? null;
-        if ($new === null) {
-            return null;
-        }
-        return new New_(new FullyQualified($new), $node->args);
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as too niche and part of no set; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allString($configuration);
-        // keyed by lowercased function name (function names are case-insensitive)
-        $this->functionToNew = [];
-        foreach ($configuration as $function => $new) {
-            $this->functionToNew[strtolower($function)] = $new;
-        }
     }
 }
