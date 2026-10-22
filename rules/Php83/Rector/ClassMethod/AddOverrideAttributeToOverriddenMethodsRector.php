@@ -4,93 +4,22 @@ declare (strict_types=1);
 namespace Rector\Php83\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Trait_;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\DeadCode\NodeAnalyzer\ParentClassAnalyzer;
-use Rector\NodeAnalyzer\ClassAnalyzer;
-use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\PhpParser\AstResolver;
-use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
- * @see https://wiki.php.net/rfc/marking_overriden_methods
- *
- * @see \Rector\Tests\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector\AddOverrideAttributeToOverriddenMethodsRectorTest
+ * @deprecated This rule is deprecated, as never used and not part of any set. Adding the #[\Override] attribute requires careful per-project context, so apply it explicitly on the methods that override, based on your own requirements.
  */
-final class AddOverrideAttributeToOverriddenMethodsRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface
+final class AddOverrideAttributeToOverriddenMethodsRector extends AbstractRector implements MinPhpVersionInterface, DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ReflectionProvider $reflectionProvider;
-    /**
-     * @readonly
-     */
-    private ClassAnalyzer $classAnalyzer;
-    /**
-     * @readonly
-     */
-    private PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    /**
-     * @readonly
-     */
-    private AstResolver $astResolver;
-    /**
-     * @readonly
-     */
-    private ValueResolver $valueResolver;
-    /**
-     * @readonly
-     */
-    private ParentClassAnalyzer $parentClassAnalyzer;
-    /**
-     * @api
-     * @var string
-     */
-    public const ALLOW_OVERRIDE_EMPTY_METHOD = 'allow_override_empty_method';
-    /**
-     * @api
-     * @var string
-     */
-    public const ADD_TO_INTERFACE_METHODS = 'add_to_interface_methods';
-    /**
-     * @var string
-     */
-    private const OVERRIDE_CLASS = 'Override';
-    private bool $allowOverrideEmptyMethod = \false;
-    private bool $addToInterfaceMethods = \false;
-    private bool $hasChanged = \false;
-    public function __construct(ReflectionProvider $reflectionProvider, ClassAnalyzer $classAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, AstResolver $astResolver, ValueResolver $valueResolver, ParentClassAnalyzer $parentClassAnalyzer)
-    {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->classAnalyzer = $classAnalyzer;
-        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
-        $this->astResolver = $astResolver;
-        $this->valueResolver = $valueResolver;
-        $this->parentClassAnalyzer = $parentClassAnalyzer;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add override attribute to overridden methods', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add override attribute to overridden methods', [new CodeSample(<<<'CODE_SAMPLE'
 class ParentClass
 {
     public function foo()
@@ -125,36 +54,7 @@ final class ChildClass extends ParentClass
     }
 }
 CODE_SAMPLE
-, [self::ALLOW_OVERRIDE_EMPTY_METHOD => \false]), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
-interface ParentInterface
-{
-    public function foo();
-}
-
-final class ChildClass implements ParentInterface
-{
-    public function foo()
-    {
-        echo 'implements interface';
-    }
-}
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-interface ParentInterface
-{
-    public function foo();
-}
-
-final class ChildClass implements ParentInterface
-{
-    #[\Override]
-    public function foo()
-    {
-        echo 'implements interface';
-    }
-}
-CODE_SAMPLE
-, [self::ADD_TO_INTERFACE_METHODS => \true])]);
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -164,192 +64,14 @@ CODE_SAMPLE
         return [Class_::class];
     }
     /**
-     * @param array<string, mixed> $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        $this->allowOverrideEmptyMethod = $configuration[self::ALLOW_OVERRIDE_EMPTY_METHOD] ?? \false;
-        $this->addToInterfaceMethods = $configuration[self::ADD_TO_INTERFACE_METHODS] ?? \false;
-    }
-    /**
      * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        $this->hasChanged = \false;
-        if ($this->classAnalyzer->isAnonymousClass($node)) {
-            return null;
-        }
-        if ($this->shouldSkipNode($node)) {
-            return null;
-        }
-        $className = (string) $this->getName($node);
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $parentClassReflections = $classReflection->getParents();
-        // interfaces are added for Stringable
-        if ($this->addToInterfaceMethods || $this->allowOverrideEmptyMethod) {
-            $parentClassReflections = array_merge($parentClassReflections, $classReflection->getInterfaces());
-        }
-        if ($this->allowOverrideEmptyMethod) {
-            // place on last to ensure verify method exists on parent early
-            // for non abstract method from trait
-            $parentClassReflections = array_merge($parentClassReflections, $classReflection->getTraits());
-        }
-        if ($parentClassReflections === []) {
-            return null;
-        }
-        foreach ($node->getMethods() as $classMethod) {
-            $this->processAddOverrideAttribute($classMethod, $parentClassReflections);
-        }
-        if (!$this->hasChanged) {
-            return null;
-        }
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as never used and not part of any set. Apply the #[\Override] attribute explicitly on the methods that override, based on your own requirements', self::class));
     }
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::OVERRIDE_ATTRIBUTE;
-    }
-    /**
-     * @param ClassReflection[] $parentClassReflections
-     */
-    private function processAddOverrideAttribute(ClassMethod $classMethod, array $parentClassReflections): void
-    {
-        if ($this->shouldSkipClassMethod($classMethod)) {
-            return;
-        }
-        /** @var string $classMethodName */
-        $classMethodName = $this->getName($classMethod->name);
-        // Private methods should be ignored
-        $shouldAddOverride = \false;
-        foreach ($parentClassReflections as $parentClassReflection) {
-            if (!$parentClassReflection->hasNativeMethod($classMethod->name->toString())) {
-                continue;
-            }
-            // ignore if it is a private method on the parent
-            if (!$parentClassReflection->hasNativeMethod($classMethodName)) {
-                continue;
-            }
-            $parentMethod = $parentClassReflection->getNativeMethod($classMethodName);
-            if ($parentMethod->isPrivate()) {
-                break;
-            }
-            if ($this->shouldSkipParentClassMethod($parentClassReflection, $classMethod)) {
-                continue;
-            }
-            if ($parentClassReflection->isTrait() && !$parentMethod->isAbstract()) {
-                break;
-            }
-            $shouldAddOverride = \true;
-            break;
-        }
-        if ($shouldAddOverride) {
-            $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(self::OVERRIDE_CLASS))]);
-            $this->hasChanged = \true;
-        }
-    }
-    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
-    {
-        if ($this->isName($classMethod->name, MethodName::CONSTRUCT)) {
-            return \true;
-        }
-        // nothing to override
-        if ($classMethod->isPrivate()) {
-            return \true;
-        }
-        // ignore if it already uses the attribute
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, self::OVERRIDE_CLASS)) {
-            return \true;
-        }
-        // skip test setup method override, as rather clutters the code than helps
-        return $this->isNames($classMethod, ['setUp', 'tearDown']) && $this->parentClassAnalyzer->hasParentCall($classMethod);
-    }
-    private function shouldSkipParentClassMethod(ClassReflection $parentClassReflection, ClassMethod $classMethod): bool
-    {
-        // special case for Stringable interface
-        if ($this->allowOverrideEmptyMethod && $parentClassReflection->getName() === 'Stringable') {
-            return \false;
-        }
-        // if the method is on interface, skip based on the config flag
-        if ($parentClassReflection->isInterface()) {
-            return !$this->addToInterfaceMethods;
-        }
-        // parse parent method, if it has some contents or not
-        $parentClass = $this->astResolver->resolveClassFromClassReflection($parentClassReflection);
-        if (!$parentClass instanceof ClassLike) {
-            return \true;
-        }
-        $parentClassMethod = $parentClass->getMethod($classMethod->name->toString());
-        if (!$parentClassMethod instanceof ClassMethod) {
-            $parentClassMethod = $this->resolveClassMethodFromTraitUse($parentClass, $classMethod->name->toString());
-        }
-        if (!$parentClassMethod instanceof ClassMethod) {
-            return \true;
-        }
-        if ($this->allowOverrideEmptyMethod) {
-            return \false;
-        }
-        // just override abstract method also skipped on purpose
-        // only grand child of abstract method that parent has content will have
-        if ($parentClassMethod->isAbstract()) {
-            return \true;
-        }
-        // has any stmts?
-        if ($parentClassMethod->stmts === null || $parentClassMethod->stmts === []) {
-            return \true;
-        }
-        if (count($parentClassMethod->stmts) === 1) {
-            /** @var Stmt $soleStmt */
-            $soleStmt = $parentClassMethod->stmts[0];
-            // most likely, return null; is interface to be designed to override
-            if ($soleStmt instanceof Return_ && $soleStmt->expr instanceof Expr && $this->valueResolver->isNull($soleStmt->expr)) {
-                return \true;
-            }
-            if ($soleStmt instanceof Expression && $soleStmt->expr instanceof Throw_) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    private function resolveClassMethodFromTraitUse(ClassLike $classLike, string $methodName): ?ClassMethod
-    {
-        foreach ($classLike->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitName) {
-                $traitClass = $this->astResolver->resolveClassFromName($traitName->__toString());
-                if (!$traitClass instanceof Trait_) {
-                    continue;
-                }
-                $traitClassMethod = $traitClass->getMethod($methodName);
-                if ($traitClassMethod instanceof ClassMethod) {
-                    return $traitClassMethod;
-                }
-            }
-        }
-        return null;
-    }
-    // early return for the class if it does not extend anything
-    private function shouldSkipNode(Class_ $class): bool
-    {
-        if ($class->extends instanceof Name) {
-            return \false;
-        }
-        if ($class->getTraitUses() !== []) {
-            return \false;
-        }
-        if ($this->addToInterfaceMethods && $class->implements !== []) {
-            return \false;
-        }
-        // add override to Stringable if flag is set
-        if ($this->allowOverrideEmptyMethod) {
-            foreach ($class->implements as $implement) {
-                if ($this->isName($implement, 'Stringable')) {
-                    return \false;
-                }
-            }
-        }
-        return \true;
     }
 }
