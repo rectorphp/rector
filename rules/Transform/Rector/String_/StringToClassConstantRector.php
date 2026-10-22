@@ -5,30 +5,18 @@ namespace Rector\Transform\Rector\String_;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\StringToClassConstant;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
+ * @deprecated This rule is deprecated, as too niche, never used and needs project context. Write a custom rule for the exact project case instead.
  */
-final class StringToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
+final class StringToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ValueResolver $valueResolver;
-    /**
-     * @var StringToClassConstant[]
-     */
-    private array $stringsToClassConstants = [];
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change strings to specific constants', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -63,20 +51,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->stringsToClassConstants as $stringToClassConstant) {
-            if (!$this->valueResolver->isValue($node, $stringToClassConstant->getString())) {
-                continue;
-            }
-            return $this->nodeFactory->createClassConstFetch($stringToClassConstant->getClass(), $stringToClassConstant->getConstant());
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as too niche and part of no set; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, StringToClassConstant::class);
-        $this->stringsToClassConstants = $configuration;
     }
 }
