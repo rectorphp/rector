@@ -6,6 +6,9 @@ namespace Rector\Renaming\ValueObject;
 use PHPStan\Type\ObjectType;
 use Rector\Renaming\Contract\RenameAnnotationInterface;
 use Rector\Validation\RectorAssert;
+/**
+ * @api used in deprecated RenameAnnotationRector configs
+ */
 final class RenameAnnotationByType implements RenameAnnotationInterface
 {
     /**
