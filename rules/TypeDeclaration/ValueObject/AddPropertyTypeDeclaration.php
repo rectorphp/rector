@@ -5,6 +5,9 @@ namespace Rector\TypeDeclaration\ValueObject;
 
 use PHPStan\Type\Type;
 use Rector\Validation\RectorAssert;
+/**
+ * @api used in deprecated AddPropertyTypeDeclarationRector configs
+ */
 final class AddPropertyTypeDeclaration
 {
     /**
