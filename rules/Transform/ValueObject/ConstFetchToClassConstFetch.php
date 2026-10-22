@@ -4,6 +4,9 @@ declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use Rector\Validation\RectorAssert;
+/**
+ * @api kept for deprecated ConstFetchToClassConstFetchRector code sample
+ */
 final class ConstFetchToClassConstFetch
 {
     /**

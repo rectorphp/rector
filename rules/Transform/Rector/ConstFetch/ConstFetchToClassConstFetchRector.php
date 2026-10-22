@@ -6,21 +6,18 @@ namespace Rector\Transform\Rector\ConstFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\ConstFetchToClassConstFetch;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @see Rector\Tests\Transform\Rector\ConstFetch\ConstFetchToClassConstFetchRector\ConstFetchToClassConstFetchTest
+ * @deprecated This rule is deprecated, as too niche and never used. A global const name can be reused across unrelated contexts and does not map cleanly to a single class constant. Use a custom rule scoped to your exact case instead.
  */
-final class ConstFetchToClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
+final class ConstFetchToClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var array<string, ConstFetchToClassConstFetch[]>
-     */
-    private array $constFetchToClassConstsByOldName = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change const fetch to class const fetch', [new ConfiguredCodeSample('$x = CONTEXT_COURSE', '$x = course::LEVEL', [new ConstFetchToClassConstFetch('CONTEXT_COURSE', 'course', 'LEVEL')])]);
@@ -34,21 +31,12 @@ final class ConstFetchToClassConstFetchRector extends AbstractRector implements 
      */
     public function refactor(Node $node): ?ClassConstFetch
     {
-        $constName = $this->getName($node);
-        if ($constName === null) {
-            return null;
-        }
-        foreach ($this->constFetchToClassConstsByOldName[strtolower($constName)] ?? [] as $constFetchToClassConst) {
-            return $this->nodeFactory->createClassConstFetch($constFetchToClassConst->getNewClassName(), $constFetchToClassConst->getNewConstName());
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as too niche and never used; use a custom rule scoped to your exact case instead', self::class));
     }
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, ConstFetchToClassConstFetch::class);
-        $this->constFetchToClassConstsByOldName = [];
-        foreach ($configuration as $constFetchToClassConst) {
-            $this->constFetchToClassConstsByOldName[strtolower($constFetchToClassConst->getOldConstName())][] = $constFetchToClassConst;
-        }
     }
 }
