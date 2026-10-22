@@ -2793,7 +2793,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\Transform\\ValueObject\\FuncCallToStaticCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/FuncCallToStaticCall.php',
         'Rector\\Transform\\ValueObject\\MethodCallToFuncCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/MethodCallToFuncCall.php',
         'Rector\\Transform\\ValueObject\\MethodCallToStaticCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/MethodCallToStaticCall.php',
-        'Rector\\Transform\\ValueObject\\NewToStaticCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/NewToStaticCall.php',
         'Rector\\Transform\\ValueObject\\ScalarValueToConstFetch' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ScalarValueToConstFetch.php',
         'Rector\\Transform\\ValueObject\\StaticCallToFuncCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/StaticCallToFuncCall.php',
         'Rector\\Transform\\ValueObject\\StaticCallToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/StaticCallToMethodCall.php',

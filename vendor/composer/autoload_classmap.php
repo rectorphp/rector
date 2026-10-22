@@ -2563,7 +2563,6 @@ return array(
     'Rector\\Transform\\ValueObject\\FuncCallToStaticCall' => $baseDir . '/rules/Transform/ValueObject/FuncCallToStaticCall.php',
     'Rector\\Transform\\ValueObject\\MethodCallToFuncCall' => $baseDir . '/rules/Transform/ValueObject/MethodCallToFuncCall.php',
     'Rector\\Transform\\ValueObject\\MethodCallToStaticCall' => $baseDir . '/rules/Transform/ValueObject/MethodCallToStaticCall.php',
-    'Rector\\Transform\\ValueObject\\NewToStaticCall' => $baseDir . '/rules/Transform/ValueObject/NewToStaticCall.php',
     'Rector\\Transform\\ValueObject\\ScalarValueToConstFetch' => $baseDir . '/rules/Transform/ValueObject/ScalarValueToConstFetch.php',
     'Rector\\Transform\\ValueObject\\StaticCallToFuncCall' => $baseDir . '/rules/Transform/ValueObject/StaticCallToFuncCall.php',
     'Rector\\Transform\\ValueObject\\StaticCallToMethodCall' => $baseDir . '/rules/Transform/ValueObject/StaticCallToMethodCall.php',
