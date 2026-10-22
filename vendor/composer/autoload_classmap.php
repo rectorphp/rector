@@ -912,7 +912,6 @@ return array(
     'Rector\\Arguments\\Rector\\MethodCall\\RemoveMethodCallParamRector' => $baseDir . '/rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php',
     'Rector\\Arguments\\ValueObject\\ArgumentAdder' => $baseDir . '/rules/Arguments/ValueObject/ArgumentAdder.php',
     'Rector\\Arguments\\ValueObject\\ArgumentAdderWithoutDefaultValue' => $baseDir . '/rules/Arguments/ValueObject/ArgumentAdderWithoutDefaultValue.php',
-    'Rector\\Arguments\\ValueObject\\RemoveMethodCallParam' => $baseDir . '/rules/Arguments/ValueObject/RemoveMethodCallParam.php',
     'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => $baseDir . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
     'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => $baseDir . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
     'Rector\\Assert\\Rector\\ClassMethod\\AddAssertArrayFromClassMethodDocblockRector' => $baseDir . '/rules/Assert/Rector/ClassMethod/AddAssertArrayFromClassMethodDocblockRector.php',

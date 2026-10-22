@@ -6,43 +6,19 @@ namespace Rector\Arguments\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
-use Rector\Arguments\ValueObject\RemoveMethodCallParam;
-use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
-use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
+use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @note used extensively https://github.com/search?q=RemoveMethodCallParamRector%3A%3Aclass+language%3APHP&type=code&l=PHP
- * @see \Rector\Tests\Arguments\Rector\MethodCall\RemoveMethodCallParamRector\RemoveMethodCallParamRectorTest
+ * @deprecated This rule is deprecated, as too niche and generic. It can create invalid calls on unrelated objects. Use a specific rule instead.
  */
-final class RemoveMethodCallParamRector extends AbstractRector implements ConfigurableRectorInterface
+final class RemoveMethodCallParamRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ReflectionResolver $reflectionResolver;
-    /**
-     * @readonly
-     */
-    private ArgsAnalyzer $argsAnalyzer;
-    /**
-     * @var array<string, RemoveMethodCallParam[]>
-     */
-    private array $removeMethodCallParamsByMethod = [];
-    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer)
-    {
-        $this->reflectionResolver = $reflectionResolver;
-        $this->argsAnalyzer = $argsAnalyzer;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove parameter of method call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove parameter of method call', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(Caller $caller)
@@ -60,7 +36,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new RemoveMethodCallParam('Caller', 'process', 1)])]);
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -74,71 +50,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = \false;
-        if ($node->isFirstClassCallable()) {
-            return null;
-        }
-        $methodName = $this->getName($node->name);
-        if ($methodName === null) {
-            return null;
-        }
-        foreach ($this->removeMethodCallParamsByMethod[strtolower($methodName)] ?? [] as $removeMethodCallParam) {
-            if (!$this->isCallerObjectType($node, $removeMethodCallParam)) {
-                continue;
-            }
-            $args = $node->getArgs();
-            $position = $removeMethodCallParam->getParamPosition();
-            $firstNamedArgPosition = $this->argsAnalyzer->resolveFirstNamedArgPosition($args);
-            // if the call has named arguments and the argument that we want to remove is not
-            // before any named argument, we need to check if it is in the list of named arguments
-            // if it is, we use the position of the named argument as the position to remove
-            // if it is not, we cannot remove it
-            if ($firstNamedArgPosition !== null && $position >= $firstNamedArgPosition) {
-                $reflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
-                if (!$reflection instanceof MethodReflection && !$reflection instanceof FunctionReflection) {
-                    return null;
-                }
-                $parametersAcceptor = ParametersAcceptorSelector::combineAcceptors($reflection->getVariants());
-                $parameterReflection = $parametersAcceptor->getParameters()[$position] ?? null;
-                $newPosition = -1;
-                if ($parameterReflection !== null) {
-                    $newPosition = $this->argsAnalyzer->resolveArgPosition($args, $parameterReflection->getName(), $newPosition);
-                }
-                if ($newPosition === -1) {
-                    return null;
-                }
-                $position = $newPosition;
-            }
-            if (!isset($args[$position])) {
-                continue;
-            }
-            unset($node->args[$position]);
-            $hasChanged = \true;
-        }
-        if (!$hasChanged) {
-            return null;
-        }
-        return $node;
-    }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        Assert::allIsInstanceOf($configuration, RemoveMethodCallParam::class);
-        $this->removeMethodCallParamsByMethod = [];
-        foreach ($configuration as $removeMethodCallParam) {
-            $this->removeMethodCallParamsByMethod[strtolower($removeMethodCallParam->getMethodName())][] = $removeMethodCallParam;
-        }
-    }
-    /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
-     */
-    private function isCallerObjectType($call, RemoveMethodCallParam $removeMethodCallParam): bool
-    {
-        if ($call instanceof MethodCall) {
-            return $this->isObjectType($call->var, $removeMethodCallParam->getObjectType());
-        }
-        return $this->isObjectType($call->class, $removeMethodCallParam->getObjectType());
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as too niche and generic. Use a specific rule instead', self::class));
     }
 }
