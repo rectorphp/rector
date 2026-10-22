@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
+/**
+ * @api used in deprecated MethodCallToFuncCallRector configs
+ */
 final class MethodCallToFuncCall
 {
     /**

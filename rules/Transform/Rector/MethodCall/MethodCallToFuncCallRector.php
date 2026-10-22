@@ -4,26 +4,19 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name\FullyQualified;
-use PHPStan\Type\ObjectType;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\MethodCallToFuncCall;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @note used extensively https://github.com/search?q=MethodCallToFuncCallRector%3A%3Aclass&type=code
- * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToFuncCallRector\MethodCallToFuncCallRectorTest
+ * @deprecated This rule is deprecated, as changing a method call to a function call is niche and depends on project context. Write a custom rule for the exact project case instead.
  */
-final class MethodCallToFuncCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class MethodCallToFuncCallRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var array<string, MethodCallToFuncCall[]>
-     */
-    private array $methodCallsToFuncCallsByMethod = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change method call to function call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -58,30 +51,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isFirstClassCallable()) {
-            return null;
-        }
-        $methodName = $this->getName($node->name);
-        if ($methodName === null) {
-            return null;
-        }
-        foreach ($this->methodCallsToFuncCallsByMethod[strtolower($methodName)] ?? [] as $methodCallToFuncCall) {
-            if (!$this->isObjectType($node->var, new ObjectType($methodCallToFuncCall->getObjectType()))) {
-                continue;
-            }
-            return new FuncCall(new FullyQualified($methodCallToFuncCall->getFunctionName()), $node->getArgs());
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as changing a method call to a function call is niche and depends on project context; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsInstanceOf($configuration, MethodCallToFuncCall::class);
-        $this->methodCallsToFuncCallsByMethod = [];
-        foreach ($configuration as $methodCallToFuncCall) {
-            $this->methodCallsToFuncCallsByMethod[strtolower($methodCallToFuncCall->getMethodName())][] = $methodCallToFuncCall;
-        }
     }
 }
