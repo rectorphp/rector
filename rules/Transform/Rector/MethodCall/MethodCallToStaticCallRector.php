@@ -5,21 +5,18 @@ namespace Rector\Transform\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\MethodCallToStaticCall;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToStaticCallRector\MethodCallToStaticCallRectorTest
+ * @deprecated This rule is deprecated, as turning a method call into a static call depends on project context and this generic rule is too niche. Write a custom rule for the exact project case instead.
  */
-final class MethodCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class MethodCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var array<string, MethodCallToStaticCall[]>
-     */
-    private array $methodCallsToStaticCallsByOldMethod = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change method call to desired static call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -68,27 +65,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $methodName = $this->getName($node->name);
-        if ($methodName === null) {
-            return null;
-        }
-        foreach ($this->methodCallsToStaticCallsByOldMethod[strtolower($methodName)] ?? [] as $methodCallToStaticCall) {
-            if (!$this->isObjectType($node->var, $methodCallToStaticCall->getOldObjectType())) {
-                continue;
-            }
-            return $this->nodeFactory->createStaticCall($methodCallToStaticCall->getNewClass(), $methodCallToStaticCall->getNewMethod(), $node->args);
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as turning a method call into a static call depends on project context; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, MethodCallToStaticCall::class);
-        $this->methodCallsToStaticCallsByOldMethod = [];
-        foreach ($configuration as $methodCallToStaticCall) {
-            $this->methodCallsToStaticCallsByOldMethod[strtolower($methodCallToStaticCall->getOldMethod())][] = $methodCallToStaticCall;
-        }
     }
 }
