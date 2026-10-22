@@ -6,21 +6,17 @@ namespace Rector\Removing\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\Stmt\TraitUse;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Removing\Rector\Class_\RemoveTraitUseRector\RemoveTraitUseRectorTest
+ * @deprecated This rule is deprecated, as too niche, never used and needs project context. Write a custom rule for the exact project case instead.
  */
-final class RemoveTraitUseRector extends AbstractRector implements ConfigurableRectorInterface
+final class RemoveTraitUseRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var string[]
-     */
-    private array $traitsToRemove = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove specific traits from code', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -48,34 +44,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = \false;
-        foreach ($node->stmts as $key => $stmt) {
-            if (!$stmt instanceof TraitUse) {
-                continue;
-            }
-            foreach ($stmt->traits as $traitKey => $trait) {
-                if (!$this->isNames($trait, $this->traitsToRemove)) {
-                    continue;
-                }
-                unset($stmt->traits[$traitKey]);
-                $hasChanged = \true;
-            }
-            // remove empty trait uses
-            if ($stmt->traits === []) {
-                unset($node->stmts[$key]);
-            }
-        }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as too niche and part of no set; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allString($configuration);
-        $this->traitsToRemove = $configuration;
     }
 }
