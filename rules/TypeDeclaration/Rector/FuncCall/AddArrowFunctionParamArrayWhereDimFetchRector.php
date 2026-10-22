@@ -80,6 +80,11 @@ CODE_SAMPLE
             $instanceofVariableNames = $this->resolveInstanceofVariables($closureExpr);
             $skippedVariableNames = array_merge($isArrayVariableNames, $instanceofVariableNames);
             $dimFetchVariableNames = $this->resolveDimFetchVariableNames($closureExpr);
+            // the items type does not change per closure param, resolve it once
+            $type = $this->getType($closureItems);
+            if ($type instanceof ArrayType && $type->getItemType()->isObject()->yes()) {
+                continue;
+            }
             foreach ($closureExpr->getParams() as $closureParam) {
                 if ($closureParam->type instanceof Node) {
                     // param is known already
@@ -90,10 +95,6 @@ CODE_SAMPLE
                     continue;
                 }
                 if (!$this->isNames($closureParam->var, $dimFetchVariableNames)) {
-                    continue;
-                }
-                $type = $this->getType($closureItems);
-                if ($type instanceof ArrayType && $type->getItemType()->isObject()->yes()) {
                     continue;
                 }
                 $hasChanged = \true;

@@ -60,12 +60,12 @@ CODE_SAMPLE
         if ($methodName === null) {
             return null;
         }
+        $class = $this->getName($node->class);
+        if ($class === null) {
+            return null;
+        }
         foreach ($this->staticCallsToNewsByMethod[strtolower($methodName)] ?? [] as $staticCallToNew) {
             if (!$this->isName($node->class, $staticCallToNew->getClass())) {
-                continue;
-            }
-            $class = $this->getName($node->class);
-            if ($class === null) {
                 continue;
             }
             return new New_(new FullyQualified($class), $node->args);
