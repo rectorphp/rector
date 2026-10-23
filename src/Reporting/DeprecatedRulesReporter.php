@@ -45,17 +45,6 @@ final class DeprecatedRulesReporter
         }
         return $reportedCount;
     }
-    public function reportDeprecatedCacheMetaExtensions(): int
-    {
-        /** @var string[] $cacheMetaExtensions */
-        $cacheMetaExtensions = SimpleParameterProvider::provideArrayParameter(Option::CACHE_META_EXTENSIONS);
-        $reportedCount = 0;
-        foreach ($cacheMetaExtensions as $cacheMetumExtension) {
-            $this->symfonyStyle->warning(sprintf('Cache meta extension "%s" is deprecated and no longer applied. It is a niche mechanism, let Rector handle cache on its own. If custom invalidation is needed, handle it in CI in a more generic way, e.g. by clearing the cache directory.', $cacheMetumExtension));
-            ++$reportedCount;
-        }
-        return $reportedCount;
-    }
     public function reportDeprecatedPhpSetsMethods(): int
     {
         /** @var string[] $deprecatedPhpSetsMethods */
