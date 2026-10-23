@@ -115,6 +115,7 @@ CODE_SAMPLE
      */
     private function refactorAssign(array $assigns, Expression $expression): ?array
     {
+        $hasChanged = \false;
         foreach ($assigns as $assign) {
             if (!$assign->expr instanceof New_ && !$assign->expr instanceof Instanceof_) {
                 continue;
@@ -129,6 +130,7 @@ CODE_SAMPLE
             }
             // mandatory to remove parentheses
             $newOrInstanceof->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $hasChanged = \true;
             if ($isAllowed) {
                 continue;
             }
@@ -143,7 +145,8 @@ CODE_SAMPLE
             $newOrInstanceof->class = $variable;
             return [new Expression($exprAssign), $expression];
         }
-        return null;
+        // parentheses were removed in place, report the change so it gets printed
+        return $hasChanged ? [$expression] : null;
     }
     /**
      * @return Expression[]|null
