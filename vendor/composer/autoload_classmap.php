@@ -1562,7 +1562,6 @@ return array(
     'Rector\\Naming\\Naming\\AliasNameResolver' => $baseDir . '/rules/Naming/Naming/AliasNameResolver.php',
     'Rector\\Naming\\Naming\\PropertyNaming' => $baseDir . '/rules/Naming/Naming/PropertyNaming.php',
     'Rector\\Naming\\Naming\\UseImportsResolver' => $baseDir . '/rules/Naming/Naming/UseImportsResolver.php',
-    'Rector\\Naming\\Naming\\VariableNaming' => $baseDir . '/rules/Naming/Naming/VariableNaming.php',
     'Rector\\Naming\\ParamRenamer\\ParamRenamer' => $baseDir . '/rules/Naming/ParamRenamer/ParamRenamer.php',
     'Rector\\Naming\\PhpDoc\\VarTagValueNodeRenamer' => $baseDir . '/rules/Naming/PhpDoc/VarTagValueNodeRenamer.php',
     'Rector\\Naming\\PropertyRenamer\\PropertyPromotionRenamer' => $baseDir . '/rules/Naming/PropertyRenamer/PropertyPromotionRenamer.php',

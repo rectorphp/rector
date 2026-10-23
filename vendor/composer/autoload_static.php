@@ -1792,7 +1792,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\Naming\\Naming\\AliasNameResolver' => __DIR__ . '/../..' . '/rules/Naming/Naming/AliasNameResolver.php',
         'Rector\\Naming\\Naming\\PropertyNaming' => __DIR__ . '/../..' . '/rules/Naming/Naming/PropertyNaming.php',
         'Rector\\Naming\\Naming\\UseImportsResolver' => __DIR__ . '/../..' . '/rules/Naming/Naming/UseImportsResolver.php',
-        'Rector\\Naming\\Naming\\VariableNaming' => __DIR__ . '/../..' . '/rules/Naming/Naming/VariableNaming.php',
         'Rector\\Naming\\ParamRenamer\\ParamRenamer' => __DIR__ . '/../..' . '/rules/Naming/ParamRenamer/ParamRenamer.php',
         'Rector\\Naming\\PhpDoc\\VarTagValueNodeRenamer' => __DIR__ . '/../..' . '/rules/Naming/PhpDoc/VarTagValueNodeRenamer.php',
         'Rector\\Naming\\PropertyRenamer\\PropertyPromotionRenamer' => __DIR__ . '/../..' . '/rules/Naming/PropertyRenamer/PropertyPromotionRenamer.php',
