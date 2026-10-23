@@ -4,37 +4,27 @@ declare (strict_types=1);
 namespace Rector\Parallel\ValueObject;
 
 /**
- * From
- * https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92#diff-bc84213b079ef3456caece03c00ba34c07886dcae12180cd1192fbb223d65b15
+ * Each worker owns a queue of jobs, balanced up front by @see \Rector\Parallel\ScheduleFactory.
  */
 final class Schedule
 {
     /**
+     * @var array<int, array<int, array<string>>>
      * @readonly
      */
-    private int $numberOfProcesses;
+    private array $jobsPerWorker;
     /**
-     * @var array<array<string>>
-     * @readonly
+     * @param array<int, array<int, array<string>>> $jobsPerWorker
      */
-    private array $jobs;
-    /**
-     * @param array<array<string>> $jobs
-     */
-    public function __construct(int $numberOfProcesses, array $jobs)
+    public function __construct(array $jobsPerWorker)
     {
-        $this->numberOfProcesses = $numberOfProcesses;
-        $this->jobs = $jobs;
-    }
-    public function getNumberOfProcesses(): int
-    {
-        return $this->numberOfProcesses;
+        $this->jobsPerWorker = $jobsPerWorker;
     }
     /**
-     * @return array<array<string>>
+     * @return array<int, array<int, array<string>>>
      */
-    public function getJobs(): array
+    public function getJobsPerWorker(): array
     {
-        return $this->jobs;
+        return $this->jobsPerWorker;
     }
 }

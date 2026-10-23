@@ -87,14 +87,17 @@ final class OutputPrinter
     }
     public function success(string $text): void
     {
+        $this->newline();
         $this->writeln($this->outputColorizer->color('[OK] ' . $text, Color::GREEN));
     }
     public function warning(string $text): void
     {
+        $this->newline();
         $this->writeln($this->outputColorizer->color('[WARNING] ' . $text, Color::YELLOW));
     }
     public function error(string $text): void
     {
+        $this->newline();
         $this->writeln($this->outputColorizer->color('[ERROR] ' . $text, Color::RED));
     }
     /**

@@ -13,8 +13,6 @@ use Rector\FileSystem\FilesFinder;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\CpuCoreCountProvider;
 use Rector\Parallel\Exception\ParallelShouldNotHappenException;
-use Rector\Parallel\Experimental\ExperimentalParallelFileProcessor;
-use Rector\Parallel\Experimental\LptScheduleFactory;
 use Rector\Parallel\ScheduleFactory;
 use Rector\PhpParser\Parser\ParserErrors;
 use Rector\Reporting\MissConfigurationReporter;
@@ -77,14 +75,6 @@ final class ApplicationFileProcessor
      */
     private Skipper $skipper;
     /**
-     * @readonly
-     */
-    private LptScheduleFactory $lptScheduleFactory;
-    /**
-     * @readonly
-     */
-    private ExperimentalParallelFileProcessor $experimentalParallelFileProcessor;
-    /**
      * @var string
      */
     private const ARGV = 'argv';
@@ -92,7 +82,7 @@ final class ApplicationFileProcessor
      * @var SystemError[]
      */
     private array $systemErrors = [];
-    public function __construct(SymfonyStyle $symfonyStyle, FilesFinder $filesFinder, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter, Skipper $skipper, LptScheduleFactory $lptScheduleFactory, ExperimentalParallelFileProcessor $experimentalParallelFileProcessor)
+    public function __construct(SymfonyStyle $symfonyStyle, FilesFinder $filesFinder, ParallelFileProcessor $parallelFileProcessor, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, \Rector\Application\FileProcessor $fileProcessor, ArrayParametersMerger $arrayParametersMerger, MissConfigurationReporter $missConfigurationReporter, Skipper $skipper)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->filesFinder = $filesFinder;
@@ -105,9 +95,6 @@ final class ApplicationFileProcessor
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->missConfigurationReporter = $missConfigurationReporter;
         $this->skipper = $skipper;
-        // @experimental, see --lpt
-        $this->lptScheduleFactory = $lptScheduleFactory;
-        $this->experimentalParallelFileProcessor = $experimentalParallelFileProcessor;
     }
     public function run(Configuration $configuration, InputInterface $input): ProcessResult
     {
@@ -268,11 +255,6 @@ final class ApplicationFileProcessor
         $cpuCores = $this->cpuCoreCountProvider->provide();
         $jobSize = SimpleParameterProvider::provideIntParameter(Option::PARALLEL_JOB_SIZE);
         $maxNumberOfProcesses = SimpleParameterProvider::provideIntParameter(Option::PARALLEL_MAX_NUMBER_OF_PROCESSES);
-        // @experimental opt-in, see --lpt
-        if ($input->hasOption(Option::LPT) && (bool) $input->getOption(Option::LPT)) {
-            $bucketSchedule = $this->lptScheduleFactory->create($cpuCores, $jobSize, $maxNumberOfProcesses, $filePaths);
-            return $this->experimentalParallelFileProcessor->process($bucketSchedule, $mainScript, $postFileCallback, $input);
-        }
         $schedule = $this->scheduleFactory->create($cpuCores, $jobSize, $maxNumberOfProcesses, $filePaths);
         // mimics see https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92#diff-387b8f04e0db7a06678eb52ce0c0d0aff73e0d7d8fc5df834d0a5fbec198e5daR139
         return $this->parallelFileProcessor->process($schedule, $mainScript, $postFileCallback, $input);
