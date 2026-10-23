@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php81\Rector\Array_;
 
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -92,6 +93,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
+        if (count($node->items) !== 2) {
+            return null;
+        }
+        if (!$node->items[0] instanceof ArrayItem || !$node->items[1] instanceof ArrayItem) {
+            return null;
+        }
         if ($node->getAttribute(AttributeKey::IS_ARG_NOT_ACCEPTING_CLOSURE)) {
             return null;
         }
