@@ -46,8 +46,6 @@ use Rector\Symfony\CodeQuality\Rector\MethodCall\ParameterBagTypedGetMethodCallR
 use Rector\Symfony\Configs\Rector\MethodCall\EnableValidationAttributesRector;
 use Rector\Symfony\HttpFoundation\Rector\New_\CookieConstructorDefaultsRector;
 use Rector\Symfony\HttpFoundation\Rector\New_\CookieSameSiteConstantRector;
-use Rector\Symfony\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector;
-use Rector\Symfony\JMS\Rector\Property\AccessorAnnotationToAttributeRector;
 use Rector\Symfony\Routing\Rector\MethodCall\UrlGeneratorReferenceTypeRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector;
 use Rector\Symfony\Symfony25\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector;
@@ -292,9 +290,6 @@ return static function (RectorConfig $rectorConfig): void {
         ScheduleWithToAddRector::class,
         // twig/twig 3.21 + symfony/twig-bridge 7.3
         GetFiltersAndFunctionsToAsTwigAttributeRector::class,
-        // jms/serializer 3.14
-        AccessTypeAnnotationToAttributeRector::class,
-        AccessorAnnotationToAttributeRector::class,
     ]);
     // shared types used by the configuration below
     $arrayType = new ArrayType(new MixedType(), new MixedType());

@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\GenericAnnotationToAttributeConverter;
 use Rector\Rector\AbstractRector;
@@ -18,11 +19,13 @@ use Rector\Symfony\Enum\JMSAnnotation;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 /**
+ * @deprecated This rule is deprecated, as JMS @AccessType annotation to attribute is a niche and rarely used case.
+ *
  * @see https://github.com/schmittjoh/serializer/issues/1531
  *
  * @see \Rector\Symfony\Tests\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector\AccessTypeAnnotationToAttributeRectorTest
  */
-final class AccessTypeAnnotationToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface
+final class AccessTypeAnnotationToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface, DeprecatedInterface
 {
     /**
      * @readonly
