@@ -2595,7 +2595,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\Symfony\\DependencyInjection\\ThisGetTypeMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DependencyInjection/ThisGetTypeMatcher.php',
         'Rector\\Symfony\\DowngradeSymfony70\\Rector\\Class_\\DowngradeSymfonyCommandAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/DowngradeSymfony70/Rector/Class_/DowngradeSymfonyCommandAttributeRector.php',
         'Rector\\Symfony\\Enum\\CommandMethodName' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/CommandMethodName.php',
-        'Rector\\Symfony\\Enum\\JMSAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/JMSAnnotation.php',
         'Rector\\Symfony\\Enum\\SensioAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAnnotation.php',
         'Rector\\Symfony\\Enum\\SensioAttribute' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAttribute.php',
         'Rector\\Symfony\\Enum\\SymfonyAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',

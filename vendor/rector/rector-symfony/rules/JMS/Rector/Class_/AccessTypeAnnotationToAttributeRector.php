@@ -4,46 +4,20 @@ declare (strict_types=1);
 namespace Rector\Symfony\JMS\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\PhpAttribute\GenericAnnotationToAttributeConverter;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\Symfony\Enum\JMSAnnotation;
-use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
-use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 /**
  * @deprecated This rule is deprecated, as JMS @AccessType annotation to attribute is a niche and rarely used case.
  *
  * @see https://github.com/schmittjoh/serializer/issues/1531
- *
- * @see \Rector\Symfony\Tests\JMS\Rector\Class_\AccessTypeAnnotationToAttributeRector\AccessTypeAnnotationToAttributeRectorTest
  */
-final class AccessTypeAnnotationToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface, DeprecatedInterface
+final class AccessTypeAnnotationToAttributeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private DocBlockUpdater $docBlockUpdater;
-    /**
-     * @readonly
-     */
-    private GenericAnnotationToAttributeConverter $genericAnnotationToAttributeConverter;
-    public function __construct(DocBlockUpdater $docBlockUpdater, GenericAnnotationToAttributeConverter $genericAnnotationToAttributeConverter)
-    {
-        $this->docBlockUpdater = $docBlockUpdater;
-        $this->genericAnnotationToAttributeConverter = $genericAnnotationToAttributeConverter;
-    }
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint
-    {
-        return new ComposerPackageConstraint('jms/serializer', '>=3.14');
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes @AccessType annotation to #[AccessType] attribute with specific key', [new CodeSample(<<<'CODE_SAMPLE'
@@ -64,29 +38,18 @@ class User
 CODE_SAMPLE
 )]);
     }
+    /**
+     * @return array<class-string<Node>>
+     */
     public function getNodeTypes(): array
     {
         return [Class_::class, Property::class];
     }
     /**
      * @param Class_|Property $node
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?Node
     {
-        $annotationToAttribute = new AnnotationToAttribute(JMSAnnotation::ACCESS_TYPE);
-        $attributeGroup = $this->genericAnnotationToAttributeConverter->convert($node, $annotationToAttribute);
-        if (!$attributeGroup instanceof AttributeGroup) {
-            return null;
-        }
-        $attribute = $attributeGroup->attrs[0];
-        if (count($attribute->args) === 1) {
-            $soleArg = $attribute->args[0];
-            $soleArg->name = new Identifier('type');
-        }
-        // 2. Reprint docblock
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        $node->attrGroups = array_merge($node->attrGroups, [$attributeGroup]);
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as JMS @AccessType annotation to attribute is a niche and rarely used case.', self::class));
     }
 }

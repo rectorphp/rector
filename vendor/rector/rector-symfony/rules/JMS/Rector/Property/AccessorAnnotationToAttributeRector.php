@@ -4,49 +4,17 @@ declare (strict_types=1);
 namespace Rector\Symfony\JMS\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
-use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\PhpAttribute\GenericAnnotationToAttributeConverter;
-use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\Symfony\Enum\JMSAnnotation;
-use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
-use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 /**
  * @deprecated This rule is deprecated, as JMS @Accessor annotation to attribute is a niche and rarely used case.
- *
- * @see \Rector\Symfony\Tests\JMS\Rector\Property\AccessorAnnotationToAttributeRector\AccessorAnnotationToAttributeRectorTest
  */
-final class AccessorAnnotationToAttributeRector extends AbstractRector implements ComposerPackageConstraintInterface, DeprecatedInterface
+final class AccessorAnnotationToAttributeRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private DocBlockUpdater $docBlockUpdater;
-    /**
-     * @readonly
-     */
-    private ValueResolver $valueResolver;
-    /**
-     * @readonly
-     */
-    private GenericAnnotationToAttributeConverter $genericAnnotationToAttributeConverter;
-    public function __construct(DocBlockUpdater $docBlockUpdater, ValueResolver $valueResolver, GenericAnnotationToAttributeConverter $genericAnnotationToAttributeConverter)
-    {
-        $this->docBlockUpdater = $docBlockUpdater;
-        $this->valueResolver = $valueResolver;
-        $this->genericAnnotationToAttributeConverter = $genericAnnotationToAttributeConverter;
-    }
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint
-    {
-        return new ComposerPackageConstraint('jms/serializer', '>=3.14');
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Changes @Accessor annotation to #[Accessor] attribute with specific "getter" or "setter" keys', [new CodeSample(<<<'CODE_SAMPLE'
@@ -71,6 +39,9 @@ class User
 CODE_SAMPLE
 )]);
     }
+    /**
+     * @return array<class-string<Node>>
+     */
     public function getNodeTypes(): array
     {
         return [Property::class];
@@ -78,32 +49,8 @@ CODE_SAMPLE
     /**
      * @param Property $node
      */
-    public function refactor(Node $node): ?\PhpParser\Node\Stmt\Property
+    public function refactor(Node $node): ?Node
     {
-        $annotationToAttribute = new AnnotationToAttribute(JMSAnnotation::ACCESSOR);
-        $attributeGroup = $this->genericAnnotationToAttributeConverter->convert($node, $annotationToAttribute);
-        if (!$attributeGroup instanceof AttributeGroup) {
-            return null;
-        }
-        $attribute = $attributeGroup->attrs[0];
-        foreach ($attribute->args as $attributeArg) {
-            // already known
-            if ($attributeArg->name instanceof Identifier) {
-                continue;
-            }
-            $value = $this->valueResolver->getValue($attributeArg->value);
-            if (strncmp((string) $value, 'get', strlen('get')) === 0) {
-                $attributeArg->name = new Identifier('getter');
-            } elseif (strncmp((string) $value, 'set', strlen('set')) === 0) {
-                $attributeArg->name = new Identifier('setter');
-            } else {
-                // skip, not getter/setter
-                continue;
-            }
-        }
-        // 2. Reprint docblock
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        $node->attrGroups = array_merge($node->attrGroups, [$attributeGroup]);
-        return $node;
+        throw new ShouldNotHappenException(sprintf('"%s" is deprecated, as JMS @Accessor annotation to attribute is a niche and rarely used case.', self::class));
     }
 }
