@@ -51,7 +51,6 @@ use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Catch_;
@@ -178,19 +177,13 @@ final class PHPStanNodeScopeResolver
             if ($mutatingScope instanceof NodeCallbackScope) {
                 $mutatingScope = $mutatingScope->toWalkScope();
             }
+            // why not simply this everywhere? what would we lose?
+            // $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Enum_) {
                 $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                if ($node instanceof Class_) {
-                    if ($node->extends instanceof FullyQualified) {
-                        $node->extends->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                    }
-                    foreach ($node->implements as $implement) {
-                        $implement->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                    }
-                }
                 return;
             }
             if ($node instanceof Trait_) {
