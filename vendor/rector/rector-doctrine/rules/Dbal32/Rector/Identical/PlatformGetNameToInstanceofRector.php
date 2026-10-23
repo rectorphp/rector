@@ -18,7 +18,7 @@ use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 /**
  * @see https://github.com/doctrine/dbal/pull/4755
- * @see Rector\Doctrine\Tests\Dbal32\Rector\Identical\PlatformGetNameToInstanceofRector\PlatformGetNameToInstanceofRectorTest
+ * @see \Rector\Doctrine\Tests\Dbal32\Rector\Identical\PlatformGetNameToInstanceofRector\PlatformGetNameToInstanceofRectorTest
  */
 final class PlatformGetNameToInstanceofRector extends AbstractRector implements ComposerPackageConstraintInterface
 {
