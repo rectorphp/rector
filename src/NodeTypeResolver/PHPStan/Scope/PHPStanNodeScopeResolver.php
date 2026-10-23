@@ -66,7 +66,6 @@ use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
@@ -177,8 +176,6 @@ final class PHPStanNodeScopeResolver
             if ($mutatingScope instanceof NodeCallbackScope) {
                 $mutatingScope = $mutatingScope->toWalkScope();
             }
-            // why not simply this everywhere? what would we lose?
-            // $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Enum_) {
@@ -256,14 +253,6 @@ final class PHPStanNodeScopeResolver
                         $this->processAssign($expr, $mutatingScope);
                     }
                 }
-                return;
-            }
-            if ($node instanceof Array_) {
-                $this->processArray($node, $mutatingScope);
-                return;
-            }
-            if ($node instanceof Property) {
-                $this->processProperty($node, $mutatingScope, $nodeCallback);
                 return;
             }
             if ($node instanceof Switch_) {
@@ -486,26 +475,6 @@ final class PHPStanNodeScopeResolver
     {
         $originalStmt = $unreachableStatementNode->getOriginalStatement();
         $this->nodeScopeResolverProcessNodes(array_merge([$originalStmt], $unreachableStatementNode->getNextStatements()), $mutatingScope, $nodeCallback);
-    }
-    /**
-     * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
-     */
-    private function processProperty(Property $property, MutatingScope $mutatingScope, callable $nodeCallback): void
-    {
-        foreach ($property->props as $propertyProperty) {
-            $propertyProperty->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            if ($propertyProperty->default instanceof Expr) {
-                $propertyProperty->default->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-        }
-        foreach ($property->hooks as $hook) {
-            if ($hook->body === null) {
-                continue;
-            }
-            /** @var Stmt[] $stmts */
-            $stmts = $hook->body instanceof Expr ? [new Expression($hook->body)] : $hook->body;
-            $this->nodeScopeResolverProcessNodes($stmts, $mutatingScope, $nodeCallback);
-        }
     }
     private function processBinaryOp(BinaryOp $binaryOp, MutatingScope $mutatingScope): void
     {
