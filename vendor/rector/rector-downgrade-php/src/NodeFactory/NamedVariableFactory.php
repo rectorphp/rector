@@ -6,7 +6,7 @@ namespace Rector\NodeFactory;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Naming\Naming\VariableNaming;
+use Rector\DowngradePhp\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NamedVariableFactory
 {

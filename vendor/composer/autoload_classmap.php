@@ -1525,6 +1525,7 @@ return array(
     'Rector\\DowngradePhp85\\Rector\\FuncCall\\DowngradeArrayFirstLastRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/FuncCall/DowngradeArrayFirstLastRector.php',
     'Rector\\DowngradePhp85\\Rector\\StmtsAwareInterface\\DowngradePipeOperatorRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp85/Rector/StmtsAwareInterface/DowngradePipeOperatorRector.php',
     'Rector\\DowngradePhp86\\Rector\\FuncCall\\DowngradeClampRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp86/Rector/FuncCall/DowngradeClampRector.php',
+    'Rector\\DowngradePhp\\Naming\\VariableNaming' => $vendorDir . '/rector/rector-downgrade-php/src/DowngradePhp/Naming/VariableNaming.php',
     'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => $baseDir . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
     'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => $baseDir . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeIfElseValueAssignToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeIfElseValueAssignToEarlyReturnRector.php',

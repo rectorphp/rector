@@ -30,7 +30,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\NodeVisitor;
 use PHPStan\Analyser\Scope;
-use Rector\Naming\Naming\VariableNaming;
+use Rector\DowngradePhp\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Rector\PHPStan\ScopeFetcher;

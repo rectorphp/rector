@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\Void_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Naming\Naming\VariableNaming;
+use Rector\DowngradePhp\Naming\VariableNaming;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;

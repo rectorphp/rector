@@ -19,7 +19,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
-use Rector\Naming\Naming\VariableNaming;
+use Rector\DowngradePhp\Naming\VariableNaming;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
