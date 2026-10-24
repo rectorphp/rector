@@ -102,9 +102,9 @@ CODE_SAMPLE
         }
         $hasParentConstructCall = \false;
         foreach ($constructClassMethod->stmts as $key => $stmt) {
-            // code that is possibly breaking flow
+            // code that is possibly breaking flow; keep any inlining already done before it
             if ($stmt instanceof If_) {
-                return null;
+                break;
             }
             if (!$stmt instanceof Expression) {
                 continue;
