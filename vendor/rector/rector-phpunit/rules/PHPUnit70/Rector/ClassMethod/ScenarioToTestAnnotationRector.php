@@ -5,10 +5,11 @@ namespace Rector\PHPUnit\PHPUnit70\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -23,10 +24,6 @@ final class ScenarioToTestAnnotationRector extends AbstractRector implements Com
     /**
      * @readonly
      */
-    private DocBlockTagReplacer $docBlockTagReplacer;
-    /**
-     * @readonly
-     */
     private DocBlockUpdater $docBlockUpdater;
     /**
      * @readonly
@@ -36,9 +33,8 @@ final class ScenarioToTestAnnotationRector extends AbstractRector implements Com
      * @readonly
      */
     private TestsNodeAnalyzer $testsNodeAnalyzer;
-    public function __construct(DocBlockTagReplacer $docBlockTagReplacer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
-        $this->docBlockTagReplacer = $docBlockTagReplacer;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
@@ -89,7 +85,20 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
-        if (!$this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, 'scenario', 'test')) {
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        $hasChanged = \false;
+        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
+            if (!$phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+            if ($phpDocChildNode->name !== '@scenario') {
+                continue;
+            }
+            unset($phpDocNode->children[$key]);
+            $phpDocNode->children[] = new PhpDocTagNode('@test', new GenericTagValueNode(''));
+            $hasChanged = \true;
+        }
+        if (!$hasChanged) {
             return null;
         }
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
