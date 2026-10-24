@@ -69,13 +69,24 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         $isFinal = $node->isFinal() || FeatureFlags::treatClassesAsFinal($node);
-        $scope = ScopeFetcher::fetch($node);
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            return null;
-        }
-        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use (&$hasChanged, $classReflection, $isFinal, $scope): ?Node {
+        $scope = null;
+        $classReflection = null;
+        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use (&$hasChanged, &$classReflection, $isFinal, &$scope, $node): ?Node {
             if (!$subNode instanceof StaticPropertyFetch && !$subNode instanceof StaticCall && !$subNode instanceof ClassConstFetch) {
+                return null;
+            }
+            if (!$subNode->class instanceof Name) {
+                return null;
+            }
+            if (!$this->isName($subNode->class, ObjectReference::STATIC)) {
+                return null;
+            }
+            if (!$subNode->name instanceof Identifier) {
+                return null;
+            }
+            $scope ??= ScopeFetcher::fetch($node);
+            $classReflection ??= $scope->getClassReflection();
+            if (!$classReflection instanceof ClassReflection) {
                 return null;
             }
             if ($this->shouldSkip($subNode, $classReflection, $isFinal, $scope)) {
@@ -92,15 +103,6 @@ CODE_SAMPLE
      */
     private function shouldSkip($node, ClassReflection $classReflection, bool $isFinal, Scope $scope): bool
     {
-        if (!$node->class instanceof Name) {
-            return \true;
-        }
-        if (!$this->isName($node->class, ObjectReference::STATIC)) {
-            return \true;
-        }
-        if (!$node->name instanceof Identifier) {
-            return \true;
-        }
         $name = (string) $this->getName($node->name);
         switch (\true) {
             case $node instanceof StaticPropertyFetch:
