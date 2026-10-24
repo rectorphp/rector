@@ -98,7 +98,7 @@ CODE_SAMPLE
      */
     private function hasPHPUnitTestClass(array $nodes): bool
     {
-        $class = $this->betterNodeFinder->findFirstNonAnonymousClass($nodes);
+        $class = $this->betterNodeFinder->findFirst($nodes, static fn(Node $node): bool => $node instanceof Class_ && !$node->isAnonymous());
         if (!$class instanceof Class_) {
             return \false;
         }
