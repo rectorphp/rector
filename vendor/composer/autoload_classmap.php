@@ -2595,7 +2595,6 @@ return array(
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ArrayCallbackParamTypeResolver' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ArrayCallbackParamTypeResolver.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\AutowiredClassMethodOrPropertyAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/AutowiredClassMethodOrPropertyAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\CallTypesResolver' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/CallTypesResolver.php',
-    'Rector\\TypeDeclaration\\NodeAnalyzer\\CallerParamMatcher' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/CallerParamMatcher.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\DeclareStrictTypeFinder' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/DeclareStrictTypeFinder.php',

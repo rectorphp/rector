@@ -2825,7 +2825,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ArrayCallbackParamTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ArrayCallbackParamTypeResolver.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\AutowiredClassMethodOrPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/AutowiredClassMethodOrPropertyAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\CallTypesResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/CallTypesResolver.php',
-        'Rector\\TypeDeclaration\\NodeAnalyzer\\CallerParamMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/CallerParamMatcher.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\DeclareStrictTypeFinder' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/DeclareStrictTypeFinder.php',
