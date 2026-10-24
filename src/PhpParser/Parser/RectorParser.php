@@ -30,8 +30,6 @@ final class RectorParser
         $this->privatesAccessor = $privatesAccessor;
     }
     /**
-     * @api used by rector-symfony
-     *
      * @return Stmt[]
      */
     public function parseFile(string $filePath): array

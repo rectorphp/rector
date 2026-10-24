@@ -17,7 +17,6 @@ abstract class AbstractLazyTestCase extends TestCase
         $this->includePreloadFilesAndScoperAutoload();
     }
     /**
-     * @api
      * @param string[] $configFiles
      */
     protected function bootFromConfigFiles(array $configFiles): void

@@ -9,9 +9,6 @@ use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLo
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocatorRepository;
 use Rector\Contract\DependencyInjection\ResettableInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-/**
- * @api phpstan external
- */
 final class DynamicSourceLocatorProvider implements ResettableInterface
 {
     /**
@@ -74,9 +71,6 @@ final class DynamicSourceLocatorProvider implements ResettableInterface
     {
         return $this->filePaths === [] && $this->directories === [];
     }
-    /**
-     * @api to allow fast single-container tests
-     */
     public function reset(): void
     {
         $this->filePaths = [];

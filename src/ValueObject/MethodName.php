@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\ValueObject;
 
 /**
- * @api
  * @enum
  */
 final class MethodName

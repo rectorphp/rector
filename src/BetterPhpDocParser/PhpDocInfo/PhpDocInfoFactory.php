@@ -98,9 +98,6 @@ final class PhpDocInfoFactory
         $this->phpDocInfosByObjectId[$objectId] = $phpDocInfo;
         return $phpDocInfo;
     }
-    /**
-     * @api downgrade
-     */
     public function createEmpty(Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
         $phpDocNode = new PhpDocNode([]);

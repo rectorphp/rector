@@ -25,7 +25,6 @@ final class FamilyRelationsAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @api
      * @return string[]
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Name $classOrName
      */

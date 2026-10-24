@@ -6,8 +6,6 @@ namespace Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor;
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey;
 /**
- * @api
- *
  * Mimics https://github.com/nikic/PHP-Parser/blob/master/lib/PhpParser/NodeVisitor/ParentConnectingVisitor.php
  *
  * @see \Rector\Tests\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitorTest

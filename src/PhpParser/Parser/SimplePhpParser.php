@@ -28,7 +28,6 @@ final class SimplePhpParser
         $this->nodeTraverser = new NodeTraverser(new AssignedToNodeVisitor());
     }
     /**
-     * @api tests
      * @return Node[]
      */
     public function parseFile(string $filePath): array

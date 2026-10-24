@@ -15,7 +15,7 @@ use Rector\PhpParser\Node\FileNode;
 use Rector\PhpParser\Parser\RectorParser;
 use Rector\ValueObject\Application\File;
 /**
- * @api
+ * @api used in tests
  */
 final class TestingParser
 {

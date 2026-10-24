@@ -88,9 +88,6 @@ final class LazyContainerFactory
      * @var array<class-string>
      */
     private const PUBLIC_PHPSTAN_SERVICE_TYPES = [ScopeFactory::class, TypeNodeResolver::class, NodeScopeResolver::class, ReflectionProvider::class, PhpVersionFactory::class, Reflector::class, ClassReflectionFactory::class];
-    /**
-     * @api used as next rectorConfig factory
-     */
     public function create(): RectorConfig
     {
         $rectorConfig = new RectorConfig();

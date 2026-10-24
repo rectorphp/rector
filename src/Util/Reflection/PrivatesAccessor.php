@@ -15,7 +15,6 @@ final class PrivatesAccessor
     /**
      * @param object|class-string $object
      * @param mixed[] $arguments
-     * @api
      * @return mixed
      */
     public function callPrivateMethod($object, string $methodName, array $arguments)

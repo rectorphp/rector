@@ -3,9 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Renaming\ValueObject;
 
-/**
- * @api
- */
 final class RenameAttribute
 {
     /**

@@ -100,17 +100,14 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      */
     private BetterNodeFinder $betterNodeFinder;
     /**
-     * @api
      * @var string
      */
     public const INLINE_PUBLIC = 'inline_public';
     /**
-     * @api
      * @var string
      */
     public const RENAME_PROPERTY = 'rename_property';
     /**
-     * @api
      * @var string
      */
     public const ALLOW_MODEL_BASED_CLASSES = 'allow_model_based_classes';

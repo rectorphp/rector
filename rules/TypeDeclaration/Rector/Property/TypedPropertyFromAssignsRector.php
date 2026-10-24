@@ -75,7 +75,6 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements Min
      */
     private AttrinationFinder $attrinationFinder;
     /**
-     * @api
      * @var string
      */
     public const INLINE_PUBLIC = 'inline_public';

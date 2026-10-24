@@ -4,9 +4,6 @@ declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
 use RectorPrefix202610\Nette\Utils\FileSystem;
-/**
- * @api
- */
 final class FixtureSplitter
 {
     public static function containsSplit(string $fixtureFileContent): bool

@@ -34,7 +34,6 @@ final class UseImportsResolver
         return $rootNode->getUsesAndGroupUses();
     }
     /**
-     * @api
      * @return Use_[]
      */
     public function resolveBareUses(): array

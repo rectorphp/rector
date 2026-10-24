@@ -94,9 +94,6 @@ final class ChangedFilesDetector
     {
         $this->cache->clear();
     }
-    /**
-     * @api
-     */
     public function setFirstResolvedConfigFileInfo(string $filePath): void
     {
         // the first config is core to all → if it was changed, just invalidate it

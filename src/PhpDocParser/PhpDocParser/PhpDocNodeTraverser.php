@@ -8,8 +8,6 @@ use Rector\PhpDocParser\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
 use Rector\PhpDocParser\PhpDocParser\Exception\InvalidTraverseException;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 /**
- * @api
- *
  * Mimics
  * https://github.com/nikic/PHP-Parser/blob/4abdcde5f16269959a834e4e58ea0ba0938ab133/lib/PhpParser/NodeTraverser.php
  *
@@ -23,8 +21,6 @@ final class PhpDocNodeTraverser
      *
      * For subsequent visitors enterNode() will still be called on the current node and leaveNode() will also be invoked
      * for the current node.
-     *
-     * @api
      * @var int
      */
     public const DONT_TRAVERSE_CHILDREN = 1;
@@ -32,8 +28,6 @@ final class PhpDocNodeTraverser
      * If NodeVisitor::enterNode() or NodeVisitor::leaveNode() returns STOP_TRAVERSAL, traversal is aborted.
      *
      * The afterTraverse() method will still be invoked.
-     *
-     * @api
      * @var int
      */
     public const STOP_TRAVERSAL = 2;
@@ -42,8 +36,6 @@ final class PhpDocNodeTraverser
      * array.
      *
      * For subsequent visitors leaveNode() will still be invoked for the removed node.
-     *
-     * @api
      * @var int
      */
     public const NODE_REMOVE = 3;
@@ -53,8 +45,6 @@ final class PhpDocNodeTraverser
      *
      * For subsequent visitors enterNode() will not be called as well. leaveNode() will be invoked for visitors that has
      * enterNode() method invoked.
-     *
-     * @api
      * @var int
      */
     public const DONT_TRAVERSE_CURRENT_AND_CHILDREN = 4;

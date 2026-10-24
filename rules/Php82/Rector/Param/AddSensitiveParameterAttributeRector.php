@@ -19,7 +19,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 final class AddSensitiveParameterAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface, DeprecatedInterface
 {
     /**
-     * @api
      * @var string
      */
     public const SENSITIVE_PARAMETERS = 'sensitive_parameters';

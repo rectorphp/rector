@@ -19,9 +19,6 @@ final class SymfonyStyleFactory
     {
         $this->privatesAccessor = $privatesAccessor;
     }
-    /**
-     * @api
-     */
     public function create(): \Rector\Console\Style\RectorStyle
     {
         $_SERVER['argv'] ??= [];

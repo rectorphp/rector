@@ -17,17 +17,14 @@ final class ArgumentAddingScope
      */
     private NodeNameResolver $nodeNameResolver;
     /**
-     * @api
      * @var string
      */
     public const SCOPE_PARENT_CALL = 'parent_call';
     /**
-     * @api
      * @var string
      */
     public const SCOPE_METHOD_CALL = 'method_call';
     /**
-     * @api
      * @var string
      */
     public const SCOPE_CLASS_METHOD = 'class_method';

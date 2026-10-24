@@ -7,7 +7,6 @@ use Rector\Config\RectorConfig;
 use Rector\Contract\Rector\RectorInterface;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @api
  * Utils class to ease building bridges by 3rd-party tools
  *
  * @see \Rector\Tests\Bridge\SetRectorsResolverTest

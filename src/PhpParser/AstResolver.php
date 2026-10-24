@@ -82,7 +82,6 @@ final class AstResolver
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @api downgrade
      * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
     public function resolveClassFromName(string $className)

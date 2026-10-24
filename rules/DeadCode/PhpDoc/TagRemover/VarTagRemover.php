@@ -73,9 +73,6 @@ final class VarTagRemover
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
         return \true;
     }
-    /**
-     * @api generic
-     */
     public function removeVarTag(Node $node): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);

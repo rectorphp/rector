@@ -17,7 +17,6 @@ use Rector\RuleDoc\RuleDefinition;
 final class EncapsedStringsToSprintfRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
     /**
-     * @api
      * @var string
      */
     public const ALWAYS = 'always';

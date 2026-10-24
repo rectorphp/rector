@@ -7,7 +7,6 @@ use RectorPrefix202610\Nette\Utils\FileSystem;
 final class FixtureFileUpdater
 {
     /**
-     * @api
      */
     public static function updateFixtureContent(string $originalContent, string $changedContent, string $fixtureFilePath): void
     {

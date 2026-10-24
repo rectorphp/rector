@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Parallel\ValueObject;
 
 /**
- * @api
  * Helpers constant for passing constant names around
  */
 final class BridgeItem
@@ -33,10 +32,6 @@ final class BridgeItem
      * @var string
      */
     public const DIFF_CONSOLE_FORMATTED = 'diff_console_formatted';
-    /**
-     * @var string
-     */
-    public const APPLIED_RECTORS = 'applied_rectors';
     /**
      * @var string
      */

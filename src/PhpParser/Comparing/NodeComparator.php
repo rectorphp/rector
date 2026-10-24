@@ -42,7 +42,6 @@ final class NodeComparator
         return $this->printWithoutComments($firstNode) === $this->printWithoutComments($secondNode);
     }
     /**
-     * @api
      * @param Node[] $availableNodes
      */
     public function isNodeEqual(Node $singleNode, array $availableNodes): bool
