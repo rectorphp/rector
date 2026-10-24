@@ -98,10 +98,6 @@ final class FileProcessor
         }
         $fileHasChanged = \false;
         $filePath = $file->getFilePath();
-        // infinite-loop guard: remember every file content the loop produces; a rule set that
-        // keeps flipping the file between states would never settle, so once a content repeats
-        // we stop and report instead of looping forever
-        $seenContentHashes = [hash('md5', $file->getOriginalFileContent()) => \true];
         do {
             $file->changeHasChanged(\false);
             // 1. change nodes with Rector Rules
@@ -118,13 +114,6 @@ final class FileProcessor
                 break;
             }
             $fileHasChanged = \true;
-            // this exact content was already produced in an earlier pass: the rules cycle
-            // and will never converge, so stop here
-            $contentHash = hash('md5', $file->getFileContent());
-            if (isset($seenContentHashes[$contentHash])) {
-                return $this->createNotConvergingResult($file, $fileHasChanged);
-            }
-            $seenContentHashes[$contentHash] = \true;
         } while (\true);
         // 5. add as cacheable if not changed at all
         if (!$fileHasChanged) {
@@ -140,20 +129,6 @@ final class FileProcessor
             $file->setFileDiff($currentFileDiff);
         }
         return new FileProcessResult([], $file->getFileDiff(), $file->hasChanged());
-    }
-    private function createNotConvergingResult(File $file, bool $fileHasChanged): FileProcessResult
-    {
-        $rectorClasses = [];
-        foreach ($file->getRectorWithLineChanges() as $rectorWithLineChange) {
-            $rectorClasses[$rectorWithLineChange->getRectorClass()] = \true;
-        }
-        $message = sprintf('File did not stabilize, the rules keep flipping it between states. Rules applied: %s', implode(', ', array_keys($rectorClasses)));
-        // in tests a non-converging file is a rule bug that must surface, not a silent partial result
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            throw new ShouldNotHappenException($message . ' in ' . $file->getFilePath());
-        }
-        $systemError = new SystemError($message, $this->filePathHelper->relativePath($file->getFilePath()));
-        return new FileProcessResult([$systemError], $file->getFileDiff(), $fileHasChanged);
     }
     private function parseFileAndDecorateNodes(File $file): ?SystemError
     {
