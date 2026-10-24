@@ -46,7 +46,6 @@ class DateTimeImmutable extends \DateTimeImmutable implements \JsonSerializable
     }
     /**
      * Returns a new DateTimeImmutable object formatted according to the specified format.
-     * @return static|false
      * @param string|\DateTimeZone|null $timezone
      */
     public static function createFromFormat(string $format, string $datetime, $timezone = null)

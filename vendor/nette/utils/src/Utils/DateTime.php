@@ -57,7 +57,6 @@ class DateTime extends \DateTime implements \JsonSerializable
     }
     /**
      * Returns a new DateTime object formatted according to the specified format.
-     * @return static|false
      * @param string|\DateTimeZone|null $timezone
      */
     public static function createFromFormat(string $format, string $datetime, $timezone = null)

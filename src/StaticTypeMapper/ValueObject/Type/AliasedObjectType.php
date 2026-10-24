@@ -40,7 +40,7 @@ final class AliasedObjectType extends ObjectType
         return $this->getClassName();
     }
     /**
-     * @param $this|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $comparedObjectType
+     * @param mixed $comparedObjectType
      */
     public function areShortNamesEqual($comparedObjectType): bool
     {

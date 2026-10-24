@@ -316,7 +316,7 @@ final class FileNode extends Stmt
     }
     /**
      * @return Nop[]
-     * @param $this|\PhpParser\Node\Stmt\Namespace_ $node
+     * @param mixed $node
      */
     private function resolveInsertNop($node): array
     {
