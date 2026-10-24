@@ -1901,7 +1901,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\NameImportingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PhpDocNodeVisitor/NameImportingPhpDocNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockClassRenamer' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockClassRenamer.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockNameImporter' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockNameImporter.php',
-        'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockTagReplacer' => __DIR__ . '/../..' . '/src/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockTagReplacer.php',
         'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\RectorBetterReflectionSourceLocatorFactory' => __DIR__ . '/../..' . '/src/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
         'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\SourceLocatorProvider\\DynamicSourceLocatorProvider' => __DIR__ . '/../..' . '/src/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php',
         'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\SourceLocator\\IntermediateSourceLocator' => __DIR__ . '/../..' . '/src/NodeTypeResolver/Reflection/BetterReflection/SourceLocator/IntermediateSourceLocator.php',

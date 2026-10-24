@@ -1671,7 +1671,6 @@ return array(
     'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\NameImportingPhpDocNodeVisitor' => $baseDir . '/src/NodeTypeResolver/PhpDocNodeVisitor/NameImportingPhpDocNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockClassRenamer' => $baseDir . '/src/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockClassRenamer.php',
     'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockNameImporter' => $baseDir . '/src/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockNameImporter.php',
-    'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockTagReplacer' => $baseDir . '/src/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockTagReplacer.php',
     'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\RectorBetterReflectionSourceLocatorFactory' => $baseDir . '/src/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
     'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\SourceLocatorProvider\\DynamicSourceLocatorProvider' => $baseDir . '/src/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php',
     'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\SourceLocator\\IntermediateSourceLocator' => $baseDir . '/src/NodeTypeResolver/Reflection/BetterReflection/SourceLocator/IntermediateSourceLocator.php',
