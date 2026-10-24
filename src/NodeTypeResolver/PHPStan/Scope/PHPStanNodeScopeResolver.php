@@ -9,6 +9,7 @@ use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
@@ -19,6 +20,7 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Clone_;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\ErrorSuppress;
@@ -325,6 +327,10 @@ final class PHPStanNodeScopeResolver
                 $this->processCallLike($node->getOriginalNode(), $mutatingScope);
                 return;
             }
+            // PHPStan does not process attributes of closures and arrow functions
+            if (($node instanceof Closure || $node instanceof ArrowFunction) && $node->attrGroups !== []) {
+                $this->processClosureAttributeGroups($node, $mutatingScope, $nodeCallback);
+            }
         };
         try {
             $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
@@ -358,6 +364,26 @@ final class PHPStanNodeScopeResolver
         foreach ($node->vars as $var) {
             $var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         }
+    }
+    /**
+     * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $node
+     */
+    private function processClosureAttributeGroups($node, MutatingScope $mutatingScope, callable $nodeCallback): void
+    {
+        $argExpressions = [];
+        foreach ($node->attrGroups as $attrGroup) {
+            $attrGroup->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            foreach ($attrGroup->attrs as $attr) {
+                $attr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $attr->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                foreach ($attr->args as $arg) {
+                    $arg->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    $argExpressions[] = new Expression($arg->value);
+                }
+            }
+        }
+        $this->nodeScopeResolverProcessNodes($argExpressions, $mutatingScope, $nodeCallback);
     }
     private function processEcho(Echo_ $echo, MutatingScope $mutatingScope): void
     {
