@@ -3,13 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Skipper\Skipper;
 
-use PhpParser\Node;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Skipper\Matcher\FileInfoMatcher;
 use Rector\Skipper\ValueObject\SkipMatch;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -19,10 +16,6 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
  */
 final class Skipper
 {
-    /**
-     * @readonly
-     */
-    private RectifiedAnalyzer $rectifiedAnalyzer;
     /**
      * @readonly
      */
@@ -47,9 +40,8 @@ final class Skipper
      * @var array<string, array<string, true>>
      */
     private array $usedSkips = [];
-    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, FileInfoMatcher $fileInfoMatcher, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Skipper\Skipper\PathSkipper $pathSkipper, FileInfoMatcher $fileInfoMatcher, ReflectionProvider $reflectionProvider)
     {
-        $this->rectifiedAnalyzer = $rectifiedAnalyzer;
         $this->pathSkipper = $pathSkipper;
         $this->fileInfoMatcher = $fileInfoMatcher;
         $this->reflectionProvider = $reflectionProvider;
@@ -156,13 +148,6 @@ final class Skipper
     {
         $skippedClassNames = array_keys($this->resolveSkippedClasses());
         return array_filter($skippedClassNames, fn(string $class): bool => is_a($class, DeprecatedInterface::class, \true));
-    }
-    /**
-     * @param class-string<RectorInterface> $rectorClass
-     */
-    public function shouldSkipCurrentNode(string $rectorClass, Node $node): bool
-    {
-        return $this->rectifiedAnalyzer->hasRectified($rectorClass, $node);
     }
     private function markUsed(string $skip, ?string $path = null): void
     {

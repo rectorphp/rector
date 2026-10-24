@@ -2430,7 +2430,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\Privatization\\TypeManipulator\\ArrayTypeLeastCommonDenominatorResolver' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/ArrayTypeLeastCommonDenominatorResolver.php',
         'Rector\\Privatization\\TypeManipulator\\TypeNormalizer' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/TypeNormalizer.php',
         'Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard' => __DIR__ . '/../..' . '/rules/Privatization/VisibilityGuard/ClassMethodVisibilityGuard.php',
-        'Rector\\ProcessAnalyzer\\RectifiedAnalyzer' => __DIR__ . '/../..' . '/src/ProcessAnalyzer/RectifiedAnalyzer.php',
         'Rector\\RectorInstaller\\Filesystem' => __DIR__ . '/..' . '/rector/extension-installer/src/Filesystem.php',
         'Rector\\RectorInstaller\\GeneratedConfig' => __DIR__ . '/..' . '/rector/extension-installer/src/GeneratedConfig.php',
         'Rector\\RectorInstaller\\LocalFilesystem' => __DIR__ . '/..' . '/rector/extension-installer/src/LocalFilesystem.php',

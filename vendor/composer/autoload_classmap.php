@@ -2200,7 +2200,6 @@ return array(
     'Rector\\Privatization\\TypeManipulator\\ArrayTypeLeastCommonDenominatorResolver' => $baseDir . '/rules/Privatization/TypeManipulator/ArrayTypeLeastCommonDenominatorResolver.php',
     'Rector\\Privatization\\TypeManipulator\\TypeNormalizer' => $baseDir . '/rules/Privatization/TypeManipulator/TypeNormalizer.php',
     'Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard' => $baseDir . '/rules/Privatization/VisibilityGuard/ClassMethodVisibilityGuard.php',
-    'Rector\\ProcessAnalyzer\\RectifiedAnalyzer' => $baseDir . '/src/ProcessAnalyzer/RectifiedAnalyzer.php',
     'Rector\\RectorInstaller\\Filesystem' => $vendorDir . '/rector/extension-installer/src/Filesystem.php',
     'Rector\\RectorInstaller\\GeneratedConfig' => $vendorDir . '/rector/extension-installer/src/GeneratedConfig.php',
     'Rector\\RectorInstaller\\LocalFilesystem' => $vendorDir . '/rector/extension-installer/src/LocalFilesystem.php',
