@@ -112,11 +112,17 @@ CODE_SAMPLE
         if ($newMethodCall !== null) {
             return $newMethodCall;
         }
+        $hasChanged = \false;
         if (isset($node->args[4])) {
             // add new node only in case of non-default value
             unset($node->args[4]);
+            $hasChanged = \true;
         }
-        return $this->processAssertEqualsWithDelta($node);
+        $newMethodCall = $this->processAssertEqualsWithDelta($node);
+        if ($newMethodCall !== null) {
+            return $newMethodCall;
+        }
+        return $hasChanged ? $node : null;
     }
     /**
      * @template TCall of MethodCall|StaticCall
@@ -181,7 +187,8 @@ CODE_SAMPLE
         $thirdArg = $call->getArgs()[3];
         unset($call->args[3]);
         if ($this->valueResolver->isValue($thirdArg->value, 0.0)) {
-            return null;
+            // default delta removed in place, no dedicated method needed
+            return $call;
         }
         $newMethodCall = $this->assertCallFactory->createCallWithName($call, 'assertEqualsWithDelta');
         $newMethodCall->args[0] = $call->args[0];

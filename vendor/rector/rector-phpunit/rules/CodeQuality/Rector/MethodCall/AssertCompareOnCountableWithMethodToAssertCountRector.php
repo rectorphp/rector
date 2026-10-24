@@ -78,6 +78,7 @@ CODE_SAMPLE
                 $args[1] = new Arg($comparedExpr->var);
                 $node->args = $args;
                 $this->renameMethod($node);
+                return $node;
             }
         }
         return null;
