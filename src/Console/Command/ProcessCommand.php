@@ -193,7 +193,6 @@ EOF
         // 4. Deprecations reporter
         $this->deprecatedRulesReporter->reportDeprecatedRules();
         $this->deprecatedRulesReporter->reportDeprecatedSkippedRules();
-        $this->deprecatedRulesReporter->reportDeprecatedPhpSetsMethods();
         $this->deprecatedRulesReporter->reportDeprecatedAttributesSetsArgs();
         $this->deprecatedRulesReporter->reportDeprecatedComposerBasedArgs();
         $this->missConfigurationReporter->reportSkippedNeverRegisteredRules();

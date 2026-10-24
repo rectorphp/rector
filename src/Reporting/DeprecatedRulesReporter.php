@@ -45,17 +45,6 @@ final class DeprecatedRulesReporter
         }
         return $reportedCount;
     }
-    public function reportDeprecatedPhpSetsMethods(): int
-    {
-        /** @var string[] $deprecatedPhpSetsMethods */
-        $deprecatedPhpSetsMethods = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_PHP_SETS_METHODS);
-        $reportedCount = 0;
-        foreach (array_unique($deprecatedPhpSetsMethods) as $deprecatedPhpSetsMethod) {
-            $this->symfonyStyle->warning(sprintf('The "->%s()" method is deprecated and no longer applied. Use "->withPhpLevel()" instead, to raise PHP level one rule at a time.', $deprecatedPhpSetsMethod));
-            ++$reportedCount;
-        }
-        return $reportedCount;
-    }
     public function reportDeprecatedAttributesSetsArgs(): int
     {
         /** @var string[] $deprecatedAttributesSetsArgs */
