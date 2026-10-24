@@ -3,9 +3,6 @@
 declare (strict_types=1);
 namespace Rector\ValueObject;
 
-/**
- * @api
- */
 final class PhpVersionFeature
 {
     /**
@@ -16,10 +13,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const CONTINUE_TO_BREAK = \Rector\ValueObject\PhpVersion::PHP_52;
-    /**
-     * @var int
-     */
-    public const NO_REFERENCE_IN_NEW = \Rector\ValueObject\PhpVersion::PHP_53;
     /**
      * @var int
      */
@@ -49,10 +42,6 @@ final class PhpVersionFeature
      */
     public const SHORT_ARRAY = \Rector\ValueObject\PhpVersion::PHP_54;
     /**
-     * @var int
-     */
-    public const DATE_TIME_INTERFACE = \Rector\ValueObject\PhpVersion::PHP_55;
-    /**
      * @see https://wiki.php.net/rfc/class_name_scalars
      * @var int
      */
@@ -65,10 +54,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const EXP_OPERATOR = \Rector\ValueObject\PhpVersion::PHP_56;
-    /**
-     * @var int
-     */
-    public const REQUIRE_DEFAULT_VALUE = \Rector\ValueObject\PhpVersion::PHP_56;
     /**
      * @var int
      */
@@ -124,10 +109,6 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const VARIABLE_ON_FUNC_CALL = \Rector\ValueObject\PhpVersion::PHP_70;
-    /**
-     * @var int
-     */
     public const NO_MKTIME_WITHOUT_ARG = \Rector\ValueObject\PhpVersion::PHP_70;
     /**
      * @var int
@@ -158,15 +139,7 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const ITERABLE_TYPE = \Rector\ValueObject\PhpVersion::PHP_71;
-    /**
-     * @var int
-     */
     public const VOID_TYPE = \Rector\ValueObject\PhpVersion::PHP_71;
-    /**
-     * @var int
-     */
-    public const CONSTANT_VISIBILITY = \Rector\ValueObject\PhpVersion::PHP_71;
     /**
      * @var int
      */
@@ -190,10 +163,6 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const RESERVED_OBJECT_KEYWORD = \Rector\ValueObject\PhpVersion::PHP_71;
-    /**
-     * @var int
-     */
     public const DEPRECATE_EACH = \Rector\ValueObject\PhpVersion::PHP_72;
     /**
      * @var int
@@ -211,10 +180,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const NO_NULL_ON_GET_CLASS = \Rector\ValueObject\PhpVersion::PHP_72;
-    /**
-     * @var int
-     */
-    public const INVERTED_BOOL_IS_OBJECT_INCOMPLETE_CLASS = \Rector\ValueObject\PhpVersion::PHP_72;
     /**
      * @var int
      */
@@ -279,20 +244,11 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const LITERAL_SEPARATOR = \Rector\ValueObject\PhpVersion::PHP_74;
-    /**
-     * @var int
-     */
     public const NULL_COALESCE_ASSIGN = \Rector\ValueObject\PhpVersion::PHP_74;
     /**
      * @var int
      */
     public const TYPED_PROPERTIES = \Rector\ValueObject\PhpVersion::PHP_74;
-    /**
-     * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
-     * @var int
-     */
-    public const COVARIANT_RETURN = \Rector\ValueObject\PhpVersion::PHP_74;
     /**
      * @var int
      */
@@ -301,10 +257,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const DEPRECATE_CURLY_BRACKET_ARRAY_STRING = \Rector\ValueObject\PhpVersion::PHP_74;
-    /**
-     * @var int
-     */
-    public const DEPRECATE_REAL = \Rector\ValueObject\PhpVersion::PHP_74;
     /**
      * @var int
      */
@@ -321,14 +273,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const CHANGE_MB_STRPOS_ARG_POSITION = \Rector\ValueObject\PhpVersion::PHP_74;
-    /**
-     * @var int
-     */
-    public const RESERVED_FN_FUNCTION_NAME = \Rector\ValueObject\PhpVersion::PHP_74;
-    /**
-     * @var int
-     */
-    public const REFLECTION_TYPE_GETNAME = \Rector\ValueObject\PhpVersion::PHP_74;
     /**
      * @var int
      */
@@ -364,10 +308,6 @@ final class PhpVersionFeature
     /**
      * @var int
      */
-    public const DEPRECATE_REQUIRED_PARAMETER_AFTER_OPTIONAL = \Rector\ValueObject\PhpVersion::PHP_80;
-    /**
-     * @var int
-     */
     public const STATIC_VISIBILITY_SET_STATE = \Rector\ValueObject\PhpVersion::PHP_80;
     /**
      * @var int
@@ -386,10 +326,6 @@ final class PhpVersionFeature
      */
     public const PARENT_VISIBILITY_OVERRIDE = \Rector\ValueObject\PhpVersion::PHP_72;
     /**
-     * @var int
-     */
-    public const COUNT_ON_NULL = \Rector\ValueObject\PhpVersion::PHP_71;
-    /**
      * @see https://wiki.php.net/rfc/constructor_promotion
      * @var int
      */
@@ -403,10 +339,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const STRINGABLE = \Rector\ValueObject\PhpVersion::PHP_80;
-    /**
-     * @var int
-     */
-    public const PHP_TOKEN = \Rector\ValueObject\PhpVersion::PHP_80;
     /**
      * @var int
      */
@@ -459,20 +391,10 @@ final class PhpVersionFeature
      */
     public const NON_CAPTURING_CATCH = \Rector\ValueObject\PhpVersion::PHP_80;
     /**
-     * @see https://www.php.net/manual/en/migration80.incompatible.php#migration80.incompatible.resource2object
-     * @var int
-     */
-    public const PHP8_RESOURCE_TO_OBJECT = \Rector\ValueObject\PhpVersion::PHP_80;
-    /**
      * @see https://wiki.php.net/rfc/lsp_errors
      * @var int
      */
     public const FATAL_ERROR_ON_INCOMPATIBLE_METHOD_SIGNATURE = \Rector\ValueObject\PhpVersion::PHP_80;
-    /**
-     * @see https://www.php.net/manual/en/migration81.incompatible.php#migration81.incompatible.resource2object
-     * @var int
-     */
-    public const PHP81_RESOURCE_TO_OBJECT = \Rector\ValueObject\PhpVersion::PHP_81;
     /**
      * @see https://wiki.php.net/rfc/new_in_initializers
      * @var int
@@ -489,25 +411,10 @@ final class PhpVersionFeature
      */
     public const UNION_INTERSECTION_TYPES = \Rector\ValueObject\PhpVersion::PHP_82;
     /**
-     * @see https://wiki.php.net/rfc/array_unpacking_string_keys
-     * @var int
-     */
-    public const ARRAY_SPREAD_STRING_KEYS = \Rector\ValueObject\PhpVersion::PHP_81;
-    /**
-     * @see https://wiki.php.net/rfc/internal_method_return_types
-     * @var int
-     */
-    public const RETURN_TYPE_WILL_CHANGE_ATTRIBUTE = \Rector\ValueObject\PhpVersion::PHP_81;
-    /**
      * @see https://wiki.php.net/rfc/first_class_callable_syntax
      * @var int
      */
     public const FIRST_CLASS_CALLABLE_SYNTAX = \Rector\ValueObject\PhpVersion::PHP_81;
-    /**
-     * @see https://wiki.php.net/rfc/deprecate_dynamic_properties
-     * @var int
-     */
-    public const DEPRECATE_DYNAMIC_PROPERTIES = \Rector\ValueObject\PhpVersion::PHP_82;
     /**
      * @see https://wiki.php.net/rfc/readonly_classes
      * @var int
@@ -528,11 +435,6 @@ final class PhpVersionFeature
      * @var int
      */
     public const MIXED_TYPE = \Rector\ValueObject\PhpVersion::PHP_80;
-    /**
-     * @see https://3v4l.org/OWtO5
-     * @var int
-     */
-    public const ARRAY_ON_ARRAY_MERGE = \Rector\ValueObject\PhpVersion::PHP_80;
     /**
      * @var int
      */
