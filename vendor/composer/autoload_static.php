@@ -2409,7 +2409,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'Rector\\Php\\PolyfillPackagesProvider' => __DIR__ . '/../..' . '/src/Php/PolyfillPackagesProvider.php',
         'Rector\\Php\\ReservedKeywordAnalyzer' => __DIR__ . '/../..' . '/src/Php/ReservedKeywordAnalyzer.php',
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/src/PostRector/Application/PostFileProcessor.php',
-        'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => __DIR__ . '/../..' . '/src/PostRector/Collector/UseNodesToAddCollector.php',
         'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => __DIR__ . '/../..' . '/src/PostRector/Contract/Rector/PostRectorInterface.php',
         'Rector\\PostRector\\Guard\\AddUseStatementGuard' => __DIR__ . '/../..' . '/src/PostRector/Guard/AddUseStatementGuard.php',
         'Rector\\PostRector\\Rector\\AbstractPostRector' => __DIR__ . '/../..' . '/src/PostRector/Rector/AbstractPostRector.php',

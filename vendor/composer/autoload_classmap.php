@@ -2179,7 +2179,6 @@ return array(
     'Rector\\Php\\PolyfillPackagesProvider' => $baseDir . '/src/Php/PolyfillPackagesProvider.php',
     'Rector\\Php\\ReservedKeywordAnalyzer' => $baseDir . '/src/Php/ReservedKeywordAnalyzer.php',
     'Rector\\PostRector\\Application\\PostFileProcessor' => $baseDir . '/src/PostRector/Application/PostFileProcessor.php',
-    'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => $baseDir . '/src/PostRector/Collector/UseNodesToAddCollector.php',
     'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => $baseDir . '/src/PostRector/Contract/Rector/PostRectorInterface.php',
     'Rector\\PostRector\\Guard\\AddUseStatementGuard' => $baseDir . '/src/PostRector/Guard/AddUseStatementGuard.php',
     'Rector\\PostRector\\Rector\\AbstractPostRector' => $baseDir . '/src/PostRector/Rector/AbstractPostRector.php',
