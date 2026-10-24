@@ -141,7 +141,7 @@ CODE_SAMPLE
         $returnTagValueNode = new ReturnTagValueNode($genericTypeNode, '');
         $phpDocInfo->addTagValueNode($returnTagValueNode);
         $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        return null;
+        return $node;
     }
     /**
      * @param MethodCall[] $collectionAddMethodCalls
