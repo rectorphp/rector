@@ -194,8 +194,6 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pArray(array $nodes, array $origNodes, int &$pos, int $indentAdjustment, string $parentNodeClass, string $subNodeName, ?int $fixup): ?string
     {
-        // reindex positions for printer
-        $nodes = array_values($nodes);
         $content = parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $parentNodeClass, $subNodeName, $fixup);
         if ($content === null) {
             return $content;
