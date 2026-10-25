@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Rector\ClassMethod;
+namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
@@ -23,7 +22,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromMockObjectRector\ReturnTypeFromMockObjectRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\Class_\ReturnTypeFromMockObjectRector\ReturnTypeFromMockObjectRectorTest
  */
 final class ReturnTypeFromMockObjectRector extends AbstractRector implements MinPhpVersionInterface
 {
@@ -71,40 +70,53 @@ CODE_SAMPLE
     }
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        // type is already known
-        if ($node->returnType instanceof Node) {
+        $classReflection = $this->getClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        // we need exactly 1 return
-        $returns = $this->betterNodeFinder->findReturnsScoped($node);
-        if (count($returns) !== 1) {
+        // is phpunit test case?
+        if (!$classReflection->is(ClassName::TEST_CASE_CLASS)) {
             return null;
         }
-        if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($node, $returns)) {
-            return null;
+        $hasChanged = \false;
+        $scope = null;
+        foreach ($node->getMethods() as $classMethod) {
+            // type is already known
+            if ($classMethod->returnType instanceof Node) {
+                continue;
+            }
+            // we need exactly 1 return
+            $returns = $this->betterNodeFinder->findReturnsScoped($classMethod);
+            if (count($returns) !== 1) {
+                continue;
+            }
+            if (!$this->returnAnalyzer->hasOnlyReturnWithExpr($classMethod, $returns)) {
+                continue;
+            }
+            $scope ??= ScopeFetcher::fetch($node);
+            if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod, $scope)) {
+                continue;
+            }
+            /** @var Expr $expr */
+            $expr = $returns[0]->expr;
+            $returnType = $this->nodeTypeResolver->getNativeType($expr);
+            if (!$this->isMockObjectType($returnType)) {
+                continue;
+            }
+            $classMethod->returnType = new FullyQualified(ClassName::MOCK_OBJECT);
+            $hasChanged = \true;
         }
-        $scope = ScopeFetcher::fetch($node);
-        if (!$this->isInsideTestCaseClass($scope)) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
-            return null;
-        }
-        /** @var Expr $expr */
-        $expr = $returns[0]->expr;
-        $returnType = $this->nodeTypeResolver->getNativeType($expr);
-        if (!$this->isMockObjectType($returnType)) {
-            return null;
-        }
-        $node->returnType = new FullyQualified(ClassName::MOCK_OBJECT);
-        return $node;
+        return null;
     }
     public function provideMinPhpVersion(): int
     {
@@ -126,14 +138,5 @@ CODE_SAMPLE
             return \true;
         }
         return $this->isIntersectionWithMockObjectType($returnType);
-    }
-    private function isInsideTestCaseClass(Scope $scope): bool
-    {
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            return \false;
-        }
-        // is phpunit test case?
-        return $classReflection->is(ClassName::TEST_CASE_CLASS);
     }
 }
