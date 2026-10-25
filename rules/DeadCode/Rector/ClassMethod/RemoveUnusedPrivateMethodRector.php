@@ -104,6 +104,7 @@ CODE_SAMPLE
         // methods invoked via a class-string static call, e.g. self::class::sampleClass(),
         // are not seen by the usage analyzer
         $classStringCallMethodNames = $this->resolveClassStringStaticCallNames($node);
+        $scope = null;
         foreach ($node->stmts as $classStmtKey => $classStmt) {
             if (!$classStmt instanceof ClassMethod) {
                 continue;
@@ -112,20 +113,20 @@ CODE_SAMPLE
                 continue;
             }
             $classMethod = $classStmt;
-            if ($this->hasDynamicMethodCallOnFetchThis($classStmt)) {
-                continue;
-            }
-            $scope = ScopeFetcher::fetch($node);
-            if ($this->shouldSkip($classStmt, $classReflection)) {
-                continue;
-            }
-            if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $classStmt, $scope)) {
-                continue;
-            }
             if ($this->isNames($classMethod, $dataProviderMethodNames)) {
                 continue;
             }
             if ($this->isNames($classMethod, $classStringCallMethodNames)) {
+                continue;
+            }
+            if ($this->hasDynamicMethodCallOnFetchThis($classStmt)) {
+                continue;
+            }
+            if ($this->shouldSkip($classStmt, $classReflection)) {
+                continue;
+            }
+            $scope ??= ScopeFetcher::fetch($node);
+            if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $classStmt, $scope)) {
                 continue;
             }
             unset($node->stmts[$classStmtKey]);
