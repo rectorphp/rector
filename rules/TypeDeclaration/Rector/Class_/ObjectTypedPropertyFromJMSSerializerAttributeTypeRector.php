@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Php74\Guard\MakePropertyTypedGuard;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -83,8 +82,7 @@ CODE_SAMPLE
         if (!$this->jmsTypeAnalyzer->hasAtLeastOneUntypedPropertyUsingJmsAttribute($node)) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->getClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }

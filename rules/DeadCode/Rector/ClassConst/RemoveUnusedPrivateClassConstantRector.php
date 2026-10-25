@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Enum_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeManipulator\ClassConstManipulator;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -75,7 +74,7 @@ CODE_SAMPLE
             if (!$stmt instanceof ClassConst) {
                 continue;
             }
-            if ($this->shouldSkipClassConst($stmt)) {
+            if ($this->shouldSkipClassConst($classReflection, $stmt)) {
                 continue;
             }
             if ($this->classConstManipulator->hasClassConstFetch($stmt, $classReflection, $node)) {
@@ -92,18 +91,13 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function shouldSkipClassConst(ClassConst $classConst): bool
+    private function shouldSkipClassConst(ClassReflection $classReflection, ClassConst $classConst): bool
     {
         if (!$classConst->isPrivate()) {
             return \true;
         }
         if (count($classConst->consts) !== 1) {
             return \true;
-        }
-        $scope = ScopeFetcher::fetch($classConst);
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            return \false;
         }
         return $this->hasParentClassOfEnumSuffix($classReflection);
     }

@@ -89,7 +89,7 @@ CODE_SAMPLE
         if ($scope->getNamespace() !== null) {
             return null;
         }
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->getClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }

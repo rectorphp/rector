@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\Guard\LaravelModelGuard;
 use Rector\Privatization\Guard\OverrideByParentClassGuard;
 use Rector\Privatization\Guard\ParentClassMagicCallGuard;
@@ -91,12 +90,11 @@ CODE_SAMPLE
         if (!$node->isFinal()) {
             return null;
         }
-        if (!$this->overrideByParentClassGuard->isLegal($node)) {
+        $classReflection = $this->getClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$this->overrideByParentClassGuard->isLegal($node)) {
             return null;
         }
         $hasChanged = \false;
@@ -126,12 +124,6 @@ CODE_SAMPLE
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        // edge case in nette framework
-        /** @var string $methodName */
-        $methodName = $this->getName($classMethod->name);
-        if (strncmp($methodName, 'createComponent', strlen('createComponent')) === 0) {
-            return \true;
-        }
         if (!$classMethod->isProtected()) {
             return \true;
         }
@@ -139,12 +131,11 @@ CODE_SAMPLE
             return \true;
         }
         // if has parent call, its probably overriding parent one → skip it
-        $hasParentCall = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
             if (!$node instanceof StaticCall) {
                 return \false;
             }
             return $this->isName($node->class, 'parent');
         });
-        return $hasParentCall;
     }
 }

@@ -15,7 +15,6 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -73,6 +72,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $hasChanged = \false;
+        $classReflection = $this->getClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
         foreach ($node->getProperties() as $property) {
             if (!$property->type instanceof Identifier) {
                 continue;
@@ -97,7 +100,7 @@ CODE_SAMPLE
             if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($propertyPhpDocInfo->getVarTagValueNode())) {
                 continue;
             }
-            if ($this->hasUsefulParentPropertyVarTag($node, $property, $propertyDefaultType)) {
+            if ($this->hasUsefulParentPropertyVarTag($classReflection, $property, $propertyDefaultType)) {
                 continue;
             }
             if ($this->nodeDocblockTypeDecorator->decorateGenericIterableVarType($propertyDefaultType, $propertyPhpDocInfo, $property)) {
@@ -109,7 +112,7 @@ CODE_SAMPLE
         }
         return $node;
     }
-    private function hasUsefulParentPropertyVarTag(Class_ $class, Property $property, Type $propertyDefaultType): bool
+    private function hasUsefulParentPropertyVarTag(ClassReflection $classReflection, Property $property, Type $propertyDefaultType): bool
     {
         $propertyName = $this->getName($property);
         if ($propertyName === null) {
@@ -117,11 +120,6 @@ CODE_SAMPLE
         }
         // private property doesn't override parent property
         if ($property->isPrivate()) {
-            return \false;
-        }
-        $scope = ScopeFetcher::fetch($class);
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         foreach ($classReflection->getParents() as $parentClassReflection) {

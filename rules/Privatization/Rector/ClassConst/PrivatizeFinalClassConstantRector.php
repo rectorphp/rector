@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Reflection\ClassReflection;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\Guard\OverrideByParentClassGuard;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
@@ -65,8 +64,7 @@ CODE_SAMPLE
         if (!$this->overrideByParentClassGuard->isLegal($node)) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        $classReflection = $scope->getClassReflection();
+        $classReflection = $this->getClassReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }

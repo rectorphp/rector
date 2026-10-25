@@ -70,8 +70,11 @@ CODE_SAMPLE
         $hasChanged = \false;
         $isFinal = $node->isFinal() || FeatureFlags::treatClassesAsFinal($node);
         $scope = null;
-        $classReflection = null;
-        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use (&$hasChanged, &$classReflection, $isFinal, &$scope, $node): ?Node {
+        $classReflection = $this->getClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use (&$hasChanged, $classReflection, $isFinal, &$scope, $node): ?Node {
             if (!$subNode instanceof StaticPropertyFetch && !$subNode instanceof StaticCall && !$subNode instanceof ClassConstFetch) {
                 return null;
             }
@@ -85,10 +88,6 @@ CODE_SAMPLE
                 return null;
             }
             $scope ??= ScopeFetcher::fetch($node);
-            $classReflection ??= $scope->getClassReflection();
-            if (!$classReflection instanceof ClassReflection) {
-                return null;
-            }
             if ($this->shouldSkip($subNode, $classReflection, $isFinal, $scope)) {
                 return null;
             }
