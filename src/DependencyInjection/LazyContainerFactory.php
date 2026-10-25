@@ -3,8 +3,6 @@
 declare (strict_types=1);
 namespace Rector\DependencyInjection;
 
-use RectorPrefix202610\Doctrine\Inflector\Inflector;
-use RectorPrefix202610\Doctrine\Inflector\Rules\English\InflectorFactory;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
@@ -111,10 +109,6 @@ final class LazyContainerFactory
                 $commandToHide->setHidden();
             }
             return $consoleApplication;
-        });
-        $rectorConfig->singleton(Inflector::class, static function (): Inflector {
-            $inflectorFactory = new InflectorFactory();
-            return $inflectorFactory->build();
         });
         $rectorConfig->singleton(ConfigurationRuleFilter::class);
         $rectorConfig->singleton(ProcessCommand::class);

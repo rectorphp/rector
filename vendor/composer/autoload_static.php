@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
+class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -57,7 +57,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
             'RectorPrefix202610\\Fidry\\CpuCoreCounter\\' => 40,
             'RectorPrefix202610\\Evenement\\' => 29,
             'RectorPrefix202610\\Entropy\\' => 27,
-            'RectorPrefix202610\\Doctrine\\Inflector\\' => 38,
             'RectorPrefix202610\\Composer\\XdebugHandler\\' => 42,
             'RectorPrefix202610\\Composer\\Semver\\' => 35,
             'RectorPrefix202610\\Composer\\Pcre\\' => 33,
@@ -204,10 +203,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'RectorPrefix202610\\Entropy\\' =>
         array (
             0 => __DIR__ . '/..' . '/entropy/entropy/src',
-        ),
-        'RectorPrefix202610\\Doctrine\\Inflector\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/inflector/src',
         ),
         'RectorPrefix202610\\Composer\\XdebugHandler\\' =>
         array (
@@ -634,55 +629,6 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
         'RectorPrefix202610\\Composer\\XdebugHandler\\Process' => __DIR__ . '/..' . '/composer/xdebug-handler/src/Process.php',
         'RectorPrefix202610\\Composer\\XdebugHandler\\Status' => __DIR__ . '/..' . '/composer/xdebug-handler/src/Status.php',
         'RectorPrefix202610\\Composer\\XdebugHandler\\XdebugHandler' => __DIR__ . '/..' . '/composer/xdebug-handler/src/XdebugHandler.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\CachedWordInflector' => __DIR__ . '/..' . '/doctrine/inflector/src/CachedWordInflector.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\GenericLanguageInflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/GenericLanguageInflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/src/Inflector.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Language' => __DIR__ . '/..' . '/doctrine/inflector/src/Language.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\LanguageInflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/LanguageInflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\NoopWordInflector' => __DIR__ . '/..' . '/doctrine/inflector/src/NoopWordInflector.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\English\\Inflectible' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/English/Inflectible.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\English\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/English/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\English\\Rules' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/English/Rules.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\English\\Uninflected' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/English/Uninflected.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Esperanto\\Inflectible' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Esperanto/Inflectible.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Esperanto\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Esperanto/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Esperanto\\Rules' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Esperanto/Rules.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Esperanto\\Uninflected' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Esperanto/Uninflected.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\French\\Inflectible' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/French/Inflectible.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\French\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/French/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\French\\Rules' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/French/Rules.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\French\\Uninflected' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/French/Uninflected.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Italian\\Inflectible' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Italian/Inflectible.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Italian\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Italian/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Italian\\Rules' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Italian/Rules.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Italian\\Uninflected' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Italian/Uninflected.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\NorwegianBokmal\\Inflectible' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/NorwegianBokmal/Inflectible.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\NorwegianBokmal\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/NorwegianBokmal/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\NorwegianBokmal\\Rules' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/NorwegianBokmal/Rules.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\NorwegianBokmal\\Uninflected' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/NorwegianBokmal/Uninflected.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Pattern' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Pattern.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Patterns' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Patterns.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Portuguese\\Inflectible' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Portuguese/Inflectible.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Portuguese\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Portuguese/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Portuguese\\Rules' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Portuguese/Rules.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Portuguese\\Uninflected' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Portuguese/Uninflected.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Ruleset' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Ruleset.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Spanish\\Inflectible' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Spanish/Inflectible.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Spanish\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Spanish/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Spanish\\Rules' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Spanish/Rules.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Spanish\\Uninflected' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Spanish/Uninflected.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Substitution' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Substitution.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Substitutions' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Substitutions.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Transformation' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Transformation.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Transformations' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Transformations.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Turkish\\Inflectible' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Turkish/Inflectible.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Turkish\\InflectorFactory' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Turkish/InflectorFactory.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Turkish\\Rules' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Turkish/Rules.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Turkish\\Uninflected' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Turkish/Uninflected.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\Rules\\Word' => __DIR__ . '/..' . '/doctrine/inflector/src/Rules/Word.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\RulesetInflector' => __DIR__ . '/..' . '/doctrine/inflector/src/RulesetInflector.php',
-        'RectorPrefix202610\\Doctrine\\Inflector\\WordInflector' => __DIR__ . '/..' . '/doctrine/inflector/src/WordInflector.php',
         'RectorPrefix202610\\Entropy\\Attribute\\RelatedTest' => __DIR__ . '/..' . '/entropy/entropy/src/Attribute/RelatedTest.php',
         'RectorPrefix202610\\Entropy\\Console\\CommandRegistry' => __DIR__ . '/..' . '/entropy/entropy/src/Console/CommandRegistry.php',
         'RectorPrefix202610\\Entropy\\Console\\ConsoleApplication' => __DIR__ . '/..' . '/entropy/entropy/src/Console/ConsoleApplication.php',
@@ -3008,9 +2954,9 @@ class ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9b375c8a62baaa447c6696376f9b41a5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -38,7 +38,6 @@ return array(
     'RectorPrefix202610\\Fidry\\CpuCoreCounter\\' => array($vendorDir . '/fidry/cpu-core-counter/src'),
     'RectorPrefix202610\\Evenement\\' => array($vendorDir . '/evenement/evenement/src'),
     'RectorPrefix202610\\Entropy\\' => array($vendorDir . '/entropy/entropy/src'),
-    'RectorPrefix202610\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/src'),
     'RectorPrefix202610\\Composer\\XdebugHandler\\' => array($vendorDir . '/composer/xdebug-handler/src'),
     'RectorPrefix202610\\Composer\\Semver\\' => array($vendorDir . '/composer/semver/src'),
     'RectorPrefix202610\\Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),
