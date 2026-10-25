@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Rector\ClassLike;
+namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\Reflection\ClassReflection;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use Rector\Reflection\ClassModifierChecker;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
@@ -18,7 +18,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassLike\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
  */
 final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implements MinPhpVersionInterface
 {
@@ -30,10 +30,15 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
      * @readonly
      */
     private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver;
-    public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver)
+    /**
+     * @readonly
+     */
+    private ClassModifierChecker $classModifierChecker;
+    public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, ClassModifierChecker $classModifierChecker)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
+        $this->classModifierChecker = $classModifierChecker;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -64,69 +69,72 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassLike::class];
+        return [ClassMethod::class];
     }
     /**
-     * @param ClassLike $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node): ?Node
     {
-        $classReflection = $this->getClassReflection($node);
-        if (!$classReflection instanceof ClassReflection) {
+        // already has return type → skip
+        if ($node->returnType instanceof Node) {
             return null;
         }
-        $isFinalClass = $classReflection->isFinalByKeyword();
-        $hasChanged = \false;
-        foreach ($node->getMethods() as $classMethod) {
-            // already has return type → skip
-            if ($classMethod->returnType instanceof Node) {
-                continue;
-            }
-            if ($this->shouldSkipClassMethod($classMethod, $classReflection, $isFinalClass)) {
-                continue;
-            }
-            if (!$this->silentVoidResolver->hasExclusiveVoid($classMethod)) {
-                continue;
-            }
-            if ($this->classMethodReturnVendorLockResolver->isVendorLocked($classMethod)) {
-                continue;
-            }
-            $classMethod->returnType = new Identifier('void');
-            $hasChanged = \true;
+        if ($this->shouldSkipClassMethod($node)) {
+            return null;
         }
-        if ($hasChanged) {
-            return $node;
+        if (!$this->silentVoidResolver->hasExclusiveVoid($node)) {
+            return null;
         }
-        return null;
+        if ($this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
+            return null;
+        }
+        $node->returnType = new Identifier('void');
+        return $node;
     }
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::VOID_TYPE;
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod, ClassReflection $classReflection, bool $isFinalClass): bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if ($classMethod->isAbstract()) {
             return \true;
         }
         // is not final and has only exception? possibly implemented by child
-        if (!$isFinalClass && $this->hasExceptionOnly($classMethod)) {
+        if ($this->isNotFinalAndHasExceptionOnly($classMethod)) {
             return \true;
         }
         // possibly required by child implementation
-        if (!$isFinalClass && $classMethod->stmts === []) {
+        if ($this->isNotFinalAndEmpty($classMethod)) {
             return \true;
         }
         if ($classMethod->isProtected()) {
-            return !$isFinalClass;
+            return !$this->classModifierChecker->isInsideFinalClass($classMethod);
         }
+        $scope = ScopeFetcher::fetch($classMethod);
+        if (!$scope->isInClass()) {
+            return \false;
+        }
+        $classReflection = $scope->getClassReflection();
         return $classReflection->isAbstract();
     }
-    private function hasExceptionOnly(ClassMethod $classMethod): bool
+    private function isNotFinalAndHasExceptionOnly(ClassMethod $classMethod): bool
     {
         if (count((array) $classMethod->stmts) !== 1) {
             return \false;
         }
         $onlyStmt = $classMethod->stmts[0] ?? null;
-        return $onlyStmt instanceof Expression && $onlyStmt->expr instanceof Throw_;
+        if (!$onlyStmt instanceof Expression || !$onlyStmt->expr instanceof Throw_) {
+            return \false;
+        }
+        return !$this->classModifierChecker->isInsideFinalClass($classMethod);
+    }
+    private function isNotFinalAndEmpty(ClassMethod $classMethod): bool
+    {
+        if ($classMethod->stmts !== []) {
+            return \false;
+        }
+        return !$this->classModifierChecker->isInsideFinalClass($classMethod);
     }
 }
