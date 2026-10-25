@@ -7,11 +7,15 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -96,13 +100,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [If_::class, ElseIf_::class, Ternary::class, Identical::class, NotIdentical::class, Empty_::class, BooleanNot::class, While_::class, Do_::class];
+        return [If_::class, ElseIf_::class, Ternary::class, Identical::class, NotIdentical::class, Empty_::class, BooleanNot::class, While_::class, Do_::class, BooleanAnd::class, BooleanOr::class];
     }
     /**
-     * @param If_|ElseIf_|Ternary|Identical|NotIdentical|Empty_|BooleanNot|While_|Do_ $node
+     * @param If_|ElseIf_|Ternary|Identical|NotIdentical|Empty_|BooleanNot|While_|Do_|BooleanAnd|BooleanOr $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof BooleanAnd || $node instanceof BooleanOr) {
+            return $this->refactorBinaryOp($node);
+        }
         if ($node instanceof Identical || $node instanceof NotIdentical) {
             return $this->refactorNullCompare($node);
         }
@@ -215,5 +222,76 @@ CODE_SAMPLE
             return $binaryOp->left;
         }
         return null;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr $node
+     */
+    private function refactorBinaryOp($node): ?Node
+    {
+        if ($node->left instanceof Assign || $node->right instanceof Assign) {
+            return null;
+        }
+        if ($node instanceof BooleanOr) {
+            return $this->processNegationBooleanOr($node);
+        }
+        return $this->processNullableInstance($node);
+    }
+    /**
+     * @template TBinaryOp of BooleanAnd|BooleanOr
+     * @param \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr $node
+     * @return TBinaryOp|null
+     */
+    private function processNullableInstance($node)
+    {
+        $hasChanged = \false;
+        $leftNullableObjectType = $this->resolveNullableObjectType($node->left);
+        if ($leftNullableObjectType instanceof ObjectType) {
+            $node->left = $this->nullableObjectToInstanceofFactory->create($node->left, $leftNullableObjectType, \false);
+            $hasChanged = \true;
+        }
+        $rightNullableObjectType = $this->resolveNullableObjectType($node->right);
+        if ($rightNullableObjectType instanceof ObjectType) {
+            $node->right = $this->nullableObjectToInstanceofFactory->create($node->right, $rightNullableObjectType, \false);
+            $hasChanged = \true;
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    private function processNegationBooleanOr(BooleanOr $booleanOr): ?BooleanOr
+    {
+        $hasChanged = \false;
+        if ($booleanOr->left instanceof BooleanNot) {
+            $nullableObjectType = $this->resolveNullableObjectType($booleanOr->left->expr);
+            if ($nullableObjectType instanceof ObjectType) {
+                $booleanOr->left->expr = $this->nullableObjectToInstanceofFactory->create($booleanOr->left->expr, $nullableObjectType, \false);
+                $hasChanged = \true;
+            }
+        }
+        if ($booleanOr->right instanceof BooleanNot) {
+            $nullableObjectType = $this->resolveNullableObjectType($booleanOr->right->expr);
+            if ($nullableObjectType instanceof ObjectType) {
+                $booleanOr->right->expr = $this->nullableObjectToInstanceofFactory->create($booleanOr->right->expr, $nullableObjectType, \false);
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
+            return $booleanOr;
+        }
+        return $this->processNullableInstance($booleanOr);
+    }
+    private function resolveNullableObjectType(Expr $expr): ?ObjectType
+    {
+        // cheap bail - bool/scalar-shaped operands can never be a nullable object,
+        // skip the costly native type resolution for them (e.g. chained "$a && $b && $c")
+        if ($this->isNeverNullableObject($expr)) {
+            return null;
+        }
+        return $this->nullableTypeAnalyzer->resolveNullableObjectType($expr);
+    }
+    private function isNeverNullableObject(Expr $expr): bool
+    {
+        return $expr instanceof BinaryOp || $expr instanceof BooleanNot || $expr instanceof Instanceof_ || $expr instanceof Empty_ || $expr instanceof Isset_;
     }
 }
