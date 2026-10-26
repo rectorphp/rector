@@ -11,6 +11,7 @@ use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDoc\Tag\TypeAliasImportTag;
 use PHPStan\PhpDoc\Tag\TypeAliasTag;
 use PHPStan\PhpDocParser\Ast\Node as AstNode;
+use PHPStan\PhpDocParser\Ast\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -21,7 +22,7 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
+use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -161,14 +162,14 @@ CODE_SAMPLE
         }
         $hasTypeAliasName = \false;
         // the traverser visits sub-nodes only, that is why the type node itself is checked above
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($typeNode, '', static function (AstNode $astNode) use ($typeAliases, &$hasTypeAliasName): ?int {
+        $phpDocNodeTraverser = new NodeTraverser([new CallablePhpDocNodeVisitor(static function (AstNode $astNode) use ($typeAliases, &$hasTypeAliasName): ?int {
             if ($astNode instanceof IdentifierTypeNode && isset($typeAliases[$astNode->name])) {
                 $hasTypeAliasName = \true;
-                return PhpDocNodeTraverser::STOP_TRAVERSAL;
+                return NodeTraverser::STOP_TRAVERSAL;
             }
             return null;
-        });
+        })]);
+        $phpDocNodeTraverser->traverse([$typeNode]);
         return $hasTypeAliasName;
     }
     private function isReturnTemplate(PhpDocInfo $phpDocInfo, ReturnTagValueNode $returnTagValueNode): bool

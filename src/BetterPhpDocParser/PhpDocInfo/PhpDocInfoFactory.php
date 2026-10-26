@@ -123,7 +123,7 @@ final class PhpDocInfoFactory
     }
     private function createFromPhpDocNode(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator, Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
-        $this->phpDocNodeMapper->transform($phpDocNode, $betterTokenIterator);
+        $phpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $betterTokenIterator);
         $phpDocInfo = new \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo($phpDocNode, $betterTokenIterator, $this->staticTypeMapper, $node, $this->annotationNaming, $this->phpDocNodeByTypeFinder, $this->nameScopeFactory);
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
         return $phpDocInfo;

@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 use RectorPrefix202610\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ImplementsTagValueNode;
@@ -33,7 +34,7 @@ use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
+use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\Validation\RectorAssert;
@@ -253,42 +254,42 @@ final class PhpDocInfo
         if ($name === '') {
             $name = null;
         }
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', static function (Node $node) use ($typeToRemove, &$hasChanged, $name): ?int {
+        $phpDocNodeTraverser = new NodeTraverser([new CallablePhpDocNodeVisitor(static function (Node $node) use ($typeToRemove, &$hasChanged, $name): ?int {
             if ($node instanceof PhpDocTagNode && $node->value instanceof $typeToRemove) {
                 // keep special annotation for tools
                 if (strncmp($node->name, '@psalm-', strlen('@psalm-')) === 0) {
-                    return null;
+                    return NodeTraverser::DONT_TRAVERSE_CHILDREN;
                 }
                 if (strncmp($node->name, '@phpstan-', strlen('@phpstan-')) === 0) {
-                    return null;
+                    return NodeTraverser::DONT_TRAVERSE_CHILDREN;
                 }
                 if ($name !== null && $node->value instanceof VarTagValueNode && $node->value->variableName !== '$' . ltrim($name, '$')) {
-                    return PhpDocNodeTraverser::DONT_TRAVERSE_CHILDREN;
+                    return NodeTraverser::DONT_TRAVERSE_CHILDREN;
                 }
                 $hasChanged = \true;
-                return PhpDocNodeTraverser::NODE_REMOVE;
+                return NodeTraverser::REMOVE_NODE;
             }
             if (!$node instanceof $typeToRemove) {
                 return null;
             }
             $hasChanged = \true;
-            return PhpDocNodeTraverser::NODE_REMOVE;
-        });
+            return NodeTraverser::REMOVE_NODE;
+        })]);
+        $phpDocNodeTraverser->traverse([$this->phpDocNode]);
         return $hasChanged;
     }
     public function removeByName(string $tagName): bool
     {
         $tagName = '@' . ltrim($tagName, '@');
         $hasChanged = \false;
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', static function (Node $node) use ($tagName, &$hasChanged): ?int {
+        $phpDocNodeTraverser = new NodeTraverser([new CallablePhpDocNodeVisitor(static function (Node $node) use ($tagName, &$hasChanged): ?int {
             if ($node instanceof PhpDocTagNode && $node->name === $tagName) {
                 $hasChanged = \true;
-                return PhpDocNodeTraverser::NODE_REMOVE;
+                return NodeTraverser::REMOVE_NODE;
             }
             return null;
-        });
+        })]);
+        $phpDocNodeTraverser->traverse([$this->phpDocNode]);
         return $hasChanged;
     }
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
@@ -449,9 +450,8 @@ final class PhpDocInfo
      */
     public function getConstFetchNodeClassNames(): array
     {
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $classNames = [];
-        $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', static function (Node $node) use (&$classNames): ?ConstTypeNode {
+        $phpDocNodeTraverser = new NodeTraverser([new CallablePhpDocNodeVisitor(static function (Node $node) use (&$classNames): ?ConstTypeNode {
             if (!$node instanceof ConstTypeNode) {
                 return null;
             }
@@ -460,7 +460,8 @@ final class PhpDocInfo
             }
             $classNames[] = $node->constExpr->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
             return $node;
-        });
+        })]);
+        $phpDocNodeTraverser->traverse([$this->phpDocNode]);
         return $classNames;
     }
     /**
@@ -468,9 +469,8 @@ final class PhpDocInfo
      */
     public function getArrayItemNodeClassNames(): array
     {
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $classNames = [];
-        $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', static function (Node $node) use (&$classNames): ?ArrayItemNode {
+        $phpDocNodeTraverser = new NodeTraverser([new CallablePhpDocNodeVisitor(static function (Node $node) use (&$classNames): ?ArrayItemNode {
             if (!$node instanceof ArrayItemNode) {
                 return null;
             }
@@ -483,7 +483,8 @@ final class PhpDocInfo
                 $classNames[] = $resolvedKeyClass;
             }
             return $node;
-        });
+        })]);
+        $phpDocNodeTraverser->traverse([$this->phpDocNode]);
         return $classNames;
     }
     /**

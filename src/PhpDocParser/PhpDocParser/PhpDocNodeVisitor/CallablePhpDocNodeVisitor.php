@@ -3,23 +3,20 @@
 declare (strict_types=1);
 namespace Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor;
 
+use PHPStan\PhpDocParser\Ast\AbstractNodeVisitor;
 use PHPStan\PhpDocParser\Ast\Node;
-final class CallablePhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use PHPStan\PhpDocParser\Ast\NodeTraverser;
+final class CallablePhpDocNodeVisitor extends AbstractNodeVisitor
 {
     /**
-     * @readonly
-     */
-    private ?string $docContent;
-    /**
-     * @var callable(Node, string|null): (int|null|Node)
+     * @var callable(Node): (NodeTraverser::*|Node|null)
      */
     private $callable;
     /**
-     * @param callable(Node $callable, string|null $docContent): (int|null|Node) $callable
+     * @param callable(Node $node): (NodeTraverser::*|Node|null) $callable
      */
-    public function __construct(callable $callable, ?string $docContent)
+    public function __construct(callable $callable)
     {
-        $this->docContent = $docContent;
         $this->callable = $callable;
     }
     /**
@@ -28,6 +25,6 @@ final class CallablePhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\
     public function enterNode(Node $node)
     {
         $callable = $this->callable;
-        return $callable($node, $this->docContent);
+        return $callable($node);
     }
 }

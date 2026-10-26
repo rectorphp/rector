@@ -5,12 +5,13 @@ namespace Rector\BetterPhpDocParser\NodeDecorator;
 
 use PhpParser\Node as PhpNode;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
+use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 /**
  * Decorate node with fully qualified class name for generic annotations for @uses, @used-by, and @see
@@ -24,14 +25,9 @@ final class PhpDocTagGenericUsesDecorator implements PhpDocNodeDecoratorInterfac
      * @readonly
      */
     private NameScopeFactory $nameScopeFactory;
-    /**
-     * @readonly
-     */
-    private PhpDocNodeTraverser $phpDocNodeTraverser;
-    public function __construct(NameScopeFactory $nameScopeFactory, PhpDocNodeTraverser $phpDocNodeTraverser)
+    public function __construct(NameScopeFactory $nameScopeFactory)
     {
         $this->nameScopeFactory = $nameScopeFactory;
-        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
     public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode): void
     {
@@ -39,7 +35,7 @@ final class PhpDocTagGenericUsesDecorator implements PhpDocNodeDecoratorInterfac
         if (strpos($phpDocNode->__toString(), '::') === \false) {
             return;
         }
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
+        $phpDocNodeTraverser = new NodeTraverser([new CallablePhpDocNodeVisitor(function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
             if (!$node instanceof PhpDocTagNode) {
                 return null;
             }
@@ -60,7 +56,8 @@ final class PhpDocTagGenericUsesDecorator implements PhpDocNodeDecoratorInterfac
             $className = $this->resolveFullyQualifiedClass($classValue, $phpNode);
             $node->value->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $className);
             return $node;
-        });
+        })]);
+        $phpDocNodeTraverser->traverse([$phpDocNode]);
     }
     private function resolveFullyQualifiedClass(string $classValue, PhpNode $phpNode): string
     {

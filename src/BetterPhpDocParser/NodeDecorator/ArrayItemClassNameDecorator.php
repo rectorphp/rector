@@ -5,11 +5,12 @@ namespace Rector\BetterPhpDocParser\NodeDecorator;
 
 use PhpParser\Node as PhpNode;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
+use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 /**
  * Decorate node with fully qualified class name for annotation:
@@ -21,14 +22,9 @@ final class ArrayItemClassNameDecorator implements PhpDocNodeDecoratorInterface
      * @readonly
      */
     private NameScopeFactory $nameScopeFactory;
-    /**
-     * @readonly
-     */
-    private PhpDocNodeTraverser $phpDocNodeTraverser;
-    public function __construct(NameScopeFactory $nameScopeFactory, PhpDocNodeTraverser $phpDocNodeTraverser)
+    public function __construct(NameScopeFactory $nameScopeFactory)
     {
         $this->nameScopeFactory = $nameScopeFactory;
-        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
     public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode): void
     {
@@ -36,7 +32,7 @@ final class ArrayItemClassNameDecorator implements PhpDocNodeDecoratorInterface
         if (strpos($phpDocNode->__toString(), '::') === \false) {
             return;
         }
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
+        $phpDocNodeTraverser = new NodeTraverser([new CallablePhpDocNodeVisitor(function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
             if (!$node instanceof ArrayItemNode) {
                 return null;
             }
@@ -50,7 +46,8 @@ final class ArrayItemClassNameDecorator implements PhpDocNodeDecoratorInterface
                 $node->setAttribute(PhpDocAttributeKey::RESOLVED_KEY_CLASS, $keyClassName);
             }
             return $node;
-        });
+        })]);
+        $phpDocNodeTraverser->traverse([$phpDocNode]);
     }
     /**
      * @param mixed $value

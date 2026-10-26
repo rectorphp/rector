@@ -3,15 +3,16 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
+use PHPStan\PhpDocParser\Ast\AbstractNodeVisitor;
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ChangedPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class ChangedPhpDocNodeVisitor extends AbstractNodeVisitor
 {
     private bool $hasChanged = \false;
-    public function beforeTraverse(Node $node): void
+    public function beforeTraverse(array $nodes): ?array
     {
         $this->hasChanged = \false;
+        return null;
     }
     public function enterNode(Node $node): ?Node
     {

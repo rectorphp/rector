@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
 use RectorPrefix202610\Nette\Utils\Strings;
 use PhpParser\Node as PhpParserNode;
+use PHPStan\PhpDocParser\Ast\AbstractNodeVisitor;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -16,14 +17,13 @@ use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 use Rector\PhpParser\Node\FileNode;
 use Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\ValueObject\Application\File;
-final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class NameImportingPhpDocNodeVisitor extends AbstractNodeVisitor
 {
     /**
      * @readonly
@@ -50,11 +50,12 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         $this->reflectionProvider = $reflectionProvider;
         $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
     }
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node): void
+    public function beforeTraverse(array $nodes): ?array
     {
         if (!$this->currentPhpParserNode instanceof PhpParserNode) {
             throw new ShouldNotHappenException('Set "$currentPhpParserNode" first');
         }
+        return null;
     }
     public function enterNode(Node $node): ?Node
     {

@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\PhpDocParser\Ast\Node as DocNode;
+use PHPStan\PhpDocParser\Ast\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -36,7 +37,7 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\AttributeValueAndDocComment;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
+use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -221,8 +222,7 @@ CODE_SAMPLE
     private function processGenericTags(PhpDocInfo $phpDocInfo): array
     {
         $attributeGroups = [];
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (DocNode $docNode) use (&$attributeGroups) {
+        $phpDocNodeTraverser = new NodeTraverser([new CallablePhpDocNodeVisitor(function (DocNode $docNode) use (&$attributeGroups) {
             if (!$docNode instanceof PhpDocTagNode) {
                 return null;
             }
@@ -245,10 +245,11 @@ CODE_SAMPLE
                 if ($attributeValueAndDocComment instanceof AttributeValueAndDocComment && $attributeValueAndDocComment->docComment) {
                     return new PhpDocTextNode($attributeValueAndDocComment->docComment);
                 }
-                return PhpDocNodeTraverser::NODE_REMOVE;
+                return NodeTraverser::REMOVE_NODE;
             }
             return null;
-        });
+        })]);
+        $phpDocNodeTraverser->traverse([$phpDocInfo->getPhpDocNode()]);
         return $attributeGroups;
     }
     /**
