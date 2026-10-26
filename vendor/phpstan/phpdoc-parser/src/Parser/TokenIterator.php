@@ -10,7 +10,9 @@ use function array_pop;
 use function assert;
 use function count;
 use function in_array;
+use function preg_match_all;
 use function strlen;
+use function strpos;
 use function substr;
 class TokenIterator
 {
@@ -26,6 +28,8 @@ class TokenIterator
     private ?string $newline = null;
     /** @var list<int>|null */
     private ?array $offsets = null;
+    /** @var array<string, int>|null the last index of a token containing "/name>", by the name */
+    private ?array $endTagIndexes = null;
     /**
      * @param list<array{string, int, int}> $tokens
      */
@@ -314,6 +318,31 @@ class TokenIterator
             }
         }
         return \false;
+    }
+    /**
+     * Whether a token at the current index or after it contains "/$name>",
+     * which every end tag of an HTML tag of that name does.
+     *
+     * The tokens are searched once, so that asking about every "<" of a
+     * PHPDoc does not walk to its end every time.
+     *
+     * @internal
+     */
+    public function hasEndTagCandidateAhead(string $name): bool
+    {
+        if ($this->endTagIndexes === null) {
+            $this->endTagIndexes = [];
+            foreach ($this->tokens as $index => $token) {
+                $value = $token[Lexer::VALUE_OFFSET];
+                if (strpos($value, '/') === \false || preg_match_all('~/([^/>]++)>~', $value, $matches) === 0) {
+                    continue;
+                }
+                foreach ($matches[1] as $candidate) {
+                    $this->endTagIndexes[$candidate] = $index;
+                }
+            }
+        }
+        return ($this->endTagIndexes[$name] ?? -1) >= $this->index;
     }
     public function getDetectedNewline(): ?string
     {

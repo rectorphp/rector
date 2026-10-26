@@ -305,6 +305,10 @@ class TypeParser
         if (!$tokens->tryConsumeTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET)) {
             return \false;
         }
+        // every end tag the walk below looks for contains this
+        if (!$tokens->hasEndTagCandidateAhead($htmlTagName)) {
+            return \false;
+        }
         $endTag = '</' . $htmlTagName . '>';
         $endTagSearchOffset = -strlen($endTag);
         while (!$tokens->isCurrentTokenType(Lexer::TOKEN_END)) {

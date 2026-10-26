@@ -297,17 +297,17 @@
         },
         {
             "name": "entropy\/entropy",
-            "version": "0.4.35",
-            "version_normalized": "0.4.35.0",
+            "version": "0.4.36",
+            "version_normalized": "0.4.36.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/TomasVotruba\/entropy.git",
-                "reference": "ed23f8ef37a4a800804a1d1095ad4c35532053e4"
+                "reference": "9f08272a96275d22a9d9808a32581392920626db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/ed23f8ef37a4a800804a1d1095ad4c35532053e4",
-                "reference": "ed23f8ef37a4a800804a1d1095ad4c35532053e4",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/9f08272a96275d22a9d9808a32581392920626db",
+                "reference": "9f08272a96275d22a9d9808a32581392920626db",
                 "shasum": ""
             },
             "require": {
@@ -330,7 +330,7 @@
                 "tomasvotruba\/type-coverage": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-23T13:34:34+00:00",
+            "time": "2026-10-26T16:46:17+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -345,7 +345,7 @@
             "description": "Entropy framework",
             "support": {
                 "issues": "https:\/\/github.com\/TomasVotruba\/entropy\/issues",
-                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.35"
+                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.36"
             },
             "install-path": "..\/entropy\/entropy"
         },
@@ -701,17 +701,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "2.3.6",
-            "version_normalized": "2.3.6.0",
+            "version": "2.3.7",
+            "version_normalized": "2.3.7.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "1427af4647235b4a73b13940b1f1258d3584f36e"
+                "reference": "3fcdcf021e840f1ec9383152e3603fc790c7c15b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/1427af4647235b4a73b13940b1f1258d3584f36e",
-                "reference": "1427af4647235b4a73b13940b1f1258d3584f36e",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/3fcdcf021e840f1ec9383152e3603fc790c7c15b",
+                "reference": "3fcdcf021e840f1ec9383152e3603fc790c7c15b",
                 "shasum": ""
             },
             "require": {
@@ -728,7 +728,7 @@
                 "phpunit\/phpunit": "^9.6",
                 "symfony\/process": "^5.2"
             },
-            "time": "2026-09-27T20:07:45+00:00",
+            "time": "2026-10-26T17:24:37+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -745,7 +745,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/2.3.6"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/2.3.7"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
