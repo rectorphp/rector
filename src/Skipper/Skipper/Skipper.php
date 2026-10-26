@@ -39,6 +39,15 @@ final class Skipper
      * @var array<string, array<string, true>>
      */
     private array $usedSkips = [];
+    /**
+     * Real file paths skipped per rule, kept only when unused-skip reporting is on, so a matched
+     * skip can be re-run on the exact file to learn whether it ever prevented a change.
+     *
+     * @var array<class-string, array<string, true>>
+     */
+    private array $skippedFilePathsByRule = [];
+    // flipped on while the needed-skip verification re-runs rules with skipping off
+    private bool $isVerifyingSkips = \false;
     public function __construct(\Rector\Skipper\Skipper\PathSkipper $pathSkipper, FileInfoMatcher $fileInfoMatcher, ReflectionProvider $reflectionProvider)
     {
         $this->pathSkipper = $pathSkipper;
@@ -56,12 +65,42 @@ final class Skipper
     }
     public function shouldSkipRectorAndFile(object $rector, string $filePath): bool
     {
+        // verification re-runs every rule with skipping off, to learn which skips really matter
+        if ($this->isVerifyingSkips) {
+            return \false;
+        }
         $skipMatch = $this->matchSkip($rector, $filePath);
         if (!$skipMatch instanceof SkipMatch) {
             return \false;
         }
         $this->markSkipUsed($skipMatch);
+        // remember the real skipped file so a rule-scoped skip can be verified later; only path
+        // skips are re-runnable, and only when reporting is on, so normal runs pay nothing
+        if ($skipMatch->getMatchedPath() !== null && SimpleParameterProvider::provideBoolParameter(Option::REPORT_UNUSED_SKIPS, \false)) {
+            $this->skippedFilePathsByRule[get_class($rector)][$filePath] = \true;
+        }
         return \true;
+    }
+    public function startVerifyingSkips(): void
+    {
+        $this->isVerifyingSkips = \true;
+    }
+    public function stopVerifyingSkips(): void
+    {
+        $this->isVerifyingSkips = \false;
+    }
+    /**
+     * Real file paths that were skipped per rule-scoped path skip during the run.
+     *
+     * @return array<class-string, string[]>
+     */
+    public function provideSkippedFilePathsByRule(): array
+    {
+        $skippedFilePathsByRule = [];
+        foreach ($this->skippedFilePathsByRule as $rectorClass => $filePaths) {
+            $skippedFilePathsByRule[$rectorClass] = array_keys($filePaths);
+        }
+        return $skippedFilePathsByRule;
     }
     /**
      * Match a class/path skip without marking it used. Callers that can only tell whether the skip

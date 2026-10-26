@@ -2188,6 +2188,7 @@ return array(
     'Rector\\Renaming\\ValueObject\\RenameStaticMethod' => $baseDir . '/rules/Renaming/ValueObject/RenameStaticMethod.php',
     'Rector\\Reporting\\DeprecatedRulesReporter' => $baseDir . '/src/Reporting/DeprecatedRulesReporter.php',
     'Rector\\Reporting\\MissConfigurationReporter' => $baseDir . '/src/Reporting/MissConfigurationReporter.php',
+    'Rector\\Reporting\\NeededSkipVerifier' => $baseDir . '/src/Reporting/NeededSkipVerifier.php',
     'Rector\\Reporting\\UnusedSkipResolver' => $baseDir . '/src/Reporting/UnusedSkipResolver.php',
     'Rector\\RuleDoc\\AbstractCodeSample' => $baseDir . '/src/RuleDoc/AbstractCodeSample.php',
     'Rector\\RuleDoc\\CodeSample\\CodeSample' => $baseDir . '/src/RuleDoc/CodeSample/CodeSample.php',
