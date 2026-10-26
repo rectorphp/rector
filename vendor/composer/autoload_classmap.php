@@ -1143,6 +1143,7 @@ return array(
     'Rector\\Contract\\DependencyInjection\\ResettableInterface' => $baseDir . '/src/Contract/DependencyInjection/ResettableInterface.php',
     'Rector\\Contract\\PhpParser\\DecoratingNodeVisitorInterface' => $baseDir . '/src/Contract/PhpParser/DecoratingNodeVisitorInterface.php',
     'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => $baseDir . '/src/Contract/Rector/ConfigurableRectorInterface.php',
+    'Rector\\Contract\\Rector\\OrderedRectorInterface' => $baseDir . '/src/Contract/Rector/OrderedRectorInterface.php',
     'Rector\\Contract\\Rector\\RectorInterface' => $baseDir . '/src/Contract/Rector/RectorInterface.php',
     'Rector\\CustomRules\\SimpleNodeDumper' => $baseDir . '/src/CustomRules/SimpleNodeDumper.php',
     'Rector\\DeadCode\\ConditionEvaluator' => $baseDir . '/rules/DeadCode/ConditionEvaluator.php',

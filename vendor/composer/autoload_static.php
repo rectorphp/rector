@@ -1369,6 +1369,7 @@ class ComposerStaticInitc75b5554380a0f86ce379d5711cf907e
         'Rector\\Contract\\DependencyInjection\\ResettableInterface' => __DIR__ . '/../..' . '/src/Contract/DependencyInjection/ResettableInterface.php',
         'Rector\\Contract\\PhpParser\\DecoratingNodeVisitorInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/DecoratingNodeVisitorInterface.php',
         'Rector\\Contract\\Rector\\ConfigurableRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ConfigurableRectorInterface.php',
+        'Rector\\Contract\\Rector\\OrderedRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/OrderedRectorInterface.php',
         'Rector\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
         'Rector\\CustomRules\\SimpleNodeDumper' => __DIR__ . '/../..' . '/src/CustomRules/SimpleNodeDumper.php',
         'Rector\\DeadCode\\ConditionEvaluator' => __DIR__ . '/../..' . '/rules/DeadCode/ConditionEvaluator.php',

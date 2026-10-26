@@ -5,7 +5,9 @@ namespace Rector\Application;
 
 use PhpParser\Node;
 use Rector\Configuration\ConfigurationRuleFilter;
+use Rector\Contract\Rector\OrderedRectorInterface;
 use Rector\Contract\Rector\RectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\ValueObject\Application\File;
 use Rector\VersionBonding\ComposerPackageConstraintFilter;
@@ -113,7 +115,60 @@ final class RectorRegistry
         }
         $activeRectors = $this->phpVersionedFilter->filter($this->rectors);
         $activeRectors = $this->composerPackageConstraintFilter->filter($activeRectors);
-        $this->activeRectors = $this->configurationRuleFilter->filter($activeRectors);
+        $activeRectors = $this->configurationRuleFilter->filter($activeRectors);
+        $this->activeRectors = $this->sortByPrecededRule($activeRectors);
         $this->areRectorsPrepared = \true;
+    }
+    /**
+     * Rules implementing OrderedRectorInterface are moved after the rule they depend on,
+     * so a chain of dependent rules converges in a single file pass.
+     *
+     * @param RectorInterface[] $rectors
+     * @return RectorInterface[]
+     */
+    private function sortByPrecededRule(array $rectors): array
+    {
+        $rectorByClass = [];
+        foreach ($rectors as $rector) {
+            $rectorByClass[get_class($rector)] = $rector;
+        }
+        $precededClassByClass = [];
+        foreach ($rectors as $rector) {
+            if (!$rector instanceof OrderedRectorInterface) {
+                continue;
+            }
+            $precededClass = $rector->precededRule();
+            // ignore a predecessor filtered out of the active set
+            if (isset($rectorByClass[$precededClass])) {
+                $precededClassByClass[get_class($rector)] = $precededClass;
+            }
+        }
+        if ($precededClassByClass === []) {
+            return $rectors;
+        }
+        $sortedRectors = [];
+        $emittedClasses = [];
+        $remainingRectors = $rectors;
+        while ($remainingRectors !== []) {
+            $hasProgress = \false;
+            foreach ($remainingRectors as $key => $rector) {
+                $precededClass = $precededClassByClass[get_class($rector)] ?? null;
+                if ($precededClass !== null && !isset($emittedClasses[$precededClass])) {
+                    continue;
+                }
+                $sortedRectors[] = $rector;
+                $emittedClasses[get_class($rector)] = \true;
+                unset($remainingRectors[$key]);
+                $hasProgress = \true;
+            }
+            if (!$hasProgress) {
+                $remainingClasses = [];
+                foreach ($remainingRectors as $rector) {
+                    $remainingClasses[] = get_class($rector);
+                }
+                throw new ShouldNotHappenException(sprintf('Circular rule ordering detected among: %s', implode(', ', $remainingClasses)));
+            }
+        }
+        return $sortedRectors;
     }
 }
