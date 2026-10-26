@@ -11,7 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\MethodName;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Class_\RemoveReadonlyPropertyVisibilityOnReadonlyClassRector\RemoveReadonlyPropertyVisibilityOnReadonlyClassRectorTest
@@ -28,7 +28,7 @@ final class RemoveReadonlyPropertyVisibilityOnReadonlyClassRector extends Abstra
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::READONLY_CLASS;
+        return PhpVersion::PHP_82;
     }
     public function getRuleDefinition(): RuleDefinition
     {

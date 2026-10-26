@@ -10,7 +10,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @deprecated This rule is deprecated, as never used and not part of any set. Adding the #[\Override] attribute requires careful per-project context, so apply it explicitly on the methods that override, based on your own requirements.
@@ -72,6 +72,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::OVERRIDE_ATTRIBUTE;
+        return PhpVersion::PHP_83;
     }
 }

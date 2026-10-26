@@ -10,7 +10,7 @@ use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php70\Rector\FuncCall\CallUserMethodRector\CallUserMethodRectorTest
@@ -23,7 +23,7 @@ final class CallUserMethodRector extends AbstractRector implements MinPhpVersion
     private const OLD_TO_NEW_FUNCTIONS = ['call_user_method' => 'call_user_func', 'call_user_method_array' => 'call_user_func_array'];
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::NO_CALL_USER_METHOD;
+        return PhpVersion::PHP_70;
     }
     public function getRuleDefinition(): RuleDefinition
     {

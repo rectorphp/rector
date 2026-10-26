@@ -12,7 +12,7 @@ use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
@@ -23,7 +23,7 @@ final class GetDebugTypeRector extends AbstractRector implements MinPhpVersionIn
 {
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::GET_DEBUG_TYPE;
+        return PhpVersion::PHP_80;
     }
     public function getRuleDefinition(): RuleDefinition
     {

@@ -11,7 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\AddTestsVoidReturnTypeWhereNoReturnRector\AddTestsVoidReturnTypeWhereNoReturnRectorTest
@@ -95,6 +95,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::VOID_TYPE;
+        return PhpVersion::PHP_71;
     }
 }

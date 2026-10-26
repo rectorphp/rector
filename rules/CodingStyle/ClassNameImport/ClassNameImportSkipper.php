@@ -176,10 +176,7 @@ final class ClassNameImportSkipper
             if (strtolower($classLikeName) !== $shortNameLowered) {
                 continue;
             }
-            if ($namespace === '') {
-                return \true;
-            }
-            if ($namespace !== $fullyQualifiedObjectTypeNamespace) {
+            if ($namespace === '' || $namespace !== $fullyQualifiedObjectTypeNamespace) {
                 return \true;
             }
         }

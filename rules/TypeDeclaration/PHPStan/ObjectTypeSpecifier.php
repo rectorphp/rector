@@ -52,8 +52,9 @@ final class ObjectTypeSpecifier
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, ?\PHPStan\Analyser\Scope $scope, bool $withPreslash = \false)
     {
-        $className = ltrim($objectType->getClassName(), '\\');
-        if (strncmp($objectType->getClassName(), '\\', strlen('\\')) === 0) {
+        $rawClassName = $objectType->getClassName();
+        $className = ltrim($rawClassName, '\\');
+        if (strncmp($rawClassName, '\\', strlen('\\')) === 0) {
             return new FullyQualifiedObjectType($className);
         }
         if (!$withPreslash) {
@@ -88,19 +89,12 @@ final class ObjectTypeSpecifier
             }
             $classReflection = $scope->getClassReflection();
             if ($classReflection instanceof ClassReflection) {
-                $templateTags = $classReflection->getTemplateTags();
                 $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
                 $templateTypeScope = $nameScope->getTemplateTypeScope();
-                if (!$templateTypeScope instanceof TemplateTypeScope) {
-                    // invalid type
-                    return $this->resolveNamespacedNonExistingObjectType($namespaceName, $className, $withPreslash);
+                $currentTemplateTag = $classReflection->getTemplateTags()[$className] ?? null;
+                if ($templateTypeScope instanceof TemplateTypeScope && $currentTemplateTag !== null) {
+                    return TemplateTypeFactory::create($templateTypeScope, $currentTemplateTag->getName(), $currentTemplateTag->getBound(), $currentTemplateTag->getVariance());
                 }
-                $currentTemplateTag = $templateTags[$className] ?? null;
-                if ($currentTemplateTag === null) {
-                    // invalid type
-                    return $this->resolveNamespacedNonExistingObjectType($namespaceName, $className, $withPreslash);
-                }
-                return TemplateTypeFactory::create($templateTypeScope, $currentTemplateTag->getName(), $currentTemplateTag->getBound(), $currentTemplateTag->getVariance());
             }
         }
         // invalid type
@@ -108,13 +102,7 @@ final class ObjectTypeSpecifier
     }
     private function resolveNamespacedNonExistingObjectType(?string $namespacedName, string $className, bool $withPreslash): NonExistingObjectType
     {
-        if ($namespacedName === null) {
-            return new NonExistingObjectType($className);
-        }
-        if ($withPreslash) {
-            return new NonExistingObjectType($className);
-        }
-        if (strpos($className, '\\') !== \false) {
+        if ($namespacedName === null || $withPreslash || strpos($className, '\\') !== \false) {
             return new NonExistingObjectType($className);
         }
         return new NonExistingObjectType($namespacedName . '\\' . $className);
@@ -134,10 +122,9 @@ final class ObjectTypeSpecifier
                 if (!$useUse->alias instanceof Identifier) {
                     continue;
                 }
-                $useName = $prefix . $useUse->name->toString();
                 $alias = $useUse->alias->toString();
                 $fullyQualifiedName = $prefix . $useUse->name->toString();
-                $processAliasedObject = $this->processAliasedObject($alias, $className, $useName, $fullyQualifiedName);
+                $processAliasedObject = $this->processAliasedObject($alias, $className, $fullyQualifiedName);
                 if ($processAliasedObject instanceof AliasedObjectType) {
                     return $processAliasedObject;
                 }
@@ -145,14 +132,14 @@ final class ObjectTypeSpecifier
         }
         return null;
     }
-    private function processAliasedObject(string $alias, string $className, string $useName, string $fullyQualifiedName): ?AliasedObjectType
+    private function processAliasedObject(string $alias, string $className, string $fullyQualifiedName): ?AliasedObjectType
     {
         // A. is alias in use statement matching this class alias
         if ($alias === $className) {
             return new AliasedObjectType($className, $fullyQualifiedName);
         }
         // B. is aliased classes matching the class name
-        if ($useName === $className) {
+        if ($fullyQualifiedName === $className) {
             return new AliasedObjectType($className, $fullyQualifiedName);
         }
         if (strncmp($className, $alias . '\\', strlen($alias . '\\')) === 0) {

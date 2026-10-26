@@ -11,7 +11,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
@@ -33,7 +33,7 @@ final class SensitiveConstantNameRector extends AbstractRector implements MinPhp
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::DEPRECATE_INSENSITIVE_CONSTANT_NAME;
+        return PhpVersion::PHP_73;
     }
     public function getRuleDefinition(): RuleDefinition
     {

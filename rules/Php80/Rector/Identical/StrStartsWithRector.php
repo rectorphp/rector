@@ -16,7 +16,7 @@ use Rector\Php80\ValueObject\StrStartsWith;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
@@ -36,7 +36,7 @@ final class StrStartsWithRector extends AbstractRector implements MinPhpVersionI
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::STR_STARTS_WITH;
+        return PhpVersion::PHP_80;
     }
     public function getRuleDefinition(): RuleDefinition
     {

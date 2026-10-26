@@ -11,7 +11,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\ArrayKeyExistsOnPropertyRectorTest
@@ -20,7 +20,7 @@ final class ArrayKeyExistsOnPropertyRector extends AbstractRector implements Min
 {
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::ARRAY_KEY_EXISTS_TO_PROPERTY_EXISTS;
+        return PhpVersion::PHP_74;
     }
     public function getRuleDefinition(): RuleDefinition
     {

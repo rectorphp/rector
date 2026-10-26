@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\ReplaceEachAssignmentWithKeyCurrentRectorTest
@@ -29,7 +29,7 @@ final class ReplaceEachAssignmentWithKeyCurrentRector extends AbstractRector imp
     private const KEY = 'key';
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::NO_EACH_OUTSIDE_LOOP;
+        return PhpVersion::PHP_72;
     }
     public function getRuleDefinition(): RuleDefinition
     {

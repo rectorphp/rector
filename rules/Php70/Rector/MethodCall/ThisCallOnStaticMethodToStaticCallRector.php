@@ -19,7 +19,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\ThisCallOnStaticMethodToStaticCallRectorTest
@@ -42,7 +42,7 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector impl
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::STATIC_CALL_ON_NON_STATIC;
+        return PhpVersion::PHP_70;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -86,7 +86,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classReflection = $this->getClassReflection($node);
+        $classReflection = $this->fetchClassLikeReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }

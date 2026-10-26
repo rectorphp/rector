@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
+class ComposerStaticInit1ff1e95d3a70ef821b5a9c32c1051ff6
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -17,6 +17,7 @@ class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
         '98b3f6eb44f3ab83aedfea8f11cd0d6a' => __DIR__ . '/../..' . '/src/functions/rule_doc_generator_class_aliases.php',
+        '500cdba6bd4abd6b4f3f7b81b19585c4' => __DIR__ . '/../..' . '/src/functions/rule_class_aliases.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -1769,7 +1770,6 @@ class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
         'Rector\\NodeAnalyzer\\VariadicAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/VariadicAnalyzer.php',
         'Rector\\NodeCollector\\BinaryOpConditionsCollector' => __DIR__ . '/../..' . '/src/NodeCollector/BinaryOpConditionsCollector.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/src/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
-        'Rector\\NodeCollector\\ScopeResolver\\ParentClassScopeResolver' => __DIR__ . '/../..' . '/src/NodeCollector/ScopeResolver/ParentClassScopeResolver.php',
         'Rector\\NodeCollector\\StaticAnalyzer' => __DIR__ . '/../..' . '/src/NodeCollector/StaticAnalyzer.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallable' => __DIR__ . '/../..' . '/src/NodeCollector/ValueObject/ArrayCallable.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallableDynamicMethod' => __DIR__ . '/../..' . '/src/NodeCollector/ValueObject/ArrayCallableDynamicMethod.php',
@@ -2232,7 +2232,6 @@ class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
         'Rector\\Php81\\Enum\\AttributeName' => __DIR__ . '/../..' . '/rules/Php81/Enum/AttributeName.php',
         'Rector\\Php81\\Enum\\NameNullToStrictNullFunctionMap' => __DIR__ . '/../..' . '/rules/Php81/Enum/NameNullToStrictNullFunctionMap.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
-        'Rector\\Php81\\NodeManipulator\\NullToStrictStringIntConverter' => __DIR__ . '/../..' . '/rules/Php81/NodeManipulator/NullToStrictStringIntConverter.php',
         'Rector\\Php81\\Rector\\Array_\\ArrayToFirstClassCallableRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Array_/ArrayToFirstClassCallableRector.php',
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
         'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
@@ -2795,6 +2794,7 @@ class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
         'Rector\\TypeDeclaration\\PhpDocParser\\ParamPhpDocNodeFactory' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PhpDocParser/ParamPhpDocNodeFactory.php',
         'Rector\\TypeDeclaration\\Rector\\ArrowFunction\\AddArrowFunctionReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ArrowFunction/AddArrowFunctionReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\BooleanAnd\\BinaryOpNullableToInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/BooleanAnd/BinaryOpNullableToInstanceofRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassLike\\AddVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassLike/AddVoidReturnTypeWhereNoReturnRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AbstractParamTypeByMethodCallTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AbstractParamTypeByMethodCallTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamArrayDocblockBasedOnCallableNativeFuncCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamArrayDocblockBasedOnCallableNativeFuncCallRector.php',
@@ -2808,7 +2808,6 @@ class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationBasedOnParentClassMethodRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeFromTryCatchTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeFromTryCatchTypeRector.php',
-        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ArrayParamTypeByMethodCallTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ArrayParamTypeByMethodCallTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanConstAndStrictReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanConstAndStrictReturnsRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromBooleanConstReturnsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromBooleanConstReturnsRector.php',
@@ -2940,8 +2939,8 @@ class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
         'Rector\\VersionBonding\\ValueObject\\ComposerBoundRuleConfiguration' => __DIR__ . '/../..' . '/src/VersionBonding/ValueObject/ComposerBoundRuleConfiguration.php',
         'Rector\\VersionBonding\\ValueObject\\ComposerPackageConstraint' => __DIR__ . '/../..' . '/src/VersionBonding/ValueObject/ComposerPackageConstraint.php',
         'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',
-        'Rector\\Visibility\\Rector\\ClassMethod\\ChangeMethodVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ChangeMethodVisibilityRector.php',
         'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
+        'Rector\\Visibility\\Rector\\Class_\\ChangeMethodVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/Class_/ChangeMethodVisibilityRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
         'Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',
         'Symfony\\Polyfill\\Intl\\Grapheme\\Grapheme' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/Grapheme.php',
@@ -2954,9 +2953,9 @@ class ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6ec22d66724a89add1791d6cf235d2b1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1ff1e95d3a70ef821b5a9c32c1051ff6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1ff1e95d3a70ef821b5a9c32c1051ff6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1ff1e95d3a70ef821b5a9c32c1051ff6::$classMap;
 
         }, null, ClassLoader::class);
     }

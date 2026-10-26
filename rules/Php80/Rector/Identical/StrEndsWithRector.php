@@ -22,7 +22,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\FuncCallAndExpr;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
@@ -46,7 +46,7 @@ final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInt
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::STR_ENDS_WITH;
+        return PhpVersion::PHP_80;
     }
     public function getRuleDefinition(): RuleDefinition
     {

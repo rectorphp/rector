@@ -17,7 +17,7 @@ use Rector\Reflection\ReflectionResolver;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
@@ -79,7 +79,7 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::HAS_RETURN_TYPE;
+        return PhpVersion::PHP_70;
     }
     /**
      * @param ClassMethod $node
@@ -127,6 +127,6 @@ CODE_SAMPLE
         if ($classReflection->isFinalByKeyword()) {
             return \true;
         }
-        return !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE);
+        return !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_80);
     }
 }

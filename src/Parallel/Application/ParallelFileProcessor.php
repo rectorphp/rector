@@ -93,7 +93,7 @@ final class ParallelFileProcessor
         $handleErrorCallable = function (Throwable $throwable) use ($parallelResultCollector, &$systemErrorsCount, &$reachedSystemErrorsCountLimit): void {
             $parallelResultCollector->collectSystemError(new SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine()));
             ++$systemErrorsCount;
-            $reachedSystemErrorsCountLimit = \true;
+            $reachedSystemErrorsCountLimit = $systemErrorsCount >= self::SYSTEM_ERROR_LIMIT;
             $this->processPool->quitAll();
             // give the child processes time to actually die, they can still write to cache meanwhile
             // @see https://github.com/rectorphp/rector-src/pull/3834/files#r1231696531

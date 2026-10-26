@@ -7,19 +7,17 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Php81\Enum\NameNullToStrictNullFunctionMap;
-use Rector\Php81\NodeManipulator\NullToStrictStringIntConverter;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector\NullToStrictStringFuncCallArgRectorTest
@@ -30,14 +28,9 @@ final class NullToStrictStringFuncCallArgRector extends AbstractRector implement
      * @readonly
      */
     private ReflectionResolver $reflectionResolver;
-    /**
-     * @readonly
-     */
-    private NullToStrictStringIntConverter $nullToStrictStringIntConverter;
-    public function __construct(ReflectionResolver $reflectionResolver, NullToStrictStringIntConverter $nullToStrictStringIntConverter)
+    public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
-        $this->nullToStrictStringIntConverter = $nullToStrictStringIntConverter;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -85,20 +78,17 @@ CODE_SAMPLE
         if ($positions === []) {
             return null;
         }
-        $classReflection = $scope->getClassReflection();
-        $isTrait = $classReflection instanceof ClassReflection && $classReflection->isTrait();
-        $functionReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
-        if (!$functionReflection instanceof FunctionReflection) {
-            return null;
-        }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $node, $scope);
         $isChanged = \false;
         foreach ($positions as $position) {
-            $result = $this->nullToStrictStringIntConverter->convertIfNull($node, $args, (int) $position, $isTrait, $scope, $parametersAcceptor);
-            if ($result instanceof Node) {
-                $node = $result;
-                $isChanged = \true;
+            if (!isset($args[$position])) {
+                continue;
             }
+            $activeArg = $args[$position];
+            if (!$this->getType($activeArg->value)->isNull()->yes()) {
+                continue;
+            }
+            $activeArg->value = new String_('');
+            $isChanged = \true;
         }
         if ($isChanged) {
             return $node;
@@ -107,7 +97,7 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::DEPRECATE_NULL_ARG_IN_STRING_FUNCTION;
+        return PhpVersion::PHP_81;
     }
     /**
      * @param Arg[] $args

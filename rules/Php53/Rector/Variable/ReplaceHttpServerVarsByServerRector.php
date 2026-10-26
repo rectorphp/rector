@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector\ReplaceHttpServerVarsByServerRectorTest
@@ -21,7 +21,7 @@ final class ReplaceHttpServerVarsByServerRector extends AbstractRector implement
     private const VARIABLE_RENAME_MAP = ['HTTP_SERVER_VARS' => '_SERVER', 'HTTP_GET_VARS' => '_GET', 'HTTP_POST_VARS' => '_POST', 'HTTP_POST_FILES' => '_FILES', 'HTTP_SESSION_VARS' => '_SESSION', 'HTTP_ENV_VARS' => '_ENV', 'HTTP_COOKIE_VARS' => '_COOKIE'];
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::SERVER_VAR;
+        return PhpVersion::PHP_53;
     }
     public function getRuleDefinition(): RuleDefinition
     {

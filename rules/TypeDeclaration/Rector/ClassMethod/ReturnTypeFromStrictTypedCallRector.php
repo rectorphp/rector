@@ -29,7 +29,7 @@ use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeAnalyzer\ReturnStrictTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
@@ -121,7 +121,7 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::SCALAR_TYPES;
+        return PhpVersion::PHP_70;
     }
     /**
      * @param ClassMethod|Function_ $node
@@ -150,7 +150,7 @@ CODE_SAMPLE
         if (count($returnedStrictTypes) === 1) {
             return $this->refactorSingleReturnType($currentScopeReturns[0], $returnedStrictTypes[0], $node);
         }
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_80)) {
             /** @var PhpParserUnionType[] $returnedStrictTypes */
             $unwrappedTypes = $this->typeNodeUnwrapper->unwrapNullableUnionTypes($returnedStrictTypes);
             $unionType = new PhpParserUnionType($unwrappedTypes);

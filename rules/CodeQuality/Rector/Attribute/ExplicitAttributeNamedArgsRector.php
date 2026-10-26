@@ -14,7 +14,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Attribute\ExplicitAttributeNamedArgsRector\ExplicitAttributeNamedArgsRectorTest
@@ -78,7 +78,7 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::NAMED_ARGUMENTS;
+        return PhpVersion::PHP_80;
     }
     /**
      * Resolve the positional arguments to name, as a position => parameter-name map, or [] when

@@ -12,7 +12,7 @@ use Rector\PhpParser\Parser\SimplePhpParser;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php72\Rector\FuncCall\StringsAssertNakedRector\StringsAssertNakedRectorTest
@@ -29,7 +29,7 @@ final class StringsAssertNakedRector extends AbstractRector implements MinPhpVer
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::STRING_IN_ASSERT_ARG;
+        return PhpVersion::PHP_72;
     }
     public function getRuleDefinition(): RuleDefinition
     {

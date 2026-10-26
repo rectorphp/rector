@@ -20,7 +20,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\MethodName;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see https://wiki.php.net/rfc/readonly_property_defaults
@@ -97,7 +97,7 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::READONLY_PROPERTY_DEFAULT_VALUE;
+        return PhpVersion::PHP_86;
     }
     private function isDefaultableReadonlyProperty(Property $property): bool
     {

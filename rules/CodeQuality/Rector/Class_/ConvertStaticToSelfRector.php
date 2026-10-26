@@ -70,7 +70,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         $isFinal = $node->isFinal() || FeatureFlags::treatClassesAsFinal($node);
         $scope = null;
-        $classReflection = $this->getClassReflection($node);
+        $classReflection = $this->fetchClassLikeReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }

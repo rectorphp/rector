@@ -10,7 +10,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @deprecated This rule is deprecated, as property hooks are a matter of preference. The rule was never part of any set, there is no real upgrade path from getters/setters, and the hooked property mixes state and behavior in a single place, making the code harder to read. Keep the explicit getter/setter methods instead.
@@ -61,6 +61,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::PROPERTY_HOOKS;
+        return PhpVersion::PHP_84;
     }
 }

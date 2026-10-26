@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Visibility\Rector\ClassMethod;
+namespace Rector\Visibility\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
@@ -16,14 +15,10 @@ use Rector\ValueObject\Visibility;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
+ * @see \Rector\Tests\Visibility\Rector\Class_\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
  */
 final class ChangeMethodVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
-    /**
-     * @readonly
-     */
-    private ParentClassScopeResolver $parentClassScopeResolver;
     /**
      * @readonly
      */
@@ -32,9 +27,8 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
      * @var ChangeMethodVisibility[]
      */
     private array $methodVisibilities = [];
-    public function __construct(ParentClassScopeResolver $parentClassScopeResolver, VisibilityManipulator $visibilityManipulator)
+    public function __construct(VisibilityManipulator $visibilityManipulator)
     {
-        $this->parentClassScopeResolver = $parentClassScopeResolver;
         $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition(): RuleDefinition
@@ -76,35 +70,42 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
         if ($this->methodVisibilities === []) {
             return null;
         }
-        if (!$this->hasMatchingMethodName($node)) {
+        $classReflection = $this->fetchClassLikeReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
-        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($scope);
-        if ($parentClassName === null) {
+        $parentClassReflection = $classReflection->getParentClass();
+        if (!$parentClassReflection instanceof ClassReflection) {
             return null;
         }
-        foreach ($this->methodVisibilities as $methodVisibility) {
-            if ($methodVisibility->getClass() !== $parentClassName) {
-                continue;
+        $parentClassName = $parentClassReflection->getName();
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            foreach ($this->methodVisibilities as $methodVisibility) {
+                if ($methodVisibility->getClass() !== $parentClassName) {
+                    continue;
+                }
+                if (!$this->isName($classMethod, $methodVisibility->getMethod())) {
+                    continue;
+                }
+                $this->visibilityManipulator->changeNodeVisibility($classMethod, $methodVisibility->getVisibility());
+                $hasChanged = \true;
             }
-            if (!$this->isName($node, $methodVisibility->getMethod())) {
-                continue;
-            }
-            $this->visibilityManipulator->changeNodeVisibility($node, $methodVisibility->getVisibility());
-            return $node;
         }
-        return null;
+        if (!$hasChanged) {
+            return null;
+        }
+        return $node;
     }
     /**
      * @param mixed[] $configuration
@@ -113,16 +114,5 @@ CODE_SAMPLE
     {
         Assert::allIsAOf($configuration, ChangeMethodVisibility::class);
         $this->methodVisibilities = $configuration;
-    }
-    private function hasMatchingMethodName(ClassMethod $classMethod): bool
-    {
-        $found = \false;
-        foreach ($this->methodVisibilities as $methodVisibility) {
-            if ($this->isName($classMethod, $methodVisibility->getMethod())) {
-                $found = \true;
-                break;
-            }
-        }
-        return $found;
     }
 }

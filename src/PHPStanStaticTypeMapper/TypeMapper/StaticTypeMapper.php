@@ -13,7 +13,7 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 /**
  * @see \Rector\Tests\NodeTypeResolver\StaticTypeMapper\StaticTypeMapperTest
  *
@@ -54,7 +54,7 @@ final class StaticTypeMapper implements TypeMapperInterface
         if ($typeKind !== TypeKind::RETURN) {
             return new Name(ObjectReference::SELF);
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_80)) {
             return new Name(ObjectReference::SELF);
         }
         return new Name(ObjectReference::STATIC);

@@ -21,7 +21,7 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 /**
  * @implements TypeMapperInterface<IntersectionType>
  */
@@ -98,7 +98,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
         if ($type->isString()->yes()) {
             return new Identifier('string');
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::INTERSECTION_TYPES)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_81)) {
             return null;
         }
         $intersectionedTypeNodes = [];
@@ -121,7 +121,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
         if (count($intersectionedTypeNodes) === 1) {
             return current($intersectionedTypeNodes);
         }
-        if ($typeKind === TypeKind::UNION && !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_INTERSECTION_TYPES)) {
+        if ($typeKind === TypeKind::UNION && !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_82)) {
             return null;
         }
         return new Node\IntersectionType($intersectionedTypeNodes);

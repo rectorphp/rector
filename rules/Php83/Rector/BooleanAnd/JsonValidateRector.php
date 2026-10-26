@@ -18,7 +18,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
@@ -46,7 +46,7 @@ final class JsonValidateRector extends AbstractRector implements MinPhpVersionIn
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::JSON_VALIDATE;
+        return PhpVersion::PHP_83;
     }
     public function getRuleDefinition(): RuleDefinition
     {

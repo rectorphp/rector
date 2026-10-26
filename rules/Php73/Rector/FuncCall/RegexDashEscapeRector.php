@@ -11,7 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Util\StringUtils;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\RegexDashEscapeRectorTest
@@ -37,7 +37,7 @@ final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersio
     private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)(?<!\\\\)-(\\\\(w|s|d)[.*]?)\]#i';
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::ESCAPE_DASH_IN_REGEX;
+        return PhpVersion::PHP_73;
     }
     public function getRuleDefinition(): RuleDefinition
     {

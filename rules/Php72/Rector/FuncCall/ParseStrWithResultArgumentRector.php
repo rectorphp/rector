@@ -13,7 +13,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector\ParseStrWithResultArgumentRectorTest
@@ -22,7 +22,7 @@ final class ParseStrWithResultArgumentRector extends AbstractRector implements M
 {
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::RESULT_ARG_IN_PARSE_STR;
+        return PhpVersion::PHP_72;
     }
     public function getRuleDefinition(): RuleDefinition
     {

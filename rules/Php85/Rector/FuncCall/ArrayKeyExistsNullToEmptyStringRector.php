@@ -5,20 +5,12 @@ namespace Rector\Php85\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\UnionType;
+use PhpParser\Node\Scalar\String_;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
-use Rector\Php81\NodeManipulator\NullToStrictStringIntConverter;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_using_values_null_as_an_array_offset_and_when_calling_array_key_exists
@@ -29,19 +21,9 @@ final class ArrayKeyExistsNullToEmptyStringRector extends AbstractRector impleme
     /**
      * @readonly
      */
-    private ReflectionResolver $reflectionResolver;
-    /**
-     * @readonly
-     */
-    private NullToStrictStringIntConverter $nullToStrictStringIntConverter;
-    /**
-     * @readonly
-     */
     private ArgsAnalyzer $argsAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, NullToStrictStringIntConverter $nullToStrictStringIntConverter, ArgsAnalyzer $argsAnalyzer)
+    public function __construct(ArgsAnalyzer $argsAnalyzer)
     {
-        $this->reflectionResolver = $reflectionResolver;
-        $this->nullToStrictStringIntConverter = $nullToStrictStringIntConverter;
         $this->argsAnalyzer = $argsAnalyzer;
     }
     public function getRuleDefinition(): RuleDefinition
@@ -69,37 +51,20 @@ CODE_SAMPLE
         if (!$this->isName($node, 'array_key_exists')) {
             return null;
         }
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            return null;
-        }
         $args = $node->getArgs();
         if (count($args) !== 2) {
             return null;
         }
-        $classReflection = $scope->getClassReflection();
-        $isTrait = $classReflection instanceof ClassReflection && $classReflection->isTrait();
-        $functionReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
-        if (!$functionReflection instanceof FunctionReflection) {
+        $argPosition = $this->argsAnalyzer->resolveArgPosition($args, 'key', 0);
+        $activeArg = $args[$argPosition];
+        if (!$this->getType($activeArg->value)->isNull()->yes()) {
             return null;
         }
-        $argPosition = $this->argsAnalyzer->resolveArgPosition($args, 'key', 0);
-        $originalType = $this->getType($args[$argPosition]->value);
-        if ($originalType instanceof UnionType) {
-            $withoutNullParameterType = TypeCombinator::removeNull($originalType);
-            if ($withoutNullParameterType->equals($originalType)) {
-                return null;
-            }
-        }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $node, $scope);
-        $result = $this->nullToStrictStringIntConverter->convertIfNull($node, $args, $argPosition, $isTrait, $scope, $parametersAcceptor);
-        if ($result instanceof Node) {
-            return $result;
-        }
-        return null;
+        $activeArg->value = new String_('');
+        return $node;
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::DEPRECATE_NULL_ARG_IN_ARRAY_KEY_EXISTS_FUNCTION;
+        return PhpVersion::PHP_85;
     }
 }

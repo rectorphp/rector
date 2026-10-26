@@ -64,7 +64,7 @@ CODE_SAMPLE
         if (!$this->overrideByParentClassGuard->isLegal($node)) {
             return null;
         }
-        $classReflection = $this->getClassReflection($node);
+        $classReflection = $this->fetchClassLikeReflection($node);
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }

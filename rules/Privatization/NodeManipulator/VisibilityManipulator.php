@@ -83,6 +83,7 @@ final class VisibilityManipulator
         $node->flags -= Modifiers::FINAL;
     }
     /**
+     * @param Visibility::* $visibility
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
      */
     public function changeNodeVisibility($node, int $visibility): void

@@ -20,7 +20,7 @@ use PhpParser\Node\VariadicPlaceholder;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ClosureFromCallableToFirstClassCallableRector\ClosureFromCallableToFirstClassCallableRectorTest
@@ -83,7 +83,7 @@ final class ClosureFromCallableToFirstClassCallableRector extends AbstractRector
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::FIRST_CLASS_CALLABLE_SYNTAX;
+        return PhpVersion::PHP_81;
     }
     public function shouldSkip(StaticCall $staticCall): bool
     {

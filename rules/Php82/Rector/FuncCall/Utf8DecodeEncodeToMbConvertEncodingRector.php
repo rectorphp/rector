@@ -11,7 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see https://3v4l.org/Q14UR
@@ -61,6 +61,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::DEPRECATE_UTF8_DECODE_ENCODE_FUNCTION;
+        return PhpVersion::PHP_82;
     }
 }

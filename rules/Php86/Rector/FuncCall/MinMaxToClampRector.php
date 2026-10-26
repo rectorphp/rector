@@ -11,7 +11,7 @@ use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php86\Rector\FuncCall\MinMaxToClampRector\MinMaxToClampRectorTest
@@ -50,7 +50,7 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::CLAMP;
+        return PhpVersion::PHP_86;
     }
     private function matchClampFuncCall(FuncCall $outerFuncCall, string $expectedInnerFuncName): ?FuncCall
     {

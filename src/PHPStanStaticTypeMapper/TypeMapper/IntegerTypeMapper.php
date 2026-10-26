@@ -10,7 +10,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 /**
  * @implements TypeMapperInterface<IntegerType>
  */
@@ -44,7 +44,7 @@ final class IntegerTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_70)) {
             return null;
         }
         return new Identifier('int');

@@ -9,7 +9,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php54\Rector\Array_\LongArrayToShortArrayRector\LongArrayToShortArrayRectorTest
@@ -18,7 +18,7 @@ final class LongArrayToShortArrayRector extends AbstractRector implements MinPhp
 {
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::SHORT_ARRAY;
+        return PhpVersion::PHP_54;
     }
     public function getRuleDefinition(): RuleDefinition
     {

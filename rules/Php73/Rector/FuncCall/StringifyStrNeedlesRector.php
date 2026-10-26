@@ -11,7 +11,7 @@ use PhpParser\Node\Scalar\InterpolatedString;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\StringifyStrNeedlesRectorTest
@@ -24,7 +24,7 @@ final class StringifyStrNeedlesRector extends AbstractRector implements MinPhpVe
     private const NEEDLE_STRING_SENSITIVE_FUNCTIONS = ['strpos', 'strrpos', 'stripos', 'strstr', 'stripos', 'strripos', 'strstr', 'strchr', 'strrchr', 'stristr'];
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::DEPRECATE_INT_IN_STR_NEEDLES;
+        return PhpVersion::PHP_73;
     }
     public function getRuleDefinition(): RuleDefinition
     {

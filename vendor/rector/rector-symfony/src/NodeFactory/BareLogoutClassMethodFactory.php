@@ -10,7 +10,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\NodeFactory;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 final class BareLogoutClassMethodFactory
 {
     /**
@@ -31,7 +31,7 @@ final class BareLogoutClassMethodFactory
         $classMethod = $this->nodeFactory->createPublicMethod('onLogout');
         $variable = new Variable('logoutEvent');
         $classMethod->params[] = $this->createLogoutEventParam($variable);
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_71)) {
             $classMethod->returnType = new Identifier('void');
         }
         return $classMethod;

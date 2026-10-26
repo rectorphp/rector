@@ -27,7 +27,7 @@ use Rector\Symfony\ValueObject\EventReferenceToMethodNameWithPriority;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 final class GetSubscribedEventsClassMethodFactory
 {
     /**
@@ -120,7 +120,7 @@ final class GetSubscribedEventsClassMethodFactory
     }
     private function decorateClassMethodWithReturnType(ClassMethod $classMethod): void
     {
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_70)) {
             $classMethod->returnType = new Identifier('array');
         }
         $returnType = new ArrayType(new StringType(), new MixedType(\true));

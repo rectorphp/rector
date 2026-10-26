@@ -11,7 +11,7 @@ use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php72\Rector\FuncCall\StringifyDefineRector\StringifyDefineRectorTest
@@ -28,7 +28,7 @@ final class StringifyDefineRector extends AbstractRector implements MinPhpVersio
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::STRING_IN_FIRST_DEFINE_ARG;
+        return PhpVersion::PHP_72;
     }
     public function getRuleDefinition(): RuleDefinition
     {

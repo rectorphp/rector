@@ -11,7 +11,7 @@ use Rector\Php74\Tokenizer\ParenthesizedNestedTernaryAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php74\Rector\Ternary\ParenthesizeNestedTernaryRector\ParenthesizeNestedTernaryRectorTest
@@ -28,7 +28,7 @@ final class ParenthesizeNestedTernaryRector extends AbstractRector implements Mi
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::DEPRECATE_NESTED_TERNARY;
+        return PhpVersion::PHP_74;
     }
     public function getRuleDefinition(): RuleDefinition
     {

@@ -16,4 +16,5 @@ return array(
     'b6b991a57620e2fb6b2f66f03fe9ddc2' => $vendorDir . '/symfony/string/Resources/functions.php',
     '30bca7fff093e8069bed7c55247e2bf8' => $baseDir . '/src/functions/node_helper.php',
     '98b3f6eb44f3ab83aedfea8f11cd0d6a' => $baseDir . '/src/functions/rule_doc_generator_class_aliases.php',
+    '500cdba6bd4abd6b4f3f7b81b19585c4' => $baseDir . '/src/functions/rule_class_aliases.php',
 );

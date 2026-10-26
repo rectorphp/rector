@@ -58,7 +58,7 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 /**
  * @see \Rector\Tests\PhpParser\Node\NodeFactoryTest
  */
@@ -287,7 +287,7 @@ final class NodeFactory
         $propertyFlags = $propertyMetadata->getFlags();
         $param->flags = $propertyFlags !== 0 ? $propertyFlags : Modifiers::PRIVATE;
         // make readonly by default
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::READONLY_PROPERTY)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_81)) {
             $param->flags |= Modifiers::READONLY;
         }
         return $param;

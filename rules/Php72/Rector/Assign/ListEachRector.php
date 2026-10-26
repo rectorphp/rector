@@ -14,7 +14,7 @@ use Rector\Php72\ValueObject\ListAndEach;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php72\Rector\Assign\ListEachRector\ListEachRectorTest
@@ -31,7 +31,7 @@ final class ListEachRector extends AbstractRector implements MinPhpVersionInterf
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::DEPRECATE_EACH;
+        return PhpVersion::PHP_72;
     }
     public function getRuleDefinition(): RuleDefinition
     {

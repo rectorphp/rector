@@ -12,7 +12,7 @@ use Rector\Php71\IsArrayAndDualCheckToAble;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php71\Rector\BooleanOr\IsIterableRector\IsIterableRectorTest
@@ -39,7 +39,7 @@ final class IsIterableRector extends AbstractRector implements MinPhpVersionInte
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::IS_ITERABLE;
+        return PhpVersion::PHP_71;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -64,7 +64,7 @@ final class IsIterableRector extends AbstractRector implements MinPhpVersionInte
     }
     private function shouldSkip(): bool
     {
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::IS_ITERABLE)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_71)) {
             return \false;
         }
         return !$this->reflectionProvider->hasFunction(new Name('is_iterable'), null);

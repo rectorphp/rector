@@ -3,6 +3,10 @@
 declare (strict_types=1);
 namespace Rector\ValueObject;
 
+/**
+ * @api
+ * @deprecated Use \Rector\ValueObject\PhpVersion constants directly instead.
+ */
 final class PhpVersionFeature
 {
     /**

@@ -12,7 +12,7 @@ use Rector\Php\PhpVersionProvider;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\AttributeArrayNameInliner;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 /**
  * @implements AnnotationToAttributeMapperInterface<DoctrineAnnotationTagValueNode>
  */
@@ -47,7 +47,7 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
         if (!$value instanceof DoctrineAnnotationTagValueNode) {
             return \false;
         }
-        return $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NEW_INITIALIZERS);
+        return $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_81);
     }
     /**
      * @param DoctrineAnnotationTagValueNode $value

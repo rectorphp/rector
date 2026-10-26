@@ -48,7 +48,7 @@ abstract class AbstractRector implements RectorInterface
         $this->commentsMerger = $commentsMerger;
         $this->reflectionProvider = $reflectionProvider;
     }
-    protected function getClassReflection(ClassLike $classLike): ?ClassReflection
+    protected function fetchClassLikeReflection(ClassLike $classLike): ?ClassReflection
     {
         $className = $this->getName($classLike);
         if ($className === null) {

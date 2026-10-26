@@ -10,7 +10,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @deprecated This rule is deprecated, as it can cause BC breaks. Adding JSON_THROW_ON_ERROR turns silent false/null results into a thrown JsonException, so every call site has to be reviewed manually. Use a wrapper tool like nette/utils Json instead, to get clear error reporting on any PHP version.
@@ -42,6 +42,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::JSON_EXCEPTION;
+        return PhpVersion::PHP_73;
     }
 }

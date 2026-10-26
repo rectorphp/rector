@@ -14,7 +14,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector\RemoveZeroBreakContinueRectorTest
@@ -31,7 +31,7 @@ final class RemoveZeroBreakContinueRector extends AbstractRector implements MinP
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::NO_ZERO_BREAK;
+        return PhpVersion::PHP_54;
     }
     public function getRuleDefinition(): RuleDefinition
     {

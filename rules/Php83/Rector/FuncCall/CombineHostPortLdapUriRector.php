@@ -14,7 +14,7 @@ use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see https://www.php.net/manual/en/migration83.deprecated.php#migration83.deprecated.ldap
@@ -82,6 +82,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::DEPRECATE_HOST_PORT_SEPARATE_ARGS;
+        return PhpVersion::PHP_83;
     }
 }

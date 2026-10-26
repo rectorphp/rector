@@ -12,7 +12,7 @@ use PhpParser\NodeVisitor;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 /**
  * @see \Rector\Tests\Php72\Rector\Unset_\UnsetCastRector\UnsetCastRectorTest
@@ -21,7 +21,7 @@ final class UnsetCastRector extends AbstractRector implements MinPhpVersionInter
 {
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::NO_UNSET_CAST;
+        return PhpVersion::PHP_72;
     }
     public function getRuleDefinition(): RuleDefinition
     {
