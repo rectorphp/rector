@@ -5,6 +5,8 @@ namespace RectorPrefix202610;
 
 use RectorPrefix202610\Composer\XdebugHandler\XdebugHandler;
 use RectorPrefix202610\Nette\Utils\Json;
+use PHPStan\PharAutoloader;
+use PHPStan\Turbo\TurboExtensionEnabler;
 use Rector\Bootstrap\AutoloadFileParameterResolver;
 use Rector\Bootstrap\RectorConfigsResolver;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
@@ -26,6 +28,22 @@ use RectorPrefix202610\Symfony\Component\Console\Input\ArgvInput;
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+// PHPStan Turbo replaces php-parser classes, so it is activated before preload.php declares them.
+// The main process only gets Turbo when php.ini loads it; the workers get it from WorkerCommandLineFactory.
+$phpstanBootstrapFile = __DIR__ . '/../../../phpstan/phpstan/bootstrap.php';
+if (!\class_exists(PharAutoloader::class) && \is_file($phpstanBootstrapFile)) {
+    // Rector installed as a dependency: the project autoloader that loads PHPStan comes after preload.php,
+    // so load PHPStan's bootstrap now, and mark it as loaded with the identifier Composer gives the file
+    $GLOBALS['__composer_autoload_files'][\md5('phpstan/phpstan:bootstrap.php')] = \true;
+    require_once $phpstanBootstrapFile;
+}
+if (\class_exists(PharAutoloader::class)) {
+    $phpstanPharPath = \dirname((string) (new \ReflectionClass(PharAutoloader::class))->getFileName()) . '/phpstan.phar';
+    TurboExtensionEnabler::trustOwnTypesIfSuitable($_SERVER['argv'], $phpstanPharPath);
+    TurboExtensionEnabler::activateIfCompatible($phpstanPharPath);
+    unset($phpstanPharPath);
+}
+unset($phpstanBootstrapFile);
 final class AutoloadIncluder
 {
     /**
