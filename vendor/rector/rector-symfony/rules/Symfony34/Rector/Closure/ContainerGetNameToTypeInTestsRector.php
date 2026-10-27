@@ -16,6 +16,7 @@ use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver;
+use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
 /**
@@ -103,14 +104,23 @@ CODE_SAMPLE
         if (!$serviceType instanceof ObjectType) {
             return null;
         }
-        // only replace when the resolved class is itself a registered service id (real service or alias),
-        // otherwise the named service maps to a class that has no matching FQCN service and the call breaks
+        // only replace when the resolved class is a registered service id that points to the very same service
+        // (the named service itself or an alias of it), otherwise get() would return a different service
         $className = $serviceType->getClassName();
-        if (!$this->serviceMapProvider->provide()->hasService($className)) {
+        $serviceMap = $this->serviceMapProvider->provide();
+        if (!$serviceMap->hasService($className)) {
+            return null;
+        }
+        if ($this->resolveAliasedServiceId($serviceMap, $firstArg->value->value) !== $this->resolveAliasedServiceId($serviceMap, $className)) {
             return null;
         }
         $classConstFetch = new ClassConstFetch(new FullyQualified($className), 'class');
         $node->args[0] = new Arg($classConstFetch);
         return $node;
+    }
+    private function resolveAliasedServiceId(ServiceMap $serviceMap, string $serviceId): string
+    {
+        $serviceDefinition = $serviceMap->getServices()[$serviceId] ?? null;
+        return (($nullsafeVariable1 = $serviceDefinition) ? $nullsafeVariable1->getAlias() : null) ?? $serviceId;
     }
 }
