@@ -21,6 +21,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\PropertyItem;
 use PhpParser\Node\StaticVar;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Declare_;
@@ -32,6 +33,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Static_;
+use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
 use PHPStan\Analyser\MutatingScope;
@@ -149,6 +151,11 @@ final class ChangedNodeScopeRefresher
         }
         if ($node instanceof ElseIf_) {
             return [new If_($node->cond, ['stmts' => $node->stmts])];
+        }
+        // Catch_ is not processed standalone by PHPStan, only as part of a TryCatch; an empty try
+        // makes it a catch no throw point reaches, which PHPStan still walks with the catch scope
+        if ($node instanceof Catch_) {
+            return [new TryCatch([], [$node])];
         }
         if ($node instanceof Stmt) {
             return [$node];

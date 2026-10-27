@@ -86,12 +86,6 @@ final class BetterPhpDocParser extends PhpDocParser
         }
         return $phpDocNode;
     }
-    public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
-    {
-        $tag = $this->resolveTag($tokenIterator);
-        $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
-        return new PhpDocTagNode($tag, $phpDocTagValueNode);
-    }
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
         $isPrecededByHorizontalWhitespace = $tokenIterator->isPrecededByHorizontalWhitespace();
@@ -124,23 +118,5 @@ final class BetterPhpDocParser extends PhpDocParser
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
         $phpDocNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
         return $phpDocNode;
-    }
-    private function resolveTag(TokenIterator $tokenIterator): string
-    {
-        $tag = $tokenIterator->currentTokenValue();
-        $tokenIterator->next();
-        // there is a space → stop
-        if ($tokenIterator->isPrecededByHorizontalWhitespace()) {
-            return $tag;
-        }
-        // is not e.g "@var "
-        // join tags like "@ORM\Column" etc.
-        if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER)) {
-            return $tag;
-        }
-        // @todo use joinUntil("(")?
-        $tag .= $tokenIterator->currentTokenValue();
-        $tokenIterator->next();
-        return $tag;
     }
 }
