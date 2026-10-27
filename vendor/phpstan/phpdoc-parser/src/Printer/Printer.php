@@ -452,6 +452,7 @@ final class Printer
         $insertStr = $this->listInsertionMap[$mapKey] ?? null;
         $result = '';
         $beforeFirstKeepOrReplace = \true;
+        $skipRemovedNode = \false;
         $delayedAdd = [];
         $insertNewline = \false;
         [$isMultiline, $beforeAsteriskIndent, $afterAsteriskIndent] = $this->isMultiline($tokenIndex, $originalNodes, $originalTokens);
@@ -482,7 +483,12 @@ final class Printer
                 $origComments = $origArrayItem->getAttribute(Attribute::COMMENTS) ?? [];
                 $commentStartPos = count($origComments) > 0 ? $origComments[0]->startIndex : $itemStartPos;
                 assert($commentStartPos >= 0);
-                $result .= $originalTokens->getContentBetween($tokenIndex, $itemStartPos);
+                if ($skipRemovedNode) {
+                    // the separator after the removed first item belongs to it
+                    $skipRemovedNode = \false;
+                } else {
+                    $result .= $originalTokens->getContentBetween($tokenIndex, $itemStartPos);
+                }
                 if (count($delayedAdd) > 0) {
                     foreach ($delayedAdd as $delayedAddNode) {
                         $parenthesesNeeded = isset($this->parenthesesListMap[$mapKey]) && in_array(get_class($delayedAddNode), $this->parenthesesListMap[$mapKey], \true);
@@ -576,12 +582,18 @@ final class Printer
                 if ($i === 0) {
                     // If we're removing from the start, keep the tokens before the node and drop those after it,
                     // instead of the other way around.
-                    $originalTokensArray = $originalTokens->getTokens();
-                    for ($j = $tokenIndex; $j < $itemStartPos; $j++) {
-                        if ($originalTokensArray[$j][Lexer::TYPE_OFFSET] === Lexer::TOKEN_PHPDOC_EOL) {
-                            break;
+                    if ($mapKey === PhpDocNode::class . '->children') {
+                        // the line of the removed child is dropped, the next child keeps its own line
+                        $originalTokensArray = $originalTokens->getTokens();
+                        for ($j = $tokenIndex; $j < $itemStartPos; $j++) {
+                            if ($originalTokensArray[$j][Lexer::TYPE_OFFSET] === Lexer::TOKEN_PHPDOC_EOL) {
+                                break;
+                            }
+                            $result .= $originalTokensArray[$j][Lexer::VALUE_OFFSET];
                         }
-                        $result .= $originalTokensArray[$j][Lexer::VALUE_OFFSET];
+                    } else {
+                        $result .= $originalTokens->getContentBetween($tokenIndex, $itemStartPos);
+                        $skipRemovedNode = \true;
                     }
                 }
                 $tokenIndex = $itemEndPos + 1;
