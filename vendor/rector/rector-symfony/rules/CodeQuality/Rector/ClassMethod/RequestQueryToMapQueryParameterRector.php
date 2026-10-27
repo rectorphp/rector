@@ -35,7 +35,7 @@ use Rector\RuleDoc\RuleDefinition;
 use Rector\Symfony\Enum\SymfonyAttribute;
 use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
@@ -73,7 +73,7 @@ final class RequestQueryToMapQueryParameterRector extends AbstractRector impleme
     }
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::ATTRIBUTES;
+        return PhpVersion::PHP_80;
     }
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
