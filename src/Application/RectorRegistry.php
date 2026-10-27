@@ -47,6 +47,15 @@ final class RectorRegistry
      */
     private array $cache = [];
     /**
+     * The file that $currentFileRectorsByNodeClass belongs to; compared by identity, so a new File
+     * (next file, a skip-verification re-run, a new test fixture) never reads a stale entry
+     */
+    private ?File $currentFile = null;
+    /**
+     * @var array<class-string<Node>, RectorInterface[]>
+     */
+    private array $currentFileRectorsByNodeClass = [];
+    /**
      * @param RectorInterface[] $rectors
      */
     public function __construct(PhpVersionedFilter $phpVersionedFilter, ComposerPackageConstraintFilter $composerPackageConstraintFilter, ConfigurationRuleFilter $configurationRuleFilter, Skipper $skipper, array $rectors)
@@ -67,6 +76,8 @@ final class RectorRegistry
         $this->rectors = $rectors;
         $this->areRectorsPrepared = \false;
         $this->cache = [];
+        $this->currentFile = null;
+        $this->currentFileRectorsByNodeClass = [];
     }
     /**
      * @return RectorInterface[]
@@ -96,13 +107,23 @@ final class RectorRegistry
      * rule would not have changed it. This drops precise unused-skip reporting in exchange for not
      * running the rule twice per skipped node.
      *
+     * The skip result only depends on the rule and the file path, so it is cached per node class
+     * for the current file, instead of asking the skipper again for every node and every pass.
+     *
      * @return RectorInterface[]
      */
     public function forNodeAndFile(Node $node, File $file): array
     {
-        $rectors = $this->forNode($node);
+        if ($this->currentFile !== $file) {
+            $this->currentFile = $file;
+            $this->currentFileRectorsByNodeClass = [];
+        }
+        $nodeClass = get_class($node);
+        if (isset($this->currentFileRectorsByNodeClass[$nodeClass])) {
+            return $this->currentFileRectorsByNodeClass[$nodeClass];
+        }
         $filePath = $file->getFilePath();
-        return array_filter($rectors, fn(RectorInterface $rector): bool => !$this->skipper->shouldSkipRectorAndFile($rector, $filePath));
+        return $this->currentFileRectorsByNodeClass[$nodeClass] = array_filter($this->forNode($node), fn(RectorInterface $rector): bool => !$this->skipper->shouldSkipRectorAndFile($rector, $filePath));
     }
     /**
      * Filtering must happen lazily, after the configuration is set in ProcessCommand::execute(),
