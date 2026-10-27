@@ -103,7 +103,6 @@ final class FileNode extends Stmt
         $this->mirrorUseComments($placementNode->stmts, $newUses);
         // make use stmts first
         $placementNode->stmts = array_merge($newUses, $this->resolveInsertNop($placementNode), $placementNode->stmts);
-        $placementNode->stmts = array_values($placementNode->stmts);
         $this->appendUsedImports($useImportTypes, $functionUseImportTypes, $constantUseImportTypes);
         return \true;
     }

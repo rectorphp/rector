@@ -41,7 +41,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         // the FileNode resolves the namespace-or-file placement internally
         if ($node instanceof FileNode) {
             // keep only the uses that were actually renamed
-            $removedUses = array_values(array_filter($this->renamedClassesDataCollector->getOldClasses(), \Closure::fromCallable([$this->renamedNameCollector, 'has'])));
+            $removedUses = array_filter($this->renamedClassesDataCollector->getOldClasses(), \Closure::fromCallable([$this->renamedNameCollector, 'has']));
             if ($node->removeImports($removedUses)) {
                 $this->addRectorClassWithLine($node);
             }
