@@ -90,6 +90,12 @@ CODE_SAMPLE
         if ($this->shouldSkipCoalesceFallback($callExpr)) {
             return null;
         }
+        // reading a property on null is already suppressed by "??", so the nullsafe "?->" is
+        // redundant here and PHPStan reports it; keep the plain "->" chain for property-only
+        // access, while a method call must stay nullsafe to avoid a call-on-null error
+        if ($this->isPurePropertyChain($callExpr, $checkedExpr)) {
+            return new Coalesce($callExpr, $fallbackExpr);
+        }
         return new Coalesce($nullsafeExpr, $fallbackExpr);
     }
     public function provideMinPhpVersion(): int
@@ -139,6 +145,20 @@ CODE_SAMPLE
             return new PropertyFetch($nestedExpr, $expr->name);
         }
         return null;
+    }
+    /**
+     * A chain of plain property fetches rooted in the checked expression, e.g. "$a->b->c",
+     * with no method call in between.
+     */
+    private function isPurePropertyChain(Expr $expr, Expr $checkedExpr): bool
+    {
+        if ($this->nodeComparator->areNodesEqual($expr, $checkedExpr)) {
+            return \true;
+        }
+        if ($expr instanceof PropertyFetch) {
+            return $this->isPurePropertyChain($expr->var, $checkedExpr);
+        }
+        return \false;
     }
     private function isPureExpr(Expr $expr): bool
     {
