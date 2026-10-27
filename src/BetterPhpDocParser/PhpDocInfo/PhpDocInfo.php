@@ -23,6 +23,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
@@ -30,7 +31,6 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
@@ -51,7 +51,7 @@ final class PhpDocInfo
     /**
      * @readonly
      */
-    private BetterTokenIterator $betterTokenIterator;
+    private TokenIterator $tokenIterator;
     /**
      * @readonly
      */
@@ -86,17 +86,17 @@ final class PhpDocInfo
      * @readonly
      */
     private PhpDocNode $originalPhpDocNode;
-    public function __construct(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator, StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, AnnotationNaming $annotationNaming, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder, NameScopeFactory $nameScopeFactory)
+    public function __construct(PhpDocNode $phpDocNode, TokenIterator $tokenIterator, StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, AnnotationNaming $annotationNaming, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder, NameScopeFactory $nameScopeFactory)
     {
         $this->phpDocNode = $phpDocNode;
-        $this->betterTokenIterator = $betterTokenIterator;
+        $this->tokenIterator = $tokenIterator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
         $this->annotationNaming = $annotationNaming;
         $this->phpDocNodeByTypeFinder = $phpDocNodeByTypeFinder;
         $this->nameScopeFactory = $nameScopeFactory;
         $this->originalPhpDocNode = clone $phpDocNode;
-        if (!$betterTokenIterator->containsTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
+        if (!in_array(Lexer::TOKEN_PHPDOC_EOL, array_column($tokenIterator->getTokens(), Lexer::TYPE_OFFSET), \true)) {
             $this->isSingleLine = \true;
         }
     }
@@ -122,11 +122,11 @@ final class PhpDocInfo
      */
     public function getTokens(): array
     {
-        return $this->betterTokenIterator->getTokens();
+        return $this->tokenIterator->getTokens();
     }
     public function getTokenCount(): int
     {
-        return $this->betterTokenIterator->count();
+        return $this->tokenIterator->getTokenCount();
     }
     public function getVarTagValueNode(string $tagName = '@var'): ?VarTagValueNode
     {
@@ -316,7 +316,7 @@ final class PhpDocInfo
         if ($this->phpDocNode->children === []) {
             return \false;
         }
-        return $this->betterTokenIterator->count() === 0;
+        return $this->tokenIterator->getTokenCount() === 0;
     }
     public function isSingleLine(): bool
     {

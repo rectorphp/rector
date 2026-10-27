@@ -10,11 +10,11 @@ use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 final class PlainValueParser
 {
@@ -36,7 +36,7 @@ final class PlainValueParser
     /**
      * @return string|mixed[]|ConstExprNode|DoctrineAnnotationTagValueNode|StringNode
      */
-    public function parseValue(BetterTokenIterator $tokenIterator, Node $currentPhpNode)
+    public function parseValue(TokenIterator $tokenIterator, Node $currentPhpNode)
     {
         $currentTokenValue = $tokenIterator->currentTokenValue();
         // temporary hackaround multi-line doctrine annotations
@@ -59,20 +59,20 @@ final class PlainValueParser
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
             return $this->parseNestedDoctrineAnnotationTagValueNode($currentTokenValue, $tokenIterator, $currentPhpNode);
         }
-        $start = $tokenIterator->currentPosition();
+        $start = $tokenIterator->currentTokenIndex();
         // from "quote to quote"
         if ($currentTokenValue === '"') {
             do {
                 $tokenIterator->next();
             } while (strpos($tokenIterator->currentTokenValue(), '"') === \false);
         }
-        $end = $tokenIterator->currentPosition();
+        $end = $tokenIterator->currentTokenIndex();
         if ($start + 1 < $end) {
-            return new StringNode($tokenIterator->printFromTo($start, $end));
+            return new StringNode($tokenIterator->getContentBetween($start, $end));
         }
         return $currentTokenValue;
     }
-    private function parseStringValue(BetterTokenIterator $tokenIterator, string $currentTokenValue): string
+    private function parseStringValue(TokenIterator $tokenIterator, string $currentTokenValue): string
     {
         if (strncmp($currentTokenValue, '"', strlen('"')) === 0 && substr_compare($currentTokenValue, '"', -strlen('"')) !== 0) {
             $currentTokenValue = $this->parseMultilineOrWhiteSpacedString($tokenIterator, $currentTokenValue);
@@ -84,7 +84,7 @@ final class PlainValueParser
         }
         return $currentTokenValue;
     }
-    private function parseMultilineOrWhiteSpacedString(BetterTokenIterator $tokenIterator, string $currentTokenValue): string
+    private function parseMultilineOrWhiteSpacedString(TokenIterator $tokenIterator, string $currentTokenValue): string
     {
         while (strncmp($currentTokenValue, '"', strlen('"')) === 0 && substr_compare($currentTokenValue, '"', -strlen('"')) !== 0) {
             if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
@@ -104,7 +104,7 @@ final class PlainValueParser
         }
         return $currentTokenValue;
     }
-    private function parseNestedDoctrineAnnotationTagValueNode(string $currentTokenValue, BetterTokenIterator $tokenIterator, Node $currentPhpNode): DoctrineAnnotationTagValueNode
+    private function parseNestedDoctrineAnnotationTagValueNode(string $currentTokenValue, TokenIterator $tokenIterator, Node $currentPhpNode): DoctrineAnnotationTagValueNode
     {
         // @todo
         $annotationShortName = $currentTokenValue;

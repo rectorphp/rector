@@ -6,12 +6,13 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
+use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\NextTokenType;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 /**
  * Better version of doctrine/annotation - with phpdoc-parser and  static reflection
@@ -37,7 +38,7 @@ final class StaticDoctrineAnnotationParser
      *
      * @return ArrayItemNode[]
      */
-    public function resolveAnnotationMethodCall(BetterTokenIterator $tokenIterator, Node $currentPhpNode): array
+    public function resolveAnnotationMethodCall(TokenIterator $tokenIterator, Node $currentPhpNode): array
     {
         if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
             return [];
@@ -53,12 +54,12 @@ final class StaticDoctrineAnnotationParser
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1215-L1224
      * @return CurlyListNode|string|array<mixed>|ConstExprNode|DoctrineAnnotationTagValueNode|StringNode
      */
-    public function resolveAnnotationValue(BetterTokenIterator $tokenIterator, Node $currentPhpNode)
+    public function resolveAnnotationValue(TokenIterator $tokenIterator, Node $currentPhpNode)
     {
         // skips dummy tokens like newlines
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         // no assign
-        if (!$tokenIterator->isNextTokenType(Lexer::TOKEN_EQUAL)) {
+        if (!NextTokenType::is($tokenIterator, Lexer::TOKEN_EQUAL)) {
             // 1. plain value - mimics https://github.com/doctrine/annotations/blob/0cb0cd2950a5c6cdbf22adbe2bfd5fd1ea68588f/lib/Doctrine/Common/Annotations/DocParser.php#L1234-L1282
             return $this->parseValue($tokenIterator, $currentPhpNode);
         }
@@ -78,7 +79,7 @@ final class StaticDoctrineAnnotationParser
      *
      * @return ArrayItemNode[]
      */
-    private function resolveAnnotationValues(BetterTokenIterator $tokenIterator, Node $currentPhpNode): array
+    private function resolveAnnotationValues(TokenIterator $tokenIterator, Node $currentPhpNode): array
     {
         $values = [];
         $resolvedValue = $this->resolveAnnotationValue($tokenIterator, $currentPhpNode);
@@ -90,7 +91,7 @@ final class StaticDoctrineAnnotationParser
         while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_COMMA)) {
             $tokenIterator->next();
             // if is next item just closing brackets
-            if ($tokenIterator->isNextTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
+            if (NextTokenType::is($tokenIterator, Lexer::TOKEN_CLOSE_PARENTHESES)) {
                 continue;
             }
             $nestedValues = $this->resolveAnnotationValue($tokenIterator, $currentPhpNode);
@@ -108,7 +109,7 @@ final class StaticDoctrineAnnotationParser
     /**
      * @return CurlyListNode|string|array<mixed>|ConstExprNode|DoctrineAnnotationTagValueNode|StringNode
      */
-    private function parseValue(BetterTokenIterator $tokenIterator, Node $currentPhpNode)
+    private function parseValue(TokenIterator $tokenIterator, Node $currentPhpNode)
     {
         if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET)) {
             $items = $this->arrayParser->parseCurlyArray($tokenIterator, $currentPhpNode);

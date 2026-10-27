@@ -308,7 +308,7 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
     private function isClosedContent(string $composedContent): bool
     {
         $composedTokenIterator = $this->tokenIteratorFactory->create($composedContent);
-        $tokenCount = $composedTokenIterator->count();
+        $tokenCount = $composedTokenIterator->getTokenCount();
         $openBracketCount = 0;
         $closeBracketCount = 0;
         if ($composedContent === '') {
@@ -322,7 +322,7 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
                 ++$closeBracketCount;
             }
             $composedTokenIterator->next();
-        } while ($composedTokenIterator->currentPosition() < $tokenCount - 1);
+        } while ($composedTokenIterator->currentTokenIndex() < $tokenCount - 1);
         return $openBracketCount === $closeBracketCount;
     }
     private function createSpacelessPhpDocTagNode(string $tagName, GenericTagValueNode $genericTagValueNode, string $fullyQualifiedAnnotationClass, Node $currentPhpNode): SpacelessPhpDocTagNode

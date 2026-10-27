@@ -7,10 +7,10 @@ use PHPStan\PhpDocParser\Ast\AbstractNodeVisitor;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
@@ -43,20 +43,21 @@ final class UnionTypeNodePhpDocNodeVisitor extends AbstractNodeVisitor implement
             $lastKey = array_key_last($node->types);
             $startAndEnd = new StartAndEnd($node->types[$firstKey]->getAttribute('startIndex'), $node->types[$lastKey]->getAttribute('endIndex'));
         }
-        $betterTokenProvider = $this->currentTokenIteratorProvider->provide();
-        $isWrappedInCurlyBrackets = $this->isWrappedInCurlyBrackets($betterTokenProvider, $startAndEnd);
+        $tokenIterator = $this->currentTokenIteratorProvider->provide();
+        $isWrappedInCurlyBrackets = $this->isWrappedInCurlyBrackets($tokenIterator, $startAndEnd);
         $bracketsAwareUnionTypeNode = new BracketsAwareUnionTypeNode($node->types, $isWrappedInCurlyBrackets);
         $this->attributeMirrorer->mirror($node, $bracketsAwareUnionTypeNode);
         return $bracketsAwareUnionTypeNode;
     }
-    private function isWrappedInCurlyBrackets(BetterTokenIterator $betterTokenProvider, StartAndEnd $startAndEnd): bool
+    private function isWrappedInCurlyBrackets(TokenIterator $tokenIterator, StartAndEnd $startAndEnd): bool
     {
         $previousPosition = $startAndEnd->getStart() - 1;
         $nextPosition = $startAndEnd->getEnd() + 1;
         // A union is wrapped only when BOTH parens flank it. Either alone may be unrelated —
         // e.g. an `@method`'s parameter-list `(` before a first-position union, or the matching
         // `)` after a last-position union — neither belongs to the union type itself.
-        return $betterTokenProvider->isTokenTypeOnPosition(Lexer::TOKEN_OPEN_PARENTHESES, $previousPosition) && $betterTokenProvider->isTokenTypeOnPosition(Lexer::TOKEN_CLOSE_PARENTHESES, $nextPosition);
+        $tokens = $tokenIterator->getTokens();
+        return ($tokens[$previousPosition][Lexer::TYPE_OFFSET] ?? null) === Lexer::TOKEN_OPEN_PARENTHESES && ($tokens[$nextPosition][Lexer::TYPE_OFFSET] ?? null) === Lexer::TOKEN_CLOSE_PARENTHESES;
     }
     private function resolveStartAndEnd(UnionTypeNode $unionTypeNode): ?StartAndEnd
     {

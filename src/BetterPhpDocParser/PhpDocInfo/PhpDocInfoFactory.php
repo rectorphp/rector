@@ -7,11 +7,11 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -86,11 +86,11 @@ final class PhpDocInfoFactory
                 return null;
             }
             // create empty node
-            $tokenIterator = new BetterTokenIterator([]);
+            $tokenIterator = new TokenIterator([]);
             $phpDocNode = new PhpDocNode([]);
         } else {
             $tokens = $this->lexer->tokenize($docComment->getText());
-            $tokenIterator = new BetterTokenIterator($tokens);
+            $tokenIterator = new TokenIterator($tokens);
             $phpDocNode = $this->betterPhpDocParser->parseWithNode($tokenIterator, $node);
             $this->setPositionOfLastToken($phpDocNode);
         }
@@ -101,7 +101,7 @@ final class PhpDocInfoFactory
     public function createEmpty(Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
         $phpDocNode = new PhpDocNode([]);
-        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, new BetterTokenIterator([]), $node);
+        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, new TokenIterator([]), $node);
         // multiline by default
         $phpDocInfo->makeMultiLined();
         return $phpDocInfo;
@@ -121,10 +121,10 @@ final class PhpDocInfoFactory
             $phpDocNode->setAttribute(PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION, $startAndEnd->getEnd());
         }
     }
-    private function createFromPhpDocNode(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator, Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    private function createFromPhpDocNode(PhpDocNode $phpDocNode, TokenIterator $tokenIterator, Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
-        $phpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $betterTokenIterator);
-        $phpDocInfo = new \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo($phpDocNode, $betterTokenIterator, $this->staticTypeMapper, $node, $this->annotationNaming, $this->phpDocNodeByTypeFinder, $this->nameScopeFactory);
+        $phpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $tokenIterator);
+        $phpDocInfo = new \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo($phpDocNode, $tokenIterator, $this->staticTypeMapper, $node, $this->annotationNaming, $this->phpDocNodeByTypeFinder, $this->nameScopeFactory);
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
         return $phpDocInfo;
     }
