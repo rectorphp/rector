@@ -58,8 +58,8 @@
     "scripts": {
         "phpstan": "vendor\/bin\/phpstan analyse --ansi",
         "duplicated-code": "vendor\/bin\/swiss-knife duplicated-code src rules --min-tokens 150 --min-lines 5",
-        "check-cs": "vendor\/bin\/ecs check --ansi",
-        "fix-cs": "vendor\/bin\/ecs check --fix --ansi"
+        "check-cs": "vendor\/bin\/ecs check --blink",
+        "fix-cs": "vendor\/bin\/ecs check --fix --blink"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
