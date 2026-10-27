@@ -2259,6 +2259,7 @@ return array(
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\ControllerMethodInjectionToConstructorRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/ControllerMethodInjectionToConstructorRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventListenerToEventSubscriberRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/EventListenerToEventSubscriberRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventSubscriberMethodReturnVoidRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/EventSubscriberMethodReturnVoidRector.php',
+    'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventSubscriberToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/EventSubscriberToAttributeRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\InlineClassRoutePrefixRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/InlineClassRoutePrefixRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\LoadValidatorMetadataToAnnotationRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php',
     'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\LoadValidatorMetadataToAttributeRector' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/LoadValidatorMetadataToAttributeRector.php',
