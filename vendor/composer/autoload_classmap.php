@@ -905,7 +905,6 @@ return array(
     'Rector\\BetterPhpDocParser\\ValueObject\\PhpDoc\\DoctrineAnnotation\\AbstractValuesAwareNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\PhpDoc\\DoctrineAnnotation\\CurlyListNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/CurlyListNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\StartAndEnd' => $baseDir . '/src/BetterPhpDocParser/ValueObject/StartAndEnd.php',
-    'Rector\\BetterPhpDocParser\\ValueObject\\Type\\BracketsAwareIntersectionTypeNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/Type/BracketsAwareIntersectionTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\FullyQualifiedIdentifierTypeNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/Type/FullyQualifiedIdentifierTypeNode.php',
     'Rector\\Bootstrap\\AutoloadFileParameterResolver' => $baseDir . '/src/Bootstrap/AutoloadFileParameterResolver.php',
     'Rector\\Bootstrap\\ExtensionConfigResolver' => $baseDir . '/src/Bootstrap/ExtensionConfigResolver.php',
