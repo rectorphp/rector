@@ -10,10 +10,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PHPStan\Type\Accessory\AccessoryArrayListType;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -100,20 +96,9 @@ final class ArrayCallbackParamTypeResolver
     }
     private function resolveArrayItemType(Type $arrayType): ?Type
     {
-        if ($arrayType instanceof ConstantArrayType || $arrayType instanceof ArrayType) {
-            return $arrayType->getItemType();
+        if (!$arrayType->isArray()->yes()) {
+            return null;
         }
-        if ($arrayType instanceof IntersectionType) {
-            foreach ($arrayType->getTypes() as $subType) {
-                if ($subType instanceof AccessoryArrayListType) {
-                    continue;
-                }
-                if (!$subType instanceof ArrayType) {
-                    continue;
-                }
-                return $subType->getItemType();
-            }
-        }
-        return null;
+        return $arrayType->getIterableValueType();
     }
 }
