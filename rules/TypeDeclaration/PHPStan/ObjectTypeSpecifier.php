@@ -68,20 +68,27 @@ final class ObjectTypeSpecifier
                 return $shortenedObjectType;
             }
         }
+        // a class in the current namespace wins over a global class with the same short name
+        $namespaceName = ($nullsafeVariable1 = $scope) ? $nullsafeVariable1->getNamespace() : null;
+        $isUnqualified = !$withPreslash && strpos($className, '\\') === \false;
+        if ($namespaceName !== null && $isUnqualified) {
+            $namespacedClassName = $namespaceName . '\\' . $className;
+            if ($this->reflectionProvider->hasClass($namespacedClassName)) {
+                return new FullyQualifiedObjectType($namespacedClassName);
+            }
+        }
         if ($this->reflectionProvider->hasClass($className)) {
             // keep the scope class reflection of the current class, as it is refreshed on class change,
             // while the reflection provider one still reads the original file
-            $classReflection = ($nullsafeVariable1 = $scope) ? $nullsafeVariable1->getClassReflection() : null;
+            $classReflection = ($nullsafeVariable2 = $scope) ? $nullsafeVariable2->getClassReflection() : null;
             if ($classReflection instanceof ClassReflection && $classReflection->getName() === $className) {
                 return new FullyQualifiedObjectType($className, null, $classReflection);
             }
             return new FullyQualifiedObjectType($className);
         }
         // probably in same namespace
-        $namespaceName = null;
         if ($scope instanceof Scope) {
-            $namespaceName = $scope->getNamespace();
-            if ($namespaceName !== null) {
+            if ($namespaceName !== null && !$isUnqualified) {
                 $newClassName = $namespaceName . '\\' . $className;
                 if ($this->reflectionProvider->hasClass($newClassName)) {
                     return new FullyQualifiedObjectType($newClassName);
