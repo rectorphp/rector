@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Privatization\TypeManipulator;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Printer\Printer;
 use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\Accessory\AccessoryNonFalsyStringType;
@@ -46,15 +47,20 @@ final class TypeNormalizer
      */
     private TypeHasher $typeHasher;
     /**
+     * @readonly
+     */
+    private Printer $printer;
+    /**
      * @var int
      */
     private const MAX_PRINTED_UNION_DOC_LENGTH = 77;
-    public function __construct(TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper, \Rector\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver, TypeHasher $typeHasher)
+    public function __construct(TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper, \Rector\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver, TypeHasher $typeHasher, Printer $printer)
     {
         $this->typeFactory = $typeFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->arrayTypeLeastCommonDenominatorResolver = $arrayTypeLeastCommonDenominatorResolver;
         $this->typeHasher = $typeHasher;
+        $this->printer = $printer;
     }
     /**
      * Generalize false/true constantArrayType to bool,
@@ -125,7 +131,7 @@ final class TypeNormalizer
                 if (count($uniqueGeneralizedUnionTypes) > 1) {
                     $generalizedUnionType = new UnionType($uniqueGeneralizedUnionTypes);
                     $shortUnionedDocType = $this->resolveNameShortDocTypeNode($generalizedUnionType);
-                    if (strlen((string) $shortUnionedDocType) > self::MAX_PRINTED_UNION_DOC_LENGTH && $this->avoidPrintedDocblockTrimming($generalizedUnionType) === \false) {
+                    if (strlen($this->printer->print($shortUnionedDocType)) > self::MAX_PRINTED_UNION_DOC_LENGTH && $this->avoidPrintedDocblockTrimming($generalizedUnionType) === \false) {
                         $alwaysKnownArrayType = $this->narrowToAlwaysKnownArrayType($generalizedUnionType);
                         if ($alwaysKnownArrayType instanceof ArrayType) {
                             return $alwaysKnownArrayType;
