@@ -133,7 +133,7 @@ final class UnionCollectionTagValueNodeNarrower
                 unset($tagValueNode->type->types[$key]);
             }
         }
-        if ($tagValueNode->type instanceof UnionTypeNode && count($tagValueNode->type->types) === 1) {
+        if (($tagValueNode->type instanceof UnionTypeNode || $tagValueNode->type instanceof IntersectionTypeNode) && count($tagValueNode->type->types) === 1) {
             // sole type
             $unionTypeNode = $tagValueNode->type;
             $tagValueNode->type = array_pop($unionTypeNode->types);
