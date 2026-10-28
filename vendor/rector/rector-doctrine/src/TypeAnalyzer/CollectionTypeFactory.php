@@ -73,11 +73,9 @@ final class CollectionTypeFactory
             // https://www.doctrine-project.org/projects/doctrine-orm/en/3.3/tutorials/working-with-indexed-associations.html#mapping-indexed-associations
             $annotations = $phpDocInfo->findByAnnotationClass(MappingClass::ONE_TO_MANY) !== [] ? $phpDocInfo->findByAnnotationClass(MappingClass::ONE_TO_MANY) : $phpDocInfo->findByAnnotationClass(MappingClass::MANY_TO_MANY);
             if (count($annotations) === 1 && $annotations[0] instanceof DoctrineAnnotationTagValueNode) {
-                foreach ($annotations[0]->getValues() as $arrayItemNode) {
-                    if ($arrayItemNode instanceof ArrayItemNode && $arrayItemNode->key instanceof StringNode && $arrayItemNode->key->value === 'indexBy' && $arrayItemNode->value instanceof StringNode) {
-                        $key = $arrayItemNode->value->value;
-                        break;
-                    }
+                $indexByArrayItemNode = $annotations[0]->getValue('indexBy');
+                if ($indexByArrayItemNode instanceof ArrayItemNode && $indexByArrayItemNode->value instanceof StringNode) {
+                    $key = $indexByArrayItemNode->value->value;
                 }
                 if ($key !== null) {
                     $type = $this->resolveKeyFromAnnotation($class, $key);
