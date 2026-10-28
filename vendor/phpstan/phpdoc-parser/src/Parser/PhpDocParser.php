@@ -447,7 +447,8 @@ class PhpDocParser
     }
     private function parseDoctrineArgument(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens): Doctrine\DoctrineArgument
     {
-        if (!$tokens->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER)) {
+        // a quoted key, e.g. "key"="value", is not valid Doctrine syntax, but is accepted as the key
+        if (!$tokens->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER, Lexer::TOKEN_DOUBLE_QUOTED_STRING, Lexer::TOKEN_DOCTRINE_ANNOTATION_STRING)) {
             $startLine = $tokens->currentTokenLine();
             $startIndex = $tokens->currentTokenIndex();
             return $this->enrichWithAttributes($tokens, new Doctrine\DoctrineArgument(null, $this->parseDoctrineArgumentValue($tokens)), $startLine, $startIndex);
@@ -456,8 +457,12 @@ class PhpDocParser
         $startIndex = $tokens->currentTokenIndex();
         try {
             $tokens->pushSavePoint();
+            $isIdentifier = $tokens->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER);
             $currentValue = $tokens->currentTokenValue();
-            $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
+            $tokens->next();
+            if (!$isIdentifier) {
+                $currentValue = $this->doctrineConstantExprParser->parseDoctrineString($currentValue, $tokens)->value;
+            }
             $key = $this->enrichWithAttributes($tokens, new IdentifierTypeNode($currentValue), $startLine, $startIndex);
             $tokens->consumeTokenType(Lexer::TOKEN_EQUAL);
             $value = $this->parseDoctrineArgumentValue($tokens);

@@ -5,6 +5,7 @@ namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\CallLike;
@@ -26,7 +27,7 @@ use Rector\Reflection\ReflectionResolver;
 /**
  * Decorates call args using the resolved function-like reflection, resolved once per call:
  *  - Closure/arrow-fn args passed to a variadic callable parameter (HAS_CLOSURE_WITH_VARIADIC_ARGS)
- *  - array args passed to a parameter that cannot hold a Closure, so an array callable is kept as is
+ *  - 2-item array args passed to a parameter that cannot hold a Closure, so an array callable is kept as is
  *    (IS_ARG_NOT_ACCEPTING_CLOSURE), see https://github.com/rectorphp/rector/issues/9563
  */
 final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
@@ -51,8 +52,8 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
         if ($args === []) {
             return null;
         }
-        // only closure/arrow-fn or array args are decorated below; skip the reflection otherwise
-        if (!$this->hasClosureArrowOrArrayArg($args)) {
+        // only closure/arrow-fn or array callable shaped args are decorated below; skip the reflection otherwise
+        if (!$this->hasClosureArrowOrArrayCallableArg($args)) {
             return null;
         }
         $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
@@ -63,16 +64,23 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
     /**
      * @param Arg[] $args
      */
-    private function hasClosureArrowOrArrayArg(array $args): bool
+    private function hasClosureArrowOrArrayCallableArg(array $args): bool
     {
         $found = \false;
         foreach ($args as $arg) {
-            if ($arg->value instanceof Closure || $arg->value instanceof ArrowFunction || $arg->value instanceof Array_) {
+            if ($arg->value instanceof Closure || $arg->value instanceof ArrowFunction || $this->isArrayCallableShape($arg->value)) {
                 $found = \true;
                 break;
             }
         }
         return $found;
+    }
+    /**
+     * Only [$caller, 'method'] can be an array callable
+     */
+    private function isArrayCallableShape(Expr $expr): bool
+    {
+        return $expr instanceof Array_ && count($expr->items) === 2;
     }
     /**
      * @param Arg[] $args
@@ -105,13 +113,13 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
         if (!$functionLikeReflection instanceof FunctionReflection && !$functionLikeReflection instanceof MethodReflection) {
             return;
         }
-        if (!array_any($args, static fn(Arg $arg): bool => $arg->value instanceof Array_)) {
+        if (!array_any($args, fn(Arg $arg): bool => $this->isArrayCallableShape($arg->value))) {
             return;
         }
         $parameterReflections = ParametersAcceptorSelectorVariantsWrapper::select($functionLikeReflection, $callLike, ScopeFetcher::fetch($callLike))->getParameters();
         $closureObjectType = new ObjectType('Closure');
         foreach ($args as $position => $arg) {
-            if (!$arg->value instanceof Array_) {
+            if (!$this->isArrayCallableShape($arg->value)) {
                 continue;
             }
             $parameterReflection = $this->matchParameterReflection($arg, $position, $parameterReflections);
