@@ -5,19 +5,16 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use RectorPrefix202610\Nette\Utils\Strings;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\Attribute;
+use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use PHPStan\PhpDocParser\Parser\TypeParser;
-use PHPStan\PhpDocParser\ParserConfig;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\NodeDecorator\ArrayItemClassNameDecorator;
 use Rector\BetterPhpDocParser\NodeDecorator\ConstExprClassNameDecorator;
@@ -25,89 +22,91 @@ use Rector\BetterPhpDocParser\NodeDecorator\DoctrineAnnotationDecorator;
 use Rector\BetterPhpDocParser\NodeDecorator\PhpDocTagGenericUsesDecorator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use Rector\Util\Reflection\PrivatesAccessor;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
-final class BetterPhpDocParser extends PhpDocParser
+final class BetterPhpDocParser
 {
     /**
      * @readonly
      */
-    private PrivatesAccessor $privatesAccessor;
+    private PhpDocParser $phpDocParser;
     /**
      * @see https://regex101.com/r/JOKSmr/5
      * @var string
      */
     private const MULTI_NEW_LINES_REGEX = '#(?<new_line>\r\n|\n){2,}#';
     /**
+     * @var int[]
+     */
+    private const NO_TEXT_TOKEN_TYPES = [Lexer::TOKEN_OPEN_PHPDOC, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_HORIZONTAL_WS, Lexer::TOKEN_END];
+    /**
      * @var PhpDocNodeDecoratorInterface[]
      * @readonly
      */
     private array $phpDocNodeDecorators;
-    public function __construct(ParserConfig $parserConfig, TypeParser $typeParser, ConstExprParser $constExprParser, ConstExprClassNameDecorator $constExprClassNameDecorator, DoctrineAnnotationDecorator $doctrineAnnotationDecorator, ArrayItemClassNameDecorator $arrayItemClassNameDecorator, PhpDocTagGenericUsesDecorator $phpDocTagGenericUsesDecorator, PrivatesAccessor $privatesAccessor)
+    public function __construct(PhpDocParser $phpDocParser, ConstExprClassNameDecorator $constExprClassNameDecorator, DoctrineAnnotationDecorator $doctrineAnnotationDecorator, ArrayItemClassNameDecorator $arrayItemClassNameDecorator, PhpDocTagGenericUsesDecorator $phpDocTagGenericUsesDecorator)
     {
-        $this->privatesAccessor = $privatesAccessor;
+        $this->phpDocParser = $phpDocParser;
         // The decorator order below is significant; keep it as is. DoctrineAnnotationDecorator must
         // run before ArrayItemClassNameDecorator, which resolves class names inside the array items the
         // former produces. A wrong order silently drops annotation class usages and strips their imports.
         // They are injected explicitly, not autodiscovered, so the order stays under our control.
         $this->phpDocNodeDecorators = [$constExprClassNameDecorator, $doctrineAnnotationDecorator, $arrayItemClassNameDecorator, $phpDocTagGenericUsesDecorator];
-        parent::__construct(
-            // ParserConfig
-            $parserConfig,
-            // TypeParser
-            $typeParser,
-            // ConstExprParser
-            $constExprParser
-        );
     }
     public function parseWithNode(TokenIterator $tokenIterator, Node $node): PhpDocNode
     {
-        $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_PHPDOC);
-        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        $children = [];
-        if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PHPDOC)) {
-            $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
-            while ($tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL) && !$tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PHPDOC)) {
-                $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
+        try {
+            $phpDocNode = $this->phpDocParser->parse($tokenIterator);
+        } catch (ParserException $exception) {
+            // invalid Doctrine annotation arguments; keep the docblock as it is
+            return $this->createTextPhpDocNode($tokenIterator);
+        }
+        foreach ($phpDocNode->children as $phpDocChildNode) {
+            $this->setStartAndEnd($phpDocChildNode);
+            if (!$phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+            $this->setStartAndEnd($phpDocChildNode->value);
+            if ($phpDocChildNode->value instanceof GenericTagValueNode) {
+                $phpDocChildNode->value->value = Strings::replace($phpDocChildNode->value->value, self::MULTI_NEW_LINES_REGEX, static fn(array $match): string => (string) $match['new_line']);
             }
         }
-        // might be in the middle of annotations
-        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
-        $phpDocNode = new PhpDocNode($children);
         foreach ($this->phpDocNodeDecorators as $phpDocNodeDecorator) {
             $phpDocNodeDecorator->decorate($phpDocNode, $node);
         }
         return $phpDocNode;
     }
-    public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
+    /**
+     * The Doctrine annotation decorator moves these positions to the nodes it creates
+     */
+    private function setStartAndEnd(PhpDocParserNode $phpDocParserNode): void
     {
-        $startPosition = $tokenIterator->currentTokenIndex();
-        $phpDocTagValueNode = parent::parseTagValue($tokenIterator, $tag);
-        $endPosition = $tokenIterator->currentTokenIndex();
-        $startAndEnd = new StartAndEnd($startPosition, $endPosition);
-        $phpDocTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-        if ($phpDocTagValueNode instanceof GenericTagValueNode) {
-            $phpDocTagValueNode->value = Strings::replace($phpDocTagValueNode->value, self::MULTI_NEW_LINES_REGEX, static fn(array $match): string => (string) $match['new_line']);
+        $startIndex = $phpDocParserNode->getAttribute(Attribute::START_INDEX);
+        $endIndex = $phpDocParserNode->getAttribute(Attribute::END_INDEX);
+        if (!is_int($startIndex) || !is_int($endIndex)) {
+            return;
         }
-        return $phpDocTagValueNode;
+        // an empty node has no tokens, its end index is before its start index
+        $phpDocParserNode->setAttribute(PhpDocAttributeKey::START_AND_END, new StartAndEnd($startIndex, max($startIndex, $endIndex + 1)));
     }
     /**
-     * @return PhpDocTextNode|PhpDocTagNode
+     * One text node with the content between "/**" and "*\/"
      */
-    private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): PhpDocChildNode
+    private function createTextPhpDocNode(TokenIterator $tokenIterator): PhpDocNode
     {
-        $startPosition = $tokenIterator->currentTokenIndex();
-        try {
-            /** @var PhpDocTextNode|PhpDocTagNode $phpDocNode */
-            $phpDocNode = $this->privatesAccessor->callPrivateMethod($this, 'parseChild', [$tokenIterator]);
-        } catch (ParserException $exception) {
-            $phpDocNode = new PhpDocTextNode('');
+        $tokens = $tokenIterator->getTokens();
+        $startIndex = 0;
+        $endIndex = count($tokens) - 1;
+        while ($startIndex < $endIndex && in_array($tokens[$startIndex][Lexer::TYPE_OFFSET], self::NO_TEXT_TOKEN_TYPES, \true)) {
+            ++$startIndex;
         }
-        $endPosition = $tokenIterator->currentTokenIndex();
-        $startAndEnd = new StartAndEnd($startPosition, $endPosition);
-        $phpDocNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-        return $phpDocNode;
+        while ($endIndex > $startIndex && in_array($tokens[$endIndex][Lexer::TYPE_OFFSET], self::NO_TEXT_TOKEN_TYPES, \true)) {
+            --$endIndex;
+        }
+        $phpDocTextNode = new PhpDocTextNode($tokenIterator->getContentBetween($startIndex, $endIndex + 1));
+        $phpDocTextNode->setAttribute(Attribute::START_INDEX, $startIndex);
+        $phpDocTextNode->setAttribute(Attribute::END_INDEX, $endIndex);
+        return new PhpDocNode([$phpDocTextNode]);
     }
 }

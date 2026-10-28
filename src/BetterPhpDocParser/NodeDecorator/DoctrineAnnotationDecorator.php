@@ -177,7 +177,16 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
     }
     private function transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes(PhpDocNode $phpDocNode, Node $currentPhpNode): void
     {
+        $incompleteAnnotationContent = null;
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
+            // the next children are the rest of an incomplete annotation, e.g. its nested annotations; keep them
+            if ($incompleteAnnotationContent !== null) {
+                $incompleteAnnotationContent .= "\n" . $phpDocChildNode;
+                if ($this->isClosedContent($incompleteAnnotationContent)) {
+                    $incompleteAnnotationContent = null;
+                }
+                continue;
+            }
             // the @\FQN use case
             if ($phpDocChildNode instanceof PhpDocTextNode) {
                 $this->processTextSpacelessInTextNode($phpDocNode, $phpDocChildNode, $currentPhpNode, $key);
@@ -188,6 +197,11 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             }
             // single quoted got invalid tag, keep process
             if ($phpDocChildNode->value instanceof InvalidTagValueNode) {
+                // the value ends before a nested annotation on the next line
+                if (!$this->isClosedContent($phpDocChildNode->value->value)) {
+                    $incompleteAnnotationContent = $phpDocChildNode->value->value;
+                    continue;
+                }
                 $name = ltrim($phpDocChildNode->name, '@');
                 $values = $phpDocChildNode->value->value;
                 $this->processDoctrine($currentPhpNode, $name, $phpDocChildNode, $phpDocNode, $key, $values);
@@ -235,8 +249,6 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode($phpDocNode->children[$key]->name, $phpDocNode->children[$key]->value, $fullyQualifiedAnnotationClass, $currentPhpNode);
             $this->attributeMirrorer->mirror($phpDocNode->children[$key], $spacelessPhpDocTagNode);
             $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
-            // require to reprint the generic
-            $phpDocNode->children[$key]->value->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
             array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
         }
     }

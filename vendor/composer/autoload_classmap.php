@@ -2071,7 +2071,6 @@ return array(
     'Rector\\PhpDocParser\\NodeTraverser\\SimpleCallableNodeTraverser' => $baseDir . '/src/PhpDocParser/NodeTraverser/SimpleCallableNodeTraverser.php',
     'Rector\\PhpDocParser\\NodeVisitor\\CallableNodeVisitor' => $baseDir . '/src/PhpDocParser/NodeVisitor/CallableNodeVisitor.php',
     'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => $baseDir . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
-    'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => $baseDir . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
     'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => $baseDir . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
     'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => $baseDir . '/src/PhpDocParser/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
     'Rector\\PhpParser\\AstResolver' => $baseDir . '/src/PhpParser/AstResolver.php',

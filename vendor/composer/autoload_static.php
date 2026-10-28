@@ -2297,7 +2297,6 @@ class ComposerStaticInit1dc4e6f733837c9136580c3c1fd0758d
         'Rector\\PhpDocParser\\NodeTraverser\\SimpleCallableNodeTraverser' => __DIR__ . '/../..' . '/src/PhpDocParser/NodeTraverser/SimpleCallableNodeTraverser.php',
         'Rector\\PhpDocParser\\NodeVisitor\\CallableNodeVisitor' => __DIR__ . '/../..' . '/src/PhpDocParser/NodeVisitor/CallableNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
-        'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => __DIR__ . '/../..' . '/src/PhpDocParser/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
         'Rector\\PhpParser\\AstResolver' => __DIR__ . '/../..' . '/src/PhpParser/AstResolver.php',
