@@ -200,5 +200,9 @@ final class SymfonyClass
     /**
      * @var string
      */
+    public const FORM_EVENTS = 'Symfony\Component\Form\FormEvents';
+    /**
+     * @var string
+     */
     public const ULID_CLASS = 'Symfony\Component\Uid\Ulid';
 }

@@ -10,6 +10,7 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -113,6 +114,19 @@ CODE_SAMPLE
         $node->implements = array_values(array_filter($node->implements, fn(Node $name): bool => !$this->isName($name, SymfonyClass::EVENT_SUBSCRIBER_INTERFACE)));
         return $node;
     }
+    private function isFormEvent(Expr $eventExpr): bool
+    {
+        if ($eventExpr instanceof ClassConstFetch) {
+            if ($this->isName($eventExpr->class, SymfonyClass::FORM_EVENTS)) {
+                return \true;
+            }
+            // event classes keyed via FormEvents::ALIASES, e.g. PreSubmitEvent::class
+            $className = $this->getName($eventExpr->class);
+            return $className !== null && strncmp($className, 'Symfony\Component\Form\Event\\', strlen('Symfony\Component\Form\Event\\')) === 0;
+        }
+        // FormEvents::* constants all resolve to "form.*" string values
+        return $eventExpr instanceof String_ && strncmp($eventExpr->value, 'form.', strlen('form.')) === 0;
+    }
     private function getReturnArray(ClassMethod $classMethod): ?Array_
     {
         $stmts = (array) $classMethod->stmts;
@@ -133,6 +147,10 @@ CODE_SAMPLE
         $listeners = [];
         foreach ($eventsArray->items as $item) {
             if ($item->key === null) {
+                return null;
+            }
+            // form events are usually registered manually, keep them as is
+            if ($this->isFormEvent($item->key)) {
                 return null;
             }
             $methodsWithPriorities = $this->resolveMethodsWithPriorities($item->value);
