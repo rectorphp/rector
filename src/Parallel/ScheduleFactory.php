@@ -42,6 +42,9 @@ final class ScheduleFactory
      * with the smallest byte load so far. Keeps the gap between the slowest and the fastest worker small,
      * so the run does not end with a single worker still chewing on the one 200 kB file.
      *
+     * Each bucket is then put back in discovery order. Handing out the largest files first would make every
+     * worker process its heaviest files at the same time, and all of them peak in memory together.
+     *
      * @param string[] $filePaths
      * @return array<int, array<string>>
      */
@@ -50,21 +53,25 @@ final class ScheduleFactory
         // tuples rather than a path-keyed map: numeric-looking paths would be cast to int keys, and
         // duplicate paths would silently collapse
         $sizedFilePaths = [];
-        foreach ($filePaths as $filePath) {
-            $sizedFilePaths[] = [$filePath, is_file($filePath) ? (int) filesize($filePath) : 0];
+        foreach (array_values($filePaths) as $position => $filePath) {
+            $sizedFilePaths[] = [$position, $filePath, is_file($filePath) ? (int) filesize($filePath) : 0];
         }
-        usort($sizedFilePaths, static fn(array $first, array $second): int => $second[1] <=> $first[1]);
+        usort($sizedFilePaths, static fn(array $first, array $second): int => $second[2] <=> $first[2]);
         $buckets = array_fill(0, $numberOfBuckets, []);
         $bucketSizes = array_fill(0, $numberOfBuckets, 0);
-        foreach ($sizedFilePaths as [$filePath, $fileSize]) {
+        foreach ($sizedFilePaths as [$position, $filePath, $fileSize]) {
             $emptiestBucketKey = 0;
             foreach ($bucketSizes as $currentBucketKey => $bucketSize) {
                 if ($bucketSize < $bucketSizes[$emptiestBucketKey]) {
                     $emptiestBucketKey = $currentBucketKey;
                 }
             }
-            $buckets[$emptiestBucketKey][] = $filePath;
+            $buckets[$emptiestBucketKey][$position] = $filePath;
             $bucketSizes[$emptiestBucketKey] += $fileSize;
+        }
+        foreach ($buckets as $bucketKey => $bucketFilePaths) {
+            ksort($bucketFilePaths);
+            $buckets[$bucketKey] = array_values($bucketFilePaths);
         }
         return $buckets;
     }

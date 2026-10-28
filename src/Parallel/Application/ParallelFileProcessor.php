@@ -28,8 +28,8 @@ use RectorPrefix202610\Symfony\Component\Console\Command\Command;
 use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
 use Throwable;
 /**
- * Workers keep their caches for the whole run and process their own balanced bucket first.
- * Idle workers take pending chunks from the largest remaining queue.
+ * Workers process their own balanced bucket first, and are replaced by a fresh one bound to the same bucket
+ * after a few chunks to free memory. Idle workers take pending chunks from the largest remaining queue.
  * Each chunk advances progress and re-arms the per-job timeout.
  */
 final class ParallelFileProcessor
@@ -42,6 +42,12 @@ final class ParallelFileProcessor
      * @var int
      */
     private const SYSTEM_ERROR_LIMIT = 50;
+    /**
+     * The number of chunks a worker can process before getting killed.
+     * In contrast the jobSize defines the maximum size of a chunk, a worker process at a time.
+     * @var int
+     */
+    private const MAX_CHUNKS_PER_WORKER = 8;
     private ProcessPool $processPool;
     public function __construct(WorkerCommandLineFactory $workerCommandLineFactory)
     {
@@ -52,7 +58,7 @@ final class ParallelFileProcessor
      */
     public function process(Schedule $schedule, string $mainScript, callable $postFileCallback, InputInterface $input): ProcessResult
     {
-        // reversed, so that array_pop() hands out the biggest files first
+        // reversed, so that array_pop() hands out the jobs in bucket order
         $jobsPerWorker = array_map(\Closure::fromCallable('array_reverse'), $schedule->getJobsPerWorker());
         /** @var array<string, int> $bucketKeyByIdentifier */
         $bucketKeyByIdentifier = [];
@@ -100,14 +106,16 @@ final class ParallelFileProcessor
             sleep(1);
         };
         $timeoutInSeconds = SimpleParameterProvider::provideIntParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS);
-        $processSpawner = function (int $bucketKey) use ($parallelResultCollector, &$jobsPerWorker, &$bucketKeyByIdentifier, $postFileCallback, &$systemErrorsCount, &$reachedSystemErrorsCountLimit, $mainScript, $input, $serverPort, $streamSelectLoop, $timeoutInSeconds, $handleErrorCallable, &$processedFilesCount): void {
+        $fileChunksBudgetPerProcess = [];
+        $processSpawner = function (int $bucketKey) use ($parallelResultCollector, &$jobsPerWorker, &$bucketKeyByIdentifier, $postFileCallback, &$systemErrorsCount, &$reachedSystemErrorsCountLimit, $mainScript, $input, $serverPort, $streamSelectLoop, $timeoutInSeconds, $handleErrorCallable, &$fileChunksBudgetPerProcess, &$processSpawner, &$processedFilesCount): void {
             $processIdentifier = Random::generate();
             $bucketKeyByIdentifier[$processIdentifier] = $bucketKey;
+            $fileChunksBudgetPerProcess[$processIdentifier] = self::MAX_CHUNKS_PER_WORKER;
             $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, ProcessCommand::class, 'worker', $input, $processIdentifier, $serverPort);
             $parallelProcess = new ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
             $parallelProcess->start(
                 // 1. callable on data
-                function (array $json) use ($parallelProcess, $parallelResultCollector, &$jobsPerWorker, &$bucketKeyByIdentifier, $postFileCallback, &$systemErrorsCount, &$reachedSystemErrorsCountLimit, $processIdentifier, &$processedFilesCount): void {
+                function (array $json) use ($parallelProcess, $parallelResultCollector, &$jobsPerWorker, &$bucketKeyByIdentifier, $postFileCallback, &$systemErrorsCount, &$reachedSystemErrorsCountLimit, $processIdentifier, &$fileChunksBudgetPerProcess, &$processSpawner, &$processedFilesCount): void {
                     /** @var array{
                      *      total_changed: int,
                      *      system_errors: mixed[],
@@ -125,6 +133,20 @@ final class ParallelFileProcessor
                         $this->processPool->quitAll();
                         return;
                     }
+                    $hasPendingJobs = \false;
+                    foreach ($jobsPerWorker as $jobs) {
+                        if ($jobs !== []) {
+                            $hasPendingJobs = \true;
+                            break;
+                        }
+                    }
+                    if ($fileChunksBudgetPerProcess[$processIdentifier] <= 0 && $hasPendingJobs) {
+                        // replace the current worker with a fresh one on the same bucket to free memory; spawn the
+                        // replacement first, as quitting the last worker in the pool closes the server it connects to
+                        $processSpawner($bucketKeyByIdentifier[$processIdentifier]);
+                        $this->processPool->quitProcess($processIdentifier);
+                        return;
+                    }
                     $jobsChunk = $this->popJobChunk($processIdentifier, $jobsPerWorker, $bucketKeyByIdentifier);
                     if ($jobsChunk === null) {
                         // bucket done, this worker has nothing left to do
@@ -132,6 +154,7 @@ final class ParallelFileProcessor
                         return;
                     }
                     $parallelProcess->request([ReactCommand::ACTION => Action::MAIN, Content::FILES => $jobsChunk]);
+                    --$fileChunksBudgetPerProcess[$processIdentifier];
                 },
                 // 2. callable on error
                 $handleErrorCallable,
