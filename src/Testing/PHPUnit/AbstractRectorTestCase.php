@@ -215,27 +215,18 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     {
         // a test can call doTestFile() more than once; a second lock from this process would wait for the first
         $this->unlockFixtureDirectory();
-        $lockFilePath = $this->createFixtureDirectoryLockFilePath($directory);
-        $fixtureDirectoryLock = fopen($lockFilePath, 'c');
+        // PHP cannot open a directory on Windows
+        if ($this->isWindows()) {
+            return;
+        }
+        // lock the directory itself: a lock file in sys_get_temp_dir() is not shared by test runners
+        // that give each worker its own TMPDIR, like fast-unit
+        $fixtureDirectoryLock = fopen($directory, 'r');
         if ($fixtureDirectoryLock === \false) {
-            throw new ShouldNotHappenException('Cannot open the lock file ' . $lockFilePath);
+            throw new ShouldNotHappenException('Cannot open the fixture directory ' . $directory);
         }
         flock($fixtureDirectoryLock, \LOCK_EX);
         $this->fixtureDirectoryLock = $fixtureDirectoryLock;
-    }
-    /**
-     * The lock file lives in a directory in the system temp directory, so a project that tests its own rules gets no file in its fixture directories.
-     * The lock file is never deleted: a process waiting on a deleted file would hold a lock no other process sees.
-     */
-    private function createFixtureDirectoryLockFilePath(string $directory): string
-    {
-        $realDirectory = realpath($directory);
-        if ($realDirectory === \false) {
-            $realDirectory = $directory;
-        }
-        $lockDirectory = sys_get_temp_dir() . '/rector_fixture_lock';
-        FileSystem::createDir($lockDirectory);
-        return $lockDirectory . '/' . sha1($realDirectory) . '.lock';
     }
     private function unlockFixtureDirectory(): void
     {
