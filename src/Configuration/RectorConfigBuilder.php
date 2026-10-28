@@ -290,7 +290,7 @@ final class RectorConfigBuilder
      */
     public function withRootFiles(): self
     {
-        $rootPhpFilesFinder = (new Finder())->files()->in(getcwd())->depth(0)->ignoreDotFiles(\false)->ignoreVCSIgnored(\true)->name('*.php')->name('.*.php')->notName('.phpstorm.meta.php');
+        $rootPhpFilesFinder = (new Finder())->files()->in(getcwd())->depth(0)->ignoreDotFiles(\false)->ignoreVCSIgnored(\true)->name('*.php')->name('.*.php')->notName('.phpstorm.meta.php')->sortByName();
         foreach ($rootPhpFilesFinder as $rootPhpFileFinder) {
             $path = $rootPhpFileFinder->getRealPath();
             $this->paths[] = $path;
