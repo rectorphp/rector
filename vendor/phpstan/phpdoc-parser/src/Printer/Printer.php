@@ -70,6 +70,7 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use function array_keys;
 use function array_map;
+use function array_values;
 use function assert;
 use function count;
 use function get_class;
@@ -447,6 +448,9 @@ final class Printer
      */
     private function printArrayFormatPreserving(array $nodes, array $originalNodes, TokenIterator $originalTokens, int &$tokenIndex, string $parentNodeClass, string $subNodeName): ?string
     {
+        // unset() leaves gaps in the keys, the differ reads the lists by position
+        $nodes = array_values($nodes);
+        $originalNodes = array_values($originalNodes);
         $diff = $this->differ->diffWithReplacements($originalNodes, $nodes);
         $mapKey = $parentNodeClass . '->' . $subNodeName;
         $insertStr = $this->listInsertionMap[$mapKey] ?? null;
@@ -502,7 +506,7 @@ final class Printer
                                 $result .= sprintf('%s%s*%s', $originalTokens->getDetectedNewline() ?? "\n", $beforeAsteriskIndent, $afterAsteriskIndent);
                             }
                         }
-                        $result .= $this->printNodeFormatPreserving($delayedAddNode, $originalTokens);
+                        $result = $this->appendNode($result, $this->printNodeFormatPreserving($delayedAddNode, $originalTokens), $afterAsteriskIndent);
                         if ($parenthesesNeeded) {
                             $result .= ')';
                         }
@@ -563,7 +567,7 @@ final class Printer
                 if ($parenthesesNeeded) {
                     $result .= '(';
                 }
-                $result .= $this->printNodeFormatPreserving($arrItem, $originalTokens);
+                $result = $this->appendNode($result, $this->printNodeFormatPreserving($arrItem, $originalTokens), $afterAsteriskIndent);
                 if ($parenthesesNeeded) {
                     $result .= ')';
                 }
@@ -624,12 +628,23 @@ final class Printer
                         $result .= sprintf('%s%s*%s', $originalTokens->getDetectedNewline() ?? "\n", $beforeAsteriskIndent, $afterAsteriskIndent);
                     }
                 }
-                $result .= $this->printNodeFormatPreserving($delayedAddNode, $originalTokens);
+                $result = $this->appendNode($result, $this->printNodeFormatPreserving($delayedAddNode, $originalTokens), $afterAsteriskIndent);
                 $first = \false;
             }
             $result .= $extraRight;
         }
         return $result;
+    }
+    /**
+     * A new empty line in a docblock is " *", without the space after the asterisk
+     */
+    private function appendNode(string $result, string $printedNode, string $afterAsteriskIndent): string
+    {
+        $lineStart = '*' . $afterAsteriskIndent;
+        if ($printedNode !== '' || $afterAsteriskIndent === '' || substr($result, -strlen($lineStart)) !== $lineStart) {
+            return $result . $printedNode;
+        }
+        return (string) substr($result, 0, -strlen($afterAsteriskIndent));
     }
     /**
      * @param list<Comment> $comments

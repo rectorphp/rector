@@ -1104,6 +1104,7 @@ return array(
     'Rector\\Config\\Level\\TypeDeclarationDocblocksLevel' => $baseDir . '/src/Config/Level/TypeDeclarationDocblocksLevel.php',
     'Rector\\Config\\Level\\TypeDeclarationLevel' => $baseDir . '/src/Config/Level/TypeDeclarationLevel.php',
     'Rector\\Config\\RectorConfig' => $baseDir . '/src/Config/RectorConfig.php',
+    'Rector\\Configuration\\ComposerBasedTriggerPackages' => $baseDir . '/src/Configuration/ComposerBasedTriggerPackages.php',
     'Rector\\Configuration\\ConfigInitializer' => $baseDir . '/src/Configuration/ConfigInitializer.php',
     'Rector\\Configuration\\ConfigurationFactory' => $baseDir . '/src/Configuration/ConfigurationFactory.php',
     'Rector\\Configuration\\ConfigurationRuleFilter' => $baseDir . '/src/Configuration/ConfigurationRuleFilter.php',

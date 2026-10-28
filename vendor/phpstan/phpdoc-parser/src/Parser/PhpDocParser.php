@@ -106,7 +106,15 @@ class PhpDocParser
             $tokens->next();
             $tagStartLine = $tokens->currentTokenLine();
             $tagStartIndex = $tokens->currentTokenIndex();
-            return $this->enrichWithAttributes($tokens, new Ast\PhpDoc\PhpDocTagNode($tag, $this->enrichWithAttributes($tokens, $this->parseDoctrineTagValue($tokens, $tag), $tagStartLine, $tagStartIndex)), $startLine, $startIndex);
+            try {
+                $tokens->pushSavePoint();
+                $tagValue = $this->parseDoctrineTagValue($tokens, $tag);
+                $tokens->dropSavePoint();
+            } catch (\PHPStan\PhpDocParser\Parser\ParserException $e) {
+                $tokens->rollback();
+                $tagValue = new Ast\PhpDoc\InvalidTagValueNode($this->parseOptionalDescription($tokens, \false), $e);
+            }
+            return $this->enrichWithAttributes($tokens, new Ast\PhpDoc\PhpDocTagNode($tag, $this->enrichWithAttributes($tokens, $tagValue, $tagStartLine, $tagStartIndex)), $startLine, $startIndex);
         }
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();

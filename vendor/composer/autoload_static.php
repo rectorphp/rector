@@ -1330,6 +1330,7 @@ class ComposerStaticInit1dc4e6f733837c9136580c3c1fd0758d
         'Rector\\Config\\Level\\TypeDeclarationDocblocksLevel' => __DIR__ . '/../..' . '/src/Config/Level/TypeDeclarationDocblocksLevel.php',
         'Rector\\Config\\Level\\TypeDeclarationLevel' => __DIR__ . '/../..' . '/src/Config/Level/TypeDeclarationLevel.php',
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/src/Config/RectorConfig.php',
+        'Rector\\Configuration\\ComposerBasedTriggerPackages' => __DIR__ . '/../..' . '/src/Configuration/ComposerBasedTriggerPackages.php',
         'Rector\\Configuration\\ConfigInitializer' => __DIR__ . '/../..' . '/src/Configuration/ConfigInitializer.php',
         'Rector\\Configuration\\ConfigurationFactory' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationFactory.php',
         'Rector\\Configuration\\ConfigurationRuleFilter' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationRuleFilter.php',
