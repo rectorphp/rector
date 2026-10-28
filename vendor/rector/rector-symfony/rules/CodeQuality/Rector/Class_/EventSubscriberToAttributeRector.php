@@ -174,10 +174,10 @@ CODE_SAMPLE
             }
             $methodName = $listenerArray->items[0] ?? null;
             $priority = $listenerArray->items[1] ?? null;
-            if (!$methodName instanceof ArrayItem || !$methodName->value instanceof String_ || $methodName->key !== null) {
+            if (!$methodName instanceof ArrayItem || !$methodName->value instanceof String_ || $methodName->key instanceof Expr) {
                 return null;
             }
-            if ($priority instanceof ArrayItem && ($priority->key !== null || $priority->value instanceof String_)) {
+            if ($priority instanceof ArrayItem && ($priority->key instanceof Expr || $priority->value instanceof String_)) {
                 return null;
             }
             $methodsWithPriorities[] = [$methodName->value->value, ($nullsafeVariable1 = $priority) ? $nullsafeVariable1->value : null];
