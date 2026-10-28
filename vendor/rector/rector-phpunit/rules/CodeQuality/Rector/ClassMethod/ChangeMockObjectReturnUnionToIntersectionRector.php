@@ -7,12 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -75,8 +75,8 @@ final class ChangeMockObjectReturnUnionToIntersectionRector extends AbstractRect
         if (!$this->hasMockObjectOrStubType($returnTypeNode)) {
             return null;
         }
-        $bracketsAwareIntersectionTypeNode = new BracketsAwareIntersectionTypeNode($returnTypeNode->types);
-        $this->phpDocTypeChanger->changeReturnTypeNode($node, $phpDocInfo, $bracketsAwareIntersectionTypeNode);
+        $intersectionTypeNode = new IntersectionTypeNode($returnTypeNode->types);
+        $this->phpDocTypeChanger->changeReturnTypeNode($node, $phpDocInfo, $intersectionTypeNode);
         return $node;
     }
     public function getRuleDefinition(): RuleDefinition

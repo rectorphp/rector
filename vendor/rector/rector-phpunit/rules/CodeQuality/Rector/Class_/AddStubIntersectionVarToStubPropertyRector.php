@@ -15,7 +15,6 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\MockObjectPropertyDetector;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -80,7 +79,7 @@ final class AddStubIntersectionVarToStubPropertyRector extends AbstractRector im
                 continue;
             }
             $intersectionTypeNode = $this->resolveStubIntersection($property, $propertyNamesToCreateStubCalls, $varTagValueNode);
-            if (!$intersectionTypeNode instanceof BracketsAwareIntersectionTypeNode) {
+            if (!$intersectionTypeNode instanceof IntersectionTypeNode) {
                 continue;
             }
             $this->phpDocTypeChanger->changeVarTypeNode($property, $phpDocInfo, $intersectionTypeNode);
@@ -153,7 +152,7 @@ CODE_SAMPLE
     /**
      * @param array<string, MethodCall|StaticCall> $propertyNamesToCreateStubCalls
      */
-    private function resolveStubIntersection(Property $property, array $propertyNamesToCreateStubCalls, ?VarTagValueNode $varTagValueNode): ?BracketsAwareIntersectionTypeNode
+    private function resolveStubIntersection(Property $property, array $propertyNamesToCreateStubCalls, ?VarTagValueNode $varTagValueNode): ?IntersectionTypeNode
     {
         $propertyName = $property->props[0]->name->toString();
         // 1. prefer the stubbed class from a setUp() createStub() call
@@ -161,7 +160,7 @@ CODE_SAMPLE
         if ($createStubCall !== null) {
             $stubbedClass = $this->resolveStubbedClass($createStubCall);
             if ($stubbedClass !== null) {
-                return new BracketsAwareIntersectionTypeNode([new IdentifierTypeNode('\\' . PHPUnitClassName::STUB), new IdentifierTypeNode('\\' . $stubbedClass)]);
+                return new IntersectionTypeNode([new IdentifierTypeNode('\\' . PHPUnitClassName::STUB), new IdentifierTypeNode('\\' . $stubbedClass)]);
             }
         }
         // 2. fall back to a bare single-class @var docblock
@@ -170,7 +169,7 @@ CODE_SAMPLE
             if (in_array($this->resolveShortName($varTagValueNode->type->name), ['Stub', 'MockObject'], \true)) {
                 return null;
             }
-            return new BracketsAwareIntersectionTypeNode([new IdentifierTypeNode('\\' . PHPUnitClassName::STUB), $varTagValueNode->type]);
+            return new IntersectionTypeNode([new IdentifierTypeNode('\\' . PHPUnitClassName::STUB), $varTagValueNode->type]);
         }
         return null;
     }
