@@ -36,11 +36,6 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private PrivatesAccessor $privatesAccessor;
     /**
-     * @see https://regex101.com/r/JDzr0c/1
-     * @var string
-     */
-    private const NEW_LINE_REGEX = "#(?<new_line>\r\n|\n)#";
-    /**
      * @see https://regex101.com/r/JOKSmr/5
      * @var string
      */
@@ -88,13 +83,9 @@ final class BetterPhpDocParser extends PhpDocParser
     }
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
-        $isPrecededByHorizontalWhitespace = $tokenIterator->isPrecededByHorizontalWhitespace();
         $startPosition = $tokenIterator->currentTokenIndex();
         $phpDocTagValueNode = parent::parseTagValue($tokenIterator, $tag);
         $endPosition = $tokenIterator->currentTokenIndex();
-        if ($isPrecededByHorizontalWhitespace && property_exists($phpDocTagValueNode, 'description')) {
-            $phpDocTagValueNode->description = Strings::replace((string) $phpDocTagValueNode->description, self::NEW_LINE_REGEX, static fn(array $match): string => $match['new_line'] . ' * ');
-        }
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
         $phpDocTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
         if ($phpDocTagValueNode instanceof GenericTagValueNode) {

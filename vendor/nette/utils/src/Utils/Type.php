@@ -14,8 +14,10 @@ use function count, is_resource, is_string;
  */
 final class Type
 {
-    /** @var list<string|self>
-     * @readonly */
+    /**
+     * @var list<string|self>
+     * @readonly
+     */
     private array $types;
     /**
      * @readonly
@@ -36,8 +38,10 @@ final class Type
         $type = $reflection instanceof \ReflectionFunctionAbstract ? $reflection->getReturnType() ?? ($reflection instanceof \ReflectionMethod ? $reflection->getTentativeReturnType() : null) : $reflection->getType();
         return $type ? self::fromReflectionType($type, $reflection, \true) : null;
     }
-    /** @return ($asObject is true ? self : self|string)
-     * @param \ReflectionFunctionAbstract|\ReflectionParameter|\ReflectionProperty $of */
+    /**
+     * @return ($asObject is true ? self : self|string)
+     * @param \ReflectionFunctionAbstract|\ReflectionParameter|\ReflectionProperty $of
+     */
     private static function fromReflectionType(\ReflectionType $type, $of, bool $asObject)
     {
         if ($type instanceof \ReflectionNamedType) {

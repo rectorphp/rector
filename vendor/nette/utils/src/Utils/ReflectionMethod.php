@@ -14,8 +14,10 @@ use function is_string;
  */
 final class ReflectionMethod extends \ReflectionMethod
 {
-    /** @var \ReflectionClass<object>
-     * @readonly */
+    /**
+     * @var \ReflectionClass<object>
+     * @readonly
+     */
     private \ReflectionClass $originalClass;
     /** @param  class-string|object  $objectOrMethod */
     public function __construct($objectOrMethod, ?string $method = null)

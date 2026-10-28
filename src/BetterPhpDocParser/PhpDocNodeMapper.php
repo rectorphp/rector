@@ -5,9 +5,6 @@ namespace Rector\BetterPhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
-use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
 use RectorPrefix202610\Webmozart\Assert\Assert;
@@ -19,31 +16,18 @@ final class PhpDocNodeMapper
     /**
      * @readonly
      */
-    private CurrentTokenIteratorProvider $currentTokenIteratorProvider;
-    /**
-     * @var BasePhpDocNodeVisitorInterface[]
-     * @readonly
-     */
-    private array $phpDocNodeVisitors;
-    /**
-     * @readonly
-     */
     private NodeTraverser $phpDocNodeTraverser;
-    /**
-     * @param BasePhpDocNodeVisitorInterface[] $phpDocNodeVisitors
-     */
-    public function __construct(CurrentTokenIteratorProvider $currentTokenIteratorProvider, ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor, CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor, array $phpDocNodeVisitors)
+    public function __construct(CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor, ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor)
     {
-        $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
-        $this->phpDocNodeVisitors = $phpDocNodeVisitors;
-        Assert::notEmpty($phpDocNodeVisitors);
-        $this->phpDocNodeTraverser = new NodeTraverser(array_merge([$parentConnectingPhpDocNodeVisitor, $cloningPhpDocNodeVisitor], array_values($this->phpDocNodeVisitors)));
+        $this->phpDocNodeTraverser = new NodeTraverser([$cloningPhpDocNodeVisitor, $parentConnectingPhpDocNodeVisitor]);
     }
-    public function transform(PhpDocNode $phpDocNode, TokenIterator $tokenIterator): PhpDocNode
+    /**
+     * Returns a clone to change; the format-preserving printer compares it with the original node
+     */
+    public function transform(PhpDocNode $phpDocNode): PhpDocNode
     {
-        $this->currentTokenIteratorProvider->setTokenIterator($tokenIterator);
-        [$phpDocNode] = $this->phpDocNodeTraverser->traverse([$phpDocNode]);
-        Assert::isInstanceOf($phpDocNode, PhpDocNode::class);
-        return $phpDocNode;
+        [$clonedPhpDocNode] = $this->phpDocNodeTraverser->traverse([$phpDocNode]);
+        Assert::isInstanceOf($clonedPhpDocNode, PhpDocNode::class);
+        return $clonedPhpDocNode;
     }
 }

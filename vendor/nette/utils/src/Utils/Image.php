@@ -159,8 +159,10 @@ class Image
         }
         return self::invokeSafe('imagecreatefromstring', $s, 'Unable to open image from string.', __METHOD__, $warnings);
     }
-    /** @param  callable-string  $func
-     * @return static */
+    /**
+     * @param callable-string $func
+     * @return static
+     */
     private static function invokeSafe(string $func, string $arg, string $message, string $callee, ?string &$warnings = self::Sentinel)
     {
         $errors = [];
@@ -661,8 +663,10 @@ class Image
         }
         $this->setImageResource($arg);
     }
-    /** @param-out int|float $num
-     * @param int|string $num */
+    /**
+     * @param-out int|float $num
+     * @param int|string $num
+     */
     private static function isPercent(&$num): bool
     {
         if (is_string($num) && substr_compare($num, '%', -strlen('%')) === 0) {

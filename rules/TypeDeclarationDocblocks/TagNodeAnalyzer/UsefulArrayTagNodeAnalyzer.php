@@ -6,9 +6,9 @@ namespace Rector\TypeDeclarationDocblocks\TagNodeAnalyzer;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 final class UsefulArrayTagNodeAnalyzer
 {
     /**
@@ -27,6 +27,6 @@ final class UsefulArrayTagNodeAnalyzer
     }
     private function isMixedArray(TypeNode $typeNode): bool
     {
-        return $typeNode instanceof SpacingAwareArrayTypeNode && $typeNode->type instanceof IdentifierTypeNode && $typeNode->type->name === 'mixed';
+        return $typeNode instanceof ArrayTypeNode && $typeNode->type instanceof IdentifierTypeNode && $typeNode->type->name === 'mixed';
     }
 }

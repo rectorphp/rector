@@ -10,8 +10,8 @@ use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\DeadCode\PhpDoc\Guard\StandaloneTypeRemovalGuard;
 use Rector\DeadCode\PhpDoc\Guard\TemplateTypeRemovalGuard;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
@@ -98,16 +98,16 @@ final class DeadParamTagValueNodeAnalyzer
         if ($this->phpDocTypeChanger->isAllowed($paramTagValueNode->type)) {
             return \false;
         }
-        if (!$paramTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
+        if (!$paramTagValueNode->type instanceof UnionTypeNode) {
             return $this->standaloneTypeRemovalGuard->isLegal($paramTagValueNode->type, $param->type);
         }
-        return $this->isAllowedBracketAwareUnion($paramTagValueNode->type);
+        return $this->isAllowedUnion($paramTagValueNode->type);
     }
-    private function isAllowedBracketAwareUnion(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): bool
+    private function isAllowedUnion(UnionTypeNode $unionTypeNode): bool
     {
-        if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($bracketsAwareUnionTypeNode)) {
+        if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($unionTypeNode)) {
             return \false;
         }
-        return !$this->genericTypeNodeAnalyzer->hasGenericType($bracketsAwareUnionTypeNode);
+        return !$this->genericTypeNodeAnalyzer->hasGenericType($unionTypeNode);
     }
 }

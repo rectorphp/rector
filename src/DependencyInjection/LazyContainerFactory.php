@@ -17,12 +17,6 @@ use Rector\Application\FileProcessor;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\Application\RectorRegistry;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
-use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
-use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ArrayTypePhpDocNodeVisitor;
-use Rector\BetterPhpDocParser\PhpDocNodeVisitor\CallableTypePhpDocNodeVisitor;
-use Rector\BetterPhpDocParser\PhpDocNodeVisitor\IntersectionTypeNodePhpDocNodeVisitor;
-use Rector\BetterPhpDocParser\PhpDocNodeVisitor\TemplatePhpDocNodeVisitor;
-use Rector\BetterPhpDocParser\PhpDocNodeVisitor\UnionTypeNodePhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser;
@@ -72,10 +66,6 @@ use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202610\Webmozart\Assert\Assert;
 final class LazyContainerFactory
 {
-    /**
-     * @var array<class-string<BasePhpDocNodeVisitorInterface>>
-     */
-    private const BASE_PHP_DOC_NODE_VISITORS = [ArrayTypePhpDocNodeVisitor::class, CallableTypePhpDocNodeVisitor::class, IntersectionTypeNodePhpDocNodeVisitor::class, TemplatePhpDocNodeVisitor::class, UnionTypeNodePhpDocNodeVisitor::class];
     /**
      * @var array<class-string<DecoratingNodeVisitorInterface>>
      */
@@ -169,7 +159,6 @@ final class LazyContainerFactory
             $rector->autowire($rectorConfig->get(NodeNameResolver::class), $rectorConfig->get(NodeTypeResolver::class), $rectorConfig->get(SimpleCallableNodeTraverser::class), $rectorConfig->get(NodeFactory::class), $rectorConfig->get(NodeComparator::class), $rectorConfig->get(CurrentFileProvider::class), $rectorConfig->get(CommentsMerger::class), $rectorConfig->get(ReflectionProvider::class));
         });
         $rectorConfig->autodiscover(__DIR__ . '/../StaticTypeMapper/PhpParser');
-        $this->registerTagged($rectorConfig, self::BASE_PHP_DOC_NODE_VISITORS, BasePhpDocNodeVisitorInterface::class);
     }
     private function registerTaggedServices(RectorConfig $rectorConfig): void
     {

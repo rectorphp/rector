@@ -51,6 +51,10 @@ final class PhpDocInfo
     /**
      * @readonly
      */
+    private PhpDocNode $originalPhpDocNode;
+    /**
+     * @readonly
+     */
     private TokenIterator $tokenIterator;
     /**
      * @readonly
@@ -82,20 +86,16 @@ final class PhpDocInfo
      */
     private const TAGS_TYPES_TO_NAMES = [ReturnTagValueNode::class => '@return', ParamTagValueNode::class => '@param', VarTagValueNode::class => '@var', MethodTagValueNode::class => '@method', PropertyTagValueNode::class => '@property', ExtendsTagValueNode::class => '@extends', ImplementsTagValueNode::class => '@implements'];
     private bool $isSingleLine = \false;
-    /**
-     * @readonly
-     */
-    private PhpDocNode $originalPhpDocNode;
-    public function __construct(PhpDocNode $phpDocNode, TokenIterator $tokenIterator, StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, AnnotationNaming $annotationNaming, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder, NameScopeFactory $nameScopeFactory)
+    public function __construct(PhpDocNode $phpDocNode, PhpDocNode $originalPhpDocNode, TokenIterator $tokenIterator, StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, AnnotationNaming $annotationNaming, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder, NameScopeFactory $nameScopeFactory)
     {
         $this->phpDocNode = $phpDocNode;
+        $this->originalPhpDocNode = $originalPhpDocNode;
         $this->tokenIterator = $tokenIterator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
         $this->annotationNaming = $annotationNaming;
         $this->phpDocNodeByTypeFinder = $phpDocNodeByTypeFinder;
         $this->nameScopeFactory = $nameScopeFactory;
-        $this->originalPhpDocNode = clone $phpDocNode;
         if (!in_array(Lexer::TOKEN_PHPDOC_EOL, array_column($tokenIterator->getTokens(), Lexer::TYPE_OFFSET), \true)) {
             $this->isSingleLine = \true;
         }
@@ -117,16 +117,9 @@ final class PhpDocInfo
     {
         return $this->originalPhpDocNode;
     }
-    /**
-     * @return list<array{string, int, int}>
-     */
-    public function getTokens(): array
+    public function getTokenIterator(): TokenIterator
     {
-        return $this->tokenIterator->getTokens();
-    }
-    public function getTokenCount(): int
-    {
-        return $this->tokenIterator->getTokenCount();
+        return $this->tokenIterator;
     }
     public function getVarTagValueNode(string $tagName = '@var'): ?VarTagValueNode
     {

@@ -134,7 +134,7 @@ CODE_SAMPLE
                 if (($tagValueNode instanceof ParamTagValueNode || $tagValueNode instanceof VarTagValueNode || $tagValueNode instanceof ReturnTagValueNode) && $tagValueNode->description === '') {
                     $tagValueNode->description = $nativeDescriptions[$this->resolveTagKey($tagValueNode)] ?? '';
                 }
-                $phpDocNode->children[$key] = new PhpDocTagNode($nativeTagName, $phpDocChildNode->value);
+                $phpDocChildNode->name = $nativeTagName;
                 $hasChanged = \true;
             }
         }

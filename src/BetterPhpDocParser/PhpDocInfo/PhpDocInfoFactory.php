@@ -12,8 +12,6 @@ use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Rector\BetterPhpDocParser\PhpDocNodeMapper;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -92,7 +90,6 @@ final class PhpDocInfoFactory
             $tokens = $this->lexer->tokenize($docComment->getText());
             $tokenIterator = new TokenIterator($tokens);
             $phpDocNode = $this->betterPhpDocParser->parseWithNode($tokenIterator, $node);
-            $this->setPositionOfLastToken($phpDocNode);
         }
         $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $tokenIterator, $node);
         $this->phpDocInfosByObjectId[$objectId] = $phpDocInfo;
@@ -106,25 +103,9 @@ final class PhpDocInfoFactory
         $phpDocInfo->makeMultiLined();
         return $phpDocInfo;
     }
-    /**
-     * Needed for printing
-     */
-    private function setPositionOfLastToken(PhpDocNode $phpDocNode): void
-    {
-        if ($phpDocNode->children === []) {
-            return;
-        }
-        $phpDocChildNodes = $phpDocNode->children;
-        $phpDocChildNode = array_pop($phpDocChildNodes);
-        $startAndEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-        if ($startAndEnd instanceof StartAndEnd) {
-            $phpDocNode->setAttribute(PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION, $startAndEnd->getEnd());
-        }
-    }
     private function createFromPhpDocNode(PhpDocNode $phpDocNode, TokenIterator $tokenIterator, Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
-        $phpDocNode = $this->phpDocNodeMapper->transform($phpDocNode, $tokenIterator);
-        $phpDocInfo = new \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo($phpDocNode, $tokenIterator, $this->staticTypeMapper, $node, $this->annotationNaming, $this->phpDocNodeByTypeFinder, $this->nameScopeFactory);
+        $phpDocInfo = new \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo($this->phpDocNodeMapper->transform($phpDocNode), $phpDocNode, $tokenIterator, $this->staticTypeMapper, $node, $this->annotationNaming, $this->phpDocNodeByTypeFinder, $this->nameScopeFactory);
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
         return $phpDocInfo;
     }

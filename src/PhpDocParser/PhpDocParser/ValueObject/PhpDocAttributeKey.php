@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpDocParser\PhpDocParser\ValueObject;
 
+use PHPStan\PhpDocParser\Ast\Attribute;
 final class PhpDocAttributeKey
 {
     /**
@@ -12,5 +13,5 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const ORIG_NODE = 'orig_node';
+    public const ORIG_NODE = Attribute::ORIGINAL_NODE;
 }

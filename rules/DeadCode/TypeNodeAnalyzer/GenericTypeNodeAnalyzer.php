@@ -5,12 +5,12 @@ namespace Rector\DeadCode\TypeNodeAnalyzer;
 
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 final class GenericTypeNodeAnalyzer
 {
-    public function hasGenericType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): bool
+    public function hasGenericType(UnionTypeNode $unionTypeNode): bool
     {
-        $types = $bracketsAwareUnionTypeNode->types;
+        $types = $unionTypeNode->types;
         $found = \false;
         foreach ($types as $typeNode) {
             if ($typeNode instanceof GenericTypeNode) {
