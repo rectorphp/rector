@@ -8,10 +8,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
-use PHPStan\Type\Accessory\AccessoryArrayListType;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -119,23 +115,9 @@ CODE_SAMPLE
     }
     private function resolveArrayItemType(Type $mainType): ?Type
     {
-        if ($mainType instanceof ConstantArrayType || $mainType instanceof ArrayType) {
-            return $mainType->getItemType();
+        if (!$mainType->isArray()->yes()) {
+            return null;
         }
-        if ($mainType instanceof IntersectionType) {
-            foreach ($mainType->getTypes() as $subType) {
-                if ($subType instanceof AccessoryArrayListType) {
-                    continue;
-                }
-                if (!$subType->isArray()->yes()) {
-                    continue;
-                }
-                if (!$subType instanceof ArrayType) {
-                    continue;
-                }
-                return $subType->getItemType();
-            }
-        }
-        return null;
+        return $mainType->getIterableValueType();
     }
 }
