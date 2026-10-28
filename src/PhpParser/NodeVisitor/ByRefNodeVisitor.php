@@ -12,7 +12,6 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
 /**
  * Marks by-ref returns IS_INSIDE_BYREF_FUNCTION_LIKE and by-ref variables
@@ -21,12 +20,20 @@ use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
 final class ByRefNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**
-     * @readonly
+     * By-ref variable names per entered function-like, tracked during the main traversal,
+     * instead of traversing the function-like stmts again on every enter
+     *
+     * @var array<string[]>
      */
-    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    private array $byRefVariableNamesStack = [];
+    /**
+     * @param Node[] $nodes
+     * @return null
+     */
+    public function beforeTraverse(array $nodes)
     {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->byRefVariableNamesStack = [];
+        return null;
     }
     public function enterNode(Node $node): ?Node
     {
@@ -34,15 +41,38 @@ final class ByRefNodeVisitor extends NodeVisitorAbstract implements DecoratingNo
             $node->expr->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
             return null;
         }
+        if ($node instanceof Variable) {
+            $this->decorateByRefVariable($node);
+            return null;
+        }
         if (!$node instanceof FunctionLike) {
             return null;
         }
         $stmts = $node->getStmts();
         if ($stmts === null) {
+            // keep the stack in sync with leaveNode()
+            $this->byRefVariableNamesStack[] = [];
             return null;
         }
         $this->decorateByRefReturn($node, $stmts);
-        $this->decorateByRefVariables($node, $stmts);
+        // closure by-ref use is a by-ref variable in the outer function-likes as well
+        $closureUseVariableNames = $this->resolveClosureUseIsByRefAttribute($node);
+        if ($closureUseVariableNames !== []) {
+            foreach ($this->byRefVariableNamesStack as $key => $byRefVariableNames) {
+                $this->byRefVariableNamesStack[$key] = array_merge($byRefVariableNames, $closureUseVariableNames);
+            }
+        }
+        $this->byRefVariableNamesStack[] = array_merge($closureUseVariableNames, $this->resolveParamIsByRefAttribute($node));
+        return null;
+    }
+    /**
+     * @return null
+     */
+    public function leaveNode(Node $node)
+    {
+        if ($node instanceof FunctionLike) {
+            array_pop($this->byRefVariableNamesStack);
+        }
         return null;
     }
     /**
@@ -55,34 +85,24 @@ final class ByRefNodeVisitor extends NodeVisitorAbstract implements DecoratingNo
         }
         SimpleNodeTraverser::decorateWithAttributeValue($stmts, AttributeKey::IS_INSIDE_BYREF_FUNCTION_LIKE, \true);
     }
-    /**
-     * @param Node\Stmt[] $stmts
-     */
-    private function decorateByRefVariables(FunctionLike $functionLike, array $stmts): void
+    private function decorateByRefVariable(Variable $variable): void
     {
-        $byRefVariableNames = $this->resolveClosureUseIsByRefAttribute($functionLike, []);
-        $byRefVariableNames = $this->resolveParamIsByRefAttribute($functionLike, $byRefVariableNames);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $subNode) use (&$byRefVariableNames): ?\PhpParser\Node\Expr\Variable {
-            if ($subNode instanceof Closure) {
-                $byRefVariableNames = $this->resolveClosureUseIsByRefAttribute($subNode, $byRefVariableNames);
-                return null;
+        if (!is_string($variable->name)) {
+            return;
+        }
+        foreach ($this->byRefVariableNamesStack as $byRefVariableNames) {
+            if (in_array($variable->name, $byRefVariableNames, \true)) {
+                $variable->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
+                return;
             }
-            if (!$subNode instanceof Variable) {
-                return null;
-            }
-            if (!in_array($subNode->name, $byRefVariableNames, \true)) {
-                return null;
-            }
-            $subNode->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
-            return $subNode;
-        });
+        }
     }
     /**
-     * @param string[] $byRefVariableNames
      * @return string[]
      */
-    private function resolveParamIsByRefAttribute(FunctionLike $functionLike, array $byRefVariableNames): array
+    private function resolveParamIsByRefAttribute(FunctionLike $functionLike): array
     {
+        $byRefVariableNames = [];
         foreach ($functionLike->getParams() as $param) {
             if ($param->byRef && $param->var instanceof Variable && !$param->var->name instanceof Expr) {
                 $param->var->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
@@ -94,14 +114,14 @@ final class ByRefNodeVisitor extends NodeVisitorAbstract implements DecoratingNo
         return $byRefVariableNames;
     }
     /**
-     * @param string[] $byRefVariableNames
      * @return string[]
      */
-    private function resolveClosureUseIsByRefAttribute(FunctionLike $functionLike, array $byRefVariableNames): array
+    private function resolveClosureUseIsByRefAttribute(FunctionLike $functionLike): array
     {
         if (!$functionLike instanceof Closure) {
-            return $byRefVariableNames;
+            return [];
         }
+        $byRefVariableNames = [];
         foreach ($functionLike->uses as $closureUse) {
             if ($closureUse->byRef && !$closureUse->var->name instanceof Expr) {
                 $closureUse->var->setAttribute(AttributeKey::IS_BYREF_VAR, \true);

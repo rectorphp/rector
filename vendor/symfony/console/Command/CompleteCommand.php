@@ -10,6 +10,7 @@
  */
 namespace RectorPrefix202610\Symfony\Component\Console\Command;
 
+use RectorPrefix202610\Symfony\Component\Console\Application;
 use RectorPrefix202610\Symfony\Component\Console\Attribute\AsCommand;
 use RectorPrefix202610\Symfony\Component\Console\Completion\CompletionInput;
 use RectorPrefix202610\Symfony\Component\Console\Completion\CompletionSuggestions;
@@ -19,6 +20,7 @@ use RectorPrefix202610\Symfony\Component\Console\Completion\Output\FishCompletio
 use RectorPrefix202610\Symfony\Component\Console\Completion\Output\ZshCompletionOutput;
 use RectorPrefix202610\Symfony\Component\Console\Exception\CommandNotFoundException;
 use RectorPrefix202610\Symfony\Component\Console\Exception\ExceptionInterface;
+use RectorPrefix202610\Symfony\Component\Console\Input\InputDefinition;
 use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202610\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202610\Symfony\Component\Console\Output\OutputInterface;
@@ -39,6 +41,7 @@ final class CompleteCommand extends Command
      */
     protected static $defaultDescription = 'Internal command to provide shell completion suggestions';
     private array $completionOutputs;
+    private ?InputDefinition $fullDefinition = null;
     private bool $isDebug = \false;
     /**
      * @param array<string, class-string<CompletionOutputInterface>> $completionOutputs A list of additional completion outputs, with shell name as key and FQCN as value
@@ -48,6 +51,47 @@ final class CompleteCommand extends Command
         // must be set before the parent constructor, as the property value is used in configure()
         $this->completionOutputs = $completionOutputs + ['bash' => BashCompletionOutput::class, 'fish' => FishCompletionOutput::class, 'zsh' => ZshCompletionOutput::class];
         parent::__construct();
+    }
+    public function setApplication(?Application $application = null): void
+    {
+        $this->fullDefinition = null;
+        parent::setApplication(...\func_get_args());
+    }
+    /**
+     * @param mixed[]|\Symfony\Component\Console\Input\InputDefinition $definition
+     * @return static
+     */
+    public function setDefinition($definition)
+    {
+        $this->fullDefinition = null;
+        return parent::setDefinition($definition);
+    }
+    /**
+     * @internal
+     */
+    public function mergeApplicationDefinition(bool $mergeArgs = \true): void
+    {
+        if (!$application = $this->getApplication()) {
+            return;
+        }
+        $definition = $this->getNativeDefinition();
+        $this->fullDefinition = new InputDefinition();
+        $this->fullDefinition->setOptions($definition->getOptions());
+        foreach ($application->getDefinition()->getOptions() as $option) {
+            // the completion scripts rely on the options of this command, they win over the conflicting application ones
+            if ($definition->hasOption($option->getName()) || array_filter(explode('|', $option->getShortcut() ?? ''), \Closure::fromCallable([$definition, 'hasShortcut']))) {
+                continue;
+            }
+            $this->fullDefinition->addOption($option);
+        }
+        if ($mergeArgs) {
+            $this->fullDefinition->setArguments($application->getDefinition()->getArguments());
+        }
+        $this->fullDefinition->addArguments($definition->getArguments());
+    }
+    public function getDefinition(): InputDefinition
+    {
+        return $this->fullDefinition ?? parent::getDefinition();
     }
     protected function configure(): void
     {

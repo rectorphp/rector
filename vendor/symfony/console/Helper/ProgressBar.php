@@ -416,12 +416,6 @@ final class ProgressBar
                     if ('' === $lastLineWithoutDecoration) {
                         --$lineCount;
                     }
-                    foreach ($messageLines as $messageLine) {
-                        $messageLineLength = Helper::width(Helper::removeDecoration($this->output->getFormatter(), $messageLine));
-                        if ($messageLineLength > $this->terminal->getWidth()) {
-                            $lineCount += floor($messageLineLength / $this->terminal->getWidth());
-                        }
-                    }
                     $this->output->clear($lineCount);
                 } else {
                     $lineCount = substr_count($this->previousMessage, "\n");

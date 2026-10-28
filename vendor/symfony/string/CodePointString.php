@@ -49,6 +49,9 @@ class CodePointString extends AbstractUnicodeString
         if ('' === $this->string) {
             return [];
         }
+        if (\strlen($this->string) <= $length) {
+            return [clone $this];
+        }
         $rx = '/(';
         while (65535 < $length) {
             $rx .= '.{65535}';
@@ -182,7 +185,7 @@ class CodePointString extends AbstractUnicodeString
     public function slice(int $start = 0, ?int $length = null)
     {
         $str = clone $this;
-        $str->string = mb_substr($this->string, $start, $length, 'UTF-8');
+        $str->string = mb_substr($this->string, max(-\PHP_INT_MAX, $start), max(-\PHP_INT_MAX, $length ?? \PHP_INT_MAX), 'UTF-8');
         return $str;
     }
     /**
@@ -194,8 +197,8 @@ class CodePointString extends AbstractUnicodeString
             throw new InvalidArgumentException('Invalid UTF-8 string.');
         }
         $str = clone $this;
-        $start = $start ? \strlen(mb_substr($this->string, 0, $start, 'UTF-8')) : 0;
-        $length = $length ? \strlen(mb_substr((string) substr($this->string, $start), 0, $length, 'UTF-8')) : $length;
+        $start = $start ? \strlen(mb_substr($this->string, 0, max(-\PHP_INT_MAX, $start), 'UTF-8')) : 0;
+        $length = $length ? \strlen(mb_substr((string) substr($this->string, $start), 0, max(-\PHP_INT_MAX, $length), 'UTF-8')) : $length;
         $str->string = substr_replace($this->string, $replacement, $start, $length ?? \PHP_INT_MAX);
         return $str;
     }

@@ -21,9 +21,12 @@ use function RectorPrefix202610\Symfony\Component\String\b;
  */
 class OutputFormatter implements WrappableOutputFormatterInterface
 {
+    private const ANSI_PATTERN = '\x1B(?:\[[0-9;:]*m|\]8;[^;]*;[^\x1B]*\x1B\\\\)';
+    private const ANSI_REGEX = '/' . self::ANSI_PATTERN . '/';
     private bool $decorated;
     private array $styles = [];
     private OutputFormatterStyleStack $styleStack;
+    private array $charWidths = [];
     public function __clone()
     {
         $this->styleStack = clone $this->styleStack;
@@ -117,6 +120,7 @@ class OutputFormatter implements WrappableOutputFormatterInterface
         $openTagRegex = '[a-z](?:[^\\\\<>]*+ | \\\\.)*';
         $closeTagRegex = '[a-z][^<>]*+';
         $currentLineLength = 0;
+        $lineBreak = \false;
         preg_match_all("#<(({$openTagRegex}) | /({$closeTagRegex})?)>#ix", $message, $matches, \PREG_OFFSET_CAPTURE);
         foreach ($matches[0] as $i => $match) {
             $pos = $match[1];
@@ -126,7 +130,7 @@ class OutputFormatter implements WrappableOutputFormatterInterface
             }
             // tags are delimited by "<" and ">", which are ASCII, so a tag offset can never
             // fall inside a multibyte sequence: slicing by bytes is safe here
-            $output .= $this->applyCurrentStyle((string) substr($message, $offset, $pos - $offset), $output, $width, $currentLineLength);
+            $output .= $this->applyCurrentStyle((string) substr($message, $offset, $pos - $offset), $width, $currentLineLength, $lineBreak);
             $offset = $pos + \strlen($text);
             // opening tag?
             if ($open = '/' !== $text[1]) {
@@ -138,15 +142,22 @@ class OutputFormatter implements WrappableOutputFormatterInterface
                 // </>
                 $this->styleStack->pop();
             } elseif (null === $style = $this->createStyleFromString($tag)) {
-                $output .= $this->applyCurrentStyle($text, $output, $width, $currentLineLength);
+                $output .= $this->applyCurrentStyle($text, $width, $currentLineLength, $lineBreak);
             } elseif ($open) {
                 $this->styleStack->push($style);
             } else {
                 $this->styleStack->pop($style);
             }
         }
-        $output .= $this->applyCurrentStyle((string) substr($message, $offset), $output, $width, $currentLineLength);
-        return strtr($output, ["\x00" => '\\', '\<' => '<', '\>' => '>']);
+        $output .= $this->applyCurrentStyle((string) substr($message, $offset), $width, $currentLineLength, $lineBreak);
+        if ($lineBreak) {
+            $output .= "\n";
+        }
+        if ($width && strpos($output, "\r") !== \false) {
+            // keep "\r\n" line breaks together when ANSI codes end the line
+            $output = preg_replace('/\r((?:' . self::ANSI_PATTERN . ')++)(?=\n|$)/', "\$1\r", $output);
+        }
+        return str_replace("\x00", '\\', $output);
     }
     public function getStyleStack(): OutputFormatterStyleStack
     {
@@ -157,8 +168,8 @@ class OutputFormatter implements WrappableOutputFormatterInterface
      */
     private function createStyleFromString(string $string): ?OutputFormatterStyleInterface
     {
-        if (isset($this->styles[$string])) {
-            return $this->styles[$string];
+        if (isset($this->styles[$lowerString = strtolower($string)])) {
+            return $this->styles[$lowerString];
         }
         if (!preg_match_all('/([^=]+)=([^;]+)(;|$)/', $string, $matches, \PREG_SET_ORDER)) {
             return null;
@@ -189,54 +200,225 @@ class OutputFormatter implements WrappableOutputFormatterInterface
     /**
      * Applies current style from stack to text, if must be applied.
      */
-    private function applyCurrentStyle(string $text, string $current, int $width, int &$currentLineLength): string
+    private function applyCurrentStyle(string $text, int $width, int &$currentLineLength, bool &$lineBreak): string
     {
         if ('' === $text) {
             return '';
         }
-        if (!$width) {
+        if (!$width || strpos($text, "\x1b") !== \false && '' === preg_replace(self::ANSI_REGEX, '', $text)) {
+            $text = str_replace(['\<', '\>'], ['<', '>'], $text);
             return $this->isDecorated() ? $this->styleStack->getCurrent()->apply($text) : $text;
         }
-        if (!$currentLineLength && '' !== $current) {
-            $text = ltrim($text);
+        $text = str_replace(['\<', '\>'], ['<', '>'], $text);
+        $prefix = '';
+        $visibleText = strpos($text, "\x1b") !== \false ? preg_replace(self::ANSI_REGEX, '', $text) : $text;
+        if ($currentLineLength >= $width) {
+            // the current line is full: drop the whitespace that follows and break the line before the next character
+            if (strpos($text, "\x1b") !== \false) {
+                $text = preg_replace_callback('/^(?:[\x00\x09\x0B\x0D\x20]|' . self::ANSI_PATTERN . ')++/', static function ($match) {
+                    preg_match_all(self::ANSI_REGEX, $match[0], $ansi);
+                    return implode('', $ansi[0]);
+                }, $text);
+                $visibleText = ltrim($visibleText, " \t\r\x00\v");
+            } else {
+                $text = $visibleText = ltrim($text, " \t\r\x00\v");
+            }
+            // whitespace at the end of the message still breaks the line
+            if ($lineBreak = '' === $visibleText) {
+                return '' === $text || !$this->isDecorated() ? $text : $this->styleStack->getCurrent()->apply($text);
+            }
+            if ("\n" !== $visibleText[0]) {
+                $prefix = "\n";
+            }
+            $currentLineLength = 0;
         }
+        $trailingNewlines = (string) substr($visibleText, \strlen(rtrim($visibleText, "\r\n")));
         if ($currentLineLength) {
             $lines = explode("\n", $text, 2);
-            $prefix = Helper::substr($lines[0], 0, $i = $width - $currentLineLength) . "\n";
-            $text = Helper::substr($lines[0], $i);
+            $eol = "\n";
+            if (isset($lines[1]) && substr_compare($lines[0], "\r", -strlen("\r")) === 0) {
+                $lines[0] = (string) substr($lines[0], 0, -1);
+                $eol = "\r\n";
+            }
+            $i = $width - $currentLineLength;
+            if ($widths = $this->getWidths($lines[0])) {
+                $room = $i;
+                $i = \count($widths);
+                foreach ($widths as $j => $charWidth) {
+                    if (0 > $room -= $charWidth) {
+                        $i = $j;
+                        break;
+                    }
+                }
+            }
+            $prefix = ($i ? $this->substr($lines[0], 0, $i) : '') . "\n";
+            $text = $i ? $this->substr($lines[0], $i) : $lines[0];
             if (isset($lines[1])) {
                 // $prefix may contain the full first line in which the \n is already a part of $prefix.
                 if ('' !== $text) {
-                    $text .= "\n";
+                    $text .= $eol;
+                } else {
+                    $prefix = substr($prefix, 0, -1) . $eol;
                 }
                 $text .= $lines[1];
             }
-        } else {
-            $prefix = '';
         }
-        preg_match('~(\n)$~', $text, $matches);
         $text = $prefix . $this->addLineBreaks($text, $width);
-        $text = rtrim($text, "\n") . ($matches[1] ?? '');
-        if (!$currentLineLength && '' !== $current && substr_compare($current, "\n", -strlen("\n")) !== 0) {
-            $text = "\n" . $text;
+        if (strpos($text, "\x1b") !== \false) {
+            $parts = preg_split('/(' . self::ANSI_PATTERN . ')/', $text, -1, \PREG_SPLIT_DELIM_CAPTURE);
+            $sequences = '';
+            for ($i = \count($parts) - 1; $i >= 0; --$i) {
+                if ($i % 2) {
+                    $sequences = $parts[$i] . $sequences;
+                } elseif ('' !== $parts[$i] = rtrim($parts[$i], "\r\n")) {
+                    break;
+                }
+            }
+            $text = implode('', \array_slice($parts, 0, $i + 1)) . $sequences;
+        } else {
+            $text = rtrim($text, "\r\n");
         }
+        $text .= $trailingNewlines;
         $lines = explode("\n", $text);
         foreach ($lines as $i => $line) {
-            $currentLineLength = 0 === $i ? $currentLineLength + Helper::length($line) : Helper::length($line);
-            if ($width <= $currentLineLength) {
-                $currentLineLength = 0;
-            }
+            $lineLength = array_sum($this->getWidths($line)) ?: Helper::length(strpos($line, "\x1b") !== \false ? preg_replace(self::ANSI_REGEX, '', $line) : $line);
+            $currentLineLength = 0 === $i ? $currentLineLength + $lineLength : $lineLength;
         }
-        if ($this->isDecorated()) {
-            foreach ($lines as $i => $line) {
-                $lines[$i] = $this->styleStack->getCurrent()->apply($line);
-            }
+        foreach ($lines as $i => $line) {
+            $lines[$i] = $this->isDecorated() ? $this->styleStack->getCurrent()->apply($line) : $line;
         }
         return implode("\n", $lines);
     }
     private function addLineBreaks(string $text, int $width): string
     {
         $encoding = mb_detect_encoding($text, null, \true) ?: 'UTF-8';
-        return b($text)->toUnicodeString($encoding)->wordwrap($width, "\n", \true)->toByteString($encoding);
+        $widths = $this->getWidths($text);
+        if (!$widths && strpos($text, "\x1b") === \false && strpos($text, "\r\n") === \false) {
+            return b($text)->toUnicodeString($encoding)->wordwrap($width, "\n", \true)->toByteString($encoding);
+        }
+        $chars = [];
+        $mask = $pending = '';
+        foreach ($this->getTokens($text) as $token) {
+            if (preg_match(self::ANSI_REGEX, $token)) {
+                $pending .= $token;
+                continue;
+            }
+            $chars[] = [$pending, $token];
+            $pending = '';
+            $mask .= "\n" === $token || "\r\n" === $token ? '#' : (' ' === $token ? ' ' : '?');
+        }
+        if (!$chars) {
+            return $pending;
+        }
+        $wrapped = rtrim($mask, '#');
+        $mask = ($widths ? $this->wordwrap($wrapped, $width, $widths) : wordwrap($wrapped, $width, '#', \true)) . substr($mask, \strlen($wrapped));
+        $result = '';
+        $j = 0;
+        foreach (str_split($mask) as $char) {
+            if ('#' === $char) {
+                $eol = "\n";
+                if (isset($chars[$j]) && ("\n" === $chars[$j][1] || "\r\n" === $chars[$j][1] || ' ' === $chars[$j][1])) {
+                    $eol = ' ' === $chars[$j][1] ? "\n" : $chars[$j][1];
+                    $result .= $chars[$j++][0];
+                }
+                $result .= $eol;
+            } else {
+                $result .= implode('', $chars[$j++]);
+            }
+        }
+        return $result . $pending;
+    }
+    private function substr(string $text, int $from, ?int $length = null): string
+    {
+        if (strpos($text, "\x1b") === \false) {
+            return Helper::substr($text, $from, $length);
+        }
+        $result = '';
+        $position = 0;
+        foreach ($this->getTokens($text) as $token) {
+            $isAnsi = preg_match(self::ANSI_REGEX, $token);
+            if ($position >= $from && (null === $length || $position < $from + $length || $isAnsi && $position === $from + $length) && (!$isAnsi || !$from || $position > $from)) {
+                $result .= $token;
+            }
+            if (!$isAnsi) {
+                ++$position;
+            }
+        }
+        return $result;
+    }
+    private function getTokens(string $text): iterable
+    {
+        $encoding = mb_detect_encoding($text, null, \true) ?: 'UTF-8';
+        foreach (preg_split('/(' . self::ANSI_PATTERN . ')/', $text, -1, \PREG_SPLIT_DELIM_CAPTURE | \PREG_SPLIT_NO_EMPTY) as $part) {
+            if (preg_match(self::ANSI_REGEX, $part)) {
+                yield $part;
+                continue;
+            }
+            foreach (b($part)->toUnicodeString($encoding)->chunk() as $char) {
+                yield (string) $char->toByteString($encoding);
+            }
+        }
+    }
+    /**
+     * Returns the number of columns of each visible character, or an empty array when none uses more than one column.
+     *
+     * @return list<int>
+     */
+    private function getWidths(string $text): array
+    {
+        if (!preg_match('/[^\x00-\x{10FF}]/u', $text)) {
+            return [];
+        }
+        $widths = [];
+        $wide = \false;
+        foreach ($this->getTokens($text) as $token) {
+            if (!preg_match(self::ANSI_REGEX, $token)) {
+                $widths[] = $charWidth = 2 < \strlen($token) ? $this->charWidths[$token] ??= Helper::width($token) : 1;
+                $wide = $wide || 1 < $charWidth;
+            }
+        }
+        return $wide ? $widths : [];
+    }
+    /**
+     * Wraps a mask like wordwrap() does when cutting long words, but using the number of columns of each character.
+     *
+     * @param list<int> $widths
+     */
+    private function wordwrap(string $mask, int $width, array $widths): string
+    {
+        $result = '';
+        $start = $lastSpace = $lineWidth = 0;
+        for ($i = 0, $length = \strlen($mask); $i < $length; ++$i) {
+            if ('#' === $mask[$i]) {
+                $result .= substr($mask, $start, $i + 1 - $start);
+                $start = $lastSpace = $i + 1;
+                $lineWidth = 0;
+                continue;
+            }
+            if (' ' === $mask[$i]) {
+                if ($lineWidth >= $width) {
+                    $result .= substr($mask, $start, $i - $start) . '#';
+                    $start = $i + 1;
+                    $lineWidth = 0;
+                } else {
+                    ++$lineWidth;
+                }
+                $lastSpace = $i;
+                continue;
+            }
+            if ($lineWidth + $widths[$i] > $width && $start < $lastSpace) {
+                $result .= substr($mask, $start, $lastSpace - $start) . '#';
+                $start = $lastSpace = $lastSpace + 1;
+                $lineWidth = array_sum(\array_slice($widths, $start, $i - $start));
+            }
+            // cut long words, and also before a wide character that still doesn't fit after breaking at the last space
+            if ($lineWidth && $lineWidth + $widths[$i] > $width) {
+                $result .= substr($mask, $start, $i - $start) . '#';
+                $start = $lastSpace = $i;
+                $lineWidth = 0;
+            }
+            $lineWidth += $widths[$i];
+        }
+        return $result . substr($mask, $start);
     }
 }

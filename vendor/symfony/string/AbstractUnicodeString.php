@@ -372,10 +372,16 @@ abstract class AbstractUnicodeString extends AbstractString
      */
     public function trim(string $chars = " \t\n\r\x00\v\f ﻿")
     {
-        if (" \t\n\r\x00\v\f ﻿" !== $chars && !preg_match('//u', $chars)) {
-            throw new InvalidArgumentException('Invalid UTF-8 chars.');
+        if ('' === $chars) {
+            return clone $this;
         }
-        $chars = preg_quote($chars);
+        if (" \t\n\r\x00\v\f ﻿" === $chars) {
+            $chars = preg_quote($chars);
+        } elseif (\false === $ranges = preg_match('/\.\./u', $chars)) {
+            throw new InvalidArgumentException('Invalid UTF-8 chars.');
+        } else {
+            $chars = $ranges ? self::quoteCharRanges($chars) : preg_quote($chars);
+        }
         $str = clone $this;
         $str->string = preg_replace("{^[{$chars}]++|[{$chars}]++\$}uD", '', $str->string);
         return $str;
@@ -385,10 +391,16 @@ abstract class AbstractUnicodeString extends AbstractString
      */
     public function trimEnd(string $chars = " \t\n\r\x00\v\f ﻿")
     {
-        if (" \t\n\r\x00\v\f ﻿" !== $chars && !preg_match('//u', $chars)) {
-            throw new InvalidArgumentException('Invalid UTF-8 chars.');
+        if ('' === $chars) {
+            return clone $this;
         }
-        $chars = preg_quote($chars);
+        if (" \t\n\r\x00\v\f ﻿" === $chars) {
+            $chars = preg_quote($chars);
+        } elseif (\false === $ranges = preg_match('/\.\./u', $chars)) {
+            throw new InvalidArgumentException('Invalid UTF-8 chars.');
+        } else {
+            $chars = $ranges ? self::quoteCharRanges($chars) : preg_quote($chars);
+        }
         $str = clone $this;
         $str->string = preg_replace("{[{$chars}]++\$}uD", '', $str->string);
         return $str;
@@ -416,10 +428,16 @@ abstract class AbstractUnicodeString extends AbstractString
      */
     public function trimStart(string $chars = " \t\n\r\x00\v\f ﻿")
     {
-        if (" \t\n\r\x00\v\f ﻿" !== $chars && !preg_match('//u', $chars)) {
-            throw new InvalidArgumentException('Invalid UTF-8 chars.');
+        if ('' === $chars) {
+            return clone $this;
         }
-        $chars = preg_quote($chars);
+        if (" \t\n\r\x00\v\f ﻿" === $chars) {
+            $chars = preg_quote($chars);
+        } elseif (\false === $ranges = preg_match('/\.\./u', $chars)) {
+            throw new InvalidArgumentException('Invalid UTF-8 chars.');
+        } else {
+            $chars = $ranges ? self::quoteCharRanges($chars) : preg_quote($chars);
+        }
         $str = clone $this;
         $str->string = preg_replace("{^[{$chars}]++}uD", '', $str->string);
         return $str;
@@ -495,6 +513,24 @@ abstract class AbstractUnicodeString extends AbstractString
         return $width;
     }
     /**
+     * Quotes $chars for a character class, reading "x..y" as a range of code points like trim() does with bytes.
+     */
+    private static function quoteCharRanges(string $chars): string
+    {
+        $chars = preg_split('//u', $chars, -1, \PREG_SPLIT_NO_EMPTY);
+        $n = \count($chars);
+        $class = '';
+        for ($i = 0; $i < $n; ++$i) {
+            if ($i + 3 < $n && '.' === $chars[$i + 1] && '.' === $chars[$i + 2] && ($from = mb_ord($chars[$i], 'UTF-8')) <= $to = mb_ord($chars[$i + 3], 'UTF-8')) {
+                $class .= \sprintf('\x{%X}-\x{%X}', $from, $to);
+                $i += 3;
+            } elseif ('.' !== $chars[$i] || '.' !== ($chars[$i + 1] ?? '')) {
+                $class .= preg_quote($chars[$i]);
+            }
+        }
+        return $class;
+    }
+    /**
      * @return static
      */
     private function pad(int $len, self $pad, int $type)
@@ -535,7 +571,9 @@ abstract class AbstractUnicodeString extends AbstractString
         foreach (preg_split('//u', $string, -1, \PREG_SPLIT_NO_EMPTY) as $c) {
             if ($joined) {
                 $joined = \false;
-                continue;
+                if ("" < $c[0] && preg_match(self::EMOJI_REGEX, $c)) {
+                    continue;
+                }
             }
             $codePoint = mb_ord($c, 'UTF-8');
             if (0x7f > $codePoint && 0x20 <= $codePoint) {

@@ -23,6 +23,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
 {
     private bool $ignoreUnreadableDirs;
     private bool $ignoreFirstRewind = \true;
+    private array $realPaths = [];
     // these 3 properties take part of the performance optimization to avoid redoing the same work in all iterations
     private string $rootPath;
     private string $subPath;
@@ -40,6 +41,9 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
         $this->rootPath = $path;
         if ('/' !== \DIRECTORY_SEPARATOR && !($flags & self::UNIX_PATHS)) {
             $this->directorySeparator = \DIRECTORY_SEPARATOR;
+        }
+        if ($flags & self::FOLLOW_SYMLINKS && \false !== $realPath = realpath($path)) {
+            $this->realPaths[$realPath] = \true;
         }
     }
     /**
@@ -65,6 +69,10 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     public function hasChildren($allowLinks = \false): bool
     {
         $hasChildren = parent::hasChildren($allowLinks);
+        // don't loop on a directory that resolves to one of its parents
+        if ($hasChildren && $this->realPaths && \false !== ($realPath = realpath($this->getPathname())) && isset($this->realPaths[$realPath])) {
+            return \false;
+        }
         if (!$hasChildren || !$this->ignoreUnreadableDirs) {
             return $hasChildren;
         }
@@ -88,6 +96,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
                 $children->ignoreUnreadableDirs = $this->ignoreUnreadableDirs;
                 // performance optimization to avoid redoing the same work in all children
                 $children->rootPath = $this->rootPath;
+                $children->realPaths += $this->realPaths;
             }
             return $children;
         } catch (\UnexpectedValueException $e) {
