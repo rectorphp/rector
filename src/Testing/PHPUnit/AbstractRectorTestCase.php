@@ -215,12 +215,27 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLa
     {
         // a test can call doTestFile() more than once; a second lock from this process would wait for the first
         $this->unlockFixtureDirectory();
-        $fixtureDirectoryLock = fopen($directory . '/.fixture.lock', 'c');
+        $lockFilePath = $this->createFixtureDirectoryLockFilePath($directory);
+        $fixtureDirectoryLock = fopen($lockFilePath, 'c');
         if ($fixtureDirectoryLock === \false) {
-            throw new ShouldNotHappenException('Cannot open the lock file in ' . $directory);
+            throw new ShouldNotHappenException('Cannot open the lock file ' . $lockFilePath);
         }
         flock($fixtureDirectoryLock, \LOCK_EX);
         $this->fixtureDirectoryLock = $fixtureDirectoryLock;
+    }
+    /**
+     * The lock file lives in a directory in the system temp directory, so a project that tests its own rules gets no file in its fixture directories.
+     * The lock file is never deleted: a process waiting on a deleted file would hold a lock no other process sees.
+     */
+    private function createFixtureDirectoryLockFilePath(string $directory): string
+    {
+        $realDirectory = realpath($directory);
+        if ($realDirectory === \false) {
+            $realDirectory = $directory;
+        }
+        $lockDirectory = sys_get_temp_dir() . '/rector_fixture_lock';
+        FileSystem::createDir($lockDirectory);
+        return $lockDirectory . '/' . sha1($realDirectory) . '.lock';
     }
     private function unlockFixtureDirectory(): void
     {
