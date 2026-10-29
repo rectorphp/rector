@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\ValueObject\Type;
 
+use PHPStan\PhpDocParser\Ast\Type\RelativeNameNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\IsSuperTypeOfResult;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -50,5 +52,9 @@ final class ShortenedObjectType extends ObjectType
             return $type->getClassName() === $this->fullyQualifiedName;
         }
         return \false;
+    }
+    public function toPhpDocNode(): TypeNode
+    {
+        return new RelativeNameNode($this->getShortName());
     }
 }

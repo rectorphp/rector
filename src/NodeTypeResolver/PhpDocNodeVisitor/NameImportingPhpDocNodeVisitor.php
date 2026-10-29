@@ -8,6 +8,7 @@ use PhpParser\Node as PhpParserNode;
 use PHPStan\PhpDocParser\Ast\AbstractNodeVisitor;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\FullyQualifiedNameNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
@@ -65,6 +66,12 @@ final class NameImportingPhpDocNodeVisitor extends AbstractNodeVisitor
         if ($node instanceof DoctrineAnnotationTagValueNode) {
             $this->processDoctrineAnnotationTagValueNode($node);
             return $node;
+        }
+        // e.g. from Type::toPhpDocNode(); import it the same way as a written \Foo\Bar
+        if ($node instanceof FullyQualifiedNameNode) {
+            $fullyQualifiedNameNode = $node;
+            $node = new IdentifierTypeNode($fullyQualifiedNameNode->toCodeString());
+            $node->setAttribute(PhpDocAttributeKey::PARENT, $fullyQualifiedNameNode->getAttribute(PhpDocAttributeKey::PARENT));
         }
         if (!$node instanceof IdentifierTypeNode) {
             return null;

@@ -301,6 +301,8 @@ require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagValueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/TypeNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/NameNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/NameNodeTrait.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/AbstractNodeVisitor.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Attribute.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php';
@@ -364,6 +366,7 @@ require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeP
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ConditionalTypeForParameterNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ConditionalTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ConstTypeNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/FullyQualifiedNameNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/GenericTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/IntersectionTypeNode.php';
@@ -372,6 +375,7 @@ require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/NullableTypeN
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ObjectShapeItemNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ObjectShapeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/OffsetAccessTypeNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/RelativeNameNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ThisTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/UnionTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Parser/ConstExprParser.php';

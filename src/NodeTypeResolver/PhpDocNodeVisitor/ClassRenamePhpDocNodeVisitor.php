@@ -7,6 +7,7 @@ use PhpParser\Node as PhpNode;
 use PHPStan\PhpDocParser\Ast\AbstractNodeVisitor;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NameNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Generic\TemplateObjectType;
 use PHPStan\Type\ObjectType;
@@ -55,7 +56,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractNodeVisitor
     }
     public function enterNode(Node $node): ?Node
     {
-        if (!$node instanceof IdentifierTypeNode) {
+        if (!$node instanceof IdentifierTypeNode && !$node instanceof NameNode) {
             return null;
         }
         /** @var \PhpParser\Node $currentPhpNode */
@@ -66,7 +67,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractNodeVisitor
             return null;
         }
         // make sure to compare FQNs
-        $objectType = $this->ensureFQCNObject($staticType, $node->name);
+        $objectType = $this->ensureFQCNObject($staticType, $node instanceof NameNode ? $node->toCodeString() : $node->name);
         foreach ($this->oldToNewTypes as $oldToNewType) {
             $oldType = $oldToNewType->getOldType();
             if (!$oldType instanceof ObjectType) {

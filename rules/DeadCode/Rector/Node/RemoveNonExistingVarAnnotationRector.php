@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NameNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\NodeManipulator\StmtsManipulator;
@@ -235,6 +236,8 @@ CODE_SAMPLE
         if ($newClassName === null) {
             return \false;
         }
-        return strcasecmp($varTagValueNode->type->type->name, $newClassName) === 0;
+        $genericName = $varTagValueNode->type->type;
+        $genericClassName = $genericName instanceof NameNode ? $genericName->toString() : $genericName->name;
+        return strcasecmp($genericClassName, $newClassName) === 0;
     }
 }

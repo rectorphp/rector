@@ -127,6 +127,9 @@ final class ArrayTypeMapper implements TypeMapperInterface
             if (count($unionedTypeNode->genericTypes) !== 1) {
                 return \false;
             }
+            if (!$unionedTypeNode->type instanceof IdentifierTypeNode) {
+                return \false;
+            }
             $genericTypeName ??= $unionedTypeNode->type->name;
             if ($genericTypeName !== $unionedTypeNode->type->name) {
                 return \false;
