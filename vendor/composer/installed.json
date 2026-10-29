@@ -1465,12 +1465,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "b35c390cc266e374b4631ecee2a807187a2dbc71"
+                "reference": "34aabc0ea62d1e1304afc72d369acd52352c7073"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/b35c390cc266e374b4631ecee2a807187a2dbc71",
-                "reference": "b35c390cc266e374b4631ecee2a807187a2dbc71",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/34aabc0ea62d1e1304afc72d369acd52352c7073",
+                "reference": "34aabc0ea62d1e1304afc72d369acd52352c7073",
                 "shasum": ""
             },
             "require": {
@@ -1493,7 +1493,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-29T01:11:51+00:00",
+            "time": "2026-10-29T08:36:51+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1640,12 +1640,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "addeacd9993dfc60536bffa24ea28f08f978f0e8"
+                "reference": "5e4e27ac2f9beb1ecdb268dddf5e7e5a3954cc0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/addeacd9993dfc60536bffa24ea28f08f978f0e8",
-                "reference": "addeacd9993dfc60536bffa24ea28f08f978f0e8",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5e4e27ac2f9beb1ecdb268dddf5e7e5a3954cc0d",
+                "reference": "5e4e27ac2f9beb1ecdb268dddf5e7e5a3954cc0d",
                 "shasum": ""
             },
             "require": {
@@ -1677,7 +1677,7 @@
                 "tomasvotruba\/type-coverage": "^2.5",
                 "twig\/twig": "^3.21"
             },
-            "time": "2026-10-29T06:37:48+00:00",
+            "time": "2026-10-29T08:36:45+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
