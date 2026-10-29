@@ -13,8 +13,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\Enum\ClassName;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -47,7 +49,11 @@ final class PromotedPropertyCandidateResolver
      * @readonly
      */
     private \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, PropertyFetchAnalyzer $propertyFetchAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    /**
+     * @readonly
+     */
+    private ClassAnnotationMatcher $classAnnotationMatcher;
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, PropertyFetchAnalyzer $propertyFetchAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, ClassAnnotationMatcher $classAnnotationMatcher)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -55,6 +61,7 @@ final class PromotedPropertyCandidateResolver
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
+        $this->classAnnotationMatcher = $classAnnotationMatcher;
     }
     /**
      * @return PropertyPromotionCandidate[]
@@ -89,10 +96,26 @@ final class PromotedPropertyCandidateResolver
     private function hasModelTypeCheck($node, string $modelType): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if ($phpDocInfo instanceof PhpDocInfo && $phpDocInfo->hasByAnnotationClass($modelType)) {
+        if ($phpDocInfo instanceof PhpDocInfo && ($phpDocInfo->hasByAnnotationClass($modelType) || $this->hasInvalidAnnotation($phpDocInfo, $node, $modelType))) {
             return \true;
         }
         return $this->phpAttributeAnalyzer->hasPhpAttribute($node, $modelType);
+    }
+    /**
+     * An annotation with arguments that are not valid, e.g. @JMS\Type('string)
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property $node
+     */
+    private function hasInvalidAnnotation(PhpDocInfo $phpDocInfo, $node, string $modelType): bool
+    {
+        foreach ($phpDocInfo->getPhpDocNode()->getTags() as $phpDocTagNode) {
+            if (!$phpDocTagNode->value instanceof InvalidTagValueNode) {
+                continue;
+            }
+            if ($this->classAnnotationMatcher->resolveTagFullyQualifiedName($phpDocTagNode->name, $node) === $modelType) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod, int $propertyStmtPosition): ?PropertyPromotionCandidate
     {

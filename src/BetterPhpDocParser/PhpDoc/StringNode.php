@@ -15,7 +15,6 @@ final class StringNode implements PhpDocTagValueNode
     public function __construct(string $value)
     {
         $this->value = $value;
-        $this->value = str_replace('""', '"', $this->value);
         if (strpos($this->value, "'") !== \false && strpos($this->value, "\n") === \false) {
             $kind = String_::KIND_DOUBLE_QUOTED;
         } else {
