@@ -123,12 +123,13 @@ final class BetterStandardPrinter extends Standard
     }
     protected function p(Node $node, int $precedence = self::MAX_PRECEDENCE, int $lhsPrecedence = self::MAX_PRECEDENCE, bool $parentFormatPreserved = \false): string
     {
-        $this->wrapBinaryOpWithBrackets($node);
-        $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
         // remove once its fixed in php-parser, https://github.com/nikic/PHP-Parser/pull/1126
         if ($node instanceof CallLike) {
             $this->cleanVariadicPlaceHolderTrailingComma($node);
+        } else {
+            $this->wrapBinaryOpWithBrackets($node);
         }
+        $content = parent::p($node, $precedence, $lhsPrecedence, $parentFormatPreserved);
         if ($node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES)) {
             return '(' . $content . ')';
         }

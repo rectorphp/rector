@@ -24,6 +24,7 @@
                 "react\/event-loop": "^1.2"
             },
             "time": "2022-12-23T10:58:28+00:00",
+            "published-time": "2022-12-23T10:59:43+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -95,6 +96,7 @@
                 "phpunit\/phpunit": "^9"
             },
             "time": "2026-06-07T11:47:49+00:00",
+            "published-time": "2026-06-11T12:12:37+00:00",
             "type": "library",
             "extra": {
                 "phpstan": {
@@ -169,6 +171,7 @@
                 "symfony\/phpunit-bridge": "^3 || ^7"
             },
             "time": "2026-10-29T09:13:34+00:00",
+            "published-time": "2026-10-29T09:14:11+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -252,6 +255,7 @@
                 "phpunit\/phpunit": "^8.5 || ^9.6 || ^10.5"
             },
             "time": "2024-05-06T16:37:16+00:00",
+            "published-time": "2024-05-06T17:01:42+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -331,6 +335,7 @@
                 "tracy\/tracy": "^2.12"
             },
             "time": "2026-10-26T16:46:17+00:00",
+            "published-time": "2026-10-26T16:46:43+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -371,6 +376,7 @@
                 "phpunit\/phpunit": "^9 || ^6"
             },
             "time": "2023-08-08T05:53:35+00:00",
+            "published-time": "2023-08-08T08:34:49+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -430,6 +436,7 @@
                 "webmozarts\/strict-phpunit": "^7.5"
             },
             "time": "2026-09-29T22:11:39+00:00",
+            "published-time": "2026-09-29T22:12:43+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -503,6 +510,7 @@
                 "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()"
             },
             "time": "2026-10-20T17:07:56+00:00",
+            "published-time": "2026-10-20T17:48:30+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -583,6 +591,7 @@
                 "phpunit\/phpunit": "^9.0"
             },
             "time": "2026-09-13T18:51:52+00:00",
+            "published-time": "2026-09-13T18:53:16+00:00",
             "bin": [
                 "bin\/php-parse"
             ],
@@ -646,6 +655,7 @@
                 "phpunit\/phpunit": "^9.6.13"
             },
             "time": "2024-03-12T13:22:30+00:00",
+            "published-time": "2024-03-12T13:23:38+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -729,6 +739,7 @@
                 "symfony\/process": "^5.2"
             },
             "time": "2026-10-28T20:28:58+00:00",
+            "published-time": "2026-10-28T20:29:42+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -768,6 +779,7 @@
                 "php": ">=7.4.0"
             },
             "time": "2021-11-05T16:47:00+00:00",
+            "published-time": "2021-11-05T16:53:27+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -824,6 +836,7 @@
                 "php": ">=8.0.0"
             },
             "time": "2024-09-11T13:17:53+00:00",
+            "published-time": "2024-09-11T13:21:14+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -881,6 +894,7 @@
                 "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.35"
             },
             "time": "2022-11-30T15:59:55+00:00",
+            "published-time": "2022-11-30T16:03:35+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -960,6 +974,7 @@
                 "sebastian\/environment": "^5.0 || ^3.0 || ^2.0 || ^1.0"
             },
             "time": "2025-12-23T15:25:20+00:00",
+            "published-time": "2025-12-23T15:25:57+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1038,6 +1053,7 @@
                 "react\/promise-timer": "^1.11"
             },
             "time": "2025-11-18T19:34:28+00:00",
+            "published-time": "2025-11-18T19:35:06+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1115,6 +1131,7 @@
                 "ext-pcntl": "For signal handling support when using the StreamSelectLoop"
             },
             "time": "2025-11-17T20:46:25+00:00",
+            "published-time": "2025-11-17T20:47:32+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1188,6 +1205,7 @@
                 "phpunit\/phpunit": "^9.6 || ^7.5"
             },
             "time": "2025-08-19T18:57:03+00:00",
+            "published-time": "2025-08-19T19:13:36+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1271,6 +1289,7 @@
                 "react\/promise-timer": "^1.11"
             },
             "time": "2025-11-19T20:47:34+00:00",
+            "published-time": "2025-11-19T20:48:23+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1349,6 +1368,7 @@
                 "phpunit\/phpunit": "^9.6 || ^5.7 || ^4.8.36"
             },
             "time": "2024-06-11T12:45:25+00:00",
+            "published-time": "2024-06-11T12:48:34+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1434,6 +1454,7 @@
                 "symplify\/phpstan-extensions": "^10.0"
             },
             "time": "2022-01-19T00:29:14+00:00",
+            "published-time": "2022-01-19T00:31:19+00:00",
             "type": "composer-plugin",
             "extra": {
                 "class": "Rector\\RectorInstaller\\Plugin",
@@ -1494,6 +1515,7 @@
                 "tracy\/tracy": "^2.12"
             },
             "time": "2026-10-29T08:36:51+00:00",
+            "published-time": "2026-10-29T08:36:55+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1552,6 +1574,7 @@
                 "tracy\/tracy": "^2.12"
             },
             "time": "2026-10-28T08:45:12+00:00",
+            "published-time": "2026-10-28T08:45:18+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1612,6 +1635,7 @@
                 "tracy\/tracy": "^2.12"
             },
             "time": "2026-10-28T15:50:18+00:00",
+            "published-time": "2026-10-28T15:50:23+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1678,6 +1702,7 @@
                 "twig\/twig": "^3.21"
             },
             "time": "2026-10-29T08:36:45+00:00",
+            "published-time": "2026-10-29T08:36:50+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1722,6 +1747,7 @@
                 "symfony\/process": "^7.4.17"
             },
             "time": "2026-08-25T15:38:55+00:00",
+            "published-time": "2026-08-25T15:39:44+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1827,6 +1853,7 @@
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
             "time": "2026-10-28T10:54:25+00:00",
+            "published-time": "2026-10-28T18:17:12+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1901,6 +1928,7 @@
                 "php": ">=8.1"
             },
             "time": "2026-06-05T06:23:12+00:00",
+            "published-time": "2026-06-27T21:46:34+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -1981,6 +2009,7 @@
                 "symfony\/process": "^7.4|^8.0"
             },
             "time": "2026-10-06T20:05:50+00:00",
+            "published-time": "2026-10-14T06:48:55+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2052,6 +2081,7 @@
                 "symfony\/filesystem": "^7.4|^8.0"
             },
             "time": "2026-10-19T17:00:07+00:00",
+            "published-time": "2026-10-28T18:25:54+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2126,6 +2156,7 @@
                 "ext-ctype": "For best performance"
             },
             "time": "2026-04-10T16:19:22+00:00",
+            "published-time": "2026-04-26T14:44:50+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2209,6 +2240,7 @@
                 "ext-intl": "For best performance"
             },
             "time": "2026-10-15T09:18:53+00:00",
+            "published-time": "2026-10-28T10:07:44+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2294,6 +2326,7 @@
                 "ext-intl": "For best performance"
             },
             "time": "2026-09-23T22:02:09+00:00",
+            "published-time": "2026-09-30T10:23:47+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2386,6 +2419,7 @@
                 "ext-mbstring": "For best performance"
             },
             "time": "2026-10-28T09:35:49+00:00",
+            "published-time": "2026-10-28T10:07:45+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2467,6 +2501,7 @@
                 "php": ">=7.2"
             },
             "time": "2026-09-25T15:50:05+00:00",
+            "published-time": "2026-09-30T10:23:35+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2559,6 +2594,7 @@
                 "ext-psr": "<1.1|>=2"
             },
             "time": "2026-07-27T15:39:01+00:00",
+            "published-time": "2026-08-30T19:56:37+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -2659,6 +2695,7 @@
                 "symfony\/var-exporter": "^6.4|^7.0|^8.0"
             },
             "time": "2026-10-23T16:51:52+00:00",
+            "published-time": "2026-10-28T18:21:18+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2746,6 +2783,7 @@
                 "ext-spl": ""
             },
             "time": "2026-10-05T23:14:19+00:00",
+            "published-time": "2026-10-05T23:14:25+00:00",
             "type": "library",
             "extra": {
                 "psalm": {
