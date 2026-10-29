@@ -323,15 +323,6 @@ final class BetterStandardPrinter extends Standard
         $declareString = parent::pStmt_Declare($declare);
         return Strings::replace($declareString, '#\s+#');
     }
-    protected function pExpr_Ternary(Ternary $ternary, int $precedence, int $lhsPrecedence): string
-    {
-        $kind = $ternary->getAttribute(AttributeKey::KIND);
-        if ($kind === AttributeKey::WRAPPED_IN_PARENTHESES) {
-            $pExprTernary = parent::pExpr_Ternary($ternary, $precedence, $lhsPrecedence);
-            return '(' . $pExprTernary . ')';
-        }
-        return parent::pExpr_Ternary($ternary, $precedence, $lhsPrecedence);
-    }
     /**
      * Used in rector-downgrade-php
      */
