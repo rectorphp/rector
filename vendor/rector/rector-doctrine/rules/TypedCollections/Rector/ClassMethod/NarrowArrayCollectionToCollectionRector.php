@@ -96,7 +96,7 @@ CODE_SAMPLE
         // 1. generic type
         if ($tagValueNode->type instanceof GenericTypeNode) {
             $genericTypeNode = $tagValueNode->type;
-            if ($genericTypeNode->type->name === 'ArrayCollection') {
+            if ($genericTypeNode->type instanceof IdentifierTypeNode && $genericTypeNode->type->name === 'ArrayCollection') {
                 $genericTypeNode->type = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
                 return \true;
             }
@@ -112,7 +112,7 @@ CODE_SAMPLE
                     $unionTypeNode->types[$key] = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
                     return \true;
                 }
-                if ($unionedType instanceof GenericTypeNode && $unionedType->type->name === 'ArrayCollection') {
+                if ($unionedType instanceof GenericTypeNode && $unionedType->type instanceof IdentifierTypeNode && $unionedType->type->name === 'ArrayCollection') {
                     $unionedType->type = new IdentifierTypeNode('\\' . DoctrineClass::COLLECTION);
                     return \true;
                 }

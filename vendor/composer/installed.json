@@ -701,17 +701,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "2.3.12",
-            "version_normalized": "2.3.12.0",
+            "version": "2.4.0",
+            "version_normalized": "2.4.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "88d1b98f3bb34b2a1316ed6a85b675bf6c98cbb4"
+                "reference": "e3647094ed8f0f1f67393d812b793a5143e25af3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/88d1b98f3bb34b2a1316ed6a85b675bf6c98cbb4",
-                "reference": "88d1b98f3bb34b2a1316ed6a85b675bf6c98cbb4",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/e3647094ed8f0f1f67393d812b793a5143e25af3",
+                "reference": "e3647094ed8f0f1f67393d812b793a5143e25af3",
                 "shasum": ""
             },
             "require": {
@@ -728,7 +728,7 @@
                 "phpunit\/phpunit": "^9.6",
                 "symfony\/process": "^5.2"
             },
-            "time": "2026-10-28T20:04:36+00:00",
+            "time": "2026-10-28T20:28:58+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -745,7 +745,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/2.3.12"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/2.4.0"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
@@ -1465,12 +1465,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "4b3ccafcbf8a009e690ba69c771278924dea0f84"
+                "reference": "b35c390cc266e374b4631ecee2a807187a2dbc71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/4b3ccafcbf8a009e690ba69c771278924dea0f84",
-                "reference": "4b3ccafcbf8a009e690ba69c771278924dea0f84",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/b35c390cc266e374b4631ecee2a807187a2dbc71",
+                "reference": "b35c390cc266e374b4631ecee2a807187a2dbc71",
                 "shasum": ""
             },
             "require": {
@@ -1493,7 +1493,7 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-28T20:13:22+00:00",
+            "time": "2026-10-29T01:11:51+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",

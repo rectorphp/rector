@@ -89,7 +89,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     /**
      * If type is nullable, and has only one other value,
      * this creates at least "?Type" in case of PHP 7.1-7.4
-     * @return PhpParserUnionType|\PhpParser\Node\NullableType|null
+     * @return \PhpParserUnionType|\PhpParser\Node\NullableType|null
      */
     private function resolveTypeWithNullablePHPParserUnionType(PhpParserUnionType $phpParserUnionType)
     {
@@ -118,7 +118,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         return $this->resolveUnionTypes($phpParserUnionType);
     }
     /**
-     * @return null|\PhpParser\Node\NullableType|PhpParserUnionType
+     * @return null|\PhpParser\Node\NullableType|\PhpParserUnionType
      */
     private function resolveNullableType(NullableType $nullableType)
     {

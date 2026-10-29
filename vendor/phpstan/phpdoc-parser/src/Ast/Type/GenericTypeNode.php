@@ -13,16 +13,18 @@ class GenericTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     public const VARIANCE_CONTRAVARIANT = 'contravariant';
     public const VARIANCE_BIVARIANT = 'bivariant';
     use NodeAttributes;
-    public \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $type;
+    /** @var IdentifierTypeNode|NameNode */
+    public \PHPStan\PhpDocParser\Ast\Type\TypeNode $type;
     /** @var TypeNode[] */
     public array $genericTypes;
     /** @var (self::VARIANCE_*)[] */
     public array $variances;
     /**
+     * @param IdentifierTypeNode|NameNode $type
      * @param TypeNode[] $genericTypes
      * @param (self::VARIANCE_*)[] $variances
      */
-    public function __construct(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $type, array $genericTypes, array $variances = [])
+    public function __construct(\PHPStan\PhpDocParser\Ast\Type\TypeNode $type, array $genericTypes, array $variances = [])
     {
         $this->type = $type;
         $this->genericTypes = $genericTypes;

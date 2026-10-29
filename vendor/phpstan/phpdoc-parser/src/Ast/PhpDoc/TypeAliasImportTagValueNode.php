@@ -5,14 +5,20 @@ namespace PHPStan\PhpDocParser\Ast\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NameNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use function trim;
 class TypeAliasImportTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
 {
     use NodeAttributes;
     public string $importedAlias;
-    public IdentifierTypeNode $importedFrom;
+    /** @var IdentifierTypeNode|NameNode */
+    public TypeNode $importedFrom;
     public ?string $importedAs = null;
-    public function __construct(string $importedAlias, IdentifierTypeNode $importedFrom, ?string $importedAs)
+    /**
+     * @param IdentifierTypeNode|NameNode $importedFrom
+     */
+    public function __construct(string $importedAlias, TypeNode $importedFrom, ?string $importedAs)
     {
         $this->importedAlias = $importedAlias;
         $this->importedFrom = $importedFrom;

@@ -6,6 +6,7 @@ namespace Rector\Doctrine\TypedCollections\DocBlockAnalyzer;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Doctrine\Enum\DoctrineClass;
 final class CollectionTagValueNodeAnalyzer
 {
@@ -18,6 +19,9 @@ final class CollectionTagValueNodeAnalyzer
             return \false;
         }
         $genericTypeNode = $tagValueNode->type;
+        if (!$genericTypeNode->type instanceof IdentifierTypeNode) {
+            return \false;
+        }
         if ($genericTypeNode->type->name === 'Collection') {
             return \true;
         }

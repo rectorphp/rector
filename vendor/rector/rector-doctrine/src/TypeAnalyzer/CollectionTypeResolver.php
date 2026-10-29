@@ -142,7 +142,7 @@ final class CollectionTypeResolver
             return null;
         }
         $fullyQualifiedTargetEntity = $this->shortClassExpander->resolveFqnTargetEntity($targetEntityClass, $property);
-        return new FullyQualifiedObjectType($fullyQualifiedTargetEntity);
+        return new FullyQualifiedObjectType(ltrim($fullyQualifiedTargetEntity, '\\'));
     }
     /**
      * @param Arg[] $args
