@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\PrettyPrinter\Standard;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass as ReflectionClassAdapter;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionEnum as ReflectionEnumAdapter;
@@ -18,7 +19,6 @@ use PHPStan\BetterReflection\SourceLocator\Ast\Strategy\NodeToReflection;
 use PHPStan\BetterReflection\SourceLocator\Located\LocatedSource;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ClassReflectionFactory;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 /**
  * The class reflection from the reflection provider is built from the original file,
  * so it does not know about members a rule added or removed; build it from the current class node instead
@@ -38,18 +38,18 @@ final class AstClassReflectionFactory
     /**
      * @readonly
      */
-    private BetterStandardPrinter $betterStandardPrinter;
+    private Standard $standardPrinter;
     /**
      * Last rebuilt reflection per class, keyed by file and class node, with the hash of the class content it was built from
      *
      * @var array<string, array{string, ClassReflection}>
      */
     private array $classReflectionsByClass = [];
-    public function __construct(Reflector $reflector, ClassReflectionFactory $classReflectionFactory, BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(Reflector $reflector, ClassReflectionFactory $classReflectionFactory, Standard $standardPrinter)
     {
         $this->reflector = $reflector;
         $this->classReflectionFactory = $classReflectionFactory;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->standardPrinter = $standardPrinter;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
@@ -61,7 +61,8 @@ final class AstClassReflectionFactory
         // the class node is refreshed on every change in it, while its members often stay the same between passes;
         // reuse the reflection built from the same content, so its cache key and member caches are not created again
         $classKey = $filePath . ':' . $namespace . '\\' . $classLike->name;
-        $contentHash = hash('md5', $this->betterStandardPrinter->print($classLike));
+        // Hashing needs deterministic content, without Rector's output formatting and AST adjustments.
+        $contentHash = hash('md5', $this->standardPrinter->prettyPrint([$classLike]));
         if (isset($this->classReflectionsByClass[$classKey]) && $this->classReflectionsByClass[$classKey][0] === $contentHash) {
             return $this->classReflectionsByClass[$classKey][1];
         }
