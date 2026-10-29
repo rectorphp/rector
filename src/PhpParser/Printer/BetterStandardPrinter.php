@@ -45,8 +45,6 @@ use Rector\Util\NewLineSplitter;
 use Rector\Util\Reflection\PrivatesAccessor;
 /**
  * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
- *
- * @property array<string, array{string, bool, string, null}> $insertionMap
  */
 final class BetterStandardPrinter extends Standard
 {
