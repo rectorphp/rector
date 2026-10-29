@@ -28,8 +28,11 @@ use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\InterpolatedStringPart;
 use PhpParser\Node\Scalar\InterpolatedString;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\InlineHTML;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\PrettyPrinter\Standard;
 use PhpParser\Token;
@@ -61,6 +64,14 @@ final class BetterStandardPrinter extends Standard
      * @var string
      */
     private const EXTRA_SPACE_BEFORE_NOP_REGEX = '#^[ \t]+$#m';
+    /**
+     * php-parser cannot emptying a node list, it falls back to a full reprint of the parent node
+     * and drops blank lines between its statements; these keyword tokens let us cut just the
+     * emptied clause instead, e.g. the "implements" of a class that loses its last interface
+     *
+     * @var array<string, int>
+     */
+    private const EMPTIED_LIST_KEYWORD_TOKENS = [Class_::class . '->implements' => \T_IMPLEMENTS, Enum_::class . '->implements' => \T_IMPLEMENTS, Interface_::class . '->extends' => \T_EXTENDS];
     public function __construct(ExprAnalyzer $exprAnalyzer, PrivatesAccessor $privatesAccessor)
     {
         $this->exprAnalyzer = $exprAnalyzer;
@@ -194,14 +205,66 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pArray(array $nodes, array $origNodes, int &$pos, int $indentAdjustment, string $parentNodeClass, string $subNodeName, ?int $fixup): ?string
     {
+        $startPos = $pos;
         $content = parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $parentNodeClass, $subNodeName, $fixup);
         if ($content === null) {
-            return $content;
+            $cutToPos = $this->resolveEmptiedNodeListEndPos($nodes, $origNodes, $startPos, $parentNodeClass, $subNodeName);
+            if ($cutToPos === null) {
+                // restore the position possibly advanced by the parent before falling back
+                $pos = $startPos;
+                return null;
+            }
+            // drop the whole clause: whitespace + keyword + type list
+            $pos = $cutToPos;
+            return '';
         }
         if (!$this->containsNop($nodes)) {
             return $content;
         }
         return Strings::replace($content, self::EXTRA_SPACE_BEFORE_NOP_REGEX);
+    }
+    /**
+     * php-parser bails on emptying a node list, which forces the parent node to be fully reprinted
+     * and loses blank lines between statements; when the whole list is removed we can instead cut
+     * just the emptied clause (keyword + types) and keep the rest format-preserved
+     *
+     * Returns the token position right after the removed clause, or null when not handled.
+     *
+     * @param mixed[] $nodes
+     * @param array<int, mixed> $origNodes
+     */
+    private function resolveEmptiedNodeListEndPos(array $nodes, array $origNodes, int $startPos, string $parentNodeClass, string $subNodeName): ?int
+    {
+        // only the "whole list removed" case is handled here
+        if ($nodes !== [] || $origNodes === []) {
+            return null;
+        }
+        if (!$this->origTokens instanceof TokenStream) {
+            return null;
+        }
+        $keywordToken = self::EMPTIED_LIST_KEYWORD_TOKENS[$parentNodeClass . '->' . $subNodeName] ?? null;
+        if ($keywordToken === null) {
+            return null;
+        }
+        $firstOrigNode = $origNodes[0];
+        $lastOrigNode = $origNodes[count($origNodes) - 1];
+        if (!$firstOrigNode instanceof Node || !$lastOrigNode instanceof Node) {
+            return null;
+        }
+        $firstStartPos = $firstOrigNode->getStartTokenPos();
+        $lastEndPos = $lastOrigNode->getEndTokenPos();
+        if ($firstStartPos < 0 || $lastEndPos < 0) {
+            return null;
+        }
+        // the keyword must sit between the previous sub-node and the removed list
+        if (!$this->origTokens->haveTokenInRange($startPos, $firstStartPos, $keywordToken)) {
+            return null;
+        }
+        // bail on php tags in the removed range to avoid dropping them
+        if ($this->origTokens->haveTagInRange($startPos, $lastEndPos + 1)) {
+            return null;
+        }
+        return $lastEndPos + 1;
     }
     /**
      * Do not add "()" on Expressions
