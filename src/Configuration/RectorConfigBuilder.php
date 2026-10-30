@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Configuration;
 
-use RectorPrefix202610\DrupalRector\Set\DrupalSetList;
+use DrupalRector\Set\DrupalSetList;
 use RectorPrefix202610\Nette\Utils\Strings;
 use PhpParser\NodeVisitor;
 use Rector\Bridge\SetRectorsResolver;
