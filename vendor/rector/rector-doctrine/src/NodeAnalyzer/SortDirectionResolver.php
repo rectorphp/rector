@@ -6,6 +6,7 @@ namespace Rector\Doctrine\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 final class SortDirectionResolver
 {
@@ -13,9 +14,14 @@ final class SortDirectionResolver
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    /**
+     * @readonly
+     */
+    private NodeNameResolver $nodeNameResolver;
+    public function __construct(ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->valueResolver = $valueResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * Extracts a normalized 'asc' or 'desc' string from strings and constants.
@@ -23,6 +29,9 @@ final class SortDirectionResolver
     public function resolve(Expr $expr): ?string
     {
         if ($expr instanceof ClassConstFetch && $expr->name instanceof Identifier) {
+            if ($this->nodeNameResolver->isName($expr->class, 'SortDirection')) {
+                return null;
+            }
             $normalized = strtolower($expr->name->toString());
             if (in_array($normalized, ['asc', 'ascending'], \true)) {
                 return 'asc';
