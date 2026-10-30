@@ -20,8 +20,7 @@
         "rector\/swiss-knife": "^2.7",
         "symplify\/phpstan-rules": "^14.13",
         "tomasvotruba\/class-leak": "^2.3",
-        "tomasvotruba\/type-coverage": "^2.3",
-        "tracy\/tracy": "^2.12"
+        "tomasvotruba\/type-coverage": "^2.3"
     },
     "autoload": {
         "psr-4": {
@@ -40,9 +39,6 @@
         },
         "classmap": [
             "stubs"
-        ],
-        "files": [
-            "tests\/debug_functions.php"
         ]
     },
     "scripts": {
