@@ -760,6 +760,16 @@ final class Printer
                     // Unchanged, can reuse old code
                     continue;
                 }
+                if ($this->isRenamedTag($node, $subNodeName, $originalTokens, $startPos)) {
+                    // the tag name is the first token of the tag; keep the format of the value
+                    $result .= $subNode;
+                    $pos = $startPos + 1;
+                    continue;
+                }
+                if ($node instanceof DoctrineAnnotation && $subNodeName === 'name' && $node->getAttribute(Attribute::ORIGINAL_NODE)->name !== $originalTokens->getContentBetween($startPos, $startPos + 1)) {
+                    // the tokens of the annotation of a Doctrine tag do not contain the name, the tag prints it
+                    continue;
+                }
                 if (is_array($subNode) && is_array($origSubNode)) {
                     // Array subnode changed, we might be able to reconstruct it
                     $listResult = $this->printArrayFormatPreserving($subNode, $origSubNode, $originalTokens, $pos, $class, $subNodeName);
@@ -810,6 +820,17 @@ final class Printer
             $pos = $subEndPos + 1;
         }
         return $result . $originalTokens->getContentBetween($pos, $endPos + 1);
+    }
+    private function isRenamedTag(Node $node, string $subNodeName, TokenIterator $originalTokens, int $startPos): bool
+    {
+        if (!$node instanceof PhpDocTagNode || $subNodeName !== 'name') {
+            return \false;
+        }
+        $originalNode = $node->getAttribute(Attribute::ORIGINAL_NODE);
+        if (!$originalNode instanceof PhpDocTagNode) {
+            return \false;
+        }
+        return $originalTokens->getContentBetween($startPos, $startPos + 1) === $originalNode->name;
     }
     /**
      * Prints a node that replaces the tokens of the original node.
