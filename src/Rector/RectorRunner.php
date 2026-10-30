@@ -53,8 +53,6 @@ CODE_SAMPLE;
      */
     public function run(RectorInterface $rector, Node $node)
     {
-        // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
         $refactoredNodeOrState = $rector->refactor($node);
         // nothing to change → continue
         if ($refactoredNodeOrState === null) {
@@ -72,11 +70,11 @@ CODE_SAMPLE;
                 throw new ShouldNotHappenException(sprintf('Unsupported state "%d" returned from "%s".', $refactoredNodeOrState, get_class($rector)));
             }
             // notify this rule changed code
-            $rectorWithLineChange = new RectorWithLineChange(get_class($rector), $originalNode->getStartLine());
+            $rectorWithLineChange = new RectorWithLineChange(get_class($rector), $node->getStartLine());
             $file->addRectorClassWithLine($rectorWithLineChange);
             return $refactoredNodeOrState;
         }
-        return $this->postRefactorProcess($rector, $file, $originalNode, $node, $refactoredNodeOrState, $filePath);
+        return $this->postRefactorProcess($rector, $file, $node, $refactoredNodeOrState, $filePath);
     }
     private function getFile(): File
     {
@@ -90,10 +88,10 @@ CODE_SAMPLE;
      * @param Node|Node[] $refactoredNode
      * @return Node|Node[]
      */
-    private function postRefactorProcess(RectorInterface $rector, File $file, Node $originalNode, Node $node, $refactoredNode, string $filePath)
+    private function postRefactorProcess(RectorInterface $rector, File $file, Node $node, $refactoredNode, string $filePath)
     {
         /** @var non-empty-array<Node>|Node $refactoredNode */
-        $rectorWithLineChange = new RectorWithLineChange(get_class($rector), $originalNode->getStartLine());
+        $rectorWithLineChange = new RectorWithLineChange(get_class($rector), $node->getStartLine());
         $file->addRectorClassWithLine($rectorWithLineChange);
         /** @var MutatingScope|null $currentScope */
         $currentScope = $node->getAttribute(AttributeKey::SCOPE);
