@@ -85,7 +85,6 @@ final class PhpDocInfoPrinter
             }
             return $docContent;
         }
-        $this->reindexArrays($phpDocNode);
         $originalPhpDocNode = $phpDocInfo->getOriginalPhpDocNode();
         $phpDocNode = $this->removeTrailingEmptyLines($phpDocNode, $originalPhpDocNode);
         [$phpDocNode, $originalPhpDocNode] = $this->replaceOpaqueChildren($phpDocNode, $originalPhpDocNode, $tokenIterator);
@@ -99,45 +98,6 @@ final class PhpDocInfoPrinter
     {
         $printedPhpDocContents = $this->printFormatPreserving($phpDocInfo);
         return [new Comment($printedPhpDocContents)];
-    }
-    /**
-     * The printer compares lists of nodes; unset() in rules leaves gaps in the keys
-     */
-    private function reindexArrays(Node $node): void
-    {
-        foreach (get_object_vars($node) as $propertyName => $value) {
-            if ($value instanceof Node) {
-                $this->reindexArrays($value);
-                continue;
-            }
-            if (!is_array($value)) {
-                continue;
-            }
-            $arrayIsListFunction = function (array $array): bool {
-                if (function_exists('array_is_list')) {
-                    return array_is_list($array);
-                }
-                if ($array === []) {
-                    return \true;
-                }
-                $current_key = 0;
-                foreach ($array as $key => $noop) {
-                    if ($key !== $current_key) {
-                        return \false;
-                    }
-                    ++$current_key;
-                }
-                return \true;
-            };
-            if (!$arrayIsListFunction($value)) {
-                $node->{$propertyName} = array_values($value);
-            }
-            foreach ($value as $item) {
-                if ($item instanceof Node) {
-                    $this->reindexArrays($item);
-                }
-            }
-        }
     }
     /**
      * Removing the last tag keeps the empty line above it, remove it too
