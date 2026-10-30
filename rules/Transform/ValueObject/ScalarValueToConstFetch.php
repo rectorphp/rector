@@ -15,17 +15,17 @@ final class ScalarValueToConstFetch
 {
     /**
      * @readonly
-     * @var \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\Int_
+     * @var \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\String_
      */
     private $scalar;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch
+     * @var \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\ConstFetch
      */
     private $constFetch;
     /**
-     * @param \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\Int_ $scalar
-     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $constFetch
+     * @param \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\String_ $scalar
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\ConstFetch $constFetch
      */
     public function __construct($scalar, $constFetch)
     {
@@ -33,14 +33,14 @@ final class ScalarValueToConstFetch
         $this->constFetch = $constFetch;
     }
     /**
-     * @return \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\Int_
+     * @return \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\String_
      */
     public function getScalar()
     {
         return $this->scalar;
     }
     /**
-     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch
+     * @return \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\ConstFetch
      */
     public function getConstFetch()
     {

@@ -83,7 +83,7 @@ final class TerminatedNodeAnalyzer
         return $this->isTerminatedInLastStmtsSwitch($node);
     }
     /**
-     * @param \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\For_ $loop
+     * @param \PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\While_ $loop
      */
     private function isTerminatedInfiniteLoop($loop): bool
     {
@@ -95,7 +95,7 @@ final class TerminatedNodeAnalyzer
         return !$this->hasBreakOrGoto($loop->stmts);
     }
     /**
-     * @param \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\For_ $loop
+     * @param \PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\While_ $loop
      */
     private function isInfiniteLoopCondition($loop): bool
     {

@@ -4,10 +4,12 @@ declare (strict_types=1);
 namespace Rector\StaticTypeMapper\ValueObject\Type;
 
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
 use PHPStan\PhpDocParser\Ast\Type\RelativeNameNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\NativeTypePosition;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
@@ -61,6 +63,10 @@ final class AliasedObjectType extends ObjectType
             }
         }
         return parent::equals($type);
+    }
+    public function toNativePhpTypeNode(NativeTypePosition $position): ?Name
+    {
+        return $position->isClassNameAllowed() ? new FullyQualified($this->fullyQualifiedClass) : null;
     }
     public function toPhpDocNode(): TypeNode
     {

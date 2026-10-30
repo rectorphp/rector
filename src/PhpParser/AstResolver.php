@@ -82,7 +82,7 @@ final class AstResolver
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
      */
     public function resolveClassFromName(string $className)
     {
@@ -133,7 +133,7 @@ final class AstResolver
         return $classMethod;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\New_ $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     public function resolveClassMethodFromCall($call): ?ClassMethod
     {
@@ -159,7 +159,7 @@ final class AstResolver
         return $this->resolveClassMethod($className, $methodName);
     }
     /**
-     * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
      */
     public function resolveClassFromClassReflection(ClassReflection $classReflection)
     {
@@ -204,7 +204,7 @@ final class AstResolver
         return $traits;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
+     * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
      */
     public function resolvePropertyFromPropertyReflection(PhpPropertyReflection $phpPropertyReflection)
     {

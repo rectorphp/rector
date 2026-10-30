@@ -81,7 +81,7 @@ abstract class Helper implements HelperInterface
     }
     /**
      * @return string
-     * @param int|float $secs
+     * @param float|int $secs
      */
     public static function formatTime($secs, int $precision = 1)
     {

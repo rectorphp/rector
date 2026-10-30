@@ -365,7 +365,7 @@ final class PHPStanNodeScopeResolver
         $assign->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
     }
     /**
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $array
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $array
      */
     private function processArray($array, MutatingScope $mutatingScope): void
     {
@@ -426,7 +426,7 @@ final class PHPStanNodeScopeResolver
         $ternary->else->setAttribute(AttributeKey::SCOPE, $mutatingScope);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
     private function resolveClassOrInterfaceScope($classLike, MutatingScope $mutatingScope): MutatingScope
     {
@@ -456,7 +456,7 @@ final class PHPStanNodeScopeResolver
         return $mutatingScope;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Enum_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
      */
     private function resolveClassName($classLike): string
     {

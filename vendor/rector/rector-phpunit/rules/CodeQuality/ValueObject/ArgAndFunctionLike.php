@@ -14,11 +14,11 @@ final class ArgAndFunctionLike
     private Arg $arg;
     /**
      * @readonly
-     * @var \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction
+     * @var \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure
      */
     private $functionLike;
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function __construct(Arg $arg, $functionLike)
     {
@@ -30,7 +30,7 @@ final class ArgAndFunctionLike
         return $this->arg;
     }
     /**
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction
+     * @return \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure
      */
     public function getFunctionLike()
     {

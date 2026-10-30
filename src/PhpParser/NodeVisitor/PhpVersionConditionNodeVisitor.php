@@ -39,7 +39,7 @@ final class PhpVersionConditionNodeVisitor extends NodeVisitorAbstract implement
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Expr\Ternary $ifOrTernary
+     * @param \PhpParser\Node\Expr\Ternary|\PhpParser\Node\Stmt\If_ $ifOrTernary
      */
     private function hasVersionCompareCond($ifOrTernary): bool
     {

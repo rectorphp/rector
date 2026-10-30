@@ -96,7 +96,7 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|null
+     * @return \PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\MethodCall|null
      */
     public function refactor(Node $node)
     {
@@ -122,7 +122,7 @@ CODE_SAMPLE
     }
     /**
      * @param Arg[] $args
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|null
+     * @return \PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\MethodCall|null
      */
     private function processExtractIsGranted(MethodCall $methodCall, Array_ $array, array $args)
     {
@@ -156,7 +156,7 @@ CODE_SAMPLE
         return $booleanOr;
     }
     /**
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|null
+     * @return \PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\MethodCall|null
      */
     private function processControllerMethods(MethodCall $methodCall)
     {
@@ -166,7 +166,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return \PhpParser\Node\Expr\BinaryOp\BooleanOr|null|\PhpParser\Node\Expr\MethodCall
+     * @return \PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\MethodCall|null
      */
     private function handleIsGranted(MethodCall $methodCall)
     {

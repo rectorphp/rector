@@ -36,7 +36,7 @@ CODE_SAMPLE
     }
     /**
      * @param Namespace_|FileNode $node
-     * @return null|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_
+     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|null
      */
     public function refactor(Node $node)
     {

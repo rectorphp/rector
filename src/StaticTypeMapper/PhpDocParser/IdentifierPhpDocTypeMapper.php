@@ -120,7 +120,7 @@ final class IdentifierPhpDocTypeMapper implements PhpDocTypeMapperInterface
         return new SelfObjectType($className);
     }
     /**
-     * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
+     * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType
      */
     private function mapParent(Node $node)
     {

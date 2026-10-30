@@ -113,7 +113,7 @@ CODE_SAMPLE
         return $expr instanceof Equal;
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\Equal $expr
+     * @param \PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\Identical $expr
      */
     private function matchComparedExprAndValueExpr($expr): ComparedExprAndValueExpr
     {

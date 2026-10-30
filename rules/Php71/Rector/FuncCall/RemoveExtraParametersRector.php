@@ -100,7 +100,7 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
         return $node;
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $reflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $reflection
      */
     private function shouldSkipFunctionReflection($reflection): bool
     {
@@ -138,7 +138,7 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
         return $this->variadicAnalyzer->hasVariadicParameters($call);
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $functionLikeReflection
      */
     private function resolveMaximumAllowedParameterCount($functionLikeReflection): int
     {

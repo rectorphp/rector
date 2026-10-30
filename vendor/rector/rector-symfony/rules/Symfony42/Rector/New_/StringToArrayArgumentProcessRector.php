@@ -80,7 +80,7 @@ CODE_SAMPLE
     }
     /**
      * @template TNode of New_|MethodCall
-     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $node
      * @return TNode|null
      */
     private function processArgumentPosition($node, int $argumentPosition)
@@ -116,7 +116,7 @@ CODE_SAMPLE
         return in_array($methodName, self::EXCLUDED_PROCESS_METHOD_CALLS, \true);
     }
     /**
-     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $expr
      */
     private function processStringType($expr, int $argumentPosition, Expr $firstArgumentExpr): bool
     {

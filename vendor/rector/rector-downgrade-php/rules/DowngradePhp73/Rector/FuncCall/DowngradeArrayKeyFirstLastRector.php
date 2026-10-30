@@ -117,7 +117,7 @@ CODE_SAMPLE
     }
     /**
      * @return Node[]|null
-     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Switch_ $stmt
      */
     private function refactorArrayKeyFirst(FuncCall $funcCall, $stmt): ?array
     {
@@ -147,7 +147,7 @@ CODE_SAMPLE
     }
     /**
      * @return Node[]|null
-     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Switch_ $stmt
      */
     private function refactorArrayKeyLast(FuncCall $funcCall, $stmt): ?array
     {
@@ -183,7 +183,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable $array
-     * @param \PhpParser\Node\Stmt|\PhpParser\Node $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt $stmt
      * @return \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\If_
      */
     private function resolvePrependNewStmt($array, FuncCall $funcCall, $stmt)

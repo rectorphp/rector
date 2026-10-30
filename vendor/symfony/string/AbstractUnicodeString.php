@@ -283,7 +283,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $this->pad($length, $pad, \STR_PAD_LEFT);
     }
     /**
-     * @param string|callable $to
+     * @param callable|string $to
      * @return static
      */
     public function replaceMatches(string $fromRegexp, $to)

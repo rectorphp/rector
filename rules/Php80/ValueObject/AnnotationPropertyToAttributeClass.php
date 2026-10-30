@@ -12,7 +12,7 @@ final class AnnotationPropertyToAttributeClass
     private string $attributeClass;
     /**
      * @readonly
-     * @var string|int|null
+     * @var int|string|null
      */
     private $annotationProperty = null;
     /**
@@ -20,7 +20,7 @@ final class AnnotationPropertyToAttributeClass
      */
     private bool $doesNeedNewImport = \false;
     /**
-     * @param string|int|null $annotationProperty
+     * @param int|string|null $annotationProperty
      */
     public function __construct(string $attributeClass, $annotationProperty = null, bool $doesNeedNewImport = \false)
     {
@@ -30,7 +30,7 @@ final class AnnotationPropertyToAttributeClass
         RectorAssert::className($attributeClass);
     }
     /**
-     * @return string|int|null
+     * @return int|string|null
      */
     public function getAnnotationProperty()
     {

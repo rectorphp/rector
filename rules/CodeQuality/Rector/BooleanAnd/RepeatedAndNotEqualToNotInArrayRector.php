@@ -108,7 +108,7 @@ CODE_SAMPLE
         return $expr instanceof NotEqual;
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\NotEqual $expr
+     * @param \PhpParser\Node\Expr\BinaryOp\NotEqual|\PhpParser\Node\Expr\BinaryOp\NotIdentical $expr
      */
     private function matchComparedExprAndValueExpr($expr): ComparedExprAndValueExpr
     {

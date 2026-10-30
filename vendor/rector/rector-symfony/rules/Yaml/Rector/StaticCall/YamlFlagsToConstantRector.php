@@ -84,7 +84,7 @@ CODE_SAMPLE
     }
     /**
      * @param bool|array<bool> $before
-     * @param string|int $after
+     * @param int|string $after
      */
     private function applyTransform(StaticCall $staticCall, int $position, $before, $after): bool
     {
@@ -132,7 +132,7 @@ CODE_SAMPLE
         return $values;
     }
     /**
-     * @param string|int $after
+     * @param int|string $after
      */
     private function createAfterExpr($after): Expr
     {

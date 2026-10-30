@@ -108,7 +108,7 @@ final class SimpleNodeDumper
         return (string) $flags;
     }
     /**
-     * @param int|float|string $type
+     * @param float|int|string $type
      */
     private static function dumpIncludeType($type): string
     {

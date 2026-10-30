@@ -49,7 +49,7 @@ CODE_SAMPLE
     }
     /**
      * @param FileNode|Namespace_|Class_ $node
-     * @return \Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Stmt\Class_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|null
      */
     public function refactor(Node $node)
     {

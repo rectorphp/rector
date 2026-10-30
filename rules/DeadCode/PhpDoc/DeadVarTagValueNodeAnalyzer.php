@@ -40,7 +40,7 @@ final class DeadVarTagValueNodeAnalyzer
         $this->templateTypeRemovalGuard = $templateTypeRemovalGuard;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Expression $node
+     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property $node
      */
     public function isDead(VarTagValueNode $varTagValueNode, $node): bool
     {

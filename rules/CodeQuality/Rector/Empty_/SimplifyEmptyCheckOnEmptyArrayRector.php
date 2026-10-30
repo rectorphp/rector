@@ -106,7 +106,7 @@ CODE_SAMPLE
         return $node instanceof BooleanNot ? new NotIdentical($expr, new Array_()) : new Identical($expr, new Array_());
     }
     /**
-     * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\Variable $expr
      */
     private function isAllowedExpr($expr, Scope $scope): bool
     {

@@ -45,12 +45,12 @@ class InputOption
     public const VALUE_NEGATABLE = 16;
     private string $name;
     /**
-     * @var string|mixed[]|null
+     * @var mixed[]|string|null
      */
     private $shortcut;
     private int $mode;
     /**
-     * @var string|int|bool|mixed[]|float|null
+     * @var mixed[]|bool|float|int|string|null
      */
     private $default;
     /**
@@ -165,7 +165,7 @@ class InputOption
     }
     /**
      * @return void
-     * @param string|bool|int|float|mixed[]|null $default
+     * @param mixed[]|bool|float|int|string|null $default
      */
     public function setDefault($default = null)
     {
@@ -186,7 +186,7 @@ class InputOption
     }
     /**
      * Returns the default value.
-     * @return string|bool|int|float|mixed[]|null
+     * @return mixed[]|bool|float|int|string|null
      */
     public function getDefault()
     {

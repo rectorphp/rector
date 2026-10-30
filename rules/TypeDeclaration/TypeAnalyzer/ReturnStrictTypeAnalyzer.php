@@ -91,7 +91,7 @@ final class ReturnStrictTypeAnalyzer
         return $this->typeNodeUnwrapper->uniquateNodes($returnedStrictTypeNodes);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     public function resolveMethodCallReturnNode($call): ?Node
     {
@@ -102,7 +102,7 @@ final class ReturnStrictTypeAnalyzer
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     public function resolveMethodCallReturnType($call): ?Type
     {
@@ -132,7 +132,7 @@ final class ReturnStrictTypeAnalyzer
         return $this->normalizeStaticType($call, $returnType);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     private function normalizeStaticType($call, Type $type): Type
     {

@@ -29,7 +29,7 @@ class InputArgument
     private string $name;
     private int $mode;
     /**
-     * @var string|int|bool|mixed[]|float|null
+     * @var mixed[]|bool|float|int|string|null
      */
     private $default;
     /**
@@ -90,7 +90,7 @@ class InputArgument
      * @return void
      *
      * @throws LogicException When incorrect default value is given
-     * @param string|bool|int|float|mixed[]|null $default
+     * @param mixed[]|bool|float|int|string|null $default
      */
     public function setDefault($default = null)
     {
@@ -111,7 +111,7 @@ class InputArgument
     }
     /**
      * Returns the default value.
-     * @return string|bool|int|float|mixed[]|null
+     * @return mixed[]|bool|float|int|string|null
      */
     public function getDefault()
     {

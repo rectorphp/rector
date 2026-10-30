@@ -89,7 +89,7 @@ final class StrictReturnNewAnalyzer
     }
     /**
      * @return array<string, string>
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function resolveCreatedVariablesToTypes($functionLike): array
     {

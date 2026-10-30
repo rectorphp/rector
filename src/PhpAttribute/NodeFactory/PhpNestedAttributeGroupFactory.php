@@ -106,7 +106,7 @@ final class PhpNestedAttributeGroupFactory
     }
     /**
      * @todo improve this hardcoded approach later
-     * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
+     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
      */
     private function resolveAliasedAttributeName(string $originalIdentifier, AnnotationPropertyToAttributeClass $annotationPropertyToAttributeClass)
     {

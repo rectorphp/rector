@@ -103,7 +103,7 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|StaticCall|New_|ArrayItem|ClassMethod $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\ArrayItem|\PhpParser\Node\Stmt\ClassMethod|null
+     * @return \PhpParser\Node\ArrayItem|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
      */
     public function refactor(Node $node)
     {

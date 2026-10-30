@@ -84,7 +84,7 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
     }
     /**
      * @param Arg[] $args
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection|null $functionLikeReflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null $functionLikeReflection
      */
     private function decorateClosureWithVariadicArgs(array $args, $functionLikeReflection): void
     {
@@ -106,7 +106,7 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
     }
     /**
      * @param Arg[] $args
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection|null $functionLikeReflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null $functionLikeReflection
      */
     private function decorateArgNotAcceptingClosure(CallLike $callLike, array $args, $functionLikeReflection): void
     {

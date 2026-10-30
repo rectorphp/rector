@@ -88,7 +88,7 @@ final class ToManyRelationPropertyTypeResolver
     }
     /**
      * @param \PhpParser\Node\Expr|string $targetEntity
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $property
      */
     private function resolveTypeFromTargetEntity($targetEntity, $property): Type
     {

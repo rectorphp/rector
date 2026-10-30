@@ -9,7 +9,7 @@ final class AssertCallFactory
 {
     /**
      * @template TCall of StaticCall|MethodCall
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      * @return ($node is MethodCall ? MethodCall : StaticCall)
      */
     public function createCallWithName($node, string $name)

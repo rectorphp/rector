@@ -270,7 +270,7 @@ CODE_SAMPLE
         return new If_($booleanNot, ['stmts' => [new Expression($throw)]]);
     }
     /**
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\BinaryOp\Identical
+     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BooleanNot
      */
     private function createCondExpr(Coalesce $coalesce)
     {

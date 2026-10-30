@@ -24,7 +24,7 @@ final class PropertyNaming
      */
     private const I_PREFIX_REGEX = '#^I[A-Z]#';
     /**
-     * @param \PHPStan\Type\ThisType|\PHPStan\Type\ObjectType|\PhpParser\Node\Name|string $objectType
+     * @param \PhpParser\Node\Name|\PHPStan\Type\ObjectType|\PHPStan\Type\ThisType|string $objectType
      */
     public function fqnToVariableName($objectType): string
     {

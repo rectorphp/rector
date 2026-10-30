@@ -30,7 +30,7 @@ final class AttributeFinder
     }
     /**
      * @param MappingClass::* $attributeClass
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findAttributeByClassArgByName($node, string $attributeClass, string $argName): ?Expr
     {
@@ -39,7 +39,7 @@ final class AttributeFinder
     /**
      * @param string[] $attributeClasses
      * @param string[] $argNames
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findAttributeByClassesArgByNames($node, array $attributeClasses, array $argNames): ?Expr
     {
@@ -57,7 +57,7 @@ final class AttributeFinder
     }
     /**
      * @param string[] $attributeClasses
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findAttributeByClassesArgByName($node, array $attributeClasses, string $argName): ?Expr
     {
@@ -68,7 +68,7 @@ final class AttributeFinder
         return $this->findArgByName($attribute, $argName);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findAttributeByClass($node, string $attributeClass): ?Attribute
     {
@@ -87,7 +87,7 @@ final class AttributeFinder
     }
     /**
      * @return Attribute[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findManyByClass($node, string $attributeClass): array
     {
@@ -107,7 +107,7 @@ final class AttributeFinder
     }
     /**
      * @param string[] $attributeClasses
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findAttributeByClasses($node, array $attributeClasses): ?Attribute
     {
@@ -121,7 +121,7 @@ final class AttributeFinder
     }
     /**
      * @param string[] $attributeClasses
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function hasAttributeByClasses($node, array $attributeClasses): bool
     {
@@ -130,7 +130,7 @@ final class AttributeFinder
     /**
      * @param string[] $names
      * @return Attribute[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findManyByClasses($node, array $names): array
     {

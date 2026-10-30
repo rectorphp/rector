@@ -30,7 +30,7 @@ final class DefaultParameterValueResolver
         return $this->resolveValueFromType($defaultValueType);
     }
     /**
-     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\ConstFetch
      */
     private function resolveValueFromType(Type $constantType)
     {

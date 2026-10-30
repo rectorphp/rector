@@ -211,7 +211,7 @@ final class NodeFactory
         return $this->builderFactory->methodCall($callerExpr, $method, $arguments);
     }
     /**
-     * @param string|\PhpParser\Node\Expr $variableNameOrExpr
+     * @param \PhpParser\Node\Expr|string $variableNameOrExpr
      */
     public function createPropertyFetch($variableNameOrExpr, string $property): PropertyFetch
     {
@@ -340,7 +340,7 @@ final class NodeFactory
         return $node;
     }
     /**
-     * @param string|int|null $key
+     * @param int|string|null $key
      * @param mixed $item
      */
     private function createArrayItem($item, $key = null): ArrayItem
@@ -423,7 +423,7 @@ final class NodeFactory
     }
     /**
      * @param \PhpParser\Node\Expr|string $exprOrVariableName
-     * @return \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\Variable
      */
     private function createMethodCaller($exprOrVariableName)
     {

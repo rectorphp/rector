@@ -116,7 +116,7 @@ final class ArrowFunctionAndClosureFirstClassCallableGuard
     }
     /**
      * @param Param[] $params
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $expr
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
      */
     private function isDependantMethod($expr, array $params): bool
     {

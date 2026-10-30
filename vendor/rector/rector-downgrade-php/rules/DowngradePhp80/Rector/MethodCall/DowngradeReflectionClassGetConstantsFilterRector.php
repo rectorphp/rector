@@ -223,7 +223,7 @@ CODE_SAMPLE
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\BinaryOp\BitwiseOr $value
+     * @param \PhpParser\Node\Expr\BinaryOp\BitwiseOr|\PhpParser\Node\Expr\ClassConstFetch $value
      */
     private function resolveClassConstFetchNames($value): array
     {

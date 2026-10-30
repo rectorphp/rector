@@ -48,7 +48,7 @@ class LazyString implements \JsonSerializable
         return $lazyString;
     }
     /**
-     * @param string|int|float|bool|\Stringable $value
+     * @param bool|float|int|string|\Stringable $value
      * @return static
      */
     public static function fromStringable($value)
@@ -72,7 +72,7 @@ class LazyString implements \JsonSerializable
      * Casts scalars and stringable objects to strings.
      *
      * @throws \TypeError When the provided value is not stringable
-     * @param \Stringable|string|int|float|bool $value
+     * @param bool|float|int|string|\Stringable $value
      */
     final public static function resolve($value): string
     {

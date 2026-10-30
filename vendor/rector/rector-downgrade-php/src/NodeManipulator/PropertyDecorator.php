@@ -33,7 +33,7 @@ final class PropertyDecorator
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $property
+     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property $property
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $typeNode
      */
     public function decorateWithDocBlock($property, $typeNode): void

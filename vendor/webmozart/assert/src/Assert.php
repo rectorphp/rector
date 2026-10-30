@@ -89,7 +89,7 @@ class Assert
      * @param string|callable():string $message
      *
      * @throws InvalidArgumentException
-     * @return int|float|string
+     * @return float|int|string
      * @param mixed $value
      */
     public static function integerish($value, $message = '')
@@ -185,7 +185,7 @@ class Assert
      * @param string|callable():string $message
      *
      * @throws InvalidArgumentException
-     * @return int|float|string
+     * @return float|int|string
      * @param mixed $value
      */
     public static function numeric($value, $message = '')
@@ -242,7 +242,7 @@ class Assert
      * @param string|callable():string $message
      *
      * @throws InvalidArgumentException
-     * @return int|bool|float|string
+     * @return bool|float|int|string
      * @param mixed $value
      */
     public static function scalar($value, $message = '')
@@ -1796,7 +1796,7 @@ class Assert
      * @param string|callable():string $message
      *
      * @throws InvalidArgumentException
-     * @return string|int
+     * @return int|string
      * @param mixed $value
      */
     public static function validArrayKey($value, $message = '')

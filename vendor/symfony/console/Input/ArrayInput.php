@@ -40,7 +40,7 @@ class ArrayInput extends Input
         return null;
     }
     /**
-     * @param string|mixed[] $values
+     * @param mixed[]|string $values
      */
     public function hasParameterOption($values, bool $onlyParams = \false): bool
     {
@@ -59,8 +59,8 @@ class ArrayInput extends Input
         return \false;
     }
     /**
-     * @param string|mixed[] $values
-     * @param string|bool|int|float|mixed[]|null $default
+     * @param mixed[]|string $values
+     * @param mixed[]|bool|float|int|string|null $default
      * @return mixed
      */
     public function getParameterOption($values, $default = \false, bool $onlyParams = \false)
@@ -165,7 +165,7 @@ class ArrayInput extends Input
      * Adds an argument value.
      *
      * @throws InvalidArgumentException When argument given doesn't exist
-     * @param string|int $name
+     * @param int|string $name
      * @param mixed $value
      */
     private function addArgument($name, $value): void

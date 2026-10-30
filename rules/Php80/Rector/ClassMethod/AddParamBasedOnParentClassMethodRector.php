@@ -234,7 +234,7 @@ CODE_SAMPLE
         return $hasChanged;
     }
     /**
-     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\ComplexType
+     * @return \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|null
      */
     private function resolveParamType(?ExtendedParameterReflection $extendedParameterReflection)
     {

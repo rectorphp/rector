@@ -74,7 +74,7 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
         return new MixedType();
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function resolveClassMethodReturnType(ClassReflection $classReflection, $node, string $methodName, Scope $scope): Type
     {

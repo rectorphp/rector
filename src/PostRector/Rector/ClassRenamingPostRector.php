@@ -34,7 +34,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->addUseStatementGuard = $addUseStatementGuard;
     }
     /**
-     * @return \Rector\PhpParser\Node\FileNode|int
+     * @return int|\Rector\PhpParser\Node\FileNode
      */
     public function enterNode(Node $node)
     {

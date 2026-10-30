@@ -132,7 +132,7 @@ CODE_SAMPLE
         });
     }
     /**
-     * @return \PhpParser\Node\Stmt\Continue_|\PhpParser\Node\Stmt\Break_
+     * @return \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_
      */
     private function processVariableNum(Continue_ $continue, Variable $numVariable)
     {

@@ -119,7 +119,7 @@ class InputDefinition
      * Returns an InputArgument by name or by position.
      *
      * @throws InvalidArgumentException When argument given doesn't exist
-     * @param string|int $name
+     * @param int|string $name
      */
     public function getArgument($name): InputArgument
     {
@@ -131,7 +131,7 @@ class InputDefinition
     }
     /**
      * Returns true if an InputArgument object exists by name or position.
-     * @param string|int $name
+     * @param int|string $name
      */
     public function hasArgument($name): bool
     {

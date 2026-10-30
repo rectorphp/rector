@@ -105,7 +105,7 @@ final class Skipper
     /**
      * Match a class/path skip without marking it used. Callers that can only tell whether the skip
      * actually prevented a change later on must mark it used themselves via markSkipUsed().
-     * @param string|object $element
+     * @param object|string $element
      */
     public function matchSkip($element, string $filePath): ?SkipMatch
     {

@@ -77,7 +77,7 @@ CODE_SAMPLE
     }
     /**
      * @template TFunctionLike of ClassMethod|Function_|Closure|ArrowFunction
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      * @return TFunctionLike|null
      */
     private function processFunctionLike($functionLike)

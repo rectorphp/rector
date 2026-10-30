@@ -80,7 +80,7 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|StaticCall|New_|ArrayItem $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\ArrayItem|null
+     * @return \PhpParser\Node\ArrayItem|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|null
      */
     public function refactor(Node $node)
     {

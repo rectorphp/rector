@@ -46,7 +46,7 @@ final class WillReturnCallbackFactory
         $this->consecutiveIfsFactory = $consecutiveIfsFactory;
     }
     /**
-     * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr|null $referenceVariable
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
      */
     public function createClosure(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt, $referenceVariable): Closure
     {

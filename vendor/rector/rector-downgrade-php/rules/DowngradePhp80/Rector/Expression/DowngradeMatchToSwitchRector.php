@@ -103,7 +103,7 @@ CODE_SAMPLE
     }
     /**
      * @param Echo_|Expression|Return_ $node
-     * @return null|\PhpParser\Node|mixed[]
+     * @return mixed[]|\PhpParser\Node|null
      */
     public function refactor(Node $node)
     {
@@ -197,7 +197,7 @@ CODE_SAMPLE
     }
     /**
      * @template TNode of Arg|FuncCall|Assign|Expression|Return_
-     * @param \PhpParser\Node\Arg|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $containerArrowFunction
+     * @param \PhpParser\Node\Arg|\PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $containerArrowFunction
      * @return TNode|null
      */
     private function refactorInArrowFunction($containerArrowFunction, ArrowFunction $arrowFunction, Match_ $match)

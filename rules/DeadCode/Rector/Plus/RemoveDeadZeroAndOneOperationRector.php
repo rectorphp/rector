@@ -132,7 +132,7 @@ CODE_SAMPLE
         return $this->nodeTypeResolver->isNumberType($binaryOp->right);
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Plus|\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Minus|\PhpParser\Node\Expr\BinaryOp\Plus $binaryOp
      */
     private function processBinaryPlusAndMinus($binaryOp): ?Expr
     {
@@ -188,7 +188,7 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Div|\PhpParser\Node\Expr\BinaryOp\Mul $binaryOp
      */
     private function processBinaryMulAndDiv($binaryOp): ?Expr
     {

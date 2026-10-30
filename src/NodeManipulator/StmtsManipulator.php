@@ -43,7 +43,7 @@ final class StmtsManipulator
     }
     /**
      * @param Stmt[] $stmts
-     * @return null|\PhpParser\Node\Expr|\PhpParser\Node\Stmt
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt|null
      */
     public function getUnwrappedLastStmt(array $stmts)
     {

@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassLike;
 final class ClassNaming
 {
     /**
-     * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\Stmt\ClassLike|string $name
      */
     public function getShortName($name): string
     {

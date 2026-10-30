@@ -41,7 +41,7 @@ final class AutowiredClassMethodOrPropertyAnalyzer
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function detect($node): bool
     {

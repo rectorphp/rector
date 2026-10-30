@@ -67,7 +67,7 @@ final class SilentVoidResolver
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function hasExclusiveVoid($functionLike): bool
     {
@@ -150,7 +150,7 @@ final class SilentVoidResolver
         return $stmt instanceof Do_ && !$this->isFoundLoopControl($stmt);
     }
     /**
-     * @param \PhpParser\Node\Stmt|\PhpParser\Node\Expr $stmt
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt $stmt
      */
     private function isIfReturn($stmt, bool $withNativeNeverType): bool
     {

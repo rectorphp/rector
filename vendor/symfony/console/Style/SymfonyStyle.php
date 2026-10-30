@@ -56,7 +56,7 @@ class SymfonyStyle extends OutputStyle
      * Formats a message as a block of text.
      *
      * @return void
-     * @param string|mixed[] $messages
+     * @param mixed[]|string $messages
      */
     public function block($messages, ?string $type = null, ?string $style = null, string $prefix = ' ', bool $padding = \false, bool $escape = \true)
     {
@@ -95,7 +95,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function text($message)
     {
@@ -109,7 +109,7 @@ class SymfonyStyle extends OutputStyle
      * Formats a command comment.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function comment($message)
     {
@@ -117,7 +117,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function success($message)
     {
@@ -125,7 +125,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function error($message)
     {
@@ -133,7 +133,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function warning($message)
     {
@@ -141,7 +141,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function note($message)
     {
@@ -151,7 +151,7 @@ class SymfonyStyle extends OutputStyle
      * Formats an info message.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function info($message)
     {
@@ -159,7 +159,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function caution($message)
     {
@@ -192,7 +192,7 @@ class SymfonyStyle extends OutputStyle
      * * new TableSeparator()
      *
      * @return void
-     * @param string|mixed[]|\Symfony\Component\Console\Helper\TableSeparator ...$list
+     * @param mixed[]|string|\Symfony\Component\Console\Helper\TableSeparator ...$list
      */
     public function definitionList(...$list)
     {
@@ -334,7 +334,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|iterable $messages
+     * @param iterable|string $messages
      */
     public function writeln($messages, int $type = self::OUTPUT_NORMAL)
     {
@@ -348,7 +348,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|iterable $messages
+     * @param iterable|string $messages
      */
     public function write($messages, bool $newline = \false, int $type = self::OUTPUT_NORMAL)
     {

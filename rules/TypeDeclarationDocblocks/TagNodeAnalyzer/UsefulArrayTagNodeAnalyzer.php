@@ -12,7 +12,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 final class UsefulArrayTagNodeAnalyzer
 {
     /**
-     * @param null|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $tagValueNode
+     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|null $tagValueNode
      */
     public function isUsefulArrayTag($tagValueNode): bool
     {

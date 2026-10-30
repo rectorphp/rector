@@ -195,7 +195,7 @@ CODE_SAMPLE
         return $property;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\NullableType $node
+     * @param \PhpParser\Node\NullableType|\PhpParser\Node\Stmt\Property $node
      */
     private function hasNativeCollectionType($node): bool
     {

@@ -87,7 +87,7 @@ final class CollectionTypeResolver
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $property
      */
     public function hasIndexBy($property): bool
     {

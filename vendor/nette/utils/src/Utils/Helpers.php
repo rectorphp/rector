@@ -54,9 +54,9 @@ class Helpers
     /**
      * Returns value clamped to the inclusive range of min and max.
      * @return ($value is float ? float : ($min is float ? float : ($max is float ? float : int)))
-     * @param int|float $value
-     * @param int|float $min
-     * @param int|float $max
+     * @param float|int $value
+     * @param float|int $min
+     * @param float|int $max
      */
     public static function clamp($value, $min, $max)
     {

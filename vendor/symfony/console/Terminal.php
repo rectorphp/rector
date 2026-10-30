@@ -172,7 +172,7 @@ class Terminal
         return self::readFromProcess(['stty', '-a']);
     }
     /**
-     * @param string|mixed[] $command
+     * @param mixed[]|string $command
      */
     private static function readFromProcess($command): ?string
     {

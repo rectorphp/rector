@@ -91,7 +91,7 @@ CODE_SAMPLE
     }
     /**
      * @template TNode of MethodCall|StaticCall|New_|FuncCall
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $node
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall $node
      * @param Arg[] $args
      * @return TNode|null
      */

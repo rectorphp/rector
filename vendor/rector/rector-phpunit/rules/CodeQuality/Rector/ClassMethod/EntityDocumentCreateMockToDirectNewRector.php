@@ -137,7 +137,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return string|\PhpParser\Node\Expr|null
+     * @return \PhpParser\Node\Expr|string|null
      */
     private function resolveMethodCallFirstArgValue(MethodCall $methodCall, string $methodName)
     {

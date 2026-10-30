@@ -284,7 +284,7 @@ class Finder implements \IteratorAggregate
     /**
      * Restricts the search by modified time. $operator accepts "[operator] [date]" example: >1978-01-23
      * @param  '>'|'>='|'<'|'<='|'='|'=='|'==='|'!='|'!=='|'<>'  $operator  or predicate string
-     * @param string|int|\DateTimeInterface|null $date
+     * @param \DateTimeInterface|int|string|null $date
      * @return static
      */
     public function date(string $operator, $date = null)

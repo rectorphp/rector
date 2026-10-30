@@ -38,7 +38,7 @@ final class CollectionParamCallDetector
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $callLike
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall $callLike
      */
     public function detect($callLike, int $position): bool
     {

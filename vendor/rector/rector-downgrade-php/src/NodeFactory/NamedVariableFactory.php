@@ -19,7 +19,7 @@ final class NamedVariableFactory
         $this->variableNaming = $variableNaming;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Expr\Ternary $expression
+     * @param \PhpParser\Node\Expr\Ternary|\PhpParser\Node\Stmt\Expression $expression
      */
     public function createVariable(string $variableName, $expression): Variable
     {

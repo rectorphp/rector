@@ -56,7 +56,7 @@ final class ParentClassMethodTypeOverrideGuard
      * final. Adding a return or param type to such a class is a breaking change for its child
      * classes, so type-declaration rules must leave it untouched. Final classes are never guarded,
      * as they cannot be extended.
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Interface_ $node
      */
     public function isTypeGuardedClass($node): bool
     {

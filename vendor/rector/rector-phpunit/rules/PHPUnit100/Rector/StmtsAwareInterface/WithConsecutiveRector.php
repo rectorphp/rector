@@ -195,9 +195,9 @@ CODE_SAMPLE
     }
     /**
      * @return array{Expression, Expression}
-     * @param \PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|null $returnStmt
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|null $returnStmt
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expectsCall
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expectsCall
      */
     private function refactorToWillReturnCallback(MethodCall $withConsecutiveMethodCall, $returnStmt, $referenceVariable, $expectsCall, Expression $expression, ?MethodCall $willReturnOnConsecutiveMethodCall): array
     {

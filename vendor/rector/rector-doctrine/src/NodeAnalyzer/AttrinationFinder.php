@@ -30,8 +30,8 @@ final class AttrinationFinder
         $this->attributeFinder = $attributeFinder;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
-     * @return \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\PhpParser\Node\Attribute|null
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     * @return \PhpParser\Node\Attribute|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|null
      */
     public function getByOne($node, string $name)
     {
@@ -42,7 +42,7 @@ final class AttrinationFinder
         return $this->attributeFinder->findAttributeByClass($node, $name);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function hasByOne($node, string $name): bool
     {
@@ -55,7 +55,7 @@ final class AttrinationFinder
     }
     /**
      * @return array<DoctrineAnnotationTagValueNode|Attribute>
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findManyBy($node, string $name): array
     {
@@ -69,7 +69,7 @@ final class AttrinationFinder
     /**
      * @param string[] $names
      * @return array<DoctrineAnnotationTagValueNode|Attribute>
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function findManyByMany($node, array $names): array
     {
@@ -100,7 +100,7 @@ final class AttrinationFinder
     /**
      * @param string[] $classNames
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property $property
-     * @return \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\PhpParser\Node\Attribute|null
+     * @return \PhpParser\Node\Attribute|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|null
      */
     public function getByMany($property, array $classNames)
     {

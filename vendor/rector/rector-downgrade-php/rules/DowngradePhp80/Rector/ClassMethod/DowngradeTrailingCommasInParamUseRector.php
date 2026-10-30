@@ -99,7 +99,7 @@ CODE_SAMPLE
         return $this->cleanTrailingComma($node, $node->uses);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     private function processParams($node): ?Node
     {

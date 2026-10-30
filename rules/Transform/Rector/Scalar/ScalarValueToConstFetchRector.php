@@ -39,7 +39,7 @@ SAMPLE
     }
     /**
      * @param String_|Float_|Int_ $node
-     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch|null
+     * @return \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\ConstFetch|null
      */
     public function refactor(Node $node)
     {

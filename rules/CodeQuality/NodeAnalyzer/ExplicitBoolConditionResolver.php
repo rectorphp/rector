@@ -27,7 +27,7 @@ final class ExplicitBoolConditionResolver
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Expr\Ternary $node
+     * @param \PhpParser\Node\Expr\Ternary|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\If_ $node
      */
     public function resolve($node): ?ExplicitBoolCondition
     {

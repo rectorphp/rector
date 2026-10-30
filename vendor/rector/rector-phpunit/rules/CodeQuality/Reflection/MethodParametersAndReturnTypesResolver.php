@@ -61,7 +61,7 @@ final class MethodParametersAndReturnTypesResolver
     }
     /**
      * @return null|Type[]
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $callLike
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall $callLike
      */
     public function resolveCallParameterTypes($callLike): ?array
     {
@@ -125,7 +125,7 @@ final class MethodParametersAndReturnTypesResolver
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $callLike
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall $callLike
      */
     public function resolveCallParameterNames($callLike): array
     {

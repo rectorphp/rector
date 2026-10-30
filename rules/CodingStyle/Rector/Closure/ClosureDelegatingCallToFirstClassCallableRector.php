@@ -49,7 +49,7 @@ CODE_SAMPLE
     }
     /**
      * @param Closure $node
-     * @return null|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
     public function refactor(Node $node)
     {

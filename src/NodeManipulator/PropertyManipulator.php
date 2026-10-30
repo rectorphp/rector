@@ -112,7 +112,7 @@ final class PropertyManipulator
         $this->contextAnalyzer = $contextAnalyzer;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrParam
      */
     public function isPropertyChangeableExceptConstructor(Class_ $class, $propertyOrParam, Scope $scope): bool
     {
@@ -196,7 +196,7 @@ final class PropertyManipulator
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\PropertyFetch $propertyFetch
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
     private function isPropertyAssignedOnlyInConstructor(Class_ $class, string $propertyName, $propertyFetch, ?ClassMethod $classMethod): bool
     {

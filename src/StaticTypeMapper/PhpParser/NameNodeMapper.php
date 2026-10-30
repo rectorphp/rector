@@ -66,7 +66,7 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         return new FullyQualified($name->getAttribute(AttributeKey::NAMESPACED_NAME));
     }
     /**
-     * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType|\PHPStan\Type\ObjectWithoutClassType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectWithoutClassType|\PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType
      */
     private function createClassReferenceType(Name $name, string $reference)
     {

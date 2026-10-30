@@ -56,7 +56,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
-     * @return \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\Array_|\PhpParser\Node\Scalar\String_
      */
     private function createCallback($node)
     {
@@ -74,7 +74,7 @@ CODE_SAMPLE
         return $this->nodeFactory->createArray([$class, $method]);
     }
     /**
-     * @param \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr $expr
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Array_|\PhpParser\Node\Scalar\String_ $expr
      */
     private function createClosureFromCallableCall($expr): StaticCall
     {

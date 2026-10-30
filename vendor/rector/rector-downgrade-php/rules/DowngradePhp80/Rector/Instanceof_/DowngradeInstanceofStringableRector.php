@@ -37,7 +37,7 @@ CODE_SAMPLE
     }
     /**
      * @param Instanceof_ $node
-     * @return null|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BinaryOp\BooleanAnd
+     * @return \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\FuncCall|null
      */
     public function refactor(Node $node)
     {

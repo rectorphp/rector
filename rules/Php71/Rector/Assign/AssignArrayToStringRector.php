@@ -133,7 +133,7 @@ CODE_SAMPLE
     }
     /**
      * @return ArrayDimFetch[]
-     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode $node
      */
     private function findSameNamedVariableAssigns(Variable $variable, $node): array
     {
@@ -179,7 +179,7 @@ CODE_SAMPLE
     }
     /**
      * The variable is filled as a string later on, so it has to stay a string here as well
-     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode $node
      */
     private function isReAssignedAsString(Variable $variable, $node): bool
     {
@@ -217,7 +217,7 @@ CODE_SAMPLE
         return $isReAssignedAsString;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode $node
      */
     private function refactorAssign(Assign $assign, $node): ?Assign
     {

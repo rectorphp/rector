@@ -67,7 +67,7 @@ CODE_SAMPLE
     }
     /**
      * @param ClassMethod|Function_|Closure $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
+     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
     public function refactor(Node $node)
     {

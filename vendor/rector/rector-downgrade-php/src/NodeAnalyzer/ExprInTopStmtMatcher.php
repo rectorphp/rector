@@ -34,7 +34,7 @@ final class ExprInTopStmtMatcher
     }
     /**
      * @param callable(Node $node): bool $filter
-     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Switch_ $stmt
      */
     public function match($stmt, callable $filter): ?\PhpParser\Node\Expr
     {
@@ -71,7 +71,7 @@ final class ExprInTopStmtMatcher
     }
     /**
      * @param callable(Node $node): bool $filter
-     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Switch_ $stmt
      */
     private function resolveOnReturnOrExpression($stmt, callable $filter): ?Expr
     {
@@ -86,7 +86,7 @@ final class ExprInTopStmtMatcher
     /**
      * @param Expr[]|Expr $exprs
      * @param callable(Node $node): bool $filter
-     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Switch_ $stmt
      */
     private function resolveExpr($stmt, $exprs, callable $filter): ?Expr
     {
@@ -106,7 +106,7 @@ final class ExprInTopStmtMatcher
     }
     /**
      * @param callable(Node $node): bool $filter
-     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
+     * @param \PhpParser\Node|\PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Switch_ $stmt
      */
     private function resolveFromChildCond($stmt, callable $filter): ?\PhpParser\Node\Expr
     {

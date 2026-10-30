@@ -108,7 +108,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Empty_ $firstArgumentValue
+     * @param \PhpParser\Node\Expr\Empty_|\PhpParser\Node\Expr\FuncCall $firstArgumentValue
      */
     private function resolveFirstArgument($firstArgumentValue): ?string
     {

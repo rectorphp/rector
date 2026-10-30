@@ -9,8 +9,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CommentResolver
 {
     /**
-     * @param int|float $rangeLine
-     * @return int|float
+     * @param float|int $rangeLine
+     * @return float|int
      */
     public function resolveRangeLineFromComment($rangeLine, int $endLine, Stmt $nextStmt)
     {

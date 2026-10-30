@@ -130,7 +130,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\ComplexType $type
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|null $type
      */
     private function hasMockObjectType($type): bool
     {

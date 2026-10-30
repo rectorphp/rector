@@ -95,7 +95,7 @@ CODE_SAMPLE
     }
     /**
      * @template TFunctionLike of ClassMethod|Function_|Closure
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      * @return TFunctionLike|null
      */
     private function applyVariadicParams($node, string $variableName)
@@ -108,7 +108,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function hasFunctionOrClosureInside($functionLike, Variable $variable): bool
     {
@@ -133,7 +133,7 @@ CODE_SAMPLE
     }
     /**
      * @return Expression<Assign>|null
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function matchFuncGetArgsVariableAssign($functionLike): ?Expression
     {

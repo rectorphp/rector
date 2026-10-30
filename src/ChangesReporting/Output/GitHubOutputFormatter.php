@@ -97,7 +97,7 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
         return implode(',', $sanitizedProperties);
     }
     /**
-     * @param string|int|null $value
+     * @param int|string|null $value
      */
     private function sanitizeAnnotationProperty($value): string
     {

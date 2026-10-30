@@ -91,7 +91,7 @@ abstract class Output implements OutputInterface
     }
     /**
      * @return void
-     * @param string|iterable $messages
+     * @param iterable|string $messages
      */
     public function writeln($messages, int $options = self::OUTPUT_NORMAL)
     {
@@ -99,7 +99,7 @@ abstract class Output implements OutputInterface
     }
     /**
      * @return void
-     * @param string|iterable $messages
+     * @param iterable|string $messages
      */
     public function write($messages, bool $newline = \false, int $options = self::OUTPUT_NORMAL)
     {

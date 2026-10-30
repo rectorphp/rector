@@ -46,7 +46,7 @@ final class ExclusiveNativeCallLikeReturnMatcher
         return $callLikes;
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $functionLikeReflection
      */
     private function isNativeCallLike($functionLikeReflection): bool
     {

@@ -75,7 +75,7 @@ final class PropertyFetchFinder
     }
     /**
      * @return array<PropertyFetch|StaticPropertyFetch>
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrPromotedParam
      */
     public function findPrivatePropertyFetches(Class_ $class, $propertyOrPromotedParam, Scope $scope): array
     {
@@ -219,7 +219,7 @@ final class PropertyFetchFinder
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $node
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isFoundByRefParam($node, int $key, Scope $scope): bool
     {
@@ -267,7 +267,7 @@ final class PropertyFetchFinder
         return $propertyFetchVarTypeClassName === $classLikeName;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrPromotedParam
      */
     private function resolvePropertyName($propertyOrPromotedParam): ?string
     {

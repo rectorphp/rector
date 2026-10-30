@@ -59,7 +59,7 @@ final class NodeDocblockTypeDecorator
         return \true;
     }
     /**
-     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeOrTypeNode
+     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode|\PHPStan\Type\Type $typeOrTypeNode
      */
     public function decorateGenericIterableReturnType($typeOrTypeNode, PhpDocInfo $classMethodPhpDocInfo, FunctionLike $functionLike): bool
     {

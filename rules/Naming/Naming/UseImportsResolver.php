@@ -49,7 +49,7 @@ final class UseImportsResolver
         return $fileNode->getUses();
     }
     /**
-     * @param \PhpParser\Node\Stmt\Use_|\PhpParser\Node\Stmt\GroupUse $use
+     * @param \PhpParser\Node\Stmt\GroupUse|\PhpParser\Node\Stmt\Use_ $use
      */
     public function resolvePrefix($use): string
     {

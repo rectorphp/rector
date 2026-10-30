@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 final class AddUnionReturnType
@@ -22,15 +22,15 @@ final class AddUnionReturnType
     /**
      * @readonly
      */
-    private UnionTypeMapper $unionTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
      */
     private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard;
-    public function __construct(ReturnTypeInferer $returnTypeInferer, UnionTypeMapper $unionTypeMapper, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    public function __construct(ReturnTypeInferer $returnTypeInferer, StaticTypeMapper $staticTypeMapper, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
     {
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->unionTypeMapper = $unionTypeMapper;
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
     }
     /**
@@ -55,7 +55,7 @@ final class AddUnionReturnType
         if (!$inferReturnType instanceof UnionType) {
             return null;
         }
-        $returnType = $this->unionTypeMapper->mapToPhpParserNode($inferReturnType, TypeKind::RETURN);
+        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferReturnType, TypeKind::RETURN);
         if (!$returnType instanceof Node) {
             return null;
         }

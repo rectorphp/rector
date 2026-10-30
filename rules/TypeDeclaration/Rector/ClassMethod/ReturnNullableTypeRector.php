@@ -10,10 +10,10 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\UnionType;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\ValueObject\PhpVersion;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
@@ -26,7 +26,7 @@ final class ReturnNullableTypeRector extends AbstractRector implements MinPhpVer
     /**
      * @readonly
      */
-    private UnionTypeMapper $unionTypeMapper;
+    private StaticTypeMapper $staticTypeMapper;
     /**
      * @readonly
      */
@@ -35,9 +35,9 @@ final class ReturnNullableTypeRector extends AbstractRector implements MinPhpVer
      * @readonly
      */
     private ReturnTypeInferer $returnTypeInferer;
-    public function __construct(UnionTypeMapper $unionTypeMapper, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer)
+    public function __construct(StaticTypeMapper $staticTypeMapper, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer)
     {
-        $this->unionTypeMapper = $unionTypeMapper;
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->returnTypeInferer = $returnTypeInferer;
     }
@@ -103,7 +103,7 @@ CODE_SAMPLE
         if (!$inferReturnType instanceof UnionType) {
             return null;
         }
-        $returnType = $this->unionTypeMapper->mapToPhpParserNode($inferReturnType, TypeKind::RETURN);
+        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferReturnType, TypeKind::RETURN);
         if (!$returnType instanceof Node) {
             return null;
         }

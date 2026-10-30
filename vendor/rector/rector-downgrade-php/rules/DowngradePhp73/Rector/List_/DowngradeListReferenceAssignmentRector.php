@@ -111,7 +111,7 @@ CODE_SAMPLE
     /**
      * Remove the right-side-most params by reference or empty from `list()`,
      * since they are not needed anymore.
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $node
      */
     private function removeStaleParams($node, int $rightSideRemovableParamsCount): void
     {
@@ -121,7 +121,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $arrayOrList
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $arrayOrList
      */
     private function shouldSkipAssign(Assign $assign, $arrayOrList): bool
     {
@@ -239,7 +239,7 @@ CODE_SAMPLE
     /**
      * Re-build the path to the variable with all accumulated indexes
      * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
-     * @param string|int $arrayIndex
+     * @param int|string $arrayIndex
      */
     private function createAssignRefWithArrayDimFetch(Variable $assignVariable, Variable $exprVariable, array $nestedArrayIndexes, $arrayIndex): Expression
     {

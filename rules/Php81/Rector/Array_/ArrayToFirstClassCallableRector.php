@@ -89,7 +89,7 @@ CODE_SAMPLE
     }
     /**
      * @param Array_ $node
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
     public function refactor(Node $node)
     {

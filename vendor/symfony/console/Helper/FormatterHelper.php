@@ -27,7 +27,7 @@ class FormatterHelper extends Helper
     }
     /**
      * Formats a message as a block of text.
-     * @param string|mixed[] $messages
+     * @param mixed[]|string $messages
      */
     public function formatBlock($messages, string $style, bool $large = \false): string
     {

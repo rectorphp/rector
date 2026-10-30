@@ -198,7 +198,7 @@ CODE_SAMPLE
         return $this->collectionTypeDetector->isCollectionType($firstArg->value);
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node|\PhpParser\Node\Expr\BinaryOp\Coalesce|\PhpParser\Node\Expr\Ternary|\PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\BinaryOp\BooleanAnd $node
+     * @param \PhpParser\Node|\PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\Coalesce|\PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Ternary|\PhpParser\Node\Stmt\If_ $node
      */
     private function shouldSkip($node): bool
     {

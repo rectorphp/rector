@@ -40,7 +40,7 @@ CODE_SAMPLE
     }
     /**
      * @param Expression|MethodCall|NullsafeMethodCall|NullsafePropertyFetch $node
-     * @return null|\PhpParser\Node\Expr\Ternary|\PhpParser\Node\Stmt\Expression
+     * @return \PhpParser\Node\Expr\Ternary|\PhpParser\Node\Stmt\Expression|null
      */
     public function refactor(Node $node)
     {

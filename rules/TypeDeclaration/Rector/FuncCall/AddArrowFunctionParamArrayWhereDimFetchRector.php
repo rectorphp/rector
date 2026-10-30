@@ -112,7 +112,7 @@ CODE_SAMPLE
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $closureExpr
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $closureExpr
      */
     private function resolveDimFetchVariableNames($closureExpr): array
     {
@@ -133,7 +133,7 @@ CODE_SAMPLE
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $closureExpr
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $closureExpr
      */
     private function resolveIsArrayVariables($closureExpr): array
     {
@@ -155,7 +155,7 @@ CODE_SAMPLE
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $closureExpr
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $closureExpr
      */
     private function resolveInstanceofVariables($closureExpr): array
     {

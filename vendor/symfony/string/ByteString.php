@@ -123,7 +123,7 @@ class ByteString extends AbstractString
         return $chunks;
     }
     /**
-     * @param string|iterable|\Symfony\Component\String\AbstractString $suffix
+     * @param iterable|string|\Symfony\Component\String\AbstractString $suffix
      */
     public function endsWith($suffix): bool
     {
@@ -135,7 +135,7 @@ class ByteString extends AbstractString
         return '' !== $suffix && \strlen($this->string) >= \strlen($suffix) && 0 === substr_compare($this->string, $suffix, -\strlen($suffix), null, $this->ignoreCase);
     }
     /**
-     * @param string|iterable|\Symfony\Component\String\AbstractString $string
+     * @param iterable|string|\Symfony\Component\String\AbstractString $string
      */
     public function equalsTo($string): bool
     {
@@ -159,7 +159,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @param string|iterable|\Symfony\Component\String\AbstractString $needle
+     * @param iterable|string|\Symfony\Component\String\AbstractString $needle
      */
     public function indexOf($needle, int $offset = 0): ?int
     {
@@ -179,7 +179,7 @@ class ByteString extends AbstractString
         return \false === $i ? null : $i;
     }
     /**
-     * @param string|iterable|\Symfony\Component\String\AbstractString $needle
+     * @param iterable|string|\Symfony\Component\String\AbstractString $needle
      */
     public function indexOfLast($needle, int $offset = 0): ?int
     {
@@ -291,7 +291,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @param string|callable $to
+     * @param callable|string $to
      * @return static
      */
     public function replaceMatches(string $fromRegexp, $to)
@@ -376,7 +376,7 @@ class ByteString extends AbstractString
         return $chunks;
     }
     /**
-     * @param string|iterable|\Symfony\Component\String\AbstractString $prefix
+     * @param iterable|string|\Symfony\Component\String\AbstractString $prefix
      */
     public function startsWith($prefix): bool
     {

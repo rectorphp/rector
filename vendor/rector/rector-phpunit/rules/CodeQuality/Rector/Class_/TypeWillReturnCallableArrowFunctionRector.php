@@ -211,7 +211,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return null|\PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure
+     * @return \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|null
      */
     public function matchInnerClosure(MethodCall $methodCall)
     {
@@ -237,7 +237,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function shouldSkipReturnForConflictWithReturnedNodeType($functionLike, Type $returnType): bool
     {

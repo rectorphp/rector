@@ -101,7 +101,7 @@ CODE_SAMPLE
     }
     /**
      * @template TCall of StaticCall|MethodCall
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      * @return TCall|null
      */
     private function refactorNew(New_ $new, $call)

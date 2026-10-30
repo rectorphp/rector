@@ -20,7 +20,7 @@ class DateTimeImmutable extends \DateTimeImmutable implements \JsonSerializable
     /**
      * Creates a DateTimeImmutable object from a string, UNIX timestamp, or other DateTimeInterface object.
      * @throws \Exception if the date and time are not valid.
-     * @param string|int|\DateTimeInterface|null $time
+     * @param \DateTimeInterface|int|string|null $time
      * @return static
      */
     public static function from($time)
@@ -46,7 +46,7 @@ class DateTimeImmutable extends \DateTimeImmutable implements \JsonSerializable
     }
     /**
      * Returns a new DateTimeImmutable object formatted according to the specified format.
-     * @param string|\DateTimeZone|null $timezone
+     * @param \DateTimeZone|string|null $timezone
      */
     public static function createFromFormat(string $format, string $datetime, $timezone = null)
     {

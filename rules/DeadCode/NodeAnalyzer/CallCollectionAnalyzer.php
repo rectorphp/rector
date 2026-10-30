@@ -86,14 +86,14 @@ final class CallCollectionAnalyzer
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     private function isSelfStatic($call): bool
     {
         return $call instanceof StaticCall && $call->class instanceof Name && in_array($call->class->toString(), [ObjectReference::SELF, ObjectReference::STATIC], \true);
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     private function shouldSkip($call, string $classMethodName): bool
     {

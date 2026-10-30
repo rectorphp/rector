@@ -21,7 +21,7 @@ final class JsonConstCleaner
     }
     /**
      * @param array<JsonConstant::*> $constants
-     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\BinaryOp\BitwiseOr $node
+     * @param \PhpParser\Node\Expr\BinaryOp\BitwiseOr|\PhpParser\Node\Expr\ConstFetch $node
      */
     public function clean($node, array $constants): ?\PhpParser\Node\Expr
     {

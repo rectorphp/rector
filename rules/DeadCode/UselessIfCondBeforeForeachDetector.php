@@ -77,7 +77,7 @@ final class UselessIfCondBeforeForeachDetector
         return $this->isMatchingNotBinaryOp($notIdentical, $foreachExpr);
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\NotEqual $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\NotEqual|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp
      */
     private function isMatchingNotBinaryOp($binaryOp, Expr $foreachExpr): bool
     {

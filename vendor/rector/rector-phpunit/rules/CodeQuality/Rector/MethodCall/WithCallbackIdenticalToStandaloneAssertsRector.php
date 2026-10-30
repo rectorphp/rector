@@ -164,7 +164,7 @@ CODE_SAMPLE
         return $joinedExprs;
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function matchInnerSoleExpr($functionLike): ?Expr
     {

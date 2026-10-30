@@ -98,7 +98,7 @@ CODE_SAMPLE
         return $hasChanged ? $node : null;
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\ClassConstFetch $node
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\StaticPropertyFetch $node
      */
     private function shouldSkip($node, ClassReflection $classReflection, bool $isFinal, Scope $scope): bool
     {

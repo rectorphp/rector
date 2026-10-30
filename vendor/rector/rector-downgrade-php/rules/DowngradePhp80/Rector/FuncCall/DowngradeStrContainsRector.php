@@ -70,7 +70,7 @@ CODE_SAMPLE
         return new NotIdentical($funcCall, $this->nodeFactory->createFalse());
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot $expr
+     * @param \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\FuncCall $expr
      */
     private function matchStrContainsOrNotStrContains($expr): ?FuncCall
     {

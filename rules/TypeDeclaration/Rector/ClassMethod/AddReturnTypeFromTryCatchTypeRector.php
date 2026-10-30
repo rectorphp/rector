@@ -151,7 +151,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Stmt\TryCatch|\PhpParser\Node\Stmt\Catch_|\PhpParser\Node\Stmt\Finally_ $tryOrCatchOrFinally
+     * @param \PhpParser\Node\Stmt\Catch_|\PhpParser\Node\Stmt\Finally_|\PhpParser\Node\Stmt\TryCatch $tryOrCatchOrFinally
      */
     private function matchReturnType($tryOrCatchOrFinally): ?Type
     {

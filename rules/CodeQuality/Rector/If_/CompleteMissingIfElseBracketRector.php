@@ -71,7 +71,7 @@ CODE_SAMPLE
     }
     /**
      * @param Token[] $oldTokens
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
+     * @param \PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\If_ $if
      */
     private function isIfConditionFollowedByOpeningCurlyBracket($if, array $oldTokens): bool
     {
@@ -98,7 +98,7 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
+     * @param \PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\If_ $if
      */
     private function isBareNewNode($if): bool
     {

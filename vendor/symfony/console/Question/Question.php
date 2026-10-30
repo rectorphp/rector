@@ -26,7 +26,7 @@ class Question
     private ?\Closure $autocompleterCallback = null;
     private ?\Closure $validator = null;
     /**
-     * @var string|int|bool|float|null
+     * @var bool|float|int|string|null
      */
     private $default;
     private ?\Closure $normalizer = null;
@@ -50,7 +50,7 @@ class Question
     }
     /**
      * Returns the default answer.
-     * @return string|bool|int|float|null
+     * @return bool|float|int|string|null
      */
     public function getDefault()
     {

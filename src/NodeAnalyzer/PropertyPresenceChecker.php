@@ -29,7 +29,7 @@ final class PropertyPresenceChecker
     }
     /**
      * Includes parent classes and traits
-     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
+     * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
      */
     public function getClassContextProperty(Class_ $class, PropertyMetadata $definedPropertyWithType)
     {

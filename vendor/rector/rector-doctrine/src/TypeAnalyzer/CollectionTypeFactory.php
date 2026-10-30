@@ -43,7 +43,7 @@ final class CollectionTypeFactory
         $this->valueResolver = $valueResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $property
      */
     public function createType(ObjectType $objectType, bool $withIndexBy, $property): GenericObjectType
     {
@@ -55,7 +55,7 @@ final class CollectionTypeFactory
         return new GenericObjectType(DoctrineClass::COLLECTION, $genericTypes);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $property
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $property
      * @return \PHPStan\Type\IntegerType|\PHPStan\Type\StringType
      */
     private function resolveKeyType($property, string $className)
@@ -108,7 +108,7 @@ final class CollectionTypeFactory
         return new IntegerType();
     }
     /**
-     * @return null|\PHPStan\Type\IntegerType|\PHPStan\Type\StringType
+     * @return \PHPStan\Type\IntegerType|\PHPStan\Type\StringType|null
      */
     private function resolveKeyFromAnnotation(Class_ $class, string $key)
     {

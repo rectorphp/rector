@@ -48,7 +48,7 @@ final class ObjectTypeSpecifier
         $this->nameScopeFactory = $nameScopeFactory;
     }
     /**
-     * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType|\PHPStan\Type\Generic\TemplateType
+     * @return \PHPStan\Type\Generic\TemplateType|\PHPStan\Type\MixedType|\PHPStan\Type\TypeWithClassName|\PHPStan\Type\UnionType|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, ?\PHPStan\Analyser\Scope $scope, bool $withPreslash = \false)
     {
@@ -156,7 +156,7 @@ final class ObjectTypeSpecifier
     }
     /**
      * @param array<Use_|GroupUse> $uses
-     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
+     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|null
      */
     private function matchShortenedObjectType(ObjectType $objectType, array $uses)
     {

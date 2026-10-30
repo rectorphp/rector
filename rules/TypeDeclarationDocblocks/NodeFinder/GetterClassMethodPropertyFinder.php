@@ -22,7 +22,7 @@ final class GetterClassMethodPropertyFinder
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
+     * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
      */
     public function find(ClassMethod $classMethod, Class_ $class)
     {

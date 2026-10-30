@@ -73,7 +73,7 @@ class Filesystem
      * Creates a directory recursively.
      *
      * @throws IOException On any directory creation failure
-     * @param string|iterable $dirs
+     * @param iterable|string $dirs
      */
     public function mkdir($dirs, int $mode = 0777): void
     {
@@ -88,7 +88,7 @@ class Filesystem
     }
     /**
      * Checks the existence of files or directories.
-     * @param string|iterable $files
+     * @param iterable|string $files
      */
     public function exists($files): bool
     {
@@ -110,7 +110,7 @@ class Filesystem
      * @param int|null $atime The access time as a Unix timestamp, if not supplied the current system time is used
      *
      * @throws IOException When touch fails
-     * @param string|iterable $files
+     * @param iterable|string $files
      */
     public function touch($files, ?int $time = null, ?int $atime = null): void
     {
@@ -124,7 +124,7 @@ class Filesystem
      * Removes files or directories.
      *
      * @throws IOException When removal fails
-     * @param string|iterable $files
+     * @param iterable|string $files
      */
     public function remove($files): void
     {
@@ -182,7 +182,7 @@ class Filesystem
      * @param bool $recursive Whether change the mod recursively or not
      *
      * @throws IOException When the change fails
-     * @param string|iterable $files
+     * @param iterable|string $files
      */
     public function chmod($files, int $mode, int $umask = 00, bool $recursive = \false): void
     {
@@ -206,7 +206,7 @@ class Filesystem
      * @param bool       $recursive Whether change the owner recursively or not
      *
      * @throws IOException When the change fails
-     * @param string|iterable $files
+     * @param iterable|string $files
      */
     public function chown($files, $user, bool $recursive = \false): void
     {
@@ -234,7 +234,7 @@ class Filesystem
      * @param bool       $recursive Whether change the group recursively or not
      *
      * @throws IOException When the change fails
-     * @param string|iterable $files
+     * @param iterable|string $files
      */
     public function chgrp($files, $group, bool $recursive = \false): void
     {
@@ -632,7 +632,7 @@ class Filesystem
         return $content;
     }
     /**
-     * @param string|iterable $files
+     * @param iterable|string $files
      */
     private function toIterable($files): iterable
     {

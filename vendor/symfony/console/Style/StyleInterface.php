@@ -39,42 +39,42 @@ interface StyleInterface
      * Formats informational text.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function text($message);
     /**
      * Formats a success result bar.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function success($message);
     /**
      * Formats an error result bar.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function error($message);
     /**
      * Formats an warning result bar.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function warning($message);
     /**
      * Formats a note admonition.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function note($message);
     /**
      * Formats a caution admonition.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param mixed[]|string $message
      */
     public function caution($message);
     /**

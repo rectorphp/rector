@@ -92,7 +92,7 @@ final class BinaryOpManipulator
         return new $inversedNodeClass($binaryOp->left, $binaryOp->right);
     }
     /**
-     * @return \PhpParser\Node\Expr\BinaryOp|\PhpParser\Node\Expr|\PhpParser\Node\Expr\BooleanNot
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\BinaryOp|\PhpParser\Node\Expr\BooleanNot
      */
     public function inverseNode(Expr $expr)
     {

@@ -186,7 +186,7 @@ final class AssertCallAnalyzer
         });
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     private function resolveClassMethodFromCall($call): ?ClassMethod
     {

@@ -126,7 +126,7 @@ CODE_SAMPLE
     }
     /**
      * @template TNode of If_|ElseIf_|Ternary
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Expr\Ternary $node
+     * @param \PhpParser\Node\Expr\Ternary|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\If_ $node
      * @return TNode|null
      */
     private function refactorExplicitBool($node)
@@ -160,7 +160,7 @@ CODE_SAMPLE
         return $this->nullableObjectToInstanceofFactory->create($expr, $nullableObjectType, $node instanceof Identical);
     }
     /**
-     * @param \PhpParser\Node\Expr\Empty_|\PhpParser\Node\Expr\BooleanNot $node
+     * @param \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Empty_ $node
      * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_|null
      */
     private function refactorEmpty($node)
@@ -191,7 +191,7 @@ CODE_SAMPLE
     }
     /**
      * @template TLoop of While_|Do_
-     * @param \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_ $node
+     * @param \PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\While_ $node
      * @return TLoop|null
      */
     private function refactorLoop($node)

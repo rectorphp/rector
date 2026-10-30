@@ -82,7 +82,7 @@ class Arrays
     /**
      * Returns zero-indexed position of given array key. Returns null if key is not found.
      * @param  array<mixed>  $array
-     * @param string|int $key
+     * @param int|string $key
      */
     public static function getKeyOffset(array $array, $key): ?int
     {
@@ -91,7 +91,7 @@ class Arrays
     /**
      * @param  array<mixed>  $array
      * @deprecated  use  getKeyOffset()
-     * @param string|int $key
+     * @param int|string $key
      */
     public static function searchKey(array $array, $key): ?int
     {
@@ -173,7 +173,7 @@ class Arrays
      * If $key is null (or does not exist), it is inserted at the beginning.
      * @param  array<mixed>  $array
      * @param  array<mixed>  $inserted
-     * @param string|int|null $key
+     * @param int|string|null $key
      */
     public static function insertBefore(array &$array, $key, array $inserted): void
     {
@@ -185,7 +185,7 @@ class Arrays
      * If $key is null (or does not exist), it is inserted at the end.
      * @param  array<mixed>  $array
      * @param  array<mixed>  $inserted
-     * @param string|int|null $key
+     * @param int|string|null $key
      */
     public static function insertAfter(array &$array, $key, array $inserted): void
     {
@@ -197,8 +197,8 @@ class Arrays
     /**
      * Renames key in array.
      * @param  array<mixed>  $array
-     * @param string|int $oldKey
-     * @param string|int $newKey
+     * @param int|string $oldKey
+     * @param int|string $newKey
      */
     public static function renameKey(array &$array, $oldKey, $newKey): bool
     {
@@ -340,7 +340,7 @@ class Arrays
      * @param  mixed  $default
      * @return ?T
      * @throws Nette\InvalidArgumentException if item does not exist and default value is not provided
-     * @param string|int $key
+     * @param int|string $key
      */
     public static function pick(array &$array, $key, $default = null)
     {

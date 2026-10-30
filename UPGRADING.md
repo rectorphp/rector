@@ -1,3 +1,7 @@
+# Upgrading to the next Rector release
+
+* `TypeMapperInterface::mapToPhpParserNode()` is removed; custom type mappers only map to PHPDoc nodes now. A custom `Type` controls its native declaration by overriding `toNativePhpTypeNode()`.
+
 # Upgrading from Rector 2.2.14 to 2.3
 
 * `FileWithoutNamespace` is deprecated, and replaced by `FileNode` that represents both namespaced and non-namespaced files and allow changes inside

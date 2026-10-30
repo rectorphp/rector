@@ -142,7 +142,7 @@ CODE_SAMPLE
         return $valueMap[$originalValue];
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Class_ $classOrClass
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod $classOrClass
      */
     private function refactorClassMethodOrClass($classOrClass, Class_ $class): void
     {

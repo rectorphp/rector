@@ -22,7 +22,7 @@ final class AttributeNameFactory
     }
     /**
      * @param Use_[] $uses
-     * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
+     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
      */
     public function create(AnnotationToAttributeInterface $annotationToAttribute, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $uses)
     {

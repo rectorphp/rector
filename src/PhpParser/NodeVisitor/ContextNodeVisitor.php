@@ -245,7 +245,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
         }
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_ $node
+     * @param \PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\If_ $node
      */
     private function processContextInIf($node): void
     {
@@ -256,7 +256,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
         }
     }
     /**
-     * @param \PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\Foreach_|\PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\Switch_ $node
+     * @param \PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\Foreach_|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\While_ $node
      */
     private function processContextInLoop($node): void
     {

@@ -122,7 +122,7 @@ CODE_SAMPLE
         return $classReflection->hasMethod($methodCallRename->getNewMethod());
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classOrInterface
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classOrInterface
      */
     private function hasClassNewClassMethod($classOrInterface, MethodCallRenameInterface $methodCallRename): bool
     {
@@ -141,7 +141,7 @@ CODE_SAMPLE
     }
     /**
      * @template TClassLike of Class_|Trait_|Interface_
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classOrInterface
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classOrInterface
      * @return TClassLike|null
      */
     private function refactorClass($classOrInterface, Scope $scope)
@@ -168,7 +168,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classOrInterface
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classOrInterface
      */
     private function shouldSkipRename(string $methodName, ClassMethod $classMethod, MethodCallRenameInterface $methodCallRename, $classOrInterface, ?ClassReflection $classReflection): bool
     {
@@ -187,8 +187,8 @@ CODE_SAMPLE
         return $this->hasClassNewClassMethod($classOrInterface, $methodCallRename);
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall $call
-     * @return \PhpParser\Node\Expr\ArrayDimFetch|null|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @return \PhpParser\Node\Expr\ArrayDimFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
     private function refactorMethodCallAndStaticCall($call)
     {

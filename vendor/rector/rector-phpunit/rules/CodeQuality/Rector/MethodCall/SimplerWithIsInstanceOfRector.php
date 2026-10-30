@@ -97,7 +97,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return \PhpParser\Node|null|\PhpParser\Node\Name
+     * @return \PhpParser\Node|\PhpParser\Node\Name|null
      */
     private function matchCallbackSoleInstanceofCheckClassName(Expr $expr)
     {
@@ -115,7 +115,7 @@ CODE_SAMPLE
         return $this->matchSoleInstanceofCheckClassName($innerClosure);
     }
     /**
-     * @return \PhpParser\Node|null|\PhpParser\Node\Expr|\PhpParser\Node\Name
+     * @return \PhpParser\Node|\PhpParser\Node\Expr|\PhpParser\Node\Name|null
      */
     private function matchSoleInstanceofCheckClassName(Closure $innerClosure)
     {

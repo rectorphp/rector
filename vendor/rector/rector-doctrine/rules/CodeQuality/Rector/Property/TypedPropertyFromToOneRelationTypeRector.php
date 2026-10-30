@@ -148,7 +148,7 @@ CODE_SAMPLE
         return PhpVersion::PHP_74;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|\PhpParser\Node\Identifier $typeNode
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $typeNode
      */
     private function completePropertyTypeOrVarDoc(Type $propertyType, $typeNode, Property $property): void
     {

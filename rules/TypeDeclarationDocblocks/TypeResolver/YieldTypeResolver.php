@@ -41,7 +41,7 @@ final class YieldTypeResolver
     /**
      * @param array<Yield_|YieldFrom> $yieldNodes
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @return \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType
+     * @return \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType
      */
     public function resolveFromYieldNodes(array $yieldNodes, $functionLike)
     {
@@ -85,7 +85,7 @@ final class YieldTypeResolver
         return $yieldedTypes;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function resolveClassName($functionLike): string
     {

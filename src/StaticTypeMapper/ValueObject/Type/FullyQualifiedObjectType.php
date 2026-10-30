@@ -5,8 +5,10 @@ namespace Rector\StaticTypeMapper\ValueObject\Type;
 
 use RectorPrefix202610\Nette\Utils\Strings;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
+use PHPStan\Type\NativeTypePosition;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -63,5 +65,9 @@ final class FullyQualifiedObjectType extends ObjectType
             return $type->getClassName() === $this->getClassName();
         }
         return \false;
+    }
+    public function toNativePhpTypeNode(NativeTypePosition $position): ?Name
+    {
+        return $position->isClassNameAllowed() ? new FullyQualified(ltrim($this->getClassName(), '\\')) : null;
     }
 }

@@ -35,7 +35,7 @@ final class ConstantArrayTypeGeneralizer
         $this->typeNormalizer = $typeNormalizer;
     }
     /**
-     * @return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode
+     * @return \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
      */
     public function generalize(ConstantArrayType $constantArrayType, bool $isFresh = \true)
     {
@@ -65,7 +65,7 @@ final class ConstantArrayTypeGeneralizer
         return $this->createArrayGenericTypeNode($genericKeyType, $genericItemType);
     }
     /**
-     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode $itemType
+     * @param \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\Type\Type $itemType
      */
     private function createArrayGenericTypeNode(Type $keyType, $itemType): GenericTypeNode
     {

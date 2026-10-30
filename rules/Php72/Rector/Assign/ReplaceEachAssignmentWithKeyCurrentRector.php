@@ -101,7 +101,7 @@ CODE_SAMPLE
         return array_map(static fn(Expr $expr): Expression => new Expression($expr), $exprs);
     }
     /**
-     * @param string|int $dimValue
+     * @param int|string $dimValue
      */
     private function createDimFetchAssignWithFuncCall(Expr $assignVariable, Expr $eachedVariable, $dimValue, string $functionName): Assign
     {

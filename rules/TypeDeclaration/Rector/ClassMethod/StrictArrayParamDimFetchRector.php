@@ -152,7 +152,7 @@ CODE_SAMPLE
     }
     /**
      * @param string[] $paramNames
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function hasArrayDimFetchOnParamNames($functionLike, array $paramNames): bool
     {
@@ -179,7 +179,7 @@ CODE_SAMPLE
         return $hasArrayDimFetch;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function isParamAccessedArrayDimFetch(Param $param, $functionLike): bool
     {

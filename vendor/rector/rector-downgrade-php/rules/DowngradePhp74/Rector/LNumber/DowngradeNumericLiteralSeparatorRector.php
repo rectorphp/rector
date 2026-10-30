@@ -66,7 +66,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Scalar\Int_|\PhpParser\Node\Scalar\Float_ $node
+     * @param \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\Int_ $node
      * @param mixed $rawValue
      */
     private function shouldSkip($node, $rawValue): bool

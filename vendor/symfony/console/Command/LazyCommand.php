@@ -113,7 +113,7 @@ final class LazyCommand extends Command
     }
     /**
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
-     * @param string|mixed[]|null $shortcut
+     * @param mixed[]|string|null $shortcut
      * @param mixed $default
      * @return static
      */

@@ -184,7 +184,7 @@ CODE_SAMPLE
         return $statements;
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $node
+     * @param \PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\If_ $node
      */
     private function doesNotLastStatementBreakFlow($node): bool
     {
@@ -205,7 +205,7 @@ CODE_SAMPLE
         return !($lastStmt instanceof Return_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Throw_ || $lastStmt instanceof Continue_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_);
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_ $node
+     * @param \PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\If_ $node
      */
     private function createIfFromNode($node): If_
     {

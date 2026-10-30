@@ -190,7 +190,7 @@ final class TraceableCommand extends Command implements SignalableCommandInterfa
         return $this;
     }
     /**
-     * @param string|mixed[]|null $shortcut
+     * @param mixed[]|string|null $shortcut
      * @param mixed[]|\Closure $suggestedValues
      * @param mixed $default
      * @return static

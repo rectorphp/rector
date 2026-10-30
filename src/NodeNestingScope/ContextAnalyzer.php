@@ -19,7 +19,7 @@ final class ContextAnalyzer
         return $node->getAttribute(AttributeKey::IS_IN_IF) === \true;
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\NullsafePropertyFetch $propertyFetch
+     * @param \PhpParser\Node\Expr\NullsafePropertyFetch|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
     public function isChangeableContext($propertyFetch): bool
     {

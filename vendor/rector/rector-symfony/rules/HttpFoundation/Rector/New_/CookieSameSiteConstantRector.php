@@ -53,7 +53,7 @@ CODE_SAMPLE
     }
     /**
      * @param New_|StaticCall|MethodCall $node
-     * @return \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|null
      */
     public function refactor(Node $node)
     {
@@ -77,7 +77,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall $node
      */
     private function matchSameSiteArgPosition($node): ?int
     {

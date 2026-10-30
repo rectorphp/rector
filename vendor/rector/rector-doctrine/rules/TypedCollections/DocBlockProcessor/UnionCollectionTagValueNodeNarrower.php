@@ -19,7 +19,7 @@ use Rector\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey;
 final class UnionCollectionTagValueNodeNarrower
 {
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $tagValueNode
+     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $tagValueNode
      */
     public function narrow($tagValueNode, bool $hasNativeCollectionType = \false): bool
     {
@@ -37,7 +37,7 @@ final class UnionCollectionTagValueNodeNarrower
         return $this->processIterableAndUnionTypeNode($tagValueNode, $hasNativeCollectionType);
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $collectionType
+     * @param \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\TypeNode $collectionType
      */
     private function addIntKeyIfMissing($collectionType): void
     {
@@ -51,7 +51,7 @@ final class UnionCollectionTagValueNodeNarrower
         $collectionType->genericTypes = array_merge([new IdentifierTypeNode('int')], $collectionType->genericTypes);
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tagValueNode
+     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $tagValueNode
      */
     private function processIterableAndUnionTypeNode($tagValueNode, bool $hasNativeCollectionType): bool
     {
@@ -143,7 +143,7 @@ final class UnionCollectionTagValueNodeNarrower
         return \true;
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $complexTypeNode
+     * @param \PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $complexTypeNode
      */
     private function hasCollectionDocblockType($complexTypeNode): bool
     {
@@ -157,7 +157,7 @@ final class UnionCollectionTagValueNodeNarrower
         return $found;
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tagValueNode
+     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $tagValueNode
      */
     private function processNullableTypeNode(bool $hasNativeCollectionType, $tagValueNode): bool
     {

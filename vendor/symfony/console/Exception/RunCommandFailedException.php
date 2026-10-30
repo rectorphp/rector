@@ -21,7 +21,7 @@ final class RunCommandFailedException extends RuntimeException
      */
     public RunCommandContext $context;
     /**
-     * @param \Throwable|string $exception
+     * @param string|\Throwable $exception
      */
     public function __construct($exception, RunCommandContext $context)
     {

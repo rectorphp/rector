@@ -21,7 +21,7 @@ final class ClassInsertManipulator
         $this->nodeFactory = $nodeFactory;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod $addedStmt
+     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $addedStmt
      */
     public function addAsFirstMethod(Class_ $class, $addedStmt): void
     {

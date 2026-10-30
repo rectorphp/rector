@@ -89,7 +89,7 @@ CODE_SAMPLE
         return $this->refactorProperty($node);
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $tagValueNode
+     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $tagValueNode
      */
     private function processTagValueNode($tagValueNode): bool
     {
@@ -208,7 +208,7 @@ CODE_SAMPLE
         return $hasChanged;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassMethod $stmts
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $stmts
      */
     private function hasCollectionName($stmts): bool
     {

@@ -158,7 +158,7 @@ CODE_SAMPLE
         return new Identical($expr, $right);
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isCallerClassEnum($node): bool
     {
@@ -195,7 +195,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return null|\PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\ClassConstFetch|null
      */
     private function getValidEnumExpr(Node $node)
     {
@@ -237,7 +237,7 @@ CODE_SAMPLE
         return $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
     }
     /**
-     * @return null|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\BinaryOp\Identical
+     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\PropertyFetch|null
      */
     private function refactorMethodCall(MethodCall $methodCall, string $methodName)
     {

@@ -72,7 +72,7 @@ final class Callback
      * Returns reflection for method or function used in PHP callback.
      * @param  mixed  $callable  type check is escalated to ReflectionException
      * @throws \ReflectionException  if callback is not valid
-     * @return \ReflectionMethod|\ReflectionFunction
+     * @return \ReflectionFunction|\ReflectionMethod
      */
     public static function toReflection($callable)
     {

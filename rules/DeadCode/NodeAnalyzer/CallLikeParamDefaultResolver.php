@@ -30,7 +30,7 @@ final class CallLikeParamDefaultResolver
     }
     /**
      * @return int[]
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $callLike
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall $callLike
      */
     public function resolveNullPositions($callLike): array
     {
@@ -58,7 +58,7 @@ final class CallLikeParamDefaultResolver
         return $nullPositions;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $callLike
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall $callLike
      */
     public function resolvePositionParameterByName($callLike, string $parameterName): ?int
     {

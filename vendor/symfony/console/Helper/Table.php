@@ -85,7 +85,7 @@ class Table
      * Sets table style.
      *
      * @return $this
-     * @param \Symfony\Component\Console\Helper\TableStyle|string $name
+     * @param string|\Symfony\Component\Console\Helper\TableStyle $name
      */
     public function setStyle($name)
     {
@@ -193,7 +193,7 @@ class Table
     }
     /**
      * @return $this
-     * @param \Symfony\Component\Console\Helper\TableSeparator|mixed[] $row
+     * @param mixed[]|\Symfony\Component\Console\Helper\TableSeparator $row
      */
     public function addRow($row)
     {
@@ -208,7 +208,7 @@ class Table
      * Adds a row to the table, and re-renders the table.
      *
      * @return $this
-     * @param \Symfony\Component\Console\Helper\TableSeparator|mixed[] $row
+     * @param mixed[]|\Symfony\Component\Console\Helper\TableSeparator $row
      */
     public function appendRow($row)
     {
@@ -900,7 +900,7 @@ class Table
         return ['default' => new TableStyle(), 'borderless' => $borderless, 'compact' => $compact, 'symfony-style-guide' => $styleGuide, 'box' => $box, 'box-double' => $boxDouble];
     }
     /**
-     * @param \Symfony\Component\Console\Helper\TableStyle|string $name
+     * @param string|\Symfony\Component\Console\Helper\TableStyle $name
      */
     private function resolveStyle($name): TableStyle
     {

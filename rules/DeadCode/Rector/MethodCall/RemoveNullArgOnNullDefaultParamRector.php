@@ -75,7 +75,7 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|StaticCall|New_|FuncCall $node
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall|null
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|null
      */
     public function refactor(Node $node)
     {

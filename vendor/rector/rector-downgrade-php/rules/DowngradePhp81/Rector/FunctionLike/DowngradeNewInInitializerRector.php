@@ -129,7 +129,7 @@ CODE_SAMPLE
     }
     /**
      * @template TFunctionLike of ClassMethod|Closure|Function_
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      * @return TFunctionLike
      */
     private function replaceNewInParams($functionLike)
@@ -170,7 +170,7 @@ CODE_SAMPLE
         return $functionLike;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType $type
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $type
      * @return \PhpParser\Node\NullableType|\PhpParser\Node\UnionType
      */
     private function ensureNullableType($type)

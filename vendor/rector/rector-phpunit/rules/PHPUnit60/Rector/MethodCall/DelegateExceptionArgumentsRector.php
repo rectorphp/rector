@@ -126,7 +126,7 @@ CODE_SAMPLE
     }
     /**
      * @template TCall of StaticCall|MethodCall
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      * @return ($call is MethodCall ? MethodCall : StaticCall)
      */
     private function createFirstArgExtraMethodCall($call)

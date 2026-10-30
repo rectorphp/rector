@@ -219,7 +219,7 @@ CODE_SAMPLE
     }
     /**
      * @return CallLike[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Foreach_|\PhpParser\Node\Stmt $node
+     * @param \PhpParser\Node\Stmt|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Foreach_ $node
      */
     private function findCallLikes($node): array
     {
