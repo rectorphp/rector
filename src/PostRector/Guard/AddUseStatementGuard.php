@@ -4,29 +4,21 @@ declare (strict_types=1);
 namespace Rector\PostRector\Guard;
 
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\FileNode;
+use Rector\ValueObject\Application\File;
 final class AddUseStatementGuard
 {
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
     /**
      * @var array<string, bool>
      */
     private array $shouldTraverseOnFiles = [];
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
-    }
     /**
      * @param Stmt[] $stmts
      */
-    public function shouldTraverse(array $stmts, string $filePath): bool
+    public function shouldTraverse(array $stmts, File $file): bool
     {
+        $filePath = $file->getFilePath();
         if (isset($this->shouldTraverseOnFiles[$filePath])) {
             return $this->shouldTraverseOnFiles[$filePath];
         }
@@ -45,6 +37,6 @@ final class AddUseStatementGuard
                 return $this->shouldTraverseOnFiles[$filePath] = \false;
             }
         }
-        return $this->shouldTraverseOnFiles[$filePath] = !$this->betterNodeFinder->hasInstancesOf($stmts, [InlineHTML::class]);
+        return $this->shouldTraverseOnFiles[$filePath] = !$file->containsHTML();
     }
 }

@@ -57,6 +57,6 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if ($this->oldToNewClasses === []) {
             return \false;
         }
-        return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());
+        return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile());
     }
 }
