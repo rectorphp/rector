@@ -50,14 +50,12 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
@@ -71,6 +69,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\UndefinedVariableException;
 use PHPStan\Node\FunctionCallableNode;
+use PHPStan\Node\InClassNode;
 use PHPStan\Node\InstantiationCallableNode;
 use PHPStan\Node\MethodCallableNode;
 use PHPStan\Node\StaticMethodCallableNode;
@@ -78,11 +77,9 @@ use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Parser\ParserErrorsException;
 use PHPStan\PhpDocParser\Parser\ParserException;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\FileNode;
 use Rector\Util\Reflection\PrivatesAccessor;
@@ -109,10 +106,6 @@ final class PHPStanNodeScopeResolver
      */
     private PrivatesAccessor $privatesAccessor;
     /**
-     * @readonly
-     */
-    private ClassAnalyzer $classAnalyzer;
-    /**
      * @var string
      */
     private const CONTEXT = 'context';
@@ -123,13 +116,12 @@ final class PHPStanNodeScopeResolver
     /**
      * @param DecoratingNodeVisitorInterface[] $decoratingNodeVisitors
      */
-    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, array $decoratingNodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, ClassAnalyzer $classAnalyzer)
+    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, array $decoratingNodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor)
     {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->scopeFactory = $scopeFactory;
         $this->privatesAccessor = $privatesAccessor;
-        $this->classAnalyzer = $classAnalyzer;
         // @todo make use of immutable, to avoid tedious traversing
         $this->nodeTraverser = new NodeTraverser(...$decoratingNodeVisitors);
     }
@@ -155,11 +147,10 @@ final class PHPStanNodeScopeResolver
             if ($mutatingScope instanceof NodeCallbackScope) {
                 $mutatingScope = $mutatingScope->toWalkScope();
             }
-            // the class reflection is resolved AFTER entering to class node
-            // so we need to get it from the first after this one
-            if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Enum_) {
-                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
-                $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            // the class reflection is resolved AFTER entering to class node,
+            // PHPStan reports the scope it entered the class with here
+            if ($node instanceof InClassNode) {
+                $node->getOriginalNode()->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 return;
             }
             if ($node instanceof Trait_) {
@@ -425,48 +416,15 @@ final class PHPStanNodeScopeResolver
         }
         $ternary->else->setAttribute(AttributeKey::SCOPE, $mutatingScope);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_ $classLike
-     */
-    private function resolveClassOrInterfaceScope($classLike, MutatingScope $mutatingScope): MutatingScope
+    private function resolveClassName(Trait_ $trait): string
     {
-        $isAnonymous = $this->classAnalyzer->isAnonymousClass($classLike);
-        // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
-        if ($classLike instanceof Class_ && $isAnonymous) {
-            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $mutatingScope);
-        } else {
-            $className = $this->resolveClassName($classLike);
-            if (!$this->reflectionProvider->hasClass($className)) {
-                return $mutatingScope;
-            }
-            $classReflection = $this->reflectionProvider->getClass($className);
+        if ($trait->namespacedName instanceof Name) {
+            return (string) $trait->namespacedName;
         }
-        try {
-            return $mutatingScope->enterClass($classReflection);
-        } catch (ShouldNotHappenException $exception) {
-        }
-        // enterClass() throws when the scope is already inside a class, which happens when a changed
-        // class node is re-processed on a later pass; keep the in-class scope instead of dropping it
-        $currentClassReflection = $mutatingScope->getClassReflection();
-        if ($currentClassReflection instanceof ClassReflection && $currentClassReflection->getName() === $classReflection->getName()) {
-            return $mutatingScope;
-        }
-        $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
-        $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
-        return $mutatingScope;
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
-     */
-    private function resolveClassName($classLike): string
-    {
-        if ($classLike->namespacedName instanceof Name) {
-            return (string) $classLike->namespacedName;
-        }
-        if (!$classLike->name instanceof Identifier) {
+        if (!$trait->name instanceof Identifier) {
             return '';
         }
-        return $classLike->name->toString();
+        return $trait->name->toString();
     }
     /**
      * @param callable(Node $trait, MutatingScope $scope): void $nodeCallback
