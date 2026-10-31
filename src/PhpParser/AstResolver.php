@@ -230,13 +230,13 @@ final class AstResolver
                 $propertyNode = $property;
                 return \true;
             }
-            return \false;
+            if (!$node instanceof Class_) {
+                return \false;
+            }
+            $propertyNode = $this->findPromotedPropertyByName($node, $desiredPropertyName);
+            return $propertyNode instanceof Param;
         });
-        if ($propertyNode instanceof Property) {
-            return $propertyNode;
-        }
-        // promoted property
-        return $this->findPromotedPropertyByName($nodes, $desiredClassName, $desiredPropertyName);
+        return $propertyNode;
     }
     /**
      * @return Stmt[]
@@ -280,35 +280,20 @@ final class AstResolver
         });
         return $classMethod;
     }
-    /**
-     * @param Stmt[] $stmts
-     */
-    private function findPromotedPropertyByName(array $stmts, string $desiredClassName, string $desiredPropertyName): ?Param
+    private function findPromotedPropertyByName(Class_ $class, string $desiredPropertyName): ?Param
     {
-        /** @var Param|null $paramNode */
-        $paramNode = null;
-        $this->betterNodeFinder->findFirst($stmts, function (Node $node) use ($desiredClassName, $desiredPropertyName, &$paramNode): bool {
-            if (!$node instanceof Class_) {
-                return \false;
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
+            return null;
+        }
+        foreach ($constructClassMethod->getParams() as $param) {
+            if (!$param->isPromoted()) {
+                continue;
             }
-            if (!$this->nodeNameResolver->isName($node, $desiredClassName)) {
-                return \false;
+            if ($this->nodeNameResolver->isName($param, $desiredPropertyName)) {
+                return $param;
             }
-            $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-            if (!$constructClassMethod instanceof ClassMethod) {
-                return \false;
-            }
-            foreach ($constructClassMethod->getParams() as $param) {
-                if (!$param->isPromoted()) {
-                    continue;
-                }
-                if ($this->nodeNameResolver->isName($param, $desiredPropertyName)) {
-                    $paramNode = $param;
-                    return \true;
-                }
-            }
-            return \false;
-        });
-        return $paramNode;
+        }
+        return null;
     }
 }
