@@ -5,21 +5,15 @@ namespace Rector\CodingStyle\NodeAnalyzer;
 
 use RectorPrefix202610\Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Util\StringUtils;
 final class UseImportNameMatcher
 {
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
      */
@@ -30,19 +24,9 @@ final class UseImportNameMatcher
      * @var string
      */
     private const SHORT_NAME_REGEX = '#^%s(\\\\[\w]+)?$#i';
-    public function __construct(BetterNodeFinder $betterNodeFinder, UseImportsResolver $useImportsResolver)
+    public function __construct(UseImportsResolver $useImportsResolver)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsResolver = $useImportsResolver;
-    }
-    /**
-     * @param Stmt[] $stmts
-     */
-    public function matchNameWithStmts(string $tag, array $stmts): ?string
-    {
-        /** @var Use_[] $uses */
-        $uses = $this->betterNodeFinder->findInstanceOf($stmts, Use_::class);
-        return $this->matchNameWithUses($tag, $uses);
     }
     /**
      * @param array<Use_|GroupUse> $uses
