@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610;
+namespace RectorPrefix202611;
 
 use Rector\Config\RectorConfig;
 use Rector\DowngradePhp83\Rector\Class_\DowngradeReadonlyAnonymousClassRector;

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610\Entropy\Utils;
+namespace RectorPrefix202611\Entropy\Utils;
 
-use RectorPrefix202610\Entropy\Attribute\RelatedTest;
-use RectorPrefix202610\Entropy\Tests\Utils\RegexTest;
+use RectorPrefix202611\Entropy\Attribute\RelatedTest;
+use RectorPrefix202611\Entropy\Tests\Utils\RegexTest;
 /**
  * @api to be used
  * @see \Entropy\Tests\Utils\RegexTest

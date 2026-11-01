@@ -9,8 +9,8 @@ use Rector\Configuration\Option;
 use Rector\FileSystem\FilePathHelper;
 use Rector\Parallel\Exception\ParallelShouldNotHappenException;
 use Rector\Parallel\Reflection\CommandFromReflectionFactory;
-use RectorPrefix202610\Symfony\Component\Console\Command\Command;
-use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202611\Symfony\Component\Console\Command\Command;
+use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
 /**
  * @see \Rector\Tests\Parallel\Command\WorkerCommandLineFactoryTest
  * @todo possibly extract to symplify/easy-parallel

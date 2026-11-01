@@ -5,9 +5,9 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202610\Nette\Utils;
+namespace RectorPrefix202611\Nette\Utils;
 
-use RectorPrefix202610\Nette;
+use RectorPrefix202611\Nette;
 use function extension_loaded, is_array, is_int, is_string;
 /**
  * Basic manipulation with images. Supported types are JPEG, PNG, GIF, WEBP, AVIF and BMP.

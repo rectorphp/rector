@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Rector\Composer;
 
-use RectorPrefix202610\Composer\Semver\Semver;
-use RectorPrefix202610\Composer\Semver\VersionParser;
-use RectorPrefix202610\Nette\Utils\FileSystem;
-use RectorPrefix202610\Nette\Utils\Json;
+use RectorPrefix202611\Composer\Semver\Semver;
+use RectorPrefix202611\Composer\Semver\VersionParser;
+use RectorPrefix202611\Nette\Utils\FileSystem;
+use RectorPrefix202611\Nette\Utils\Json;
 use Rector\Composer\ValueObject\InstalledPackage;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Skipper\FileSystem\PathNormalizer;
 use UnexpectedValueException;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\InstalledPackageResolverTest
  */

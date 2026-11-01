@@ -5,9 +5,9 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202610\Nette\Utils;
+namespace RectorPrefix202611\Nette\Utils;
 
-use RectorPrefix202610\Nette;
+use RectorPrefix202611\Nette;
 use function strlen;
 /**
  * Represent RGB color (0..255) with opacity (0..1).

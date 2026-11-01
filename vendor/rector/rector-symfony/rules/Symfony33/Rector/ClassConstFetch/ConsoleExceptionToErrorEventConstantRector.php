@@ -12,7 +12,7 @@ use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use RectorPrefix202610\Symfony\Component\Console\ConsoleEvents;
+use RectorPrefix202611\Symfony\Component\Console\ConsoleEvents;
 /**
  * Covers:
  * - https://github.com/symfony/symfony/pull/22441/files

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Reporting;
 
-use RectorPrefix202610\Nette\Utils\FileSystem;
+use RectorPrefix202611\Nette\Utils\FileSystem;
 use Rector\Application\FileProcessor;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\FileSystem\FilePathHelper;

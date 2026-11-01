@@ -26,7 +26,7 @@ use Rector\Symfony\Enum\SymfonyClass;
 use Rector\Symfony\MinimalSharedStringSolver;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ClassNameAndFilePath;
-use RectorPrefix202610\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202611\Symfony\Component\Filesystem\Filesystem;
 /**
  * @see \Rector\Symfony\Tests\Configs\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector\ServiceSettersToSettersAutodiscoveryRectorTest
  */

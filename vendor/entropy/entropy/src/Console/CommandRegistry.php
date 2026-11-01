@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610\Entropy\Console;
+namespace RectorPrefix202611\Entropy\Console;
 
-use RectorPrefix202610\Entropy\Console\Contract\CommandInterface;
-use RectorPrefix202610\Entropy\Console\Contract\DefaultCommandInterface;
-use RectorPrefix202610\Entropy\Console\Contract\HiddenCommandInterface;
-use RectorPrefix202610\Entropy\Console\Exception\InvalidCommandException;
-use RectorPrefix202610\Entropy\Utils\FuzzyMatcher;
-use RectorPrefix202610\Entropy\Validation\Assert;
+use RectorPrefix202611\Entropy\Console\Contract\CommandInterface;
+use RectorPrefix202611\Entropy\Console\Contract\DefaultCommandInterface;
+use RectorPrefix202611\Entropy\Console\Contract\HiddenCommandInterface;
+use RectorPrefix202611\Entropy\Console\Exception\InvalidCommandException;
+use RectorPrefix202611\Entropy\Utils\FuzzyMatcher;
+use RectorPrefix202611\Entropy\Validation\Assert;
 final class CommandRegistry
 {
     /**

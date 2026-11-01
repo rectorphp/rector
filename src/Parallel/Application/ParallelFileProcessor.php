@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Parallel\Application;
 
-use RectorPrefix202610\Clue\React\NDJson\Decoder;
-use RectorPrefix202610\Clue\React\NDJson\Encoder;
-use RectorPrefix202610\Nette\Utils\Random;
-use RectorPrefix202610\React\EventLoop\StreamSelectLoop;
-use RectorPrefix202610\React\Socket\ConnectionInterface;
-use RectorPrefix202610\React\Socket\TcpServer;
+use RectorPrefix202611\Clue\React\NDJson\Decoder;
+use RectorPrefix202611\Clue\React\NDJson\Encoder;
+use RectorPrefix202611\Nette\Utils\Random;
+use RectorPrefix202611\React\EventLoop\StreamSelectLoop;
+use RectorPrefix202611\React\Socket\ConnectionInterface;
+use RectorPrefix202611\React\Socket\TcpServer;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Command\ProcessCommand;
@@ -24,8 +24,8 @@ use Rector\Parallel\ValueObject\ProcessPool;
 use Rector\Parallel\ValueObject\Schedule;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
-use RectorPrefix202610\Symfony\Component\Console\Command\Command;
-use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202611\Symfony\Component\Console\Command\Command;
+use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
 use Throwable;
 /**
  * Workers process their own balanced bucket first, and are replaced by a fresh one bound to the same bucket

@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202610\Symfony\Component\Console\Command;
+namespace RectorPrefix202611\Symfony\Component\Console\Command;
 
-use RectorPrefix202610\Symfony\Component\Console\Application;
-use RectorPrefix202610\Symfony\Component\Console\Attribute\AsCommand;
-use RectorPrefix202610\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202610\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202610\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
-use RectorPrefix202610\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
-use RectorPrefix202610\Symfony\Component\Console\Completion\Output\FishCompletionOutput;
-use RectorPrefix202610\Symfony\Component\Console\Completion\Output\ZshCompletionOutput;
-use RectorPrefix202610\Symfony\Component\Console\Exception\CommandNotFoundException;
-use RectorPrefix202610\Symfony\Component\Console\Exception\ExceptionInterface;
-use RectorPrefix202610\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202610\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202610\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202611\Symfony\Component\Console\Application;
+use RectorPrefix202611\Symfony\Component\Console\Attribute\AsCommand;
+use RectorPrefix202611\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202611\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202611\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
+use RectorPrefix202611\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
+use RectorPrefix202611\Symfony\Component\Console\Completion\Output\FishCompletionOutput;
+use RectorPrefix202611\Symfony\Component\Console\Completion\Output\ZshCompletionOutput;
+use RectorPrefix202611\Symfony\Component\Console\Exception\CommandNotFoundException;
+use RectorPrefix202611\Symfony\Component\Console\Exception\ExceptionInterface;
+use RectorPrefix202611\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202611\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202611\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Responsible for providing the values to the shell completion.
  *

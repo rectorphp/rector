@@ -6,7 +6,7 @@ namespace Rector\Configuration\Parameter;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Skipper\FileSystem\PathNormalizer;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 final class SimpleParameterProvider
 {
     /**

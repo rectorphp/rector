@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Console;
 
-use RectorPrefix202610\Symfony\Component\Console\Command\Command;
+use RectorPrefix202611\Symfony\Component\Console\Command\Command;
 final class ExitCode
 {
     /**

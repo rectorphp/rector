@@ -13,7 +13,7 @@ use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\Visibility;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Visibility\Rector\Class_\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
  */

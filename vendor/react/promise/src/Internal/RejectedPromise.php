@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix202610\React\Promise\Internal;
+namespace RectorPrefix202611\React\Promise\Internal;
 
-use RectorPrefix202610\React\Promise\PromiseInterface;
-use function RectorPrefix202610\React\Promise\_checkTypehint;
-use function RectorPrefix202610\React\Promise\resolve;
-use function RectorPrefix202610\React\Promise\set_rejection_handler;
+use RectorPrefix202611\React\Promise\PromiseInterface;
+use function RectorPrefix202611\React\Promise\_checkTypehint;
+use function RectorPrefix202611\React\Promise\resolve;
+use function RectorPrefix202611\React\Promise\set_rejection_handler;
 /**
  * @internal
  *

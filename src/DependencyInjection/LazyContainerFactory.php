@@ -53,9 +53,9 @@ use Rector\PhpParser\NodeVisitor\NameAndArgNodeVisitor;
 use Rector\PhpParser\NodeVisitor\PhpVersionConditionNodeVisitor;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Rector\AbstractRector;
-use RectorPrefix202610\Symfony\Component\Console\Application;
-use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Symfony\Component\Console\Application;
+use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 final class LazyContainerFactory
 {
     /**

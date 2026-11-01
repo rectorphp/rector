@@ -8,7 +8,7 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Config\RectorConfig;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix202610\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202611\Symfony\Component\Console\Input\ArgvInput;
 final class RectorContainerFactory
 {
     public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs): RectorConfig

@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202610\React\EventLoop;
+namespace RectorPrefix202611\React\EventLoop;
 
-use RectorPrefix202610\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix202610\React\EventLoop\Timer\Timer;
-use RectorPrefix202610\React\EventLoop\Timer\Timers;
+use RectorPrefix202611\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix202611\React\EventLoop\Timer\Timer;
+use RectorPrefix202611\React\EventLoop\Timer\Timers;
 /**
  * A `stream_select()` based event loop.
  *

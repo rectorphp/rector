@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Console\Rule;
 
-use RectorPrefix202610\Composer\Autoload\ClassLoader;
+use RectorPrefix202611\Composer\Autoload\ClassLoader;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use ReflectionClass;
 use SplFileInfo;
-use RectorPrefix202610\Symfony\Component\Finder\Finder;
+use RectorPrefix202611\Symfony\Component\Finder\Finder;
 /**
  * Discovers all Rector rule classes available on disk - in core and rector-* packages -
  * regardless of the current config, by scanning the registered PSR-4 prefixes.

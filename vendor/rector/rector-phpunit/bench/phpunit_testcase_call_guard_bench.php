@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610;
+namespace RectorPrefix202611;
 
 /**
  * Benchmark for the PHPUnit test-case call guard shared by ~25 assert rules.

@@ -8,25 +8,13 @@ use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ArrayMergeFromArraySpreadFactory
 {
-    /**
-     * @readonly
-     */
-    private NodeNameResolver $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
-    {
-        $this->nodeNameResolver = $nodeNameResolver;
-    }
     public function createFromArray(Array_ $array, MutatingScope $mutatingScope): FuncCall
     {
         $newArrayItems = $this->dissolveArrayItems($array);
@@ -90,22 +78,7 @@ final class ArrayMergeFromArraySpreadFactory
     }
     private function createArgFromSpreadArrayItem(MutatingScope $mutatingScope, ArrayItem $arrayItem): Arg
     {
-        // By now every item is a variable
-        /** @var Variable $variable */
-        $variable = $arrayItem->value;
-        $variableName = $this->nodeNameResolver->getName($variable) ?? '';
-        // If the variable is not in scope, it's one we just added.
-        // Then get the type from the attribute
-        if ($mutatingScope->hasVariableType($variableName)->yes()) {
-            $type = $mutatingScope->getVariableType($variableName);
-        } else {
-            $originalNode = $arrayItem->getAttribute(AttributeKey::ORIGINAL_NODE);
-            if ($originalNode instanceof ArrayItem) {
-                $type = $mutatingScope->getType($originalNode->value);
-            } else {
-                throw new ShouldNotHappenException();
-            }
-        }
+        $type = $mutatingScope->getType($arrayItem->value);
         $iteratorToArrayFuncCall = new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem->value)]);
         // If we know it is an array, then print it directly
         // Otherwise PHPStan throws an error:

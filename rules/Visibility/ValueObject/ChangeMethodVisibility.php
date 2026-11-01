@@ -5,7 +5,7 @@ namespace Rector\Visibility\ValueObject;
 
 use Rector\Validation\RectorAssert;
 use Rector\ValueObject\Visibility;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 final class ChangeMethodVisibility
 {
     /**

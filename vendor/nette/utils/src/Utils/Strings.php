@@ -5,10 +5,10 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202610\Nette\Utils;
+namespace RectorPrefix202611\Nette\Utils;
 
-use RectorPrefix202610\JetBrains\PhpStorm\Language;
-use RectorPrefix202610\Nette;
+use RectorPrefix202611\JetBrains\PhpStorm\Language;
+use RectorPrefix202611\Nette;
 use function defined, extension_loaded, function_exists, in_array, is_array, is_int, is_object, is_string, strlen;
 use const ENT_IGNORE, ENT_NOQUOTES;
 /**

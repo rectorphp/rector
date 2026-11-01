@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
-use RectorPrefix202610\Nette\Utils\Strings;
+use RectorPrefix202611\Nette\Utils\Strings;
 use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;

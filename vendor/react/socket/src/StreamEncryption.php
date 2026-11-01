@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202610\React\Socket;
+namespace RectorPrefix202611\React\Socket;
 
-use RectorPrefix202610\React\EventLoop\LoopInterface;
-use RectorPrefix202610\React\Promise\Deferred;
+use RectorPrefix202611\React\EventLoop\LoopInterface;
+use RectorPrefix202611\React\Promise\Deferred;
 use RuntimeException;
 use UnexpectedValueException;
 /**

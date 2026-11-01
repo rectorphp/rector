@@ -21,7 +21,7 @@ use Rector\RuleDoc\RuleDefinition;
 use Rector\Util\Reflection\PrivatesAccessor;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use RectorPrefix202610\Symfony\Component\Console\Input\StringInput;
+use RectorPrefix202611\Symfony\Component\Console\Input\StringInput;
 /**
  * @changelog https://github.com/symfony/symfony/pull/27821/files
  *

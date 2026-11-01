@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Parallel;
 
-use RectorPrefix202610\Fidry\CpuCoreCounter\CpuCoreCounter;
+use RectorPrefix202611\Fidry\CpuCoreCounter\CpuCoreCounter;
 final class CpuCoreCountProvider
 {
     public function provide(): int

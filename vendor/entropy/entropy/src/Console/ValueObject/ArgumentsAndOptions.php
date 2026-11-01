@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610\Entropy\Console\ValueObject;
+namespace RectorPrefix202611\Entropy\Console\ValueObject;
 
-use RectorPrefix202610\Entropy\Validation\Assert;
+use RectorPrefix202611\Entropy\Validation\Assert;
 final class ArgumentsAndOptions
 {
     /**

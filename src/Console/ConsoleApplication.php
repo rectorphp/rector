@@ -7,14 +7,14 @@ use Rector\Application\VersionResolver;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
 use Rector\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202610\Symfony\Component\Console\Application;
-use RectorPrefix202610\Symfony\Component\Console\Command\Command;
-use RectorPrefix202610\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202610\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202610\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Symfony\Component\Console\Application;
+use RectorPrefix202611\Symfony\Component\Console\Command\Command;
+use RectorPrefix202611\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202611\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202611\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 final class ConsoleApplication extends Application
 {
     /**

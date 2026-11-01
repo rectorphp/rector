@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610\Entropy\Utils;
+namespace RectorPrefix202611\Entropy\Utils;
 
-use RectorPrefix202610\Entropy\Attribute\RelatedTest;
-use RectorPrefix202610\Entropy\Tests\Utils\JsonTest;
-use RectorPrefix202610\Entropy\Validation\Assert;
+use RectorPrefix202611\Entropy\Attribute\RelatedTest;
+use RectorPrefix202611\Entropy\Tests\Utils\JsonTest;
+use RectorPrefix202611\Entropy\Validation\Assert;
 /**
  * @api to be used outside
  * @see \Entropy\Tests\Utils\JsonTest

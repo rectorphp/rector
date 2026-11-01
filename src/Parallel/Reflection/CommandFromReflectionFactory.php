@@ -6,7 +6,7 @@ namespace Rector\Parallel\Reflection;
 use Rector\Parallel\Exception\ParallelShouldNotHappenException;
 use ReflectionClass;
 use ReflectionMethod;
-use RectorPrefix202610\Symfony\Component\Console\Command\Command;
+use RectorPrefix202611\Symfony\Component\Console\Command\Command;
 final class CommandFromReflectionFactory
 {
     /**

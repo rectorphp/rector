@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use Iterator;
-use RectorPrefix202610\Nette\Utils\FileSystem;
-use RectorPrefix202610\Nette\Utils\Strings;
+use RectorPrefix202611\Nette\Utils\FileSystem;
+use RectorPrefix202611\Nette\Utils\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
 use Rector\Application\ApplicationFileProcessor;
 use Rector\Application\RectorRegistry;

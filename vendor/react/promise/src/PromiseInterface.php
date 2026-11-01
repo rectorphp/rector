@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202610\React\Promise;
+namespace RectorPrefix202611\React\Promise;
 
 /**
  * @template-covariant T

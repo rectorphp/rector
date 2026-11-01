@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610\Entropy\Console\Input;
+namespace RectorPrefix202611\Entropy\Console\Input;
 
-use RectorPrefix202610\Entropy\Attribute\RelatedTest;
-use RectorPrefix202610\Entropy\Console\CommandRegistry;
-use RectorPrefix202610\Entropy\Console\Contract\CommandInterface;
-use RectorPrefix202610\Entropy\Console\ValueObject\CLIRequest;
-use RectorPrefix202610\Entropy\Reflection\ValueOptionNameResolver;
-use RectorPrefix202610\Entropy\Tests\Console\Input\InputParserTest;
+use RectorPrefix202611\Entropy\Attribute\RelatedTest;
+use RectorPrefix202611\Entropy\Console\CommandRegistry;
+use RectorPrefix202611\Entropy\Console\Contract\CommandInterface;
+use RectorPrefix202611\Entropy\Console\ValueObject\CLIRequest;
+use RectorPrefix202611\Entropy\Reflection\ValueOptionNameResolver;
+use RectorPrefix202611\Entropy\Tests\Console\Input\InputParserTest;
 use ReflectionMethod;
 /**
  * @see \Entropy\Tests\Console\Input\InputParserTest

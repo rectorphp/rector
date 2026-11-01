@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
-use RectorPrefix202610\Nette\Utils\FileSystem;
+use RectorPrefix202611\Nette\Utils\FileSystem;
 final class FixtureSplitter
 {
     public static function containsSplit(string $fixtureFileContent): bool

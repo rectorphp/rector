@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\FileSystem;
 
-use RectorPrefix202610\Nette\Utils\FileSystem;
+use RectorPrefix202611\Nette\Utils\FileSystem;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\ValueObject\Configuration;
-use RectorPrefix202610\Symfony\Component\Finder\Finder;
+use RectorPrefix202611\Symfony\Component\Finder\Finder;
 /**
  * @see \Rector\Tests\FileSystem\FilesFinder\FilesFinderTest
  */

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610\Webmozart\Assert;
+namespace RectorPrefix202611\Webmozart\Assert;
 
 /** @internal Used by the Psalm plugin */
 final class HasAssert

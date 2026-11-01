@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Configuration;
 
 use DrupalRector\Set\DrupalSetList;
-use RectorPrefix202610\Nette\Utils\Strings;
+use RectorPrefix202611\Nette\Utils\Strings;
 use PhpParser\NodeVisitor;
 use Rector\Bridge\SetRectorsResolver;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
@@ -33,8 +33,8 @@ use Rector\Symfony\Set\TwigSetList;
 use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
 use RectorLaravel\Set\LaravelSetList;
-use RectorPrefix202610\Symfony\Component\Finder\Finder;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Symfony\Component\Finder\Finder;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
  * @api
  */

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Parallel;
 
 use Rector\Parallel\ValueObject\Schedule;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
  * Balances files by byte size into one bucket per worker using LPT (Longest Processing Time first).
  *

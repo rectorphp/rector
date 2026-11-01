@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610\Composer\Pcre\PHPStan;
+namespace RectorPrefix202611\Composer\Pcre\PHPStan;
 
-use RectorPrefix202610\Composer\Pcre\Preg;
-use RectorPrefix202610\Composer\Pcre\Regex;
-use RectorPrefix202610\Composer\Pcre\PcreException;
-use RectorPrefix202610\Nette\Utils\RegexpException;
-use RectorPrefix202610\Nette\Utils\Strings;
+use RectorPrefix202611\Composer\Pcre\Preg;
+use RectorPrefix202611\Composer\Pcre\Regex;
+use RectorPrefix202611\Composer\Pcre\PcreException;
+use RectorPrefix202611\Nette\Utils\RegexpException;
+use RectorPrefix202611\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;

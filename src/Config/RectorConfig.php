@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Config;
 
-use RectorPrefix202610\Composer\Semver\Semver;
-use RectorPrefix202610\Entropy\Container\Container;
+use RectorPrefix202611\Composer\Semver\Semver;
+use RectorPrefix202611\Entropy\Container\Container;
 use Rector\Composer\InstalledPackageResolver;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -20,8 +20,8 @@ use Rector\ValueObject\Configuration\LevelOverflow;
 use Rector\ValueObject\PhpVersion;
 use Rector\ValueObject\PolyfillPackage;
 use Rector\VersionBonding\ValueObject\ComposerBoundRuleConfiguration;
-use RectorPrefix202610\Symfony\Component\Console\Command\Command;
-use RectorPrefix202610\Webmozart\Assert\Assert;
+use RectorPrefix202611\Symfony\Component\Console\Command\Command;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
  * @api
  * @see \Rector\Tests\Config\RectorConfigTest

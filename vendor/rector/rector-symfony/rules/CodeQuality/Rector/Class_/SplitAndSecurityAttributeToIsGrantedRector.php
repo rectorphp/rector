@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
-use RectorPrefix202610\Nette\Utils\Strings;
+use RectorPrefix202611\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
@@ -17,8 +17,8 @@ use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-use RectorPrefix202610\Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use RectorPrefix202610\Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use RectorPrefix202611\Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use RectorPrefix202611\Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 /**
  * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\SplitAndSecurityAttributeToIsGrantedRector\SplitAndSecurityAttributeToIsGrantedRectorTest
  */

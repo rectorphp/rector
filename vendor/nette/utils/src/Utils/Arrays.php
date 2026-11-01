@@ -5,10 +5,10 @@ declare (strict_types=1);
  * This file is part of the Nette Framework (https://nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
-namespace RectorPrefix202610\Nette\Utils;
+namespace RectorPrefix202611\Nette\Utils;
 
-use RectorPrefix202610\JetBrains\PhpStorm\Language;
-use RectorPrefix202610\Nette;
+use RectorPrefix202611\JetBrains\PhpStorm\Language;
+use RectorPrefix202611\Nette;
 use function array_key_exists, count, func_num_args, is_array, is_int, is_object;
 use const PREG_SPLIT_DELIM_CAPTURE, PREG_SPLIT_NO_EMPTY;
 /**

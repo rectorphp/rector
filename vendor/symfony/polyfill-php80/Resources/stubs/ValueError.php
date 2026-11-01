@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202610;
+namespace RectorPrefix202611;
 
 /*
  * This file is part of the Symfony package.
@@ -14,5 +14,5 @@ if (\PHP_VERSION_ID < 80000) {
     class ValueError extends \Error
     {
     }
-    \class_alias('RectorPrefix202610\ValueError', 'ValueError', \false);
+    \class_alias('RectorPrefix202611\ValueError', 'ValueError', \false);
 }

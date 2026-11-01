@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202610\Entropy\Console\Terminal;
+namespace RectorPrefix202611\Entropy\Console\Terminal;
 
 /**
  * @see \Entropy\Tests\Console\Terminal\TerminalTest
