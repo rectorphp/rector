@@ -180,6 +180,6 @@ final class UnionCollectionTagValueNodeNarrower
         if (!$typeNode instanceof IdentifierTypeNode) {
             return \false;
         }
-        return in_array($typeNode->name, [DoctrineClass::COLLECTION, DoctrineClass::ARRAY_COLLECTION, 'Collection', 'ArrayCollection'], \true);
+        return in_array(ltrim($typeNode->name, '\\'), [DoctrineClass::COLLECTION, DoctrineClass::ARRAY_COLLECTION, 'Collection', 'ArrayCollection'], \true);
     }
 }
