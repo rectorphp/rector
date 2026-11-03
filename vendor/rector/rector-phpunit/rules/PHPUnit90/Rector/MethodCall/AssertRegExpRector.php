@@ -118,6 +118,9 @@ final class AssertRegExpRector extends AbstractRector implements ComposerPackage
             if ($secondArgumentValue->isFirstClassCallable()) {
                 continue;
             }
+            if (!$this->hasMovablePregMatchArgs($secondArgumentValue)) {
+                continue;
+            }
             if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($stmt->expr, [self::ASSERT_SAME, self::ASSERT_EQUALS, self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS])) {
                 continue;
             }
@@ -162,6 +165,21 @@ final class AssertRegExpRector extends AbstractRector implements ComposerPackage
             $node->name = new Identifier('assertDoesNotMatchRegularExpression');
         }
     }
+    private function hasMovablePregMatchArgs(FuncCall $funcCall): bool
+    {
+        $args = $funcCall->getArgs();
+        if (!isset($args[0], $args[1])) {
+            return \false;
+        }
+        $found = \true;
+        foreach ($args as $arg) {
+            if (!!$arg->unpack) {
+                $found = \false;
+                break;
+            }
+        }
+        return $found;
+    }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
@@ -172,6 +190,12 @@ final class AssertRegExpRector extends AbstractRector implements ComposerPackage
         $pregMatchFunction = $oldArguments[1]->value;
         $regex = $pregMatchFunction->getArgs()[0];
         $variable = $pregMatchFunction->getArgs()[1];
+        // preg_match() names it $subject, PHPUnit names it $string
+        foreach ([$regex, $variable] as $arg) {
+            if ($arg->name instanceof Identifier && $this->isName($arg->name, 'subject')) {
+                $arg->name = new Identifier('string');
+            }
+        }
         unset($oldArguments[0], $oldArguments[1]);
         $node->args = array_merge([$regex, $variable], $oldArguments);
     }
