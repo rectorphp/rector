@@ -5,9 +5,11 @@ namespace Rector\PHPUnit\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\PHPUnit\CodeQuality\NodeAnalyser\NullableObjectAssignCollector;
 use Rector\PHPUnit\CodeQuality\NodeFactory\AssertMethodCallFactory;
@@ -112,6 +114,15 @@ CODE_SAMPLE
         $variableNameToTypeCollection = $this->nullableObjectAssignCollector->collect($node);
         $next = 0;
         foreach ($node->stmts as $key => $stmt) {
+            // already asserted, e.g. in trait, where $this is not known as TestCase so the type is not narrowed
+            $assertedVariableName = $this->matchAssertInstanceOfVariableName($stmt);
+            if ($assertedVariableName !== null) {
+                $assertedVariableNameToType = $variableNameToTypeCollection->matchByVariableName($assertedVariableName);
+                if ($assertedVariableNameToType instanceof VariableNameToType) {
+                    $variableNameToTypeCollection->remove($assertedVariableNameToType);
+                }
+                continue;
+            }
             // has callable on nullable variables of already collected names?
             // a single statement can use multiple nullable variables at once
             $matchedNullableVariableNameToTypes = $this->matchNullableVariableNameToTypes($stmt, $variableNameToTypeCollection);
@@ -129,6 +140,27 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    private function matchAssertInstanceOfVariableName(Stmt $stmt): ?string
+    {
+        if (!$stmt instanceof Expression) {
+            return null;
+        }
+        $call = $stmt->expr;
+        if (!$call instanceof MethodCall && !$call instanceof StaticCall) {
+            return null;
+        }
+        if (!$this->isName($call->name, 'assertInstanceOf')) {
+            return null;
+        }
+        if ($call->isFirstClassCallable()) {
+            return null;
+        }
+        $args = $call->getArgs();
+        if (!isset($args[1]) || !$args[1]->value instanceof Variable) {
+            return null;
+        }
+        return $this->getName($args[1]->value);
     }
     /**
      * @return VariableNameToType[]
