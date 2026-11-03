@@ -98,16 +98,25 @@ final class FileProcessor
         }
         $fileHasChanged = \false;
         $filePath = $file->getFilePath();
+        $rulesReachedFixedPoint = \false;
         do {
             $file->changeHasChanged(\false);
             // every rule and post rector records a line change when it mutates the AST
             $changeCountBeforePass = count($file->getRectorWithLineChanges());
-            // 1. change nodes with Rector Rules
-            $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts(), $file);
-            // 2. apply post rectors
-            $postNewStmts = $this->postFileProcessor->traverse($newStmts, $file);
+            // 1. change nodes with Rector Rules, until they reach a fixed point
+            if ($rulesReachedFixedPoint) {
+                $newStmts = $file->getNewStmts();
+            } else {
+                $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts(), $file);
+                $rulesReachedFixedPoint = count($file->getRectorWithLineChanges()) === $changeCountBeforePass;
+            }
+            // 2. apply post rectors after the rules: a rule in a next pass would resolve
+            // a short name they import against the global namespace
+            if ($rulesReachedFixedPoint) {
+                $newStmts = $this->postFileProcessor->traverse($newStmts, $file);
+            }
             // 3. this is needed for new tokens added in "afterTraverse()"
-            $file->changeNewStmts($postNewStmts);
+            $file->changeNewStmts($newStmts);
             // file never changed and this pass changed nothing: the print would just reproduce the
             // original content, so skip the expensive format-preserving print entirely.
             // once the file has changed we keep printing every pass, as a reprint can still
@@ -118,9 +127,13 @@ final class FileProcessor
             // 4. print to file or string
             // important to detect if file has changed
             $this->printFile($file, $configuration, $filePath);
-            // no change in current iteration, stop
+            // no change in current iteration: stop, once the post rectors ran
             if (!$file->hasChanged()) {
-                break;
+                if ($rulesReachedFixedPoint) {
+                    break;
+                }
+                $rulesReachedFixedPoint = \true;
+                continue;
             }
             $fileHasChanged = \true;
         } while (\true);
