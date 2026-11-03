@@ -97,6 +97,9 @@ CODE_SAMPLE
     }
     private function processMethodCall(MethodCall $methodCall): ?\PhpParser\Node\Expr\CallLike
     {
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
         $methodCallName = $this->getName($methodCall->name);
         if (!is_string($methodCallName)) {
             return null;
