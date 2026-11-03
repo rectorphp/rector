@@ -40,20 +40,20 @@ final class MbStrrposEncodingArgumentPositionRector extends AbstractRector imple
         if (!$this->isName($node, 'mb_strrpos')) {
             return null;
         }
-        if (!isset($node->args[2])) {
+        // encoding already passed, positionally or by name
+        if ($node->getArg('encoding', 3) instanceof Arg) {
             return null;
         }
-        if (isset($node->args[3])) {
+        $offsetArg = $node->getArg('offset', 2);
+        if (!$offsetArg instanceof Arg) {
             return null;
         }
-        if (!$node->args[2] instanceof Arg) {
+        // only string can be an encoding; mixed/unknown can be the int $offset
+        $offsetArgType = $this->nodeTypeResolver->getNativeType($offsetArg->value);
+        if (!$offsetArgType->isString()->yes()) {
             return null;
         }
-        $secondArgType = $this->getType($node->args[2]->value);
-        if ($secondArgType->isInteger()->yes()) {
-            return null;
-        }
-        $node->args[3] = $node->args[2];
+        $node->args[3] = $offsetArg;
         $node->args[2] = new Arg(new Int_(0));
         return $node;
     }
