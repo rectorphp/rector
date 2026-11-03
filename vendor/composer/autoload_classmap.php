@@ -2030,6 +2030,7 @@ return array(
     'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => $baseDir . '/src/PhpAttribute/NodeFactory/NamedArgsFactory.php',
     'Rector\\PhpAttribute\\NodeFactory\\PhpAttributeGroupFactory' => $baseDir . '/src/PhpAttribute/NodeFactory/PhpAttributeGroupFactory.php',
     'Rector\\PhpAttribute\\NodeFactory\\PhpNestedAttributeGroupFactory' => $baseDir . '/src/PhpAttribute/NodeFactory/PhpNestedAttributeGroupFactory.php',
+    'Rector\\PhpAttribute\\NodeFactory\\UnknownNamedArgsToOptionsFolder' => $baseDir . '/src/PhpAttribute/NodeFactory/UnknownNamedArgsToOptionsFolder.php',
     'Rector\\PhpAttribute\\UseAliasNameMatcher' => $baseDir . '/src/PhpAttribute/UseAliasNameMatcher.php',
     'Rector\\PhpAttribute\\ValueObject\\UseAliasMetadata' => $baseDir . '/src/PhpAttribute/ValueObject/UseAliasMetadata.php',
     'Rector\\PhpDocDecorator\\PhpDocFromTypeDeclarationDecorator' => $vendorDir . '/rector/rector-downgrade-php/src/PhpDocDecorator/PhpDocFromTypeDeclarationDecorator.php',

@@ -2256,6 +2256,7 @@ class ComposerStaticInit340a0bb1ec4c457f3c39e65f1dbc56a9
         'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => __DIR__ . '/../..' . '/src/PhpAttribute/NodeFactory/NamedArgsFactory.php',
         'Rector\\PhpAttribute\\NodeFactory\\PhpAttributeGroupFactory' => __DIR__ . '/../..' . '/src/PhpAttribute/NodeFactory/PhpAttributeGroupFactory.php',
         'Rector\\PhpAttribute\\NodeFactory\\PhpNestedAttributeGroupFactory' => __DIR__ . '/../..' . '/src/PhpAttribute/NodeFactory/PhpNestedAttributeGroupFactory.php',
+        'Rector\\PhpAttribute\\NodeFactory\\UnknownNamedArgsToOptionsFolder' => __DIR__ . '/../..' . '/src/PhpAttribute/NodeFactory/UnknownNamedArgsToOptionsFolder.php',
         'Rector\\PhpAttribute\\UseAliasNameMatcher' => __DIR__ . '/../..' . '/src/PhpAttribute/UseAliasNameMatcher.php',
         'Rector\\PhpAttribute\\ValueObject\\UseAliasMetadata' => __DIR__ . '/../..' . '/src/PhpAttribute/ValueObject/UseAliasMetadata.php',
         'Rector\\PhpDocDecorator\\PhpDocFromTypeDeclarationDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/PhpDocDecorator/PhpDocFromTypeDeclarationDecorator.php',

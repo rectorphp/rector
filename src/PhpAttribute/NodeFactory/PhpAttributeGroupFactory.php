@@ -45,13 +45,18 @@ final class PhpAttributeGroupFactory
      * @readonly
      */
     private AttributeArrayNameInliner $attributeArrayNameInliner;
-    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, \Rector\PhpAttribute\NodeFactory\AnnotationToAttributeIntegerValueCaster $annotationToAttributeIntegerValueCaster, AttributeArrayNameInliner $attributeArrayNameInliner)
+    /**
+     * @readonly
+     */
+    private \Rector\PhpAttribute\NodeFactory\UnknownNamedArgsToOptionsFolder $unknownNamedArgsToOptionsFolder;
+    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, \Rector\PhpAttribute\NodeFactory\AnnotationToAttributeIntegerValueCaster $annotationToAttributeIntegerValueCaster, AttributeArrayNameInliner $attributeArrayNameInliner, \Rector\PhpAttribute\NodeFactory\UnknownNamedArgsToOptionsFolder $unknownNamedArgsToOptionsFolder)
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
         $this->attributeNameFactory = $attributeNameFactory;
         $this->namedArgsFactory = $namedArgsFactory;
         $this->annotationToAttributeIntegerValueCaster = $annotationToAttributeIntegerValueCaster;
         $this->attributeArrayNameInliner = $attributeArrayNameInliner;
+        $this->unknownNamedArgsToOptionsFolder = $unknownNamedArgsToOptionsFolder;
     }
     public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute, ?string $value = null): AttributeGroup
     {
@@ -89,6 +94,7 @@ final class PhpAttributeGroupFactory
         $args = $this->createArgsFromItems($values, '', $annotationToAttribute->getClassReferenceFields());
         $this->annotationToAttributeIntegerValueCaster->castAttributeTypes($annotationToAttribute, $args);
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args, $annotationToAttribute->getAttributeClass());
+        $args = $this->unknownNamedArgsToOptionsFolder->fold($args, $annotationToAttribute->getAttributeClass());
         $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode, $uses);
         // keep FQN in the attribute, so it can be easily detected later
         $attributeName->setAttribute(AttributeKey::PHP_ATTRIBUTE_NAME, $annotationToAttribute->getAttributeClass());
