@@ -844,6 +844,7 @@ return array(
     'RectorPrefix202611\\Symfony\\Contracts\\Service\\ServiceProviderInterface' => $vendorDir . '/symfony/service-contracts/ServiceProviderInterface.php',
     'RectorPrefix202611\\Symfony\\Contracts\\Service\\ServiceSubscriberInterface' => $vendorDir . '/symfony/service-contracts/ServiceSubscriberInterface.php',
     'RectorPrefix202611\\Symfony\\Contracts\\Service\\ServiceSubscriberTrait' => $vendorDir . '/symfony/service-contracts/ServiceSubscriberTrait.php',
+    'RectorPrefix202611\\Symfony\\Contracts\\Service\\ShutdownInterface' => $vendorDir . '/symfony/service-contracts/ShutdownInterface.php',
     'RectorPrefix202611\\UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     'RectorPrefix202611\\ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     'RectorPrefix202611\\Webmozart\\Assert\\Assert' => $vendorDir . '/webmozart/assert/src/Assert.php',

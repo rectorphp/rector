@@ -186,9 +186,9 @@ final class Path
             return '';
         }
         // Maintain scheme
-        if (\false !== $schemeSeparatorPosition = strpos($path, '://')) {
-            $scheme = (string) substr($path, 0, $schemeSeparatorPosition + 3);
-            $path = (string) substr($path, $schemeSeparatorPosition + 3);
+        if (preg_match('{^[a-zA-Z0-9+.-]{2,}://}', $path, $m)) {
+            $scheme = $m[0];
+            $path = (string) substr($path, \strlen($scheme));
         } else {
             $scheme = '';
         }
@@ -316,7 +316,7 @@ final class Path
             return \false;
         }
         // URLs and stream wrappers are considered absolute
-        if (strpos($path, '://') !== \false && null !== parse_url($path, \PHP_URL_SCHEME)) {
+        if (preg_match('{^[a-zA-Z0-9+.-]{2,}://}', $path)) {
             return \true;
         }
         if ('/' === $path[0]) {
@@ -393,9 +393,9 @@ final class Path
         if (self::isAbsolute($path)) {
             return self::canonicalize($path);
         }
-        if (\false !== $schemeSeparatorPosition = strpos($basePath, '://')) {
-            $scheme = (string) substr($basePath, 0, $schemeSeparatorPosition + 3);
-            $basePath = (string) substr($basePath, $schemeSeparatorPosition + 3);
+        if (preg_match('{^[a-zA-Z0-9+.-]{2,}://}', $basePath, $m)) {
+            $scheme = $m[0];
+            $basePath = (string) substr($basePath, \strlen($scheme));
         } else {
             $scheme = '';
         }
@@ -510,7 +510,7 @@ final class Path
      */
     public static function isLocal(string $path): bool
     {
-        return '' !== $path && strpos($path, '://') === \false;
+        return '' !== $path && !preg_match('{^[a-zA-Z0-9+.-]{2,}://}', $path);
     }
     /**
      * Returns the longest common base path in canonical form of a set of paths or
@@ -686,9 +686,9 @@ final class Path
             return ['', ''];
         }
         // Remember scheme as part of the root, if any
-        if (\false !== $schemeSeparatorPosition = strpos($path, '://')) {
-            $root = (string) substr($path, 0, $schemeSeparatorPosition + 3);
-            $path = (string) substr($path, $schemeSeparatorPosition + 3);
+        if (preg_match('{^[a-zA-Z0-9+.-]{2,}://}', $path, $m)) {
+            $root = $m[0];
+            $path = (string) substr($path, \strlen($root));
         } else {
             $root = '';
         }

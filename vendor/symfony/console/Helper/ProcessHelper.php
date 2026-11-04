@@ -10,6 +10,7 @@
  */
 namespace RectorPrefix202611\Symfony\Component\Console\Helper;
 
+use RectorPrefix202611\Symfony\Component\Console\Formatter\OutputFormatter;
 use RectorPrefix202611\Symfony\Component\Console\Output\ConsoleOutputInterface;
 use RectorPrefix202611\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202611\Symfony\Component\Process\Exception\ProcessFailedException;
@@ -107,7 +108,7 @@ class ProcessHelper extends Helper
     }
     private function escapeString(string $str): string
     {
-        return str_replace('<', '\<', $str);
+        return OutputFormatter::escapeTrailingBackslash(str_replace('<', '\<', $str));
     }
     public function getName(): string
     {

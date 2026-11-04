@@ -54,6 +54,9 @@ final class ProgressBar
     private bool $overwrite = \true;
     private Terminal $terminal;
     private ?string $previousMessage = null;
+    private int $lastDrawnStep = 0;
+    private int $lastDrawnMax = 0;
+    private bool $finishedWithoutMax = \false;
     private Cursor $cursor;
     private array $placeholders = [];
     private static array $formatters;
@@ -284,13 +287,20 @@ final class ProgressBar
      */
     public function start(?int $max = null, int $startAt = 0): void
     {
+        $startAt = max(0, $startAt);
         $this->startTime = time();
         $this->step = $startAt;
         $this->startingStep = $startAt;
-        $startAt > 0 ? $this->setProgress($startAt) : $this->percent = 0.0;
         if (null !== $max) {
             $this->setMaxSteps($max);
+        } elseif ($this->finishedWithoutMax) {
+            // drop the max that finish() set to draw a full bar
+            $this->setMaxSteps(0);
         }
+        if ($this->max && $startAt > $this->max) {
+            $this->max = $startAt;
+        }
+        $this->percent = $this->max ? (float) $startAt / $this->max : 0.0;
         $this->display();
     }
     /**
@@ -339,19 +349,30 @@ final class ProgressBar
     public function setMaxSteps(int $max): void
     {
         $this->format = null;
+        $this->finishedWithoutMax = \false;
         $this->max = max(0, $max);
         $this->stepWidth = $this->max ? Helper::width((string) $this->max) : 4;
+        $this->percent = $this->max ? min(1, (float) $this->step / $this->max) : 0;
     }
     /**
      * Finishes the progress output.
      */
     public function finish(): void
     {
-        if (!$this->max) {
+        if ($this->max && $this->step > $this->max) {
+            // the max was lowered below the step with setMaxSteps(), raise it like setProgress() does
             $this->max = $this->step;
         }
-        if ($this->step === $this->max && !$this->overwrite) {
-            // prevent double 100% output
+        $max = $this->max;
+        if (!$this->max) {
+            $this->max = $this->step;
+            $this->percent = $this->max ? 1.0 : 0.0;
+            $this->finishedWithoutMax = \true;
+        }
+        if ($this->step === $this->max && !$this->overwrite && $this->lastDrawnStep === $this->step && \in_array($this->lastDrawnMax, [$max, $this->max], \true)) {
+            // prevent double output when the last frame already shows this step, against the max it had before finishing or this one
+            // remember this max as drawn, so that calling finish() again does not draw the frame either
+            $this->lastDrawnMax = $this->max;
             return;
         }
         $this->setProgress($this->max);
@@ -368,6 +389,8 @@ final class ProgressBar
             $this->setRealFormat($this->internalFormat ?: $this->determineBestFormat());
         }
         $this->overwrite($this->buildLine());
+        $this->lastDrawnStep = $this->step;
+        $this->lastDrawnMax = $this->max;
     }
     /**
      * Removes the progress bar from the current line.
@@ -428,7 +451,7 @@ final class ProgressBar
                     $this->cursor->clearLine();
                 }
             }
-        } elseif ($this->step > 0) {
+        } elseif (null !== $this->previousMessage) {
             $message = \PHP_EOL . $message;
         }
         $this->previousMessage = $originalMessage;

@@ -1070,6 +1070,7 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'RectorPrefix202611\\Symfony\\Contracts\\Service\\ServiceProviderInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceProviderInterface.php',
         'RectorPrefix202611\\Symfony\\Contracts\\Service\\ServiceSubscriberInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberInterface.php',
         'RectorPrefix202611\\Symfony\\Contracts\\Service\\ServiceSubscriberTrait' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberTrait.php',
+        'RectorPrefix202611\\Symfony\\Contracts\\Service\\ShutdownInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ShutdownInterface.php',
         'RectorPrefix202611\\UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'RectorPrefix202611\\ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'RectorPrefix202611\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',

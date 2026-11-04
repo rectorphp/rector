@@ -46,11 +46,11 @@ class SymfonyQuestionHelper extends QuestionHelper
                 foreach ($default as $key => $value) {
                     $default[$key] = $choices[trim($value)];
                 }
-                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, implode(', ', $default));
+                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, OutputFormatter::escapeTrailingBackslash(implode(', ', $default)));
                 break;
             case $question instanceof ChoiceQuestion:
                 $choices = $question->getChoices();
-                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, $choices[$default] ?? $default);
+                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, OutputFormatter::escapeTrailingBackslash($choices[$default] ?? $default));
                 break;
             default:
                 $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, OutputFormatter::escape($default));

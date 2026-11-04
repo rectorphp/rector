@@ -13,6 +13,7 @@ namespace RectorPrefix202611\Symfony\Component\Console\Logger;
 use RectorPrefix202611\Psr\Log\AbstractLogger;
 use RectorPrefix202611\Psr\Log\InvalidArgumentException;
 use RectorPrefix202611\Psr\Log\LogLevel;
+use RectorPrefix202611\Symfony\Component\Console\Formatter\OutputFormatter;
 use RectorPrefix202611\Symfony\Component\Console\Output\ConsoleOutputInterface;
 use RectorPrefix202611\Symfony\Component\Console\Output\OutputInterface;
 /**
@@ -52,7 +53,7 @@ class ConsoleLogger extends AbstractLogger
         // the if condition check isn't necessary -- it's the same one that $output will do internally anyway.
         // We only do it for efficiency here as the message formatting is relatively expensive.
         if ($output->getVerbosity() >= $this->verbosityLevelMap[$level]) {
-            $output->writeln(\sprintf('<%1$s>[%2$s] %3$s</%1$s>', $this->formatLevelMap[$level], $level, $this->interpolate($message, $context)), $this->verbosityLevelMap[$level]);
+            $output->writeln(\sprintf('<%1$s>[%2$s] %3$s</%1$s>', $this->formatLevelMap[$level], $level, OutputFormatter::escapeTrailingBackslash($this->interpolate($message, $context))), $this->verbosityLevelMap[$level]);
         }
     }
     /**
