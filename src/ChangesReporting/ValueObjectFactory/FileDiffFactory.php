@@ -38,6 +38,6 @@ final class FileDiffFactory
         $diff = $shouldShowDiffs ? $this->defaultDiffer->diff($oldContent, $newContent) : '';
         $consoleDiff = $shouldShowDiffs ? $this->colorConsoleDiffFormatter->format($diff) : '';
         // always keep the most recent diff
-        return new FileDiff($relativeFilePath, $diff, $consoleDiff, $rectorsWithLineChanges);
+        return new FileDiff($relativeFilePath, $diff, $consoleDiff, $rectorsWithLineChanges, $file->hasChanged());
     }
 }

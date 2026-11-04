@@ -40,4 +40,8 @@ final class BridgeItem
      * @var string
      */
     public const RECTORS_WITH_LINE_CHANGES = 'rectors_with_line_changes';
+    /**
+     * @var string
+     */
+    public const HAS_CHANGED = 'has_changed';
 }

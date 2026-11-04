@@ -32,7 +32,9 @@ final class JsonOutputFactory
                 $errorsJson[Bridge::FILE_DIFFS][] = ['file' => $filePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses(), 'changes' => $changes];
             }
             // for Rector CI
-            $errorsJson['changed_files'][] = $filePath;
+            if ($fileDiff->hasChanged()) {
+                $errorsJson['changed_files'][] = $filePath;
+            }
         }
         $systemErrors = $processResult->getSystemErrors();
         $errorsJson['totals']['errors'] = count($systemErrors);
