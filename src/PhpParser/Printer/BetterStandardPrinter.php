@@ -421,10 +421,37 @@ final class BetterStandardPrinter extends Standard
             $this->reprintLowerPrecedenceOperand($node->right);
         }
         if ($node->left instanceof BinaryOp && $node->left->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
+            $this->keepTernaryOperandParentheses($node->left);
             $node->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         if ($node->right instanceof BinaryOp && $node->right->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node) {
+            $this->keepTernaryOperandParentheses($node->right);
             $node->right->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
+    }
+    /**
+     * The binary op is about to be reprinted, while its unchanged ternary operand is still format-preserved,
+     * which prints it without its original parentheses
+     *
+     * @see https://github.com/rectorphp/rector-src/issues/8910
+     */
+    private function keepTernaryOperandParentheses(BinaryOp $binaryOp): void
+    {
+        $originalBinaryOp = $binaryOp->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (!$originalBinaryOp instanceof BinaryOp || !$this->origTokens instanceof TokenStream) {
+            return;
+        }
+        foreach ([$binaryOp->left, $binaryOp->right] as $key => $operand) {
+            if (!$operand instanceof Ternary) {
+                continue;
+            }
+            $originalOperand = $key === 0 ? $originalBinaryOp->left : $originalBinaryOp->right;
+            if ($operand->getAttribute(AttributeKey::ORIGINAL_NODE) !== $originalOperand) {
+                continue;
+            }
+            if ($this->origTokens->haveParens($operand->getStartTokenPos(), $operand->getEndTokenPos())) {
+                $operand->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+            }
         }
     }
     /**
