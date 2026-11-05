@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\NodeManipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -15,9 +16,13 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStan\ScopeFetcher;
 final class PrivateMethodParamRemover
 {
     /**
@@ -44,7 +49,11 @@ final class PrivateMethodParamRemover
      * @readonly
      */
     private NodeTypeResolver $nodeTypeResolver;
-    public function __construct(PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @readonly
+     */
+    private ArrayCallableMethodMatcher $arrayCallableMethodMatcher;
+    public function __construct(PhpDocTagRemover $phpDocTagRemover, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ArrayCallableMethodMatcher $arrayCallableMethodMatcher)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->docBlockUpdater = $docBlockUpdater;
@@ -52,6 +61,7 @@ final class PrivateMethodParamRemover
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
     }
     /**
      * @param array<int, Param> $paramsToRemove
@@ -86,6 +96,10 @@ final class PrivateMethodParamRemover
         if ($methodName === null) {
             return \false;
         }
+        // the code receiving the callable decides how many arguments it passes
+        if ($this->isUsedAsArrayCallable($class, $classMethod)) {
+            return \false;
+        }
         $keysArg = array_keys($paramsToRemove);
         $classObjectType = new ObjectType((string) $this->nodeNameResolver->getName($class));
         $callers = [];
@@ -113,6 +127,26 @@ final class PrivateMethodParamRemover
             $this->cleanupArgs($caller, $keysArg);
         }
         return \true;
+    }
+    private function isUsedAsArrayCallable(Class_ $class, ClassMethod $classMethod): bool
+    {
+        $scope = ScopeFetcher::fetch($class);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        /** @var Array_[] $arrays */
+        $arrays = $this->betterNodeFinder->findInstanceOf($class, Array_::class);
+        foreach ($arrays as $array) {
+            $arrayCallable = $this->arrayCallableMethodMatcher->match($array, $scope, $methodName);
+            if ($arrayCallable instanceof ArrayCallableDynamicMethod) {
+                return \true;
+            }
+            if (!$arrayCallable instanceof ArrayCallable) {
+                continue;
+            }
+            if ($this->nodeNameResolver->isName($class, $arrayCallable->getClass()) && $this->nodeNameResolver->isName($classMethod, $arrayCallable->getMethod())) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @param int[] $keysArg
