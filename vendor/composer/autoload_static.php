@@ -2211,6 +2211,7 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'Rector\\Php83\\Rector\\FuncCall\\CombineHostPortLdapUriRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\DynamicClassConstFetchRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/DynamicClassConstFetchRector.php',
         'Rector\\Php83\\Rector\\FuncCall\\RemoveGetClassGetParentClassNoArgsRector' => __DIR__ . '/../..' . '/rules/Php83/Rector/FuncCall/RemoveGetClassGetParentClassNoArgsRector.php',
+        'Rector\\Php84\\NodeAnalyzer\\ExprModifiedInConditionalAnalyzer' => __DIR__ . '/../..' . '/rules/Php84/NodeAnalyzer/ExprModifiedInConditionalAnalyzer.php',
         'Rector\\Php84\\NodeAnalyzer\\ForeachKeyUsedInConditionalAnalyzer' => __DIR__ . '/../..' . '/rules/Php84/NodeAnalyzer/ForeachKeyUsedInConditionalAnalyzer.php',
         'Rector\\Php84\\NodeFactory\\ForeachToArrayAnyAllFactory' => __DIR__ . '/../..' . '/rules/Php84/NodeFactory/ForeachToArrayAnyAllFactory.php',
         'Rector\\Php84\\NodeFactory\\ForeachToArrayFindFactory' => __DIR__ . '/../..' . '/rules/Php84/NodeFactory/ForeachToArrayFindFactory.php',

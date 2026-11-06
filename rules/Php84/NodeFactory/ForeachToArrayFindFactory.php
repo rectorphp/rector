@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\If_;
 use Rector\NodeManipulator\StmtsManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\Php84\NodeAnalyzer\ExprModifiedInConditionalAnalyzer;
 use Rector\Php84\NodeAnalyzer\ForeachKeyUsedInConditionalAnalyzer;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\NodeFactory;
@@ -53,7 +54,11 @@ final class ForeachToArrayFindFactory
      * @readonly
      */
     private NodeNameResolver $nodeNameResolver;
-    public function __construct(ValueResolver $valueResolver, StmtsManipulator $stmtsManipulator, ForeachKeyUsedInConditionalAnalyzer $foreachKeyUsedInConditionalAnalyzer, NodeComparator $nodeComparator, NodeTypeResolver $nodeTypeResolver, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     */
+    private ExprModifiedInConditionalAnalyzer $exprModifiedInConditionalAnalyzer;
+    public function __construct(ValueResolver $valueResolver, StmtsManipulator $stmtsManipulator, ForeachKeyUsedInConditionalAnalyzer $foreachKeyUsedInConditionalAnalyzer, NodeComparator $nodeComparator, NodeTypeResolver $nodeTypeResolver, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, ExprModifiedInConditionalAnalyzer $exprModifiedInConditionalAnalyzer)
     {
         $this->valueResolver = $valueResolver;
         $this->stmtsManipulator = $stmtsManipulator;
@@ -62,6 +67,7 @@ final class ForeachToArrayFindFactory
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->exprModifiedInConditionalAnalyzer = $exprModifiedInConditionalAnalyzer;
     }
     /**
      * @param StmtsAware $node
@@ -130,6 +136,9 @@ final class ForeachToArrayFindFactory
         }
         $firstStmt = $foreach->stmts[0];
         if (!$firstStmt instanceof If_ || count($firstStmt->stmts) !== 2) {
+            return \false;
+        }
+        if ($this->exprModifiedInConditionalAnalyzer->isModified($firstStmt->cond)) {
             return \false;
         }
         $assignmentStmt = $firstStmt->stmts[0];

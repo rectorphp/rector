@@ -1985,6 +1985,7 @@ return array(
     'Rector\\Php83\\Rector\\FuncCall\\CombineHostPortLdapUriRector' => $baseDir . '/rules/Php83/Rector/FuncCall/CombineHostPortLdapUriRector.php',
     'Rector\\Php83\\Rector\\FuncCall\\DynamicClassConstFetchRector' => $baseDir . '/rules/Php83/Rector/FuncCall/DynamicClassConstFetchRector.php',
     'Rector\\Php83\\Rector\\FuncCall\\RemoveGetClassGetParentClassNoArgsRector' => $baseDir . '/rules/Php83/Rector/FuncCall/RemoveGetClassGetParentClassNoArgsRector.php',
+    'Rector\\Php84\\NodeAnalyzer\\ExprModifiedInConditionalAnalyzer' => $baseDir . '/rules/Php84/NodeAnalyzer/ExprModifiedInConditionalAnalyzer.php',
     'Rector\\Php84\\NodeAnalyzer\\ForeachKeyUsedInConditionalAnalyzer' => $baseDir . '/rules/Php84/NodeAnalyzer/ForeachKeyUsedInConditionalAnalyzer.php',
     'Rector\\Php84\\NodeFactory\\ForeachToArrayAnyAllFactory' => $baseDir . '/rules/Php84/NodeFactory/ForeachToArrayAnyAllFactory.php',
     'Rector\\Php84\\NodeFactory\\ForeachToArrayFindFactory' => $baseDir . '/rules/Php84/NodeFactory/ForeachToArrayFindFactory.php',
