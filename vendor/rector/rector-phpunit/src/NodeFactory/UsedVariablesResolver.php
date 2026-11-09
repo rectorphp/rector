@@ -28,9 +28,12 @@ final class UsedVariablesResolver
     /**
      * @return Variable[]
      */
-    public function resolveUsedVariables(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt): array
+    public function resolveUsedVariables(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt, ?MethodCall $willReturnOnConsecutiveMethodCall = null): array
     {
         $consecutiveArgs = $withConsecutiveMethodCall->getArgs();
+        if ($willReturnOnConsecutiveMethodCall instanceof MethodCall) {
+            $consecutiveArgs = array_merge($consecutiveArgs, $willReturnOnConsecutiveMethodCall->getArgs());
+        }
         $stmtVariables = $returnStmt instanceof Stmt ? $this->resolveUniqueVariables([$returnStmt]) : [];
         return $this->resolveUniqueVariables(array_merge($consecutiveArgs, $stmtVariables));
     }

@@ -48,10 +48,10 @@ final class WillReturnCallbackFactory
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|null $referenceVariable
      */
-    public function createClosure(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt, $referenceVariable): Closure
+    public function createClosure(MethodCall $withConsecutiveMethodCall, ?Stmt $returnStmt, $referenceVariable, ?MethodCall $willReturnOnConsecutiveMethodCall = null): Closure
     {
         $matcherVariable = new Variable(ConsecutiveVariable::MATCHER);
-        $usedVariables = $this->usedVariablesResolver->resolveUsedVariables($withConsecutiveMethodCall, $returnStmt);
+        $usedVariables = $this->usedVariablesResolver->resolveUsedVariables($withConsecutiveMethodCall, $returnStmt, $willReturnOnConsecutiveMethodCall);
         $closureStmts = $this->createParametersMatch($withConsecutiveMethodCall);
         if ($returnStmt instanceof Stmt) {
             $closureStmts[] = $returnStmt;

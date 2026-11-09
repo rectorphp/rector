@@ -333,11 +333,22 @@ final class NodeFactory
     {
         // reset original node, to allow the printer to re-use the node
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, static function (Node $subNode): Node {
+        $this->removeFilePositions($node);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $subNode): Node {
             $subNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $this->removeFilePositions($subNode);
             return $subNode;
         });
         return $node;
+    }
+    /**
+     * Positions may come from another file, e.g. a parent class constructor
+     */
+    private function removeFilePositions(Node $node): void
+    {
+        $attributes = $node->getAttributes();
+        unset($attributes['startFilePos'], $attributes['endFilePos'], $attributes['startTokenPos'], $attributes['endTokenPos']);
+        $node->setAttributes($attributes);
     }
     /**
      * @param int|string|null $key

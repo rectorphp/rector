@@ -201,7 +201,7 @@ CODE_SAMPLE
      */
     private function refactorToWillReturnCallback(MethodCall $withConsecutiveMethodCall, $returnStmt, $referenceVariable, $expectsCall, Expression $expression, ?MethodCall $willReturnOnConsecutiveMethodCall): array
     {
-        $closure = $this->willReturnCallbackFactory->createClosure($withConsecutiveMethodCall, $returnStmt, $referenceVariable);
+        $closure = $this->willReturnCallbackFactory->createClosure($withConsecutiveMethodCall, $returnStmt, $referenceVariable, $willReturnOnConsecutiveMethodCall);
         $withConsecutiveMethodCall->name = new Identifier(ConsecutiveMethodName::WILL_RETURN_CALLBACK);
         $withConsecutiveMethodCall->args = [new Arg($closure)];
         $matcherVariable = new Variable(ConsecutiveVariable::MATCHER);
