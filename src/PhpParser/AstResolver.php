@@ -22,8 +22,8 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Parser\RectorParser;
 use Rector\Reflection\MethodReflectionResolver;
@@ -40,10 +40,6 @@ final class AstResolver
      * @readonly
      */
     private RectorParser $rectorParser;
-    /**
-     * @readonly
-     */
-    private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator;
     /**
      * @readonly
      */
@@ -65,21 +61,25 @@ final class AstResolver
      */
     private BetterNodeFinder $betterNodeFinder;
     /**
+     * @readonly
+     */
+    private PHPStanNodeScopeResolver $phpStanNodeScopeResolver;
+    /**
      * Parsing files is very heavy performance, so this will help to leverage it
      * The value can be also null, when no statements could be parsed from the file.
      *
      * @var array<string, Stmt[]|null>
      */
     private array $parsedFileNodes = [];
-    public function __construct(RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, MethodReflectionResolver $methodReflectionResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(RectorParser $rectorParser, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, MethodReflectionResolver $methodReflectionResolver, BetterNodeFinder $betterNodeFinder, PHPStanNodeScopeResolver $phpStanNodeScopeResolver)
     {
         $this->rectorParser = $rectorParser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->methodReflectionResolver = $methodReflectionResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
     }
     /**
      * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
@@ -265,7 +265,7 @@ final class AstResolver
             }
             throw $throwable;
         }
-        return $this->parsedFileNodes[$fileName] = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($fileName, $stmts);
+        return $this->parsedFileNodes[$fileName] = $this->phpStanNodeScopeResolver->processNodes($stmts, $fileName);
     }
     private function locateClassMethodInTrait(string $methodName, MethodReflection $methodReflection): ?ClassMethod
     {
