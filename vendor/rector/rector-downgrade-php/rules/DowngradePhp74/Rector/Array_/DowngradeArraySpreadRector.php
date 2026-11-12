@@ -5,17 +5,21 @@ namespace Rector\DowngradePhp74\Rector\Array_;
 
 use PhpParser\Node;
 use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\MagicConst;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\MutatingScope;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer;
 use Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory;
-use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
@@ -40,17 +44,17 @@ final class DowngradeArraySpreadRector extends AbstractRector
     /**
      * @readonly
      */
-    private AstResolver $astResolver;
+    private BetterNodeFinder $betterNodeFinder;
     /**
      * @readonly
      */
-    private BetterNodeFinder $betterNodeFinder;
-    public function __construct(ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory, ArraySpreadAnalyzer $arraySpreadAnalyzer, AstResolver $astResolver, BetterNodeFinder $betterNodeFinder)
+    private ReflectionProvider $reflectionProvider;
+    public function __construct(ArrayMergeFromArraySpreadFactory $arrayMergeFromArraySpreadFactory, ArraySpreadAnalyzer $arraySpreadAnalyzer, BetterNodeFinder $betterNodeFinder, ReflectionProvider $reflectionProvider)
     {
         $this->arrayMergeFromArraySpreadFactory = $arrayMergeFromArraySpreadFactory;
         $this->arraySpreadAnalyzer = $arraySpreadAnalyzer;
-        $this->astResolver = $astResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -97,15 +101,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Array_::class, ClassConst::class];
+        return [Array_::class, ClassLike::class];
     }
     /**
-     * @param Array_|ClassConst $node
+     * @param Array_|ClassLike $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof ClassConst) {
-            return $this->refactorUnderClassConst($node);
+        if ($node instanceof ClassLike) {
+            return $this->refactorUnderClassLike($node);
         }
         if (!$this->arraySpreadAnalyzer->isArrayWithUnpack($node)) {
             return null;
@@ -114,28 +118,38 @@ CODE_SAMPLE
         $scope = ScopeFetcher::fetch($node);
         return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope);
     }
-    private function refactorUnderClassConst(ClassConst $classConst): ?ClassConst
+    private function refactorUnderClassLike(ClassLike $classLike): ?ClassLike
+    {
+        $hasChanged = \false;
+        foreach ($classLike->getConstants() as $classConst) {
+            if ($this->refactorUnderClassConst($classConst, $classLike)) {
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
+            return $classLike;
+        }
+        return null;
+    }
+    private function refactorUnderClassConst(ClassConst $classConst, ClassLike $classLike): bool
     {
         $arrays = $this->betterNodeFinder->findInstanceOf($classConst->consts, Array_::class);
         if ($arrays === []) {
-            return null;
+            return \false;
         }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($classConst->consts, function (Node $subNode) use (&$hasChanged): ?Node {
+        $this->traverseNodesWithCallable($classConst->consts, function (Node $subNode) use (&$hasChanged, $classLike): ?Node {
             if (!$subNode instanceof Array_) {
                 return null;
             }
-            $refactorArrayConstValue = $this->refactorArrayConstValue($subNode);
+            $refactorArrayConstValue = $this->refactorArrayConstValue($subNode, $classLike);
             if ($refactorArrayConstValue instanceof Array_) {
                 $hasChanged = \true;
                 return $refactorArrayConstValue;
             }
             return null;
         });
-        if ($hasChanged) {
-            return $classConst;
-        }
-        return null;
+        return $hasChanged;
     }
     private function resolveItemType(?ArrayItem $arrayItem): ?Type
     {
@@ -156,7 +170,7 @@ CODE_SAMPLE
         }
         return $this->nodeTypeResolver->getType($arrayItem->value->class);
     }
-    private function refactorArrayConstValue(Array_ $array): ?Array_
+    private function refactorArrayConstValue(Array_ $array, ClassLike $classLike): ?Array_
     {
         $hasChanged = \false;
         $newArray = clone $array;
@@ -171,23 +185,80 @@ CODE_SAMPLE
             /** @var ClassConstFetch $value */
             $name = $value->name;
             /** @var Identifier $name */
-            $classLike = $this->astResolver->resolveClassFromName($type->getClassName());
-            if (!$classLike instanceof ClassLike) {
+            $constantValueExpr = $this->resolveConstantValueExpr($classLike, $type->getClassName(), $name->toString());
+            if (!$constantValueExpr instanceof Array_) {
                 continue;
             }
-            $constants = $classLike->getConstants();
-            foreach ($constants as $constant) {
-                $const = $constant->consts[0];
-                if ($const->name->toString() === $name->toString() && $const->value instanceof Array_) {
-                    array_pop($newArray->items);
-                    $newArray->items = array_merge($newArray->items, $const->value->items);
-                    $hasChanged = \true;
-                }
-            }
+            array_pop($newArray->items);
+            $newArray->items = array_merge($newArray->items, $constantValueExpr->items);
+            $hasChanged = \true;
         }
         if ($hasChanged) {
             return $newArray;
         }
         return null;
+    }
+    private function resolveConstantValueExpr(ClassLike $classLike, string $className, string $constantName): ?Expr
+    {
+        // own class constant is read from current AST, to keep the names as written
+        if ($this->isName($classLike, $className)) {
+            foreach ($classLike->getConstants() as $classConst) {
+                foreach ($classConst->consts as $const) {
+                    if ($this->isName($const, $constantName)) {
+                        return $const->value;
+                    }
+                }
+            }
+        }
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if (!$classReflection->hasConstant($constantName)) {
+            return null;
+        }
+        $valueExpr = $classReflection->getConstant($constantName)->getValueExpr();
+        $contextDependentNode = $this->betterNodeFinder->findFirst($valueExpr, fn(Node $node): bool => $this->isContextDependentNode($node));
+        return $contextDependentNode instanceof Node ? null : $valueExpr;
+    }
+    /**
+     * These change meaning, or are no longer accessible, once moved to another class
+     */
+    private function isContextDependentNode(Node $node): bool
+    {
+        if ($node instanceof MagicConst) {
+            return \true;
+        }
+        if ($node instanceof Name && $node->isSpecialClassName()) {
+            return \true;
+        }
+        if ($node instanceof ConstFetch) {
+            return $this->isNamespacedConstFetch($node);
+        }
+        return $node instanceof ClassConstFetch && $this->isNonPublicClassConstFetch($node);
+    }
+    private function isNamespacedConstFetch(ConstFetch $constFetch): bool
+    {
+        $namespacedName = $constFetch->name->getAttribute('namespacedName');
+        if (!$namespacedName instanceof FullyQualified) {
+            return \false;
+        }
+        return $this->reflectionProvider->hasConstant($namespacedName, null);
+    }
+    private function isNonPublicClassConstFetch(ClassConstFetch $classConstFetch): bool
+    {
+        if (!$classConstFetch->class instanceof Name || !$classConstFetch->name instanceof Identifier) {
+            return \false;
+        }
+        $className = $classConstFetch->class->toString();
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return \false;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $constantName = $classConstFetch->name->toString();
+        if (!$classReflection->hasConstant($constantName)) {
+            return \false;
+        }
+        return !$classReflection->getConstant($constantName)->isPublic();
     }
 }
