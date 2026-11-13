@@ -2057,6 +2057,7 @@ return array(
     'Rector\\PhpParser\\NodeVisitor\\LocalVariableScopeNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/LocalVariableScopeNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\NameAndArgNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/NameAndArgNodeVisitor.php',
     'Rector\\PhpParser\\NodeVisitor\\PhpVersionConditionNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/PhpVersionConditionNodeVisitor.php',
+    'Rector\\PhpParser\\NodeVisitor\\ReboundClosureNodeVisitor' => $baseDir . '/src/PhpParser/NodeVisitor/ReboundClosureNodeVisitor.php',
     'Rector\\PhpParser\\Node\\AssignAndBinaryMap' => $baseDir . '/src/PhpParser/Node/AssignAndBinaryMap.php',
     'Rector\\PhpParser\\Node\\BetterNodeFinder' => $baseDir . '/src/PhpParser/Node/BetterNodeFinder.php',
     'Rector\\PhpParser\\Node\\FileNode' => $baseDir . '/src/PhpParser/Node/FileNode.php',

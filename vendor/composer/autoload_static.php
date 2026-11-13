@@ -2283,6 +2283,7 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'Rector\\PhpParser\\NodeVisitor\\LocalVariableScopeNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/LocalVariableScopeNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\NameAndArgNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/NameAndArgNodeVisitor.php',
         'Rector\\PhpParser\\NodeVisitor\\PhpVersionConditionNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/PhpVersionConditionNodeVisitor.php',
+        'Rector\\PhpParser\\NodeVisitor\\ReboundClosureNodeVisitor' => __DIR__ . '/../..' . '/src/PhpParser/NodeVisitor/ReboundClosureNodeVisitor.php',
         'Rector\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
         'Rector\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',
         'Rector\\PhpParser\\Node\\FileNode' => __DIR__ . '/../..' . '/src/PhpParser/Node/FileNode.php',

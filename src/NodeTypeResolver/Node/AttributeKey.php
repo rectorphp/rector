@@ -251,4 +251,9 @@ final class AttributeKey
      * @var string
      */
     public const IS_ARG_NOT_ACCEPTING_CLOSURE = 'is_arg_not_accepting_closure';
+    /**
+     * Closure or arrow function with rebound $this, e.g. (fn () => ...)->call($object)
+     * @var string
+     */
+    public const IS_REBOUND_CLOSURE = 'is_rebound_closure';
 }

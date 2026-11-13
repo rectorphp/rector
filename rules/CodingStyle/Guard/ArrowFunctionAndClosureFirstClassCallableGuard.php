@@ -57,6 +57,10 @@ final class ArrowFunctionAndClosureFirstClassCallableGuard
         if ($arrowFunctionOrClosure->getAttribute(AttributeKey::HAS_CLOSURE_WITH_VARIADIC_ARGS) === \true) {
             return \true;
         }
+        // $this is rebound, e.g. (fn () => $this->method())->call($object)
+        if ($arrowFunctionOrClosure->getAttribute(AttributeKey::IS_REBOUND_CLOSURE) === \true) {
+            return \true;
+        }
         if ($arrowFunctionOrClosure->getAttribute(AttributeKey::IS_ASSIGNED_TO) === \true || $arrowFunctionOrClosure->getAttribute(AttributeKey::IS_BEING_ASSIGNED)) {
             return \true;
         }
