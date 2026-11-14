@@ -3,13 +3,19 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\CodeQuality\NodeAnalyser;
 
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\ObjectType;
@@ -133,6 +139,62 @@ final class MockObjectExprDetector
             }
         }
         return \false;
+    }
+    /**
+     * The variable is put to an array, assigned to another variable or captured by a closure, e.g.
+     * foreach ([$a, $b] as $mock), $alias = $a or $mocks = [$a]; it can be mocked through the alias, so be safe
+     */
+    public function isEscapingToAlias(Expr $expr, ClassMethod $classMethod): bool
+    {
+        if (!$expr instanceof Variable) {
+            return \false;
+        }
+        $variableName = $this->nodeNameResolver->getName($expr);
+        // to be safe
+        if ($variableName === null) {
+            return \true;
+        }
+        // not scoped on purpose, as the alias can be created in a closure
+        $nodes = $this->betterNodeFinder->findInstancesOf((array) $classMethod->stmts, [Assign::class, AssignRef::class, Foreach_::class, Closure::class]);
+        foreach ($nodes as $node) {
+            if ($node instanceof Foreach_) {
+                if ($this->isVariableInArray($node->expr, $variableName)) {
+                    return \true;
+                }
+                continue;
+            }
+            if ($node instanceof Assign || $node instanceof AssignRef) {
+                // e.g. $alias = $a, $mocks = [$a, $b]; arrays passed directly as arguments are not aliases
+                if ($this->isVariableNamed($node->expr, $variableName) || $this->isVariableInArray($node->expr, $variableName)) {
+                    return \true;
+                }
+                continue;
+            }
+            foreach ($node->uses as $closureUse) {
+                if ($this->nodeNameResolver->isName($closureUse->var, $variableName)) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
+    }
+    private function isVariableNamed(Expr $expr, string $variableName): bool
+    {
+        return $expr instanceof Variable && $this->nodeNameResolver->isName($expr, $variableName);
+    }
+    private function isVariableInArray(Expr $expr, string $variableName): bool
+    {
+        if (!$expr instanceof Array_) {
+            return \false;
+        }
+        $found = \false;
+        foreach ($expr->items as $item) {
+            if ($this->isVariableNamed($item->value, $variableName)) {
+                $found = \true;
+                break;
+            }
+        }
+        return $found;
     }
     public function isPropertyUsedForMocking(Class_ $class, string $propertyName): bool
     {

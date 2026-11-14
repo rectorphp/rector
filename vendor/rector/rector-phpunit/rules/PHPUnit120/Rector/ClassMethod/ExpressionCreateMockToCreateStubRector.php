@@ -112,6 +112,10 @@ CODE_SAMPLE
             if ($this->mockObjectExprDetector->isUsedForMocking($assign->var, $node)) {
                 continue;
             }
+            // the mock can be configured through an alias, e.g. foreach ([$a, $b] as $mock)
+            if ($this->mockObjectExprDetector->isEscapingToAlias($assign->var, $node)) {
+                continue;
+            }
             /** @var MethodCall $methodCall */
             $methodCall = $assign->expr;
             $methodCall->name = new Identifier('createStub');
