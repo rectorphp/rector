@@ -50,7 +50,7 @@ final class AssertCallAnalyzer
     /**
      * @var string[]
      */
-    private const ASSERT_METHOD_NAME_PREFIXES = ['expectNotToPerformAssertions', 'assert', 'expectException', 'setExpectedException', 'expectOutput', 'should'];
+    private const ASSERT_METHOD_NAME_PREFIXES = ['expectNotToPerformAssertions', 'assert', 'expectException', 'setExpectedException', 'expectOutput', 'expectUserDeprecationMessage', 'should'];
     /**
      * @var array<string, bool>
      */
