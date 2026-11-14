@@ -143,7 +143,7 @@ CODE_SAMPLE
             return null;
         }
         // assertions in lifecycle methods count toward every test of the class
-        if ($this->lifecycleMethodAssertAnalyzer->hasAssertingLifecycleMethod($node)) {
+        if ($this->lifecycleMethodAssertAnalyzer->hasAssertingLifecycleMethod($node, $scope)) {
             return null;
         }
         $hasChanged = \false;
