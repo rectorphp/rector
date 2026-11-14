@@ -54,9 +54,23 @@ final class PHPUnitClassName
     /**
      * @var string
      */
+    public const SYMFONY_KERNEL_TEST_CASE = 'Symfony\Bundle\FrameworkBundle\Test\KernelTestCase';
+    /**
+     * @var string
+     */
+    public const SYMFONY_WEB_TEST_CASE = 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase';
+    /**
+     * @var string
+     */
     public const TWIG_INTEGRATION_TEST_CASE = 'Twig\Test\IntegrationTestCase';
     /**
      * @var string[]
      */
     public const TEST_CLASSES = [self::TEST_CASE, self::TEST_CASE_LEGACY];
+    /**
+     * Framework base test classes, their methods do not count as test assertions and their files are huge to parse
+     *
+     * @var string[]
+     */
+    public const FRAMEWORK_TEST_CASES = [self::TEST_CASE, self::ASSERT, self::SYMFONY_KERNEL_TEST_CASE, self::SYMFONY_WEB_TEST_CASE, self::SYMFONY_TYPE_TEST_CASE];
 }

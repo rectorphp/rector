@@ -11,6 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -44,6 +45,10 @@ final class AssertCallAnalyzer
      */
     private NodeTypeResolver $nodeTypeResolver;
     /**
+     * @readonly
+     */
+    private ReflectionProvider $reflectionProvider;
+    /**
      * @var int
      */
     private const MAX_NESTED_METHOD_CALL_LEVEL = 5;
@@ -64,13 +69,14 @@ final class AssertCallAnalyzer
      * This should prevent segfaults while going too deep into to parsed code. Without it, it might end-up with segfault
      */
     private int $classMethodNestingLevel = 0;
-    public function __construct(AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider)
     {
         $this->astResolver = $astResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function resetNesting(): void
     {
@@ -204,7 +210,23 @@ final class AssertCallAnalyzer
         if ($className === null) {
             return null;
         }
+        // e.g. "parent::setUp()" declared in PHPUnit or Symfony, no need to parse their huge classes
+        if ($this->isDeclaredInFrameworkTestCase($className, $methodName)) {
+            return null;
+        }
         return $this->astResolver->resolveClassMethod($className, $methodName);
+    }
+    private function isDeclaredInFrameworkTestCase(string $className, string $methodName): bool
+    {
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return \false;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if (!$classReflection->hasNativeMethod($methodName)) {
+            return \false;
+        }
+        $declaringClassName = $classReflection->getNativeMethod($methodName)->getDeclaringClass()->getName();
+        return in_array($declaringClassName, PHPUnitClassName::FRAMEWORK_TEST_CASES, \true);
     }
     private function resolveOwnClassName(ClassMethod $classMethod): string
     {
@@ -223,10 +245,6 @@ final class AssertCallAnalyzer
             // "parent" resolves to a union of all ancestors in type resolver, so use the direct parent class instead
             $parentClassReflection = ($nullsafeVariable1 = $this->resolveClassReflection($call)) ? $nullsafeVariable1->getParentClass() : null;
             if (!$parentClassReflection instanceof ClassReflection) {
-                return null;
-            }
-            // PHPUnit itself has no asserting test methods, no need to parse its huge classes
-            if ($parentClassReflection->getName() === PHPUnitClassName::TEST_CASE) {
                 return null;
             }
             return $parentClassReflection->getName();
