@@ -140,6 +140,10 @@ CODE_SAMPLE
             Assert::isInstanceOf($arg->name, Identifier::class);
             return $arg->name->toString();
         }, $attributeArgs);
+        // #[AsCommand] requires name, skip when it cannot be resolved
+        if (!in_array('name', $existingAttributeNames, \true) && !$this->hasPermittedMethodCall($configureClassMethod, 'setName') && $this->hasPermittedAttributeMethodCall($configureClassMethod)) {
+            return null;
+        }
         $hasChanged = \false;
         foreach (self::METHODS_TO_ATTRIBUTE_NAMES as $methodName => $attributeName) {
             $resolvedExpr = $this->findAndRemoveMethodExpr($configureClassMethod, $methodName);
@@ -237,6 +241,33 @@ CODE_SAMPLE
             return $node->var;
         });
         return $expr;
+    }
+    private function hasPermittedAttributeMethodCall(ClassMethod $classMethod): bool
+    {
+        foreach (array_keys(self::METHODS_TO_ATTRIBUTE_NAMES) as $methodName) {
+            if ($this->hasPermittedMethodCall($classMethod, $methodName)) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    private function hasPermittedMethodCall(ClassMethod $classMethod, string $methodName): bool
+    {
+        $hasMethodCall = \false;
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$hasMethodCall, $methodName) {
+            if (!$node instanceof MethodCall || !$this->isName($node->name, $methodName)) {
+                return null;
+            }
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+            $args = $node->getArgs();
+            if ($args !== [] && $this->isPermittedAttributeValue($args[0]->value)) {
+                $hasMethodCall = \true;
+            }
+            return null;
+        });
+        return $hasMethodCall;
     }
     private function isPermittedAttributeValue(Expr $expr): bool
     {
