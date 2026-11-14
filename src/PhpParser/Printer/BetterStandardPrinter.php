@@ -136,10 +136,6 @@ final class BetterStandardPrinter extends Standard
         }
         return $content;
     }
-    protected function pStmt_FileNode(FileNode $fileNode): string
-    {
-        return $this->pStmts($fileNode->stmts);
-    }
     protected function pExpr_ArrowFunction(ArrowFunction $arrowFunction, int $precedence, int $lhsPrecedence): string
     {
         if (!$arrowFunction->hasAttribute(AttributeKey::COMMENTS)) {
