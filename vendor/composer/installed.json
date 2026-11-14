@@ -301,17 +301,17 @@
         },
         {
             "name": "entropy\/entropy",
-            "version": "0.4.36",
-            "version_normalized": "0.4.36.0",
+            "version": "0.4.37",
+            "version_normalized": "0.4.37.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/TomasVotruba\/entropy.git",
-                "reference": "9f08272a96275d22a9d9808a32581392920626db"
+                "reference": "57bd06e1652f3c38148944b4880ee3b6e6284da3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/9f08272a96275d22a9d9808a32581392920626db",
-                "reference": "9f08272a96275d22a9d9808a32581392920626db",
+                "url": "https:\/\/api.github.com\/repos\/TomasVotruba\/entropy\/zipball\/57bd06e1652f3c38148944b4880ee3b6e6284da3",
+                "reference": "57bd06e1652f3c38148944b4880ee3b6e6284da3",
                 "shasum": ""
             },
             "require": {
@@ -334,8 +334,8 @@
                 "tomasvotruba\/type-coverage": "^2.2",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-10-26T16:46:17+00:00",
-            "published-time": "2026-10-26T16:46:43+00:00",
+            "time": "2026-11-14T16:57:42+00:00",
+            "published-time": "2026-11-14T16:57:58+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -350,7 +350,7 @@
             "description": "Entropy framework",
             "support": {
                 "issues": "https:\/\/github.com\/TomasVotruba\/entropy\/issues",
-                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.36"
+                "source": "https:\/\/github.com\/TomasVotruba\/entropy\/tree\/0.4.37"
             },
             "install-path": "..\/entropy\/entropy"
         },
@@ -1602,12 +1602,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "282fac4520cdcdbc9a321209d106ace98f1ccbcd"
+                "reference": "745886edbb0cc83989e865c0db7bd9c9691e5b10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/282fac4520cdcdbc9a321209d106ace98f1ccbcd",
-                "reference": "282fac4520cdcdbc9a321209d106ace98f1ccbcd",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/745886edbb0cc83989e865c0db7bd9c9691e5b10",
+                "reference": "745886edbb0cc83989e865c0db7bd9c9691e5b10",
                 "shasum": ""
             },
             "require": {
@@ -1633,8 +1633,8 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-11-14T16:38:18+00:00",
-            "published-time": "2026-11-14T16:38:23+00:00",
+            "time": "2026-11-14T17:07:04+00:00",
+            "published-time": "2026-11-14T17:07:08+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",

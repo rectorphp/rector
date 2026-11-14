@@ -58,6 +58,9 @@ final class CommandHelpFactory
     {
         if ($argumentOrOption instanceof Option) {
             $contents = '--' . $argumentOrOption->getName();
+            if ($argumentOrOption->getShortName() !== null) {
+                $contents .= ', -' . $argumentOrOption->getShortName();
+            }
             $defaultValue = $argumentOrOption->getDefaultValue();
             if ($defaultValue !== null && $defaultValue !== \false) {
                 if ($defaultValue === \true) {
