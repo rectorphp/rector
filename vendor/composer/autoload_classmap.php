@@ -1739,6 +1739,7 @@ return array(
     'Rector\\PHPUnit\\NodeAnalyzer\\ArgumentMover' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/ArgumentMover.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\AssertCallAnalyzer' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/AssertCallAnalyzer.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\IdentifierManipulator' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/IdentifierManipulator.php',
+    'Rector\\PHPUnit\\NodeAnalyzer\\LifecycleMethodAssertAnalyzer' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/LifecycleMethodAssertAnalyzer.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\MockedVariableAnalyzer' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/MockedVariableAnalyzer.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\SetUpMethodDecorator' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/SetUpMethodDecorator.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\TestsNodeAnalyzer' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/TestsNodeAnalyzer.php',

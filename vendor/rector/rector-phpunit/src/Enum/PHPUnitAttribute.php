@@ -55,4 +55,20 @@ final class PHPUnitAttribute
      * @var string
      */
     public const DATA_PROVIDER = 'PHPUnit\Framework\Attributes\DataProvider';
+    /**
+     * @var string
+     */
+    public const BEFORE = 'PHPUnit\Framework\Attributes\Before';
+    /**
+     * @var string
+     */
+    public const AFTER = 'PHPUnit\Framework\Attributes\After';
+    /**
+     * @var string
+     */
+    public const PRE_CONDITION = 'PHPUnit\Framework\Attributes\PreCondition';
+    /**
+     * @var string
+     */
+    public const POST_CONDITION = 'PHPUnit\Framework\Attributes\PostCondition';
 }

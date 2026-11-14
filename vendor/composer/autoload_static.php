@@ -1965,6 +1965,7 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'Rector\\PHPUnit\\NodeAnalyzer\\ArgumentMover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/ArgumentMover.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\AssertCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/AssertCallAnalyzer.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\IdentifierManipulator' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/IdentifierManipulator.php',
+        'Rector\\PHPUnit\\NodeAnalyzer\\LifecycleMethodAssertAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/LifecycleMethodAssertAnalyzer.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\MockedVariableAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/MockedVariableAnalyzer.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\SetUpMethodDecorator' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/SetUpMethodDecorator.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\TestsNodeAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/TestsNodeAnalyzer.php',

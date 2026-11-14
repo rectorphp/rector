@@ -8,6 +8,7 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
@@ -19,9 +20,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPUnit\Enum\PHPUnitAttribute;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer;
+use Rector\PHPUnit\NodeAnalyzer\LifecycleMethodAssertAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -71,13 +74,21 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
      */
     private ReflectionProvider $reflectionProvider;
     /**
+     * @readonly
+     */
+    private LifecycleMethodAssertAnalyzer $lifecycleMethodAssertAnalyzer;
+    /**
+     * @readonly
+     */
+    private BetterNodeFinder $betterNodeFinder;
+    /**
      * inherited from the PHPUnit 6.0 set
      */
     public function provideComposerPackageConstraint(): ComposerPackageConstraint
     {
         return new ComposerPackageConstraint('phpunit/phpunit', '>=6.0');
     }
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssertCallAnalyzer $assertCallAnalyzer, MockedVariableAnalyzer $mockedVariableAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssertCallAnalyzer $assertCallAnalyzer, MockedVariableAnalyzer $mockedVariableAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider, LifecycleMethodAssertAnalyzer $lifecycleMethodAssertAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->assertCallAnalyzer = $assertCallAnalyzer;
@@ -87,6 +98,8 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
         $this->reflectionProvider = $reflectionProvider;
+        $this->lifecycleMethodAssertAnalyzer = $lifecycleMethodAssertAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -171,6 +184,11 @@ CODE_SAMPLE
         if ($this->assertCallAnalyzer->containsAssertCall($classMethod)) {
             return \true;
         }
+        // assertions in lifecycle methods count toward every test of the class
+        $class = $this->resolveCurrentClass($classMethod);
+        if ($class instanceof Class_ && $this->lifecycleMethodAssertAnalyzer->hasAssertingLifecycleMethod($class)) {
+            return \true;
+        }
         return $this->mockedVariableAnalyzer->containsMockAsUsedVariable($classMethod);
     }
     /**
@@ -221,6 +239,11 @@ CODE_SAMPLE
             return \false;
         }
         return $classReflection->isAbstract();
+    }
+    private function resolveCurrentClass(ClassMethod $classMethod): ?Class_
+    {
+        $class = $this->betterNodeFinder->findFirst($this->getFile()->getNewStmts(), fn(Node $node): bool => $node instanceof Class_ && in_array($classMethod, $node->getMethods(), \true));
+        return $class instanceof Class_ ? $class : null;
     }
     private function isInTwigIntegrationTestCase(ClassMethod $classMethod): bool
     {
