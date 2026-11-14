@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeVisitor;
+use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ClassReflection;
@@ -20,7 +21,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStan\ScopeFetcher;
 use Rector\PHPUnit\Enum\PHPUnitAttribute;
 use Rector\PHPUnit\Enum\PHPUnitClassName;
 use Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer;
@@ -28,7 +29,6 @@ use Rector\PHPUnit\NodeAnalyzer\LifecycleMethodAssertAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
@@ -68,19 +68,11 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
     /**
      * @readonly
      */
-    private ReflectionResolver $reflectionResolver;
-    /**
-     * @readonly
-     */
     private ReflectionProvider $reflectionProvider;
     /**
      * @readonly
      */
     private LifecycleMethodAssertAnalyzer $lifecycleMethodAssertAnalyzer;
-    /**
-     * @readonly
-     */
-    private BetterNodeFinder $betterNodeFinder;
     /**
      * inherited from the PHPUnit 6.0 set
      */
@@ -88,7 +80,7 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
     {
         return new ComposerPackageConstraint('phpunit/phpunit', '>=6.0');
     }
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssertCallAnalyzer $assertCallAnalyzer, MockedVariableAnalyzer $mockedVariableAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider, LifecycleMethodAssertAnalyzer $lifecycleMethodAssertAnalyzer, BetterNodeFinder $betterNodeFinder)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, AssertCallAnalyzer $assertCallAnalyzer, MockedVariableAnalyzer $mockedVariableAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, DocBlockUpdater $docBlockUpdater, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, LifecycleMethodAssertAnalyzer $lifecycleMethodAssertAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->assertCallAnalyzer = $assertCallAnalyzer;
@@ -96,10 +88,8 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractR
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->docBlockUpdater = $docBlockUpdater;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->reflectionResolver = $reflectionResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->lifecycleMethodAssertAnalyzer = $lifecycleMethodAssertAnalyzer;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -133,48 +123,60 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipClassMethod($node)) {
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $this->removeAddToAssertionCountCalls($node);
+        // a child class can add asserting lifecycle methods, that count toward the inherited tests
+        if ($node->isAbstract()) {
+            return null;
+        }
+        $scope = ScopeFetcher::fetch($node);
+        // the parent test case asserts in its own integration methods
+        if ($this->isInTwigIntegrationTestCase($scope)) {
+            return null;
+        }
+        // assertions in lifecycle methods count toward every test of the class
+        if ($this->lifecycleMethodAssertAnalyzer->hasAssertingLifecycleMethod($node)) {
+            return null;
+        }
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->shouldSkipClassMethod($classMethod)) {
+                continue;
+            }
+            $this->removeAddToAssertionCountCalls($classMethod);
+            $this->addDoesNotPerformAssertions($classMethod);
+            $hasChanged = \true;
+        }
+        if (!$hasChanged) {
+            return null;
+        }
+        return $node;
+    }
+    private function addDoesNotPerformAssertions(ClassMethod $classMethod): void
+    {
         // the attribute is available since PHPUnit 10, prefer it over the annotation
         if ($this->reflectionProvider->hasClass(PHPUnitAttribute::DOES_NOT_PERFORM_ASSERTIONS)) {
-            $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(PHPUnitAttribute::DOES_NOT_PERFORM_ASSERTIONS))]);
-            return $node;
+            $classMethod->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(PHPUnitAttribute::DOES_NOT_PERFORM_ASSERTIONS))]);
+            return;
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@doesNotPerformAssertions', new GenericTagValueNode('')));
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
-        return $node;
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
-        if (!$this->testsNodeAnalyzer->isInTestClass($classMethod)) {
-            return \true;
-        }
         if (!$this->testsNodeAnalyzer->isTestClassMethod($classMethod)) {
             return \true;
         }
         if ($classMethod->isAbstract()) {
-            return \true;
-        }
-        // we have no idea how the trait is used, the using class can assert on its own
-        if ($this->isInTrait($classMethod)) {
-            return \true;
-        }
-        // a child class can add asserting lifecycle methods, that count toward the inherited tests
-        if ($this->isInAbstractClass($classMethod)) {
-            return \true;
-        }
-        // the parent test case asserts in its own integration methods
-        if ($this->isInTwigIntegrationTestCase($classMethod)) {
             return \true;
         }
         if ($this->hasAssertingAnnotationOrAttribute($classMethod)) {
@@ -182,11 +184,6 @@ CODE_SAMPLE
         }
         $this->assertCallAnalyzer->resetNesting();
         if ($this->assertCallAnalyzer->containsAssertCall($classMethod)) {
-            return \true;
-        }
-        // assertions in lifecycle methods count toward every test of the class
-        $class = $this->resolveCurrentClass($classMethod);
-        if ($class instanceof Class_ && $this->lifecycleMethodAssertAnalyzer->hasAssertingLifecycleMethod($class)) {
             return \true;
         }
         return $this->mockedVariableAnalyzer->containsMockAsUsedVariable($classMethod);
@@ -224,30 +221,9 @@ CODE_SAMPLE
         }
         return $this->isName($methodCall->name, 'addToAssertionCount');
     }
-    private function isInTrait(ClassMethod $classMethod): bool
+    private function isInTwigIntegrationTestCase(Scope $scope): bool
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
-            return \false;
-        }
-        return $classReflection->isTrait();
-    }
-    private function isInAbstractClass(ClassMethod $classMethod): bool
-    {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
-            return \false;
-        }
-        return $classReflection->isAbstract();
-    }
-    private function resolveCurrentClass(ClassMethod $classMethod): ?Class_
-    {
-        $class = $this->betterNodeFinder->findFirst($this->getFile()->getNewStmts(), fn(Node $node): bool => $node instanceof Class_ && in_array($classMethod, $node->getMethods(), \true));
-        return $class instanceof Class_ ? $class : null;
-    }
-    private function isInTwigIntegrationTestCase(ClassMethod $classMethod): bool
-    {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
