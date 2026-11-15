@@ -38,6 +38,11 @@ final class ChangedFilesDetector
     private array $cacheableFiles = [];
     // scopes the per-file cache key to the active --only / --only-suffix / --filter selection (empty = full run)
     private string $scopeSuffix = '';
+    private ?string $configurationCacheKey = null;
+    /**
+     * @var array{hash: string, rules: string[], sets: string[], skip: string[]}|null
+     */
+    private ?array $configurationSnapshot = null;
     public function __construct(FileHashComputer $fileHashComputer, Cache $cache, FileHasher $fileHasher, FilePathHelper $filePathHelper)
     {
         $this->fileHashComputer = $fileHashComputer;
@@ -93,6 +98,10 @@ final class ChangedFilesDetector
     public function clear(): void
     {
         $this->cache->clear();
+        // keep the snapshot of the current run, so the next run can still detect a configuration change
+        if ($this->configurationCacheKey !== null && $this->configurationSnapshot !== null) {
+            $this->cache->save($this->configurationCacheKey, CacheKey::CONFIGURATION_HASH_KEY, $this->configurationSnapshot);
+        }
     }
     public function setFirstResolvedConfigFileInfo(string $filePath): void
     {
@@ -127,15 +136,18 @@ final class ChangedFilesDetector
     private function storeConfigurationDataHash(string $filePath, array $configurationSnapshot): void
     {
         $key = CacheKey::CONFIGURATION_HASH_KEY . '_' . $this->getFilePathCacheKey($filePath);
-        $this->invalidateCacheIfConfigurationChanged($key, $configurationSnapshot);
+        $oldCachedValue = $this->cache->load($key, CacheKey::CONFIGURATION_HASH_KEY);
+        $this->configurationCacheKey = $key;
+        $this->configurationSnapshot = $configurationSnapshot;
+        $this->invalidateCacheIfConfigurationChanged($oldCachedValue, $configurationSnapshot);
         $this->cache->save($key, CacheKey::CONFIGURATION_HASH_KEY, $configurationSnapshot);
     }
     /**
      * @param array{hash: string, rules: string[], sets: string[], skip: string[]} $configurationSnapshot
+     * @param mixed $oldCachedValue
      */
-    private function invalidateCacheIfConfigurationChanged(string $key, array $configurationSnapshot): void
+    private function invalidateCacheIfConfigurationChanged($oldCachedValue, array $configurationSnapshot): void
     {
-        $oldCachedValue = $this->cache->load($key, CacheKey::CONFIGURATION_HASH_KEY);
         // first run, nothing to compare against
         if ($oldCachedValue === null) {
             return;
