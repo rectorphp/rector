@@ -756,14 +756,6 @@ final class RectorConfigBuilder
         return $this;
     }
     /**
-     * @deprecated Set providers are now loaded internally. Use withComposerBased() instead.
-     */
-    public function withSetProviders(): self
-    {
-        trigger_error('The withSetProviders() method is deprecated and no longer applied. Set providers are now loaded internally - use "withComposerBased()" instead.', \E_USER_DEPRECATED);
-        return $this;
-    }
-    /**
      * @param PhpVersion::* $phpVersion
      */
     private function addPhpLevelSets(int $phpVersion): self
