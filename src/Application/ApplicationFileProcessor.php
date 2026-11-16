@@ -190,7 +190,7 @@ final class ApplicationFileProcessor
                 $systemErrors[] = $this->resolveSystemError($throwable, $filePath);
             }
         }
-        return new ProcessResult($systemErrors, $fileDiffs, $totalChanged, $this->skipper->provideUsedSkips());
+        return new ProcessResult($systemErrors, $fileDiffs, $totalChanged, $this->skipper->provideUsedSkips(), $this->skipper->provideSkippedFilePathsByRule());
     }
     private function processFile(File $file, Configuration $configuration): FileProcessResult
     {

@@ -36,4 +36,8 @@ final class Bridge
      * @var string
      */
     public const USED_SKIPS = 'used_skips';
+    /**
+     * @var string
+     */
+    public const SKIPPED_FILE_PATHS_BY_RULE = 'skipped_file_paths_by_rule';
 }

@@ -195,7 +195,7 @@ EOF
         $this->missConfigurationReporter->reportSkippedNonRectorClasses();
         $this->missConfigurationReporter->reportUnusedSkips($processResult);
         // the verification re-run is forced to a dry run, so it is safe on an apply run too
-        $this->missConfigurationReporter->reportUnnecessarySkips();
+        $this->missConfigurationReporter->reportUnnecessarySkips($processResult);
         return $this->resolveReturnCode($processResult, $configuration);
     }
     protected function initialize(InputInterface $input, OutputInterface $output): void

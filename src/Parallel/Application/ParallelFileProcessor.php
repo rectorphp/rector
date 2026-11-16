@@ -122,7 +122,8 @@ final class ParallelFileProcessor
                      *      file_diffs: array<string, mixed>,
                      *      files_count: int,
                      *      system_errors_count: int,
-                     *      used_skips: array<string, string[]>
+                     *      used_skips: array<string, string[]>,
+                     *      skipped_file_paths_by_rule: array<string, string[]>
                      * } $json */
                     $filesCount = $parallelResultCollector->collectWorkerResult($json);
                     $postFileCallback($filesCount);
