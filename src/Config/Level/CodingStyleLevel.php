@@ -25,7 +25,6 @@ use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRecto
 use Rector\CodingStyle\Rector\Use_\SeparateMultiUseImportsRector;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
 /**
  * Key 0 = level 0
  * Key 50 = level 50
@@ -46,8 +45,4 @@ final class CodingStyleLevel
      * @var array<class-string<RectorInterface>>
      */
     public const RULES = [SeparateMultiUseImportsRector::class, NewlineBetweenClassLikeStmtsRector::class, NewlineAfterStatementRector::class, AlternativeIfToBracketRector::class, CompleteMissingIfElseBracketRector::class, SimplifyQuoteEscapeRector::class, StringClassNameToClassConstantRector::class, CatchExceptionNameMatchingTypeRector::class, SplitDoubleAssignRector::class, NewlineBeforeNewAssignSetRector::class, MakeInheritedMethodVisibilitySameAsParentRector::class, CallUserFuncArrayToVariadicRector::class, VersionCompareFuncCallToConstantRector::class, CallUserFuncToMethodCallRector::class, FuncGetArgsToVariadicParamRector::class, StrictArraySearchRector::class, StrictInArrayRector::class, UseClassKeywordForClassNameResolutionRector::class, SplitGroupedPropertiesRector::class, SplitGroupedClassConstantsRector::class, RemoveUselessAliasInUseStatementRector::class];
-    /**
-     * @var array<class-string<RectorInterface>, mixed[]>
-     */
-    public const RULES_WITH_CONFIGURATION = [FuncCallToConstFetchRector::class => ['php_sapi_name' => 'PHP_SAPI', 'pi' => 'M_PI']];
 }
