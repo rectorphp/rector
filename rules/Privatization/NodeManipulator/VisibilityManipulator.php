@@ -112,6 +112,10 @@ final class VisibilityManipulator
     public function makePrivate($node): void
     {
         $this->replaceVisibilityFlag($node, Visibility::PRIVATE);
+        // private property cannot have wider set visibility, and private(set) is redundant
+        if ($node instanceof Property || $node instanceof Param) {
+            $node->flags &= ~Modifiers::VISIBILITY_SET_MASK;
+        }
         // only constructor can be both private and final
         if ($node instanceof ClassMethod && $this->nodeNameResolver->isName($node, MethodName::CONSTRUCT)) {
             return;
