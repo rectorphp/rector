@@ -2395,6 +2395,7 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedGenericObjectType' => __DIR__ . '/../..' . '/src/StaticTypeMapper/ValueObject/Type/ShortenedGenericObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedObjectType' => __DIR__ . '/../..' . '/src/StaticTypeMapper/ValueObject/Type/ShortenedObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType' => __DIR__ . '/../..' . '/src/StaticTypeMapper/ValueObject/Type/SimpleStaticType.php',
+        'Rector\\Strict\\Rector\\Empty_\\DisallowedEmptyRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/Empty_/DisallowedEmptyRuleFixerRector.php',
         'Rector\\Symfony\\ApplicationMetadata\\ListenerServiceDefinitionProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/ApplicationMetadata/ListenerServiceDefinitionProvider.php',
         'Rector\\Symfony\\Bridge\\NodeAnalyzer\\ControllerMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/Bridge/NodeAnalyzer/ControllerMethodAnalyzer.php',
         'Rector\\Symfony\\CodeQuality\\Enum\\ResponseClass' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Enum/ResponseClass.php',

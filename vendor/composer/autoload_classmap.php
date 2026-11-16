@@ -2169,6 +2169,7 @@ return array(
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedGenericObjectType' => $baseDir . '/src/StaticTypeMapper/ValueObject/Type/ShortenedGenericObjectType.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedObjectType' => $baseDir . '/src/StaticTypeMapper/ValueObject/Type/ShortenedObjectType.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType' => $baseDir . '/src/StaticTypeMapper/ValueObject/Type/SimpleStaticType.php',
+    'Rector\\Strict\\Rector\\Empty_\\DisallowedEmptyRuleFixerRector' => $baseDir . '/rules/Strict/Rector/Empty_/DisallowedEmptyRuleFixerRector.php',
     'Rector\\Symfony\\ApplicationMetadata\\ListenerServiceDefinitionProvider' => $vendorDir . '/rector/rector-symfony/src/ApplicationMetadata/ListenerServiceDefinitionProvider.php',
     'Rector\\Symfony\\Bridge\\NodeAnalyzer\\ControllerMethodAnalyzer' => $vendorDir . '/rector/rector-symfony/src/Bridge/NodeAnalyzer/ControllerMethodAnalyzer.php',
     'Rector\\Symfony\\CodeQuality\\Enum\\ResponseClass' => $vendorDir . '/rector/rector-symfony/rules/CodeQuality/Enum/ResponseClass.php',
