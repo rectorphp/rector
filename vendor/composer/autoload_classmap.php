@@ -2285,6 +2285,7 @@ return array(
     'Rector\\Symfony\\Symfony40\\Rector\\MethodCall\\ContainerBuilderCompileEnvArgumentRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony40/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector.php',
     'Rector\\Symfony\\Symfony40\\Rector\\MethodCall\\FormIsValidRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony40/Rector/MethodCall/FormIsValidRector.php',
     'Rector\\Symfony\\Symfony40\\Rector\\MethodCall\\VarDumperTestTraitMethodArgsRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony40/Rector/MethodCall/VarDumperTestTraitMethodArgsRector.php',
+    'Rector\\Symfony\\Symfony42\\Rector\\Class_\\GetExtendedTypesReturnArrayRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony42/Rector/Class_/GetExtendedTypesReturnArrayRector.php',
     'Rector\\Symfony\\Symfony42\\Rector\\New_\\RootNodeTreeBuilderRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony42/Rector/New_/RootNodeTreeBuilderRector.php',
     'Rector\\Symfony\\Symfony42\\Rector\\New_\\StringToArrayArgumentProcessRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony42/Rector/New_/StringToArrayArgumentProcessRector.php',
     'Rector\\Symfony\\Symfony43\\Rector\\ClassMethod\\EventDispatcherParentConstructRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony43/Rector/ClassMethod/EventDispatcherParentConstructRector.php',

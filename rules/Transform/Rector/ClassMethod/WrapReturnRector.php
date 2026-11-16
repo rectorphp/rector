@@ -4,27 +4,19 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\WrapReturn;
-use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\WrapReturnRectorTest
+ * @deprecated This rule is deprecated, as only used for 1 case now covered by dedicated GetExtendedTypesReturnArrayRector in rector-symfony. Write a custom rule for the exact project case instead.
  */
-final class WrapReturnRector extends AbstractRector implements ConfigurableRectorInterface
+final class WrapReturnRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var WrapReturn[]
-     */
-    private array $typeMethodWraps = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Wrap return value of specific method', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -59,48 +51,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = \false;
-        foreach ($this->typeMethodWraps as $typeMethodWrap) {
-            foreach ($node->getMethods() as $classMethod) {
-                if (!$this->isName($classMethod, $typeMethodWrap->getMethod())) {
-                    continue;
-                }
-                if ($node->stmts === null) {
-                    continue;
-                }
-                if (!$this->isObjectType($node, $typeMethodWrap->getObjectType())) {
-                    continue;
-                }
-                if ($typeMethodWrap->isArrayWrap() && $this->wrap($classMethod)) {
-                    $hasChanged = \true;
-                }
-            }
-        }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as only used for 1 case now covered by a dedicated rule; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, WrapReturn::class);
-        $this->typeMethodWraps = $configuration;
-    }
-    private function wrap(ClassMethod $classMethod): bool
-    {
-        if (!is_iterable($classMethod->stmts)) {
-            return \false;
-        }
-        $hasChanged = \false;
-        foreach ($classMethod->stmts as $stmt) {
-            if ($stmt instanceof Return_ && $stmt->expr instanceof Expr && !$stmt->expr instanceof Array_) {
-                $stmt->expr = new Array_([new ArrayItem($stmt->expr)]);
-                $hasChanged = \true;
-            }
-        }
-        return $hasChanged;
     }
 }

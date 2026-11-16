@@ -2511,6 +2511,7 @@ class ComposerStaticInit0c1b47791204efd54d3172b0b9e806f1
         'Rector\\Symfony\\Symfony40\\Rector\\MethodCall\\ContainerBuilderCompileEnvArgumentRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony40/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector.php',
         'Rector\\Symfony\\Symfony40\\Rector\\MethodCall\\FormIsValidRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony40/Rector/MethodCall/FormIsValidRector.php',
         'Rector\\Symfony\\Symfony40\\Rector\\MethodCall\\VarDumperTestTraitMethodArgsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony40/Rector/MethodCall/VarDumperTestTraitMethodArgsRector.php',
+        'Rector\\Symfony\\Symfony42\\Rector\\Class_\\GetExtendedTypesReturnArrayRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony42/Rector/Class_/GetExtendedTypesReturnArrayRector.php',
         'Rector\\Symfony\\Symfony42\\Rector\\New_\\RootNodeTreeBuilderRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony42/Rector/New_/RootNodeTreeBuilderRector.php',
         'Rector\\Symfony\\Symfony42\\Rector\\New_\\StringToArrayArgumentProcessRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony42/Rector/New_/StringToArrayArgumentProcessRector.php',
         'Rector\\Symfony\\Symfony43\\Rector\\ClassMethod\\EventDispatcherParentConstructRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony43/Rector/ClassMethod/EventDispatcherParentConstructRector.php',
