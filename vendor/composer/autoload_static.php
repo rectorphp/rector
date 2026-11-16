@@ -1096,7 +1096,6 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'Rector\\Arguments\\ValueObject\\ArgumentAdderWithoutDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ArgumentAdderWithoutDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
-        'Rector\\Assert\\Rector\\ClassMethod\\AddAssertArrayFromClassMethodDocblockRector' => __DIR__ . '/../..' . '/rules/Assert/Rector/ClassMethod/AddAssertArrayFromClassMethodDocblockRector.php',
         'Rector\\Autoloading\\AdditionalAutoloader' => __DIR__ . '/../..' . '/src/Autoloading/AdditionalAutoloader.php',
         'Rector\\Autoloading\\BootstrapFilesIncluder' => __DIR__ . '/../..' . '/src/Autoloading/BootstrapFilesIncluder.php',
         'Rector\\BetterPhpDocParser\\Annotation\\AnnotationNaming' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/Annotation/AnnotationNaming.php',
