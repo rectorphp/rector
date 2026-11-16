@@ -1385,8 +1385,6 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'Rector\\DeadCode\\Rector\\BooleanAnd\\RemoveAndTrueRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/BooleanAnd/RemoveAndTrueRector.php',
         'Rector\\DeadCode\\Rector\\Cast\\RecastingRemovalRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Cast/RecastingRemovalRector.php',
         'Rector\\DeadCode\\Rector\\ClassConst\\RemoveUnusedPrivateClassConstantRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php',
-        'Rector\\DeadCode\\Rector\\ClassLike\\RemoveAnnotationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php',
-        'Rector\\DeadCode\\Rector\\ClassLike\\RemoveTypedPropertyNonMockDocblockRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassLike/RemoveTypedPropertyNonMockDocblockRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveArgumentFromDefaultParentCallRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveArgumentFromDefaultParentCallRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDuplicatedReturnSelfDocblockRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveDuplicatedReturnSelfDocblockRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',

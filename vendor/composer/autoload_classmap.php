@@ -1159,8 +1159,6 @@ return array(
     'Rector\\DeadCode\\Rector\\BooleanAnd\\RemoveAndTrueRector' => $baseDir . '/rules/DeadCode/Rector/BooleanAnd/RemoveAndTrueRector.php',
     'Rector\\DeadCode\\Rector\\Cast\\RecastingRemovalRector' => $baseDir . '/rules/DeadCode/Rector/Cast/RecastingRemovalRector.php',
     'Rector\\DeadCode\\Rector\\ClassConst\\RemoveUnusedPrivateClassConstantRector' => $baseDir . '/rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php',
-    'Rector\\DeadCode\\Rector\\ClassLike\\RemoveAnnotationRector' => $baseDir . '/rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php',
-    'Rector\\DeadCode\\Rector\\ClassLike\\RemoveTypedPropertyNonMockDocblockRector' => $baseDir . '/rules/DeadCode/Rector/ClassLike/RemoveTypedPropertyNonMockDocblockRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveArgumentFromDefaultParentCallRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveArgumentFromDefaultParentCallRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDuplicatedReturnSelfDocblockRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveDuplicatedReturnSelfDocblockRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
