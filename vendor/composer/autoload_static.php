@@ -2202,8 +2202,6 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'Rector\\Php84\\NodeAnalyzer\\ForeachKeyUsedInConditionalAnalyzer' => __DIR__ . '/../..' . '/rules/Php84/NodeAnalyzer/ForeachKeyUsedInConditionalAnalyzer.php',
         'Rector\\Php84\\NodeFactory\\ForeachToArrayAnyAllFactory' => __DIR__ . '/../..' . '/rules/Php84/NodeFactory/ForeachToArrayAnyAllFactory.php',
         'Rector\\Php84\\NodeFactory\\ForeachToArrayFindFactory' => __DIR__ . '/../..' . '/rules/Php84/NodeFactory/ForeachToArrayFindFactory.php',
-        'Rector\\Php84\\Rector\\Class_\\DeprecatedAnnotationToDeprecatedAttributeRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Class_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
-        'Rector\\Php84\\Rector\\Class_\\PropertyHookRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Class_/PropertyHookRector.php',
         'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayAllRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Foreach_/ForeachToArrayAllRector.php',
         'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayAnyRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Foreach_/ForeachToArrayAnyRector.php',
         'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayFindKeyRector' => __DIR__ . '/../..' . '/rules/Php84/Rector/Foreach_/ForeachToArrayFindKeyRector.php',

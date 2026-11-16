@@ -1976,8 +1976,6 @@ return array(
     'Rector\\Php84\\NodeAnalyzer\\ForeachKeyUsedInConditionalAnalyzer' => $baseDir . '/rules/Php84/NodeAnalyzer/ForeachKeyUsedInConditionalAnalyzer.php',
     'Rector\\Php84\\NodeFactory\\ForeachToArrayAnyAllFactory' => $baseDir . '/rules/Php84/NodeFactory/ForeachToArrayAnyAllFactory.php',
     'Rector\\Php84\\NodeFactory\\ForeachToArrayFindFactory' => $baseDir . '/rules/Php84/NodeFactory/ForeachToArrayFindFactory.php',
-    'Rector\\Php84\\Rector\\Class_\\DeprecatedAnnotationToDeprecatedAttributeRector' => $baseDir . '/rules/Php84/Rector/Class_/DeprecatedAnnotationToDeprecatedAttributeRector.php',
-    'Rector\\Php84\\Rector\\Class_\\PropertyHookRector' => $baseDir . '/rules/Php84/Rector/Class_/PropertyHookRector.php',
     'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayAllRector' => $baseDir . '/rules/Php84/Rector/Foreach_/ForeachToArrayAllRector.php',
     'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayAnyRector' => $baseDir . '/rules/Php84/Rector/Foreach_/ForeachToArrayAnyRector.php',
     'Rector\\Php84\\Rector\\Foreach_\\ForeachToArrayFindKeyRector' => $baseDir . '/rules/Php84/Rector/Foreach_/ForeachToArrayFindKeyRector.php',
