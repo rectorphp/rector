@@ -4,24 +4,19 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\StaticCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\Transform\ValueObject\StaticCallToNew;
-use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\StaticCallToNewRectorTest
+ * @deprecated This rule is deprecated, as only used for 1 case now covered by dedicated ResponseCreateToNewRector in rector-symfony. Write a custom rule for the exact project case instead.
  */
-final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
+final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @var array<string, StaticCallToNew[]>
-     */
-    private array $staticCallsToNewsByMethod = [];
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change static call to new instance', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -56,31 +51,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $methodName = $this->getName($node->name);
-        if ($methodName === null) {
-            return null;
-        }
-        $class = $this->getName($node->class);
-        if ($class === null) {
-            return null;
-        }
-        foreach ($this->staticCallsToNewsByMethod[strtolower($methodName)] ?? [] as $staticCallToNew) {
-            if (!$this->isName($node->class, $staticCallToNew->getClass())) {
-                continue;
-            }
-            return new New_(new FullyQualified($class), $node->args);
-        }
-        return null;
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as only used for 1 case now covered by a dedicated rule; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allIsAOf($configuration, StaticCallToNew::class);
-        $this->staticCallsToNewsByMethod = [];
-        foreach ($configuration as $staticCallToNew) {
-            $this->staticCallsToNewsByMethod[strtolower($staticCallToNew->getMethod())][] = $staticCallToNew;
-        }
     }
 }
