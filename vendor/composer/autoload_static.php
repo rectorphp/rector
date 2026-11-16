@@ -1154,8 +1154,6 @@ class ComposerStaticInit808ed7f67a14fafbea86e43dee793645
         'Rector\\ChangesReporting\\Contract\\Output\\OutputFormatterInterface' => __DIR__ . '/../..' . '/src/ChangesReporting/Contract/Output/OutputFormatterInterface.php',
         'Rector\\ChangesReporting\\Output\\ConsoleOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/ConsoleOutputFormatter.php',
         'Rector\\ChangesReporting\\Output\\Factory\\JsonOutputFactory' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/Factory/JsonOutputFactory.php',
-        'Rector\\ChangesReporting\\Output\\GitHubOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/GitHubOutputFormatter.php',
-        'Rector\\ChangesReporting\\Output\\GitlabOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/GitlabOutputFormatter.php',
         'Rector\\ChangesReporting\\Output\\JsonOutputFormatter' => __DIR__ . '/../..' . '/src/ChangesReporting/Output/JsonOutputFormatter.php',
         'Rector\\ChangesReporting\\ValueObjectFactory\\ErrorFactory' => __DIR__ . '/../..' . '/src/ChangesReporting/ValueObjectFactory/ErrorFactory.php',
         'Rector\\ChangesReporting\\ValueObjectFactory\\FileDiffFactory' => __DIR__ . '/../..' . '/src/ChangesReporting/ValueObjectFactory/FileDiffFactory.php',
