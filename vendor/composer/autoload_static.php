@@ -1206,7 +1206,6 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodeQuality\\Rector\\FuncCall\\InlineIsAInstanceOfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/InlineIsAInstanceOfRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\IsAWithStringWithThirdArgumentRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/IsAWithStringWithThirdArgumentRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\RemoveSoleValueSprintfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/RemoveSoleValueSprintfRector.php',
-        'Rector\\CodeQuality\\Rector\\FuncCall\\SetTypeToCastRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SetTypeToCastRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyFuncGetArgsCountRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SimplifyFuncGetArgsCountRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyInArrayValuesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SimplifyInArrayValuesRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyStrposLowerRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SimplifyStrposLowerRector.php',
