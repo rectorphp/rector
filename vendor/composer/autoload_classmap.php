@@ -1812,7 +1812,6 @@ return array(
     'Rector\\Php70\\NodeAnalyzer\\MethodCallNameAnalyzer' => $baseDir . '/rules/Php70/NodeAnalyzer/MethodCallNameAnalyzer.php',
     'Rector\\Php70\\NodeAnalyzer\\Php4ConstructorClassMethodAnalyzer' => $baseDir . '/rules/Php70/NodeAnalyzer/Php4ConstructorClassMethodAnalyzer.php',
     'Rector\\Php70\\Rector\\Assign\\ListSplitStringRector' => $baseDir . '/rules/Php70/Rector/Assign/ListSplitStringRector.php',
-    'Rector\\Php70\\Rector\\Assign\\ListSwapArrayOrderRector' => $baseDir . '/rules/Php70/Rector/Assign/ListSwapArrayOrderRector.php',
     'Rector\\Php70\\Rector\\Break_\\BreakNotInLoopOrSwitchToReturnRector' => $baseDir . '/rules/Php70/Rector/Break_/BreakNotInLoopOrSwitchToReturnRector.php',
     'Rector\\Php70\\Rector\\ClassMethod\\Php4ConstructorRector' => $baseDir . '/rules/Php70/Rector/ClassMethod/Php4ConstructorRector.php',
     'Rector\\Php70\\Rector\\FuncCall\\CallUserMethodRector' => $baseDir . '/rules/Php70/Rector/FuncCall/CallUserMethodRector.php',

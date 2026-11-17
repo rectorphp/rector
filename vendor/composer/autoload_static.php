@@ -2038,7 +2038,6 @@ class ComposerStaticInit0c1b47791204efd54d3172b0b9e806f1
         'Rector\\Php70\\NodeAnalyzer\\MethodCallNameAnalyzer' => __DIR__ . '/../..' . '/rules/Php70/NodeAnalyzer/MethodCallNameAnalyzer.php',
         'Rector\\Php70\\NodeAnalyzer\\Php4ConstructorClassMethodAnalyzer' => __DIR__ . '/../..' . '/rules/Php70/NodeAnalyzer/Php4ConstructorClassMethodAnalyzer.php',
         'Rector\\Php70\\Rector\\Assign\\ListSplitStringRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Assign/ListSplitStringRector.php',
-        'Rector\\Php70\\Rector\\Assign\\ListSwapArrayOrderRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Assign/ListSwapArrayOrderRector.php',
         'Rector\\Php70\\Rector\\Break_\\BreakNotInLoopOrSwitchToReturnRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Break_/BreakNotInLoopOrSwitchToReturnRector.php',
         'Rector\\Php70\\Rector\\ClassMethod\\Php4ConstructorRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/ClassMethod/Php4ConstructorRector.php',
         'Rector\\Php70\\Rector\\FuncCall\\CallUserMethodRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/FuncCall/CallUserMethodRector.php',
