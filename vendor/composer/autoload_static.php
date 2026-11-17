@@ -2786,7 +2786,6 @@ class ComposerStaticInit0c1b47791204efd54d3172b0b9e806f1
         'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
         'Rector\\TypeDeclaration\\ValueObject\\DataProviderNodes' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/DataProviderNodes.php',
         'Rector\\Unambiguous\\Rector\\Class_\\RemoveReturnThisFromSetterClassMethodRector' => __DIR__ . '/../..' . '/rules/Unambiguous/Rector/Class_/RemoveReturnThisFromSetterClassMethodRector.php',
-        'Rector\\Unambiguous\\Rector\\Expression\\FluentSettersToStandaloneCallMethodRector' => __DIR__ . '/../..' . '/rules/Unambiguous/Rector/Expression/FluentSettersToStandaloneCallMethodRector.php',
         'Rector\\Util\\ArrayChecker' => __DIR__ . '/../..' . '/src/Util/ArrayChecker.php',
         'Rector\\Util\\ArrayParametersMerger' => __DIR__ . '/../..' . '/src/Util/ArrayParametersMerger.php',
         'Rector\\Util\\FileHasher' => __DIR__ . '/../..' . '/src/Util/FileHasher.php',
