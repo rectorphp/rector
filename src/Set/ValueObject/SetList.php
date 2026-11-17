@@ -23,11 +23,6 @@ final class SetList
      */
     public const DEAD_CODE = __DIR__ . '/../../../config/set/dead-code.php';
     /**
-     * @deprecated Niche set for a rarely used extension, it is empty now and will be removed.
-     * @var string
-     */
-    public const NAMING = __DIR__ . '/../../../config/set/naming.php';
-    /**
      * @var string
      */
     public const NAMED_ARGS = __DIR__ . '/../../../config/set/named-args.php';
