@@ -1734,6 +1734,7 @@ return array(
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\ClassMethod\\ExpressionCreateMockToCreateStubRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/ClassMethod/ExpressionCreateMockToCreateStubRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AllowMockObjectsForDataProviderRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AllowMockObjectsForDataProviderRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AllowMockObjectsWhereParentClassRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AllowMockObjectsWhereParentClassRector.php',
+    'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AllowMockObjectsWithoutExpectationsAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AllowMockObjectsWithoutExpectationsAttributeRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\AssertIsTypeMethodCallRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/AssertIsTypeMethodCallRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\PropertyCreateMockToCreateStubRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/PropertyCreateMockToCreateStubRector.php',
     'Rector\\PHPUnit\\PHPUnit120\\Rector\\Class_\\RemoveOverrideFinalConstructTestCaseRector' => $vendorDir . '/rector/rector-phpunit/rules/PHPUnit120/Rector/Class_/RemoveOverrideFinalConstructTestCaseRector.php',
