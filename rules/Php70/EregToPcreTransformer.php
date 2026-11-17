@@ -124,11 +124,8 @@ final class EregToPcreTransformer
             } elseif (in_array($char, ['*', '+', '?'], \true)) {
                 throw new InvalidEregException('unescaped metacharacter "' . $char . '"');
             } elseif ($char === '{') {
-                if ($i + 1 < $l && strpos('0123456789', $content[$i + 1]) !== \false) {
-                    $r[$rr] .= '\{';
-                } else {
-                    throw new InvalidEregException('unescaped metacharacter "' . $char . '"');
-                }
+                // a "{" in atom position is a literal, e.g. "{[0-9]*}"
+                $r[$rr] .= '\{';
             } elseif ($char === '.') {
                 $r[$rr] .= $char;
             } elseif ($char === '^' || $char === '$') {
