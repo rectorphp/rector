@@ -968,7 +968,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\Expression\\InlineIfToExplicitIfRector' => $baseDir . '/rules/CodeQuality/Rector/Expression/InlineIfToExplicitIfRector.php',
     'Rector\\CodeQuality\\Rector\\Expression\\TernaryFalseExpressionToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Expression/TernaryFalseExpressionToIfRector.php',
     'Rector\\CodeQuality\\Rector\\For_\\ForRepeatedCountToOwnVariableRector' => $baseDir . '/rules/CodeQuality/Rector/For_/ForRepeatedCountToOwnVariableRector.php',
-    'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachItemsAssignToEmptyArrayToAssignRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/ForeachItemsAssignToEmptyArrayToAssignRector.php',
     'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachToInArrayRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/ForeachToInArrayRector.php',
     'Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/SimplifyForeachToCoalescingRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\ArrayMergeOfNonArraysToSimpleArrayRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/ArrayMergeOfNonArraysToSimpleArrayRector.php',

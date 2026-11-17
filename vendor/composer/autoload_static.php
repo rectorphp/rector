@@ -1194,7 +1194,6 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodeQuality\\Rector\\Expression\\InlineIfToExplicitIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Expression/InlineIfToExplicitIfRector.php',
         'Rector\\CodeQuality\\Rector\\Expression\\TernaryFalseExpressionToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Expression/TernaryFalseExpressionToIfRector.php',
         'Rector\\CodeQuality\\Rector\\For_\\ForRepeatedCountToOwnVariableRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/For_/ForRepeatedCountToOwnVariableRector.php',
-        'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachItemsAssignToEmptyArrayToAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Foreach_/ForeachItemsAssignToEmptyArrayToAssignRector.php',
         'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachToInArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Foreach_/ForeachToInArrayRector.php',
         'Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Foreach_/SimplifyForeachToCoalescingRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\ArrayMergeOfNonArraysToSimpleArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/ArrayMergeOfNonArraysToSimpleArrayRector.php',
