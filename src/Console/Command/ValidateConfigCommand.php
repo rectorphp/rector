@@ -64,6 +64,7 @@ final class ValidateConfigCommand extends Command
         $issueCount += $this->deprecatedRulesReporter->reportDeprecatedSkippedRules();
         $issueCount += $this->deprecatedRulesReporter->reportDeprecatedAttributesSetsArgs();
         $issueCount += $this->deprecatedRulesReporter->reportDeprecatedComposerBasedArgs();
+        $issueCount += $this->deprecatedRulesReporter->reportDeprecatedPreparedSetsArgs();
         $issueCount += $this->missConfigurationReporter->reportSkippedNeverRegisteredRules();
         $issueCount += $this->missConfigurationReporter->reportSkippedNonRectorClasses();
         $issueCount += $this->reportDeprecatedSkippedClasses();

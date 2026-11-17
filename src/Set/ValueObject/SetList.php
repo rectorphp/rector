@@ -49,21 +49,6 @@ final class SetList
      */
     public const TYPE_DECLARATION_DOCBLOCKS = __DIR__ . '/../../../config/set/type-declaration-docblocks.php';
     /**
-     * @deprecated Use code-quality set instead, as all early return rules were moved there
-     * @var string
-     */
-    public const EARLY_RETURN = __DIR__ . '/../../../config/set/early-return.php';
-    /**
-     * @deprecated Use code-quality set instead, as most instanceof rules were moved there
-     * @var string
-     */
-    public const INSTANCEOF = __DIR__ . '/../../../config/set/instanceof.php';
-    /**
-     * @deprecated Use code-quality and coding-style sets instead, as the if rules were moved there or deprecated
-     * @var string
-     */
-    public const IF = __DIR__ . '/../../../config/set/if.php';
-    /**
      * @var string
      */
     public const CARBON = __DIR__ . '/../../../config/set/datetime-to-carbon.php';

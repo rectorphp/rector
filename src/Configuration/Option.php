@@ -264,6 +264,11 @@ final class Option
      */
     public const DEPRECATED_COMPOSER_BASED_ARGS = 'deprecated_composer_based_args';
     /**
+     * @internal For reporting deprecated withPreparedSets() arguments
+     * @var string
+     */
+    public const DEPRECATED_PREPARED_SETS_ARGS = 'deprecated_prepared_sets_args';
+    /**
      * @internal For collect skipped start with short open tag files to be reported
      * @var string
      */

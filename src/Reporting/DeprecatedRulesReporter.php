@@ -67,4 +67,15 @@ final class DeprecatedRulesReporter
         }
         return $reportedCount;
     }
+    public function reportDeprecatedPreparedSetsArgs(): int
+    {
+        /** @var string[] $deprecatedPreparedSetsArgs */
+        $deprecatedPreparedSetsArgs = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_PREPARED_SETS_ARGS);
+        $reportedCount = 0;
+        foreach (array_unique($deprecatedPreparedSetsArgs) as $deprecatedPreparedSetsArg) {
+            $this->symfonyStyle->warning(sprintf('The "->withPreparedSets(%s: true)" argument is deprecated and no longer applied. Its rules were moved to the "codeQuality" and "codingStyle" sets, use them instead.', $deprecatedPreparedSetsArg));
+            ++$reportedCount;
+        }
+        return $reportedCount;
+    }
 }
