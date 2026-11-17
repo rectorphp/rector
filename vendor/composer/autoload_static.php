@@ -1186,7 +1186,6 @@ class ComposerStaticInit0c1b47791204efd54d3172b0b9e806f1
         'Rector\\CodeQuality\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\ConvertStaticToSelfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/ConvertStaticToSelfRector.php',
-        'Rector\\CodeQuality\\Rector\\Class_\\DynamicDocBlockPropertyToNativePropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/DynamicDocBlockPropertyToNativePropertyRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\InnerFunctionToPrivateMethodRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/InnerFunctionToPrivateMethodRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\RemoveReadonlyPropertyVisibilityOnReadonlyClassRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/RemoveReadonlyPropertyVisibilityOnReadonlyClassRector.php',

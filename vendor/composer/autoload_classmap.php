@@ -960,7 +960,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\ConvertStaticToSelfRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/ConvertStaticToSelfRector.php',
-    'Rector\\CodeQuality\\Rector\\Class_\\DynamicDocBlockPropertyToNativePropertyRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/DynamicDocBlockPropertyToNativePropertyRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\InnerFunctionToPrivateMethodRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/InnerFunctionToPrivateMethodRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\RemoveReadonlyPropertyVisibilityOnReadonlyClassRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/RemoveReadonlyPropertyVisibilityOnReadonlyClassRector.php',
