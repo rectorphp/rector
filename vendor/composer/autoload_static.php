@@ -1168,7 +1168,6 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodeQuality\\Rector\\Assign\\CombinedAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Assign/CombinedAssignRector.php',
         'Rector\\CodeQuality\\Rector\\Attribute\\ExplicitAttributeNamedArgsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Attribute/ExplicitAttributeNamedArgsRector.php',
         'Rector\\CodeQuality\\Rector\\Attribute\\SortAttributeNamedArgsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Attribute/SortAttributeNamedArgsRector.php',
-        'Rector\\CodeQuality\\Rector\\BooleanAnd\\RemoveUselessIsObjectCheckRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanAnd/RemoveUselessIsObjectCheckRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanAnd\\RepeatedAndNotEqualToNotInArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanAnd/RepeatedAndNotEqualToNotInArrayRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanAnd\\SimplifyEmptyArrayCheckRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanAnd/SimplifyEmptyArrayCheckRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanNot\\NegatedAndsToPositiveOrsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanNot/NegatedAndsToPositiveOrsRector.php',

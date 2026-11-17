@@ -942,7 +942,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\Assign\\CombinedAssignRector' => $baseDir . '/rules/CodeQuality/Rector/Assign/CombinedAssignRector.php',
     'Rector\\CodeQuality\\Rector\\Attribute\\ExplicitAttributeNamedArgsRector' => $baseDir . '/rules/CodeQuality/Rector/Attribute/ExplicitAttributeNamedArgsRector.php',
     'Rector\\CodeQuality\\Rector\\Attribute\\SortAttributeNamedArgsRector' => $baseDir . '/rules/CodeQuality/Rector/Attribute/SortAttributeNamedArgsRector.php',
-    'Rector\\CodeQuality\\Rector\\BooleanAnd\\RemoveUselessIsObjectCheckRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/RemoveUselessIsObjectCheckRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanAnd\\RepeatedAndNotEqualToNotInArrayRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/RepeatedAndNotEqualToNotInArrayRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanAnd\\SimplifyEmptyArrayCheckRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/SimplifyEmptyArrayCheckRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanNot\\NegatedAndsToPositiveOrsRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/NegatedAndsToPositiveOrsRector.php',
