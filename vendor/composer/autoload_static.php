@@ -1449,8 +1449,6 @@ class ComposerStaticInit0c1b47791204efd54d3172b0b9e806f1
         'Rector\\Doctrine\\CodeQuality\\Enum\\CollectionMapping' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Enum/CollectionMapping.php',
         'Rector\\Doctrine\\CodeQuality\\Enum\\DocumentMappingKey' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Enum/DocumentMappingKey.php',
         'Rector\\Doctrine\\CodeQuality\\Enum\\EntityMappingKey' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Enum/EntityMappingKey.php',
-        'Rector\\Doctrine\\CodeQuality\\Helper\\SetterGetterFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Helper/SetterGetterFinder.php',
-        'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\TypeNullableEntityFromDocblockRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/TypeNullableEntityFromDocblockRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\ColumnTypeToTypesConstantRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/ColumnTypeToTypesConstantRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\CorrectDefaultTypesOnEntityPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromColumnTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromColumnTypeRector.php',

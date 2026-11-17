@@ -1223,8 +1223,6 @@ return array(
     'Rector\\Doctrine\\CodeQuality\\Enum\\CollectionMapping' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Enum/CollectionMapping.php',
     'Rector\\Doctrine\\CodeQuality\\Enum\\DocumentMappingKey' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Enum/DocumentMappingKey.php',
     'Rector\\Doctrine\\CodeQuality\\Enum\\EntityMappingKey' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Enum/EntityMappingKey.php',
-    'Rector\\Doctrine\\CodeQuality\\Helper\\SetterGetterFinder' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Helper/SetterGetterFinder.php',
-    'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\TypeNullableEntityFromDocblockRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/TypeNullableEntityFromDocblockRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\ColumnTypeToTypesConstantRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/ColumnTypeToTypesConstantRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\CorrectDefaultTypesOnEntityPropertyRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector.php',
     'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromColumnTypeRector' => $vendorDir . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromColumnTypeRector.php',
