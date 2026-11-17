@@ -5,8 +5,9 @@ namespace Rector\Php85\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Mod;
+use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\Int_;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -67,7 +68,9 @@ CODE_SAMPLE
         if ($value >= 0 && $value <= 255) {
             return null;
         }
-        $args[0]->value = new Mod($argExpr, new LNumber(256));
+        $mod = new Mod($argExpr, new Int_(256));
+        // modulo keeps the sign of the dividend, so a negative value is still out of range
+        $args[0]->value = $value % 256 < 0 ? new Plus($mod, new Int_(256)) : $mod;
         $node->args = $args;
         return $node;
     }
