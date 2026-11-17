@@ -2488,7 +2488,6 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromAssignsRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromAssignsRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
-    'Rector\\TypeDeclaration\\Rector\\StmtsAwareInterface\\DeclareStrictTypesRector' => $baseDir . '/rules/TypeDeclaration/Rector/StmtsAwareInterface/DeclareStrictTypesRector.php',
     'Rector\\TypeDeclaration\\Rector\\StmtsAwareInterface\\SafeDeclareStrictTypesRector' => $baseDir . '/rules/TypeDeclaration/Rector/StmtsAwareInterface/SafeDeclareStrictTypesRector.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\NullableTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/NullableTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\ParameterTypeFromDataProviderResolver' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/ParameterTypeFromDataProviderResolver.php',
