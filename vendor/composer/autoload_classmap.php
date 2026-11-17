@@ -970,7 +970,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachToInArrayRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/ForeachToInArrayRector.php',
     'Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/SimplifyForeachToCoalescingRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\ArrayMergeOfNonArraysToSimpleArrayRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/ArrayMergeOfNonArraysToSimpleArrayRector.php',
-    'Rector\\CodeQuality\\Rector\\FuncCall\\CallUserFuncWithArrowFunctionToInlineRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/CallUserFuncWithArrowFunctionToInlineRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\ChangeArrayPushToArrayAssignRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\CompactToVariablesRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/CompactToVariablesRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\InlineIsAInstanceOfRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/InlineIsAInstanceOfRector.php',

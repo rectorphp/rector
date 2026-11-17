@@ -1196,7 +1196,6 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachToInArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Foreach_/ForeachToInArrayRector.php',
         'Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Foreach_/SimplifyForeachToCoalescingRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\ArrayMergeOfNonArraysToSimpleArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/ArrayMergeOfNonArraysToSimpleArrayRector.php',
-        'Rector\\CodeQuality\\Rector\\FuncCall\\CallUserFuncWithArrowFunctionToInlineRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/CallUserFuncWithArrowFunctionToInlineRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\ChangeArrayPushToArrayAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\CompactToVariablesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/CompactToVariablesRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\InlineIsAInstanceOfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/InlineIsAInstanceOfRector.php',
