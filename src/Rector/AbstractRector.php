@@ -54,8 +54,9 @@ abstract class AbstractRector implements RectorInterface
         if ($className === null) {
             return null;
         }
+        // the class can be unknown to reflection, e.g. when the file has syntax that PHPStan cannot parse, like "$value{0}"
         if (!$this->reflectionProvider->hasClass($className)) {
-            throw new ShouldNotHappenException(sprintf('Class "%s" should be known at this point', $className));
+            return null;
         }
         return $this->reflectionProvider->getClass($className);
     }
