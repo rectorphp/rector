@@ -1464,7 +1464,6 @@ return array(
     'Rector\\Naming\\ParamRenamer\\ParamRenamer' => $baseDir . '/rules/Naming/ParamRenamer/ParamRenamer.php',
     'Rector\\Naming\\PhpDoc\\VarTagValueNodeRenamer' => $baseDir . '/rules/Naming/PhpDoc/VarTagValueNodeRenamer.php',
     'Rector\\Naming\\PropertyRenamer\\PropertyPromotionRenamer' => $baseDir . '/rules/Naming/PropertyRenamer/PropertyPromotionRenamer.php',
-    'Rector\\Naming\\Rector\\Class_\\RenamePropertyToMatchTypeRector' => $baseDir . '/rules/Naming/Rector/Class_/RenamePropertyToMatchTypeRector.php',
     'Rector\\Naming\\Rector\\Foreach_\\RenameForeachValueVariableToMatchExprVariableRector' => $baseDir . '/rules/Naming/Rector/Foreach_/RenameForeachValueVariableToMatchExprVariableRector.php',
     'Rector\\Naming\\Rector\\Foreach_\\RenameForeachValueVariableToMatchMethodCallReturnTypeRector' => $baseDir . '/rules/Naming/Rector/Foreach_/RenameForeachValueVariableToMatchMethodCallReturnTypeRector.php',
     'Rector\\Naming\\ValueObjectFactory\\ParamRenameFactory' => $baseDir . '/rules/Naming/ValueObjectFactory/ParamRenameFactory.php',
