@@ -1236,6 +1236,7 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
         'Rector\\CodeQuality\\Rector\\NullsafeMethodCall\\CleanupUnneededNullsafeOperatorRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/NullsafeMethodCall/CleanupUnneededNullsafeOperatorRector.php',
         'Rector\\CodeQuality\\Rector\\Property\\FixClassCaseSensitivityVarDocblockRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Property/FixClassCaseSensitivityVarDocblockRector.php',
+        'Rector\\CodeQuality\\Rector\\StmtsAwareInterface\\MoveInnerFunctionToTopLevelRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/StmtsAwareInterface/MoveInnerFunctionToTopLevelRector.php',
         'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\ArrayKeyExistsTernaryThenValueToCoalescingRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\NumberCompareToMaxFuncCallRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/NumberCompareToMaxFuncCallRector.php',
