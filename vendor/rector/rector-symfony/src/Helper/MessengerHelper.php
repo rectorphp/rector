@@ -86,7 +86,7 @@ final class MessengerHelper
      */
     public function addAttribute($node, array $options = [])
     {
-        $args = $this->phpAttributeGroupFactory->createArgsFromItems($options, self::AS_MESSAGE_HANDLER_ATTRIBUTE);
+        $args = $this->phpAttributeGroupFactory->createArgsFromItems($options);
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
         $node->attrGroups = array_merge($node->attrGroups, [new AttributeGroup([new Attribute(new FullyQualified(self::AS_MESSAGE_HANDLER_ATTRIBUTE), $args)])]);
         return $node;
