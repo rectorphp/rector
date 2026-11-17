@@ -30,7 +30,6 @@ use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
-use Rector\Renaming\Rector\String_\RenameStringRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Rector\Renaming\ValueObject\RenameAttribute;
@@ -86,6 +85,7 @@ use Rector\Symfony\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubs
 use Rector\Symfony\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector;
 use Rector\Symfony\Symfony51\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
 use Rector\Symfony\Symfony51\Rector\StaticCall\ResponseCreateToNewRector;
+use Rector\Symfony\Symfony51\Rector\String_\PreviousAdminRoleToIsImpersonatorRector;
 use Rector\Symfony\Symfony52\Rector\Attribute\EmailModeToConstantRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector;
 use Rector\Symfony\Symfony52\Rector\MethodCall\FormBuilderSetDataMapperRector;
@@ -235,6 +235,8 @@ return RectorConfig::configure()->withRules([
     // symfony/security-http 5.1
     LogoutHandlerToLogoutEventSubscriberRector::class,
     LogoutSuccessHandlerToLogoutEventSubscriberRector::class,
+    // symfony/security-core 5.1
+    PreviousAdminRoleToIsImpersonatorRector::class,
     // symfony/http-foundation 5.1
     ResponseCreateToNewRector::class,
     ParameterBagTypedGetMethodCallRector::class,
@@ -430,10 +432,7 @@ return RectorConfig::configure()->withRules([
 ], 'symfony/inflector', '>=5.1')->withComposerBasedRule(RenameMethodRector::class, [
     // @see https://github.com/symfony/symfony/pull/35828
     new MethodCallRename('Symfony\Component\Notifier\Bridge\Slack\Slack', 'channel', 'recipient'),
-], 'symfony/notifier', '>=5.1')->withComposerBasedRule(RenameStringRector::class, [
-    // @see https://github.com/symfony/symfony/pull/35858
-    'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
-], 'symfony/security-core', '>=5.1')->withComposerBasedRule(RenameMethodRector::class, [
+], 'symfony/notifier', '>=5.1')->withComposerBasedRule(RenameMethodRector::class, [
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#mime
     new MethodCallRename('Symfony\Component\Mime\Address', 'fromString', 'create'),
 ], 'symfony/mime', '>=5.2')->withComposerBasedRule(AddParamTypeDeclarationRector::class, [new AddParamTypeDeclaration('Symfony\Component\Notifier\NotifierInterface', 'send', 1, new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')), new AddParamTypeDeclaration('Symfony\Component\Notifier\Notifier', 'getChannels', 1, new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')), new AddParamTypeDeclaration('Symfony\Component\Notifier\Channel\ChannelInterface', 'notify', 1, new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')), new AddParamTypeDeclaration('Symfony\Component\Notifier\Channel\ChannelInterface', 'supports', 1, new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')), new AddParamTypeDeclaration('Symfony\Component\Notifier\Notification\ChatNotificationInterface', 'asChatMessage', 0, new ObjectType('Symfony\Component\Notifier\Recipient\RecipientInterface')), new AddParamTypeDeclaration('Symfony\Component\Notifier\Notification\EmailNotificationInterface', 'asEmailMessage', 0, new ObjectType('Symfony\Component\Notifier\Recipient\EmailRecipientInterface')), new AddParamTypeDeclaration('Symfony\Component\Notifier\Notification\SmsNotificationInterface', 'asSmsMessage', 0, new ObjectType('Symfony\Component\Notifier\Recipient\SmsRecipientInterface'))], 'symfony/notifier', '>=5.2')->withComposerBasedRule(RenameMethodRector::class, [new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken', 'setProviderKey', 'setFirewallName'), new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken', 'getProviderKey', 'getFirewallName'), new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\RememberMeToken', 'setProviderKey', 'setFirewallName'), new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\RememberMeToken', 'getProviderKey', 'getFirewallName'), new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken', 'setProviderKey', 'setFirewallName'), new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken', 'getProviderKey', 'getFirewallName'), new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', 'setProviderKey', 'setFirewallName'), new MethodCallRename('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken', 'getProviderKey', 'getFirewallName')], 'symfony/security-core', '>=5.2')->withComposerBasedRule(RenameClassConstFetchRector::class, [new RenameClassAndConstFetch('Symfony\Component\Security\Http\Firewall\AccessListener', 'PUBLIC_ACCESS', 'Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter', 'PUBLIC_ACCESS')], 'symfony/security-http', '>=5.2')->withComposerBasedRule(RenameMethodRector::class, [new MethodCallRename('Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler', 'setProviderKey', 'setFirewallName'), new MethodCallRename('Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler', 'getProviderKey', 'getFirewallName')], 'symfony/security-http', '>=5.2')->withComposerBasedRule(RenamePropertyRector::class, [new RenameProperty('Symfony\Component\Security\Http\RememberMe\AbstractRememberMeServices', 'providerKey', 'firewallName')], 'symfony/security-http', '>=5.2')->withComposerBasedRule(RenameMethodRector::class, [new MethodCallRename('Symfony\Component\Console\Helper\Helper', 'strlen', 'width'), new MethodCallRename('Symfony\Component\Console\Helper\Helper', 'strlenWithoutDecoration', 'removeDecoration')], 'symfony/console', '>=5.3')->withComposerBasedRule(AddParamTypeDeclarationRector::class, [

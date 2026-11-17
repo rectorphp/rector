@@ -2496,6 +2496,7 @@ class ComposerStaticInit0c1b47791204efd54d3172b0b9e806f1
         'Rector\\Symfony\\Symfony51\\Rector\\Class_\\LogoutHandlerToLogoutEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony51/Rector/Class_/LogoutHandlerToLogoutEventSubscriberRector.php',
         'Rector\\Symfony\\Symfony51\\Rector\\Class_\\LogoutSuccessHandlerToLogoutEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony51/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php',
         'Rector\\Symfony\\Symfony51\\Rector\\StaticCall\\ResponseCreateToNewRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony51/Rector/StaticCall/ResponseCreateToNewRector.php',
+        'Rector\\Symfony\\Symfony51\\Rector\\String_\\PreviousAdminRoleToIsImpersonatorRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony51/Rector/String_/PreviousAdminRoleToIsImpersonatorRector.php',
         'Rector\\Symfony\\Symfony52\\Rector\\Attribute\\EmailModeToConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony52/Rector/Attribute/EmailModeToConstantRector.php',
         'Rector\\Symfony\\Symfony52\\Rector\\MethodCall\\DefinitionAliasSetPrivateToSetPublicRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony52/Rector/MethodCall/DefinitionAliasSetPrivateToSetPublicRector.php',
         'Rector\\Symfony\\Symfony52\\Rector\\MethodCall\\FormBuilderSetDataMapperRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony52/Rector/MethodCall/FormBuilderSetDataMapperRector.php',

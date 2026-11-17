@@ -2270,6 +2270,7 @@ return array(
     'Rector\\Symfony\\Symfony51\\Rector\\Class_\\LogoutHandlerToLogoutEventSubscriberRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony51/Rector/Class_/LogoutHandlerToLogoutEventSubscriberRector.php',
     'Rector\\Symfony\\Symfony51\\Rector\\Class_\\LogoutSuccessHandlerToLogoutEventSubscriberRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony51/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php',
     'Rector\\Symfony\\Symfony51\\Rector\\StaticCall\\ResponseCreateToNewRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony51/Rector/StaticCall/ResponseCreateToNewRector.php',
+    'Rector\\Symfony\\Symfony51\\Rector\\String_\\PreviousAdminRoleToIsImpersonatorRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony51/Rector/String_/PreviousAdminRoleToIsImpersonatorRector.php',
     'Rector\\Symfony\\Symfony52\\Rector\\Attribute\\EmailModeToConstantRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony52/Rector/Attribute/EmailModeToConstantRector.php',
     'Rector\\Symfony\\Symfony52\\Rector\\MethodCall\\DefinitionAliasSetPrivateToSetPublicRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony52/Rector/MethodCall/DefinitionAliasSetPrivateToSetPublicRector.php',
     'Rector\\Symfony\\Symfony52\\Rector\\MethodCall\\FormBuilderSetDataMapperRector' => $vendorDir . '/rector/rector-symfony/rules/Symfony52/Rector/MethodCall/FormBuilderSetDataMapperRector.php',

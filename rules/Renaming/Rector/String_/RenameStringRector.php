@@ -5,29 +5,17 @@ namespace Rector\Renaming\Rector\String_;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
-use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\Renaming\Rector\String_\RenameStringRector\RenameStringRectorTest
+ * @deprecated This rule is deprecated, as it renames every matching string literal blindly and was only used for 1 case now covered by dedicated PreviousAdminRoleToIsImpersonatorRector in rector-symfony. Write a custom rule for the exact project case instead.
  */
-final class RenameStringRector extends AbstractRector implements ConfigurableRectorInterface
+final class RenameStringRector extends AbstractRector implements ConfigurableRectorInterface, DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private ValueResolver $valueResolver;
-    /**
-     * @var array<string, string>
-     */
-    private array $stringChanges = [];
-    public function __construct(ValueResolver $valueResolver)
-    {
-        $this->valueResolver = $valueResolver;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change string value', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -62,23 +50,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $value = $this->valueResolver->getValue($node);
-        if (!is_string($value)) {
-            return null;
-        }
-        $newValue = $this->stringChanges[$value] ?? null;
-        if ($newValue === null) {
-            return null;
-        }
-        return new String_($newValue);
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as it renames every matching string literal blindly; write a custom rule for the exact project case instead', self::class));
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        Assert::allString(array_keys($configuration));
-        Assert::allString($configuration);
-        $this->stringChanges = $configuration;
     }
 }
