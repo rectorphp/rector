@@ -5,6 +5,7 @@ namespace Rector\Set\ValueObject;
 
 /**
  * @api
+ * @deprecated Use withPhpSets() or withPhpLevel() instead
  */
 final class LevelSetList
 {

@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix202611;
 
 use Rector\Config\RectorConfig;
-use Rector\Set\ValueObject\LevelSetList;
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->sets([__DIR__ . '/../php84.php', LevelSetList::UP_TO_PHP_83]);
+    $rectorConfig->sets([__DIR__ . '/../php84.php', __DIR__ . '/up-to-php83.php']);
 };
