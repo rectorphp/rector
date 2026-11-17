@@ -91,7 +91,7 @@ final class PhpAttributeGroupFactory
     public function create(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, AnnotationToAttribute $annotationToAttribute, array $uses): AttributeGroup
     {
         $values = $doctrineAnnotationTagValueNode->getValuesWithSilentKey();
-        $args = $this->createArgsFromItems($values, '', $annotationToAttribute->getClassReferenceFields());
+        $args = $this->createArgsFromItems($values, $annotationToAttribute->getClassReferenceFields());
         $this->annotationToAttributeIntegerValueCaster->castAttributeTypes($annotationToAttribute, $args);
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args, $annotationToAttribute->getAttributeClass());
         $args = $this->unknownNamedArgsToOptionsFolder->fold($args, $annotationToAttribute->getAttributeClass());
@@ -103,12 +103,11 @@ final class PhpAttributeGroupFactory
     }
     /**
      * @param ArrayItemNode[]|mixed[] $items
-     * @param string $attributeClass @deprecated
      * @param string[] $classReferencedFields
      *
      * @return list<Arg>
      */
-    public function createArgsFromItems(array $items, string $attributeClass = '', array $classReferencedFields = []): array
+    public function createArgsFromItems(array $items, array $classReferencedFields = []): array
     {
         $mappedItems = $this->annotationToAttributeMapper->map($items);
         $this->mapClassReferences($mappedItems, $classReferencedFields);
