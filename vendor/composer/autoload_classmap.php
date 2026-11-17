@@ -990,7 +990,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\If_\\CompleteMissingIfElseBracketRector' => $baseDir . '/rules/CodeQuality/Rector/If_/CompleteMissingIfElseBracketRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector' => $baseDir . '/rules/CodeQuality/Rector/If_/ConsecutiveNullCompareReturnsToNullCoalesceQueueRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\ExplicitNullableObjectInstanceRector' => $baseDir . '/rules/CodeQuality/Rector/If_/ExplicitNullableObjectInstanceRector.php',
-    'Rector\\CodeQuality\\Rector\\If_\\ObjectExplicitBoolCompareRector' => $baseDir . '/rules/CodeQuality/Rector/If_/ObjectExplicitBoolCompareRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfNotNullReturnRector' => $baseDir . '/rules/CodeQuality/Rector/If_/SimplifyIfNotNullReturnRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfNullableReturnRector' => $baseDir . '/rules/CodeQuality/Rector/If_/SimplifyIfNullableReturnRector.php',
     'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfReturnBoolRector' => $baseDir . '/rules/CodeQuality/Rector/If_/SimplifyIfReturnBoolRector.php',

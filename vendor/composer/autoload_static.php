@@ -1216,7 +1216,6 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodeQuality\\Rector\\If_\\CompleteMissingIfElseBracketRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/CompleteMissingIfElseBracketRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/ConsecutiveNullCompareReturnsToNullCoalesceQueueRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\ExplicitNullableObjectInstanceRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/ExplicitNullableObjectInstanceRector.php',
-        'Rector\\CodeQuality\\Rector\\If_\\ObjectExplicitBoolCompareRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/ObjectExplicitBoolCompareRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfNotNullReturnRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/SimplifyIfNotNullReturnRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfNullableReturnRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/SimplifyIfNullableReturnRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfReturnBoolRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/SimplifyIfReturnBoolRector.php',
