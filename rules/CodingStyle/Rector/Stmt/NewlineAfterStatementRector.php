@@ -4,26 +4,17 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Stmt;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Nop;
-use Rector\Comments\CommentResolver;
+use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
 /**
- * @see \Rector\Tests\CodingStyle\Rector\Stmt\NewlineAfterStatementRector\NewlineAfterStatementRectorTest
+ * @deprecated This rule is deprecated, as newlines between statements are coding standard concern and its definition is too vague. Use coding standard tool like ECS or PHP CS Fixer instead.
  */
-final class NewlineAfterStatementRector extends AbstractRector
+final class NewlineAfterStatementRector extends AbstractRector implements DeprecatedInterface
 {
-    /**
-     * @readonly
-     */
-    private CommentResolver $commentResolver;
-    public function __construct(CommentResolver $commentResolver)
-    {
-        $this->commentResolver = $commentResolver;
-    }
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add empty new line after different-type statements to improve code readability', [new CodeSample(<<<'CODE_SAMPLE'
@@ -59,57 +50,8 @@ CODE_SAMPLE
     {
         return NodeGroup::STMTS_AWARE;
     }
-    /**
-     * @param StmtsAware $node
-     * @return StmtsAware|null
-     */
-    public function refactor(Node $node): ?\PhpParser\Node
+    public function refactor(Node $node): ?Node
     {
-        if ($this->getFile()->containsHTML()) {
-            return null;
-        }
-        return $this->processAddNewLine($node, \false);
-    }
-    /**
-     * @param StmtsAware $node
-     * @return StmtsAware|null
-     */
-    private function processAddNewLine(Node $node, bool $hasChanged, int $jumpToKey = 0): ?\PhpParser\Node
-    {
-        if ($node->stmts === null) {
-            return null;
-        }
-        $totalKeys = array_key_last($node->stmts);
-        for ($key = $jumpToKey; $key < $totalKeys; ++$key) {
-            if (!isset($node->stmts[$key], $node->stmts[$key + 1])) {
-                break;
-            }
-            $stmt = $node->stmts[$key];
-            $nextStmt = $node->stmts[$key + 1];
-            if ($this->shouldSkip($stmt)) {
-                continue;
-            }
-            /** @var Stmt $stmt */
-            $endLine = $stmt->getEndLine();
-            $rangeLine = $nextStmt->getStartLine() - $endLine;
-            if ($rangeLine > 1) {
-                $rangeLine = $this->commentResolver->resolveRangeLineFromComment($rangeLine, $endLine, $nextStmt);
-            }
-            // skip same line or < 0 that cause infinite loop or crash
-            if ($rangeLine !== 1) {
-                continue;
-            }
-            array_splice($node->stmts, $key + 1, 0, [new Nop()]);
-            $hasChanged = \true;
-            return $this->processAddNewLine($node, $hasChanged, $key + 2);
-        }
-        if ($hasChanged) {
-            return $node;
-        }
-        return null;
-    }
-    private function shouldSkip(Stmt $stmt): bool
-    {
-        return !in_array(get_class($stmt), NodeGroup::STMTS_TO_HAVE_NEXT_NEWLINE, \true);
+        throw new ShouldNotHappenException(sprintf('"%s" rule is deprecated, as newlines between statements are coding standard concern; use coding standard tool like ECS or PHP CS Fixer instead', self::class));
     }
 }
