@@ -5,7 +5,7 @@ namespace Rector\Transform\ValueObject;
 
 use Rector\Validation\RectorAssert;
 /**
- * @api used in deprecated StringToClassConstantRector configs
+ * @api used in rector-laravel
  */
 final class StringToClassConstant
 {
