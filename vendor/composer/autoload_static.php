@@ -1272,6 +1272,7 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodingStyle\\Rector\\FuncCall\\StrictInArrayRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/StrictInArrayRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
         'Rector\\CodingStyle\\Rector\\If_\\AlternativeIfToBracketRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/If_/AlternativeIfToBracketRector.php',
+        'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\SplitGroupedPropertiesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php',
         'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',
         'Rector\\CodingStyle\\Rector\\Stmt\\RemoveUselessAliasInUseStatementRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Stmt/RemoveUselessAliasInUseStatementRector.php',
