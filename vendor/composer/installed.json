@@ -1486,12 +1486,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "405d7985f5a964403dafe12790666b7e342f9756"
+                "reference": "7ca22d2c4d18a0b4fc9d02c503293be77abca6aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/405d7985f5a964403dafe12790666b7e342f9756",
-                "reference": "405d7985f5a964403dafe12790666b7e342f9756",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/7ca22d2c4d18a0b4fc9d02c503293be77abca6aa",
+                "reference": "7ca22d2c4d18a0b4fc9d02c503293be77abca6aa",
                 "shasum": ""
             },
             "require": {
@@ -1513,8 +1513,8 @@
                 "tomasvotruba\/class-leak": "^2.3",
                 "tomasvotruba\/type-coverage": "^2.3"
             },
-            "time": "2026-11-17T15:10:10+00:00",
-            "published-time": "2026-11-17T15:10:16+00:00",
+            "time": "2026-11-17T15:10:22+00:00",
+            "published-time": "2026-11-17T15:10:28+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
@@ -1602,12 +1602,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "4ce55dc5e18903ae95988d2b35630c9bca4b56db"
+                "reference": "df4cc8a527ff6f561d8a78389a8842dff7cf7e3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/4ce55dc5e18903ae95988d2b35630c9bca4b56db",
-                "reference": "4ce55dc5e18903ae95988d2b35630c9bca4b56db",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/df4cc8a527ff6f561d8a78389a8842dff7cf7e3d",
+                "reference": "df4cc8a527ff6f561d8a78389a8842dff7cf7e3d",
                 "shasum": ""
             },
             "require": {
@@ -1633,8 +1633,8 @@
                 "tomasvotruba\/type-coverage": "^2.3",
                 "tracy\/tracy": "^2.12"
             },
-            "time": "2026-11-15T22:33:40+00:00",
-            "published-time": "2026-11-15T22:33:45+00:00",
+            "time": "2026-11-17T15:10:28+00:00",
+            "published-time": "2026-11-17T15:10:33+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "installation-source": "dist",
