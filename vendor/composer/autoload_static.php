@@ -1187,7 +1187,6 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\ConvertStaticToSelfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/ConvertStaticToSelfRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
-        'Rector\\CodeQuality\\Rector\\Class_\\InnerFunctionToPrivateMethodRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/InnerFunctionToPrivateMethodRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\RemoveReadonlyPropertyVisibilityOnReadonlyClassRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/RemoveReadonlyPropertyVisibilityOnReadonlyClassRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\ReturnIteratorInDataProviderRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/ReturnIteratorInDataProviderRector.php',
         'Rector\\CodeQuality\\Rector\\Concat\\DirnameDirConcatStringToDirectStringPathRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Concat/DirnameDirConcatStringToDirectStringPathRector.php',

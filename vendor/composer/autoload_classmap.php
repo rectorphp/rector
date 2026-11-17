@@ -961,7 +961,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\ConvertStaticToSelfRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/ConvertStaticToSelfRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
-    'Rector\\CodeQuality\\Rector\\Class_\\InnerFunctionToPrivateMethodRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/InnerFunctionToPrivateMethodRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\RemoveReadonlyPropertyVisibilityOnReadonlyClassRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/RemoveReadonlyPropertyVisibilityOnReadonlyClassRector.php',
     'Rector\\CodeQuality\\Rector\\Class_\\ReturnIteratorInDataProviderRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/ReturnIteratorInDataProviderRector.php',
     'Rector\\CodeQuality\\Rector\\Concat\\DirnameDirConcatStringToDirectStringPathRector' => $baseDir . '/rules/CodeQuality/Rector/Concat/DirnameDirConcatStringToDirectStringPathRector.php',
