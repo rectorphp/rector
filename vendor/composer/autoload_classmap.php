@@ -980,7 +980,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\FuncCall\\RemoveSoleValueSprintfRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/RemoveSoleValueSprintfRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyFuncGetArgsCountRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SimplifyFuncGetArgsCountRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyInArrayValuesRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SimplifyInArrayValuesRector.php',
-    'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyStrposLowerRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SimplifyStrposLowerRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\SingleInArrayToCompareRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SingleInArrayToCompareRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\SortCallLikeNamedArgsRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SortCallLikeNamedArgsRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\UnwrapSprintfOneArgumentRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/UnwrapSprintfOneArgumentRector.php',
