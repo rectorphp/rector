@@ -2725,7 +2725,6 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\StmtsAwareInterface\\DeclareStrictTypesRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/StmtsAwareInterface/DeclareStrictTypesRector.php',
         'Rector\\TypeDeclaration\\Rector\\StmtsAwareInterface\\SafeDeclareStrictTypesRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/StmtsAwareInterface/SafeDeclareStrictTypesRector.php',
-        'Rector\\TypeDeclaration\\Rector\\While_\\WhileNullableToInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/While_/WhileNullableToInstanceofRector.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\NullableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/NullableTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\ParameterTypeFromDataProviderResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/ParameterTypeFromDataProviderResolver.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\PropertyTypeDefaultValueAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/PropertyTypeDefaultValueAnalyzer.php',
