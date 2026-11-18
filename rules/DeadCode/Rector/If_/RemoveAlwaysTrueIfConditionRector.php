@@ -111,6 +111,12 @@ CODE_SAMPLE
         if ($this->getFile()->containsHTML()) {
             return null;
         }
+        // types inside a trait are resolved without the class using it, so they are unreliable
+        $scope = ScopeFetcher::fetch($node);
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection instanceof ClassReflection && $classReflection->isTrait()) {
+            return null;
+        }
         if ($node->cond instanceof BooleanAnd) {
             return $this->refactorIfWithBooleanAnd($node);
         }
@@ -121,7 +127,6 @@ CODE_SAMPLE
         if (!$conditionStaticType->isTrue()->yes()) {
             return null;
         }
-        $scope = ScopeFetcher::fetch($node);
         if ($this->shouldSkipFromVariable($node->cond, $scope)) {
             return null;
         }
@@ -131,10 +136,6 @@ CODE_SAMPLE
         }
         $type = $scope->getNativeType($node->cond);
         if (!$type->isTrue()->yes()) {
-            return null;
-        }
-        $classReflection = $scope->getClassReflection();
-        if ($classReflection instanceof ClassReflection && $classReflection->isTrait()) {
             return null;
         }
         if ($node->stmts === []) {
