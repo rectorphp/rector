@@ -104,6 +104,10 @@ final class ChangedNodeScopeRefresher
             // the class node itself is not part of its stmts, e.g. an Enum_ replaced by a new Class_ has no scope yet
             $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $this->phpStanNodeScopeResolver->processNodes($node->stmts, $filePath, $mutatingScope);
+            // the class attributes are not part of its stmts either, e.g. one converted from an annotation
+            foreach ($node->attrGroups as $attrGroup) {
+                $this->phpStanNodeScopeResolver->processNodes($this->resolveStmts($attrGroup), $filePath, $mutatingScope);
+            }
             return;
         }
         $stmts = $this->resolveStmts($node);
