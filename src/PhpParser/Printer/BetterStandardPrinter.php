@@ -479,7 +479,7 @@ final class BetterStandardPrinter extends Standard
      */
     private function wrapAssign(Node $leftNode, Node $rightNode): void
     {
-        if ($leftNode instanceof Assign && $leftNode->getStartTokenPos() > 0 && $rightNode->getStartTokenPos() < 0) {
+        if (($leftNode instanceof Assign || $leftNode instanceof AssignOp) && $leftNode->getStartTokenPos() > 0 && $rightNode->getStartTokenPos() < 0) {
             $leftNode->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         }
     }
