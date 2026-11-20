@@ -411,10 +411,12 @@ final class PHPStanNodeScopeResolver
     }
     private function processTernary(Ternary $ternary, MutatingScope $mutatingScope): void
     {
-        if ($ternary->if instanceof Expr) {
+        if ($ternary->if instanceof Expr && !$ternary->if->getAttribute(AttributeKey::SCOPE) instanceof MutatingScope) {
             $ternary->if->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         }
-        $ternary->else->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        if (!$ternary->else->getAttribute(AttributeKey::SCOPE) instanceof MutatingScope) {
+            $ternary->else->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
     }
     private function resolveClassName(Trait_ $trait): string
     {
