@@ -67,20 +67,46 @@ CODE_SAMPLE
             }
             return null;
         }
-        // start node
-        if (!isset($oldTokens[$node->getStartTokenPos()])) {
+        // "new" must end with arguments, e.g. skip "new Foo" or anonymous class
+        if (!isset($oldTokens[$new->getEndTokenPos()]) || (string) $oldTokens[$new->getEndTokenPos()] !== ')') {
             return null;
         }
-        // end of "new" node
-        if (!isset($oldTokens[$new->getEndTokenPos()])) {
+        // all wrapping "(" between the node start and "new"
+        $openingPositions = [];
+        for ($position = $node->getStartTokenPos(); $position < $new->getStartTokenPos(); ++$position) {
+            if (!isset($oldTokens[$position])) {
+                return null;
+            }
+            if ($oldTokens[$position]->isIgnorable()) {
+                continue;
+            }
+            if ((string) $oldTokens[$position] !== '(') {
+                return null;
+            }
+            $openingPositions[] = $position;
+        }
+        if ($openingPositions === []) {
             return null;
         }
-        if ((string) $oldTokens[$node->getStartTokenPos()] === '(' && (string) $oldTokens[$new->getEndTokenPos()] === ')') {
-            $oldTokens[$node->getStartTokenPos()]->text = '';
-            $oldTokens[$new->getEndTokenPos()]->text = '';
-            return $node;
+        // the matching ")" after "new", not the arguments ")"
+        $closingPositions = [];
+        $position = $new->getEndTokenPos() + 1;
+        while (count($closingPositions) < count($openingPositions)) {
+            if (!isset($oldTokens[$position])) {
+                return null;
+            }
+            if (!$oldTokens[$position]->isIgnorable()) {
+                if ((string) $oldTokens[$position] !== ')') {
+                    return null;
+                }
+                $closingPositions[] = $position;
+            }
+            ++$position;
         }
-        return null;
+        foreach (array_merge($openingPositions, $closingPositions) as $parenthesisPosition) {
+            $oldTokens[$parenthesisPosition]->text = '';
+        }
+        return $node;
     }
     public function provideMinPhpVersion(): int
     {
