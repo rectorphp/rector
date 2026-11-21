@@ -408,8 +408,12 @@ final class BetterStandardPrinter extends Standard
         if ($node instanceof Coalesce && $node->right instanceof Ternary) {
             $node->right->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         }
-        if ($node->left instanceof Assign && $this->origTokens instanceof TokenStream && !$this->origTokens->haveParens($node->left->getStartTokenPos(), $node->left->getEndTokenPos())) {
-            $node->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        if ($node->left instanceof Assign && $this->origTokens instanceof TokenStream) {
+            if ($this->origTokens->haveParens($node->left->getStartTokenPos(), $node->left->getEndTokenPos())) {
+                $node->left->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+            } else {
+                $node->left->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            }
         }
         if ($node->right instanceof Assign && $this->origTokens instanceof TokenStream) {
             $node->right->setAttribute(AttributeKey::ORIGINAL_NODE, null);
