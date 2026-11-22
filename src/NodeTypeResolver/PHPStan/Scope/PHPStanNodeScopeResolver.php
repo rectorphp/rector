@@ -340,7 +340,7 @@ final class PHPStanNodeScopeResolver
         } elseif ($callLike instanceof New_ && !$callLike->class instanceof Class_) {
             $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         }
-        if ($callLike->isFirstClassCallable()) {
+        if ($callLike->isPartialFunctionApplication()) {
             return;
         }
         foreach ($callLike->getArgs() as $arg) {

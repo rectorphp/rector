@@ -24,7 +24,7 @@ final class NameAndArgNodeVisitor extends NodeVisitorAbstract implements Decorat
     {
         if ($node instanceof FuncCall && $node->name instanceof Name) {
             $node->name->setAttribute(AttributeKey::IS_FUNCCALL_NAME, \true);
-            if (!$node->isFirstClassCallable()) {
+            if (!$node->isPartialFunctionApplication()) {
                 $funcCallName = $node->name->toString();
                 foreach ($node->getArgs() as $arg) {
                     $arg->value->setAttribute(AttributeKey::FROM_FUNC_CALL_NAME, $funcCallName);

@@ -45,7 +45,7 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
         if (!$node instanceof CallLike) {
             return null;
         }
-        if ($node->isFirstClassCallable()) {
+        if ($node->isPartialFunctionApplication()) {
             return null;
         }
         $args = $node->getArgs();
