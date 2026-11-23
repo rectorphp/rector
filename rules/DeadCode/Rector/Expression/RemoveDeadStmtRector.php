@@ -84,11 +84,10 @@ CODE_SAMPLE
         }
         $newNode = clone $node;
         $newNode->expr = array_shift($livingCode);
-        $newNodes = [];
+        $newNodes = [$newNode];
         foreach ($livingCode as $singleLivingCode) {
             $newNodes[] = new Expression($singleLivingCode);
         }
-        $newNodes[] = $newNode;
         return $newNodes;
     }
     private function hasGetMagic(Expression $expression): bool
