@@ -257,6 +257,12 @@ final class AttributeKey
      */
     public const IS_ARG_NOT_ACCEPTING_CLOSURE = 'is_arg_not_accepting_closure';
     /**
+     * The array is returned from a function-like whose native return type does not accept a Closure,
+     * e.g. a "return [$this, 'method'];" in a method returning "array"
+     * @var string
+     */
+    public const IS_RETURN_NOT_ACCEPTING_CLOSURE = 'is_return_not_accepting_closure';
+    /**
      * Closure or arrow function with rebound $this, e.g. (fn () => ...)->call($object)
      * @var string
      */
