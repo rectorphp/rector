@@ -259,7 +259,7 @@ return RectorConfig::configure()->withRules([
     KernelTestCaseContainerPropertyDeprecationRector::class,
     // symfony/http-kernel 5.3
     RequestIsMainRector::class,
-    // symfony/event-dispatcher 5.4
+    // symfony/event-dispatcher 5.4 + symfony/framework-bundle 5.4
     EventSubscriberToAttributeRector::class,
     // symfony/dependency-injection 6.0
     ContainerInterfaceServiceToServiceContainerRector::class,
