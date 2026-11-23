@@ -5,6 +5,7 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
@@ -41,11 +42,18 @@ CODE_SAMPLE
         if (!$this->isName($node, 'sprintf')) {
             return null;
         }
-        if (count($node->getArgs()) > 1) {
+        if (count($node->getArgs()) !== 1) {
             return null;
         }
         $firstArg = $node->getArgs()[0];
         if ($firstArg->unpack) {
+            return null;
+        }
+        // only a literal without "%" prints itself, e.g. "%%" prints "%" and "%s" throws
+        if (!$firstArg->value instanceof String_) {
+            return null;
+        }
+        if (strpos($firstArg->value->value, '%') !== \false) {
             return null;
         }
         return $firstArg->value;
