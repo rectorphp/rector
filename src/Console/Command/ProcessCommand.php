@@ -179,7 +179,7 @@ EOF
         }
         // MAIN PHASE
         // 2. run Rector
-        $processResult = $this->applicationFileProcessor->run($configuration, $input);
+        $processResult = $this->applicationFileProcessor->run($configuration);
         // REPORTING PHASE
         // 3. reporting phaseRunning 2nd time with collectors data
         // report diffs and errors

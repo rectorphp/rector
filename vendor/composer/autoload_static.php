@@ -1965,7 +1965,6 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\Parallel\\Enum\\ReactEvent' => __DIR__ . '/../..' . '/src/Parallel/Enum/ReactEvent.php',
         'Rector\\Parallel\\Enum\\StreamFormat' => __DIR__ . '/../..' . '/src/Parallel/Enum/StreamFormat.php',
         'Rector\\Parallel\\Exception\\ParallelShouldNotHappenException' => __DIR__ . '/../..' . '/src/Parallel/Exception/ParallelShouldNotHappenException.php',
-        'Rector\\Parallel\\Reflection\\CommandFromReflectionFactory' => __DIR__ . '/../..' . '/src/Parallel/Reflection/CommandFromReflectionFactory.php',
         'Rector\\Parallel\\ScheduleFactory' => __DIR__ . '/../..' . '/src/Parallel/ScheduleFactory.php',
         'Rector\\Parallel\\ValueObject\\Bridge' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/Bridge.php',
         'Rector\\Parallel\\ValueObject\\BridgeItem' => __DIR__ . '/../..' . '/src/Parallel/ValueObject/BridgeItem.php',

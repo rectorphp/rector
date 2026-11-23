@@ -1739,7 +1739,6 @@ return array(
     'Rector\\Parallel\\Enum\\ReactEvent' => $baseDir . '/src/Parallel/Enum/ReactEvent.php',
     'Rector\\Parallel\\Enum\\StreamFormat' => $baseDir . '/src/Parallel/Enum/StreamFormat.php',
     'Rector\\Parallel\\Exception\\ParallelShouldNotHappenException' => $baseDir . '/src/Parallel/Exception/ParallelShouldNotHappenException.php',
-    'Rector\\Parallel\\Reflection\\CommandFromReflectionFactory' => $baseDir . '/src/Parallel/Reflection/CommandFromReflectionFactory.php',
     'Rector\\Parallel\\ScheduleFactory' => $baseDir . '/src/Parallel/ScheduleFactory.php',
     'Rector\\Parallel\\ValueObject\\Bridge' => $baseDir . '/src/Parallel/ValueObject/Bridge.php',
     'Rector\\Parallel\\ValueObject\\BridgeItem' => $baseDir . '/src/Parallel/ValueObject/BridgeItem.php',

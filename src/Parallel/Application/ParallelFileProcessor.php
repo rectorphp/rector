@@ -11,7 +11,6 @@ use RectorPrefix202611\React\Socket\ConnectionInterface;
 use RectorPrefix202611\React\Socket\TcpServer;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Console\Command\ProcessCommand;
 use Rector\Console\ExitCode;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
 use Rector\Parallel\Enum\Action;
@@ -23,9 +22,9 @@ use Rector\Parallel\ValueObject\Bridge;
 use Rector\Parallel\ValueObject\ParallelProcess;
 use Rector\Parallel\ValueObject\ProcessPool;
 use Rector\Parallel\ValueObject\Schedule;
+use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
-use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
 use Throwable;
 /**
  * Workers process their own balanced bucket first, and are replaced by a fresh one bound to the same bucket
@@ -56,7 +55,7 @@ final class ParallelFileProcessor
     /**
      * @param callable(int $stepCount): void $postFileCallback Used for progress bar jump
      */
-    public function process(Schedule $schedule, string $mainScript, callable $postFileCallback, InputInterface $input): ProcessResult
+    public function process(Schedule $schedule, string $mainScript, callable $postFileCallback, Configuration $configuration): ProcessResult
     {
         // reversed, so that array_pop() hands out the jobs in bucket order
         $jobsPerWorker = array_map(\Closure::fromCallable('array_reverse'), $schedule->getJobsPerWorker());
@@ -107,11 +106,11 @@ final class ParallelFileProcessor
         };
         $timeoutInSeconds = SimpleParameterProvider::provideIntParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS);
         $fileChunksBudgetPerProcess = [];
-        $processSpawner = function (int $bucketKey) use ($parallelResultCollector, &$jobsPerWorker, &$bucketKeyByIdentifier, $postFileCallback, &$systemErrorsCount, &$reachedSystemErrorsCountLimit, $mainScript, $input, $serverPort, $streamSelectLoop, $timeoutInSeconds, $handleErrorCallable, &$fileChunksBudgetPerProcess, &$processSpawner, &$processedFilesCount): void {
+        $processSpawner = function (int $bucketKey) use ($parallelResultCollector, &$jobsPerWorker, &$bucketKeyByIdentifier, $postFileCallback, &$systemErrorsCount, &$reachedSystemErrorsCountLimit, $mainScript, $configuration, $serverPort, $streamSelectLoop, $timeoutInSeconds, $handleErrorCallable, &$fileChunksBudgetPerProcess, &$processSpawner, &$processedFilesCount): void {
             $processIdentifier = Random::generate();
             $bucketKeyByIdentifier[$processIdentifier] = $bucketKey;
             $fileChunksBudgetPerProcess[$processIdentifier] = self::MAX_CHUNKS_PER_WORKER;
-            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, ProcessCommand::class, 'worker', $input, $processIdentifier, $serverPort);
+            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, 'worker', $configuration, $processIdentifier, $serverPort);
             $parallelProcess = new ParallelProcess($workerCommandLine, $streamSelectLoop, $timeoutInSeconds);
             $parallelProcess->start(
                 // 1. callable on data
