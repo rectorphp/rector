@@ -5,14 +5,14 @@ namespace Rector\Util;
 
 use RectorPrefix202611\Nette\Utils\Strings;
 use PhpParser\Node;
+use Rector\Console\Style\RectorStyle;
 use Rector\CustomRules\SimpleNodeDumper;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 final class NodePrinter
 {
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @see https://regex101.com/r/Fe8n73/1
      * @var string
@@ -23,9 +23,9 @@ final class NodePrinter
      * @var string
      */
     private const PROPERTY_KEY_REGEX = '#(?<key>[\w\d]+)\:#';
-    public function __construct(SymfonyStyle $symfonyStyle)
+    public function __construct(RectorStyle $rectorStyle)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
     }
     /**
      * @param Node|Node[] $nodes
@@ -35,8 +35,8 @@ final class NodePrinter
         $dumpedNodesContents = SimpleNodeDumper::dump($nodes);
         // colorize
         $colorContents = $this->addConsoleColors($dumpedNodesContents);
-        $this->symfonyStyle->writeln($colorContents);
-        $this->symfonyStyle->newLine();
+        $this->rectorStyle->writeln($colorContents);
+        $this->rectorStyle->newLine();
     }
     private function addConsoleColors(string $contents): string
     {

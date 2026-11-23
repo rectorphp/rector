@@ -8,6 +8,7 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Configuration\Option;
 use Rector\Console\ExitCode;
+use Rector\Console\Style\RectorStyle;
 use Rector\Reporting\DeprecatedRulesReporter;
 use Rector\Reporting\MissConfigurationReporter;
 use Rector\Skipper\Skipper\Skipper;
@@ -16,7 +17,6 @@ use RectorPrefix202611\Symfony\Component\Console\Command\Command;
 use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202611\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202611\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\Tests\Console\Command\ValidateConfigCommandTest
  */
@@ -25,7 +25,7 @@ final class ValidateConfigCommand extends Command
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @readonly
      */
@@ -38,9 +38,9 @@ final class ValidateConfigCommand extends Command
      * @readonly
      */
     private Skipper $skipper;
-    public function __construct(SymfonyStyle $symfonyStyle, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter, Skipper $skipper)
+    public function __construct(RectorStyle $rectorStyle, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter, Skipper $skipper)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
         $this->deprecatedRulesReporter = $deprecatedRulesReporter;
         $this->missConfigurationReporter = $missConfigurationReporter;
         $this->skipper = $skipper;
@@ -57,7 +57,7 @@ final class ValidateConfigCommand extends Command
         $isJsonOutput = $input->getOption(Option::OUTPUT_FORMAT) === JsonOutputFormatter::NAME;
         // silence the human-readable warnings, so only the JSON payload lands on stdout
         if ($isJsonOutput) {
-            $this->symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+            $this->rectorStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
         $issueCount = 0;
         $issueCount += $this->deprecatedRulesReporter->reportDeprecatedRules();
@@ -74,10 +74,10 @@ final class ValidateConfigCommand extends Command
             return $issueCount === 0 ? ExitCode::SUCCESS : ExitCode::FAILURE;
         }
         if ($issueCount === 0) {
-            $this->symfonyStyle->success('Config is valid, no issues found');
+            $this->rectorStyle->success('Config is valid, no issues found');
             return ExitCode::SUCCESS;
         }
-        $this->symfonyStyle->error(sprintf('%d config %s found, see the warnings above', $issueCount, $issueCount === 1 ? 'issue' : 'issues'));
+        $this->rectorStyle->error(sprintf('%d config %s found, see the warnings above', $issueCount, $issueCount === 1 ? 'issue' : 'issues'));
         return ExitCode::FAILURE;
     }
     private function reportDeprecatedSkippedClasses(): int
@@ -86,7 +86,7 @@ final class ValidateConfigCommand extends Command
         if ($deprecatedSkippedClasses === []) {
             return 0;
         }
-        $this->symfonyStyle->warning(sprintf('These rules are skipped, but are deprecated. Most likely you do not need to skip them anymore, remove them: %s%s', "\n\n", '* ' . implode("\n* ", $deprecatedSkippedClasses) . "\n"));
+        $this->rectorStyle->warning(sprintf('These rules are skipped, but are deprecated. Most likely you do not need to skip them anymore, remove them: %s%s', "\n\n", '* ' . implode("\n* ", $deprecatedSkippedClasses) . "\n"));
         return count($deprecatedSkippedClasses);
     }
     private function reportSetAndRulesDuplicatedRegistrations(): int
@@ -95,7 +95,7 @@ final class ValidateConfigCommand extends Command
         if ($setAndRulesDuplicatedRegistrations === []) {
             return 0;
         }
-        $this->symfonyStyle->warning(sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', "\n\n", implode(' * ', $setAndRulesDuplicatedRegistrations) . "\n"));
+        $this->rectorStyle->warning(sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', "\n\n", implode(' * ', $setAndRulesDuplicatedRegistrations) . "\n"));
         return count($setAndRulesDuplicatedRegistrations);
     }
 }

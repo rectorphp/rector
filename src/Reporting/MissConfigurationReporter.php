@@ -6,10 +6,10 @@ namespace Rector\Reporting;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\VendorMissAnalyseGuard;
+use Rector\Console\Style\RectorStyle;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\ValueObject\ProcessResult;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\Tests\Reporting\MissConfigurationReporterTest
  */
@@ -18,7 +18,7 @@ final class MissConfigurationReporter
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @readonly
      */
@@ -31,9 +31,9 @@ final class MissConfigurationReporter
      * @readonly
      */
     private \Rector\Reporting\NeededSkipVerifier $neededSkipVerifier;
-    public function __construct(SymfonyStyle $symfonyStyle, VendorMissAnalyseGuard $vendorMissAnalyseGuard, \Rector\Reporting\UnusedSkipResolver $unusedSkipResolver, \Rector\Reporting\NeededSkipVerifier $neededSkipVerifier)
+    public function __construct(RectorStyle $rectorStyle, VendorMissAnalyseGuard $vendorMissAnalyseGuard, \Rector\Reporting\UnusedSkipResolver $unusedSkipResolver, \Rector\Reporting\NeededSkipVerifier $neededSkipVerifier)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
         $this->vendorMissAnalyseGuard = $vendorMissAnalyseGuard;
         $this->unusedSkipResolver = $unusedSkipResolver;
         $this->neededSkipVerifier = $neededSkipVerifier;
@@ -48,10 +48,10 @@ final class MissConfigurationReporter
         if ($unusedSkips === []) {
             return;
         }
-        $this->symfonyStyle->warning(sprintf('%s never matched any element. You can remove %s from "->withSkip()"', count($unusedSkips) > 1 ? 'These skips are unused, they' : 'This skip is unused, it', count($unusedSkips) > 1 ? 'them' : 'it'));
+        $this->rectorStyle->warning(sprintf('%s never matched any element. You can remove %s from "->withSkip()"', count($unusedSkips) > 1 ? 'These skips are unused, they' : 'This skip is unused, it', count($unusedSkips) > 1 ? 'them' : 'it'));
         // add a blank line between items, so grouped rule skips stay visually separated
         $spacedUnusedSkips = array_map(static fn(string $unusedSkip): string => $unusedSkip . "\n", $unusedSkips);
-        $this->symfonyStyle->listing($spacedUnusedSkips);
+        $this->rectorStyle->listing($spacedUnusedSkips);
     }
     /**
      * Reports rule-scoped skips that matched a file but whose rule would not have changed it, so the
@@ -64,10 +64,10 @@ final class MissConfigurationReporter
         if ($unnecessarySkips === []) {
             return;
         }
-        $this->symfonyStyle->warning(sprintf('%s matched a file, but the rule would not have changed it. You can remove %s from "->withSkip()"', count($unnecessarySkips) > 1 ? 'These skips are unnecessary, they' : 'This skip is unnecessary, it', count($unnecessarySkips) > 1 ? 'them' : 'it'));
+        $this->rectorStyle->warning(sprintf('%s matched a file, but the rule would not have changed it. You can remove %s from "->withSkip()"', count($unnecessarySkips) > 1 ? 'These skips are unnecessary, they' : 'This skip is unnecessary, it', count($unnecessarySkips) > 1 ? 'them' : 'it'));
         // add a blank line between items, so grouped rule skips stay visually separated
         $spacedUnnecessarySkips = array_map(static fn(string $unnecessarySkip): string => $unnecessarySkip . "\n", $unnecessarySkips);
-        $this->symfonyStyle->listing($spacedUnnecessarySkips);
+        $this->rectorStyle->listing($spacedUnnecessarySkips);
     }
     public function reportSkippedNeverRegisteredRules(): int
     {
@@ -79,8 +79,8 @@ final class MissConfigurationReporter
         if ($neverRegisteredSkippedRules === []) {
             return 0;
         }
-        $this->symfonyStyle->warning(sprintf('%s never registered. You can remove %s from "->withSkip()"', count($neverRegisteredSkippedRules) > 1 ? 'These skipped rules are' : 'This skipped rule is', count($neverRegisteredSkippedRules) > 1 ? 'them' : 'it'));
-        $this->symfonyStyle->listing($neverRegisteredSkippedRules);
+        $this->rectorStyle->warning(sprintf('%s never registered. You can remove %s from "->withSkip()"', count($neverRegisteredSkippedRules) > 1 ? 'These skipped rules are' : 'This skipped rule is', count($neverRegisteredSkippedRules) > 1 ? 'them' : 'it'));
+        $this->rectorStyle->listing($neverRegisteredSkippedRules);
         return count($neverRegisteredSkippedRules);
     }
     public function reportSkippedNonRectorClasses(): int
@@ -89,7 +89,7 @@ final class MissConfigurationReporter
         if ($skippedNonRectorClasses === []) {
             return 0;
         }
-        $this->symfonyStyle->warning(sprintf('%s "%s" %s not a Rector rule, so %s never be skipped. Only classes that implement "%s" can be used in "->withSkip()"', count($skippedNonRectorClasses) > 1 ? 'These skipped classes' : 'This skipped class', implode('", "', $skippedNonRectorClasses), count($skippedNonRectorClasses) > 1 ? 'are' : 'is', count($skippedNonRectorClasses) > 1 ? 'they can' : 'it can', RectorInterface::class));
+        $this->rectorStyle->warning(sprintf('%s "%s" %s not a Rector rule, so %s never be skipped. Only classes that implement "%s" can be used in "->withSkip()"', count($skippedNonRectorClasses) > 1 ? 'These skipped classes' : 'This skipped class', implode('", "', $skippedNonRectorClasses), count($skippedNonRectorClasses) > 1 ? 'are' : 'is', count($skippedNonRectorClasses) > 1 ? 'they can' : 'it can', RectorInterface::class));
         return count($skippedNonRectorClasses);
     }
     /**
@@ -100,7 +100,7 @@ final class MissConfigurationReporter
         if (!$this->vendorMissAnalyseGuard->isVendorAnalyzed($filePaths)) {
             return;
         }
-        $this->symfonyStyle->warning(sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer /vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', "\n\n"));
+        $this->rectorStyle->warning(sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer /vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', "\n\n"));
         sleep(3);
     }
     public function reportStartWithShortOpenTag(): void
@@ -111,7 +111,7 @@ final class MissConfigurationReporter
         }
         $suffix = count($files) > 1 ? 's were' : ' was';
         $fileList = implode("\n", $files);
-        $this->symfonyStyle->warning(sprintf('The following file%s skipped as starting with short open tag. Migrate to long open PHP tag first: %s%s', $suffix, "\n\n", $fileList));
+        $this->rectorStyle->warning(sprintf('The following file%s skipped as starting with short open tag. Migrate to long open PHP tag first: %s%s', $suffix, "\n\n", $fileList));
         sleep(3);
     }
 }

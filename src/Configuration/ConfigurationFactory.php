@@ -6,10 +6,10 @@ namespace Rector\Configuration;
 use Rector\Agentic\TerminalDetector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Console\Style\RectorStyle;
 use Rector\FileSystem\FilePathFilter;
 use Rector\ValueObject\Configuration;
 use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Configuration\ConfigurationFactoryTest
@@ -19,7 +19,7 @@ final class ConfigurationFactory
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @readonly
      */
@@ -28,9 +28,9 @@ final class ConfigurationFactory
      * @readonly
      */
     private FilePathFilter $filePathFilter;
-    public function __construct(SymfonyStyle $symfonyStyle, \Rector\Configuration\OnlyRuleResolver $onlyRuleResolver, FilePathFilter $filePathFilter)
+    public function __construct(RectorStyle $rectorStyle, \Rector\Configuration\OnlyRuleResolver $onlyRuleResolver, FilePathFilter $filePathFilter)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
         $this->onlyRuleResolver = $onlyRuleResolver;
         $this->filePathFilter = $filePathFilter;
     }
@@ -60,7 +60,7 @@ final class ConfigurationFactory
         $onlyRules = array_map(\Closure::fromCallable([$this->onlyRuleResolver, 'resolve']), $onlyRuleInputs);
         $onlySuffix = $input->getOption(\Rector\Configuration\Option::ONLY_SUFFIX);
         if ($onlySuffix !== null) {
-            $this->symfonyStyle->warning('The "--only-suffix" option is deprecated and will be removed. Use "--filter" instead, e.g. --filter="*Controller.php"');
+            $this->rectorStyle->warning('The "--only-suffix" option is deprecated and will be removed. Use "--filter" instead, e.g. --filter="*Controller.php"');
         }
         $rawFilter = $input->getOption(\Rector\Configuration\Option::FILTER);
         $filters = $rawFilter !== null ? $this->filePathFilter->parsePatterns((string) $rawFilter) : [];
@@ -118,7 +118,7 @@ final class ConfigurationFactory
         if (!TerminalDetector::isOutputTty()) {
             return \false;
         }
-        if ($this->symfonyStyle->isVerbose()) {
+        if ($this->rectorStyle->isVerbose()) {
             return \false;
         }
         return $outputFormat === ConsoleOutputFormatter::NAME;

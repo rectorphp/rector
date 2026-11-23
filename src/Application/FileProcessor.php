@@ -12,6 +12,7 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
+use Rector\Console\Style\RectorStyle;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystem\FilePathHelper;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -26,7 +27,6 @@ use Rector\ValueObject\Application\File;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\FileProcessResult;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class FileProcessor
 {
@@ -41,7 +41,7 @@ final class FileProcessor
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @readonly
      */
@@ -74,11 +74,11 @@ final class FileProcessor
      * @readonly
      */
     private UsedImportsResolver $usedImportsResolver;
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, UsedImportsResolver $usedImportsResolver)
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, RectorNodeTraverser $rectorNodeTraverser, RectorStyle $rectorStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, UsedImportsResolver $usedImportsResolver)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
         $this->fileDiffFactory = $fileDiffFactory;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->errorFactory = $errorFactory;
@@ -169,7 +169,7 @@ final class FileProcessor
             }
             return $this->errorFactory->createAutoloadError($analysedCodeException, $file->getFilePath());
         } catch (Throwable $throwable) {
-            if ($this->symfonyStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            if ($this->rectorStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
             $relativeFilePath = $this->filePathHelper->relativePath($file->getFilePath());

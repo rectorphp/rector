@@ -6,10 +6,10 @@ namespace Rector\Configuration;
 use RectorPrefix202611\Nette\Utils\FileSystem;
 use Rector\Agentic\TerminalDetector;
 use Rector\Bootstrap\RectorConfigsResolver;
+use Rector\Console\Style\RectorStyle;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\FileSystem\InitFilePathsResolver;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 final class ConfigInitializer
 {
     /**
@@ -24,7 +24,7 @@ final class ConfigInitializer
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @readonly
      */
@@ -32,11 +32,11 @@ final class ConfigInitializer
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, InitFilePathsResolver $initFilePathsResolver, SymfonyStyle $symfonyStyle, RectorConfigsResolver $rectorConfigsResolver)
+    public function __construct(array $rectors, InitFilePathsResolver $initFilePathsResolver, RectorStyle $rectorStyle, RectorConfigsResolver $rectorConfigsResolver)
     {
         $this->rectors = $rectors;
         $this->initFilePathsResolver = $initFilePathsResolver;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
         $this->rectorConfigsResolver = $rectorConfigsResolver;
     }
     public function createConfig(string $projectDirectory): void
@@ -44,25 +44,25 @@ final class ConfigInitializer
         $commonRectorConfigPath = $projectDirectory . '/' . RectorConfigsResolver::DEFAULT_CONFIG_FILE;
         $distRectorConfigPath = $projectDirectory . '/' . RectorConfigsResolver::DEFAULT_DIST_CONFIG_FILE;
         if (file_exists($commonRectorConfigPath)) {
-            $this->symfonyStyle->warning('Register rules or sets in your "' . RectorConfigsResolver::DEFAULT_CONFIG_FILE . '" config');
+            $this->rectorStyle->warning('Register rules or sets in your "' . RectorConfigsResolver::DEFAULT_CONFIG_FILE . '" config');
             return;
         }
         if (file_exists($distRectorConfigPath)) {
-            $this->symfonyStyle->warning('Register rules or sets in your "' . RectorConfigsResolver::DEFAULT_DIST_CONFIG_FILE . '" config');
+            $this->rectorStyle->warning('Register rules or sets in your "' . RectorConfigsResolver::DEFAULT_DIST_CONFIG_FILE . '" config');
             return;
         }
         $mainConfigFile = $this->rectorConfigsResolver->provide()->getMainConfigFile();
         if ($mainConfigFile !== null && file_exists($mainConfigFile)) {
-            $this->symfonyStyle->warning('Register rules or sets in your "' . basename($mainConfigFile) . '" config');
+            $this->rectorStyle->warning('Register rules or sets in your "' . basename($mainConfigFile) . '" config');
             return;
         }
         // non-interactive terminal, e.g. piped output, CI or an agent: never prompt or silently write a
         // config, just say what to do - Symfony still treats a closed STDIN as interactive here
         if (!TerminalDetector::isInputTty()) {
-            $this->symfonyStyle->warning(sprintf('No "%s" config found. Create one, or pass "--config <path>".', RectorConfigsResolver::DEFAULT_CONFIG_FILE));
+            $this->rectorStyle->warning(sprintf('No "%s" config found. Create one, or pass "--config <path>".', RectorConfigsResolver::DEFAULT_CONFIG_FILE));
             return;
         }
-        $response = $this->symfonyStyle->ask('No "' . RectorConfigsResolver::DEFAULT_CONFIG_FILE . '" config found. Should we generate it for you?', 'yes');
+        $response = $this->rectorStyle->ask('No "' . RectorConfigsResolver::DEFAULT_CONFIG_FILE . '" config found. Should we generate it for you?', 'yes');
         // be tolerant about input
         if (!in_array($response, ['yes', 'YES', 'y', 'Y'], \true)) {
             // okay, nothing we can do
@@ -71,7 +71,7 @@ final class ConfigInitializer
         $configContents = FileSystem::read(__DIR__ . '/../../templates/rector.php.dist');
         $configContents = $this->replacePathsContents($configContents, $projectDirectory);
         FileSystem::write($commonRectorConfigPath, $configContents, null);
-        $this->symfonyStyle->success('The config is added now. Re-run command to make Rector do the work!');
+        $this->rectorStyle->success('The config is added now. Re-run command to make Rector do the work!');
     }
     public function areSomeRectorsLoaded(): bool
     {

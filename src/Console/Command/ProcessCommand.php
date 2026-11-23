@@ -14,6 +14,7 @@ use Rector\Configuration\Option;
 use Rector\Console\ExitCode;
 use Rector\Console\Output\OutputFormatterCollector;
 use Rector\Console\ProcessConfigureDecorator;
+use Rector\Console\Style\RectorStyle;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Reporting\DeprecatedRulesReporter;
 use Rector\Reporting\MissConfigurationReporter;
@@ -27,7 +28,6 @@ use RectorPrefix202611\Symfony\Component\Console\Application;
 use RectorPrefix202611\Symfony\Component\Console\Command\Command;
 use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202611\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 final class ProcessCommand extends Command
 {
     /**
@@ -57,7 +57,7 @@ final class ProcessCommand extends Command
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @readonly
      */
@@ -82,7 +82,7 @@ final class ProcessCommand extends Command
      * @readonly
      */
     private Skipper $skipper;
-    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, SymfonyStyle $symfonyStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter, ConfigurationRuleFilter $configurationRuleFilter, Skipper $skipper)
+    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, OutputFormatterCollector $outputFormatterCollector, RectorStyle $rectorStyle, MemoryLimiter $memoryLimiter, ConfigurationFactory $configurationFactory, DeprecatedRulesReporter $deprecatedRulesReporter, MissConfigurationReporter $missConfigurationReporter, ConfigurationRuleFilter $configurationRuleFilter, Skipper $skipper)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -90,7 +90,7 @@ final class ProcessCommand extends Command
         $this->applicationFileProcessor = $applicationFileProcessor;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->outputFormatterCollector = $outputFormatterCollector;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
         $this->memoryLimiter = $memoryLimiter;
         $this->configurationFactory = $configurationFactory;
         $this->deprecatedRulesReporter = $deprecatedRulesReporter;
@@ -137,11 +137,11 @@ EOF
         $this->configurationRuleFilter->setConfiguration($configuration);
         // disable console output in case of json output formatter
         if ($configuration->getOutputFormat() === JsonOutputFormatter::NAME) {
-            $this->symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+            $this->rectorStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
         // "--rules-summary" is a human-only table; the JSON format carries richer per-rule data
         if ($configuration->shouldShowRulesSummary()) {
-            $this->symfonyStyle->getErrorStyle()->warning('The "--rules-summary" option is deprecated and will be removed. Use "--output-format=json" instead, which reports every applied rule with its file and line.');
+            $this->rectorStyle->getErrorStyle()->warning('The "--rules-summary" option is deprecated and will be removed. Use "--output-format=json" instead, which reports every applied rule with its file and line.');
         }
         $this->additionalAutoloader->autoloadInput($input);
         $paths = $configuration->getPaths();
@@ -151,24 +151,24 @@ EOF
         }
         // 0. warn about skipped rules that are deprecated
         if ($this->skipper->resolveDeprecatedSkippedClasses() !== []) {
-            $this->symfonyStyle->warning(sprintf('These rules are skipped, but are deprecated. Most likely you do not need to skip them anymore as not part of any set and remove them: %s%s', "\n\n", '* ' . implode("\n* ", $this->skipper->resolveDeprecatedSkippedClasses()) . "\n"));
+            $this->rectorStyle->warning(sprintf('These rules are skipped, but are deprecated. Most likely you do not need to skip them anymore as not part of any set and remove them: %s%s', "\n\n", '* ' . implode("\n* ", $this->skipper->resolveDeprecatedSkippedClasses()) . "\n"));
         }
         // 1. warn about rules registered in both withRules() and sets to avoid bloated rector.php configs
         $setAndRulesDuplicatedRegistrations = $configuration->getBothSetAndRulesDuplicatedRegistrations();
         if ($setAndRulesDuplicatedRegistrations !== []) {
-            $this->symfonyStyle->warning(sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', "\n\n", implode(' * ', $setAndRulesDuplicatedRegistrations) . "\n"));
+            $this->rectorStyle->warning(sprintf('These rules are registered in both sets and "withRules()". Remove them from "withRules()" to avoid duplications: %s* %s', "\n\n", implode(' * ', $setAndRulesDuplicatedRegistrations) . "\n"));
         }
         // 2. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
         if ($this->dynamicSourceLocatorDecorator->arePathsEmpty()) {
             // read from rector.php, no paths definition needs withPaths() config
             if ($paths === []) {
-                $this->symfonyStyle->error('Provide paths in Rector config. See ways: https://getrector.com/documentation/define-paths');
+                $this->rectorStyle->error('Provide paths in Rector config. See ways: https://getrector.com/documentation/define-paths');
                 return ExitCode::FAILURE;
             }
             // read from cli paths arguments, eg: vendor/bin/rector process A B C which A, B, and C not exists
             $isSingular = count($paths) === 1;
-            $this->symfonyStyle->error(sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', "\n\n" . ' - ', implode("\n" . ' - ', $paths)));
+            $this->rectorStyle->error(sprintf('The following given path%s do%s not match any file%s or director%s: %s%s', $isSingular ? '' : 's', $isSingular ? 'es' : '', $isSingular ? '' : 's', $isSingular ? 'y' : 'ies', "\n\n" . ' - ', implode("\n" . ' - ', $paths)));
             return ExitCode::FAILURE;
         }
         // autoload paths is register to DynamicSourceLocatorProvider,
@@ -236,6 +236,6 @@ EOF
     private function reportLevelOverflow(LevelOverflow $levelOverflow): void
     {
         $suggestedSetMethod = \PHP_VERSION_ID >= 80000 ? sprintf('->withPreparedSets(%s: true)', $levelOverflow->getSuggestedRuleset()) : sprintf('->withSets(SetList::%s)', $levelOverflow->getSuggestedSetListConstant());
-        $this->symfonyStyle->warning(sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), "\n", $suggestedSetMethod));
+        $this->rectorStyle->warning(sprintf('The "->%s()" level contains only %d rules, but you set level to %d.%sYou are using the full set now! Time to switch to more efficient "%s".', $levelOverflow->getConfigurationName(), $levelOverflow->getRuleCount(), $levelOverflow->getLevel(), "\n", $suggestedSetMethod));
     }
 }

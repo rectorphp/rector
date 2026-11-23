@@ -6,16 +6,16 @@ namespace Rector\Reporting;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
+use Rector\Console\Style\RectorStyle;
 final class DeprecatedRulesReporter
 {
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
-    public function __construct(SymfonyStyle $symfonyStyle)
+    private RectorStyle $rectorStyle;
+    public function __construct(RectorStyle $rectorStyle)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
     }
     public function reportDeprecatedRules(): int
     {
@@ -26,7 +26,7 @@ final class DeprecatedRulesReporter
             if (!is_a($registeredRectorRule, DeprecatedInterface::class, \true)) {
                 continue;
             }
-            $this->symfonyStyle->warning(sprintf('Registered rule "%s" is deprecated and will be removed. Upgrade your config to use another rule or remove it', $registeredRectorRule));
+            $this->rectorStyle->warning(sprintf('Registered rule "%s" is deprecated and will be removed. Upgrade your config to use another rule or remove it', $registeredRectorRule));
             ++$reportedCount;
         }
         return $reportedCount;
@@ -40,7 +40,7 @@ final class DeprecatedRulesReporter
             if (!is_a($skippedRectorRule, DeprecatedInterface::class, \true)) {
                 continue;
             }
-            $this->symfonyStyle->warning(sprintf('Skipped rule "%s" is deprecated', $skippedRectorRule));
+            $this->rectorStyle->warning(sprintf('Skipped rule "%s" is deprecated', $skippedRectorRule));
             ++$reportedCount;
         }
         return $reportedCount;
@@ -51,7 +51,7 @@ final class DeprecatedRulesReporter
         $deprecatedAttributesSetsArgs = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_ATTRIBUTES_SETS_ARGS);
         $reportedCount = 0;
         foreach (array_unique($deprecatedAttributesSetsArgs) as $deprecatedAttributesSetsArg) {
-            $this->symfonyStyle->warning(sprintf('The "->withAttributesSets(%s: true)" argument is deprecated and no longer applied. It is already included in the "symfony: true" argument, use it instead.', $deprecatedAttributesSetsArg));
+            $this->rectorStyle->warning(sprintf('The "->withAttributesSets(%s: true)" argument is deprecated and no longer applied. It is already included in the "symfony: true" argument, use it instead.', $deprecatedAttributesSetsArg));
             ++$reportedCount;
         }
         return $reportedCount;
@@ -62,7 +62,7 @@ final class DeprecatedRulesReporter
         $deprecatedComposerBasedArgs = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_COMPOSER_BASED_ARGS);
         $reportedCount = 0;
         foreach (array_unique($deprecatedComposerBasedArgs) as $deprecatedComposerBasedArg) {
-            $this->symfonyStyle->warning(sprintf('The "->withComposerBased(%s: true)" argument is deprecated and no longer applied. It only added named args to 2 methods of a single package, register the rule directly if needed.', $deprecatedComposerBasedArg));
+            $this->rectorStyle->warning(sprintf('The "->withComposerBased(%s: true)" argument is deprecated and no longer applied. It only added named args to 2 methods of a single package, register the rule directly if needed.', $deprecatedComposerBasedArg));
             ++$reportedCount;
         }
         return $reportedCount;
@@ -73,7 +73,7 @@ final class DeprecatedRulesReporter
         $deprecatedPreparedSetsArgs = SimpleParameterProvider::provideArrayParameter(Option::DEPRECATED_PREPARED_SETS_ARGS);
         $reportedCount = 0;
         foreach (array_unique($deprecatedPreparedSetsArgs) as $deprecatedPreparedSetsArg) {
-            $this->symfonyStyle->warning(sprintf('The "->withPreparedSets(%s: true)" argument is deprecated and no longer applied. Its rules were moved to the "codeQuality" and "codingStyle" sets, use them instead.', $deprecatedPreparedSetsArg));
+            $this->rectorStyle->warning(sprintf('The "->withPreparedSets(%s: true)" argument is deprecated and no longer applied. Its rules were moved to the "codeQuality" and "codingStyle" sets, use them instead.', $deprecatedPreparedSetsArg));
             ++$reportedCount;
         }
         return $reportedCount;

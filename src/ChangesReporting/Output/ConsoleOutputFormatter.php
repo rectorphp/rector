@@ -7,18 +7,18 @@ use RectorPrefix202611\Nette\Utils\Strings;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\Console\Style\RectorStyle;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202611\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @var string
      */
@@ -28,9 +28,9 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      * @var string
      */
     private const ON_LINE_REGEX = '# on line #';
-    public function __construct(SymfonyStyle $symfonyStyle)
+    public function __construct(RectorStyle $rectorStyle)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
     }
     public function report(ProcessResult $processResult, Configuration $configuration): void
     {
@@ -43,13 +43,13 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         }
         // to keep space between progress bar and success message
         if ($configuration->shouldShowProgressBar() && $processResult->getFileDiffs() === []) {
-            $this->symfonyStyle->newLine();
+            $this->rectorStyle->newLine();
         }
         if ($configuration->shouldShowRulesSummary()) {
             $this->reportRulesSummary($processResult, $configuration);
         }
         $message = $this->createSuccessMessage($processResult, $configuration);
-        $this->symfonyStyle->success($message);
+        $this->rectorStyle->success($message);
     }
     public function getName(): string
     {
@@ -66,7 +66,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         // normalize
         ksort($fileDiffs);
         $message = sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's');
-        $this->symfonyStyle->title($message);
+        $this->rectorStyle->title($message);
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {
             $filePath = $absoluteFilePath ? $fileDiff->getAbsoluteFilePath() ?? '' : $fileDiff->getRelativeFilePath();
@@ -77,13 +77,13 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             }
             $filePathWithUrl = $this->addEditorUrl($filePath, $fileDiff->getAbsoluteFilePath(), $fileDiff->getRelativeFilePath(), (string) $fileDiff->getFirstLineNumber());
             $message = sprintf('<options=bold>%d) %s</>', ++$i, $filePathWithUrl);
-            $this->symfonyStyle->writeln($message);
-            $this->symfonyStyle->newLine();
-            $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
+            $this->rectorStyle->writeln($message);
+            $this->rectorStyle->newLine();
+            $this->rectorStyle->writeln($fileDiff->getDiffConsoleFormatted());
             if ($fileDiff->getRectorChanges() !== []) {
-                $this->symfonyStyle->writeln('<options=underscore>Applied rules:</>');
-                $this->symfonyStyle->listing($fileDiff->getRectorShortClasses());
-                $this->symfonyStyle->newLine();
+                $this->rectorStyle->writeln('<options=underscore>Applied rules:</>');
+                $this->rectorStyle->listing($fileDiff->getRectorShortClasses());
+                $this->rectorStyle->newLine();
             }
         }
     }
@@ -101,7 +101,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             if ($error->getLine() !== null) {
                 $message .= ' On line: ' . $error->getLine();
             }
-            $this->symfonyStyle->error($message);
+            $this->rectorStyle->error($message);
         }
     }
     private function reportRulesSummary(ProcessResult $processResult, Configuration $configuration): void
@@ -111,12 +111,12 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             return;
         }
         $verb = $configuration->isDryRun() ? 'would have been applied' : 'was applied';
-        $this->symfonyStyle->section('Rules Summary');
+        $this->rectorStyle->section('Rules Summary');
         foreach ($ruleApplicationCounts as $ruleClass => $count) {
             $ruleShortClass = (string) Strings::after($ruleClass, '\\', -1);
-            $this->symfonyStyle->writeln(sprintf(' * <info>%s</info> %s <comment>%d</comment> time%s', $ruleShortClass, $verb, $count, $count > 1 ? 's' : ''));
+            $this->rectorStyle->writeln(sprintf(' * <info>%s</info> %s <comment>%d</comment> time%s', $ruleShortClass, $verb, $count, $count > 1 ? 's' : ''));
         }
-        $this->symfonyStyle->newLine();
+        $this->rectorStyle->newLine();
     }
     private function normalizePathsToRelativeWithLine(string $errorMessage): string
     {

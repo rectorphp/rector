@@ -29,6 +29,7 @@ use Rector\Console\Command\ValidateConfigCommand;
 use Rector\Console\Command\WorkerCommand;
 use Rector\Console\ConsoleApplication;
 use Rector\Console\Rule\AllRectorRulesProvider;
+use Rector\Console\Style\RectorStyle;
 use Rector\Console\Style\SymfonyStyleFactory;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -141,10 +142,12 @@ final class LazyContainerFactory
         $rectorConfig->autodiscover(__DIR__ . '/../NodeNameResolver/NodeNameResolver');
         $rectorConfig->autodiscover(__DIR__ . '/../NodeTypeResolver/NodeTypeResolver');
         $rectorConfig->autodiscover(__DIR__ . '/../ChangesReporting/Output');
-        $rectorConfig->singleton(SymfonyStyle::class, static function (RectorConfig $rectorConfig): SymfonyStyle {
+        $rectorConfig->singleton(RectorStyle::class, static function (RectorConfig $rectorConfig): RectorStyle {
             $symfonyStyleFactory = $rectorConfig->make(SymfonyStyleFactory::class);
             return $symfonyStyleFactory->create();
         });
+        // kept for extensions that still inject SymfonyStyle
+        $rectorConfig->singleton(SymfonyStyle::class, static fn(RectorConfig $rectorConfig): SymfonyStyle => $rectorConfig->make(RectorStyle::class));
     }
     private function registerAnnotationToAttributeSetters(RectorConfig $rectorConfig): void
     {

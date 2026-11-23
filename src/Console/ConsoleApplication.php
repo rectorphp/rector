@@ -6,6 +6,7 @@ namespace Rector\Console;
 use Rector\Application\VersionResolver;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
+use Rector\Console\Style\RectorStyle;
 use Rector\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202611\Symfony\Component\Console\Application;
 use RectorPrefix202611\Symfony\Component\Console\Command\Command;
@@ -13,14 +14,13 @@ use RectorPrefix202611\Symfony\Component\Console\Input\InputDefinition;
 use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202611\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202611\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202611\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202611\Webmozart\Assert\Assert;
 final class ConsoleApplication extends Application
 {
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private RectorStyle $rectorStyle;
     /**
      * @var string
      */
@@ -28,9 +28,9 @@ final class ConsoleApplication extends Application
     /**
      * @param Command[] $commands
      */
-    public function __construct(array $commands, SymfonyStyle $symfonyStyle)
+    public function __construct(array $commands, RectorStyle $rectorStyle)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->rectorStyle = $rectorStyle;
         parent::__construct(self::NAME, VersionResolver::PACKAGE_VERSION);
         Assert::notEmpty($commands);
         Assert::allIsInstanceOf($commands, Command::class);
@@ -69,7 +69,7 @@ final class ConsoleApplication extends Application
             $tokens = array_merge(['process'], $tokens);
             $privatesAccessor->setPrivateProperty($input, 'tokens', $tokens);
         } elseif (!$this->has($commandName)) {
-            $this->symfonyStyle->error(sprintf('The following given path does not match any files or directories: %s%s', "\n\n - ", $commandName));
+            $this->rectorStyle->error(sprintf('The following given path does not match any files or directories: %s%s', "\n\n - ", $commandName));
             return \Rector\Console\ExitCode::FAILURE;
         }
         return parent::doRun($input, $output);
