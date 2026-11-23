@@ -80,8 +80,8 @@ final class RemoveUnusedPromotedPropertyRector extends AbstractRector implements
 class SomeClass
 {
     public function __construct(
-        private $someUnusedDependency,
-        private $usedDependency
+        private $usedDependency,
+        private $someUnusedDependency
     ) {
     }
 
@@ -131,25 +131,27 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         $phpDocInfo = null;
-        foreach ($constructClassMethod->params as $key => $param) {
+        // only trailing params can be removed, removing earlier ones would shift positional arguments of callers
+        $isTrailingParam = \true;
+        foreach (array_reverse($constructClassMethod->params, \true) as $key => $param) {
             // only private local scope; removing public property might be dangerous
             if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
+                $isTrailingParam = \false;
                 continue;
             }
             $paramName = $this->getName($param);
             $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($node, $paramName);
             if ($propertyFetches !== []) {
-                continue;
-            }
-            if (!$this->propertyWriteonlyAnalyzer->arePropertyFetchesExclusivelyBeingAssignedTo($propertyFetches)) {
+                $isTrailingParam = \false;
                 continue;
             }
             // always changed on below code
             $hasChanged = \true;
-            // is variable used? only remove property, keep param
+            // is variable used or param is followed by other params? only remove property, keep param
             $variable = $this->betterNodeFinder->findVariableOfName((array) $constructClassMethod->stmts, $paramName);
-            if ($variable instanceof Variable) {
+            if ($variable instanceof Variable || !$isTrailingParam) {
                 $param->flags = 0;
+                $isTrailingParam = \false;
                 continue;
             }
             $phpDocInfo ??= $this->phpDocInfoFactory->createFromNode($constructClassMethod);
