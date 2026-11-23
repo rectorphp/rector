@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -76,15 +77,17 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processBoolTypeToNotBool(Node $node, Expr $leftExpr, Expr $rightExpr): ?Expr
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $node
+     */
+    private function processBoolTypeToNotBool($node, Expr $leftExpr, Expr $rightExpr): ?Expr
     {
-        if ($node instanceof Identical) {
-            return $this->refactorIdentical($leftExpr, $rightExpr);
+        $expr = $node instanceof Identical ? $this->refactorIdentical($leftExpr, $rightExpr) : $this->refactorNotIdentical($leftExpr, $rightExpr);
+        // $value = $value !== false would become a self-assign
+        if ($expr instanceof Expr && $expr->getAttribute(AttributeKey::IS_ASSIGN_VAR_IN_COMPARISON) === \true) {
+            return null;
         }
-        if ($node instanceof NotIdentical) {
-            return $this->refactorNotIdentical($leftExpr, $rightExpr);
-        }
-        return null;
+        return $expr;
     }
     private function refactorIdentical(Expr $leftExpr, Expr $rightExpr): ?Expr
     {

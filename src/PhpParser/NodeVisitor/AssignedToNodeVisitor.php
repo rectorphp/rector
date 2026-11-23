@@ -10,7 +10,10 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -41,6 +44,10 @@ final class AssignedToNodeVisitor extends NodeVisitorAbstract implements Decorat
             }
         }
         $node->expr->setAttribute(AttributeKey::IS_ASSIGNED_TO, \true);
+        if ($node->expr instanceof Identical || $node->expr instanceof NotIdentical) {
+            $this->markAssignVarInComparison($node->var, $node->expr->left);
+            $this->markAssignVarInComparison($node->var, $node->expr->right);
+        }
         if ($node->expr instanceof Assign) {
             $node->var->setAttribute(AttributeKey::IS_MULTI_ASSIGN, \true);
             $node->expr->setAttribute(AttributeKey::IS_MULTI_ASSIGN, \true);
@@ -60,5 +67,15 @@ final class AssignedToNodeVisitor extends NodeVisitorAbstract implements Decorat
             $expr = $expr->var;
             $expr->setAttribute(AttributeKey::IS_ASSIGN_OP_VAR, \true);
         }
+    }
+    private function markAssignVarInComparison(Expr $assignVar, Expr $comparedExpr): void
+    {
+        if (!$assignVar instanceof Variable || !$comparedExpr instanceof Variable) {
+            return;
+        }
+        if (!is_string($assignVar->name) || $assignVar->name !== $comparedExpr->name) {
+            return;
+        }
+        $comparedExpr->setAttribute(AttributeKey::IS_ASSIGN_VAR_IN_COMPARISON, \true);
     }
 }

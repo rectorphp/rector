@@ -116,6 +116,11 @@ final class AttributeKey
      */
     public const IS_MULTI_ASSIGN = 'is_multi_assign';
     /**
+     * The assigned variable used in its own compared value, e.g. the 2nd $value in $value = $value !== false
+     * @var string
+     */
+    public const IS_ASSIGN_VAR_IN_COMPARISON = 'is_assign_var_in_comparison';
+    /**
      * @var string
      */
     public const IS_IN_LOOP_OR_SWITCH = 'is_in_loop';
