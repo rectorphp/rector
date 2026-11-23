@@ -24,7 +24,8 @@ final class MakePropertyPromotionGuard
         if (!$this->propertyTypeChangeGuard->isLegal($property, $classReflection, $inlinePublic, \true)) {
             return \false;
         }
-        if ($class->isFinal()) {
+        // a public property in a final class is still written from outside, so it needs the same care
+        if ($class->isFinal() && !$property->isPublic()) {
             return \true;
         }
         if ($inlinePublic) {
