@@ -82,7 +82,7 @@ CODE_SAMPLE
         if (!$identical->left instanceof BooleanNot) {
             return null;
         }
-        if (!$this->getType($identical->left)->isBoolean()->yes()) {
+        if (!$this->getType($identical->left->expr)->isBoolean()->yes()) {
             return null;
         }
         if (!$this->getType($identical->right)->isBoolean()->yes()) {
