@@ -3,14 +3,17 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
+use PHPStan\Reflection\Php\PhpFunctionFromParserNodeReflection;
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArgPlaceholder;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\VariadicPlaceholder;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -20,6 +23,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
@@ -92,8 +96,37 @@ final class CallTypesResolver
     }
     private function resolveStrictArgValueType(Arg $arg): Type
     {
+        // native type of an untyped param with @param type can be narrowed by that docblock, e.g. via isset()
+        if ($this->isDocblockTypedOnlyParamVariable($arg->value)) {
+            return new MixedType();
+        }
         $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         return $this->normalizeType($argValueType);
+    }
+    private function isDocblockTypedOnlyParamVariable(Expr $expr): bool
+    {
+        if (!$expr instanceof Variable || !is_string($expr->name)) {
+            return \false;
+        }
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            return \false;
+        }
+        $functionReflection = $scope->getFunction();
+        if (!$functionReflection instanceof PhpFunctionFromParserNodeReflection) {
+            return \false;
+        }
+        foreach ($functionReflection->getOnlyVariant()->getParameters() as $parameterReflection) {
+            if ($parameterReflection->getName() !== $expr->name) {
+                continue;
+            }
+            $nativeType = $parameterReflection->getNativeType();
+            if (!$nativeType instanceof MixedType || $nativeType->isExplicitMixed()) {
+                return \false;
+            }
+            return !$parameterReflection->getPhpDocType() instanceof MixedType;
+        }
+        return \false;
     }
     private function resolveArgValueType(Arg $arg): Type
     {
