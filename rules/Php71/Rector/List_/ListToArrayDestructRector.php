@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\Php71\Rector\List_;
 
 use PhpParser\Node;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Foreach_;
@@ -67,12 +65,7 @@ CODE_SAMPLE
             if ($node->var->getAttribute(AttributeKey::KIND) === List_::KIND_ARRAY) {
                 return null;
             }
-            $list = $node->var;
-            // all list items must be set
-            if ($this->hasPartialDestruct($list)) {
-                return null;
-            }
-            $node->var = new Array_($list->items);
+            $node->var = $this->createShortList($node->var);
             return $node;
         }
         if (!$node->valueVar instanceof List_) {
@@ -81,27 +74,15 @@ CODE_SAMPLE
         if ($node->valueVar->getAttribute(AttributeKey::KIND) === List_::KIND_ARRAY) {
             return null;
         }
-        $list = $node->valueVar;
-        // all list items must be set
-        if ($this->hasPartialDestruct($list)) {
-            return null;
-        }
-        $node->valueVar = new Array_($list->items);
+        $node->valueVar = $this->createShortList($node->valueVar);
         return $node;
     }
     public function provideMinPhpVersion(): int
     {
         return PhpVersion::PHP_71;
     }
-    private function hasPartialDestruct(List_ $list): bool
+    private function createShortList(List_ $list): List_
     {
-        $found = \false;
-        foreach ($list->items as $arrayItem) {
-            if (!$arrayItem instanceof ArrayItem) {
-                $found = \true;
-                break;
-            }
-        }
-        return $found;
+        return new List_($list->items, [AttributeKey::KIND => List_::KIND_ARRAY]);
     }
 }
