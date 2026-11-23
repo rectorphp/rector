@@ -110,10 +110,6 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             }
             return new Bool_($expr->expr);
         }
-        $exprType = $this->getType($expr);
-        if ($exprType->isBoolean()->yes()) {
-            return new BooleanNot($expr);
-        }
-        return new BooleanNot(new Bool_($expr));
+        return new BooleanNot($expr);
     }
 }
