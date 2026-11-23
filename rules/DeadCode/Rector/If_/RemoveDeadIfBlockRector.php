@@ -96,12 +96,12 @@ CODE_SAMPLE
             $node->else = null;
             return $this->refactor($node) ?? $node;
         }
-        foreach ($node->elseifs as $elseif) {
-            $keep_elseifs = array_values(array_filter($node->elseifs, fn(ElseIf_ $elseif): bool => $elseif->stmts !== [] || $this->sideEffectNodeDetector->detect($elseif->cond)));
-            if (count($node->elseifs) !== count($keep_elseifs)) {
-                $node->elseifs = $keep_elseifs;
-                return $this->refactor($node) ?? $node;
-            }
+        // An empty elseif still catches its case and stops later branches from running,
+        // so it can only be removed when it is the last branch
+        $lastElseIf = end($node->elseifs);
+        if ($lastElseIf instanceof ElseIf_ && !$node->else instanceof Else_ && $lastElseIf->stmts === [] && !$this->sideEffectNodeDetector->detect($lastElseIf->cond)) {
+            array_pop($node->elseifs);
+            return $this->refactor($node) ?? $node;
         }
         if ($node->stmts !== []) {
             return null;
@@ -119,16 +119,13 @@ CODE_SAMPLE
         if ($node->elseifs !== []) {
             // A trailing else would run when the negated if condition is true,
             // which the original empty if body never did, so keep the code as is.
-            if ($node->else instanceof Else_) {
+            // Later elseifs would run when the negated if condition is false too, so merge only a single elseif.
+            if ($node->else instanceof Else_ || count($node->elseifs) > 1) {
                 return null;
             }
             $firstElseIf = $node->elseifs[0];
             $cond = new BooleanAnd($this->conditionInverter->createInvertedCondition($node->cond), $firstElseIf->cond);
             $if = new If_($cond, ['stmts' => $firstElseIf->stmts]);
-            if (count($node->elseifs) > 1) {
-                $if->elseifs = \array_slice($node->elseifs, 1);
-            }
-            $if->else = $node->else;
             return $this->refactor($if) ?? $if;
         }
         if ($node->else instanceof Else_) {
