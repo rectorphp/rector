@@ -5,6 +5,7 @@ namespace Rector\CodeQuality\Rector\Switch_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
@@ -54,7 +55,7 @@ class SomeObject
     public function run($value)
     {
         $result = 1;
-        if ($value === 100) {
+        if ($value == 100) {
             $result = 1000;
         }
 
@@ -90,9 +91,22 @@ CODE_SAMPLE
             // remove default clause because it cause syntax error
             return array_filter($onlyCase->stmts, static fn(Stmt $stmt): bool => !$stmt instanceof Break_);
         }
-        $if = new If_(new Identical($node->cond, $onlyCase->cond));
+        $if = new If_($this->createComparison($node->cond, $onlyCase->cond));
         $if->stmts = $this->switchManipulator->removeBreakNodes($onlyCase->stmts);
         return $if;
+    }
+    /**
+     * switch compares loosely, so strict comparison is safe only for 2 integers
+     * @return \PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\Identical
+     */
+    private function createComparison(Expr $leftExpr, Expr $rightExpr)
+    {
+        $leftType = $this->getType($leftExpr);
+        $rightType = $this->getType($rightExpr);
+        if ($leftType->isInteger()->yes() && $rightType->isInteger()->yes()) {
+            return new Identical($leftExpr, $rightExpr);
+        }
+        return new Equal($leftExpr, $rightExpr);
     }
     /**
      * @param Stmt[] $stmts
