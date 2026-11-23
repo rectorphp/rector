@@ -59,6 +59,10 @@ final class ClosureFromCallableToFirstClassCallableRector extends AbstractRector
                 return null;
             }
             if ($array->items[0]->value instanceof Variable) {
+                // a string holds a static callable, e.g. 'SomeClass'
+                if (!$this->getType($array->items[0]->value)->isObject()->yes()) {
+                    return null;
+                }
                 return new MethodCall($array->items[0]->value, $array->items[1]->value->value, [new VariadicPlaceholder()]);
             }
             if ($array->items[0]->value instanceof String_) {
