@@ -5,7 +5,9 @@ namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -17,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -38,11 +41,16 @@ final class RemoveUnusedPrivatePropertyRector extends AbstractRector
      * @readonly
      */
     private PhpDocInfoFactory $phpDocInfoFactory;
-    public function __construct(PropertyFetchFinder $propertyFetchFinder, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     */
+    private SideEffectNodeDetector $sideEffectNodeDetector;
+    public function __construct(PropertyFetchFinder $propertyFetchFinder, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, SideEffectNodeDetector $sideEffectNodeDetector)
     {
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->propertyWriteonlyAnalyzer = $propertyWriteonlyAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->sideEffectNodeDetector = $sideEffectNodeDetector;
     }
     public function getRuleDefinition(): RuleDefinition
     {
@@ -174,10 +182,23 @@ CODE_SAMPLE
                 return null;
             }
             if ($node instanceof Expression) {
+                // keep the side effect of the assigned value, e.g. a "new" or a call
+                $assignedExpr = $this->cleanCastedExpr($assign->expr);
+                if ($this->sideEffectNodeDetector->detect($assignedExpr)) {
+                    $node->expr = $assignedExpr;
+                    return $node;
+                }
                 return NodeVisitor::REMOVE_NODE;
             }
             $node->expr = $node->expr->expr;
             return $node;
         });
+    }
+    private function cleanCastedExpr(Expr $expr): Expr
+    {
+        if (!$expr instanceof Cast) {
+            return $expr;
+        }
+        return $this->cleanCastedExpr($expr->expr);
     }
 }
