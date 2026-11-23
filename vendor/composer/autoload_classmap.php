@@ -903,6 +903,7 @@ return array(
     'Rector\\BetterPhpDocParser\\ValueObject\\StartAndEnd' => $baseDir . '/src/BetterPhpDocParser/ValueObject/StartAndEnd.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\FullyQualifiedIdentifierTypeNode' => $baseDir . '/src/BetterPhpDocParser/ValueObject/Type/FullyQualifiedIdentifierTypeNode.php',
     'Rector\\Bootstrap\\AutoloadFileParameterResolver' => $baseDir . '/src/Bootstrap/AutoloadFileParameterResolver.php',
+    'Rector\\Bootstrap\\CliOptionValueResolver' => $baseDir . '/src/Bootstrap/CliOptionValueResolver.php',
     'Rector\\Bootstrap\\ExtensionConfigResolver' => $baseDir . '/src/Bootstrap/ExtensionConfigResolver.php',
     'Rector\\Bootstrap\\RectorConfigsResolver' => $baseDir . '/src/Bootstrap/RectorConfigsResolver.php',
     'Rector\\Bridge\\SetRectorsResolver' => $baseDir . '/src/Bridge/SetRectorsResolver.php',

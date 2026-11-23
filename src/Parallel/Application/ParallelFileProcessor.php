@@ -12,6 +12,7 @@ use RectorPrefix202611\React\Socket\TcpServer;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Command\ProcessCommand;
+use Rector\Console\ExitCode;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
 use Rector\Parallel\Enum\Action;
 use Rector\Parallel\Enum\Content;
@@ -24,7 +25,6 @@ use Rector\Parallel\ValueObject\ProcessPool;
 use Rector\Parallel\ValueObject\Schedule;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
-use RectorPrefix202611\Symfony\Component\Console\Command\Command;
 use RectorPrefix202611\Symfony\Component\Console\Input\InputInterface;
 use Throwable;
 /**
@@ -162,7 +162,7 @@ final class ParallelFileProcessor
                 // 3. callable on exit
                 function ($exitCode, string $stdErr) use ($parallelResultCollector, $processIdentifier): void {
                     $this->processPool->tryQuitProcess($processIdentifier);
-                    if ($exitCode === Command::SUCCESS) {
+                    if ($exitCode === ExitCode::SUCCESS) {
                         return;
                     }
                     if ($exitCode === null) {

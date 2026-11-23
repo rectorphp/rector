@@ -1129,6 +1129,7 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\BetterPhpDocParser\\ValueObject\\StartAndEnd' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/ValueObject/StartAndEnd.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\Type\\FullyQualifiedIdentifierTypeNode' => __DIR__ . '/../..' . '/src/BetterPhpDocParser/ValueObject/Type/FullyQualifiedIdentifierTypeNode.php',
         'Rector\\Bootstrap\\AutoloadFileParameterResolver' => __DIR__ . '/../..' . '/src/Bootstrap/AutoloadFileParameterResolver.php',
+        'Rector\\Bootstrap\\CliOptionValueResolver' => __DIR__ . '/../..' . '/src/Bootstrap/CliOptionValueResolver.php',
         'Rector\\Bootstrap\\ExtensionConfigResolver' => __DIR__ . '/../..' . '/src/Bootstrap/ExtensionConfigResolver.php',
         'Rector\\Bootstrap\\RectorConfigsResolver' => __DIR__ . '/../..' . '/src/Bootstrap/RectorConfigsResolver.php',
         'Rector\\Bridge\\SetRectorsResolver' => __DIR__ . '/../..' . '/src/Bridge/SetRectorsResolver.php',

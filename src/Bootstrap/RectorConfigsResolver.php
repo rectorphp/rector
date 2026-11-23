@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Bootstrap;
 
 use Rector\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix202611\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix202611\Webmozart\Assert\Assert;
 final class RectorConfigsResolver
 {
@@ -18,22 +17,21 @@ final class RectorConfigsResolver
     public const DEFAULT_DIST_CONFIG_FILE = 'rector.dist.php';
     public function provide(): BootstrapConfigs
     {
-        $argvInput = new ArgvInput();
-        $mainConfigFile = $this->resolveFromInputWithFallback($argvInput);
+        $mainConfigFile = $this->resolveFromInputWithFallback();
         return new BootstrapConfigs($mainConfigFile, []);
     }
-    private function resolveFromInput(ArgvInput $argvInput): ?string
+    private function resolveFromInput(): ?string
     {
-        $configFile = $this->getOptionValue($argvInput, ['--config', '-c']);
+        $configFile = \Rector\Bootstrap\CliOptionValueResolver::resolve($_SERVER['argv'] ?? [], ['--config', '-c']);
         if ($configFile === null) {
             return null;
         }
         Assert::fileExists($configFile);
         return realpath($configFile);
     }
-    private function resolveFromInputWithFallback(ArgvInput $argvInput): ?string
+    private function resolveFromInputWithFallback(): ?string
     {
-        $configFile = $this->resolveFromInput($argvInput);
+        $configFile = $this->resolveFromInput();
         if ($configFile !== null) {
             return $configFile;
         }
@@ -51,17 +49,5 @@ final class RectorConfigsResolver
             return null;
         }
         return $rootFallbackFile;
-    }
-    /**
-     * @param string[] $optionNames
-     */
-    private function getOptionValue(ArgvInput $argvInput, array $optionNames): ?string
-    {
-        foreach ($optionNames as $optionName) {
-            if ($argvInput->hasParameterOption($optionName, \true)) {
-                return $argvInput->getParameterOption($optionName, null, \true);
-            }
-        }
-        return null;
     }
 }
