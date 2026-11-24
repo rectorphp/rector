@@ -25,7 +25,7 @@ final class VersionCompareFuncCallArgumentRector extends AbstractRector implemen
     /**
      * @var array<string, string>
      */
-    private const OPERATOR_MAP = ['gte' => 'ge', 'lte' => 'le', '' => '!=', '!' => '!=', 'g' => 'gt', 'l' => 'lt', 'n' => 'ne'];
+    private const OPERATOR_MAP = ['gte' => 'ge', 'lte' => 'le', '' => '<', '!' => '!=', 'g' => 'gt', 'l' => 'lt', 'n' => 'ne'];
     public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
