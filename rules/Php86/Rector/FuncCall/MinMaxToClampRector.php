@@ -92,9 +92,38 @@ CODE_SAMPLE
         }
         [$valueExpr, $innerBoundExpr] = $valueAndBound;
         if ($this->isName($outerFuncCall, 'max')) {
-            return $this->nodeFactory->createFuncCall('clamp', [$valueExpr, $outerBoundExpr, $innerBoundExpr]);
+            [$minExpr, $maxExpr] = [$outerBoundExpr, $innerBoundExpr];
+        } else {
+            [$minExpr, $maxExpr] = [$innerBoundExpr, $outerBoundExpr];
         }
-        return $this->nodeFactory->createFuncCall('clamp', [$valueExpr, $innerBoundExpr, $outerBoundExpr]);
+        // clamp() throws ValueError when min > max, while nested min()/max() returns a value
+        if (!$this->isProvenMinLowerOrEqualMax($minExpr, $maxExpr)) {
+            return null;
+        }
+        return $this->nodeFactory->createFuncCall('clamp', [$valueExpr, $minExpr, $maxExpr]);
+    }
+    private function isProvenMinLowerOrEqualMax(Expr $minExpr, Expr $maxExpr): bool
+    {
+        $minValues = $this->getNativeType($minExpr)->getConstantScalarValues();
+        $maxValues = $this->getNativeType($maxExpr)->getConstantScalarValues();
+        if ($minValues === [] || $maxValues === []) {
+            return \false;
+        }
+        // clamp() throws ValueError on NAN bounds as well
+        foreach (array_merge($minValues, $maxValues) as $boundValue) {
+            if (is_float($boundValue) && is_nan($boundValue)) {
+                return \false;
+            }
+        }
+        // constants like PHP_INT_MAX resolve to several platform values, all of them must hold
+        foreach ($minValues as $minValue) {
+            foreach ($maxValues as $maxValue) {
+                if ($minValue > $maxValue) {
+                    return \false;
+                }
+            }
+        }
+        return \true;
     }
     private function isSupportedArg(Arg $arg): bool
     {
