@@ -8,8 +8,9 @@ use Rector\CodeQuality\Rector\Attribute\SortAttributeNamedArgsRector;
 use Rector\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector;
 use Rector\CodeQuality\Rector\CallLike\AddNameToNullArgumentRector;
 use Rector\CodeQuality\Rector\FuncCall\SortCallLikeNamedArgsRector;
+use Rector\CodeQuality\Rector\New_\NarrowPreviousExceptionCodeArgRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\MethodCall\RemoveNullNamedArgOnNullDefaultParamRector;
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->rules([AddNameToNullArgumentRector::class, AddNameToBooleanArgumentRector::class, RemoveNullNamedArgOnNullDefaultParamRector::class, SortCallLikeNamedArgsRector::class, SortAttributeNamedArgsRector::class, ExplicitAttributeNamedArgsRector::class]);
+    $rectorConfig->rules([AddNameToNullArgumentRector::class, AddNameToBooleanArgumentRector::class, RemoveNullNamedArgOnNullDefaultParamRector::class, SortCallLikeNamedArgsRector::class, SortAttributeNamedArgsRector::class, ExplicitAttributeNamedArgsRector::class, NarrowPreviousExceptionCodeArgRector::class]);
 };

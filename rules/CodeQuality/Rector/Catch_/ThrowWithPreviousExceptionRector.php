@@ -155,11 +155,8 @@ CODE_SAMPLE
         /** @var Arg $arg1 */
         $arg1 = $new->args[1];
         if ($arg1->name instanceof Identifier && $arg1->name->toString() === 'previous') {
-            if ($hasCodeParameter && !$hasCodeArgument) {
-                $new->args[1] = new Arg(new MethodCall($caughtThrowableVariable, 'getCode'), \false, \false, [], $shouldUseNamedArguments ? new Identifier('code') : null);
-                $new->args[$exceptionArgumentPosition] = $arg1;
-                $hasChanged = \true;
-            } elseif (!$hasChanged) {
+            // previous is already passed, code is omitted on purpose
+            if (!$hasChanged) {
                 return null;
             }
         } elseif ($this->hasParameter($new, 'previous') && !$this->hasArgument($new, 'previous')) {

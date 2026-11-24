@@ -1218,6 +1218,7 @@ class ComposerStaticInitfaf6b56ca49b22c929b219425034a021
         'Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Isset_/IssetOnPropertyObjectToPropertyExistsRector.php',
         'Rector\\CodeQuality\\Rector\\LogicalAnd\\AndAssignsToSeparateLinesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/LogicalAnd/AndAssignsToSeparateLinesRector.php',
         'Rector\\CodeQuality\\Rector\\LogicalAnd\\LogicalToBooleanRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/LogicalAnd/LogicalToBooleanRector.php',
+        'Rector\\CodeQuality\\Rector\\New_\\NarrowPreviousExceptionCodeArgRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/New_/NarrowPreviousExceptionCodeArgRector.php',
         'Rector\\CodeQuality\\Rector\\New_\\NewStaticToNewSelfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/New_/NewStaticToNewSelfRector.php',
         'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
         'Rector\\CodeQuality\\Rector\\NullsafeMethodCall\\CleanupUnneededNullsafeOperatorRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/NullsafeMethodCall/CleanupUnneededNullsafeOperatorRector.php',
