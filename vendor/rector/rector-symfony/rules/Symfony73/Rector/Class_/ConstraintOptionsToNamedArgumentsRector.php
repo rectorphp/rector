@@ -143,6 +143,17 @@ CODE_SAMPLE
         if ($namedArgs === []) {
             return null;
         }
+        // keep named arguments passed next to the options array
+        $namedArgNames = array_map(static fn(Arg $arg): string => (string) $arg->name, $namedArgs);
+        foreach (array_slice($args, 1) as $arg) {
+            if (!$arg->name instanceof Identifier || $arg->unpack) {
+                return null;
+            }
+            if (in_array($arg->name->toString(), $namedArgNames, \true)) {
+                return null;
+            }
+            $namedArgs[] = $arg;
+        }
         $node->args = $namedArgs;
         return $node;
     }
