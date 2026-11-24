@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Stmt\Expression;
@@ -125,6 +124,10 @@ CODE_SAMPLE
                 continue;
             }
             $match = $matchResult->getMatch();
+            // (int) cast would turn loose "777abc" == 777 (false) into 777 === 777 (true)
+            if ($this->isStringCondWithIntArm($match)) {
+                continue;
+            }
             if ($matchResult->shouldRemoveNextStmt() && $isReturn) {
                 unset($node->stmts[$key + 1]);
             }
@@ -167,9 +170,7 @@ CODE_SAMPLE
     private function castMatchCond(Match_ $match): void
     {
         $type = $this->nodeTypeResolver->getNativeType($match->cond);
-        $isNativeCondString = $type->isString()->yes();
-        $isNativeCondInt = $type->isInteger()->yes();
-        if (!$isNativeCondString && !$isNativeCondInt) {
+        if (!$type->isInteger()->yes()) {
             return;
         }
         $armCondType = [];
@@ -180,9 +181,7 @@ CODE_SAMPLE
             }
             foreach ($arm->conds as $armCond) {
                 $armCondType = $this->nodeTypeResolver->getNativeType($armCond);
-                if ($armCondType->isInteger()->yes() && $isNativeCondString) {
-                    $newMatchCond = new Int_($match->cond);
-                } elseif ($armCondType->isString()->yes() && $isNativeCondInt) {
+                if ($armCondType->isString()->yes()) {
                     $newMatchCond = new String_($match->cond);
                 } else {
                     $newMatchCond = null;
@@ -193,6 +192,23 @@ CODE_SAMPLE
         if ($newMatchCond instanceof Cast) {
             $match->cond = $newMatchCond;
         }
+    }
+    private function isStringCondWithIntArm(Match_ $match): bool
+    {
+        if (!$this->nodeTypeResolver->getNativeType($match->cond)->isString()->yes()) {
+            return \false;
+        }
+        foreach ($match->arms as $arm) {
+            if ($arm->conds === null) {
+                continue;
+            }
+            foreach ($arm->conds as $armCond) {
+                if ($this->nodeTypeResolver->getNativeType($armCond)->isInteger()->yes()) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
     private function mirrorDynamicBoolExpr(Match_ $match): void
     {
