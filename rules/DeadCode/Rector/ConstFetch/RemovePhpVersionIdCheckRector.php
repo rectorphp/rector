@@ -133,7 +133,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersionProvider->provide() < $value->value) {
+        if ($this->phpVersionProvider->provide() <= $value->value) {
             return null;
         }
         if ($if->stmts === []) {
@@ -167,7 +167,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersionProvider->provide() >= $value->value) {
+        if ($this->phpVersionProvider->provide() > $value->value) {
             return NodeVisitor::REMOVE_NODE;
         }
         return null;
@@ -194,7 +194,7 @@ CODE_SAMPLE
         if (!$value instanceof Int_) {
             return null;
         }
-        if ($this->phpVersionProvider->provide() < $value->value) {
+        if ($this->phpVersionProvider->provide() <= $value->value) {
             return null;
         }
         if ($if->stmts === []) {
