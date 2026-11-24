@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\Ternary;
 use Rector\NodeManipulator\BinaryOpManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php71\ValueObject\TwoNodeMatch;
-use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -27,18 +26,13 @@ final class SimplifyConditionsRector extends AbstractRector
     /**
      * @readonly
      */
-    private AssignAndBinaryMap $assignAndBinaryMap;
-    /**
-     * @readonly
-     */
     private BinaryOpManipulator $binaryOpManipulator;
     /**
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, BinaryOpManipulator $binaryOpManipulator, ValueResolver $valueResolver)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator, ValueResolver $valueResolver)
     {
-        $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->binaryOpManipulator = $binaryOpManipulator;
         $this->valueResolver = $valueResolver;
     }
@@ -102,7 +96,7 @@ final class SimplifyConditionsRector extends AbstractRector
     }
     private function createInversedBooleanOp(BinaryOp $binaryOp): ?BinaryOp
     {
-        $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOp);
+        $inversedBinaryClass = $this->binaryOpManipulator->resolveSafeInversedClass($binaryOp);
         if ($inversedBinaryClass === null) {
             return null;
         }

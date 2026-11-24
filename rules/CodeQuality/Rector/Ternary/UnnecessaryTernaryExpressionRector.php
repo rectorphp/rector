@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Ternary;
-use Rector\PhpParser\Node\AssignAndBinaryMap;
+use Rector\NodeManipulator\BinaryOpManipulator;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
@@ -22,14 +22,14 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     /**
      * @readonly
      */
-    private AssignAndBinaryMap $assignAndBinaryMap;
+    private BinaryOpManipulator $binaryOpManipulator;
     /**
      * @readonly
      */
     private ValueResolver $valueResolver;
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, ValueResolver $valueResolver)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator, ValueResolver $valueResolver)
     {
-        $this->assignAndBinaryMap = $assignAndBinaryMap;
+        $this->binaryOpManipulator = $binaryOpManipulator;
         $this->valueResolver = $valueResolver;
     }
     public function getRuleDefinition(): RuleDefinition
@@ -74,7 +74,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
             return $binaryOperation;
         }
-        $inversedBinaryClass = $this->assignAndBinaryMap->getInversed($binaryOperation);
+        $inversedBinaryClass = $this->binaryOpManipulator->resolveSafeInversedClass($binaryOperation);
         if ($inversedBinaryClass === null) {
             return null;
         }
