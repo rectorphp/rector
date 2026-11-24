@@ -108,18 +108,20 @@ CODE_SAMPLE
         if ($classMethod->isAbstract()) {
             return \true;
         }
+        // final method cannot be overridden by child
+        $canBeOverridden = !$isFinalClass && !$classMethod->isFinal();
         // is not final and has only exception? possibly implemented by child
-        if (!$isFinalClass && $this->hasExceptionOnly($classMethod)) {
+        if ($canBeOverridden && $this->hasExceptionOnly($classMethod)) {
             return \true;
         }
         // possibly required by child implementation
-        if (!$isFinalClass && $classMethod->stmts === []) {
+        if ($canBeOverridden && $classMethod->stmts === []) {
             return \true;
         }
         if ($classMethod->isProtected()) {
-            return !$isFinalClass;
+            return $canBeOverridden;
         }
-        return $classReflection->isAbstract();
+        return !$classMethod->isFinal() && $classReflection->isAbstract();
     }
     private function hasExceptionOnly(ClassMethod $classMethod): bool
     {
