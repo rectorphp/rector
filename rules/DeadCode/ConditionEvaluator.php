@@ -60,11 +60,11 @@ final class ConditionEvaluator
         }
         if ($binaryToVersionCompareCondition->getBinaryClass() === Equal::class) {
             // weak comparison on purpose
-            return $binaryToVersionCompareCondition->getExpectedValue() === $versionCompareResult;
+            return $binaryToVersionCompareCondition->getExpectedValue() == $versionCompareResult;
         }
         if ($binaryToVersionCompareCondition->getBinaryClass() === NotEqual::class) {
             // weak comparison on purpose
-            return $binaryToVersionCompareCondition->getExpectedValue() !== $versionCompareResult;
+            return $binaryToVersionCompareCondition->getExpectedValue() != $versionCompareResult;
         }
         throw new ShouldNotHappenException();
     }
