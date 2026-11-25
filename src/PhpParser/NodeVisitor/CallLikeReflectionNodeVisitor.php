@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
@@ -22,7 +23,6 @@ use PHPStan\Type\ObjectType;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
-use Rector\PHPStan\ScopeFetcher;
 use Rector\Reflection\ReflectionResolver;
 /**
  * Decorates call args using the resolved function-like reflection, resolved once per call:
@@ -116,7 +116,12 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
         if (!array_any($args, fn(Arg $arg): bool => $this->isArrayCallableShape($arg->value))) {
             return;
         }
-        $parameterReflections = ParametersAcceptorSelectorVariantsWrapper::select($functionLikeReflection, $callLike, ScopeFetcher::fetch($callLike))->getParameters();
+        // nodes without scope, e.g. inside a trait-level attribute, cannot be refactored by scope-aware rules anyway
+        $scope = $callLike->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            return;
+        }
+        $parameterReflections = ParametersAcceptorSelectorVariantsWrapper::select($functionLikeReflection, $callLike, $scope)->getParameters();
         $closureObjectType = new ObjectType('Closure');
         foreach ($args as $position => $arg) {
             if (!$this->isArrayCallableShape($arg->value)) {
