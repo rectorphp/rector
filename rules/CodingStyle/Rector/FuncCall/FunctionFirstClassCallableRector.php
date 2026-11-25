@@ -114,16 +114,15 @@ CODE_SAMPLE
      */
     private function isShadowedFunction(FuncCall $funcCall, string $functionName): bool
     {
-        $namespaceName = ScopeFetcher::fetch($funcCall)->getNamespace();
-        if ($namespaceName !== null && $this->reflectionProvider->hasFunction(new FullyQualified($namespaceName . '\\' . $functionName), null)) {
+        $functionNameNode = new Name($functionName);
+        $functionCallScope = ScopeFetcher::fetch($funcCall);
+        $resolvedFunctionName = $this->reflectionProvider->resolveFunctionName($functionNameNode, $functionCallScope);
+        if ($resolvedFunctionName !== null && $resolvedFunctionName !== $functionName) {
             return \true;
         }
         foreach ($this->useImportsResolver->resolve() as $use) {
             foreach ($use->uses as $useItem) {
-                if ($use->type !== Use_::TYPE_FUNCTION && $useItem->type !== Use_::TYPE_FUNCTION) {
-                    continue;
-                }
-                if ($useItem->getAlias()->toLowerString() === strtolower($functionName)) {
+                if (($use->type === Use_::TYPE_FUNCTION || $useItem->type === Use_::TYPE_FUNCTION) && $this->isName($useItem->getAlias(), $functionName)) {
                     return \true;
                 }
             }
