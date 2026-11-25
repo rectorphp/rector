@@ -23,6 +23,7 @@ use Rector\Config\RectorConfig;
 use Rector\Configuration\ConfigurationRuleFilter;
 use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\Console\Command\ComposerBasedCommand;
+use Rector\Console\Command\DumpConfigCommand;
 use Rector\Console\Command\ListRulesCommand;
 use Rector\Console\Command\ProcessCommand;
 use Rector\Console\Command\ValidateConfigCommand;
@@ -100,6 +101,7 @@ final class LazyContainerFactory
         $rectorConfig->singleton(AllRectorRulesProvider::class);
         $rectorConfig->singleton(ListRulesCommand::class);
         $rectorConfig->singleton(ComposerBasedCommand::class);
+        $rectorConfig->singleton(DumpConfigCommand::class);
     }
     private function registerFileProcessing(RectorConfig $rectorConfig): void
     {
