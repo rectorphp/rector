@@ -119,7 +119,7 @@ abstract class AbstractString implements \JsonSerializable
             $n = (string) $n;
             $j = $this->indexOfLast($n, $offset);
             if (null !== $j && $j >= $i) {
-                $i = $offset = $j;
+                $i = $j;
                 $str->string = $n;
             }
         }
@@ -177,7 +177,7 @@ abstract class AbstractString implements \JsonSerializable
             $n = (string) $n;
             $j = $this->indexOfLast($n, $offset);
             if (null !== $j && $j >= $i) {
-                $i = $offset = $j;
+                $i = $j;
                 $str->string = $n;
             }
         }
@@ -322,7 +322,7 @@ abstract class AbstractString implements \JsonSerializable
         foreach ($needle as $n) {
             $j = $this->indexOfLast((string) $n, $offset);
             if (null !== $j && $j >= $i) {
-                $i = $offset = $j;
+                $i = $j;
             }
         }
         return $i;
@@ -477,17 +477,17 @@ abstract class AbstractString implements \JsonSerializable
     {
         $b = new ByteString();
         $toEncoding = \in_array($toEncoding, ['utf8', 'utf-8', 'UTF8'], \true) ? 'UTF-8' : $toEncoding;
-        if (null === $toEncoding || $toEncoding === $fromEncoding = $this instanceof AbstractUnicodeString || preg_match('//u', $b->string) ? 'UTF-8' : 'Windows-1252') {
+        if (null === $toEncoding || $toEncoding === $fromEncoding = $this instanceof AbstractUnicodeString || preg_match('//u', $this->string) ? 'UTF-8' : 'Windows-1252') {
             $b->string = $this->string;
             return $b;
         }
         try {
-            $b->string = mb_convert_encoding($this->string, $toEncoding, 'UTF-8');
+            $b->string = mb_convert_encoding($this->string, $toEncoding, $fromEncoding);
         } catch (\ValueError $e) {
             if (!\function_exists('iconv') && !\function_exists('RectorPrefix202611\iconv')) {
                 throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
             }
-            $b->string = iconv('UTF-8', $toEncoding, $this->string);
+            $b->string = iconv($fromEncoding, $toEncoding, $this->string);
         }
         return $b;
     }

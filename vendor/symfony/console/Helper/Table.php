@@ -474,9 +474,9 @@ class Table
             $titleLength = Helper::width(Helper::removeDecoration($formatter = $this->output->getFormatter(), $formattedTitle = \sprintf($titleFormat, $title)));
             $markupLength = Helper::width($markup);
             if ($titleLength > $limit = $markupLength - 4) {
-                $titleLength = $limit;
                 $formatLength = Helper::width(Helper::removeDecoration($formatter, \sprintf($titleFormat, '')));
-                $formattedTitle = \sprintf($titleFormat, Helper::substr($title, 0, $limit - $formatLength - 3) . '...');
+                $formattedTitle = \sprintf($titleFormat, Helper::substrToWidth($title, $limit - $formatLength - 3) . '...');
+                $titleLength = Helper::width(Helper::removeDecoration($formatter, $formattedTitle));
             }
             $titleStart = intdiv($markupLength - $titleLength, 2);
             if (\false === mb_detect_encoding($markup, null, \true)) {
@@ -754,11 +754,8 @@ class Table
         $openTags = [[]];
         foreach ($lines as $i => $line) {
             $tags = $openTags[$i];
-            preg_match_all('#<(?:[a-z](?:[^\\\\<>]*+|\\\\.)*|/(?:[a-z][^<>]*+)?)>#i', $line, $matches, \PREG_OFFSET_CAPTURE);
-            foreach ($matches[0] as [$tag, $offset]) {
-                if ($offset && '\\' === $line[$offset - 1]) {
-                    continue;
-                }
+            preg_match_all('#(?<!\\\\)<(?:[a-z](?:[^\\\\<>]++|\\\\.)*+|/(?:[a-z][^<>]*+)?)>#i', $line, $matches);
+            foreach ($matches[0] as $tag) {
                 if ('</>' !== $tag) {
                     // the formatter pushes the style of a style tag, and prints any other tag as is
                     $name = ltrim((string) substr($tag, 1), '/');

@@ -152,7 +152,7 @@ final class RectorConfigBuilder
     {
         // not to miss it by accident
         if ($this->isWithPhpSetsUsed === \true) {
-            $this->sets[] = SetList::PHP_POLYFILLS;
+            $this->sets[] = __DIR__ . '/../../config/set/php-polyfills.php';
         }
         if ($this->isPhpSetsVersionPicked && $this->pickedPhpSetsVersion !== null) {
             SimpleParameterProvider::setParameter(\Rector\Configuration\Option::POLYFILL_CEILING_PHP_VERSION, $this->pickedPhpSetsVersion);

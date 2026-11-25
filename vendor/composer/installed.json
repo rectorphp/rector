@@ -1808,17 +1808,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.4.50",
-            "version_normalized": "6.4.50.0",
+            "version": "v6.4.51",
+            "version_normalized": "6.4.51.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "955771637c0a01d5e91730aa8f63edae5190e2c7"
+                "reference": "3176cb05763b4690fd0b9f4073fa452c4c9163bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/955771637c0a01d5e91730aa8f63edae5190e2c7",
-                "reference": "955771637c0a01d5e91730aa8f63edae5190e2c7",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/3176cb05763b4690fd0b9f4073fa452c4c9163bb",
+                "reference": "3176cb05763b4690fd0b9f4073fa452c4c9163bb",
                 "shasum": ""
             },
             "require": {
@@ -1851,8 +1851,8 @@
                 "symfony\/stopwatch": "^5.4|^6.0|^7.0",
                 "symfony\/var-dumper": "^5.4|^6.0|^7.0"
             },
-            "time": "2026-11-03T21:19:33+00:00",
-            "published-time": "2026-11-04T11:24:42+00:00",
+            "time": "2026-11-06T16:06:30+00:00",
+            "published-time": "2026-11-25T09:20:03+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1886,7 +1886,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.50"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.4.51"
             },
             "funding": [
                 {
@@ -1985,17 +1985,17 @@
         },
         {
             "name": "symfony\/filesystem",
-            "version": "v8.1.11",
-            "version_normalized": "8.1.11.0",
+            "version": "v8.1.12",
+            "version_normalized": "8.1.12.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/filesystem.git",
-                "reference": "58f57b6a33e3495f7f41e01258f1ae5ef76cccd2"
+                "reference": "a8f7a3cf9d3140902eaee85baf1f8e98666d336a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/58f57b6a33e3495f7f41e01258f1ae5ef76cccd2",
-                "reference": "58f57b6a33e3495f7f41e01258f1ae5ef76cccd2",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/a8f7a3cf9d3140902eaee85baf1f8e98666d336a",
+                "reference": "a8f7a3cf9d3140902eaee85baf1f8e98666d336a",
                 "shasum": ""
             },
             "require": {
@@ -2007,8 +2007,8 @@
             "require-dev": {
                 "symfony\/process": "^7.4|^8.0"
             },
-            "time": "2026-11-04T08:39:20+00:00",
-            "published-time": "2026-11-04T11:32:01+00:00",
+            "time": "2026-11-24T15:59:55+00:00",
+            "published-time": "2026-11-25T09:29:32+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2036,7 +2036,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v8.1.11"
+                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v8.1.12"
             },
             "funding": [
                 {
@@ -2060,17 +2060,17 @@
         },
         {
             "name": "symfony\/finder",
-            "version": "v8.1.11",
-            "version_normalized": "8.1.11.0",
+            "version": "v8.1.12",
+            "version_normalized": "8.1.12.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/finder.git",
-                "reference": "a2902e479ba5691d20d51d100a715ea19ad2c837"
+                "reference": "7022913b72c56ac5123922726aa94f2f98b726ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/a2902e479ba5691d20d51d100a715ea19ad2c837",
-                "reference": "a2902e479ba5691d20d51d100a715ea19ad2c837",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/7022913b72c56ac5123922726aa94f2f98b726ad",
+                "reference": "7022913b72c56ac5123922726aa94f2f98b726ad",
                 "shasum": ""
             },
             "require": {
@@ -2079,8 +2079,8 @@
             "require-dev": {
                 "symfony\/filesystem": "^7.4|^8.0"
             },
-            "time": "2026-11-02T10:58:30+00:00",
-            "published-time": "2026-11-04T11:31:20+00:00",
+            "time": "2026-11-24T15:06:41+00:00",
+            "published-time": "2026-11-25T09:29:36+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2108,7 +2108,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v8.1.11"
+                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v8.1.12"
             },
             "funding": [
                 {
@@ -2662,17 +2662,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v7.4.22",
-            "version_normalized": "7.4.22.0",
+            "version": "v7.4.24",
+            "version_normalized": "7.4.24.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "8dff7da3a56638f1d189c5368183294102de4ced"
+                "reference": "71cd5014e85d05d46796ce60dc4aed9104122b89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/8dff7da3a56638f1d189c5368183294102de4ced",
-                "reference": "8dff7da3a56638f1d189c5368183294102de4ced",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/71cd5014e85d05d46796ce60dc4aed9104122b89",
+                "reference": "71cd5014e85d05d46796ce60dc4aed9104122b89",
                 "shasum": ""
             },
             "require": {
@@ -2693,8 +2693,8 @@
                 "symfony\/translation-contracts": "^2.5|^3.0",
                 "symfony\/var-exporter": "^6.4|^7.0|^8.0"
             },
-            "time": "2026-10-23T16:51:52+00:00",
-            "published-time": "2026-10-28T18:21:18+00:00",
+            "time": "2026-11-24T15:24:17+00:00",
+            "published-time": "2026-11-25T09:24:05+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2733,7 +2733,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v7.4.22"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v7.4.24"
             },
             "funding": [
                 {

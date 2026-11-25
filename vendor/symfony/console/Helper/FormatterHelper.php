@@ -62,7 +62,7 @@ class FormatterHelper extends Helper
         if ($computedLength > self::width($message)) {
             return $message;
         }
-        return self::substr($message, 0, $length) . $suffix;
+        return self::substrToWidth($message, $length) . $suffix;
     }
     public function getName(): string
     {
