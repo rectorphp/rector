@@ -16,6 +16,7 @@ use Rector\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
+use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\CodeSample\ConfiguredCodeSample;
 use Rector\RuleDoc\RuleDefinition;
 use Rector\ValueObject\PhpVersion;
@@ -71,21 +72,46 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, ['ClassName', 'AnotherClassName'])]);
+, ['ClassName', 'AnotherClassName']), new CodeSample(<<<'CODE_SAMPLE'
+namespace App;
+
+class SomeController
+{
+    public function run()
+    {
+        return 'App\SomeController::indexAction';
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+namespace App;
+
+class SomeController
+{
+    public function run()
+    {
+        return self::class . '::indexAction';
+    }
+}
+CODE_SAMPLE
+)]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
-        return [String_::class];
+        return [String_::class, Concat::class];
     }
     /**
-     * @param String_ $node
+     * @param String_|Concat $node
      * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Expr\ClassConstFetch|null
      */
     public function refactor(Node $node)
     {
+        if ($node instanceof Concat) {
+            return $this->refactorSelfMethodPrefix($node);
+        }
         if ($this->shouldSkipIsA($node)) {
             return null;
         }
@@ -155,21 +181,47 @@ CODE_SAMPLE
         if (preg_match('#^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$#', $methodName) !== 1) {
             return null;
         }
+        if (!$this->isSelfClassName($string, $className)) {
+            return null;
+        }
+        return $this->createSelfClassConcat('::' . $methodName);
+    }
+    /**
+     * 'App\SomeClass::' . $method inside App\SomeClass => self::class . '::' . $method
+     */
+    private function refactorSelfMethodPrefix(Concat $concat): ?Concat
+    {
+        if (!$concat->left instanceof String_) {
+            return null;
+        }
+        $value = ltrim($concat->left->value, '\\');
+        if (substr_compare($value, '::', -strlen('::')) !== 0 || substr_count($value, '::') !== 1) {
+            return null;
+        }
+        if (!$this->isSelfClassName($concat->left, (string) substr($value, 0, -2))) {
+            return null;
+        }
+        $concat->left = $this->createSelfClassConcat('::');
+        return $concat;
+    }
+    private function isSelfClassName(String_ $string, string $className): bool
+    {
         $classReflection = $this->reflectionResolver->resolveClassReflection($string);
         if (!$classReflection instanceof ClassReflection) {
-            return null;
+            return \false;
         }
         // self::class inside a trait is the using class, not the trait
         if ($classReflection->isAnonymous() || $classReflection->isTrait()) {
-            return null;
+            return \false;
         }
         if ($classReflection->getName() !== $className) {
-            return null;
+            return \false;
         }
-        if ($this->shouldSkip($className)) {
-            return null;
-        }
-        return new Concat(new ClassConstFetch(new Name(ObjectReference::SELF), 'class'), new String_('::' . $methodName));
+        return !$this->shouldSkip($className);
+    }
+    private function createSelfClassConcat(string $suffix): Concat
+    {
+        return new Concat(new ClassConstFetch(new Name(ObjectReference::SELF), 'class'), new String_($suffix));
     }
     private function shouldSkipIsA(String_ $string): bool
     {
