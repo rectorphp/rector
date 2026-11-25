@@ -38,7 +38,7 @@ class ConstExprParser
         if ($tokens->isCurrentTokenType(Lexer::TOKEN_INTEGER)) {
             $value = $tokens->currentTokenValue();
             $tokens->next();
-            return $this->enrichWithAttributes($tokens, new Ast\ConstExpr\ConstExprIntegerNode(str_replace('_', '', $value)), $startLine, $startIndex);
+            return $this->enrichWithAttributes($tokens, new Ast\ConstExpr\ConstExprIntegerNode(\PHPStan\PhpDocParser\Parser\IntegerLiteralNormalizer::normalizeToDecimal($value)), $startLine, $startIndex);
         }
         if ($this->parseDoctrineStrings && $tokens->isCurrentTokenType(Lexer::TOKEN_DOCTRINE_ANNOTATION_STRING)) {
             $value = $tokens->currentTokenValue();

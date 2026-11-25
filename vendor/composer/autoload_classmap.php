@@ -94,6 +94,7 @@ return array(
     'PHPStan\\PhpDocParser\\Lexer\\Lexer' => $vendorDir . '/phpstan/phpdoc-parser/src/Lexer/Lexer.php',
     'PHPStan\\PhpDocParser\\ParserConfig' => $vendorDir . '/phpstan/phpdoc-parser/src/ParserConfig.php',
     'PHPStan\\PhpDocParser\\Parser\\ConstExprParser' => $vendorDir . '/phpstan/phpdoc-parser/src/Parser/ConstExprParser.php',
+    'PHPStan\\PhpDocParser\\Parser\\IntegerLiteralNormalizer' => $vendorDir . '/phpstan/phpdoc-parser/src/Parser/IntegerLiteralNormalizer.php',
     'PHPStan\\PhpDocParser\\Parser\\ParserException' => $vendorDir . '/phpstan/phpdoc-parser/src/Parser/ParserException.php',
     'PHPStan\\PhpDocParser\\Parser\\PhpDocParser' => $vendorDir . '/phpstan/phpdoc-parser/src/Parser/PhpDocParser.php',
     'PHPStan\\PhpDocParser\\Parser\\StringUnescaper' => $vendorDir . '/phpstan/phpdoc-parser/src/Parser/StringUnescaper.php',

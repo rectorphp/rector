@@ -6,7 +6,6 @@ namespace Rector\Php80\Rector\Switch_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Stmt\Expression;
@@ -124,8 +123,8 @@ CODE_SAMPLE
                 continue;
             }
             $match = $matchResult->getMatch();
-            // (int) cast would turn loose "777abc" == 777 (false) into 777 === 777 (true)
-            if ($this->isStringCondWithIntArm($match)) {
+            // switch compares loosely, match strictly
+            if ($this->isLooseComparisonChanged($match)) {
                 continue;
             }
             if ($matchResult->shouldRemoveNextStmt() && $isReturn) {
@@ -169,12 +168,26 @@ CODE_SAMPLE
     }
     private function castMatchCond(Match_ $match): void
     {
-        $type = $this->nodeTypeResolver->getNativeType($match->cond);
-        if (!$type->isInteger()->yes()) {
+        if (!$this->nodeTypeResolver->getNativeType($match->cond)->isInteger()->yes()) {
             return;
         }
-        $armCondType = [];
-        $newMatchCond = null;
+        // arms are either all strings or all non-strings, see isLooseComparisonChanged()
+        foreach ($match->arms as $arm) {
+            if ($arm->conds === null) {
+                continue;
+            }
+            if ($this->nodeTypeResolver->getNativeType($arm->conds[0])->isString()->yes()) {
+                $match->cond = new String_($match->cond);
+            }
+            return;
+        }
+    }
+    private function isLooseComparisonChanged(Match_ $match): bool
+    {
+        $condType = $this->nodeTypeResolver->getNativeType($match->cond);
+        $stringArmTypes = [];
+        $hasNonStringArm = \false;
+        $hasIntArm = \false;
         foreach ($match->arms as $arm) {
             if ($arm->conds === null) {
                 continue;
@@ -182,28 +195,39 @@ CODE_SAMPLE
             foreach ($arm->conds as $armCond) {
                 $armCondType = $this->nodeTypeResolver->getNativeType($armCond);
                 if ($armCondType->isString()->yes()) {
-                    $newMatchCond = new String_($match->cond);
-                } else {
-                    $newMatchCond = null;
-                    break;
+                    $stringArmTypes[] = $armCondType;
+                    continue;
+                }
+                $hasNonStringArm = \true;
+                if ($armCondType->isInteger()->yes()) {
+                    $hasIntArm = \true;
                 }
             }
         }
-        if ($newMatchCond instanceof Cast) {
-            $match->cond = $newMatchCond;
+        // (int) cast would turn loose "777abc" == 777 (false) into 777 === 777 (true)
+        if ($condType->isString()->yes()) {
+            return $hasIntArm;
         }
-    }
-    private function isStringCondWithIntArm(Match_ $match): bool
-    {
-        if (!$this->nodeTypeResolver->getNativeType($match->cond)->isString()->yes()) {
+        if ($stringArmTypes === []) {
             return \false;
         }
-        foreach ($match->arms as $arm) {
-            if ($arm->conds === null) {
-                continue;
+        // unknown subject: true == 'a' or 1 == '1' would stop matching
+        if (!$condType->isInteger()->yes()) {
+            return \true;
+        }
+        // one (string) cast cannot fit both string and non-string arms
+        if ($hasNonStringArm) {
+            return \true;
+        }
+        // (string) cast mirrors loose == only for non-numeric or canonical int strings, 1 == '01' holds but '1' === '01' does not
+        foreach ($stringArmTypes as $stringArmType) {
+            $constantStringTypes = $stringArmType->getConstantStrings();
+            if ($constantStringTypes === []) {
+                return \true;
             }
-            foreach ($arm->conds as $armCond) {
-                if ($this->nodeTypeResolver->getNativeType($armCond)->isInteger()->yes()) {
+            foreach ($constantStringTypes as $constantStringType) {
+                $value = $constantStringType->getValue();
+                if (is_numeric($value) && (string) (int) $value !== $value) {
                     return \true;
                 }
             }

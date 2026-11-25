@@ -16,7 +16,6 @@ use PHPStan\ShouldNotHappenException;
 use function array_key_exists;
 use function count;
 use function rtrim;
-use function str_replace;
 use function trim;
 /**
  * @phpstan-import-type ValueType from Doctrine\DoctrineArgument as DoctrineValueType
@@ -554,7 +553,7 @@ class PhpDocParser
         $startLine = $tokens->currentTokenLine();
         $startIndex = $tokens->currentTokenIndex();
         if ($tokens->isCurrentTokenType(Lexer::TOKEN_INTEGER)) {
-            $key = new Ast\ConstExpr\ConstExprIntegerNode(str_replace('_', '', $tokens->currentTokenValue()));
+            $key = new Ast\ConstExpr\ConstExprIntegerNode(\PHPStan\PhpDocParser\Parser\IntegerLiteralNormalizer::normalizeToDecimal($tokens->currentTokenValue()));
             $tokens->next();
         } elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_DOCTRINE_ANNOTATION_STRING)) {
             $key = $this->doctrineConstantExprParser->parseDoctrineString($tokens->currentTokenValue(), $tokens);
