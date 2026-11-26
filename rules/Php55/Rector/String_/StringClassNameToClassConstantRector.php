@@ -110,13 +110,13 @@ CODE_SAMPLE
     public function refactor(Node $node)
     {
         if ($node instanceof Concat) {
-            return $this->refactorSelfMethodPrefix($node);
+            return $this->refactorMethodPrefix($node);
         }
         if ($this->shouldSkipIsA($node)) {
             return null;
         }
         if (strpos($node->value, '::') !== \false) {
-            return $this->refactorSelfMethodReference($node);
+            return $this->refactorMethodReference($node);
         }
         $classLikeName = $node->value;
         // remove leading slash
@@ -172,9 +172,9 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * 'App\SomeClass::run' inside App\SomeClass => self::class . '::run'
+     * 'App\SomeClass::run' => \App\SomeClass::class . '::run', or self::class . '::run' inside App\SomeClass
      */
-    private function refactorSelfMethodReference(String_ $string): ?Concat
+    private function refactorMethodReference(String_ $string): ?Concat
     {
         $parts = explode('::', ltrim($string->value, '\\'));
         if (count($parts) !== 2) {
@@ -184,15 +184,12 @@ CODE_SAMPLE
         if (preg_match('#^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$#', $methodName) !== 1) {
             return null;
         }
-        if (!$this->isSelfClassName($string, $className)) {
-            return null;
-        }
-        return $this->createSelfClassConcat('::' . $methodName);
+        return $this->createClassConcat($string, $className, '::' . $methodName);
     }
     /**
-     * 'App\SomeClass::' . $method inside App\SomeClass => self::class . '::' . $method
+     * 'App\SomeClass::' . $method => \App\SomeClass::class . '::' . $method, or self::class inside App\SomeClass
      */
-    private function refactorSelfMethodPrefix(Concat $concat): ?Concat
+    private function refactorMethodPrefix(Concat $concat): ?Concat
     {
         if (!$concat->left instanceof String_) {
             return null;
@@ -201,10 +198,11 @@ CODE_SAMPLE
         if (substr_compare($value, '::', -strlen('::')) !== 0 || substr_count($value, '::') !== 1) {
             return null;
         }
-        if (!$this->isSelfClassName($concat->left, (string) substr($value, 0, -2))) {
+        $classConcat = $this->createClassConcat($concat->left, (string) substr($value, 0, -2), '::');
+        if (!$classConcat instanceof Concat) {
             return null;
         }
-        $concat->left = $this->createSelfClassConcat('::');
+        $concat->left = $classConcat;
         return $concat;
     }
     private function isSelfClassName(String_ $string, string $className): bool
@@ -217,14 +215,15 @@ CODE_SAMPLE
         if ($classReflection->isAnonymous() || $classReflection->isTrait()) {
             return \false;
         }
-        if ($classReflection->getName() !== $className) {
-            return \false;
-        }
-        return !$this->shouldSkip($className);
+        return $classReflection->getName() === $className;
     }
-    private function createSelfClassConcat(string $suffix): Concat
+    private function createClassConcat(String_ $string, string $className, string $suffix): ?Concat
     {
-        return new Concat(new ClassConstFetch(new Name(ObjectReference::SELF), 'class'), new String_($suffix));
+        if ($this->shouldSkip($className)) {
+            return null;
+        }
+        $class = $this->isSelfClassName($string, $className) ? new Name(ObjectReference::SELF) : new FullyQualified($className);
+        return new Concat(new ClassConstFetch($class, 'class'), new String_($suffix));
     }
     private function shouldSkipIsA(String_ $string): bool
     {
