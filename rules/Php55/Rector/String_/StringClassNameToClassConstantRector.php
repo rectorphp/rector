@@ -127,6 +127,9 @@ CODE_SAMPLE
         if ($this->shouldSkip($classLikeName)) {
             return null;
         }
+        if ($this->isSelfClassName($node, $classLikeName)) {
+            return new ClassConstFetch(new Name(ObjectReference::SELF), 'class');
+        }
         $fullyQualified = new FullyQualified($classLikeName);
         return new ClassConstFetch($fullyQualified, 'class');
     }
