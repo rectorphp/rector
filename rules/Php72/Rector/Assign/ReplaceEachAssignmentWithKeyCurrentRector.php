@@ -75,11 +75,12 @@ CODE_SAMPLE
         if ($eachFuncCall->isFirstClassCallable()) {
             return null;
         }
-        if (!isset($eachFuncCall->getArgs()[0])) {
+        $firstArg = $eachFuncCall->getArg('array', 0);
+        if (!$firstArg instanceof Arg) {
             return null;
         }
         $assignVariable = $assign->var;
-        $eachedVariable = $eachFuncCall->getArgs()[0]->value;
+        $eachedVariable = $firstArg->value;
         return $this->createNewStmts($assignVariable, $eachedVariable);
     }
     private function shouldSkip(Assign $assign): bool

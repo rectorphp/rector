@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
@@ -72,10 +73,10 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (!isset($node->getArgs()[0])) {
+        $firstArg = $node->getArg('constant_name', 0);
+        if (!$firstArg instanceof Arg) {
             return null;
         }
-        $firstArg = $node->getArgs()[0];
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($firstArg->value)) {
             return null;
         }

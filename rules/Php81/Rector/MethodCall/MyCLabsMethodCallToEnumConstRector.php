@@ -144,7 +144,7 @@ CODE_SAMPLE
                 return null;
             }
         }
-        $arg = $methodCall->getArgs()[0] ?? null;
+        $arg = $methodCall->getArg('variable', 0);
         if (!$arg instanceof Arg) {
             return null;
         }

@@ -75,8 +75,16 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        $firstArgValue = $node->getArgs()[0]->value;
-        $secondArgValue = $node->getArgs()[1]->value;
+        $firstArg = $node->getArg('callback', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
+        $secondArg = $node->getArg('args', 1);
+        if (!$secondArg instanceof Arg) {
+            return null;
+        }
+        $firstArgValue = $firstArg->value;
+        $secondArgValue = $secondArg->value;
         if ($firstArgValue instanceof String_) {
             $functionName = $this->valueResolver->getValue($firstArgValue);
             return $this->createFuncCall($secondArgValue, $functionName);

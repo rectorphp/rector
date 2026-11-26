@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
@@ -83,7 +84,10 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
         if (count($strncmpFuncCall->getArgs()) < 2) {
             return \false;
         }
-        $thirdArg = $strncmpFuncCall->getArgs()[2];
+        $thirdArg = $strncmpFuncCall->getArg('length', 2);
+        if (!$thirdArg instanceof Arg) {
+            return \false;
+        }
         $thirdArgExpr = $thirdArg->value;
         if (!$thirdArgExpr instanceof FuncCall) {
             return \false;
@@ -92,7 +96,11 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
             return \false;
         }
         $strlenFuncCall = $thirdArgExpr;
-        $strlenExpr = $strlenFuncCall->getArgs()[0]->value;
+        $strlenArg = $strlenFuncCall->getArg('string', 0);
+        if (!$strlenArg instanceof Arg) {
+            return \false;
+        }
+        $strlenExpr = $strlenArg->value;
         return $this->nodeComparator->areNodesEqual($needleExpr, $strlenExpr);
     }
     private function isHardcodedStringWithLNumberLength(StrStartsWith $strStartsWith): bool
@@ -101,11 +109,19 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
         if (count($strncmpFuncCall->getArgs()) < 2) {
             return \false;
         }
-        $hardcodedStringNeedle = $strncmpFuncCall->getArgs()[1]->value;
+        $needleArg = $strncmpFuncCall->getArg('string2', 1);
+        if (!$needleArg instanceof Arg) {
+            return \false;
+        }
+        $hardcodedStringNeedle = $needleArg->value;
         if (!$hardcodedStringNeedle instanceof String_) {
             return \false;
         }
-        $lNumberLength = $strncmpFuncCall->getArgs()[2]->value;
+        $lengthArg = $strncmpFuncCall->getArg('length', 2);
+        if (!$lengthArg instanceof Arg) {
+            return \false;
+        }
+        $lNumberLength = $lengthArg->value;
         if (!$lNumberLength instanceof Int_) {
             return \false;
         }

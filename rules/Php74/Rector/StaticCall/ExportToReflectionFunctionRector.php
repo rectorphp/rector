@@ -68,7 +68,7 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        $firstArg = $node->getArgs()[0] ?? null;
+        $firstArg = $node->getArg('name', 0);
         if (!$firstArg instanceof Arg) {
             return null;
         }
@@ -77,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
         $new = new New_($node->class, [new Arg($firstArg->value)]);
-        $secondArg = $node->getArgs()[1] ?? null;
+        $secondArg = $node->getArg('return', 1);
         if (!$secondArg instanceof Arg) {
             return $new;
         }

@@ -253,8 +253,8 @@ CODE_SAMPLE
     {
         $nodeToCheck = null;
         if ($node instanceof FuncCall && !$node->isFirstClassCallable() && $this->isNames($node, ['is_array', 'is_string', 'is_int', 'is_bool', 'is_float'])) {
-            $firstArg = $node->getArgs()[0];
-            $nodeToCheck = $firstArg->value;
+            $firstArg = $node->getArg('value', 0);
+            $nodeToCheck = $firstArg instanceof Arg ? $firstArg->value : null;
         }
         if ($node instanceof Expression) {
             $nodeToCheck = $node->expr;

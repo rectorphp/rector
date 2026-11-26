@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -57,11 +58,14 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        if (!isset($node->getArgs()[0])) {
+        if ($node->getArgs() === []) {
             return new ClassConstFetch(new Name('self'), 'class');
         }
-        $object = $node->getArgs()[0]->value;
-        return new ClassConstFetch($object, 'class');
+        $firstArg = $node->getArg('object', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
+        return new ClassConstFetch($firstArg->value, 'class');
     }
     public function provideMinPhpVersion(): int
     {

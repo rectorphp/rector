@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Concat;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\MagicConst\Dir;
@@ -61,7 +62,10 @@ CODE_SAMPLE
         if (count($dirnameFuncCall->getArgs()) !== 1) {
             return null;
         }
-        $firstArg = $dirnameFuncCall->getArgs()[0];
+        $firstArg = $dirnameFuncCall->getArg('path', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
         if (!$firstArg->value instanceof Dir) {
             return null;
         }

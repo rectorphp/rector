@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Rector\AbstractRector;
 use Rector\RuleDoc\CodeSample\CodeSample;
 use Rector\RuleDoc\RuleDefinition;
+use RectorPrefix202611\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector\SingleInArrayToCompareRectorTest
  */
@@ -103,7 +104,7 @@ CODE_SAMPLE
         if ($firstArrayItem->unpack) {
             return null;
         }
-        if (!isset($funcCall->getArgs()[0])) {
+        if (!$funcCall->getArg('needle', 0) instanceof Arg) {
             return null;
         }
         return $firstArrayItem;
@@ -111,9 +112,10 @@ CODE_SAMPLE
     private function processCompare(ArrayItem $firstArrayItem, FuncCall $funcCall, bool $isNegated = \false): Node
     {
         $firstArrayItemValue = $firstArrayItem->value;
-        $firstArg = $funcCall->getArgs()[0];
+        $firstArg = $funcCall->getArg('needle', 0);
+        Assert::isInstanceOf($firstArg, Arg::class);
         // strict
-        if (isset($funcCall->getArgs()[2])) {
+        if ($funcCall->getArg('strict', 2) instanceof Arg) {
             return $isNegated ? new NotIdentical($firstArg->value, $firstArrayItemValue) : new Identical($firstArg->value, $firstArrayItemValue);
         }
         return $isNegated ? new NotEqual($firstArg->value, $firstArrayItemValue) : new Equal($firstArg->value, $firstArrayItemValue);

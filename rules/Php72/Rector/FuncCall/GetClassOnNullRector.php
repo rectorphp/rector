@@ -79,7 +79,7 @@ CODE_SAMPLE
             if ($node->isFirstClassCallable()) {
                 return null;
             }
-            $firstArg = $node->getArgs()[0] ?? null;
+            $firstArg = $node->getArg('object', 0);
             if (!$firstArg instanceof Arg) {
                 return null;
             }

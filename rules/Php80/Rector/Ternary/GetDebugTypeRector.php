@@ -67,7 +67,15 @@ CODE_SAMPLE
         }
         /** @var FuncCall|ClassConstFetch $getClassFuncCallOrClassConstFetchClass */
         $getClassFuncCallOrClassConstFetchClass = $node->if;
-        $firstExpr = $getClassFuncCallOrClassConstFetchClass instanceof FuncCall ? $getClassFuncCallOrClassConstFetchClass->getArgs()[0]->value : $getClassFuncCallOrClassConstFetchClass->class;
+        if ($getClassFuncCallOrClassConstFetchClass instanceof FuncCall) {
+            $getClassArg = $getClassFuncCallOrClassConstFetchClass->getArg('object', 0);
+            if (!$getClassArg instanceof Arg) {
+                return null;
+            }
+            $firstExpr = $getClassArg->value;
+        } else {
+            $firstExpr = $getClassFuncCallOrClassConstFetchClass->class;
+        }
         return $this->nodeFactory->createFuncCall('get_debug_type', [$firstExpr]);
     }
     public function providePolyfillPackage(): string
@@ -82,7 +90,7 @@ CODE_SAMPLE
         if ($ternary->cond->isFirstClassCallable()) {
             return \true;
         }
-        if (!isset($ternary->cond->getArgs()[0])) {
+        if (!$ternary->cond->getArg('value', 0) instanceof Arg) {
             return \true;
         }
         if (!$this->isName($ternary->cond, 'is_object')) {
@@ -119,13 +127,22 @@ CODE_SAMPLE
         if ($isObjectFuncCall->isFirstClassCallable()) {
             return \false;
         }
-        $firstExpr = $isObjectFuncCall->getArgs()[0]->value;
-        /** @var FuncCall|ClassConstFetch $getClassFuncCallOrClassConstFetchClass */
-        $getClassFuncCallOrClassConstFetchClass = $ternary->if;
-        if ($getClassFuncCallOrClassConstFetchClass instanceof FuncCall && !$getClassFuncCallOrClassConstFetchClass->args[0] instanceof Arg) {
+        $firstArg = $isObjectFuncCall->getArg('value', 0);
+        if (!$firstArg instanceof Arg) {
             return \false;
         }
-        $secondExpr = $getClassFuncCallOrClassConstFetchClass instanceof FuncCall ? $getClassFuncCallOrClassConstFetchClass->getArgs()[0]->value : $getClassFuncCallOrClassConstFetchClass->class;
+        $firstExpr = $firstArg->value;
+        /** @var FuncCall|ClassConstFetch $getClassFuncCallOrClassConstFetchClass */
+        $getClassFuncCallOrClassConstFetchClass = $ternary->if;
+        if ($getClassFuncCallOrClassConstFetchClass instanceof FuncCall) {
+            $getClassArg = $getClassFuncCallOrClassConstFetchClass->getArg('object', 0);
+            if (!$getClassArg instanceof Arg) {
+                return \false;
+            }
+            $secondExpr = $getClassArg->value;
+        } else {
+            $secondExpr = $getClassFuncCallOrClassConstFetchClass->class;
+        }
         $gettypeFuncCall = $ternary->else;
         if (!$gettypeFuncCall instanceof FuncCall) {
             return \false;

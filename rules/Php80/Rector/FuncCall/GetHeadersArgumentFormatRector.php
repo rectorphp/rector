@@ -53,7 +53,7 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        $formatArg = $node->getArgs()[1] ?? null;
+        $formatArg = $node->getArg('associative', 1);
         if (!$formatArg instanceof Arg) {
             return null;
         }

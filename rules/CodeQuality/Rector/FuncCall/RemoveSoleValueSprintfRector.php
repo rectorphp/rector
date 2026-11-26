@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
@@ -59,7 +60,10 @@ CODE_SAMPLE
         if (count($node->getArgs()) !== 2) {
             return null;
         }
-        $firstArg = $node->getArgs()[0];
+        $firstArg = $node->getArg('format', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
         $maskArgument = $firstArg->value;
         if (!$maskArgument instanceof String_) {
             return null;
@@ -67,7 +71,10 @@ CODE_SAMPLE
         if ($maskArgument->value !== '%s') {
             return null;
         }
-        $secondArg = $node->getArgs()[1];
+        $secondArg = $node->getArg('values', 1);
+        if (!$secondArg instanceof Arg) {
+            return null;
+        }
         $valueArgument = $secondArg->value;
         $valueType = $this->getType($valueArgument);
         if (!$valueType->isString()->yes()) {

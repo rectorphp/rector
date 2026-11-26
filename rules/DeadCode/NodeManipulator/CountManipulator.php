@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\NodeManipulator;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
@@ -100,10 +101,11 @@ final class CountManipulator
         if ($node->isFirstClassCallable()) {
             return \false;
         }
-        if (!isset($node->getArgs()[0])) {
+        $firstArg = $node->getArg('value', 0);
+        if (!$firstArg instanceof Arg) {
             return \false;
         }
-        $countedExpr = $node->getArgs()[0]->value;
+        $countedExpr = $firstArg->value;
         if ($this->nodeComparator->areNodesEqual($countedExpr, $expr)) {
             $exprType = $this->nodeTypeResolver->getNativeType($expr);
             if (!$exprType->isArray()->yes()) {

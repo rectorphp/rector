@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -76,8 +77,16 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if (count($funcCall->getArgs()) < 2) {
             return null;
         }
-        $haystack = $funcCall->getArgs()[0]->value;
-        $needle = $funcCall->getArgs()[1]->value;
+        $haystackArg = $funcCall->getArg('haystack', 0);
+        if (!$haystackArg instanceof Arg) {
+            return null;
+        }
+        $needleArg = $funcCall->getArg('needle', 1);
+        if (!$needleArg instanceof Arg) {
+            return null;
+        }
+        $haystack = $haystackArg->value;
+        $needle = $needleArg->value;
         return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
     }
     private function processBinaryOpRight(BinaryOp $binaryOp, bool $isPositive): ?StrStartsWith
@@ -90,8 +99,16 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if (count($funcCall->getArgs()) < 2) {
             return null;
         }
-        $haystack = $funcCall->getArgs()[0]->value;
-        $needle = $funcCall->getArgs()[1]->value;
+        $haystackArg = $funcCall->getArg('haystack', 0);
+        if (!$haystackArg instanceof Arg) {
+            return null;
+        }
+        $needleArg = $funcCall->getArg('needle', 1);
+        if (!$needleArg instanceof Arg) {
+            return null;
+        }
+        $haystack = $haystackArg->value;
+        $needle = $needleArg->value;
         return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
     }
 }

@@ -137,11 +137,19 @@ CODE_SAMPLE
         if (count($substrFuncCall->getArgs()) < 2) {
             return null;
         }
-        $needle = $substrFuncCall->getArgs()[1]->value;
+        $offsetArg = $substrFuncCall->getArg('offset', 1);
+        if (!$offsetArg instanceof Arg) {
+            return null;
+        }
+        $needle = $offsetArg->value;
         if (!$this->isUnaryMinusStrlenFuncCallArgValue($needle, $comparedNeedleExpr) && !$this->isHardCodedLNumberAndString($needle, $comparedNeedleExpr)) {
             return null;
         }
-        $haystack = $substrFuncCall->getArgs()[0]->value;
+        $stringArg = $substrFuncCall->getArg('string', 0);
+        if (!$stringArg instanceof Arg) {
+            return null;
+        }
+        $haystack = $stringArg->value;
         $isPositive = $binaryOp instanceof Identical || $binaryOp instanceof Equal;
         return $this->buildReturnNode($haystack, $comparedNeedleExpr, $isPositive);
     }
@@ -189,13 +197,11 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, 'strlen')) {
             return \false;
         }
-        if (!isset($funcCall->getArgs()[0])) {
+        $firstArg = $funcCall->getArg('string', 0);
+        if (!$firstArg instanceof Arg) {
             return \false;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
-            return \false;
-        }
-        return $this->nodeComparator->areNodesEqual($funcCall->args[0]->value, $needle);
+        return $this->nodeComparator->areNodesEqual($firstArg->value, $needle);
     }
     private function isHardCodedLNumberAndString(Expr $substrOffset, Expr $needle): bool
     {

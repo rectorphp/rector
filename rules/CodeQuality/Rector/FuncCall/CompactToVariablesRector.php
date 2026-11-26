@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
@@ -78,7 +79,10 @@ CODE_SAMPLE
         if ($node->isFirstClassCallable()) {
             return null;
         }
-        $firstArg = $node->getArgs()[0];
+        $firstArg = $node->getArg('var_name', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
         $firstValue = $firstArg->value;
         $firstValueStaticType = $this->getType($firstValue);
         if (!$firstValueStaticType instanceof ConstantArrayType) {

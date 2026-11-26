@@ -82,13 +82,14 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         if ($funcCall->isFirstClassCallable()) {
             return \true;
         }
-        return !isset($funcCall->getArgs()[0]);
+        return !$funcCall->getArg('pattern', 0) instanceof Arg;
     }
     private function processStringPattern(FuncCall $funcCall, String_ $string, string $functionName): void
     {
         $pattern = $string->value;
         $pattern = $this->eregToPcreTransformer->transform($pattern, $this->isCaseInsensitiveFunction($functionName));
-        $firstArg = $funcCall->getArgs()[0];
+        $firstArg = $funcCall->getArg('pattern', 0);
+        Assert::isInstanceOf($firstArg, Arg::class);
         Assert::isInstanceOf($firstArg->value, String_::class);
         $firstArg->value->value = $pattern;
     }
@@ -131,7 +132,8 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
     }
     private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCall): Ternary
     {
-        $thirdArg = $funcCall->getArgs()[2];
+        $thirdArg = $funcCall->getArg('regs', 2);
+        Assert::isInstanceOf($thirdArg, Arg::class);
         $arrayDimFetch = new ArrayDimFetch($thirdArg->value, new Int_(0));
         $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$arrayDimFetch]);
         return new Ternary($funcCall, $strlenFuncCall, $this->nodeFactory->createFalse());
@@ -155,7 +157,7 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         if (!in_array($functionName, ['ereg', 'eregi'], \true)) {
             return \false;
         }
-        return isset($expr->getArgs()[2]);
+        return $expr->getArg('regs', 2) instanceof Arg;
     }
     private function refactorFuncCall(FuncCall $funcCall): ?FuncCall
     {
@@ -164,7 +166,10 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         }
         /** @var string $functionName */
         $functionName = $this->getName($funcCall);
-        $firstArg = $funcCall->getArgs()[0];
+        $firstArg = $funcCall->getArg('pattern', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
         $patternExpr = $firstArg->value;
         if ($patternExpr instanceof String_) {
             $this->processStringPattern($funcCall, $patternExpr, $functionName);

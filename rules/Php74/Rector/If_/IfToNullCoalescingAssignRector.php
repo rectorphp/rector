@@ -154,7 +154,7 @@ CODE_SAMPLE
             if (count($expr->getArgs()) !== 1) {
                 return null;
             }
-            return $expr->getArgs()[0]->value;
+            return ($nullsafeVariable1 = $expr->getArg('value', 0)) ? $nullsafeVariable1->value : null;
         }
         // null === $value or $value === null
         if ($expr instanceof Identical) {

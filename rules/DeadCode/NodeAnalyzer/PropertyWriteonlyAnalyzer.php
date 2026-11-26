@@ -34,7 +34,7 @@ final class PropertyWriteonlyAnalyzer
     {
         return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node): bool {
             if ($node instanceof FuncCall && $this->nodeNameResolver->isName($node, 'get_object_vars') && !$node->isFirstClassCallable()) {
-                $firstArg = $node->getArgs()[0] ?? null;
+                $firstArg = $node->getArg('object', 0);
                 if ($firstArg instanceof Arg && $firstArg->value instanceof Variable && $firstArg->value->name === 'this') {
                     return \true;
                 }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Carbon\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -77,7 +78,10 @@ CODE_SAMPLE
             // @todo handle in separate static call
             return null;
         }
-        $firstArg = $new->getArgs()[0];
+        $firstArg = $new->getArg('datetime', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
         if (!$firstArg->value instanceof String_) {
             return null;
         }

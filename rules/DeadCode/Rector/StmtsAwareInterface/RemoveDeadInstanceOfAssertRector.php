@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\StmtsAwareInterface;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
@@ -107,7 +108,11 @@ CODE_SAMPLE
         if (count($expr->getArgs()) !== 1) {
             return \false;
         }
-        $instanceof = $expr->getArgs()[0]->value;
+        $firstArg = $expr->getArg('assertion', 0);
+        if (!$firstArg instanceof Arg) {
+            return \false;
+        }
+        $instanceof = $firstArg->value;
         if (!$instanceof instanceof Instanceof_) {
             return \false;
         }

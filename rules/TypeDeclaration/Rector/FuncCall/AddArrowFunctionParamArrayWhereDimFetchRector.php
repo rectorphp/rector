@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
@@ -72,12 +73,20 @@ CODE_SAMPLE
                 continue;
             }
             $callbackPosition = $positions['callback'];
-            $closureExpr = $node->getArgs()[$callbackPosition]->value;
+            $callbackArg = $node->getArg('callback', $callbackPosition);
+            if (!$callbackArg instanceof Arg) {
+                continue;
+            }
+            $closureExpr = $callbackArg->value;
             if (!$closureExpr instanceof ArrowFunction && !$closureExpr instanceof Closure) {
                 continue;
             }
             $arrayPosition = $positions['array'];
-            $closureItems = $node->getArgs()[$arrayPosition]->value;
+            $arrayArg = $node->getArg('array', $arrayPosition);
+            if (!$arrayArg instanceof Arg) {
+                continue;
+            }
+            $closureItems = $arrayArg->value;
             $isArrayVariableNames = $this->resolveIsArrayVariables($closureExpr);
             $instanceofVariableNames = $this->resolveInstanceofVariables($closureExpr);
             $skippedVariableNames = array_merge($isArrayVariableNames, $instanceofVariableNames);
@@ -147,7 +156,11 @@ CODE_SAMPLE
             if (!$this->isName($funcCall, 'is_array')) {
                 continue;
             }
-            $firstArgExpr = $funcCall->getArgs()[0]->value;
+            $firstArg = $funcCall->getArg('value', 0);
+            if (!$firstArg instanceof Arg) {
+                continue;
+            }
+            $firstArgExpr = $firstArg->value;
             if (!$firstArgExpr instanceof Variable) {
                 continue;
             }

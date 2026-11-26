@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php85\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\FuncCall;
@@ -83,7 +84,11 @@ CODE_SAMPLE
         if (count($arrayDimFetch->dim->getArgs()) !== 1) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $arrayDimFetch->dim->getArgs()[0]->value)) {
+        $firstArg = $arrayDimFetch->dim->getArg('array', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
+        if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $firstArg->value)) {
             return null;
         }
         if ($this->shouldSkip($arrayDimFetch, $arrayDimFetch->var)) {
@@ -109,7 +114,11 @@ CODE_SAMPLE
         if ($this->shouldSkip($arrayDimFetch, $arrayDimFetch)) {
             return null;
         }
-        $arrayArg = $arrayDimFetch->var->getArgs()[0]->value;
+        $firstArg = $arrayDimFetch->var->getArg('array', 0);
+        if (!$firstArg instanceof Arg) {
+            return null;
+        }
+        $arrayArg = $firstArg->value;
         if ($arrayDimFetch->dim instanceof Int_ && $arrayDimFetch->dim->value === 0) {
             return $this->nodeFactory->createFuncCall('array_first', [$arrayArg]);
         }
@@ -129,7 +138,11 @@ CODE_SAMPLE
             if (!$arrayDimFetch->dim->right instanceof Int_ || $arrayDimFetch->dim->right->value !== 1) {
                 return null;
             }
-            if (!$this->nodeComparator->areNodesEqual($arrayArg, $arrayDimFetch->dim->left->getArgs()[0]->value)) {
+            $countArg = $arrayDimFetch->dim->left->getArg('value', 0);
+            if (!$countArg instanceof Arg) {
+                return null;
+            }
+            if (!$this->nodeComparator->areNodesEqual($arrayArg, $countArg->value)) {
                 return null;
             }
             return $this->nodeFactory->createFuncCall('array_last', [$arrayArg]);

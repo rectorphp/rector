@@ -61,10 +61,10 @@ final class IsArrayAndDualCheckToAble
         if ($funcCallExpr->isFirstClassCallable()) {
             return null;
         }
-        if (!isset($funcCallExpr->getArgs()[0])) {
+        $firstArg = $funcCallExpr->getArg('value', 0);
+        if (!$firstArg instanceof Arg) {
             return null;
         }
-        $firstArg = $funcCallExpr->getArgs()[0];
         $firstExprNode = $firstArg->value;
         if (!$this->nodeComparator->areNodesEqual($instanceofExpr->expr, $firstExprNode)) {
             return null;

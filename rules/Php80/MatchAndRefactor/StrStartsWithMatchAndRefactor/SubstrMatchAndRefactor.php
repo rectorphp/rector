@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
@@ -50,13 +51,19 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         $isPositive = $binaryOp instanceof Identical || $binaryOp instanceof Equal;
         if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'substr')) {
             $funcCall = $binaryOp->left;
-            $haystack = $funcCall->getArgs()[0]->value;
-            return new StrStartsWith($funcCall, $haystack, $binaryOp->right, $isPositive);
+            $stringArg = $funcCall->getArg('string', 0);
+            if (!$stringArg instanceof Arg) {
+                return null;
+            }
+            return new StrStartsWith($funcCall, $stringArg->value, $binaryOp->right, $isPositive);
         }
         if ($binaryOp->right instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->right, 'substr')) {
             $funcCall = $binaryOp->right;
-            $haystack = $funcCall->getArgs()[0]->value;
-            return new StrStartsWith($funcCall, $haystack, $binaryOp->left, $isPositive);
+            $stringArg = $funcCall->getArg('string', 0);
+            if (!$stringArg instanceof Arg) {
+                return null;
+            }
+            return new StrStartsWith($funcCall, $stringArg->value, $binaryOp->left, $isPositive);
         }
         return null;
     }
@@ -76,11 +83,18 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if ($substrFuncCall->isFirstClassCallable()) {
             return \false;
         }
-        $firstArg = $substrFuncCall->getArgs()[1];
+        $firstArg = $substrFuncCall->getArg('offset', 1);
+        if (!$firstArg instanceof Arg) {
+            return \false;
+        }
         if (!$this->valueResolver->isValue($firstArg->value, 0)) {
             return \false;
         }
-        $secondFuncCallArgValue = $substrFuncCall->getArgs()[2]->value;
+        $lengthArg = $substrFuncCall->getArg('length', 2);
+        if (!$lengthArg instanceof Arg) {
+            return \false;
+        }
+        $secondFuncCallArgValue = $lengthArg->value;
         if (!$secondFuncCallArgValue instanceof FuncCall) {
             return \false;
         }
@@ -88,7 +102,11 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
             return \false;
         }
         $strlenFuncCall = $secondFuncCallArgValue;
-        $needleExpr = $strlenFuncCall->getArgs()[0]->value;
+        $strlenArg = $strlenFuncCall->getArg('string', 0);
+        if (!$strlenArg instanceof Arg) {
+            return \false;
+        }
+        $needleExpr = $strlenArg->value;
         $comparedNeedleExpr = $strStartsWith->getNeedleExpr();
         return $this->nodeComparator->areNodesEqual($needleExpr, $comparedNeedleExpr);
     }
@@ -98,7 +116,10 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if ($substrFuncCall->isFirstClassCallable()) {
             return \false;
         }
-        $secondArg = $substrFuncCall->getArgs()[1];
+        $secondArg = $substrFuncCall->getArg('offset', 1);
+        if (!$secondArg instanceof Arg) {
+            return \false;
+        }
         if (!$this->valueResolver->isValue($secondArg->value, 0)) {
             return \false;
         }
@@ -109,7 +130,11 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         if (count($substrFuncCall->getArgs()) < 3) {
             return \false;
         }
-        $lNumberLength = $substrFuncCall->getArgs()[2]->value;
+        $lengthArg = $substrFuncCall->getArg('length', 2);
+        if (!$lengthArg instanceof Arg) {
+            return \false;
+        }
+        $lNumberLength = $lengthArg->value;
         if (!$lNumberLength instanceof Int_) {
             return \false;
         }
