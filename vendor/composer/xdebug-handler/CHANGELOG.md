@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [3.1.0] - 2026-11-25
+  * Added: protected methods `outputError` and `outputInfo` for extending classes.
+  * Added: the extending class name to logger/debug output, if applicable.
+
 ## [3.0.5] - 2024-05-06
   * Fixed: fail restart if PHP_BINARY is not available
 
@@ -89,7 +93,7 @@
   * Added: debug information using `XDEBUG_HANDLER_DEBUG`.
   * Added: fluent interface for setters.
   * Added: `PhpConfig` helper class for calling PHP sub-processes.
-  * Added: `PHPRC` original value to restart stettings, for use in a restarted process.
+  * Added: `PHPRC` original value to restart settings, for use in a restarted process.
   * Changed: internal procedure to disable ini-scanning, using `-n` command-line option.
   * Fixed: replaced `escapeshellarg` usage to avoid locale problems.
   * Fixed: improved color-option handling to respect double-dash delimiter.
@@ -115,7 +119,8 @@
   * Break: the following class was renamed:
     - `Composer\XdebugHandler` -> `Composer\XdebugHandler\XdebugHandler`
 
-[Unreleased]: https://github.com/composer/xdebug-handler/compare/3.0.5...HEAD
+[Unreleased]: https://github.com/composer/xdebug-handler/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/composer/xdebug-handler/compare/3.0.5...3.1.0
 [3.0.5]: https://github.com/composer/xdebug-handler/compare/3.0.4...3.0.5
 [3.0.4]: https://github.com/composer/xdebug-handler/compare/3.0.3...3.0.4
 [3.0.3]: https://github.com/composer/xdebug-handler/compare/3.0.2...3.0.3

@@ -23,8 +23,8 @@
         "composer\/pcre": "^1 || ^2 || ^3"
     },
     "require-dev": {
-        "phpstan\/phpstan": "^1.0",
-        "phpstan\/phpstan-strict-rules": "^1.1",
+        "phpstan\/phpstan": "^1.11 || ^2.0",
+        "phpstan\/phpstan-strict-rules": "^1.1 || ^2.0",
         "phpunit\/phpunit": "^8.5 || ^9.6 || ^10.5"
     },
     "autoload": {

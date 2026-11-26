@@ -231,17 +231,17 @@
         },
         {
             "name": "composer\/xdebug-handler",
-            "version": "3.0.5",
-            "version_normalized": "3.0.5.0",
+            "version": "3.1.0",
+            "version_normalized": "3.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/xdebug-handler.git",
-                "reference": "6c1925561632e83d60a44492e0b344cf48ab85ef"
+                "reference": "9ade436e94b5a869a88b8306d993c25538d3b478"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/xdebug-handler\/zipball\/6c1925561632e83d60a44492e0b344cf48ab85ef",
-                "reference": "6c1925561632e83d60a44492e0b344cf48ab85ef",
+                "url": "https:\/\/api.github.com\/repos\/composer\/xdebug-handler\/zipball\/9ade436e94b5a869a88b8306d993c25538d3b478",
+                "reference": "9ade436e94b5a869a88b8306d993c25538d3b478",
                 "shasum": ""
             },
             "require": {
@@ -250,12 +250,12 @@
                 "psr\/log": "^1 || ^2 || ^3"
             },
             "require-dev": {
-                "phpstan\/phpstan": "^1.0",
-                "phpstan\/phpstan-strict-rules": "^1.1",
+                "phpstan\/phpstan": "^1.11 || ^2.0",
+                "phpstan\/phpstan-strict-rules": "^1.1 || ^2.0",
                 "phpunit\/phpunit": "^8.5 || ^9.6 || ^10.5"
             },
-            "time": "2024-05-06T16:37:16+00:00",
-            "published-time": "2024-05-06T17:01:42+00:00",
+            "time": "2026-11-25T19:20:28+00:00",
+            "published-time": "2026-11-25T19:31:20+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -281,7 +281,7 @@
             "support": {
                 "irc": "ircs:\/\/irc.libera.chat:6697\/composer",
                 "issues": "https:\/\/github.com\/composer\/xdebug-handler\/issues",
-                "source": "https:\/\/github.com\/composer\/xdebug-handler\/tree\/3.0.5"
+                "source": "https:\/\/github.com\/composer\/xdebug-handler\/tree\/3.1.0"
             },
             "funding": [
                 {
@@ -291,10 +291,6 @@
                 {
                     "url": "https:\/\/github.com\/composer",
                     "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/composer\/composer",
-                    "type": "tidelift"
                 }
             ],
             "install-path": ".\/xdebug-handler"
