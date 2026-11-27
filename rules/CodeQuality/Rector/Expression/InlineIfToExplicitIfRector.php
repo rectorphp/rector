@@ -7,8 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
@@ -82,10 +80,6 @@ CODE_SAMPLE
     {
         /** @var BooleanAnd|BooleanOr $booleanExpr */
         $booleanExpr = $expression->expr;
-        $exprLeft = $booleanExpr->left instanceof BooleanNot ? $booleanExpr->left->expr : $booleanExpr->left;
-        if ($exprLeft instanceof FuncCall && $this->isName($exprLeft, 'defined')) {
-            return null;
-        }
         if ($this->isSameLocalMethodCallChain($booleanExpr)) {
             return null;
         }
@@ -93,7 +87,6 @@ CODE_SAMPLE
         if (!$leftStaticType->isBoolean()->yes()) {
             return null;
         }
-        /** @var Expr $expr */
         $expr = $booleanExpr instanceof BooleanAnd ? $booleanExpr->left : $this->binaryOpManipulator->inverseNode($booleanExpr->left);
         $if = new If_($expr);
         $if->stmts[] = new Expression($booleanExpr->right);
