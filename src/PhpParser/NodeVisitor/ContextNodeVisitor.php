@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -102,6 +103,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
         if ($node instanceof Unset_) {
             foreach ($node->vars as $var) {
                 $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
+                $this->markArrayDimFetchChain($var, AttributeKey::IS_UNSET_VAR);
             }
             return null;
         }
@@ -144,6 +146,7 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
         }
         if ($node instanceof PostDec || $node instanceof PostInc || $node instanceof PreDec || $node instanceof PreInc) {
             $node->var->setAttribute(AttributeKey::IS_INCREMENT_OR_DECREMENT, \true);
+            $this->markArrayDimFetchChain($node->var, AttributeKey::IS_INCREMENT_OR_DECREMENT);
             return null;
         }
         if ($node instanceof BooleanAnd) {
@@ -317,6 +320,16 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
                 $node->keyVar->setAttribute(AttributeKey::IS_VARIABLE_LOOP, \true);
             }
             $node->valueVar->setAttribute(AttributeKey::IS_VARIABLE_LOOP, \true);
+        }
+    }
+    /**
+     * Marks every array dim fetch in the chain: a write to $array[$key][0] writes to $array[$key] as well
+     */
+    private function markArrayDimFetchChain(Expr $expr, string $attributeKey): void
+    {
+        while ($expr instanceof ArrayDimFetch) {
+            $expr->setAttribute($attributeKey, \true);
+            $expr = $expr->var;
         }
     }
 }

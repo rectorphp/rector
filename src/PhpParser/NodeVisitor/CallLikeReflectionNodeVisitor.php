@@ -31,7 +31,7 @@ use Rector\Reflection\ReflectionResolver;
  *  - Closure/arrow-fn args passed to a variadic callable parameter (HAS_CLOSURE_WITH_VARIADIC_ARGS)
  *  - 2-item array args passed to a parameter that cannot hold a Closure, so an array callable is kept as is
  *    (IS_ARG_NOT_ACCEPTING_CLOSURE), see https://github.com/rectorphp/rector/issues/9563
- *  - array dim fetch on a func call (e.g. $items[array_key_last($items)]) passed to a by-ref parameter (IS_BYREF_VAR)
+ *  - array dim fetch chain on a func call (e.g. $items[array_key_last($items)]['key']) passed to a by-ref parameter (IS_BYREF_VAR)
  */
 final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
@@ -62,7 +62,7 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
         $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         $this->decorateClosureWithVariadicArgs($args, $functionLikeReflection);
         $this->decorateArgNotAcceptingClosure($node, $args, $functionLikeReflection);
-        $this->decorateByRefArrayDimFetchArg($node, $args, $functionLikeReflection);
+        $this->decorateByRefArrayDimFetchArg($args, $functionLikeReflection);
         return null;
     }
     /**
@@ -95,7 +95,13 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
     }
     private function isFuncCallArrayDimFetchShape(Expr $expr): bool
     {
-        return $expr instanceof ArrayDimFetch && ($expr->dim instanceof FuncCall || $expr->var instanceof FuncCall);
+        while ($expr instanceof ArrayDimFetch) {
+            if ($expr->dim instanceof FuncCall || $expr->var instanceof FuncCall) {
+                return \true;
+            }
+            $expr = $expr->var;
+        }
+        return \false;
     }
     /**
      * Only [$caller, 'method'] can be an array callable
@@ -158,7 +164,7 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
      * @param Arg[] $args
      * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null $functionLikeReflection
      */
-    private function decorateByRefArrayDimFetchArg(CallLike $callLike, array $args, $functionLikeReflection): void
+    private function decorateByRefArrayDimFetchArg(array $args, $functionLikeReflection): void
     {
         if (!$functionLikeReflection instanceof FunctionReflection && !$functionLikeReflection instanceof MethodReflection) {
             return;
@@ -166,7 +172,8 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
         if (!$this->hasFuncCallArrayDimFetchArg($args)) {
             return;
         }
-        $parameterReflections = ParametersAcceptorSelectorVariantsWrapper::select($functionLikeReflection, $callLike, ScopeFetcher::fetch($callLike))->getParameters();
+        // by-ref is declared on the parameter, combined variants avoid resolving the arg types
+        $parameterReflections = ParametersAcceptorSelector::combineAcceptors($functionLikeReflection->getVariants())->getParameters();
         foreach ($args as $position => $arg) {
             if (!$this->isFuncCallArrayDimFetchShape($arg->value)) {
                 continue;
@@ -178,7 +185,11 @@ final class CallLikeReflectionNodeVisitor extends NodeVisitorAbstract implements
             if (!$parameterReflection->passedByReference()->yes()) {
                 continue;
             }
-            $arg->value->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
+            $expr = $arg->value;
+            while ($expr instanceof ArrayDimFetch) {
+                $expr->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
+                $expr = $expr->var;
+            }
         }
     }
     /**

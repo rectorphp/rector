@@ -4,13 +4,16 @@ declare (strict_types=1);
 namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -41,12 +44,24 @@ final class ByRefNodeVisitor extends NodeVisitorAbstract implements DecoratingNo
     {
         if ($node instanceof AssignRef) {
             $node->expr->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
+            $this->markArrayDimFetchChain($node->expr, AttributeKey::IS_BYREF_VAR);
             return null;
         }
-        // only array dim fetch, a by-ref variable is tracked per function-like below
-        if ($node instanceof Foreach_ && $node->byRef && $node->expr instanceof ArrayDimFetch) {
-            $node->expr->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
+        // only array dim fetch chains below, a by-ref variable is tracked per function-like
+        if ($node instanceof Foreach_ && $node->byRef) {
+            $this->markArrayDimFetchChain($node->expr, AttributeKey::IS_BYREF_VAR);
             return null;
+        }
+        if ($node instanceof ArrayItem && $node->byRef) {
+            $this->markArrayDimFetchChain($node->value, AttributeKey::IS_BYREF_VAR);
+            return null;
+        }
+        if ($node instanceof Return_ && $node->expr instanceof Expr && $node->getAttribute(AttributeKey::IS_INSIDE_BYREF_FUNCTION_LIKE) === \true) {
+            $this->markArrayDimFetchChain($node->expr, AttributeKey::IS_BYREF_VAR);
+            return null;
+        }
+        if ($node instanceof ArrowFunction && $node->byRef) {
+            $this->markArrayDimFetchChain($node->expr, AttributeKey::IS_BYREF_VAR);
         }
         if ($node instanceof Variable) {
             $this->decorateByRefVariable($node);
@@ -138,5 +153,15 @@ final class ByRefNodeVisitor extends NodeVisitorAbstract implements DecoratingNo
             }
         }
         return $byRefVariableNames;
+    }
+    /**
+     * Marks every array dim fetch in the chain: a write to $array[$key][0] writes to $array[$key] as well
+     */
+    private function markArrayDimFetchChain(Expr $expr, string $attributeKey): void
+    {
+        while ($expr instanceof ArrayDimFetch) {
+            $expr->setAttribute($attributeKey, \true);
+            $expr = $expr->var;
+        }
     }
 }
