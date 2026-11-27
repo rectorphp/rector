@@ -161,6 +161,9 @@ CODE_SAMPLE
         if ($arrayDimFetch->getAttribute(AttributeKey::IS_ASSIGN_OP_VAR) === \true) {
             return \true;
         }
+        if ($arrayDimFetch->getAttribute(AttributeKey::IS_INCREMENT_OR_DECREMENT) === \true) {
+            return \true;
+        }
         return (bool) $arrayDimFetch->getAttribute(AttributeKey::IS_UNSET_VAR);
     }
 }

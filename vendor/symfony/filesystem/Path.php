@@ -228,8 +228,11 @@ final class Path
             return '';
         }
         if (null !== $extension) {
-            // remove extension and trailing dot
-            return rtrim(basename($path, $extension), '.');
+            $filename = basename($path);
+            if (strncmp($extension, '.', strlen('.')) === 0 || substr_compare($filename, '.' . $extension, -strlen('.' . $extension)) === 0) {
+                $filename = basename($filename, $extension);
+            }
+            return rtrim($filename, '.');
         }
         return pathinfo($path, \PATHINFO_FILENAME);
     }
