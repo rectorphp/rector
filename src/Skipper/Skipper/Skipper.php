@@ -46,8 +46,10 @@ final class Skipper
      * @var array<class-string, array<string, true>>
      */
     private array $skippedFilePathsByRule = [];
-    // flipped on while the needed-skip verification re-runs rules with skipping off
-    private bool $isVerifyingSkips = \false;
+    /**
+     * Rule whose skip is lifted while the needed-skip verification re-runs a file
+     */
+    private ?string $verifiedRectorClass = null;
     public function __construct(\Rector\Skipper\Skipper\PathSkipper $pathSkipper, FileInfoMatcher $fileInfoMatcher, ReflectionProvider $reflectionProvider)
     {
         $this->pathSkipper = $pathSkipper;
@@ -65,9 +67,12 @@ final class Skipper
     }
     public function shouldSkipRectorAndFile(object $rector, string $filePath): bool
     {
-        // verification re-runs every rule with skipping off, to learn which skips really matter
-        if ($this->isVerifyingSkips) {
-            return \false;
+        // verification lifts only the verified rule's skip, other skips keep applying
+        if ($this->verifiedRectorClass !== null) {
+            if (get_class($rector) === $this->verifiedRectorClass) {
+                return \false;
+            }
+            return $this->matchSkip($rector, $filePath) instanceof SkipMatch;
         }
         $skipMatch = $this->matchSkip($rector, $filePath);
         if (!$skipMatch instanceof SkipMatch) {
@@ -81,13 +86,13 @@ final class Skipper
         }
         return \true;
     }
-    public function startVerifyingSkips(): void
+    public function startVerifyingSkip(string $rectorClass): void
     {
-        $this->isVerifyingSkips = \true;
+        $this->verifiedRectorClass = $rectorClass;
     }
-    public function stopVerifyingSkips(): void
+    public function stopVerifyingSkip(): void
     {
-        $this->isVerifyingSkips = \false;
+        $this->verifiedRectorClass = null;
     }
     /**
      * Real file paths that were skipped per rule-scoped path skip during the run.

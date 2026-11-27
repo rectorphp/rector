@@ -12,7 +12,7 @@ use Rector\ValueObject\Application\File;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\ProcessResult;
 /**
- * Re-runs each rule-scoped skip on its exact file with skipping off. A skip whose rule still does
+ * Re-runs each rule-scoped skip on its exact file with only that skip lifted. A skip whose rule still does
  * not change the file never prevented anything and can be removed. The re-processing is forced to a
  * dry run, so it never writes, no matter the mode of the real run.
  *
@@ -55,17 +55,13 @@ final class NeededSkipVerifier
         if ($skippedFilePathsByRule === []) {
             return [];
         }
-        $changedRulesByFilePath = $this->resolveChangedRulesByFilePath($skippedFilePathsByRule);
+        // force a dry run, so re-processing detects the change but never writes the skipped file
+        $dryRunConfiguration = new Configuration(\true);
         $unnecessarySkips = [];
         foreach ($skippedFilePathsByRule as $rectorClass => $filePaths) {
             $unnecessaryRelativePaths = [];
             foreach ($filePaths as $filePath) {
-                // file could not be re-processed (e.g. parse error), keep the skip to stay safe
-                if (!array_key_exists($filePath, $changedRulesByFilePath)) {
-                    continue;
-                }
-                // the rule changed the file, so the skip really prevents a change - keep it
-                if (in_array($rectorClass, $changedRulesByFilePath[$filePath], \true)) {
+                if ($this->isSkipNeeded($rectorClass, $filePath, $dryRunConfiguration)) {
                     continue;
                 }
                 $unnecessaryRelativePaths[] = $this->filePathHelper->relativePath($filePath);
@@ -79,36 +75,23 @@ final class NeededSkipVerifier
         return $unnecessarySkips;
     }
     /**
-     * @param array<string, string[]> $skippedFilePathsByRule
-     * @return array<string, string[]> real file path => rule classes that changed it
+     * Lifts only this one skip, so other skipped rules cannot make the same change first
      */
-    private function resolveChangedRulesByFilePath(array $skippedFilePathsByRule): array
+    private function isSkipNeeded(string $rectorClass, string $filePath, Configuration $configuration): bool
     {
-        $uniqueFilePaths = [];
-        foreach ($skippedFilePathsByRule as $filePaths) {
-            foreach ($filePaths as $filePath) {
-                $uniqueFilePaths[$filePath] = \true;
-            }
-        }
-        // force a dry run, so re-processing detects the change but never writes the skipped file
-        $dryRunConfiguration = new Configuration(\true);
-        $this->skipper->startVerifyingSkips();
-        $changedRulesByFilePath = [];
+        $this->skipper->startVerifyingSkip($rectorClass);
         try {
-            foreach (array_keys($uniqueFilePaths) as $filePath) {
-                $file = new File($filePath, FileSystem::read($filePath));
-                $this->currentFileProvider->setFile($file);
-                $fileProcessResult = $this->fileProcessor->processFile($file, $dryRunConfiguration);
-                // a broken file is not verifiable, leave it out so its skips are kept
-                if ($fileProcessResult->getSystemErrors() !== []) {
-                    continue;
-                }
-                $fileDiff = $fileProcessResult->getFileDiff();
-                $changedRulesByFilePath[$filePath] = (($nullsafeVariable1 = $fileDiff) ? $nullsafeVariable1->getRectorClasses() : null) ?? [];
-            }
+            $file = new File($filePath, FileSystem::read($filePath));
+            $this->currentFileProvider->setFile($file);
+            $fileProcessResult = $this->fileProcessor->processFile($file, $configuration);
         } finally {
-            $this->skipper->stopVerifyingSkips();
+            $this->skipper->stopVerifyingSkip();
         }
-        return $changedRulesByFilePath;
+        // a broken file is not verifiable, keep the skip to stay safe
+        if ($fileProcessResult->getSystemErrors() !== []) {
+            return \true;
+        }
+        $fileDiff = $fileProcessResult->getFileDiff();
+        return in_array($rectorClass, (($nullsafeVariable1 = $fileDiff) ? $nullsafeVariable1->getRectorClasses() : null) ?? [], \true);
     }
 }
