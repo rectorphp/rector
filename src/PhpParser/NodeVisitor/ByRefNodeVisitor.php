@@ -5,10 +5,12 @@ namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -38,6 +40,11 @@ final class ByRefNodeVisitor extends NodeVisitorAbstract implements DecoratingNo
     public function enterNode(Node $node): ?Node
     {
         if ($node instanceof AssignRef) {
+            $node->expr->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
+            return null;
+        }
+        // only array dim fetch, a by-ref variable is tracked per function-like below
+        if ($node instanceof Foreach_ && $node->byRef && $node->expr instanceof ArrayDimFetch) {
             $node->expr->setAttribute(AttributeKey::IS_BYREF_VAR, \true);
             return null;
         }
